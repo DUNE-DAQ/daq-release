@@ -1,0 +1,40 @@
+---
+    release: v0.0
+    # The following two lines are future use. 
+    # If multiple packaging methods are provided, users can use packaging 
+    # method they prefer with scripts in the daq-buildtools package.
+    #supported_os: ["centOS7", "SL7"]
+    #supported_packaging: ["ups", "spack"]
+
+    remote_locations:
+        - ups:
+            - /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products
+    local_locations:
+        - ups: ~
+
+    # external packages are prebuilt UPS products or spack modules.
+    external_packages:
+        - name: cmake
+          version: v3_17_2
+        - name: gcc
+          version: v8_2_0
+        - name: boost
+          version: v1_70_0
+          variant: "e19:debug"
+        - name: cetlib
+          version: v3_10_00
+          variant: "e19:debug"
+        - name: TRACE
+          version: v3_15_09
+
+    # daq prebuilt packages are prebuilt UPS products or spack modules.
+    daq_prebuilt_packages: ~
+
+    # daq source packages are checked out directly from github for local build/development.
+    daq_source_packages:
+        - name: appfwk
+          repo: https://github.com/DUNE-DAQ/appfwk.git
+          tag: develop # tag or branch
+        - name: ers
+          repo: https://github.com/DUNE-DAQ/ers.git
+          tag: ers-00-26-00 # tag or branch
