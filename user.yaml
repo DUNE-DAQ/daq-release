@@ -1,6 +1,7 @@
 ---
     comments: "override some UPS products with newer versions; 
-      setting up some additioanl UPS products."
+      setting up some additioanl UPS products;
+      add additional source packages"
 
     base_release: v1.0.0
 
@@ -18,6 +19,6 @@
         #  variant: ~
 
     src_pkgs: ~
-        #- name: ers
-        #  repo: https://github.com/DUNE-DAQ/ers.git
-        #  tag: user-00-28-00 
+        - name: listrev
+          repo: https://github.com/DUNE-DAQ/listrev.git
+          tag: master

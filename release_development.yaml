@@ -17,19 +17,31 @@
         - name: cetlib
           version: v3_10_00
           variant: "e19:prof"
+        - name: nlohmann_json_version
+          version: v3_9_0b
+          variant: "e19:prof"
         - name: TRACE
           version: v3_15_09
+          variant: ~
+        - name: folly
+          version: v2020_05_25
           variant: "e19:prof"
+        - name: ers
+          version: v0_26_00c
+          variant: "e19:prof"
+        - name: ninja
+          version: v1_10_0
+          variant: ~
 
     prebuilt_pkgs: ~
-        #- name: cmake
-        #  version: v3_17_2
-        #  variant: ~
 
     src_pkgs:
         - name: appfwk
           repo: https://github.com/DUNE-DAQ/appfwk.git
-          tag: develop # tag or branch
-        - name: ers
-          repo: https://github.com/DUNE-DAQ/ers.git
-          tag: ers-00-26-00 
+          tag: develop
+        - name: daq-buildtools
+          repo: https://github.com/DUNE-DAQ/daq-buildtools.git
+          tag: develop
+        - name: styleguide
+          repo: https://github.com/DUNE-DAQ/styleguide.git
+          tag: develop

@@ -23,11 +23,21 @@ Detailed explanations of the release manifest file:
 
 ```yaml
 ---
+    # Release tag, in the format of vX.X.X or "development"
+    # "vX.X.X" should be the actual tag used in other DAQ git repos.
     release: v1.0.0
 
+    # List of pathes to UPS products, additional pathes in "user.yaml" will
+    # be appended to the list.
     product_paths:
         - /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products
 
+    # List of external dependencies; each element of the list is a dictionary
+    # with keys in "name", "version", "variant"; if any of the field is empty,
+    # supplied it with "~".
+    #
+    # Addtional elements in "user.yaml" will be appended to the list if the
+    # its a new dependency, or overwrite the exisiting ones if it already exists.
     external_deps:
         - name: cmake
           version: v3_17_2
@@ -45,8 +55,22 @@ Detailed explanations of the release manifest file:
           version: v3_15_09
           variant: "e19:prof"
 
+    # List of DAQ's prebuilt packages in UPS products area; this is for DAQ
+    # packages typically built by developers in their working directory.
+    #
+    # Similar rules of addition/overwriting for entries in "user.yaml" apply
+    # as the section above.
     prebuilt_pkgs: ~
 
+    # List of DAQ source packages to be cloned and built in users' working
+    # directory. Each element is a dictionary as in "external_deps" seciton,
+    # but each element has the keys of "name", "repo" and "tag" (or name of the
+    # branch).
+    #
+    # Same packages can exist both in the "prebuilt_pkgs" section and the
+    # "src_pkgs" section. In this case, the prebuilt packages will not be setup.
+    # 
+    # Similar rules apply to entries in "user.yaml".
     src_pkgs:
         - name: appfwk
           repo: https://github.com/DUNE-DAQ/appfwk.git
