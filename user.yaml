@@ -1,0 +1,23 @@
+---
+    comments: "override some UPS products with newer versions; 
+      setting up some additioanl UPS products."
+
+    base_release: v1.0.0
+
+    product_paths: ~
+        #- /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev
+
+    external_deps: ~
+        #- name: cmake
+        #  version: v3_17_2
+        #  variant: ~
+
+    prebuilt_pkgs: ~
+        #- name: cmake
+        #  version: v3_17_2
+        #  variant: ~
+
+    src_pkgs: ~
+        #- name: ers
+        #  repo: https://github.com/DUNE-DAQ/ers.git
+        #  tag: user-00-28-00 
