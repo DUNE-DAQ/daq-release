@@ -26,14 +26,14 @@
         - name: folly
           version: v2020_05_25
           variant: "e19:prof"
-        - name: ers
-          version: v0_26_00c
-          variant: "e19:prof"
         - name: ninja
           version: v1_10_0
           variant: ~
 
-    prebuilt_pkgs: ~
+    prebuilt_pkgs:
+        - name: ers
+          version: v0_26_00c
+          variant: "e19:prof"
 
     src_pkgs:
         - name: appfwk

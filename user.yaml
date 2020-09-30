@@ -3,22 +3,25 @@
       setting up some additioanl UPS products;
       add additional source packages"
 
-    base_release: v1.0.0
+    base_release: development
 
     product_paths: ~
+        # Remember to remove `~` in the line above when adding paths.
         #- /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev
 
     external_deps: ~
+        # Remember to remove `~` in the line above when adding pkgs.
         #- name: cmake
         #  version: v3_17_2
         #  variant: ~
 
     prebuilt_pkgs: ~
+        # Remember to remove `~` in the line above when adding pkgs.
         #- name: cmake
         #  version: v3_17_2
         #  variant: ~
 
-    src_pkgs: ~
+    src_pkgs:
         - name: listrev
           repo: https://github.com/DUNE-DAQ/listrev.git
           tag: master
