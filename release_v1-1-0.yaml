@@ -17,7 +17,7 @@
         - name: cetlib
           version: v3_10_00
           variant: "e19:prof"
-        - name: nlohmann_json_version
+        - name: nlohmann_json
           version: v3_9_0b
           variant: "e19:prof"
         - name: TRACE
