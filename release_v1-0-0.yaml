@@ -29,6 +29,9 @@
         - name: ninja
           version: v1_8_2
           variant: ~
+        - name: pyyaml
+          version: v5_3_1
+          variant: "p383b"
 
     prebuilt_pkgs: ~
 
@@ -39,6 +42,3 @@
         - name: ers
           repo: https://github.com/DUNE-DAQ/ers.git
           tag: ers-00-26-00 
-        - name: daq-buildtools
-          repo: https://github.com/DUNE-DAQ/daq-buildtools.git
-          tag: v1.1.0

@@ -21,7 +21,7 @@
         #  version: v3_17_2
         #  variant: ~
 
-    src_pkgs:
-        - name: listrev
-          repo: https://github.com/DUNE-DAQ/listrev.git
-          tag: master
+    src_pkgs: ~
+        #- name: listrev
+        #  repo: https://github.com/DUNE-DAQ/listrev.git
+        #  tag: master

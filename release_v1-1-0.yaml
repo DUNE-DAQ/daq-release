@@ -29,6 +29,9 @@
         - name: ninja
           version: v1_10_0
           variant: ~
+        - name: pyyaml
+          version: v5_3_1
+          variant: "p383b"
 
     prebuilt_pkgs:
         - name: ers
@@ -38,7 +41,4 @@
     src_pkgs:
         - name: appfwk
           repo: https://github.com/DUNE-DAQ/appfwk.git
-          tag: v1.1.0
-        - name: daq-buildtools
-          repo: https://github.com/DUNE-DAQ/daq-buildtools.git
           tag: v1.1.0
