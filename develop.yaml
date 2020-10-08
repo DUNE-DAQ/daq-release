@@ -1,0 +1,36 @@
+---
+    release: develop
+
+    product_paths:
+        - /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products
+
+    release_path:
+        - /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases-tmp
+
+    externals:
+        - name: cmake
+          version: v3_17_2
+          variant: ~
+        - name: cetlib
+          version: v3_10_00
+          variant: "e19:prof"
+        - name: nlohmann_json
+          version: v3_9_0b
+          variant: "e19:prof"
+        - name: TRACE
+          version: v3_15_09
+          variant: ~
+        - name: folly
+          version: v2020_05_25
+          variant: "e19:prof"
+        - name: ninja
+          version: v1_10_0
+          variant: ~
+        - name: pyyaml
+          version: v5_3_1
+          variant: "p383b"
+
+    packages:
+        - name: ers
+          version: v0_26_00c
+          variant: "e19:prof"
