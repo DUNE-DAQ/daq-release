@@ -2,6 +2,8 @@
 
 This is a placeholder for instructions on setting up CI using GitHub action.
 
+Here is a [presentation](https://indico.fnal.gov/event/45266/contributions/195659/attachments/133754/165107/DUNE_DAQ_SW_2020831.pdf) in SW Coordination Meeting on CI prototype
+
 ## Phase one
 
 1. Create Docker image for running CI jobs;
