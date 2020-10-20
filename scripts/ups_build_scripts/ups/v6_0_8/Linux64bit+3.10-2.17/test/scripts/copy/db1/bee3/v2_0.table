@@ -1,0 +1,15 @@
+FILE = TABLE
+PRODUCT = bee1
+
+GROUP:
+
+FLAVOR = NULL
+
+
+COMMON:
+
+
+setupRequired("bee5 v1_0")
+END:
+
+

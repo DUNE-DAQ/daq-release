@@ -1,0 +1,13 @@
+FILE = TABLE
+
+FLAVOR = ANY
+QUALIFIERS = ""
+
+FLAVOR = IRIX+5
+QUALIFIERS = ""
+
+COMMON:
+   ACTION=SETUP
+    setupRequired("snoopy v1_0 -f NULL")
+END:
+

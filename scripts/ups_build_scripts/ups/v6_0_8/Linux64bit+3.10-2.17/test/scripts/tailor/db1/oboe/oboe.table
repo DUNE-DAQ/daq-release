@@ -1,0 +1,25 @@
+FILE = TABLE
+PRODUCT = oboe
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+FLAVOR = NULL
+QUALIFIERS = "freshman"
+
+FLAVOR = NULL
+QUALIFIERS = "sophomore"
+
+FLAVOR = NULL
+QUALIFIERS = "junior"
+
+FLAVOR = NULL
+QUALIFIERS = "senior"
+
+FLAVOR = NULL
+QUALIFIERS = "graduate"
+
+END:
+

@@ -1,0 +1,8 @@
+FILE = TABLE
+PRODUCT = snoopy
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   setupRequired("asta v1_0")

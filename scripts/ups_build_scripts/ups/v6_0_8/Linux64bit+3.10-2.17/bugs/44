@@ -1,0 +1,14 @@
+Priority: Low
+State: Unverified
+
+When one has set up a version of ups with a qualifier like build,
+attempts to switch to csh or bash cause some kind of infinite loop:
+
+  doofus> echo $SETUP_UPS
+  ups -f ANY -z /usr/users/baisley/ups/db -q build -r
+    /usr/products/src4/bm-scratch/ups-v4_5-OSF1+V4 -m ups.table -M ./ups
+  doofus> bash
+  executing .shrc
+  INFORMATIONAL: Product 'ups' (with qualifiers 'build'), has no current
+    chain (or may not exist)
+

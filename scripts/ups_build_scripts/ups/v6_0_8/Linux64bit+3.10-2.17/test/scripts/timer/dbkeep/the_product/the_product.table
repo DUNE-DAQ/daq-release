@@ -1,0 +1,146 @@
+FILE = table
+
+
+GROUP:
+
+FLAVOR = ANY
+QUALIFIERS = ""
+
+COMMON:
+
+Action=Setup
+   setupenv()
+   proddir()
+   setupRequired(aa)
+   setupRequired(ab)
+   setupRequired(ac)
+   setupRequired(ad)
+   setupRequired(ae)
+   setupRequired(af)
+   setupRequired(ag)
+   setupRequired(ah)
+   setupRequired(ai)
+   setupRequired(aj)
+   setupRequired(ba)
+   setupRequired(bb)
+   setupRequired(bc)
+   setupRequired(bd)
+   setupRequired(be)
+   setupRequired(bf)
+   setupRequired(bg)
+   setupRequired(bh)
+   setupRequired(bi)
+   setupRequired(bj)
+   setupRequired(ca)
+   setupRequired(cb)
+   setupRequired(cc)
+   setupRequired(cd)
+   setupRequired(ce)
+   setupRequired(cf)
+   setupRequired(cg)
+   setupRequired(ch)
+   setupRequired(ci)
+   setupRequired(cj)
+   setupRequired(da)
+   setupRequired(db)
+   setupRequired(dc)
+   setupRequired(dd)
+   setupRequired(de)
+   setupRequired(df)
+   setupRequired(dg)
+   setupRequired(dh)
+   setupRequired(di)
+   setupRequired(dj)
+   setupRequired(ea)
+   setupRequired(eb)
+   setupRequired(ec)
+   setupRequired(ed)
+   setupRequired(ee)
+   setupRequired(ef)
+   setupRequired(eg)
+   setupRequired(eh)
+   setupRequired(ei)
+   setupRequired(ej)
+   setupRequired(fa)
+   setupRequired(fb)
+   setupRequired(fc)
+   setupRequired(fd)
+   setupRequired(fe)
+   setupRequired(ff)
+   setupRequired(fg)
+   setupRequired(fh)
+   setupRequired(fi)
+   setupRequired(fj)
+   setupRequired(ga)
+   setupRequired(gb)
+   setupRequired(gc)
+   setupRequired(gd)
+   setupRequired(ge)
+   setupRequired(gf)
+   setupRequired(gg)
+   setupRequired(gh)
+   setupRequired(gi)
+   setupRequired(gj)
+   setupRequired(ha)
+   setupRequired(hb)
+   setupRequired(hc)
+   setupRequired(hd)
+   setupRequired(he)
+   setupRequired(hf)
+   setupRequired(hg)
+   setupRequired(hh)
+   setupRequired(hi)
+   setupRequired(hj)
+   setupRequired(ia)
+   setupRequired(ib)
+   setupRequired(ic)
+   setupRequired(id)
+   setupRequired(ie)
+   setupRequired(if)
+   setupRequired(ig)
+   setupRequired(ih)
+   setupRequired(ii)
+   setupRequired(ij)
+   setupRequired(ja)
+   setupRequired(jb)
+   setupRequired(jc)
+   setupRequired(jd)
+   setupRequired(je)
+   setupRequired(jf)
+   setupRequired(jg)
+   setupRequired(jh)
+   setupRequired(ji)
+   setupRequired(jj)
+ACTION = declare
+   Execute("echo declare",NO_UPS_ENV)
+ACTION = undeclare
+   Execute("echo undeclare",NO_UPS_ENV)
+ACTION = current
+   Execute("echo current",NO_UPS_ENV)
+ACTION = uncurrent
+   Execute("echo uncurrent",NO_UPS_ENV)
+ACTION = new
+   Execute("echo new",NO_UPS_ENV)
+ACTION = unnew
+   Execute("echo unnew",NO_UPS_ENV)
+ACTION = test
+   Execute("echo test",NO_UPS_ENV)
+ACTION = untest
+   Execute("echo untest",NO_UPS_ENV)
+ACTION = old
+   Execute("echo old",NO_UPS_ENV)
+ACTION = unold
+   Execute("echo unold",NO_UPS_ENV)
+ACTION = development
+   Execute("echo development",NO_UPS_ENV)
+ACTION = undevelopment
+   Execute("echo undevelopment",NO_UPS_ENV)
+ACTION = configure
+   Execute("echo configure",NO_UPS_ENV)
+ACTION = unconfigure
+   Execute("echo unconfigure",NO_UPS_ENV)
+ACTION = leash
+   Execute("echo leash",NO_UPS_ENV)
+ACTION = unleash
+   Execute("echo unleash",NO_UPS_ENV)
+END:

@@ -1,0 +1,10 @@
+FILE = DBCONFIG
+
+AUTHORIZED_NODES = *
+#PROD_DIR_PREFIX = 
+HTML_TARGET_DIR = /tmp/html
+INFO_TARGET_DIR = /tmp/info
+NEWS_TARGET_DIR = /tmp/news
+MAN_TARGET_DIR = /tmp/man
+CATMAN_TARGET_DIR = /tmp/catman
+

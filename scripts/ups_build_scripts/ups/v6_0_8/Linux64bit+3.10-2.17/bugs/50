@@ -1,0 +1,49 @@
+Priority: Low
+State: Fixed(?)
+
+Really a bug in OSF1's shell, but:
+
+Looks like someone tried to patch it to remove the temp file.
+
+I just fixed(?) it by unsetting Setups_Dir_Resolve only if $MACH_OS != OSF1
+
+> Finding out how this cron job was creating these files was difficult. The
+> contents of these files was:
+>
+>                 #!$AsH
+>                 eval Res_dir=¤2
+>                 ${echo} ¤Res_dir
+>
+> After some poking around we found the cron job ran
+/usr/local/etc/setups.sh
+> and we located these lines in /usr/local/etc/setups.sh. They are part of a
+> subroutine called "Setups_Dir_Resolve" Now this subroutine creates the
+file,
+> makes it executable, runs the file, then it should delete the file.
+Further
+> checking revealed that the subroutine should only be called if the first
+> character of Setups_Home is NOT (!=) a '/'. In other words:
+>
+>                 if test `echo $Setups_Home|cut -c1` != '/'
+>                 then
+>
+>                     Setups_Dir_Resolve  Setups_Home  $Setups_Home
+>                 fi
+>
+> Setups_Home is set to "/usr/products" at the beginning of the script.
+> (Setups_Home=/usr/products) So this subroutine should NEVER run and the
+file
+> should NEVER be created. But it was.
+>
+>     I found the name of the subroutine again at the end of the file as
+part
+> of an "unset" command:
+>
+>                 unset Setups_Dir_Resolve No_SETUP_UPS
+>
+> I'm not sure why you'd want to unset a subroutine so I changed the line
+to:
+>
+>                 unset No_SETUP_UPS
+>
+> Like magic the files stopped appearing in /tmp.

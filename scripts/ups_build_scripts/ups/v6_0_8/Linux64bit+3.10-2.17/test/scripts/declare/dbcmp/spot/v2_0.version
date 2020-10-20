@@ -1,0 +1,17 @@
+FILE = version
+PRODUCT = spot
+VERSION = v2_0
+
+#*************************************************
+#
+FLAVOR = IRIX
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-09 23.01.02 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-09 23.01.02 GMT
+  PROD_DIR = ${UPS_DIR}/test/scripts/declare/products/spot
+  UPS_DIR = ups
+  TABLE_DIR = ups
+  TABLE_FILE = spot.table
+  ARCHIVE_FILE = ftp://sillyhostname${UPS_DIR}/test/scripts/declare/products/spot/archive.file

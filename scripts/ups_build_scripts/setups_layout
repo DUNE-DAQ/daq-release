@@ -1,0 +1,2 @@
+s_setenv UPS_THIS_DB $SETUPS_DIR
+s_setenv PROD_DIR_PREFIX $SETUPS_DIR

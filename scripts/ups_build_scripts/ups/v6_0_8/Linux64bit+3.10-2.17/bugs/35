@@ -1,0 +1,8 @@
+Priority: Low
+State: Unverified
+
+Give all location keywords an @ form.  Could be the same as the existing
+relative forms.  MAN_SOURCE_DIR and other source_dirs, MAN_TARGET_DIR and
+other target_dirs, TABLE_DIR ...
+3 days.  Low priority.
+

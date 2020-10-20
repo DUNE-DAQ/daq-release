@@ -1,0 +1,13 @@
+FILE = chain
+PRODUCT = ups
+CHAIN = current
+
+#*************************************************
+#
+FLAVOR = Linux64bit+3.10-2.17
+VERSION = v6_0_8
+QUALIFIERS = ""
+  DECLARER = jenkins
+  DECLARED = 2017-11-29 22.12.03 GMT
+  MODIFIER = jenkins
+  MODIFIED = 2017-11-29 22.12.03 GMT

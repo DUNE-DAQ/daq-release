@@ -1,0 +1,7 @@
+Priority: Medium
+State: Fixed
+
+In a version file, lines like $ARCHIVE_FILE = ${BFDIST}... don't
+get ${BFDIST}... expanded.  It works for $PROD_DIR, but not others.
+If this worked, databases could be easily relocatable.  May be fixed in v4_5_2
+

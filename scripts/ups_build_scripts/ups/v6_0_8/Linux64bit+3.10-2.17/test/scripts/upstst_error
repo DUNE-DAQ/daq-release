@@ -1,0 +1,17 @@
+#!/bin/sh
+# ============================================================================
+# test the error routines
+# ============================================================================
+$UPS_DIR/test/ups_test << EOD
+ups_echo "================================================================="
+ups_echo "you should see UPS_NO_DATABASE, UPS_NOSHELL, and UPS_SUCCESS  errors"
+ups_echo "they should have severities of FATAL, WARNING, and INFORMATIONAL"
+upserr_add -severity UPS_FATAL  	UPS_NO_DATABASE
+upserr_add -severity UPS_WARNING 	UPS_NOSHELL       (NO_SHELL)
+upserr_add -severity UPS_INFORMATIONAL 	UPS_SUCCESS
+ups_echo "================================================================="
+upserr_output
+upserr_clear
+upserr_output
+quit
+EOD

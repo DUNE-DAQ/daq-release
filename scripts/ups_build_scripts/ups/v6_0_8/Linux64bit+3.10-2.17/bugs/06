@@ -1,0 +1,6 @@
+Priority: Low
+State: Fixed(?)
+
+In configure actions (at least when called by a declare?) <prod>_DIR
+seems to only have the relative path.  This screws up perl installs.
+

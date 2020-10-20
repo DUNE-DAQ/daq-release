@@ -1,0 +1,7 @@
+Priority: Low
+State: Unverified
+
+Fix the annoying 'chmod: /fnal/ups/etc: Not owner' errors during configure.
+The problem was that lauri owned the old files, and I could rename but not
+chmod them.
+

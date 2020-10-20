@@ -1,0 +1,180 @@
+FLY_DIR="/NULL/fly"; export FLY_DIR
+#
+SETUP_FLY='fly v1_0 -f NULL -z ../db1'; export SETUP_FLY
+#
+OPERA="AIDA FAUST"; export OPERA
+#
+if [ "${OPERA:-}" = "" ]; then
+  OPERA="MADAM_BUTTERFLY CARMEN"
+else
+  OPERA="${OPERA} MADAM_BUTTERFLY CARMEN"
+fi
+export OPERA
+#
+if [ "${OPERA:-}" = "" ]; then
+  OPERA="FIDELIO"
+else
+  OPERA="FIDELIO ${OPERA}"
+fi
+export OPERA
+#
+if [ "${OPERA:-}" != "" ]
+then
+  upstmp=FAUST
+  OPERA="`$UPS_DIR/bin/dropit -e -p "$OPERA" -i' ' -d' ' "$upstmp"`";
+  if [ "${OPERA:-}" = "" ]; then unset OPERA; fi
+  unset upstmp
+fi
+#
+unset OPERA
+#
+if [ "${TMPDIR:-}" = "" ]; then TMPDIR="/tmp"; export TMPDIR; fi;
+#
+PATH="/bin:/usr/local/bin:/local/etc:/mybin"; export PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="emacs/bin"
+else
+  PATH="${PATH}emacs/etcemacs/bin"
+fi
+export PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="emacs/test"
+else
+  PATH="emacs/test:${PATH}"
+fi
+export PATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=emacs
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ ! r blah ]; then
+echo "can't read file";
+return 1
+fi;
+#
+type ls 2>&1 | grep -i "not found" > /dev/null
+if [ $? -eq 0 ]
+then
+  echo "exeAccess failed for ls"
+  return 1
+fi
+mystatus=`ls -l`; export mystatus
+#
+echo "from extra1"
+#
+echo "from extra3"
+#
+ups_prod_name="fly"; export ups_prod_name
+#
+ups_prod_version="v1_0"; export ups_prod_version
+#
+ups_prod_flavor="NULL"; export ups_prod_flavor
+#
+ups_prod_qualifiers=""; export ups_prod_qualifiers
+#
+ups_prod_dir="/NULL/fly"; export ups_prod_dir
+#
+ups_shell="sh"; export ups_shell
+#
+ups_options=""; export ups_options
+#
+ups_origin=""; export ups_origin
+#
+ups_verbose=""; export ups_verbose
+#
+ups_extended=""; export ups_extended
+#
+ups_verbose=""; export ups_verbose
+#
+ups_extended=""; export ups_extended
+#
+ups_this_db="../db1"; export ups_this_db
+#
+products="../db1"; export products
+#
+ups_compile="../db1/fly/v1_0.NULL.compile"; export ups_compile
+#
+rambo () { SlyStalone "$@" ;}
+#
+unset rambo
+
+if [ -s reqfile1 ]; then
+  . reqfile1
+else
+  echo "File (reqfile1) not found"
+  return 1
+fi
+#
+if [ -s reqcheck1 ]; then
+  . reqcheck1
+  UPS_STATUS=$?
+  if [ "$UPS_STATUS" != "0" ]; then
+    echo "Error $UPS_STATUS while sourcing reqcheck1"
+    unset UPS_STATUS
+    return 1
+  fi
+  unset UPS_STATUS
+else
+  echo "File (reqcheck1) not found"
+  return 1
+fi
+#
+if [ -s optfile ]; then
+  . optfile
+fi
+#
+if [ -s optcheck ]; then
+  . optcheck
+  UPS_STATUS=$?
+  if [ "$UPS_STATUS" != "0" ]; then
+    echo "Error $UPS_STATUS while sourcing optcheck"
+    unset UPS_STATUS
+    return 1
+  fi
+  unset UPS_STATUS
+fi
+#
+if [ -s optfile ]; then
+  . optfile
+fi
+#
+if [ -s optcheck ]; then
+  . optcheck
+  UPS_STATUS=$?
+  if [ "$UPS_STATUS" != "0" ]; then
+    echo "Error $UPS_STATUS while sourcing optcheck"
+    unset UPS_STATUS
+    return 1
+  fi
+  unset UPS_STATUS
+fi
+#
+if [ -s reqcheck2 ]; then
+  . reqcheck2
+  UPS_STATUS=$?
+  if [ "$UPS_STATUS" != "0" ]; then
+    echo "Error $UPS_STATUS while sourcing reqcheck2"
+    unset UPS_STATUS
+    return 1
+  fi
+  unset UPS_STATUS
+else
+  echo "File (reqcheck2) not found"
+  return 1
+fi
+#

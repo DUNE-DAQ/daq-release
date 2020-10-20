@@ -1,0 +1,39 @@
+FILE = VERSION
+PRODUCT = trombone
+VERSION = v2_0
+
+FLAVOR = IRIX+3
+QUALIFIERS = ""
+  DECLARED = 6-22-98
+  DECLARER = silas
+  MODIFIED = 6-22-98
+  MODIFIER = silas
+  PROD_DIR = /IRIX3/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+  TABLE_DIR = ""
+
+FLAVOR = IRIX+5.1
+QUALIFIERS = "red"
+  DECLARED = 6-22-98
+  DECLARER = silas
+  PROD_DIR = /IRIX51/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 6-22-98 
+  DECLARER = silas
+  PROD_DIR = /NULL/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+
+FLAVOR = PLUM
+QUALIFIERS = "music"
+  DECLARED = 6-22-98
+  DECLARER = silas
+  PROD_DIR = /PLUM/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+

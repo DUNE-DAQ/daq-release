@@ -1,0 +1,13 @@
+FILE = TABLE
+PRODUCT = snoopy
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = "lucy:linus"
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+COMMON:
+END:

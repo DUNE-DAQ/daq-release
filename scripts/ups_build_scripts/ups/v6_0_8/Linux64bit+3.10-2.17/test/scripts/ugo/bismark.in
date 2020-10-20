@@ -1,0 +1,11 @@
+Product:          bismark
+Flavor:           RUM_RAISIN
+                  ANY
+Qualifiers:       a:b:c
+                  a:b
+                  a:c
+                  a
+DB:               /thunder
+                  /lightening
+Chains:           current
+ugo_v 0 and UPS_VERBOSE 0

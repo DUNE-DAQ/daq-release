@@ -1,0 +1,15 @@
+#!/bin/sh
+# ============================================================================
+# test ups declare
+# ============================================================================
+PRODUCTS="$UPS_DIR/test/scripts/timer/dbclean"; export PRODUCTS
+rm -rf $PRODUCTS
+mkdir $PRODUCTS
+for y in `echo a b c d e f g h i j`
+do 
+  for z in `echo a b c d e f g h i j`
+  do
+    ln -s $UPS_DIR/test/scripts/timer/dbkeep/the_product \
+          $PRODUCTS/`echo $y$z`
+  done
+done

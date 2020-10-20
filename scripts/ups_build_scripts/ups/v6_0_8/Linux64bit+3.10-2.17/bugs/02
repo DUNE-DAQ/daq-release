@@ -1,0 +1,8 @@
+Priority: Low
+State: Unverified
+
+"Make ups complain about missing (presumed) user-defined actions, so that a
+ typo doesn't get quietly ignored.  5 days.  Low priority."  This seems to
+have healed itself.  But, we should complain about currents, verifies, and
+user-defined actions on products which don't exist:  'ups test xyzzy', e.g.
+

@@ -1,0 +1,8 @@
+Priority: Low
+State: Unverified
+
+Change the handling of the -E option.  Modify will now use $EDITOR by
+default (falling back to vi if $EDITOR is empty), but the user may use
+-E to specify a different editor.  3 days.  Important.  There is also a
+problem with using tpu for the editor.  Entering ^Z causes severe cramps.
+

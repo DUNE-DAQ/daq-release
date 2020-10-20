@@ -1,0 +1,10 @@
+FILE = TABLE
+PRODUCT = bee3
+
+GROUP:
+
+FLAVOR = NULL
+
+
+COMMON:
+END:

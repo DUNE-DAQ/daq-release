@@ -1,0 +1,12 @@
+FILE = VERSION
+PRODUCT = lassie
+VERSION = v3_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie3.table
+

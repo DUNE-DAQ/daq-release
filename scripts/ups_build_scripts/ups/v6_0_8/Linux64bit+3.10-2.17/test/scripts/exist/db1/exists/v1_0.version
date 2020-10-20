@@ -1,0 +1,13 @@
+FILE = version
+PRODUCT = exists
+VERSION = v1_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = baisley
+  DECLARED = 1999-02-08 23.19.52 GMT
+  MODIFIER = baisley
+  MODIFIED = 1999-02-08 23.19.52 GMT
+  PROD_DIR = 

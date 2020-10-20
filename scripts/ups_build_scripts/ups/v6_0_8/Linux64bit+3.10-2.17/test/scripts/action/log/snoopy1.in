@@ -1,0 +1,6 @@
+   asta v1_0 -f NULL -z ../db2:dodefaults()
+   asta v1_0 -f NULL -z ../db2:proddir()
+   asta v1_0 -f NULL -z ../db2:proddir(_FOO, /NULL/asta/foo)
+      lassie v5_0 -f NULL -z ../db1:dodefaults()
+      lassie v5_0 -f NULL -z ../db1:sourcerequired(lassie_v5_0, UPS_ENV)
+      snif v1_0 -f NULL -z ../db2:dodefaults()

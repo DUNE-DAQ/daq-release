@@ -1,0 +1,9 @@
+Priority: Low
+State: Unverified
+
+[just a wrong umask?]
+
+The upd install ups -G -c v4_5 command with -3 (for Linux+2.2 and IRIX+6.5)
+didn't make the /fnal/ups/etc/setups.cache.Linux+2.2 file group writable.
+The /fnal/ups/etc/setups.cache.IRIX+6.5.BAK was owned by root.
+

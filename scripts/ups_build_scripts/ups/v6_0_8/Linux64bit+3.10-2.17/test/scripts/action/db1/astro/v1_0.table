@@ -1,0 +1,11 @@
+FILE = TABLE
+PRODUCT = astro
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   doDefaults()
+   setupRequired("snoopy v1_1")
+   sourceRequired(astro_v1_0, UPS_ENV)
+

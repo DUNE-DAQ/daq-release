@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+#============================================================================
+# test ups unconfigure   
+#   
+#============================================================================
+cd $UPS_DIR/test/scripts/configure/log
+SHELL=sh;export SHELL;
+UPS_SHELL=${SHELL};export UPS_SHELL;
+env PRODUCTS=../db $UPS_DIR/test/ups_test << EOD
+#ups_echo
+#"================================================================="
+#
+#
+unconfigure trombone -O -z ../db -c
+#   
+unconfigure trombone v1_0 -g current -s -actout temp
+
+unconfigure trombone v2_0 -M "../db/trombone" -m trombone.table 
+
+unconfigure trombone -f NULL 
+unconfigure trombone v2_0 -actout temp2 -out trombone1.out -diff trombone1.in
+quit
+EOD

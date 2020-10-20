@@ -1,0 +1,7 @@
+Priority: Low
+State: Unverified
+
+Fix the hash table problem, after finding a way to duplicate it.  I *think*
+this is what causes David Berg's "duplicate instance" messages.
+15 days.  Probably important.  Fagan sent me some code.
+

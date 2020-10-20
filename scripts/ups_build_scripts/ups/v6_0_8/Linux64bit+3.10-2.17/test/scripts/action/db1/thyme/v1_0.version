@@ -1,0 +1,14 @@
+FILE = version
+PRODUCT = thyme
+VERSION = v1_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = basil
+  DECLARED = 1998-06-10
+  MODIFIER = rosemary
+  MODIFIED = 1998-06-10
+  PROD_DIR = /NULL/thyme
+  UPS_DIR = ups

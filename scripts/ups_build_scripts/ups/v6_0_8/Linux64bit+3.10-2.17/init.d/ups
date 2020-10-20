@@ -1,0 +1,33 @@
+#!/bin/sh
+
+upsdb=/local/ups/db
+state=$1
+case $state in
+  'start')
+      exec > /tmp/ups.out 2>&1
+      # uncomment the following if debugging
+      # set -x
+      start=$upsdb/.upsfiles/startup/ups_startup
+      (while [ ! -f $start ]; do sleep 5; done; $start) &
+      ;;
+  'stop')
+     $upsdb/.upsfiles/shutdown/ups_shutdown
+     ;;
+  'config')
+     case $0 in
+     /*) initd=$0;;
+     *)  initd=`pwd`/$0;;
+     esac
+     sfile=`echo $initd | sed -e 's;init.d/;rc3.d/S99;'`
+     kfile=`echo $initd | sed -e 's;init.d/;rc0.d/K01;'`
+     ln -s $initd $sfile
+     ln -s $initd $kfile
+     sfile=`echo $initd | sed -e 's;init.d/;rc5.d/S99;'`
+     kfile=`echo $initd | sed -e 's;init.d/;rc6.d/K01;'`
+     ln -s $initd $sfile
+     ln -s $initd $kfile
+     ;;
+  *)
+     echo "usage: $0 {start|stop|config}"
+     ;;
+esac

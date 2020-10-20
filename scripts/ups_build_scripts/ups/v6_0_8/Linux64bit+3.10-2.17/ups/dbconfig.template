@@ -1,0 +1,31 @@
+FILE = DBCONFIG
+
+# all nodes can read/use the products declared in this db
+AUTHORIZED_NODES = *
+
+# all product roots are under the following:
+PROD_DIR_PREFIX = /fnal/ups/prd
+
+# keep statistics about the following products:
+#   (uncomment to get stats!)
+# STATISTICS = ups:upd:perl
+
+#
+# manpages, info files, get copied here:
+MAN_TARGET_DIR = /fnal/ups/man
+CATMAN_TARGET_DIR = /fnal/ups/catman
+# INFO_TARGET_DIR = /fnal/ups/Info
+
+#
+#  automatic html and news processing not yet supported
+#  HTML_TARGET_DIR = /dev/null
+#  NEWS_TARGET_DIR = /dev/null
+
+# this db contains the ups product; 
+#   copy the setups.[c]sh and cached files to this directory:
+SETUPS_DIR = /fnal/ups/etc
+
+# this db contains the upd product; 
+#   look for the upd configuration and user callouts here:
+UPD_USERCODE_DIR = /fnal/ups/db/.updfiles
+

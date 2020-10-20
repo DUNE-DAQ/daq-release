@@ -1,0 +1,7 @@
+Priority: Medium
+State: Fixed
+
+If a product has a ${UPS_PROD_DIR}/ups directory, but no ups_dir
+defined in the table file or defined via -U, the ${UPS_UPS_DIR}
+wasn't getting set/replaced.
+

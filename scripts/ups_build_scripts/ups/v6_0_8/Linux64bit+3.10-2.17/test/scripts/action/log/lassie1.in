@@ -1,0 +1,4 @@
+lassie v1_0 -f NULL -z ../db1:dodefaults()
+   spot v1_0 -f NULL -z ../db1:dodefaults()
+   spot v1_0 -f NULL -z ../db1:sourcerequired(spot_v1_0, UPS_ENV)
+lassie v1_0 -f NULL -z ../db1:sourcerequired(lassie_v1_0, UPS_ENV)

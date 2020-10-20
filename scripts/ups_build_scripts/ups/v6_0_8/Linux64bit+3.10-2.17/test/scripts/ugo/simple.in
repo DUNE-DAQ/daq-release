@@ -1,0 +1,9 @@
+Product:          *
+Version:          *
+Flavor:           CHOCOLATE
+Qualifiers:       *
+DB:               /thunder
+                  /lightening
+Chains:           current
+                  development
+ugo_v 0 and UPS_VERBOSE 0

@@ -1,0 +1,62 @@
+FILE = TABLE
+PRODUCT = tiny
+VERSION = v2_0
+DESCRIPTION = "whatta you wanna know ?"
+_USER1 = uuuu1
+
+#*************************************************
+#
+GROUP:
+  FLAVOR = IRIX+6.2
+  QUALIFIERS = ""
+    
+  FLAVOR = IRIX
+  QUALIFIERS = "nodebug:superoptimized"
+    
+COMMON:
+  DESCRIPTION = "This is some version"
+  HTML_SOURCE_DIR = /usr/local/html
+  ACTION = CONFIGURE
+    setupRequired("dog v2_4")
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    setupRequired("lion v1_7")
+  ACTION = SETUP
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    setupRequired("cat v2_4")
+    setupRequired("dog v1_7")
+
+END:
+
+#*************************************************
+#
+FLAVOR = IRIX
+QUALIFIERS = "nodebug"
+  _USER2 = uuuu2
+  ACTION = CONFIGURE
+    setupRequired("dog v2_4")
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    setupRequired("lion v1_7")
+  ACTION = SETUP
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    setupRequired("cat v2_7")
+    setupRequired("dog v1_7")
+
+#*************************************************
+#
+FLAVOR = IRIX
+QUALIFIERS = "superoptimized"
+  ACTION = CONFIGURE
+    setupRequired("dog v2_4")
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    setupRequired("lion v1_7")
+  ACTION = SETUP
+    envAppend(PATH, ${PROD_DIR}/bin, :)
+    envSet(${PROD_NAME}_LIB, ${PROD_DIR}/lib)
+    setupRequired("cat v2_8")
+    setupRequired("dog v1_7")
+

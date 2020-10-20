@@ -1,0 +1,10 @@
+FILE = TABLE
+PRODUCT = jessie 
+
+GROUP:
+
+FLAVOR = ANY
+QUALIFIERS = "red"
+
+COMMON:
+END:

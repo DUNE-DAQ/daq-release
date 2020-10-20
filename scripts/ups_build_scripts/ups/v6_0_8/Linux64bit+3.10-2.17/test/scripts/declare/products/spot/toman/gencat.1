@@ -1,0 +1,218 @@
+
+
+
+ggggeeeennnnccccaaaatttt((((1111))))                                                            ggggeeeennnnccccaaaatttt((((1111))))
+
+
+
+NNNNAAAAMMMMEEEE
+     _gggg_eeee_nnnn_cccc_aaaa_tttt - generate a formatted message catalogue
+
+SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
+     _gggg_eeee_nnnn_cccc_aaaa_tttt [_----_mmmm] _c_a_t_f_i_l_e _m_s_g_f_i_l_e  ...
+
+DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+     The _gggg_eeee_nnnn_cccc_aaaa_tttt utility merges the message text source file(s) _m_s_g_f_i_l_e into a
+     formatted message database _c_a_t_f_i_l_e.  The database _c_a_t_f_i_l_e will be created
+     if it does not already exist.  If _c_a_t_f_i_l_e does exist its messages will be
+     included in the new _c_a_t_f_i_l_e.  If set and message numbers collide, the new
+     message text defined in _m_s_g_f_i_l_e will replace the old message text
+     currently contained in _c_a_t_f_i_l_e.  The message text source file (or set of
+     files) input to _gggg_eeee_nnnn_cccc_aaaa_tttt can contain either set and message numbers or
+     simply message numbers, in which case the set _NNNN_LLLL______SSSS_EEEE_TTTT_DDDD [see _nnnn_llll______tttt_yyyy_pppp_eeee_ssss(5)]
+     is assumed.
+
+     The format of a message text source file is defined as follows.  Note
+     that the fields of a message text source line are separated by a single
+     ASCII space or tab character.  Any other ASCII spaces or tabs are
+     considered as being part of the subsequent field.
+
+     _$$$$_ssss_eeee_tttt  _n _c_o_m_m_e_n_t
+          Where _n specifies the set identifier of the following messages until
+          the next _$$$$_ssss_eeee_tttt, _$$$$_dddd_eeee_llll_ssss_eeee_tttt or end-of-file appears.  _n must be  a number
+          in the range (1-{_NNNN_LLLL______SSSS_EEEE_TTTT_MMMM_AAAA_XXXX}).  Set identifiers within a single
+          source file need not be contiguous.  Any string following the set
+          identifier is treated as a comment.  If no _$$$$_ssss_eeee_tttt directive is
+          specified in a message text source file, all messages will be
+          located in the default message set _NNNN_LLLL______SSSS_EEEE_TTTT_DDDD.
+
+     _$$$$_dddd_eeee_llll_ssss_eeee_tttt  _n _c_o_m_m_e_n_t
+          Deletes message set _n from an existing message catalogue.  Any
+          string following the set number is treated as a comment.
+9          (Note:  if _n is not a valid set, it is ignored.)
+
+     _$$$$ _c_o_m_m_e_n_t
+          A line beginning with a dollar symbol (_$$$$) followed by an ASCII space
+          or tab character is treated as a comment.
+
+     _m _m_e_s_s_a_g_e _t_e_x_t
+          The _m denotes the message identifier, which is a number in the range
+          (1-{_NNNN_LLLL______MMMM_SSSS_GGGG_MMMM_AAAA_XXXX}).  The message text is stored in the message
+          catalogue with the set identifier specified by the last _$$$$_ssss_eeee_tttt
+          directive, and with message identifier _m.  If the message text is
+          empty, and an ASCII space or tab field separator is present, an
+          empty string is stored in the message catalogue.  If a message
+          source line has a message number, but neither a field separator nor
+          message text, the existing message with that number (if any) is
+          deleted from the catalogue.  Message identifiers need not be
+          contiguous.  The length of message text must be in the range
+          (0-{_NNNN_LLLL______TTTT_EEEE_XXXX_TTTT_MMMM_AAAA_XXXX}).
+
+
+9                                                                        PPPPaaaaggggeeee 1111
+
+
+
+
+
+
+ggggeeeennnnccccaaaatttt((((1111))))                                                            ggggeeeennnnccccaaaatttt((((1111))))
+
+
+
+     _$$$$_qqqq_uuuu_oooo_tttt_eeee _c
+          This line specifies an optional quote character _c, which can be used
+          to surround message text so that trailing spaces or null (empty)
+          messages are visible in a message source line.  By default, or if an
+          empty _$$$$_qqqq_uuuu_oooo_tttt_eeee directive is supplied, no quoting of message text will
+          be recognized.
+
+     Empty lines in a message text source file are ignored.
+
+     Text strings can contain the special characters and escape sequences
+     defined in the following table:
+                    ___________________________________________
+                      Description         Symbol     Sequence
+                    ___________________________________________
+                      newline             NL(LF)     \n
+                      horizontal tab      HT         \t
+                      vertical tab        VT         \v
+                      backspace           BS         \b
+                      carriage return     CR         \r
+                      form feed           FF         \f
+                      backslash           \          \\
+                      bit pattern         ddd        \ddd
+                    ___________________________________________
+7                    |7|7|7|7|7|7|7|7|7|7|
+
+
+
+
+
+
+
+
+
+                                                               |7|7|7|7|7|7|7|7|7|7|
+
+
+
+
+
+
+
+
+
+
+
+     If the character following a backslash is not one of those specified, the
+     backslash is ignored.  The escape sequence _\\\\_dddd_dddd_dddd consists of backslash
+     followed by 1, 2, or 3 octal digits, which are taken to specify the value
+     of the desired character.
+
+     Backslash followed by an ASCII newline character is also used to continue
+     a string on the following line.  Thus, the following two lines describe a
+     single message string:
+
+         _1111 _TTTT_hhhh_iiii_ssss _llll_iiii_nnnn_eeee _cccc_oooo_nnnn_tttt_iiii_nnnn_uuuu_eeee_ssss _\\\\
+         _tttt_oooo _tttt_hhhh_eeee _nnnn_eeee_xxxx_tttt _llll_iiii_nnnn_eeee
+
+     which is equivalent to:
+
+         _1111 _TTTT_hhhh_iiii_ssss _llll_iiii_nnnn_eeee _cccc_oooo_nnnn_tttt_iiii_nnnn_uuuu_eeee_ssss _tttt_oooo _tttt_hhhh_eeee _nnnn_eeee_xxxx_tttt _llll_iiii_nnnn_eeee
+
+FFFFIIIILLLLEEEESSSS
+     _////_uuuu_ssss_rrrr_////_llll_iiii_bbbb_////_llll_oooo_cccc_aaaa_llll_eeee_////_l_o_c_a_l_e_////_LLLL_CCCC______MMMM_EEEE_SSSS_SSSS_AAAA_GGGG_EEEE_SSSS_////_uuuu_xxxx_mmmm_eeee_ssss_gggg
+          language-specific message file [See _LLLL_AAAA_NNNN_GGGG on _eeee_nnnn_vvvv_iiii_rrrr_oooo_nnnn(5).]
+
+SSSSEEEEEEEE AAAALLLLSSSSOOOO
+     _mmmm_kkkk_mmmm_ssss_gggg_ssss(1), _cccc_aaaa_tttt_oooo_pppp_eeee_nnnn(3C), _cccc_aaaa_tttt_gggg_eeee_tttt_ssss(3C), _cccc_aaaa_tttt_cccc_llll_oooo_ssss_eeee(3C), _gggg_eeee_tttt_tttt_xxxx_tttt(3C),
+     _nnnn_llll______tttt_yyyy_pppp_eeee_ssss(5)
+
+NNNNOOOOTTTTEEEESSSS
+     This version of _gggg_eeee_nnnn_cccc_aaaa_tttt is built on the _mmmm_kkkk_mmmm_ssss_gggg_ssss utility.  The _gggg_eeee_nnnn_cccc_aaaa_tttt
+     database consists of two files, _c_a_t_f_i_l_e_...._mmmm, which is a _mmmm_kkkk_mmmm_ssss_gggg_ssss format
+     catalogue, and _c_a_t_f_i_l_e, which contains the information required to
+
+
+
+                                                                        PPPPaaaaggggeeee 2222
+
+
+
+
+
+
+ggggeeeennnnccccaaaatttt((((1111))))                                                            ggggeeeennnnccccaaaatttt((((1111))))
+
+
+
+     translate a set and message number into a simple message number that can
+     be used in a call to _gggg_eeee_tttt_tttt_xxxx_tttt.
+
+     Using _gggg_eeee_tttt_tttt_xxxx_tttt constrains the catalogues to be located in a subdirectory
+     under _////_uuuu_ssss_rrrr_////_llll_iiii_bbbb_////_llll_oooo_cccc_aaaa_llll_eeee.  This restriction is lifted by placing only a
+     symbolic link to the catalogue in the directory
+     _////_uuuu_ssss_rrrr_////_llll_iiii_bbbb_////_llll_oooo_cccc_aaaa_llll_eeee_////_XXXX_oooo_pppp_eeee_nnnn_////_LLLL_CCCC______MMMM_EEEE_SSSS_SSSS_AAAA_GGGG_EEEE_SSSS when the catalogue is opened.  It is
+     this link that _gggg_eeee_tttt_tttt_xxxx_tttt uses when attempting to access the catalogue.  The
+     link is removed when the catalogue is closed but occasionally as
+     applications exit abnormally without closing catalogues redundant
+     symbolic links will be left in the directory.
+
+     For compatibility with previous versions of _gggg_eeee_nnnn_cccc_aaaa_tttt released in a number
+     of specialized internationalization products, the _----_mmmm option is supplied.
+     This option will cause _gggg_eeee_nnnn_cccc_aaaa_tttt to build a single file _c_a_t_f_i_l_e which is
+     compatible with the format catalogues produced by the earlier versions.
+     The retrieval routines detect the type of catalogue they are using and
+     will act appropriately.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        PPPPaaaaggggeeee 3333
+
+
+

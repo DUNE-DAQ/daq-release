@@ -1,0 +1,8 @@
+Priority: Low
+State: Unverified
+
+Some platforms produce annoying error messages when sourcing /dev/null.  We
+should never output /dev/null, but output the name of a self-deleting file,
+even if we need to make a second temporary file, as would be the case for
+setup xxx -s.  3 days.  Annoying, but low priority.
+

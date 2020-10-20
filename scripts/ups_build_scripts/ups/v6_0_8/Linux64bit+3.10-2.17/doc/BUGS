@@ -1,0 +1,18 @@
+User defined variables in group stanzas get lost.
+Modify's -E option does nothing.
+The bash shell complains about sourcing /dev/null.
+There have been reports of declarations being incorrectly made in the
+  first database in the $PRODUCTS list if there's a match (error?) in the
+  nth database.
+There have been reports of problems with list -K with empty database
+  directories.
+(Un)declares may fail if there's an error detected, even if it's not
+  relevant to the product at hand.
+Leading spaces in quoted strings (used with -G and -O, for example)
+  are not trimmed and cause errors.
+The -P option is only partially effective, and commands can fail even
+  with -P if there are no databases available.
+Not all of the variables available to functions are available to scripts
+  executed by table files.
+There are reports that envPrepend commands fail with tcsh if the
+  variable doesn't already exist.

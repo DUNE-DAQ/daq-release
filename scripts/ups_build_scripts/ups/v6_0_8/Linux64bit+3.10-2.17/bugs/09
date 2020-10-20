@@ -1,0 +1,15 @@
+Priority: Low
+State: Unverified
+
+To deal with the "sh: Cannot perform a return when not in function mode"
+error messages in Bourne shell, we could convert most of the remainder of
+the temporary file into a here document.
+
+    cat > /dev/null <<'false'
+    ...
+    false
+    'false'
+    <clean-up>
+
+Would need to work out a scheme for not exiting with an unintended error.
+

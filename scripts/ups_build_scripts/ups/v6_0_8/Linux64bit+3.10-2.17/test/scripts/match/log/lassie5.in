@@ -1,0 +1,4 @@
+D:NAME=../db1
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt, CHAIN=mydog
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=        NULL, QUALIFIERS=nodbg:opt

@@ -1,0 +1,9 @@
+Product:          ProdC
+Flavor:           IRIX
+                  AIX
+                  ANY
+Qualifiers:       
+DB:               /thunder
+                  /lightening
+Chains:           current
+ugo_v 0 and UPS_VERBOSE 0

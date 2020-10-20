@@ -1,0 +1,16 @@
+Product:          *
+Flavor:           CHOCOLATE
+                  VANILLA
+                  ROCKYROAD
+                  ANY
+Qualifiers:       a:aardvark
+                  123:Bear:Canary:___:big-dog:dog
+                  cat:fat-cat
+                  cat
+                  fat-cat
+                  
+                  aardvark
+DB:               /thunder
+                  /lightening
+Chains:           current
+ugo_v 0 and UPS_VERBOSE 0

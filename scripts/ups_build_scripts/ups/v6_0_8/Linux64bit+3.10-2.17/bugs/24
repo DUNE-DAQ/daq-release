@@ -1,0 +1,7 @@
+Priority: Low
+State: Unverified
+
+An optional 3rd parameter for envXXX functions to pass options to dropit,
+the default being -e.  This would allow complete control over path
+handling, and would be reversible, in theory.  5 days (optimistic?).
+

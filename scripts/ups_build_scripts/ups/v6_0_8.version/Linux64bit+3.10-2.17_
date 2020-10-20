@@ -1,0 +1,15 @@
+FILE = version
+PRODUCT = ups
+VERSION = v6_0_8
+
+#*************************************************
+#
+FLAVOR = Linux64bit+3.10-2.17
+QUALIFIERS = ""
+  DECLARER = jenkins
+  DECLARED = 2019-07-24 15.53.14 GMT
+  MODIFIER = jenkins
+  MODIFIED = 2019-07-24 15.53.14 GMT
+  PROD_DIR = ups/v6_0_8/Linux64bit+3.10-2.17
+  UPS_DIR = ups
+  TABLE_FILE = ups.table

@@ -1,0 +1,20 @@
+FILE = VERSION
+PRODUCT = asta 
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = "nick:nora"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/asta
+  UPS_DIR = ups
+  TABLE_FILE = asta.table
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/asta
+  UPS_DIR = ups
+  TABLE_FILE = asta.table
+

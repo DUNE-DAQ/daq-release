@@ -1,0 +1,16 @@
+File=Table
+Product=oregano
+#*************************************************
+# Starting Group definition
+Group:
+Flavor=ANY
+Qualifiers=""
+
+Common:
+   Action=setup
+      setupRequired("-j -f NULL thyme v1_0")
+      doDefaults()
+End:
+# End Group definition
+#*************************************************
+

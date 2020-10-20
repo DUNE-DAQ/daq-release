@@ -1,0 +1,263 @@
+#!/bin/sh
+#
+# Add dependencies to a makefile
+#
+# Usage: upsmake_make [flags] cfiles
+# flags:
+#	-cc	compilation command (with -Is, etc.) to use (default: cc)
+#	-env	environment to use (default: uname)
+#	-file   name of makefile (default: Makefile)
+#
+# For example,
+#	upsmake_make -cc 'cc=cc -I..' -file makefile -env IRIX *.c
+#
+# You may not want to check against the standard (i.e. <...>) headers,
+# especially as there is no guarantee that they are in the same place
+# on all systems. You can suppress their inclusion in the makefile with
+# the flag -nostd
+#
+# Because of the way that we use cc to find the dependencies, products
+# setup in the environment with ups have been expanded. To try to remedy
+# this, upsmake_make goes through the list of -I directives and attempts
+# to find their original form in the environment. It seems to work, but
+# you can turn this off with the -nofixup flag
+#
+# Note that upsmake_make works by replacing all lines in the makfile that
+# follow a line `#START_DEPEND' with the new .h file dependencies,
+# except as noted below. The old makefile is saved as with a ~
+# appended
+#
+# Author: Robert Lupton (rhl@astro.princeton.edu)
+# Revised: Ron Rechenmacher (ron@fnal.fnal.gov)
+#		Misc cleanup
+#		Added support for multiple (or cross) "platform" development
+
+#			- add switches: -mop <obj_prefix>, -mos
+#			<obj_suffix> -moa -modp <file> When -mo{p,s}
+#			is specified, the prefix/suffix (which may
+#			contain macros) are added to the generated
+#			dependancies.  There is one catch with -mos; a
+#			suffix of type `.x' will produce the same
+#			results as `x.'. -moa says to append to the
+#			makefile as opposed to regenerating everything
+#			after the `#START_DEPEND' flag.  The -mopd
+#			<file> option can be used to output dependancy
+#			to a file different than the makefile.  The
+#			file specification can also include macros.
+#			An `include' make directive will be added to
+#			the makefile.  Note that the file created will
+#			of course not have the macros and may need to
+#			be renamed.  Macros included in the options
+#			will have no effect unless assigned values
+#			either on the (sdss)make command line or via
+#			the environment with using the (sdss)make -e
+#			option.  (An example to take advantage to
+#			multiplatform building would be to define a
+#			macro, say $(XOBJ), in the -mop options, then
+#			assign XOBJ="`uname`/" in the environment or
+#			on the make command line. You must also make
+#			sure the `uname`/ directory exists.)
+			
+#
+# Set up the environment.
+#
+
+makeDir=`dirname $0`
+if [ -n "$makeDir" ]; then
+   makeDir=${makeDir}/
+fi
+
+#
+#
+#
+
+while [ X"$1" != X"" ]; do
+	case $1 in
+	  -cc|-env|-file)
+		if [ X"$2" = X"" ]; then
+			echo "Please provide an argument with $1" >&2
+			exit 1
+		fi
+		case $1 in
+		  -cc)
+			cc="$2";;
+		  -env)
+			env=$2;;
+		  -file*)
+			mfile=$2;;
+		  *)
+			echo "You can't get here; saw $1" >&2;;
+		esac
+		shift;;
+	  -help|-h|-\?)
+		cat <<'dd.sysin'
+Usage: upspremake [flags] [targets]
+Valid flags are:
+	-?		Print this message
+	-cc str		Specify the compiler and flags
+	-env str	Choose a compilation environment (ACC, GCC, IRIX)
+	-file name	Choose the name of the makefile
+	-help		Print this message
+	-nofix		Don't attempt to un-expand environment symbols
+	-nostd		Don't generate dependencies for system headers
+	-mop str	MultiObject Prefix
+	-mos str	MultiObject Suffix
+	-moa		MultiObject Append to makefile
+	-modp file	MultiObject separate file for DePendancies
+flags may be upper of lower case, and truncated to 3 characers. All other
+flags are passed to make
+dd.sysin
+		exit 1;;		
+	  -nofix*)
+		nofix=1
+		HARDPATH="HARDPATH=1";;
+	  -nostd*)
+		nostd=1;;
+	  -mop)
+		shift
+		MOP="MOP=$1";;
+	  -mos)
+		shift
+		MOS="MOS=$1";;
+	  -moa)
+		MOA="MOA=1";;
+	  -mod*)	# dpfile
+		shift
+		MOD=MOD="$1";;
+	  -*)
+		echo "Unknown flag $1" >&2;;
+	  *)
+		break;;
+	esac
+	shift
+done
+#
+# Get default values if needed
+#
+if [ "$cc" = "" ]; then
+	cc='cc'
+fi
+if [ "$env" = "" ]; then
+	env=`uname`
+fi
+if [ "$mfile" = "" ]; then
+	mfile='Makefile'
+fi
+
+#
+# Now do the work; trim the makefile, generate the dependencies, and
+# massage them before appending them to the trimmed makefile
+# assume that the C-compiler will pack many dependencies on a line.
+#
+#   o	Change the -M option for some compilers also.
+#
+
+mopt='-M'		# Most compilers use this for generating dependencies
+
+if [ -n "$nostd" ] ; then
+
+	case $env in
+
+	   SunOS|acc|ACC)
+		NOSTDlist='/usr/include /usr/lang'
+		;;
+
+	   #
+	   # For the GCC case, it's necessary to locate where the standard
+	   # include files reside.  The easiest means for a non-standard
+	   # environment is to invoke gcc -M to have it list out the standar
+	   # include path.
+	   #
+
+ 	   gcc|GCC|Linux|LINUX)
+		mopt='-MM'				# GNU can be different
+		NOSTDlist='/usr/include'
+
+		make_gccTestFile="upsmake_make.$$.c"	# Gen semi-unique name
+
+		make_gccFind=`echo $PATH | tr ':' ' '`
+		make_gccLoc=`whereis -b -B ${make_gccFind} -f gcc | sed -e 's/^gcc:[ 	]*//' -e 's/[ 	]*$//'`
+
+		if [ -n "${make_gccLoc}" ]; then
+		   echo '#include <stdio.h>' > ${make_gccTestFile}
+		           make_gccInc=`gcc -M ${make_gccTestFile} | sed -e                               '/\/stdio.h/!d' \
+		                                                         -e 's/^.*[: 	]\{1,\}\(\/[^ 	]*\)\/stdio.h[ 	\]*$/\1/'`
+		                        rm  -f ${make_gccTestFile}
+		   if [ -n "${make_gccInc}" ]; then
+		      NOSTDlist="${NOSTDlist} ${make_gccInc}"
+		   fi
+		else
+		   if [ -d "$GCC_DIR"    ]; then		  # Guess where
+		      NOSTDlist="${NOSTDlist} ${GCC_DIR}/include" # .h reside
+		   fi
+		fi
+
+		if [ -d "$GCCFIX_DIR" ]; then
+		   NOSTDlist="${NOSTDlist} ${GCCFIX_DIR}/inc"
+		fi
+	        ;;
+
+
+ 	   cc68k|CC68K)
+		mopt='-MM'				# GNU can be different
+		NOSTDlist="/usr/include  $VX_DSC_DIR/h"
+
+		make_gccTestFile="upsmake_make.$$.c"	# Gen semi-unique name
+
+		make_gccFind=`echo $PATH | tr ':' ' '`
+		make_gccLoc=`whereis -b -B ${make_gccFind} -f gcc | sed -e 's/^gcc:[ 	]*//' -e 's/[ 	]*$//'`
+
+		if [ -n "${make_gccLoc}" ]; then
+		   echo '#include <stdio.h>' > ${make_gccTestFile}
+		           make_gccInc=`gcc -M ${make_gccTestFile} | sed -e                               '/\/stdio.h/!d' \
+		                                                         -e 's/^.*[: 	]\{1,\}\(\/[^ 	]*\)\/stdio.h[ 	\]*$/\1/'`
+		                        rm  -f ${make_gccTestFile}
+		   if [ -n "${make_gccInc}" ]; then
+		      NOSTDlist="${NOSTDlist} ${make_gccInc}"
+		   fi
+		else
+		   if [ -d "$GCC_DIR"    ]; then		  # Guess where
+		      NOSTDlist="${NOSTDlist} ${GCC_DIR}/include" # .h reside
+		   fi
+		fi
+
+		if [ -d "$GCCFIX_DIR" ]; then
+		   NOSTDlist="${NOSTDlist} ${GCCFIX_DIR}/inc"
+		fi
+	        ;;
+
+
+	   #
+	   # Everyone else.
+	   #
+
+	   *)
+		NOSTDlist='/usr/include'
+		;;
+esac
+fi
+
+#
+#   o	Duplicate the Makefile without the trailing dependencies.
+#
+
+/bin/mv $mfile ${mfile}~	# Backup the make file. NOTE: because
+				# the perl script outputs the new makefile
+				# from the old, use this old file as input to
+				# the perl script
+
+echo $cc
+
+# The following makes sure include directories are expanded.  I.E. there
+# are no variables in the variable.  A user may define there "INCLUDES" 
+# macro insuch a way (INCLUDES = -I$$SOME_DIR) such that a variable will 
+# remain at this poing. Variable expansion is not recursive 
+# and if we don't eval, the cc command will not comprehend the -I options.
+# The same is true for the perl script.  It wants to be given a list of -I
+# options without variables.
+eval evalcc=\"$cc\"
+
+$evalcc $mopt "$@" 2> .CC-M.stderr~ \
+		| perl ${makeDir}upsmakeDependFix.pl \
+		${MOP:-} ${MOS:-} ${MOA:-} ${MOD:-} MKFILE=${mfile}~ \
+		${HARDPATH:-} CCLINE="$evalcc" NOSTD="$NOSTDlist" > $mfile;

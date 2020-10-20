@@ -1,0 +1,14 @@
+FILE = chain
+# PRODUCT = the_product
+CHAIN = current
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v1_0
+QUALIFIERS = ""
+  DECLARER = fagan
+  DECLARED = 1998-05-13 13.25.08 GMT
+  MODIFIER = fagan
+  MODIFIED = 1998-05-13 13.25.08 GMT
+

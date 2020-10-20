@@ -1,0 +1,11 @@
+FILE = VERSION
+PRODUCT = snoopy 
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/snoopy
+  UPS_DIR = ups
+

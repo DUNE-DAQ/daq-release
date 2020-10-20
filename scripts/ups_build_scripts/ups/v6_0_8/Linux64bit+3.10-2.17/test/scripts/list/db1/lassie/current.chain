@@ -1,0 +1,30 @@
+#*************************************************
+# Chain File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+File=Chain
+Product=lassie
+Chain=current
+# 
+Flavor=NULL
+Qualifiers="nodbg:opt"
+Version=v2_0
+Declarer="roddy"
+Declared=5-14-97
+# 
+Flavor=IRIX+5
+Qualifiers="nodbg:opt"
+Version=v2_0
+Declarer="roddy"
+Declared=5-14-97
+# 
+Flavor=OSF1
+Qualifiers=""
+Version=v1_0
+Declarer="roddy"
+Declared=5-14-97

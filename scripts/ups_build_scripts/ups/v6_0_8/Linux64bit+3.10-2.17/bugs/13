@@ -1,0 +1,4 @@
+Priority: Low
+State: Fixed?
+
+Installing ups doesn't seem to update the [cat]man pages.  Should be fixed in v4_5_2.

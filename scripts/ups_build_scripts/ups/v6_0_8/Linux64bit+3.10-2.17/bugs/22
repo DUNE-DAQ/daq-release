@@ -1,0 +1,57 @@
+Priority: Low
+State: Unverified
+
+Make all of the table and version file keywords available as environment
+variables, and substitute their values in the setup's temporary file.  Some
+of these will be tricky.  UPS_PROD_CHAIN will probably need to include '-g'
+if there is a chain, so that it can be used without a bunch of glue code.
+6 days.  Important.  The entire list:
+
+  PRODUCTS                Must already be set
+  UPD_USERCODE_DIR        Must already be set
+
+  UPS_ACTION              Name of top-level action being executed
+  UPS_ARCHIVE_FILE
+  UPS_AUTHORIZED_NODES
+  UPS_CATMAN_SOURCE_DIR
+  UPS_CATMAN_TARGET_DIR
+  UPS_CHAIN               Specified chain name or current
+  UPS_COMPILE*            The complete compile file spec
+  UPS_COMPILE_DIR
+  UPS_COMPILE_FILE
+  UPS_DB_VERSION
+  UPS_DECLARED
+  UPS_DECLARER
+  UPS_DESCRIPTION
+  UPS_EXTENDED*
+  UPS_FILE                Will always be "table" I'd think
+  UPS_HTML_SOURCE_DIR     Not yet supported
+  UPS_HTML_TARGET_DIR     Not yet supported
+  UPS_INFO_SOURCE_DIR
+  UPS_INFO_TARGET_DIR
+  UPS_MAN_SOURCE_DIR
+  UPS_MAN_TARGET_DIR
+  UPS_MODIFIED
+  UPS_MODIFIER
+  UPS_NEWS_SOURCE_DIR     Not yet supported
+  UPS_NEWS_TARGET_DIR     Not yet supported
+  UPS_OPTIONS*
+  UPS_ORIGIN
+  UPS_OS_FLAVOR*
+  UPS_PROD_CHAIN          Specified chain or current, as "-g <chain>"
+  UPS_PROD_DIR*
+  UPS_PROD_DIR_PREFIX
+  UPS_PROD_FLAVOR*
+  UPS_PROD_NAME*
+  UPS_PROD_QUALIFIERS*
+  UPS_PROD_VERSION*
+  UPS_SETUPS_DIR
+  UPS_SHELL
+  UPS_SOURCE
+  UPS_STATISTICS
+  UPS_TABLE_DIR
+  UPS_TABLE_FILE
+  UPS_THIS_DB*
+  UPS_UPS_DIR*
+  UPS_VERBOSE*
+

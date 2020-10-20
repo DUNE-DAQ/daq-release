@@ -1,0 +1,34 @@
+FILE=VERSION 
+PRODUCT=clarinet VERSION=v2_0
+
+FLAVOR=IRIX
+QUALIFIERS="pine"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=IRIX3.1
+QUALIFIERS="elm"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=IRIX5.2
+QUALIFIERS="nedit"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=IRIX7.3
+QUALIFIERS="virport"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table

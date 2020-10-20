@@ -1,0 +1,15 @@
+#!/bin/sh
+# ============================================================================
+# test ups flavor
+# ============================================================================
+cd $UPS_DIR/test/scripts/flavor
+$UPS_DIR/test/ups_test << EOD
+flavor -H MyOS+Major.Minor -3 -out full.out -diff full.in
+flavor -H MyOS+Major.Minor -2 -out major.out -diff major.in
+flavor -H MyOS+Major.Minor -1 -out osonly.out -diff osonly.in
+flavor -H MyOS+Major.Minor -0 -out null.out -diff null.in
+flavor -H MyOS+Major.Minor -l -out long.out -diff long.in
+# ask for more then you got...
+flavor -H MyOS -3 -out osonly.out -diff osonly.in
+quit
+EOD

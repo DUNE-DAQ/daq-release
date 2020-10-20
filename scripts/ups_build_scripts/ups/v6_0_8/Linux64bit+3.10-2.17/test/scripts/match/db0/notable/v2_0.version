@@ -1,0 +1,11 @@
+FILE = VERSION
+PRODUCT = notable
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-12-62
+  DECLARER = jetson
+  PROD_DIR = /NULL/notable
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table

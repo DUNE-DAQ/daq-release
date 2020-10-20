@@ -1,0 +1,18 @@
+setenv IFE_DIR ""
+#
+setenv SETUP_IFE 'ife v1_0 -f NULL -z ../db1'
+#
+echo "start"
+#
+test "$FOO" = "a"
+if ($status == 0) then
+:
+echo "if case"
+#
+else
+:
+echo "else case"
+#
+endif
+echo "end"
+#

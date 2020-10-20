@@ -1,0 +1,9 @@
+setenv ROVER "ROCK AND ROLL"
+#
+if (-e $UPS_DIR/test/scripts/compile/log/rover.out.csh) then
+  source $UPS_DIR/test/scripts/compile/log/rover.out.csh
+else
+  echo "File ($UPS_DIR/test/scripts/compile/log/rover.out.csh) not found"
+  exit 1
+endif
+#

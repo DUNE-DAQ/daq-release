@@ -1,0 +1,515 @@
+.TH ups 1 2000-06-02
+.SH NAME
+ups, upd, setup, unsetup -- access to Fermilab local products
+.SH DESCRIPTION
+
+.nf
+.B "setup [opts] product [version]"
+ Makes product instance available for use.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -e, -f, -g, -H, -j, -k, -M, -m, -n,
+     -O, -o, -P, -q, -R, -r, -s, -t, -U, -V, -v, -Z, -z
+
+.B "unsetup [opts] product [version]"
+ Makes the product no longer available for use by undoing changes made
+ to the environment by setup.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -e, -f, -g, -H, -j, -M, -m, -n, -O,
+     -o, -P, -q, -r, -s, -t, -U, -V, -v, -Z, -z
+
+.B "upd fetch [options] [-J filename] product version"
+ Retrieves a single file or directory maintained in a UPS distribution
+ database, and downloads it to the user node, placing it relative to the
+ current working directory. This command cannot retrieve files from
+ within a tar file. In an archive distribution database, the only files
+ provided in the appropriate format are the ups subdirectory files, the
+ README and INSTALL_NOTE files, and the table and version files. If file
+ name or path is not specified (via the -J option), the command returns
+ a recursive list of directories and files that are available for
+ retrieval. Warning: when using a live distribution database, this list
+ may be very long. product name
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -h, -J, -n, -o, -q, -s,
+     -t, -v, -z
+
+.B "ups get -F [options] product [version]"
+ ups get -F outputs a list of files that are maintained outside of the
+ product area (exclusive of table files, for which the location is
+ maintained in the version file). In a future release, ups get may
+ acquire additional functions.
+ Options
+     -?, -c, -d, -F, -f, -g, -H, -M, -m, -n, -o, -q, -r, -t, -U, -V,
+     -v, -Z, -z
+
+.B "upd get -F options product [version]"
+ upd get -F outputs a list of files that are maintained outside of the
+ product area (exclusive of table files, for which the location is
+ maintained in the version file) on the distribution node and which must
+ be distributed with the product. It is used similarly to ups get. In a
+ future release, upd get may acquire additional functions.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -F, -f, -g, -H, -h, -M, -m, -n, -o,
+     -q, -r, -t, -U, -v, -Z, -z
+
+.B "upd install options product [version]"
+ Retrieves a product instance and by default its UPS product
+ requirements as needed from a UPS distribution node. It installs it (or
+ them) on the user node (unwinding if transferred in tar format) and
+ declares it/them to a local UPS database. The -G option is provided to
+ allow you to pass UPS options to the local ups declare command which
+ gets called by UPD. product name
+ Options
+     -0, -1, -2, -3, -?, -C, -c, -d, -f, -G, -g, -H, -h, -I, -i, -j,
+     -M, -m, -n, -O, -o, -q, -R, -r, -s, -t, -U, -v, -z
+
+
+.B "ups list [options] [product] [version]"
+ Outputs product instance information contained in the ups databases in
+ one of two formats; one designed to be read by a person and the other
+ for piping information to another command.
+ Options
+     -0, -1, -2, -3, -?, -a, -c, -d, -f, -g, -H, -K, -l, -M, -m, -n,
+     -o, -q, -r, -t, -U, -v, -Z, -z
+
+.B "upd list [options] [product] [version]"
+ Performs ups list on the distribution UPS database(s).
+ Options
+     -0, -1, -2, -3, -?, -a, -c, -d, -f, -g, -H, -h, -K, -l, -M, -m,
+     -n, -o, -q, -r, -t, -U, -v, -Z, -z
+
+.B "upd update component options product [version]"
+ Retrieves either the table file or ups subdirectory (depending on the
+ component specified) for a product instance, and by default for its UPS
+ product requirements, from a UPS distribution database for the purpose
+ of updating the pre-existing one(s) on a local node. Overwriting occurs
+ only if the MODIFIED date in the (remote) version file that points to
+ the retrieved component is more recent than that in the pre-existing
+ local version file; file time-stamps are not used for comparison. The
+ update will fail if there is no corresponding pre-existing component on
+ the user node. component (specified as table_file or ups_dir ), and
+ product name
+ Options
+     -0, -1, -?, -c, -d, -f, -G, -g, -H, -h, -I, -i, -j, -n, -O, -o,
+     -P, -q, -R, -s, -t, -v, -z
+
+.B "Developer and Installer Commands"
+
+.B "ups depend [options] product [version]"
+ Identifies UPS product requirements of the specified product or
+ instance(s).
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -j, -K, -l, -M, -m, -n,
+     -o, -q, -R, -r, -t, -U, -V, -v, -Z, -z
+
+.B "upd depend [options] product [version]"
+ Identifies UPS product requirements of the specified product or
+ instance(s) as declared in the distribution database. It is used
+ similarly to ups depend.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -h, -j, -K, -l, -M, -n,
+     -o, -q, -R, -r, -s, -t, -U, -v, -Z, -z
+
+.B "ups exist [options] product [version]"
+ Determines if a setup command with the same options would likely
+ succeed. Specifically, it determines whether ups can create the
+ temporary file of actions that setup would perform. If so, it creates
+ the file, but it does not execute it. This can be used as a quick test
+ for existence of a particular product instance.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -e, -f, -g, -H, -j, -k, -M, -m, -n,
+     -O, -o, -P, -q, -r, -t, -U, -V, -v, -Z, -z
+
+.B "upd exist [options] product [version]"
+ Determines if a setup command with the same options would likely
+ succeed on the remote node. Specifically, it determines whether ups can
+ create the temporary file of actions that setup would perform. If so,
+ it creates the file, but it does not execute it. This can be used as a
+ quick test for existence of a particular product instance. It is used
+ similarly to
+ ups exist productname
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -e, -f, -g, -H, -h, -j, -k, -M, -m,
+     -n, -O, -o, -P, -q, -r, -t, -U, -V, -v, -Z, -z
+
+.B "upd addproduct [options] product version"
+ Adds one or a combination of the following to the KITS database: a
+ product tar file, an unwound product (must be declared to a local UPS
+ database), a table file, or a ups directory. Required elements depend
+ on the object being added.
+ Options
+     -0, -1, -2, -3, -?, -A, -c, -D, -d, -f, -g, -H, -h, -M, -m, -n,
+     -O, -o, -P, -p, -q, -r, -s, -T, -t, -U, -V, -v, -z
+
+.B "upd modproduct [-m tablefile] [-U upsdir] [-g chain] product version"
+.B "-f flavor"
+ Used to a chain to a product instance declared in KITS Also used to
+ replace a table file or a ups directory for a product instance in KITS.
+ Required elements depend on the object being modified.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -h, -M, -m, -n, -o, -q,
+     -s, -t, -U, -v, -z
+
+.B "upd delproduct [opts] product version -f flavor"
+ Deletes a specified product instance declaration and its associated tar
+ file (if any) from the KITS database.
+ Options
+     -0, -1, -2, -?, -c, -d, -f, -g, -H, -h, -n, -o, -q, -s, -t, -v,
+     -z
+
+.B "upd repproduct [options] product version"
+ Equivalent to a upd delproduct followed by a upd addproduct
+ Options
+     -0, -1, -2, -3, -?, -A, -c, -D, -d, -f, -g, -H, -h, -M, -m, -n,
+     -O, -o, -P, -p, -q, -r, -s, -T, -t, -U, -V, -v, -z
+
+.B "ups verify [options] [product] [version]"
+ Performs checks of the information in all the database files for the
+ specified instances to determine if there are any errors or
+ inconsistencies.
+ Options
+     -0, -1, -2, -3, -?, -a, -c, -d, -f, -g, -H, -M, -m, -n, -o, -q,
+     -r, -t, -U, -v, -Z, -z
+
+.B "upd verify [options] [product] [version]"
+ Performs ups verify on the distribution UPS database(s).
+ Options
+     -0, -1, -2, -3, -?, -a, -c, -d, -f, -g, -H, -h, -K, -l, -M, -m,
+     -n, -o, -q, -r, -t, -U, -v, -Z, -z
+
+.B "ups configure [options] product [version]"
+ Runs the "configure" action of the product, usually to allow
+ constructing symbolic links, copying files, or automatic local
+ customization of the product.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -M, -m, -n, -O, -o, -P,
+     -q, -r, -s, -t, -U, -V, -v, -Z, -z
+
+\fBups copy [options] product [version] -G "[options] product version"\fP
+ Designed as a ups product development tool allowing a new instance of a
+ product to be declared "like" another.
+ Options
+     -0, -1, -2, -3, -?, -A, -b, -C, -c, -D, -d, -f, -G, -g, -H, -M,
+     -m, -n, -O, -o, -p, -q, -r, -T, -t, -U, -u, -V, -v, -W, -X, -Z,
+     -z
+
+.B "ups declare [-r home] [-m table_file_name] [-M table_file_loc]"
+.B "[-U ups_dir] [options] product version"
+ Adds a new product instance and-or chain to a UPS database, or changes
+ the chain information on an instance.
+ Options
+     -0, -1, -2, -3, -?, -A, -b, -C, -c, -D, -d, -f, -g, -H, -L, -M,
+     -m, -n, -O, -o, -q, -r, -T, -t, -U, -u, -v, -Z, -z
+
+.B "ups modify [options] product [version]"
+ Allows user to manually edit product files and then performs
+ syntax/content validation.
+ Options
+     -?, -A, -c, -d, -E, -f, -H, -M, -m, -n, -N, -o, -p, -q, -r, -t,
+     -T, -U, -V, -v, -Z, -z
+
+.B "ups start [options] product [version]"
+ Allows automatic startup for products that need to load drivers start
+ daemons or perform other actions required at system boot time.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -M, -m, -n, -O, -o, -P,
+     -q, -r, -s, -t, -U, -V, -v, -w, -Z, -z
+
+.B "ups stop [options] product [version]"
+ For products that get started automatically at system startup this
+ allows automatic stop of products at system shutdown.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -M, -m, -n, -O, -o, -P,
+     -q, -r, -s, -t, -U, -V, -v, -Z, -z
+
+.B "ups tailor [options] product [version]"
+ Allows the entry of any once per installation information that requires
+ user input; e.g. the location of specific hardware devices. If a
+ product instance has tailor functions, the command must be run by the
+ installer after the product is declared to the ups database.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -K, -M, -m, -n, -O, -o,
+     -P, -q, -r, -s, -t, -U, -V, -v, -Z, -z
+
+.B "ups touch [options] product [version]"
+ Changes the MODIFIED date and MODIFIER to the current time and the
+ current user, respectively.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -n, -o, -q, -t, -v, -Z,
+     -z
+
+.B "ups unconfigure [options] product [version]"
+ This calls the products "unconfigure" action, which should undo
+ whatever the products "configure" action does.
+ Options
+     -0, -1, -2, -3, -?, -c, -d, -f, -g, -H, -M, -m, -n, -O, -o, -P,
+     -q, -r, -s, -t, -U, -V, -v, -Z, -z
+
+.B "ups undeclare [options] product [version]"
+ Allows removal of instances from the ups database.
+ Options
+     -0, -1, -2, -3, -?, -C, -c, -d, -f, -g, -H, -M, -m, -n, -O, -o,
+     -q, -r, -t, -U, -V, -v, -Y, -y, -Z, -z
+
+.B "ups parent [options] [product] [version]"
+ Outputs an inverse dependency tree for each product instance specified.
+ Unlike ups depend, it shows what products depend on the specified instances,
+ rather than what products the specified instances depend upon.
+ Options
+     -0, -1, -2, -3, -?, -a, -c, -d, -f, -g, -H, -K, -l, -M, -m, -n,
+     -o, -q, -r, -t, -U, -v, -Z, -z
+
+.B "Command Option Descriptions"
+
+.B "-0"
+ NULL flavor string; use in place of -f option
+ Note: can also be used inside -G ""
+
+.B "-1"
+ OS flavor specification of distribution node up to the generic OS
+ (e.g., SunOS); use in place of -f option
+ Note: can also be used inside -G ""
+
+.B "-2"
+ OS flavor specification of distribution node up to the major release
+ (e.g., SunOS+5); use in place of -f option
+ Note: can also be used inside -G ""
+
+.B "-3"
+ most significant OS flavor specification of distribution node, or the
+ full specification (e.g., SunOS+5.5); use in place of -f option
+ Note: can also be used inside -G ""
+
+.B "-?"
+ print out usage information for command
+ Note: C shell users, enclose -? in double quotes (e.g., ups declare
+ "-?" ); -? is interpreted by sh.
+
+.B "-A"
+ nodes set authorized nodes to include only specified nodes
+ Note: can also be used inside -G ""
+
+.B "-a"
+ include all instances found in searched distribution database(s)
+
+.B "-b compile_file"
+ Specify the name of a file to hold compiled functions.
+
+.B "-c"
+ Don't run configure/unconfigure current/uncurrent, etc. actions
+ Note: can also be used inside -G ""
+
+.B "-c"
+ current chain for product instance in distribution database
+ Note: can also be used inside -G ""
+
+.B "-D URL"
+ specify product's master source location, (informational only)
+ Note: can also be used inside -G ""
+
+.B "-d"
+ specifies the development chain for product instance in distribution
+ database, Equivalent to "-g development"
+ Note: can also be used inside -G ""
+
+.B "-E"
+ Run the editor specified by $EDITOR on the requested file
+ Note: can also be used inside -G ""
+
+.B "-e"
+ sets $UPS_EXTENDED to the value 1 when performing actions. (This may
+ have an effect if the table file uses the variable)
+
+.B "-F"
+ return list of files (excluding table file, for which the location is
+ maintained in the version file) that are associated with the product on
+ the distribution node but that are maintained external to the product's
+ root directory and external to the database
+
+.B "-f"
+ flavor flavor of product on distribution node; for products with UPS
+ product requirements, this applies only to the main product.
+ Notes: Can also be used inside -G "". See note under -H.
+
+\fB-G "options_to_pass_to_local_ups_declare_command"\fP
+ options to be modified over the existing command line options,
+ and then to be given in a ups declare command.
+ Note: If you specify -G, upd install does two declarations, one
+ without the options specified with -G overridden, and a second one with
+ them.
+
+.B "-g chainName"
+ create or use product instance associated with chainName.
+ Note: can also be used inside -G ""
+
+.B "-H localFlavor"
+ specify host flavor to use in order to build a flavor list for the
+ product and all of its requirements
+ Note: this differs from -f in that it specifies a group of flavors, not
+ a specific one.
+
+.B "-h"
+ hostName host name (node name) that contains the distribution UPS
+ database; the default is fnkits.fnal.gov. Usually just the plain host
+ name is required, however the -h option can always specify any of the
+ following:
+    o a plain host name (e.g., fred.sub.domain)
+    o a host and Webserver port number (e.g., fred.sub.domain:8080 )
+    o a full URL to the ups.cgi cgi script (e.g.,
+      http://fred.sub.domain:8080/cgi-bin/some/dir/ups.cgi )
+    o a file url to a locally mounted products database (e.g. a cdrom)
+      like file://localhost/mnt/cdrom/ups/db
+
+.B "-I"
+ unwind product tar file on the local node after transmission (default
+ is to unwind during transmission); this option allows ftp to re-get a
+ tar file if your network connection is lost during the transfer.
+
+.B "-i"
+ ignore errors; if a UPS product requirement can't be distributed,
+ continue
+
+.B "-J"
+ filename individual file to fetch (for archive database, must be one of
+ INSTALL_NOTE, README, or a version or table file)
+
+.B "-j"
+ setup/get only the specified (top level) product (ignore UPS product
+ requirements)
+
+.B "-K"
+ "keywords" return information for the specified keywords only, in
+ machine-readable format.
+
+.B "-k"
+ prevents execution of unsetup files prior to (subsequent) setup.
+
+.B "-L"
+ add the STATISTICS keyword for this instance in its version file.
+
+.B "-l"
+ produce a full (long) listing
+
+.B "-M tableFileDir"
+ table file directory
+ Note: can also be used inside -G ""
+
+.B "-m tableFile"
+ table file name
+ Note: can also be used inside -G ""
+
+.B "-N filename"
+ specify a particular file to be checked by ups verify
+ Note: can also be used inside -G ""
+
+.B "-n"
+ use/create new chain (i.e. chain name new ) for product instance
+ Note: can also be used inside -G ""
+
+.B "-O"
+ "flags" used to specify $UPS_OPTIONS value to pass to actions.
+ Note: can also be used inside -G "" to set $UPS_OPTIONS to "options"
+
+.B "-o"
+ use/create old chain (i.e. chain name old ) for product instance
+ Note: can also be used inside -G ""
+
+.B "-P"
+ Do not look in the ups database for this product instance, instead rely
+ only on those items specified on the command line.
+
+\fB-p "description"\fP
+ product description
+
+.B "-q [qual1[:qual2...]][?opt1[:?opt2...]]"
+ product instance qualifiers; multiple qualifiers are separated by
+ colons, optional ones have question marks.
+ Note: can also be used inside -G ""
+
+.B "-R"
+ use only the required UPS product requirements (listed in table file
+ using setupRequired ); ignore the optional ones.
+
+.B "-r home"
+ Specify product's root directory.
+
+.B "-s"
+ list what command would do; but do not execute the command
+
+.B "-T URL"
+ Specify URL or pathname for archive file.
+
+.B "-t"
+ test chain (i.e. chain name test ) for product instance in distribution
+ database
+ Note: can also be used inside -G ""
+
+.B "-U upsDir"
+ ups directory location
+
+.B "-u dir"
+ directory for compiled functions files (see also -b)
+
+.B "-V"
+ Do not delete temporary script files or partially installed products
+ when command finishes, instead list them.
+
+.B "-v"
+ print out extra `debugging' information. To get progressively more
+ information, use multiple v 's, e.g., -vv, -vvv (up to four).
+
+.B "-W"
+ Use environment variables that show what is currently set up to
+ determine instances of UPS product requirements.
+
+.B "-w"
+ On ups start, stop the product first, then start it.
+
+.B "-X"
+ echo the command to execute, but don't run it.
+
+.B "-Y"
+ delete product root directory and all files under it, without asking.
+
+.B "-y"
+ delete product root directory and all files under it, after asking.
+
+.B "-Z"
+ Time this command.
+
+.B "-z"
+ database Used to specify the distribution database; whole path can be
+ specified here. The default value depends on the UPD configuration on
+ the distribution node and the value of $PRODUCTS there.
+ Note: can also be used inside -G ""
+.fi
+.SH SEE ALSO
+sh(1), csh(1), bash(1), tcsh(1)
+.SH BUGS
+ o Malformed use of ${UPS_KEYWORD} (like leaving off the closing brace),
+   results in a confusing error message, and can log out the process.
+ o sourceReqCheck and fileCheck are slightly broken.  They attempt to use
+   a 'return 1' statement which produces the message "sh: Cannot perform
+   a return when not in function mode."
+ o User defined variables in group stanzas get lost.
+ o The modify command doesn't behave correctly when multiple instances
+   match, or when a product has no declared chain.
+ o Modify's -E option does nothing.
+ o Some ups commands (current, verify, user-defined actions) on non-existent
+   products 'succeed' but do nothing, when they should report an error.
+ o The bash shell complains about sourcing /dev/null.
+ o There have been reports of declarations being incorrectly made in the 
+   first database in the $PRODUCTS list if there's a match (error?) in the 
+   nth database.
+ o There have been reports of problems with list -K with empty database
+   directories.
+ o There have been reports of bogus duplicate instances being found.
+ o (Un)declares may fail if there's an error detected, even if it's not
+   relevant to the product at hand.
+ o Leading spaces in quoted strings (used with -G and -O, for example)
+   are not trimmed and cause errors.
+ o The -P option is only partially effective, and commands can fail even
+   with -P if there are no databases available.
+ o Not all of the variables available to functions are available to scripts
+   executed by table files.
+ o There are reports that envPrepend commands fail with tcsh if the
+   variable doesn't already exist.

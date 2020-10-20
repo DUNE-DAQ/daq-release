@@ -1,0 +1,6 @@
+Priority: Low
+State: Unverified
+
+Also, regarding sourceReqCheck, is there a way to avoid having the
+sourced script's exit(s) not terminate the whole job?  See above.
+

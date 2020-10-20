@@ -1,0 +1,26 @@
+Priority: Low
+State: Verified
+
+Yes, upd cloneproduct does currently copy everything.  Changing that
+iss an item which is on the ups To Do list, but way down at the
+bottom.
+
+The problem is, if there are multiple instances sharing the same tar file,
+table file, etc. ups doesn't know whether it should remove them when you
+do a "ups undeclare -Y".  In practice, it always removes home directories
+and tarfiles, and never removes table files; both behaviours are
+technically wrong in various circumstances.  Therefore if you cloned
+a product without copying, then deleted one, the other one would be
+broken.
+
+Design:(?)
+
+  Store a refcounts file in each db directory.  
+
+  For all files/dirs mentioned in the version files in that directory,
+  keep a reference count.  When the reference count is zero on an 
+  undeclare -[Yy], ask/delete them, too.
+
+  For files with a _upd_overlay flag, refcounts file is a symlink to
+  the overlaid product db dir(?)
+

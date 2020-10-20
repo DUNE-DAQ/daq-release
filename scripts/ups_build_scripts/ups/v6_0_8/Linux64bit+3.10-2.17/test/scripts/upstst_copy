@@ -1,0 +1,19 @@
+#!/bin/sh
+# ============================================================================
+# test ups copy
+# ============================================================================
+PRODUCTS="$UPS_DIR/test/scripts/copy/db1"; export PRODUCTS
+cd $UPS_DIR/test/scripts/copy/log
+$UPS_DIR/test/ups_test << EOD
+#
+# test expected errors
+#
+copy bee1 v1_0 -f NULL -status UPS_NO_NEW_INSTANCE
+copy bee1 v1_0 -G "bee3 v4_0" -f invalid -status UPS_NO_MATCH
+#
+#
+#
+copy bee1 v1_0 -G "bee3 v4_1 -m bee3.table" -z ../db1 -f NULL -out bee1.out -diff bee1.in 
+copy bee1 v1_0 -qpigpen -G "bee3 v4_1 -qlinus -r ../db1/bee3 -f CHERRY -M ups -m kitchen.table -U blah -C -z /dev/NULL/db" -out bee2.out -diff bee2.in
+quit
+EOD

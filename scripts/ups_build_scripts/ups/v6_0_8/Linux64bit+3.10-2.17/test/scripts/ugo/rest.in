@@ -1,0 +1,29 @@
+Product:          *
+Version:          *
+Authorized Nodes: hercules
+                  neptune
+                  zeus
+Flavor:           *
+Host:             levinworth
+                  alcatraz
+Key:              west
+                  largo
+                  limepie
+Tablefiledir:     /jupiter:/mars
+Tablefile:        titan
+Anyfile:          sam:shameful
+Options:          -power_steering -ac -abs
+Description:      It was a dark and stormy night.
+Product not in a database (-P)
+Qualifiers:       *
+Productdir:       /myprod:/yourprod
+Archivefile:      a.tar:b.tar
+Upsdir:           /fred:/barney
+Origin:           origin
+Compile Dir:           command_file_dir
+Compile File:           command_fish
+DB:               popeye
+                  sinbad
+                  ahab
+Chains:           *
+ugo_v 1 and UPS_VERBOSE 1

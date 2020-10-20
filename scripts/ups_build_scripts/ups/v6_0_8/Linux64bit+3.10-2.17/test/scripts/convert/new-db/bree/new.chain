@@ -1,0 +1,24 @@
+#*************************************************
+# Chain File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+# optional keywords.
+# attributes - 
+# declared - when this product was declared
+# declarer - who declared this product
+# 
+File=Chain
+Product=bree
+Chain=new
+# 
+Flavor=NULL
+Qualifiers=""
+Version=new
+Declarer="lauri"
+Declared=3-23-98
+# 

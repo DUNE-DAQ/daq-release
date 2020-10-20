@@ -1,0 +1,23 @@
+FILE = version
+PRODUCT = rover
+VERSION = v1_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-03 19.58.09 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 19.58.09 GMT
+  PROD_DIR = /tmp
+
+#*************************************************
+#
+FLAVOR = IRIX
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-03 19.58.09 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 19.58.09 GMT
+  PROD_DIR = /tmp

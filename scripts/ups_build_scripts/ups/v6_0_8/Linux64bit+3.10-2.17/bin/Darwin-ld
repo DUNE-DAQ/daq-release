@@ -1,0 +1,28 @@
+#!/bin/sh
+#set -x
+arglist=""
+while [ $# -gt 0 ]
+do
+    case "$1" in
+    -arch) archlist="$archlist $2"
+            shift
+            shift
+            ;;
+    -o)     outfile=$2
+            shift
+            shift
+            ;;
+    *)      arglist="$arglist \"$1\""
+            shift
+            ;;
+    esac
+done
+
+partials=""
+for arch in $archlist
+do
+    eval ld -arch $arch -o $outfile-$arch $arglist
+    partials="$partials $outfile-$arch"
+done
+lipo -create -output $outfile $partials
+

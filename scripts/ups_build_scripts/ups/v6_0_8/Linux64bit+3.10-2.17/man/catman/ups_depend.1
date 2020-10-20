@@ -1,0 +1,42 @@
+UPS help command: depend
+
+           List (for a specified UPS product instance) 
+           UPS product requirements or all UPS product instances 
+           which this product depends upon
+
+     Valid Options:
+          -? print out usage information 
+          -c current chain 
+          -d development chain 
+          -f flavor : flavor to use (operating system[+release]) 
+          -g chainName : chain to use 
+          -H flavor : use this as the flavor and build a flavor table from it 
+          -j applies to top level product and not UPS product requirements 
+          -K "keywords" : return information from these (colon-separated) keywords
+             only ("+" means PRODUCT:VERSION:FLAVOR:QUALIFIERS:CHAIN(S))
+          -l produce a long listing 
+          -m tableFile : table file name
+          -M tableFileDir : table file directory 
+          -n new chain 
+          -o old chain 
+          -O "options" : set $UPS_OPTIONS to "options" 
+          -q qualifiers : colon separated list ofrequired or optional qualifiers
+             that are to be part of the instance
+          -r dir : set $PROD_DIR to dir 
+          -R only output the required dependent UPS products 
+          -t test chain 
+          -U upsDir : ups directory location 
+          -v print out extra 'debugging' info (-vv for even more etc. etc.)
+          -V do not delete the temp file 
+          -z database : use this database to get instance information 
+          -Z time this command (does not include sourcing of temp file for
+             setup/unsetup
+          -0 Pick flavor for operating system generic to any UNIX or comparable 
+          -1 Pick flavor for operating system generic to the vendor
+          -2 Pick flavor for operating system to level of major version number
+          -3 Pick more specific flavor for operating system (includes start of 
+             minor version numbers)
+          -4 Pick still more specific flavor for operating system (includes more
+             of minor version numbers)
+          -5 Pick most specific flavor for operating system (includes all of
+             minor version numbers)

@@ -1,0 +1,12 @@
+FILE = VERSION
+PRODUCT = snif
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = madonna
+  PROD_DIR = /NULL/snif
+  UPS_DIR = ups
+  TABLE_FILE = v1_0.table
+

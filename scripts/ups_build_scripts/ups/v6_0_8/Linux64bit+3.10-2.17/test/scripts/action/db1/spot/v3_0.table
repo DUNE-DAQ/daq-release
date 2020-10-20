@@ -1,0 +1,10 @@
+FILE = TABLE
+PRODUCT = spot
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+  sourceRequired(spot_v2_0, UPS_ENV)
+  setupRequired("lassie v2_0")
+

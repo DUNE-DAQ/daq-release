@@ -1,0 +1,52 @@
+#!/bin/sh
+# ============================================================================
+# test the action routines
+# ============================================================================
+cd $UPS_DIR/test/scripts/action/log
+SHELL=csh;export SHELL;
+UPS_SHELL=${SHELL};export UPS_SHELL;
+env PRODUCTS=../db1 $UPS_DIR/test/ups_test << EOD
+#ups_echo "================================================================="
+#
+# check simple things
+#
+upsact_print -out lassie1.out -diff lassie1.in setup lassie v1_0 
+upsact_print -out lassie2.out -diff lassie2.in setup lassie v2_0 
+upsact_print -out lassie3.out -diff lassie3.in setup lassie v3_0 
+upsact_print -out lassie4.out -diff lassie4.in setup lassie v4_0 
+upsact_print -out rover1.out  -diff rover1.in  setup rover  v1_0 
+upsact_print -out rover2.out  -diff rover2.in  setup rover  v2_0 
+upsact_print -out snoopy1.out -diff snoopy1.in setup snoopy v2_0 -z ../db1:../db2 
+upsact_print -out snoopy2.out -diff snoopy2.in setup snoopy v3_0 -z ../db1:../db2 
+upsact_print -options "" -out rabbit1.out -diff rabbit1.in setup rabbit v1_0 -z ../db1:../db2:../db3 
+upsact_process_commands -out fly1.out -diff fly1.in setup fly v1_0 
+upsact_process_commands setup fly v2_0 -status UPS_ACTION_PARSE 
+upsact_process_commands unsetup     fly v4_0 -out fly4.out -diff fly4.in 
+upsact_process_commands unconfigure fly v4_0 -out fly5.out -diff fly5.in 
+upsact_process_commands uncurrent   fly v4_0 -out fly6.out -diff fly6.in 
+#
+# if then else tests
+#
+upsact_process_commands -out ite1.out -diff ite1.in setup ite v1_0 
+ upsact_process_commands -out ite3.out -diff ite3.in setup ite v2_0 -status UPS_MISMATCHED_ENDIF
+#
+#  check for a bug involving a setupRequired(product version)
+#  where there is no current chain for product for the 
+#  unsetup before setting up product.
+# 
+
+setup oregano v1_0 -out oregano.out -diff oregano.in
+quit
+EOD
+FOO=a
+export FOO
+env PRODUCTS=../db1 $UPS_DIR/test/ups_test << EOD
+upsact_process_commands -out ite2.out -diff ite2.in setup ite v1_0 
+quit
+EOD
+SHELL=/bin/sh;export SHELL;
+UPS_SHELL=${SHELL};export UPS_SHELL;
+env PRODUCTS=../db1 $UPS_DIR/test/ups_test << EOD2
+upsact_process_commands -out fly2.out -diff fly2.in setup fly v1_0 
+quit
+EOD2

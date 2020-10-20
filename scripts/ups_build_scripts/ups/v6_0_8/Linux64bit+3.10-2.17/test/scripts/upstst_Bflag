@@ -1,0 +1,69 @@
+#!/bin/sh
+# ============================================================================
+# test ups depend
+# ============================================================================
+
+cd $UPS_DIR/test/scripts/Bflag
+
+. `ups unsetup -z ./db bleem v2`
+
+echo "Expect: ERROR: Version conflict -- different branches of dependency tree require conflicting versions of product foo: versions v2 vs v1"
+
+$UPS_DIR/test/ups_test << EOD 
+depend bleem v1 -f NULL -z ./db -K DECLARER:VERSION:PRODUCT -out bleemv1.out -diff bleemv1.in
+depend bleem v1 -B -f NULL -z ./db -K DECLARER:VERSION:PRODUCT -out bleemBv1.out -diff bleemBv1.in
+depend bleem v2 -f NULL -z ./db -K DECLARER:VERSION:PRODUCT -out bleemv2.out -diff bleemv2.in
+depend bleem v2 -B -f NULL -z ./db -K DECLARER:VERSION:PRODUCT -out bleemBv2.out -diff bleemBv2.in
+quit
+EOD
+
+echo "Expect: ERROR: Version conflict -- different branches of dependency tree require conflicting versions of product foo: versions v2 vs v1"
+sfile=`ups setup -z ./db -B bleem v1 `
+[ $sfile = $UPS_DIR/bin/setup_fail ] || echo "Ouch! setup -B bleem v1 should failed"
+
+sfile=`ups setup -z ./db -B bleem v2 `
+[ $sfile = $UPS_DIR/bin/setup_fail ] &&  echo "Ouch! setup -B bleem v2 should have worked"
+
+: should have SETUP_ BLEEM FOO BAR and BAZ
+if [ `grep SETUP_ $sfile | wc -l` != 4 ]
+then 
+    echo FAILED -- wrong dependency count
+    echo "got:"
+    cat $sfile
+fi
+
+rm $sfile
+
+. `ups setup -z ./db foo v1`
+: $SETUP_FOO
+
+echo "Expect: ERROR: Version conflict -- dependency tree requires versions conflicting with current setup of product foo: version v2 vs v1"
+sfile=`ups setup -z ./db -B bleem v2`
+[ $sfile = $UPS_DIR/bin/setup_fail ] || echo "Ouch! setup -B bleem v2 should have failed"
+
+: $SETUP_FOO
+
+. `ups unsetup -z ./db foo`
+. `ups setup -z ./db foo v2`
+
+sfile=`ups setup -z ./db -B bleem v2`
+: should have BAR and BAZ but not FOO
+[ $sfile = $UPS_DIR/bin/setup_fail ] &&  echo "Ouch! setup -B bleem v2 should have worked"
+if [ `grep SETUP_ $sfile | wc -l` != 3 ]
+then 
+    echo FAILED -- wrong dependency count
+    echo "got:"
+    cat $sfile
+fi
+
+. $sfile
+
+sfile=`ups setup -z ./db -B bleem v2`
+: should have nothing -- bleem is already setup
+if [ $sfile != $UPS_DIR/bin/setup_win ]
+then
+    echo FAILED -- wrong dependency count
+    echo "got:"
+    cat $sfile
+fi
+

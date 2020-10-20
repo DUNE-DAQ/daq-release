@@ -1,0 +1,4 @@
+D:NAME=../db1
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt, CHAIN=current
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt

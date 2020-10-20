@@ -1,0 +1,6 @@
+This dummy product has no ups directory (and therefore
+has no setup/configure/etc. scripts.)
+
+ups_convert should be smart enough not to call any actions -- 
+or should doDefaults() for all actions called.
+

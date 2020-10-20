@@ -1,0 +1,14 @@
+UPS_PROD_NAME_UC='JESSIE'; export UPS_PROD_NAME_UC
+UPS_PROD_NAME='jessie'; export UPS_PROD_NAME
+UPS_PROD_VERSION='v2_0'; export UPS_PROD_VERSION
+UPS_PROD_DIR='/usr/products/jessie_relative'; export UPS_PROD_DIR
+UPS_UPS_DIR='/usr/products/jessie_relative/ups'; export UPS_UPS_DIR
+unset UPS_VERBOSE
+unset UPS_EXTENDED
+UPS_THIS_DB='../list/db1'; export UPS_THIS_DB
+UPS_OS_FLAVOR='Linux+2.6-2.12'; export UPS_OS_FLAVOR
+UPS_PROD_FLAVOR='NULL'; export UPS_PROD_FLAVOR
+UPS_REQ_QUALIFIERS='red'; export UPS_REQ_QUALIFIERS
+UPS_PROD_QUALIFIERS='red'; export UPS_PROD_QUALIFIERS
+UPS_OPTIONS=''; export UPS_OPTIONS
+UPS_REQ_CHAIN=''; export UPS_REQ_CHAIN

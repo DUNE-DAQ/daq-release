@@ -1,0 +1,12 @@
+FILE = TABLE
+PRODUCT = baritone
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = "boo"
+COMMON:
+
+ACTION = CONFIGURE
+	 execute ("echo Hello", UPS_ENV)
+END:

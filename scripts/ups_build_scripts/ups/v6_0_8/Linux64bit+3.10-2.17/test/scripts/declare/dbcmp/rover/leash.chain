@@ -1,0 +1,23 @@
+FILE = chain
+PRODUCT = rover
+CHAIN = leash
+
+#*************************************************
+#
+FLAVOR = IRIX
+VERSION = v1_0
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-03 19.58.09 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 19.58.09 GMT
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v2_0
+QUALIFIERS = "red"
+  DECLARER = votava
+  DECLARED = 1998-04-03 19.58.09 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 19.58.09 GMT

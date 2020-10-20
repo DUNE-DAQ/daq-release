@@ -1,0 +1,43 @@
+FILE = VERSION
+PRODUCT = rover
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/rover
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table
+
+FLAVOR = IRIX+5.3
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX53/rover
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table
+
+FLAVOR = IRIX+5
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX5/rover
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table
+
+FLAVOR = IRIX+6.2
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX62/rover
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table
+
+FLAVOR = OSF1
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /usr/prod/OSF1/rover/v2_0
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table

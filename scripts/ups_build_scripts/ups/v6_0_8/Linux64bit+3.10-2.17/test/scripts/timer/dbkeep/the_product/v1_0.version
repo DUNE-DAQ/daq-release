@@ -1,0 +1,14 @@
+FILE = version
+# PRODUCT = the_product
+VERSION = v1_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = fagan
+  DECLARED = 1998-05-13 13.25.08 GMT
+  MODIFIER = fagan
+  MODIFIED = 1998-05-13 13.25.08 GMT
+  PROD_DIR = ${UPS_DIR}/test/scripts/timer
+  TABLE_FILE = the_product.table

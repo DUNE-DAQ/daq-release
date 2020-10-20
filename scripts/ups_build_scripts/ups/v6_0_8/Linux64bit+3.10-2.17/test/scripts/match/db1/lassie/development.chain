@@ -1,0 +1,30 @@
+#*************************************************
+# Chain File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+# optional keywords.
+# attributes - 
+# declared - when this product was declared
+# declarer - who declared this product
+# 
+File=Chain
+Product=dot
+Chain=development
+# 
+Flavor=IRIX
+Qualifiers=""
+Version=devel
+Declarer="votava"
+Declared=11-11-93
+# 
+Flavor=IRIX
+Qualifiers="build:"
+Version=devel
+Declarer="votava"
+Declared=11-11-93
+# 

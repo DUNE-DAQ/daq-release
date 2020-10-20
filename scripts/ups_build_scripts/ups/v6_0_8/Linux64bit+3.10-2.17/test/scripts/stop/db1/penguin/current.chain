@@ -1,0 +1,13 @@
+FILE = chain
+PRODUCT = penguin
+CHAIN = current
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v1_0
+QUALIFIERS = ""
+  DECLARER = rtokarek
+  DECLARED = 1998-06-10
+  MODIFIER = highpriest
+  MODIFIED = 1998-06-22

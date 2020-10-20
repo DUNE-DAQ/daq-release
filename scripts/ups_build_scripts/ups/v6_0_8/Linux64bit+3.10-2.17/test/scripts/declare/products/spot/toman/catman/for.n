@@ -1,0 +1,66 @@
+
+
+
+for(n)			    Tcl	Built-In Commands		       for(n)
+
+
+_____________________________________________________________________________
+
+NAME
+  for -	``For''	loop
+
+SYNOPSIS
+  ffoorr _s_t_a_r_t _t_e_s_t _n_e_x_t _b_o_d_y
+_________________________________________________________________
+
+
+DESCRIPTION
+
+  FFoorr is a looping command, similar in structure to the	C ffoorr statement.  The
+  _s_t_a_r_t, _n_e_x_t, and _b_o_d_y	arguments must be Tcl command strings, and _t_e_s_t	is an
+  expression string.  The ffoorr command first invokes the	Tcl interpreter	to
+  execute _s_t_a_r_t.  Then it repeatedly evaluates _t_e_s_t as an expression; if the
+  result is non-zero it	invokes	the Tcl	interpreter on _b_o_d_y, then invokes the
+  Tcl interpreter on _n_e_x_t, then	repeats	the loop.  The command terminates
+  when _t_e_s_t evaluates to 0.  If	a ccoonnttiinnuuee command is invoked within _b_o_d_y
+  then any remaining commands in the current execution of _b_o_d_y are skipped;
+  processing continues by invoking the Tcl interpreter on _n_e_x_t,	then evaluat-
+  ing _t_e_s_t, and	so on.	If a bbrreeaakk command is invoked within _b_o_d_y or _n_e_x_t,
+  then the ffoorr command will return immediately.	 The operation of bbrreeaakk	and
+  ccoonnttiinnuuee are similar to the corresponding statements in C.  FFoorr returns an
+  empty	string.
+
+
+KEYWORDS
+  for, iteration, looping
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

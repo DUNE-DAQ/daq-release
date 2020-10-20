@@ -1,0 +1,7 @@
+Priority: Low
+Status: Unverified
+
+sourceReqCheck is broken.  It has a 'return 1' statement when there's
+an error, and "sh: Cannot perform a return when not in function mode."
+Same problem with fileCheck.  See above.
+

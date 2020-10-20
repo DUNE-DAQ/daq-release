@@ -1,0 +1,9 @@
+Priority: Low
+State: Unverified
+
+Leaving off, or inserting space in front of, the closing brace in a
+${UPS_KEYWORD} gives confusing error messages and goes into a hard loop
+or logs out.
+  ERROR: Unable to translate or evaluate 'EnvSet (SLAP_UPS_VERBOSE, ${UPS_VERBOSE)'
+  ksh: SLAP_UPS_VERBOSE="${UPS_VERBOSE }": The specified substitution is not valid for this command.
+

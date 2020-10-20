@@ -1,0 +1,12 @@
+Priority: Low
+State: Unverified
+
+There are many small dysfunctions with the ups modify command.  When multiple
+chains are specified, none of the product files are listed, and an error
+message is printed about needing a unique instance, but only after 'quit' is
+selected from the menu.  If you instead choose to edit one of the offered
+dbconfig files, the unique instance error message won't be displayed, but the
+version file will be verified in the pre-modification pass.  For an unchained
+instance modify lists the version file, but doesn't allow the table file to be
+modified.
+

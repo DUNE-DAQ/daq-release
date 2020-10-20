@@ -1,0 +1,15 @@
+Priority: Low
+State: Unverified
+
+Still a problem with -j in dependent products?  Lauri suggests that we
+include code to test for a SETUP_<prod> variable prior to the setup:
+
+  if [ "${SETUP_<prod>:+1}" = "1" ]
+  then
+    unsetup -j <prod>
+  fi
+
+  if ($?SETUP_<prod> == 1) then
+    unsetup -j <prod>
+  endif
+

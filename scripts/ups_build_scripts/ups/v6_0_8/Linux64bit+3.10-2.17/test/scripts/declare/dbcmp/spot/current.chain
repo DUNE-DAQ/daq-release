@@ -1,0 +1,23 @@
+FILE = chain
+PRODUCT = spot
+CHAIN = current
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v1_0
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-09 22.58.55 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-09 22.58.55 GMT
+
+#*************************************************
+#
+FLAVOR = IRIX
+VERSION = v2_0
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-09 22.58.56 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-09 22.58.56 GMT

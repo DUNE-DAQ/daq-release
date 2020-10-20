@@ -1,0 +1,6 @@
+Priority: Low
+State: Unverified
+
+Make ups list -K not fail if the database directory is empty.
+3 days.  Low priority.
+

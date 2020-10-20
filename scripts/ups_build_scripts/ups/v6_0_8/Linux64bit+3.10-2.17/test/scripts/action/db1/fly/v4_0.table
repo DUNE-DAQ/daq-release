@@ -1,0 +1,29 @@
+FILE = TABLE
+PRODUCT = fly
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   doDefaults()
+   envAppend(SYMPHONY,"EROICA",";")
+   envset(OPERA,"AIDA FAUST")
+   envappend(OPERA,"MADAM_BUTTERFLY CARMEN"," ")
+   envprepend(OPERA,FIDELIO,' ')
+   envremove(OPERA,FAUST,' ')
+   envsetifnotset(TMPDIR,/tmp)
+   filetest(blah,r,"can't read file")
+   exeAccess(ls)
+   execute("ls -l", NO_UPS_ENV, mystatus)
+   exeActionOptional(extra1)
+   exeActionRequired(extra3)
+ACTION = CURRENT
+   pathset(path,/bin:/usr/local/bin:/local/etc:/mybin)
+   pathAppend(path,emacs/bin,emacs/etc)
+   pathprepend(path,emacs/test)
+   pathremove(path,emacs)
+   pathremove(path,bin)
+ACTION = CONFIGURE
+   addalias (rambo,"SlyStalone %s")
+   unalias  (rambo)
+   sourceRequired(reqfile1,NO_UPS_ENV,continue)

@@ -1,0 +1,12 @@
+FILE = TABLE
+PRODUCT = lassie
+
+FLAVOR = NULL
+QUALIFIERS = ""
+   ACTION=SETUP
+      doDefaults()
+      setupRequired("spot v3_0")
+      sourceRequired(lassie_v4_0, UPS_ENV)
+   ACTION=UNSETUP
+      doDefaults()
+

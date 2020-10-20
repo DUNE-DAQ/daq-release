@@ -1,0 +1,23 @@
+FILE = version
+PRODUCT = rover
+VERSION = v2_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = "red"
+  DECLARER = votava
+  DECLARED = 1998-04-03 19.58.09 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 19.58.09 GMT
+  ORIGIN = akc@kennel
+  PROD_DIR = /dog/house
+  UPS_DIR = /ups
+  TABLE_DIR = /tabledir
+  TABLE_FILE = tablefile
+  ARCHIVE_FILE = ftp:/tarfile
+  AUTHORIZED_NODES = "backyard"
+  STATISTICS
+  COMPILE_DIR = /tmp
+  COMPILE_FILE = mycompile
+  -blah

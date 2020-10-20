@@ -1,0 +1,19 @@
+#*************************************************
+# Chain File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+File=Chain
+Product=lassie
+Chain=mydog
+# 
+Flavor=NULL
+Qualifiers="nodbg:opt"
+Version=v2_0
+Declarer="roddy"
+Declared=5-14-97
+# 

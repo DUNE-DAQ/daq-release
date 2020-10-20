@@ -1,0 +1,13 @@
+FILE = TABLE
+PRODUCT = rabbit
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   setupRequired("asta v1_0")
+   setupRequired("lassie v1_0")
+   setupOptional("notthere v9_9")
+   setupRequired("fly v1_0")
+   setupRequired("rover v1_0")
+   setupRequired("spot v3_0")

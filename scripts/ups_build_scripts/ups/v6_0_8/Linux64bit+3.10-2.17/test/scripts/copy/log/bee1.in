@@ -1,0 +1,3 @@
+
+ups declare bee3 v4_1 -f "NULL" -q "" -r "/NULL/bee1" -z "../db1"  -U "ups"  -m "bee3.table" 
+

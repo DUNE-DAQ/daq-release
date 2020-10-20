@@ -1,0 +1,5 @@
+rover v1_0 -f NULL -z ../db1:dodefaults()
+   snoopy v1_0 -f NULL -z ../db1:dodefaults()
+   astro v1_0 -f NULL -z ../db1:dodefaults()
+   astro v1_0 -f NULL -z ../db1:sourcerequired(astro_v1_0, UPS_ENV)
+rover v1_0 -f NULL -z ../db1:sourcerequired(rover_v1_0, UPS_ENV)

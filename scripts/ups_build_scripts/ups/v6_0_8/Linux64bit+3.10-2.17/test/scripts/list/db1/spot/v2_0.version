@@ -1,0 +1,25 @@
+FILE = VERSION
+PRODUCT = spot
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/spot
+  UPS_DIR = ups
+  TABLE_FILE = spot.table
+
+FLAVOR = NULL
+QUALIFIERS = "long"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/spot
+  UPS_DIR = ups
+  TABLE_FILE = spot.table
+  AUTHORIZED_NODES = backyard
+  ARCHIVE_FILE = akc.tar.z
+  _DUMMY = "this should be recognized"
+  MODIFIED = 1-12-98
+  MODIFIER = astro
+  ORIGIN = /asteroid

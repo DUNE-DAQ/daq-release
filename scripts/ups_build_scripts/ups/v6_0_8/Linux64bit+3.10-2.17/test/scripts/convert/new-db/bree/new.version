@@ -1,0 +1,47 @@
+#*************************************************
+# Version File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# prod_dir=/product/home
+# optional keywords.
+# attributes - 
+# declared - when this product was declared
+# declarer - who declared this product
+# ups_dir - product ups directory 
+# Source -
+# Origin - 
+# Distribution - 
+# Authorized_nodes - 
+# table_dir - 
+# table_file -
+# 
+# if ups_dir does not begin with / then it's
+# path is defined by appending it to the PROD_DIR.
+# 
+# if table_dir is not defined but there is a table
+# file, the table_dir is defined to be the ups
+# database product definition area. (HERE) 
+# 
+File=Version
+Product=bree
+Version=new
+# 
+#*************************************************
+# Starting group definition
+Group:
+   FLAVOR=NULL
+   QUALIFIERS=""
+   DECLARED=3-23-98
+   DECLARER="lauri"
+   PROD_DIR=${UPS_DIR}/test/scripts/convert/old-products/bree
+   UPS_DIR=ups
+   AUTHORIZED_NODES="*"
+   TABLE_FILE=new.table
+End:
+# end of group definition
+#*************************************************
+

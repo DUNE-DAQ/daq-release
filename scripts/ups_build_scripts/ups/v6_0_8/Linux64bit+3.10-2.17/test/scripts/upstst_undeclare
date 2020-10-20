@@ -1,0 +1,42 @@
+#!/bin/sh
+# ============================================================================
+# test ups declare
+# ============================================================================
+PRODUCTS="$UPS_DIR/test/scripts/undeclare/dbclean"; export PRODUCTS
+rm -rf $PRODUCTS
+cp -r $UPS_DIR/test/scripts/undeclare/dbcmp $PRODUCTS
+rm -rf $UPS_DIR/test/scripts/undeclare/products/spot
+mkdir $UPS_DIR/test/scripts/undeclare/products/spot 
+# note: in declare archive_file..
+touch $UPS_DIR/test/scripts/declare/products/spot/archive.file
+cd $UPS_DIR/test/scripts/undeclare/log
+$UPS_DIR/test/ups_test << EOD
+#
+#
+undeclare rover -status UPS_INVALID_SPECIFICATION 
+undeclare rover v1_0 -status UPS_INVALID_SPECIFICATION 
+undeclare -o -g leash spot -actout tmp.out -out spot1.out -diff spot1.in
+undeclare -C -g new spot -actout tmp.out -out spot2.out -diff spot2.in
+undeclare spot v1_0 -actout tmp.out -out spot3.out
+undeclare spot -Y v2_0 -actout tmp.out -out spot4.out -diff spot4.in
+#
+EOD
+
+sort spot3.out | diff spot3.in -
+if [ $? -ne 0 ]
+then
+  echo 'files spot3.in spot3.out differ'
+fi
+
+if [ -d $UPS_DIR/test/scripts/undeclare/products/spot ] 
+then
+  echo "$UPS_DIR/test/scripts/undeclare/products/spot exists!";
+fi;
+for myfile in `ls $PRODUCTS/spot/*chain 2> /dev/null` 
+do
+  echo "$myfile files exist!";
+done;
+for myfile in `ls $PRODUCTS/spot/*version 2> /dev/null` 
+do
+  echo "$myfile files exist!";
+done;

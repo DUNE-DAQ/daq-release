@@ -1,0 +1,20 @@
+Priority: Low
+State: Unverified
+
+User defined variables in group stanzas get lost.  They should override
+those in the common stanza.  Not sure if this is a bug or enhancement.
+15 days.  Big important bug.
+
+In a 
+  group:
+  ..part1..
+  common:
+  ..part2..
+  end:
+you can have user defined keywords in part1 or part2 but (apparently)
+not both, which is to say that if you put them in part2 the ones
+in part1 dissappear.
+
+
+
+

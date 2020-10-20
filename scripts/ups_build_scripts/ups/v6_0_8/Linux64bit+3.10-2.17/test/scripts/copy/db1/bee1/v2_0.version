@@ -1,0 +1,11 @@
+FILE = VERSION
+VERSION = v2_0
+
+FLAVOR = NULL 
+QUALIFIERS = "" 
+DECLARED = 1-1-98
+ DECLARER = jetson
+  PROD_DIR = /NULL/bee2  
+ UPS_DIR = ups
+ TABLE_FILE = bee2.table
+

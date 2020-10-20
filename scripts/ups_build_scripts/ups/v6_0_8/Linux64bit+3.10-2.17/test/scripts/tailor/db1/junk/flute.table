@@ -1,0 +1,19 @@
+FILE=TABLE
+PRODUCT=flute
+
+FLAVOR = NULL
+QUALIFIERS = "boy"
+
+FLAVOR = NULL
+QUALIFIERS = "meets"
+
+FLAVOR = NULL
+QUALIFIERS = "world"
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+COMMON:
+ACTION=TAILOR
+ execute("echo tailor music", NO_UPS_ENV)
+END:

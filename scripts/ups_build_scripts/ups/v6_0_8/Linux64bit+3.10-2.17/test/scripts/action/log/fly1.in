@@ -1,0 +1,182 @@
+setenv FLY_DIR "/NULL/fly"
+#
+setenv SETUP_FLY 'fly v1_0 -f NULL -z ../db1'
+#
+setenv OPERA "AIDA FAUST"
+#
+if (! ${?OPERA}) then
+  setenv OPERA "MADAM_BUTTERFLY CARMEN"
+else
+  setenv OPERA "${OPERA} MADAM_BUTTERFLY CARMEN"
+endif
+#
+if (! ${?OPERA}) then
+  setenv OPERA "FIDELIO"
+else
+  setenv OPERA "FIDELIO ${OPERA}"
+endif
+#
+if (${?OPERA}) then
+  setenv upstmp "FAUST"
+  setenv OPERA "`$UPS_DIR/bin/dropit -e -p "'"$OPERA"'" -i' ' -d' ' "'"$upstmp"'"`"
+  if ("${OPERA}" == "") unsetenv OPERA
+  unsetenv upstmp
+endif
+#
+unsetenv OPERA
+#
+if (! ${?TMPDIR}) setenv TMPDIR "/tmp"
+#
+setenv PATH "/bin:/usr/local/bin:/local/etc:/mybin"
+#
+rehash
+#
+if (! ${?PATH}) then
+  setenv PATH "emacs/bin"
+else
+  setenv PATH "${PATH}emacs/etcemacs/bin"
+endif
+#
+rehash
+#
+if (! ${?PATH}) then
+  setenv PATH "emacs/test"
+else
+  setenv PATH "emacs/test:${PATH}"
+endif
+#
+rehash
+#
+if (${?PATH}) then
+  setenv upstmp "emacs"
+  setenv PATH "`$UPS_DIR/bin/dropit -e -p "'"$PATH"'" -i':' -d':' "'"$upstmp"'"`"
+  if ("${PATH}" == "") unsetenv PATH
+  unsetenv upstmp
+endif
+#
+rehash
+#
+if (${?PATH}) then
+  setenv upstmp "bin"
+  setenv PATH "`$UPS_DIR/bin/dropit -e -p "'"$PATH"'" -i':' -d':' "'"$upstmp"'"`"
+  if ("${PATH}" == "") unsetenv PATH
+  unsetenv upstmp
+endif
+#
+rehash
+#
+if ( ! r blah ) then
+echo "can't read file"
+exit 1
+endif
+#
+which ls |& grep ls > /dev/null
+if ($status == 1) then
+  echo "exeAccess failed for ls"
+  exit 1
+endif
+setenv mystatus "`ls -l`"
+#
+echo "from extra1"
+#
+echo "from extra3"
+#
+setenv ups_prod_name "fly"
+#
+setenv ups_prod_version "v1_0"
+#
+setenv ups_prod_flavor "NULL"
+#
+setenv ups_prod_qualifiers ""
+#
+setenv ups_prod_dir "/NULL/fly"
+#
+setenv ups_shell "csh"
+#
+setenv ups_options ""
+#
+setenv ups_origin ""
+#
+setenv ups_verbose ""
+#
+setenv ups_extended ""
+#
+setenv ups_verbose ""
+#
+setenv ups_extended ""
+#
+setenv ups_this_db "../db1"
+#
+setenv products "../db1"
+#
+setenv ups_compile "../db1/fly/v1_0.NULL.compile"
+#
+alias rambo 'SlyStalone \!*'
+#
+unalias rambo
+#
+if (-e reqfile1) then
+  source reqfile1
+else
+  echo "File (reqfile1) not found"
+  exit 1
+endif
+#
+if (-e reqcheck1) then
+  source reqcheck1
+  setenv UPS_STATUS "$status"
+  if ("$UPS_STATUS" != "0") then
+    echo "Error $UPS_STATUS while sourcing reqcheck1
+    unsetenv UPS_STATUS
+    exit 1
+  endif
+  unsetenv UPS_STATUS
+else
+  echo "File (reqcheck1) not found"
+  exit 1
+endif
+#
+if (-e optfile) then
+  source optfile
+endif
+#
+if (-e optcheck) then
+  source optcheck
+  setenv UPS_STATUS "$status"
+  if ("$UPS_STATUS" != "0") then
+    echo "Error $UPS_STATUS while sourcing optcheck
+    unsetenv UPS_STATUS
+    exit 1
+  endif
+  unsetenv UPS_STATUS
+endif
+#
+if (-e optfile) then
+  source optfile
+endif
+#
+if (-e optcheck) then
+  source optcheck
+  setenv UPS_STATUS "$status"
+  if ("$UPS_STATUS" != "0") then
+    echo "Error $UPS_STATUS while sourcing optcheck
+    unsetenv UPS_STATUS
+    exit 1
+  endif
+  unsetenv UPS_STATUS
+endif
+#
+if (-e reqcheck2) then
+  source reqcheck2
+  setenv UPS_STATUS "$status"
+  if ("$UPS_STATUS" != "0") then
+    echo "Error $UPS_STATUS while sourcing reqcheck2
+    unsetenv UPS_STATUS
+    exit 1
+  endif
+  unsetenv UPS_STATUS
+else
+  echo "File (reqcheck2) not found"
+  exit 1
+endif
+#

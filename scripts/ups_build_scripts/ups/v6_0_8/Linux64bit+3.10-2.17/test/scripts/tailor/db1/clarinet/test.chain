@@ -1,0 +1,18 @@
+#*************************************************
+# Chain File
+#*************************************************
+#
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+File=Chain
+Product=clarinet
+Chain=test
+#
+Flavor=IRIX
+Qualifiers="pine"
+Version=v2_0
+Declarer="silas"
+Declared=6-29-98

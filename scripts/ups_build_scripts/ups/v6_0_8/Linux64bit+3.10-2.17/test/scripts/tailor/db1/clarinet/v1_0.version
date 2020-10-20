@@ -1,0 +1,51 @@
+FILE = VERSION
+PRODUCT = "clarinet"
+VERSION =v1_0.version
+
+FLAVOR= ANY
+QUALIFIERS=""
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=IRIX+5.1
+QUALIFIERS="alpha"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=IRIX+6
+QUALIFIERS="bus"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=NULL
+QUALIFIERS=""
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=PLUM
+QUALIFIERS="worm"
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table
+
+FLAVOR=OSF1
+QUALIFIERS=""
+  DECLARER=silas
+  DECLARED=6-26-98
+  PROD_DIR=
+  UPS_DIR=ups
+  TABLE_FILE=clarinet.table

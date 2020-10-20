@@ -1,0 +1,17 @@
+File=table
+Product=foo
+
+Flavor=ANY
+Qualifiers=""
+
+Action=Setup
+    ProdDir()
+    SetupEnv()
+    Execute(echo "start", NO_UPS_ENV)
+    If( test "$FOO" = "a" )
+       Execute(echo "if case", NO_UPS_ENV)
+    Else()
+       Execute(echo "else case", NO_UPS_ENV)
+    EndIf( test "$FOO" = "a" )
+    Execute(echo "end", NO_UPS_ENV)
+

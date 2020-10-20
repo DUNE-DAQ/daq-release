@@ -1,0 +1,7 @@
+Priority: Low
+State: Fixed(?)
+
+Add special-case handling in ups/configure to convert to read-write
+afs location when writing setups scripts, because the upsconfig file
+has been changed to point to the read-only volume.
+

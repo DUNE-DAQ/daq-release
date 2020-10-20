@@ -1,0 +1,20 @@
+FILE = TABLE
+PRODUCT = bee3
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS ="TEST"
+
+FLAVOR = NULL
+QUALIFIERS =""
+
+COMMON:
+
+ACTION=SETUP
+
+setupRequired("bee5 v1_0")
+
+END:
+
+

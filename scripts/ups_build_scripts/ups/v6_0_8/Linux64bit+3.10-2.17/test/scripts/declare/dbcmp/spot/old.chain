@@ -1,0 +1,13 @@
+FILE = chain
+PRODUCT = spot
+CHAIN = old
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v1_0
+QUALIFIERS = ""
+  DECLARER = votava
+  DECLARED = 1998-04-03 20.09.37 GMT
+  MODIFIER = votava
+  MODIFIED = 1998-04-03 20.09.37 GMT

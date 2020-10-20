@@ -1,0 +1,12 @@
+FILE = VERSION
+PRODUCT = baritone 
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = " "
+  DECLARED = 6-22-98
+  DECLARER = jessicat
+  PROD_DIR = /NULL/baritone
+  UPS_DIR = ups
+  TABLE_FILE = v1_0.table
+

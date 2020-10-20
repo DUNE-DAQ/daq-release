@@ -1,0 +1,9 @@
+FLAVOR = NULL 
+QUALIFIERS = "senior"
+  DECLARER = silas
+  DECLARED = 6-29-98
+  PROD_DIR = NULL/oboe
+  UPS_DIR = ups     
+  TABLE_DIR = ups   
+  TABLE_FILE = oboe.table
+

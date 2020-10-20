@@ -1,0 +1,14 @@
+FILE = TABLE
+PRODUCT = rabbit
+
+FLAVOR = ANY
+QUALIFIERS = ""
+
+ACTION = SETUP
+   envset(RABBIT,"ROCK AND ROLL")
+   sourceCompileReq("$UPS_DIR/test/scripts/compile/log/rabbit.out.${UPS_SHELL}")
+   envset(RABBIT,"OPERA")
+
+ACTION = CONFIGURE
+   writeCompileScript("${UPS_PROD_DIR}/rabbit.out", SETUP)
+

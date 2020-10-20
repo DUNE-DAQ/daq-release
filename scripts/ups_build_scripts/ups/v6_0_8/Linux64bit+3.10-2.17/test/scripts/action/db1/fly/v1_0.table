@@ -1,0 +1,73 @@
+FILE = TABLE
+PRODUCT = fly
+
+FLAVOR = ANY
+QUALIFIERS = ""
+INFO_SOURCE_DIR = ${UPS_DIR}/test/scripts/action/prod/info
+HTML_SOURCE_DIR = ${UPS_DIR}/test/scripts/action/prod/html
+MAN_SOURCE_DIR = ${UPS_DIR}/test/scripts/action/man
+CATMAN_SOURCE_DIR = ${UPS_DIR}/test/scripts/action/prod/catman
+
+ACTION = SETUP
+   doDefaults()
+# do environment variable tests
+   envset(OPERA,"AIDA FAUST")
+   envappend(OPERA,"MADAM_BUTTERFLY CARMEN"," ")
+   envprepend(OPERA,FIDELIO,' ')
+   envremove(OPERA,FAUST,' ')
+   envunset(OPERA)
+   envsetifnotset(TMPDIR,/tmp)
+# do path tests
+   pathset(path,/bin:/usr/local/bin:/local/etc:/mybin)
+   pathAppend(path,emacs/bin,emacs/etc)
+   pathprepend(path,emacs/test)
+   pathremove(path,emacs)
+   pathremove(path,bin)
+# do file tests
+   filetest(blah,r,"can't read file")
+# setup tests
+# this is already done by earlier action tests?
+#   setupOptional(blah)
+#   setupRequired(blah)
+# execute tests
+   exeAccess(ls)
+   execute("ls -l", NO_UPS_ENV, mystatus)
+   exeActionOptional(extra1)
+   exeActionOptional(extra2)
+   exeActionRequired(extra3)
+# tested by fly v2_0
+#   exeActionRequired(extra4)
+# are predefined variables set?
+   envset(ups_prod_name,${UPS_PROD_NAME})
+   envset(ups_prod_version,${UPS_PROD_VERSION})
+   envset(ups_prod_flavor,${UPS_PROD_FLAVOR})
+   envset(ups_prod_qualifiers,${UPS_PROD_QUALIFIERS})
+   envset(ups_prod_dir,${UPS_PROD_DIR})
+   envset(ups_shell,${UPS_SHELL})
+   envset(ups_options,${UPS_OPTIONS})
+   envset(ups_origin,${UPS_ORIGIN})
+   envset(ups_verbose,${UPS_VERBOSE})
+   envset(ups_extended,${UPS_EXTENDED})
+   envset(ups_verbose,${UPS_VERBOSE})
+   envset(ups_extended,${UPS_EXTENDED})
+   envset(ups_this_db,${UPS_THIS_DB})
+   envset(products,${PRODUCTS})
+   envset(ups_compile,${UPS_COMPILE})
+#aliases
+   addalias (rambo,"SlyStalone %s")
+   unalias  (rambo)
+# source tests
+   sourceRequired(reqfile1,NO_UPS_ENV, continue)
+   sourceReqCheck(reqcheck1,NO_UPS_ENV,continue)
+   sourceOptional(optfile,NO_UPS_ENV,CONTINUE)
+   sourceOptCheck(optcheck,NO_UPS_ENV,CONTINUE)
+   sourceOptional(optfile,NO_UPS_ENV,EXIT)
+   sourceOptCheck(optcheck,NO_UPS_ENV,EXIT)
+   sourceReqCheck(reqcheck2,NO_UPS_ENV,EXIT)
+   envset (OPERA,"")
+# compile tests
+#   sourceCompileReq(requiredScript)
+ACTION = extra1
+execute (echo "from extra1", NO_UPS_ENV)
+ACTION = extra3
+execute (echo "from extra3", NO_UPS_ENV)

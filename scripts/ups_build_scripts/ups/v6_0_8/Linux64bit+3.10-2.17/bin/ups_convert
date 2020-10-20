@@ -1,0 +1,900 @@
+#!/usr/bin/env perl
+#!/usr/local/bin/perl
+#
+# Known problems:
+#   If you have identical chains for different instances.  
+#   While this is technically not an illegal database definition the 
+#   results are apparently ( but not really ) random.  This is true of
+#   the most lastest version of ups and actually an error should occur.
+# Result: 
+#   The declared information reguarding when and by who may be incorrect,
+#   which in not a real big deal anyhow. ( it's hashed last rules )
+#
+# Other Notes:
+#   There is just one heck of a lot of code/effort in here to attempt
+#   to merge build requisites into use for tables and if the order is
+#   not identical they still won't match.
+#   i.e. if you have a uses of prod a, b, and c and build of a, and c
+#   only a will use and build a, c will not because it's order is use
+#   3 and build 2.  But before you go thinking to just slap use and 
+#   builds into 1 string and forget all this nonsense another BIG 
+#   reason for doing this is to order the prereq's before the postreqs.
+#   This will allow for a very large advantage of a single table pass
+#   for the setup process and inverse tree parse method.
+#
+#* reqCat = PREREQ or POSTREQ
+#* reqOrder = artificial number added to maintain order of requisites...
+#
+#   I MUST explain DeSeTuP word cause, it along with this whole thing,
+#   it really rather weird...  When I create the requisite commands for
+#   setup I have to put the defaults in between the prereq's and the
+#   postreqs but in the process I'm also thumbing threw USE and BUILD
+#   and flavors, and well technically versions but tables are forced
+#   on versions for the conversion process.  So while I have to add the
+#   defaults I have no idea what will later be merged into like groups.
+#   I had two chioces, toss out the grouping which is very nice radically
+#   difficult and complete, or add the defaults numerous times base on
+#   what later would be grouped.  So I stuck in a place holder and replace
+#   the first occurance with the right stuff and delete all the additional
+#   placeholders that *might* be there.  Then I substitute the whole setup
+#   actions with unsetup and stick in the unsetup action.
+#
+#   That solves the setup and unsetup defaults in the pre and post reqs
+#   now I still need to handle the tailor's, start's, and all the other
+#   misc.  The problem is to this point I avoided looking INTO the product
+#   and just used the product definition.  But since I have to I will
+#   ass/u/me that is a products version has a tailor, or appropriate, for
+#   one flavor it has for all flavors.   So I will try to keep a base dir
+#   for the last product defined and base all defintions of the other
+#   actions base on that version and the last flavor.
+
+
+$errorMsg = "Error:";
+
+# Get the UPS database we will be using
+$dbs = $ENV{'OLD_PRODUCTS'};
+if (! "$dbs") {
+  print  "$errorMsg A UPS database must be specified in the environmental \n";
+  print  "       variable \$OLD_PRODUCTS.\n";
+  exit 1;
+}
+
+$ndbs = $ENV{'PRODUCTS'};
+if (! "$ndbs") {
+  $ndbs = "$dbs/ndbs";
+  print "The PRODUCTS environment was not set, the new ups database will\n";
+  exit 1;
+}
+
+# Separate out all individual databases.
+@dbs = split(/ /, $dbs);
+
+$GetoptName = $ARGV[0];
+if (! "$ARGV[0]") { $GetoptName = "*"; }
+$releaseVersion = $ARGV[1];
+
+#**********************************************************************
+#* 
+#* Field definitions for the hash values
+#* 
+#**********************************************************************
+# Name           Values                             used in 
+$#PRODDIR=0;   # Product directory                - instanceHash
+$#WHEN=1;      # When the instance was declared   - instanceHash,flvrchnHash
+$#WHO=2;       # Who declared it                  - instanceHash,flvrchnHash
+$#USE=3;       # Use requirements                 - instanceHash
+$#BUILD=4;     # Build requirements               - instanceHash
+$#SOURCE=5;    # Source directory ( vary rare )   - instanceHash
+$#ORIGIN=6;    # tarfiledirectory ( seldom used ) - instanceHash
+$#AUTHNDS=7;   # Authorizes nodes                 - instanceHash
+$#DISTRIB=8;   # Distribution, never seen not used- instanceHash
+$#UPSDIR=9;
+$#VERSION=0;   # Version specification            - reqHash,flvrchnHash
+$#FLAVOR=1;    # Flavor                           - reqHash
+$#FLAGS=2;     # flags                            - reqHash
+
+$opt_v=1;
+NEXTDB:
+
+foreach $db (@dbs) {
+#   @files = glob ( "$db/$GetoptName" );
+# I don't see another answer around a glob link problem
+#   @files = <$db/$GetoptName>;
+# this didn't work either!!!
+# glob just sucks...
+   if ( "$GetoptName" ne "*" ) {
+      @files = glob ( "$db/$GetoptName" );
+   } else {
+      opendir DBDIR , "$db";
+      @files = readdir DBDIR;
+      closedir DBDIR;
+   }
+   foreach $releaseName ( @files ) { 
+      if ("$GetoptName" eq "*" ) {
+         if (!open(DBFILE, "$db/$releaseName")) {
+            print STDERR "Can't open $db/$releaseName\n";
+            NEXTDB;
+         }
+      } else { 
+         if (!open(DBFILE, "$releaseName")) {
+            print STDERR "Can't open $releaseName\n";
+            NEXTDB;
+         }
+      }
+      @P = split ( '/' , $releaseName );
+      $PRODUCT ="$P[$#P]";
+      %flvrchnHash = ();
+      %chainHash = ();
+      %instanceHash = ();
+      %versionHash = ();
+      %reqHash = ();
+      %flvrverHash = ();
+
+      ParseFile ();	# Parse file build tables 
+      SetFlavor ();	# Set to all defined flavors or specified
+      SetVersion ();
+
+#**********************************************************************
+#* 
+#* 
+#**********************************************************************
+#123456789012345678901234567890123456789012345678901234567890
+      foreach $version ( @Versions ) {
+         OpenVersionFile ( $version );
+         $VersionHeaderInfo=0;
+         foreach $flvr (@flavor) {
+            @Chain = sort keys %{ $chainHash{$flvr}{$version} };
+            foreach $chain ( @Chain ) { AddChain("$chain"); }
+            if ( &prod_dir ) {
+               AddReqS ();
+               WriteVersionRecs (); 
+            }
+            %reqHash = ();
+         }
+         close VersionFile;
+         WriteTableFile($version); 
+      }
+   }
+}
+#**********************************************************************
+#* 
+#* This routine parses out the old ups database format and saves all
+#* the definitions of the product instances.
+#*
+#**********************************************************************
+#123456789012345678901234567890123456789012345678901234567890
+sub ParseFile {
+$noChain = 0;
+$gotChain = $noChain + 1;
+$foundChain = $noChain;
+LINE:
+   while (<DBFILE>) {
+      if (/^Product:/) {
+# Changed to grab from file names, too many loose fingers editing ups files
+#         ($pc, $PRODUCT ) = split;
+         if ("$opt_v") { print "Starting Product: $PRODUCT \n"; }
+         MakeParentDir (" ");
+      }
+      if (/^Chain:/) {
+         $foundChain = $gotChain;                 # Rest of chain line blank
+      } elsif ($foundChain == $gotChain) {        # last line was chain 
+        $foundChain = $noChain;                   # reset chain line flag
+        ($chain, $flavor, $version, $date, $person) = split; # get chain data
+        $flvrchnHash{$flavor}{$chain} = [ $version, $date, $person ];
+# Added the chain to the chain flavor/version hash, seems rather stupid BUT
+# found many cases where people had many chains for the same instance...
+        $chainHash{$flavor}{$version}{$chain} = [ $chain ];
+# Can't have chains without instances, build versions only in instances...
+#        $versionHash{$version} = [ $version ];
+      } elsif (/^Instance:\s*"([^"]*)"\s*(\S*)\s*(\S*)/o) {
+        $opKey = $2;
+        $verKey = $1;
+        $versionHash{$verKey} = [ $verKey ];    # build unique list of versions
+        $_ = <DBFILE>;
+        $instanceHash{$opKey}{$verKey} = [ $3, split ] ;
+        while (<DBFILE>) {
+          if (/^end./o) { next LINE; }
+# This is the Master source ( Source, )
+          if ((m|^\s*/.*|o) && ( split == 1 )) { 
+             $instanceHash{$opKey}{$verKey}[$#SOURCE] = $_[0]; 
+          }
+# getting the exact match right seems to elude me at the moment....
+# This is what the ups listed as the tarfiledirectory ( I called origin )
+          if ((/^\s*[aA-zZ]:*/o) && ( split == 1 )) { 
+             $instanceHash{$opKey}{$verKey}[$#ORIGIN] = $_[0]; 
+          }
+# This is ups_dir - didn't know about this bad boy... (Mar 24 CST 1998)
+          if (/^\s*ups_dir:\s*.*/o) {
+             $instanceHash{$opKey}{$verKey}[$#UPSDIR] = &fix_env_specs($_[1]); 
+          }
+# This is Authorized nodes..
+          if (/^\s*Authorized_Nodes:\s*.*/o) {
+# 10/30/97 request...
+#             $instanceHash{$opKey}{$verKey}[$#AUTHNDS] = $_[1]; 
+             $temp = $_[1];
+             $temp =~ s/\]/\"/;
+             $temp =~ s/\[/\"/;
+             $temp =~ s/,/:/g;
+             $instanceHash{$opKey}{$verKey}[$#AUTHNDS] = $temp; 
+          }
+# Distribution, any arbitrary number... 
+          if ((/^\s*[0-9]/o) && ( split == 1 )) { 
+             $instanceHash{$opKey}{$verKey}[$#DISTRIB] = $_[0]; 
+          }
+          if (/^\s*Requirements:\s*\{([^}]*)}/o) {
+             $instanceHash{$opKey}{$verKey}[$#USE] = $1;
+          } elsif (/^\s*\{([^}]*)}/o) {
+            if ("$1") {
+               $instanceHash{$opKey}{$verKey}[$#BUILD] = $1;
+            }
+          }
+        }
+      }
+   }
+}
+#**********************************************************************
+#* 
+#* The default will select all flavors to convert the entire database
+#* if they want to only convert 1 flavor they will have to specify this
+#* flavor on the command line.  
+#* 
+#**********************************************************************
+#123456789012345678901234567890123456789012345678901234567890
+sub SetFlavor {
+   if ("$opt_f") {                      # Specified a -f on command line
+      @flavor = $opt_f;                 # set the flavor a specified
+   } else {                             # No flavor specified 
+     @flavor = sort keys %instanceHash; # set flavor to list of flavors
+   }
+}
+sub SetVersion {
+@Versions = sort keys %versionHash; 
+if ("$releaseVersion") { @Versions = "$releaseVersion"; }
+}
+sub writeflvrReqs {
+    my ( $flavor, $version) = @_;
+    $basedir=&prod_dir;
+    $ccheck="";
+    $CatFlag=0;
+    @reqCat = split ( / /, "PREREQ POSTREQ" );
+# remember the old setup before the postreq line...
+    @reqType = split ( / /, "USE BUILD" );
+    $lastType="";
+    foreach $reqCat ( @reqCat ) {
+       foreach $reqType ( @reqType ) {
+          if ( $flvrverHash{$flavor}{$version}{$reqType} ) {
+             if ( ! $lastType ) { $lastType=$reqType; }
+             if ( $lastType ne $reqType ) { 
+                $CatFlag=0;
+                $lastType=$reqType;
+             }
+             if ( ! $CatFlag && $reqCat eq "POSTREQ" ) {
+                $CatFlaq=1;
+                   $flvrverHash{$flavor}{$version}{$reqType}.=&add_setup;
+             }
+          }
+          @use = sort keys %{ $reqHash{$reqType}{$reqCat} };
+          foreach $reqName ( @use ) {
+             @realname = split ( /\,/ , "$reqName" );
+#             $flvrverHash{$flavor}{$version}{$reqType}.="$reqCat=$realname[1]\n";
+             $flvrverHash{$flavor}{$version}{$reqType}.="      setupRequired(\"";
+             if ($reqHash{$reqType}{$reqCat}{$reqName}[$#FLAGS]) {
+                $flvrverHash{$flavor}{$version}{$reqType}.="$reqHash{$reqType}{$reqCat}{$reqName}[$#FLAGS] ";
+             }
+             if ( $reqType eq "BUILD" ) {
+             $flvrverHash{$flavor}{$version}{$reqType}.="-j ";
+             }
+             $flvrverHash{$flavor}{$version}{$reqType}.="-f $reqHash{$reqType}{$reqCat}{$reqName}[$#FLAVOR] ";
+# catch versions that are chains,old,test,development,and new.
+# do current as a first test
+             $ccheck="";
+             $ccheck="$reqHash{$reqType}{$reqCat}{$reqName}[$#VERSION]";
+             if ( "$ccheck" ) { 
+                if ( "$ccheck" eq "current" ) {
+                   $flvrverHash{$flavor}{$version}{$reqType}.="$realname[1]\")\n";
+                   $ccheck="";
+                }
+                if ( "$ccheck" eq "old" ) {
+                   $flvrverHash{$flavor}{$version}{$reqType}.="-o $realname[1]\")\n";
+                   $ccheck="";
+                }
+                if ( "$ccheck" eq "test" ) {
+                   $flvrverHash{$flavor}{$version}{$reqType}.="-t $realname[1]\")\n";
+                   $ccheck="";
+                }
+                if ( "$ccheck" eq "development" ) {
+                   $flvrverHash{$flavor}{$version}{$reqType}.="-d $realname[1]\")\n";
+                   $ccheck="";
+                }
+                if ( "$ccheck" eq "new" ) {
+                   $flvrverHash{$flavor}{$version}{$reqType}.="-n $realname[1]\")\n";
+                   $ccheck="";
+                }
+                if ( "$ccheck" ) { 
+                   $flvrverHash{$flavor}{$version}{$reqType}.="$realname[1] ";
+                   $flvrverHash{$flavor}{$version}{$reqType}.="$reqHash{$reqType}{$reqCat}{$reqName}[$#VERSION]\")\n";
+                }
+             } else { 
+               $flvrverHash{$flavor}{$version}{$reqType}.="$realname[1] ";
+               $flvrverHash{$flavor}{$version}{$reqType}.="$reqHash{$reqType}{$reqCat}{$reqName}[$#VERSION]\")\n";
+             }
+          }
+       }
+    }
+}
+sub addReq {
+    my ( $flavor, $reqType, $Req, $reqOrder ) = @_;
+    my $check_os = "";
+    my $check_qual = "";
+      $Req =~ tr/\(//d;
+      $Req =~ tr/\)//d;
+      @RequireLine = split ( / / , $Req ) ; 
+      foreach $requires ( @RequireLine ) {
+         if ( $requires eq "<" || $requires eq "=" || $requires eq ">" ) {
+            if ( $requires eq ">" ) { 
+               $reqCat = "POSTREQ"; 
+            } else {
+              $reqCat = "PREREQ"; 
+            }
+            $reqFlag = "" ;
+         } else { 
+           if ( substr ( $requires , 0 , 1 ) eq  "-" ) {
+              if ( $reqFlag ) {
+                 $reqFlag = "$reqFlag $requires";
+              } else {
+                 $reqFlag = "$requires";
+              }
+           } else {
+              @ReqProd = split ( /,/ , $requires );
+              $reqName = sprintf "%2d,%s", $reqOrder, $ReqProd[0];
+              $reqVer = "$ReqProd[1]";
+              $reqOS = "$ReqProd[2]";
+# This is added to check the requirements for a extended flavor that needs
+# to be fixed i.e. if something requires IRIX+6+n32 ...
+              ( $check_os, $check_qual ) = &split_os ( $reqOS );
+              if ( $check_qual ) {
+                  $reqOS = $check_os;
+                  $reqFlag = "-q $check_qual";
+# humm... what about -b, need to do something?
+              }
+# need to change the -b to -q build 
+              $reqFlag =~ s/-b /-q build /g;
+              if ( $flavor eq $reqOS ) { $reqOS = "\${UPS_PROD_FLAVOR}"; }
+              $reqHash{$reqType}{$reqCat}{$reqName} = [ $reqVer, $reqOS, $reqFlag ];
+             }
+         }
+      }
+}
+
+sub WriteTableFile {
+    my ( $version ) = $_[0];
+    $TableFileInfo=0;
+    @reqType = split ( / /, "USE BUILD" );
+    foreach $reqType ( @reqType ) {
+    foreach $flvr (@flavor) {
+    if ( &prod_dir ) {
+if ( &table_file ("$reqType") ) {
+           if ("$opt_v") { 
+              print "Writing Table File entry for $flvr $PRODUCT $version $reqType\n"; 
+              }
+           open( TableFile, ">>$ndbs/$PRODUCT/$version.table" );
+           $ReqHash{$flvr} = &table_file ("$reqType");
+           delete $flvrverHash{$flvr}{$version}{"$reqType"};
+        } else {
+# Need for force table files even if there is no requirements - Sep 11
+          if ("$reqType" eq "USE") { 
+             if ("$opt_v") { 
+                print "Writing Table File entry for $flvr $PRODUCT $version $reqType\n"; 
+                }
+             open( TableFile, ">>$ndbs/$PRODUCT/$version.table" );
+                $ReqHash{$flvr} = &add_setup;
+             }
+        }
+    }
+    }
+    if ( ! $TableFileInfo ) { 
+       print TableFile "File=Table\n";
+       print TableFile "Product=$PRODUCT\n";
+#       print TableFile "Version=$version\n"; No longer wanted 9/9/97
+       $TableFileInfo=1;
+    }
+    while( ($key, $val) = each %ReqHash ) {
+    if ("$opt_v") { 
+       print "Merge table definitions for $PRODUCT $version $key\n"; 
+    }
+       $RevReqHash{$val} .= "$key ";
+    }
+    foreach $key (keys(%RevReqHash)) {
+       print TableFile "#*************************************************\n";
+       print TableFile "# Starting Group definition\n";
+       print TableFile "Group:\n";
+       @OS = split ( / / , $RevReqHash{$key} );
+       foreach $os ( @OS ) { 
+          ( $sos, $qual ) = &split_os ( $os );
+          print TableFile "Flavor=$sos\n";
+          if ( $reqType eq "BUILD" ) {
+             if ( $qual ne "" ) { 
+                $qual="build:$qual";
+             } else { 
+                $qual="build";
+             }
+          }
+          print TableFile "Qualifiers=\"$qual\"\n";
+          print TableFile "\n";
+       }
+       print TableFile "Common:\n";
+       print TableFile "   Action=setup\n";
+# Can't just redefine the look for place since I want to keep the 
+# ${UPS_PROD_DIR}/ups for things without the ups_dir specifically set !!
+       if ($tud) { $uud=$tud; } else { $uud="${basedir}/ups"; }
+       if (checkfor("${uud}/setup.sh")) {
+          $key=~s/DaSeTuP/      proddir()\n      setupenv()\n      sourceRequired(\${UPS_UPS_DIR}\/setup.\${UPS_SHELL},UPS_ENV)\n/;
+       } else { 
+         if (checkfor("${uud}/setup")) {
+	    $key=~s/DaSeTuP/      proddir()\n      setupenv()\n      envSetIfNotSet(UPS_COMPAT,`echo .\${UPS_SHELL}| sed -e 's\/.csh\/\/'`)\n      sourceOptional(\${UPS_UPS_DIR}\/setup\${UPS_COMPAT},UPS_ENV)\n/;
+	 } else {
+           if (checkfor("${uud}/setup.csh")) {
+              $key=~s/DaSeTuP/      proddir()\n      setupenv()\n      sourceRequired(\${UPS_UPS_DIR}\/setup.\${UPS_SHELL},UPS_ENV)\n/;
+           } else { 
+	       $key=~s/DaSeTuP/      proddir()\n      setupenv()\n/;
+           }
+	 }
+       }
+       print TableFile "$key";
+# remove unsetup all together...
+#       $key=~s/setup/unsetup/g;
+#       $key=~s/     doDefaults\(\)\n//g;
+#       print TableFile "   Action=unsetup\n";
+#       if (checkfor("${basedir}/ups/unsetup.sh")) {
+#           print TableFile "$key";
+#       }
+# and back to last...
+#       print TableFile "      doDefaults()\n";
+       $baseactions=&add_misactions;
+       print TableFile "${baseactions}";
+       print TableFile "End:\n";
+       print TableFile "# End Group definition\n";
+       print TableFile "#*************************************************\n";
+       print TableFile "\n";
+    }
+    %ReqHash = ();
+    %RevReqHash = ();
+    }
+    %flvrverHash = ();
+    close TableFile;
+}
+sub MakeParentDir {
+    if ( !-e "$ndbs/$PRODUCT" ) {
+       if ( ! mkdir "$ndbs/$PRODUCT", 0755 ) {
+	  print  "$errorMsg cannot make $pc $PRODUCT database home";
+	  exit 1;
+       }
+    } elsif ( !-d "$ndbs/$PRODUCTS" || !-w "$ndbs/$PRODUCTS" ) {
+	    print  "$errorMsg cannot write in $pc $PRODUCT database directory";
+	    exit 1;
+    }
+}
+sub OpenChainFile {
+    my ( $chain ) = @_;
+    $ChainHeaderInfo=1;
+    if ( !-e "$ndbs/$PRODUCT/$chain.chain" ) {
+       if ("$opt_v") { 
+	   print "Opening chain file for $PRODUCT chain $chain \n"; 
+       }
+       $ChainHeaderInfo=0;
+       if ( !open(ChainFile, ">$ndbs/$PRODUCT/$chain.chain") ) {
+	  print "$errorMsg cannot make $pc $PRODUCT $chain chain file";
+	  exit 1;
+       }
+    } else { 
+       if ("$opt_v") { 
+	   print "Appending chain file for $PRODUCT chain $chain \n"; 
+       }
+       if ( !open( ChainFile, ">>$ndbs/$PRODUCT/$chain.chain" ) ) {
+	    print  "$errorMsg cannot append in $pc $PRODUCT $chain chain file";
+	    exit 1;
+       }
+    }
+}
+sub AddChainRec { 
+    ( $chainKey, $flvr, $ver ) = @_; 
+    OpenChainFile ( $chainKey );
+    if ( ! $ChainHeaderInfo ) {
+       print ChainFile "#*************************************************\n";
+       print ChainFile "# Chain File \n";
+       print ChainFile "#*************************************************\n";
+       print ChainFile "# \n";
+       print ChainFile "# Leading white space is ignored.\n";
+       print ChainFile "# Keywords are NOT case sensitive.\n";
+       print ChainFile "# Required keywords.\n";
+       print ChainFile "# flavor=FLAVOR\n";
+       print ChainFile "# version=VERSION\n";
+       print ChainFile "# optional keywords.\n";
+       print ChainFile "# attributes - \n";
+       print ChainFile "# declared - when this product was declared\n";
+       print ChainFile "# declarer - who declared this product\n";
+       print ChainFile "# \n";
+       print ChainFile "File=Chain\n";
+       print ChainFile "Product=$PRODUCT\n";
+       print ChainFile "Chain=$chain\n";
+       print ChainFile "# \n";
+    }
+    $who="$flvrchnHash{$flvr}{$chainKey}[$#WHO]";
+    $when=&convert_to_gmt($flvrchnHash{$flvr}{$chainKey}[$#WHEN]);
+    ( $sos, $qual ) = &split_os ( $flvr );
+    print ChainFile "Flavor=$sos\n";
+    print ChainFile "Qualifiers=\"$qual\"\n";
+    print ChainFile "Version=$ver\n";
+    print ChainFile "Declarer=$who\n";
+    print ChainFile "Declared=$when\n";
+    print ChainFile "# \n";
+# Add another chain because build attributes will now be a qualifier...
+    if ( &build_reqs ) { 
+    print ChainFile "Flavor=$sos\n";
+    if ( $qual ne "" ) { 
+       print ChainFile "Qualifiers=\"build:$qual\"\n";
+    } else { 
+       print ChainFile "Qualifiers=\"build\"\n";
+    }
+    print ChainFile "Version=$ver\n";
+    print ChainFile "Declarer=$who\n";
+    print ChainFile "Declared=$when\n";
+    print ChainFile "# \n";
+}
+    close ChainFile;
+}
+sub OpenVersionFile {
+    my ( $version ) = @_;
+    if ( !-e "$ndbs/$PRODUCT/$version.version" ) {
+       if ( !open(VersionFile, ">$ndbs/$PRODUCT/$version.version") ) {
+	  print "$errorMsg cannot make $pc $PRODUCT $version version file";
+	  exit 1;
+       }
+    } elsif ( !open( VersionFile, ">>$ndbs/$PRODUCT/$version.version" ) ) {
+	    print  "$errorMsg cannot append in $pc $PRODUCT $version version file";
+	    exit 1;
+    }
+}
+sub WriteVersionRecs {
+    if ( ! $VersionHeaderInfo ) {
+       $VersionHeaderInfo=1;
+       print VersionFile "#*************************************************\n";
+       print VersionFile "# Version File \n";
+       print VersionFile "#*************************************************\n";
+       print VersionFile "# \n";
+       print VersionFile "# Leading white space is ignored.\n";
+       print VersionFile "# Keywords are NOT case sensitive.\n";
+       print VersionFile "# Required keywords.\n";
+       print VersionFile "# flavor=FLAVOR\n";
+       print VersionFile "# prod_dir=/product/home\n";
+       print VersionFile "# optional keywords.\n";
+       print VersionFile "# attributes - \n";
+       print VersionFile "# declared - when this product was declared\n";
+       print VersionFile "# declarer - who declared this product\n";
+       print VersionFile "# ups_dir - product ups directory \n";
+       print VersionFile "# Source -\n";
+       print VersionFile "# Origin - \n";
+       print VersionFile "# Distribution - \n";
+       print VersionFile "# Authorized_nodes - \n";
+       print VersionFile "# table_dir - \n";
+       print VersionFile "# table_file -\n";
+       print VersionFile "# \n";
+       print VersionFile "# if ups_dir does not begin with / then it's\n";
+       print VersionFile "# path is defined by appending it to the PROD_DIR.\n";
+       print VersionFile "# \n";
+       print VersionFile "# if table_dir is not defined but there is a table\n";
+       print VersionFile "# file, the table_dir is defined to be the ups\n";
+       print VersionFile "# database product definition area. (HERE) \n";
+       print VersionFile "# \n";
+       print VersionFile "File=Version\n";
+       print VersionFile "Product=$PRODUCT\n";
+       print VersionFile "Version=$version\n";
+       print VersionFile "# \n";
+# ups dir's for versions are the same (Table Ups Dir tud)
+       $tud=$instanceHash{$flvr}{$version}[$#UPSDIR];
+    }
+    ( $sos, $qual ) = &split_os ( $flvr );
+    $DaTe=&convert_to_gmt($instanceHash{$flvr}{$version}[$#WHEN]);
+    print VersionFile "#*************************************************\n";
+    print VersionFile "# Starting group definition\n";
+    print VersionFile "Group:\n";
+    print VersionFile "   FLAVOR=$sos\n";
+    print VersionFile "   QUALIFIERS=\"$qual\"\n";
+    print VersionFile "   DECLARED=$DaTe\n";
+    print VersionFile "   DECLARER=$instanceHash{$flvr}{$version}[$#WHO]\n";
+    print VersionFile "   MODIFIED=$DaTe\n";
+    print VersionFile "   MODIFIER=$instanceHash{$flvr}{$version}[$#WHO]\n";
+    $PrOd_DiR=&fix_env_specs($instanceHash{$flvr}{$version}[$#PRODDIR]);
+    print VersionFile "   PROD_DIR=$PrOd_DiR\n";
+    if ( &upsdir ) {
+     print VersionFile "   UPS_DIR=$instanceHash{$flvr}{$version}[$#UPSDIR]\n";
+    } else {  
+     print VersionFile "   UPS_DIR=ups\n";
+    }
+# Had Source and Origin backwards
+    if ( &source ) {
+       print VersionFile "   ORIGIN=$instanceHash{$flvr}{$version}[$#SOURCE]\n";
+    }
+    if ( &origin ) {
+       print VersionFile "   ARCHIVE_FILE=$instanceHash{$flvr}{$version}[$#ORIGIN]\n";
+    }
+    if ( &auth_nodes ) {
+       print VersionFile "   AUTHORIZED_NODES=$instanceHash{$flvr}{$version}[$#AUTHNDS]\n";
+    }
+    if ( &distribution ) {
+       print VersionFile "   DISTRIBUTION=$instanceHash{$flvr}{$version}[$#DISTRIB]\n";
+    }
+# Everbloody get's a table file for the conversion since it has to source
+# the old setup's....
+#    if ( &table_file ("USE")  ) {
+       print VersionFile "   TABLE_FILE=$version.table\n";
+#    }
+    print VersionFile "End:\n";
+    print VersionFile "# end of group definition\n";
+    print VersionFile "#*************************************************\n\n";
+    if ( &build_reqs ) {
+    print VersionFile "#*************************************************\n";
+    print VersionFile "# Starting group definition\n";
+    print VersionFile "Group:\n";
+    print VersionFile "   FLAVOR=$sos\n";
+    if ( $qual ne "" ) { 
+       print VersionFile "   QUALIFIERS=\"build:$qual\"\n";
+    } else { 
+       print VersionFile "   QUALIFIERS=\"build\"\n";
+    }
+    $DaTe=&convert_to_gmt($instanceHash{$flvr}{$version}[$#WHEN]);
+    print VersionFile "   DECLARED=$DaTe\n";
+    print VersionFile "   DECLARER=$instanceHash{$flvr}{$version}[$#WHO]\n";
+    print VersionFile "   MODIFIED=$DaTe\n";
+    print VersionFile "   MODIFIER=$instanceHash{$flvr}{$version}[$#WHO]\n";
+    $PrOd_DiR=&fix_env_specs($instanceHash{$flvr}{$version}[$#PRODDIR]);
+    print VersionFile "   PROD_DIR=$PrOd_DiR\n";
+    if ( &upsdir ) {
+     print VersionFile "   UPS_DIR=$instanceHash{$flvr}{$version}[$#UPSDIR]\n";
+    } else {  
+     print VersionFile "   UPS_DIR=ups\n";
+    }
+# Had Source and Origin backwards
+    if ( &source ) {
+     print VersionFile "   ORIGIN=$instanceHash{$flvr}{$version}[$#SOURCE]\n";
+    }
+    if ( &origin ) {
+     print VersionFile "   ARCHIVE_FILE=$instanceHash{$flvr}{$version}[$#ORIGIN]\n";
+    }
+    if ( &auth_nodes ) {
+     print VersionFile "   AUTHORIZED_NODES=$instanceHash{$flvr}{$version}[$#AUTHNDS]\n";
+    }
+    if ( &distribution ) {
+     print VersionFile "   DISTRIBUTION=$instanceHash{$flvr}{$version}[$#DISTRIB]\n";
+    }
+    if ( &table_file  ("BUILD") ) {
+#       print VersionFile "   TABLE_DIR=$ndbs/$PRODUCT\n";
+       print VersionFile "   TABLE_FILE=$version.table\n";
+    }
+    print VersionFile "End:\n";
+    print VersionFile "# end of group definition\n";
+    print VersionFile "#*************************************************\n\n";
+    }
+}
+sub AddChain {
+  my $chainKey = $_[0];
+    $ver = $flvrchnHash{$flvr}{$chainKey}[$#VERSION];
+    if ("$ver" && ((! "$releaseVersion") || ("$ver" eq "$releaseVersion"))) {
+       AddChainRec ( $chainKey, $flvr, $ver );
+    }
+}
+sub AddReqS {
+    if ( &use_reqs ) {
+       $reqOrder=1;
+       foreach $useReq (split /\),\(/, &use_reqs ) {
+	  addReq ( $flvr, "USE", $useReq, $reqOrder);
+	  $reqOrder+=1;
+       }
+    }
+    if ( &build_reqs ) {
+       $reqOrder=1;
+       foreach $buildReq (split /\),\(/, &build_reqs ) {
+	  addReq ( $flvr, "BUILD", $buildReq, $reqOrder);
+	  $reqOrder+=1;
+       }
+    }
+    writeflvrReqs ($flvr, $version);
+}
+#**********************************************************************
+#* 
+#* Translation subs
+#*
+#* Just try to not use these in if's and keep the code readable ;)
+#* 
+#**********************************************************************
+sub prod_dir { return "$instanceHash{$flvr}{$version}[$#PRODDIR]" }
+sub use_reqs { return $instanceHash{$flvr}{$version}[$#USE] }
+sub build_reqs { return $instanceHash{$flvr}{$version}[$#BUILD] }
+sub source { return $instanceHash{$flvr}{$version}[$#SOURCE] }
+sub origin { return $instanceHash{$flvr}{$version}[$#ORIGIN] }
+sub auth_nodes { return $instanceHash{$flvr}{$version}[$#AUTHNDS] }
+sub distribution { return $instanceHash{$flvr}{$version}[$#DISTRIB] }
+sub upsdir { return $instanceHash{$flvr}{$version}[$#UPSDIR] }
+
+sub build_version { return $reqHash{"BUILD"}{$reqCat}{$reqName}[$#VERSION] }
+sub use_version { return $reqHash{"USE"}{$reqCat}{$reqName}[$#VERSION] }
+sub build_flavor { return $reqHash{"BUILD"}{$reqCat}{$reqName}[$#FLAVOR] }
+sub use_flavor { return $reqHash{"USE"}{$reqCat}{$reqName}[$#FLAVOR] }
+sub build_flags { return $reqHash{"BUILD"}{$reqCat}{$reqName}[$#FLAGS] }
+sub use_flags { return $reqHash{"USE"}{$reqCat}{$reqName}[$#FLAGS] }
+
+sub convert_to_gmt
+{ @D = split ( '\-' , $_[0]);
+  return sprintf("19%s-%02d-%02d 00.00.00 GMT",$D[2],$D[0],$D[1]);
+}
+sub fix_env_specs
+{ my $value = $_[0];
+  $value =~ s/\$(\w*)/\${$1}/g;
+# yes I bet there's a better way but it works... if ${JOE} put ${}{JOE}
+  $value =~ s/{}//g;
+  return $value;
+}
+sub table_file { 
+    my $type = $_[0];
+    return $flvrverHash{$flvr}{$version}{$type} 
+}
+sub add_setup {
+    my $value;
+    $value="DaSeTuP"
+} 
+sub add_misactions { 
+    $value="";
+    if ($tud) { $uud=$tud; } else { $uud="${basedir}/ups"; }
+    if (checkfor("${uud}/tailor")) {
+       $value.="   Action=Tailor\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/tailor,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/tailor.sh}")) {
+       $value.="   Action=Tailor\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/tailor.\${UPS_SHELL},UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/configure")) {
+       $value.="   Action=Configure\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/configure,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/configure.sh")) {
+       $value.="   Action=Configure\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/configure.\${UPS_SHELL},UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/unconfigure")) {
+       $value.="   Action=unConfigure\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/unconfigure,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/unconfigure.sh")) {
+       $value.="   Action=unConfigure\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/unconfigure.\${UPS_SHELL},UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/start")) {
+       $value.="   Action=start\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/start,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    if (checkfor("${uud}/stop")) {
+       $value.="   Action=stop\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/stop,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+# This is REAL BS ...
+# If there is a current put it out and check again for configure
+# if there isn't a current check configure again and if so put it out
+# the configure as a current action.
+# This is going to confuse the living daylights out of people because
+# they might see an action=current execute configure
+    if (checkfor("${uud}/current")) {
+       $value.="   Action=Current\n";
+       $value.="      ProdDir()\n";
+       if (checkfor("${uud}/configure")) {
+          $value.="      execute(\${UPS_UPS_DIR}/configure,UPS_ENV)\n";
+       }
+       if (checkfor("${uud}/configure.sh")) {
+          $value.="      execute(\${UPS_UPS_DIR}/configure.\${UPS_SHELL},UPS_ENV)\n";
+       }
+       $value.="      execute(\${UPS_UPS_DIR}/current,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    } else {
+       if (checkfor("${uud}/configure")) {
+          $value.="   Action=Current\n";
+          $value.="      ProdDir()\n";
+          $value.="      execute(\${UPS_UPS_DIR}/configure,UPS_ENV)\n";
+          $value.="      UnProdDir()\n";
+       }
+       if (checkfor("${uud}/configure.sh")) {
+          $value.="   Action=Current\n";
+          $value.="      ProdDir()\n";
+          $value.="      execute(\${UPS_UPS_DIR}/configure.\${UPS_SHELL},UPS_ENV)\n";
+          $value.="      UnProdDir()\n";
+       }
+    }
+    if (checkfor("${uud}/uncurrent")) {
+       $value.="   Action=unCurrent\n";
+       $value.="      ProdDir()\n";
+       $value.="      execute(\${UPS_UPS_DIR}/uncurrent,UPS_ENV)\n";
+       $value.="      UnProdDir()\n";
+    }
+    return $value
+}
+sub split_os { 
+      my $os = $_[0];
+      my $ros;
+      my $rqual;
+      my $eek;
+      $rqual="";
+      @eek = split ( /\+/, $os );
+      for ($i=2; $i < $#eek+1 ;++$i) { $rqual .= "$eek[$i]:"; }
+# take off last :
+      if ($rqual) { 
+         chop($rqual);
+      }
+      if ( $eek[1] ) { 
+         $ros = "$eek[0]+$eek[1]";
+      } else {
+         $ros = "$eek[0]";
+      }
+      return $ros, $rqual;
+}
+sub checkfor {
+    my ($test) = @_;
+    $test =~ s/\$\{?([A-Z_]*)\}?/\$ENV{$1}/go;
+    $test = eval <<EOF;
+"$test"
+EOF
+    $test=&expandtildes($test);
+    return (-f $test);
+}
+
+sub expandtildes {
+    my($string) = $_[0];
+    my($users, @users, $rest, $user);
+    my(@res) = ();
+    my $dirsep="/";
+
+    # check for and do  tilde expansion
+    #
+    if ( $string =~ /\A\~([^${dirsep}]*)(.*)/ ) {
+        $users = $1;
+        $rest = $2;
+
+        if ( $users =~ /\{.*\}/) {
+            @users = ($users =~ m/(\w+)/g);
+            print "here users is @users\n" if ($debugflag);
+            foreach $user (@users) {
+	        unshift(@res, (&gethome($user) . $rest) );
+            }
+
+        } else {
+            $string =~ s/\A\~([^${dirsep}]*)/&gethome($1)/e;
+            unshift(@res, $string);
+        }
+    } else {
+        unshift(@res, $string);
+    }
+    return @res[0];
+}
+sub gethome {
+    my(@list);
+    if ( $_[0] eq '' ) {
+       return $ENV{'HOME'};
+    } else {
+      @list = getpwnam($_[0]);
+        return $list[7];
+    }
+}

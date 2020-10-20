@@ -1,0 +1,19 @@
+FILE = TABLE
+PRODUCT = spot
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = "nodbg:opt"
+
+FLAVOR = IRIX+5
+QUALIFIERS = "nodbg:opt"
+
+FLAVOR = IRIX+5.3
+QUALIFIERS = "nodbg:opt"
+
+FLAVOR = IRIX+6.2
+QUALIFIERS = ""
+
+COMMON:
+END:

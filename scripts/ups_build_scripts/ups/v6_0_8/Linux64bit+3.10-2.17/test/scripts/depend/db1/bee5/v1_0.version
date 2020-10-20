@@ -1,0 +1,12 @@
+FILE = VERSION
+PRODUCT = bee5
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 10-10-97
+  DECLARER = ruth
+  PROD_DIR = /NULL/bee51
+  UPS_DIR = ups
+  TABLE_FILE = bee5.table
+

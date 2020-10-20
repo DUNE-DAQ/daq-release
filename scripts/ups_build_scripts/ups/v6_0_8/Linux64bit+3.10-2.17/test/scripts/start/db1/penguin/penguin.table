@@ -1,0 +1,16 @@
+File=Table
+Product=penguin
+#*************************************************
+# Starting Group definition
+Group:
+Flavor=ANY
+Qualifiers=""
+
+Common:
+   ACTION = START
+	execute("echo start moo",NO_UPS_ENV)
+
+End:
+# End Group definition
+#*************************************************
+

@@ -1,0 +1,45 @@
+FILE = VERSION
+PRODUCT = flute
+VERSION = v3_0
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = "boy"
+  DECLARER = silas
+  DECLARED = 6-29-98
+  PROD_DIR = NULL/flute
+  UPS_DIR = ups
+  TABLE_DIR = ups
+  TABLE_FILE = flute.table
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = "meets"
+  DECLARER = silas
+  DECLARED = 6-29-98
+  PROD_DIR = NULL/flute
+  UPS_DIR = ups
+  TABLE_DIR = ups
+  TABLE_FILE = flute.table
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = "world"
+  DECLARER = silas  
+  DECLARED = 6-29-98
+  PROD_DIR = NULL/flute
+  UPS_DIR = ups  
+  TABLE_DIR = ups
+  TABLE_FILE = flute.table
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = silas  
+  DECLARED = 6-29-98
+  PROD_DIR = NULL/flute
+  UPS_DIR = ups  
+  TABLE_DIR = ups
+  TABLE_FILE = flute.table
+

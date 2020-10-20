@@ -1,0 +1,10 @@
+Priority: Low
+State: Unverified
+
+(Un)declares fail if there's an "error" detected, even if it's not relevant
+to the declare.  Jerry Guglielmo ran into this with a shared database but
+unshared product areas.
+15 days.  Very low priority.  This isn't a bug, it's a design feature.  It
+would take serious work to fix, and people can rearrange their database and
+updconfig file to work around it.
+

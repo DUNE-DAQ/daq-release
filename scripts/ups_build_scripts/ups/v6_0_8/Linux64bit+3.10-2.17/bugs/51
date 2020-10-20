@@ -1,0 +1,4458 @@
+Priority: High
+State: Confirmed
+
+'ups declare' is running "tailor" actions.
+
+This appears to be new behavior in ups v4_6; a ups declare should
+be running the "declare" "configure" and chain actions for any
+chains being declared, but it should not run "tailor".
+
+This was discoverd on d0bbin, on an upd install of sam_bootstrap v4_0_0.
+
+----------
+From: "Laurelin of Middle Earth" <lauri@fnal.gov>
+To: <helpdesk@fnal.gov>
+Subject: Additional info for 000000000023708
+Date: Wednesday, January 16, 2002 11:45 AM
+
+From the 'sam' account, in a situation where it WORKS;
+output from 
+  tmpfile=`ups setup systools, misperl, -qdev sam_faq, -qdev sam_admin, -qdev sam_web_config, -qweb_dev sam_config, sam_db_server,   oracle v8_0_5, fnorb, webCGI, sam_monitor`
+  mail lauri@fnal.gov < $tmpfile
+  . $tmpfile
+
+-------- Original Message --------
+From: Run II Sequential Access <sam@d0ora3.fnal.gov>
+To: lauri@fnal.gov
+
+unset TEMPLATE_HOME_DIR
+#
+unset SETUP_TEMPLATE_HOME
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/systools/v6_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SYSTOOLSUTL_DIR
+#
+unset SETUP_SYSTOOLSUTL
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SETUP_CMDBINGEN
+#
+unset CMDBINGEN_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CMDBIN_DIR
+#
+unset SETUP_CMDBIN
+#
+unset SETUP_CMDBINUTL
+#
+unset SETUP_CMDBINCMD
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+unset PERL_DIR
+#
+unset SETUP_PERL
+#
+unset SETUP_CMDSCRIPTSUSER
+#
+unset SETUP_CMDSCRIPTSLGRP
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdscripts/v1_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SETUP_CMDSCRIPTSGUID
+#
+unset SETUP_CMDSCRIPTSBASE
+#
+unset SETUP_CMDSCRIPTSHELL
+#
+unset SETUP_CMDSCRIPTSCTRL
+#
+unset CMDSCRIPTS_DIR
+#
+unset SETUP_CMDSCRIPTS
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/systools/v6_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SYSTOOLS_DIR
+#
+unset SETUP_SYSTOOLS
+#
+SETUP_SYSTOOLS='systools v6_0 -f NULL -z /fnal/ups/db'; export SETUP_SYSTOOLS
+#
+SYSTOOLS_DIR="/fnal/ups/prd/systools/v6_0/NULL"; export SYSTOOLS_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_PERL='perl v5_006_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PERL
+#
+PERL_DIR="/fnal/ups/prd/perl/v5_006_1/SunOS+5"; export PERL_DIR
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDBINCMD='cmdbincmd v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINCMD
+#
+SETUP_CMDBINUTL='cmdbinutl v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINUTL
+#
+SETUP_CMDBIN='cmdbin v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBIN
+#
+CMDBIN_DIR="/fnal/ups/prd/cmdbin/v1_0/SunOS+5"; export CMDBIN_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTS='cmdscripts v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTS
+#
+CMDSCRIPTS_DIR="/fnal/ups/prd/cmdscripts/v1_0/NULL"; export CMDSCRIPTS_DIR
+#
+SETUP_CMDSCRIPTSBASE='cmdscriptsbase v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSBASE
+#
+SETUP_CMDSCRIPTSCTRL='cmdscriptsctrl v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSCTRL
+#
+SETUP_CMDSCRIPTSGUID='cmdscriptsguid v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSGUID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdscripts/v1_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/cmdscripts/v1_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTSLGRP='cmdscriptslgrp v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSLGRP
+#
+SETUP_CMDSCRIPTSHELL='cmdscriptshell v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSHELL
+#
+CMDBINGEN_DIR="/fnal/ups/prd/cmdbin/v1_0/SunOS+5"; export CMDBINGEN_DIR
+#
+SETUP_CMDBINGEN='cmdbingen v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINGEN
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTSUSER='cmdscriptsuser v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSUSER
+#
+TEMPLATE_HOME_DIR="/fnal/ups/prd/template_home/v1_3/NULL"; export TEMPLATE_HOME_DIR
+#
+SETUP_TEMPLATE_HOME='template_home v1_3 -f NULL -z /fnal/ups/db'; export SETUP_TEMPLATE_HOME
+#
+cat > /dev/null <<'true'
+#
+SETUP_LOGIN='login v1_6 -f NULL -z /fnal/ups/db'; export SETUP_LOGIN
+#
+if [ "${MACH_ID:-}" = "" ]; then MACH_ID="`funame -n`"; export MACH_ID; fi;
+#
+if [ "${MACH_TYPE:-}" = "" ]; then MACH_TYPE="`funame -m`"; export MACH_TYPE; fi;
+#
+if [ "${MACH_OS:-}" = "" ]; then MACH_OS="`ups flavor -1`"; export MACH_OS; fi;
+#
+if [ "${MACH_REL:-}" = "" ]; then MACH_REL="`ups flavor | sed -e 's/.*+//'`"; export MACH_REL; fi;
+#
+SETUP_SETPATH='setpath v1_9 -f NULL -z /fnal/ups/db'; export SETUP_SETPATH
+#
+if [ "${UPS_FLAVOR_1:-}" = "" ]; then UPS_FLAVOR_1="`ups flavor -1`"; export UPS_FLAVOR_1; fi;
+#
+if [ "${UPS_FLAVOR_2:-}" = "" ]; then UPS_FLAVOR_2="`ups flavor -2`"; export UPS_FLAVOR_2; fi;
+#
+setpath_tmp="`echo ${HOME}/bin.${UPS_FLAVOR_2} | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+setpath_tmp="`echo ${HOME}/bin.${UPS_FLAVOR_1} | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+setpath_tmp="`echo ${HOME}/bin | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+unset setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD /usr/krb5/bin /usr/local/bin /opt/SUNWspro/bin /usr/ccs/bin /usr/lang /usr/bsd /usr/bin /usr/sbin /usr/lbin /usr/ucb /etc /usr/etc /bin /sbin /usr/afsws/bin /usr/openwin/bin /usr/bin/X11 /usr/X11/bin /usr/lpp/X11/Xamples/bin /usr/X11R6/bin /usr/sccs`"; export PATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=.
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="."
+else
+  PATH="${PATH}:."
+fi
+export PATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=`id | grep 'uid=0' > /dev/null && echo . || echo NOT`
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${MANPATH:-}" = "" ]; then MANPATH="."; export MANPATH; fi;
+#
+MANPATH="`${UPS_DIR}/bin/dropit -sEeD -p$MANPATH /fnal/ups/catman /fnal/ups/man /afs/fnal.gov/ups/catman /afs/fnal.gov/ups/man /usr/local/catman /usr/local/man /opt/SUNWspro/man /usr/ccs/catman /usr/ccs/man /usr/catman /usr/man /usr/share/catman /usr/share/man /usr/afsws/catman /usr/afsws/man /usr/openwin/catman /usr/openwin/man /usr/products/catman /usr/products/man /afs/fnal.gov/products/catman /afs/fnal.gov/products/man`"; export MANPATH
+#
+tmpmans="`ups list -aKCATMAN_TARGET_DIR:MAN_TARGET_DIR | perl -pe 's:[\t\f\n\r -#]+: :g; s: /afs/\.: /afs/:g;'`"; export tmpmans
+#
+tmpmans="`${UPS_DIR}/bin/dropit -feDs -p. -d' ' $tmpmans`"; export tmpmans
+#
+MANPATH="`${UPS_DIR}/bin/dropit -fEeDs -p$MANPATH $tmpmans`"; export MANPATH
+#
+if [ "${MANPATH:-}" != "" ]
+then
+  upstmp=.
+  MANPATH="`$UPS_DIR/bin/dropit -e -p "$MANPATH" -i':' -d':' "$upstmp"`";
+  if [ "${MANPATH:-}" = "" ]; then unset MANPATH; fi
+  unset upstmp
+fi
+#
+unset tmpmans
+#
+umask 022
+#
+SETUP_SETTERM='setterm v1_5 -f NULL -z /fnal/ups/db'; export SETUP_SETTERM
+#
+TTY=`tty`; export TTY
+#
+if [ "${TERM:-}" = "" ]; then TERM="vt100"; export TERM; fi;
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || stty sane
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || stty echoe kill '^x' erase '^?' intr '^c'
+#
+/bin/sh -c '[ "$TERM" = "iris-ansi" -o "$TERM" = "iris-ansi-net" -o "$TERM" = "hp" ]' && stty erase '^h'
+#
+TTYPE=`echo $TERM | cut -c1`; export TTYPE
+#
+TERM=`/bin/sh -c '[ -r /usr/lib/terminfo/$TTYPE/$TERM -o -r /usr/share/lib/terminfo/$TTYPE/$TERM -o -r /usr/share/terminfo/$TTYPE/$TERM ]' && echo $TERM || echo vt100`; export TERM
+#
+unset TTYPE
+#
+TERM=`/bin/sh -c '[ "$TERM" = "network" -o "$TERM" = "dumb" -o "$TERM" = "sun" ]' && echo vt100 || echo $TERM`; export TERM
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || echo Terminal type is ${TERM}
+#
+sh -c 'chmod 622 `tty` >/dev/null 2>&1'
+#
+SETUP_SETXWIN='setxwin v1_13 -f SunOS+5 -z /fnal/ups/db'; export SETUP_SETXWIN
+#
+if [ "${USER:-}" = "" ]; then USER="$LOGNAME"; export USER; fi;
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="$HOME/.Xdefaults"
+else
+  XUSERFILESEARCHPATH="$HOME/.Xdefaults:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="$HOME/.Xresources"
+else
+  XUSERFILESEARCHPATH="$HOME/.Xresources:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+OPENWINHOME="/usr/openwin"; export OPENWINHOME
+#
+if [ "${MANPATH:-}" != "" ]
+then
+  upstmp=/usr/openwin/man
+  MANPATH="`$UPS_DIR/bin/dropit -e -p "$MANPATH" -i':' -d':' "$upstmp"`";
+  if [ "${MANPATH:-}" = "" ]; then unset MANPATH; fi
+  unset upstmp
+fi
+#
+if [ "${MANPATH:-}" = "" ]; then
+  MANPATH="/usr/openwin/man"
+else
+  MANPATH="${MANPATH}:/usr/openwin/man"
+fi
+export MANPATH
+#
+if [ "${XUSERFILESEARCHPATH:-}" != "" ]
+then
+  upstmp=/usr/openwin/lib/app-defaults/%N
+  XUSERFILESEARCHPATH="`$UPS_DIR/bin/dropit -e -p "$XUSERFILESEARCHPATH" -i':' -d':' "$upstmp"`";
+  if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then unset XUSERFILESEARCHPATH; fi
+  unset upstmp
+fi
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="/usr/openwin/lib/app-defaults/%N"
+else
+  XUSERFILESEARCHPATH="/usr/openwin/lib/app-defaults/%N:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+_this_term=`tty | sed -e 's:/dev/::' -e 's/not a tty/not_a_tty/g'`; export _this_term
+#
+remote=`finger -lpm ${USER} | grep 'from' | grep ${_this_term}'[^0-9]' | tail -1 | sed -e 's/.* from //'`; export remote
+#
+unset _this_term
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY=""; export DISPLAY; fi;
+#
+unsetme=`/bin/sh -c '[ ${DISPLAY}X = X ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="no_ups_disp_found"; export DISPLAY; fi;
+#
+ups_disp="${remote}:0.0"; export ups_disp
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found ]' || /bin/sh -c 'xdpyinfo -display '$ups_disp' > /tmp/.xtest'"$$"' 2> /tmp/.xtesterr'"$$"' &'
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+ups_disp=`/bin/sh -c '[ -s /tmp/.xtest'"$$"' ]' && echo $ups_disp || echo no_ups_disp_found`; export ups_disp
+#
+rm -f /tmp/.xtest$$ /tmp/.xtesterr$$
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="$ups_disp"; export DISPLAY; fi;
+#
+ups_disp=":0.0"; export ups_disp
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found ]' || /bin/sh -c 'xdpyinfo -display '$ups_disp' > /tmp/.xtest'"$$"' 2> /tmp/.xtesterr'"$$"' &'
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+ups_disp=`/bin/sh -c '[ -s /tmp/.xtest'"$$"' ]' && echo $ups_disp || echo no_ups_disp_found`; export ups_disp
+#
+rm -f /tmp/.xtest$$ /tmp/.xtesterr$$
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="$ups_disp"; export DISPLAY; fi;
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+unsetme="unsetme"; export unsetme
+#
+unset unsetme
+#
+unset remote
+#
+unset ups_disp
+#
+INFO_DIR="/fnal/ups/prd/Info/v1_6/NULL"; export INFO_DIR
+#
+SETUP_INFO='Info v1_6 -f NULL -z /fnal/ups/db'; export SETUP_INFO
+#
+Info () { /fnal/ups/prd/Info/v1_6/NULL/bin/Info "$@" ;}
+#
+EMULATE="none"; export EMULATE
+#
+TZ="CST6CDT"; export TZ
+#
+PAGER="`/bin/sh -c '[ -x /usr/local/bin/less ]' && echo /usr/local/bin/less || echo more`"; export PAGER
+#
+if [ "${LOGNAME:-}" = "" ]; then LOGNAME="${USER}"; export LOGNAME; fi;
+#
+/bin/sh -c '/bin/mail -e >/dev/null 2>&1 && echo You have mail'
+#
+/bin/sh -c '[ -d /usr/news ] && [ -x /usr/bin/news ]' && /usr/bin/news
+#
+Info -new
+#
+if [ -s /usr/local/etc/local.login.sh ]; then
+  . /usr/local/etc/local.login.sh
+fi
+#
+SETUP_SHRC='shrc v1_10 -f SunOS+5 -z /fnal/ups/db'; export SETUP_SHRC
+#
+fermimail () { /usr/ucb/Mail "$@" ;}
+#
+man () { /usr/bin/man -F "$@" ;}
+#
+if [ "${MACH_ID:-}" = "" ]; then MACH_ID="`funame -n`"; export MACH_ID; fi;
+#
+if [ "${MACH_TYPE:-}" = "" ]; then MACH_TYPE="`funame -m`"; export MACH_TYPE; fi;
+#
+if [ "${MACH_OS:-}" = "" ]; then MACH_OS="`ups flavor -1`"; export MACH_OS; fi;
+#
+if [ "${MACH_REL:-}" = "" ]; then MACH_REL="`ups flavor | sed -e 's/.*+//'`"; export MACH_REL; fi;
+#
+if [ "${SETUP_SETPATH:-}" = "" ]; then SETUP_SETPATH="Not_Set"; export SETUP_SETPATH; fi;
+#
+_temp="$SETUP_SETPATH"; export _temp
+#
+if [ "${SETUP_SETPATH:-}" != "" ]
+then
+  upstmp=Not_Set
+  SETUP_SETPATH="`$UPS_DIR/bin/dropit -e -p "$SETUP_SETPATH" -i':' -d':' "$upstmp"`";
+  if [ "${SETUP_SETPATH:-}" = "" ]; then unset SETUP_SETPATH; fi
+  unset upstmp
+fi
+#
+(unset ENV; /bin/sh -c '[ "$_temp" = Not_Set ]') && . `ups setup setpath` || true
+#
+unset _temp
+#
+if [ "${MANPATH:-}" = "" ]; then MANPATH=""; export MANPATH; fi;
+#
+if [ -s /usr/local/etc/local.shrc ]; then
+  . /usr/local/etc/local.shrc
+fi
+#
+true
+#
+'true'
+#
+SETUP_SYSTOOLSUTL='systoolsutl v1_0 -f NULL -z /fnal/ups/db'; export SETUP_SYSTOOLSUTL
+#
+SYSTOOLSUTL_DIR="/fnal/ups/prd/systools/v6_0/NULL"; export SYSTOOLSUTL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_MISPERL='misperl v2_2_4 -f NULL -z /fnal/ups/db'; export SETUP_MISPERL
+#
+MISPERL_DIR="/fnal/ups/prd/misperl/v2_2_4/NULL"; export MISPERL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/misperl/v2_2_4/NULL/bin"
+else
+  PATH="${PATH}:/fnal/ups/prd/misperl/v2_2_4/NULL/bin"
+fi
+export PATH
+#
+SETUP_SAM_FAQ='sam_faq b1_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_FAQ
+#
+SAM_FAQ_DIR="/fnal/ups/prd/sam_faq/b1_0/NULLdev"; export SAM_FAQ_DIR
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLdev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/bin"
+else
+  PATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/bin:${PATH}"
+fi
+export PATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_HTMLGEN='HTMLgen v2_1 -f NULL -z /fnal/ups/db'; export SETUP_HTMLGEN
+#
+HTMLGEN_DIR="/fnal/ups/prd/HTMLgen/v2_1/NULL"; export HTMLGEN_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/HTMLgen/v2_1/NULL"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/HTMLgen/v2_1/NULL"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/inc"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/inc:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_ADMIN='sam_admin v4_0_1 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_ADMIN
+#
+SAM_ADMIN_DIR="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev"; export SAM_ADMIN_DIR
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLdev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/bin"
+else
+  PATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/bin:${PATH}"
+fi
+export PATH
+#
+autodest () { samadmin autodest "$@" ;}
+#
+tapetest () { samadmin tapetest "$@" ;}
+#
+encpstats () { samadmin encpstats "$@" ;}
+#
+SETUP_GNUPLOT='gnuplot v3_7 -f SunOS+5 -z /fnal/ups/db'; export SETUP_GNUPLOT
+#
+GNUPLOT_DIR="/fnal/ups/prd/gnuplot/v3_7/SunOS+5"; export GNUPLOT_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+GNUHELP="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/share/gnuplot.gih"; export GNUHELP
+#
+XIMAGETOOLS_DIR="/fnal/ups/prd/ximagetools/v4_0/NULL"; export XIMAGETOOLS_DIR
+#
+SETUP_XIMAGETOOLS='ximagetools v4_0 -f NULL -z /fnal/ups/db'; export SETUP_XIMAGETOOLS
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/ximagetools/v4_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/ximagetools/v4_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+IMAGELIBS_DIR="/fnal/ups/prd/imagelibs/v1_0/SunOS+5"; export IMAGELIBS_DIR
+#
+SETUP_IMAGELIBS='imagelibs v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_IMAGELIBS
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/imagelibs/v1_0/SunOS+5"
+else
+  PATH="/fnal/ups/prd/imagelibs/v1_0/SunOS+5:${PATH}"
+fi
+export PATH
+#
+GHOSTSCRIPT_DIR="/fnal/ups/prd/ghostscript/v5_50/SunOS+5"; export GHOSTSCRIPT_DIR
+#
+SETUP_GHOSTSCRIPT='ghostscript v5_50 -f SunOS+5 -z /fnal/ups/db'; export SETUP_GHOSTSCRIPT
+#
+GS_FONTPATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/fonts"; export GS_FONTPATH
+#
+GS_LIB="/fnal/ups/prd/ghostscript/v5_50/SunOS+5:/fnal/ups/prd/ghostscript/v5_50/SunOS+5/fonts:/fnal/ups/prd/ghostscript/v5_50/SunOS+5/misc"; export GS_LIB
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+IMAGEMAGICK_DIR="/fnal/ups/prd/imagemagick/v4_04/SunOS+5"; export IMAGEMAGICK_DIR
+#
+SETUP_IMAGEMAGICK='imagemagick v4_04 -f SunOS+5 -z /fnal/ups/db'; export SETUP_IMAGEMAGICK
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/imagemagick/v4_04/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/imagemagick/v4_04/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+XFIG_DIR="/fnal/ups/prd/xfig/v3_20/SunOS+5"; export XFIG_DIR
+#
+SETUP_XFIG='xfig v3_20 -f SunOS+5 -z /fnal/ups/db'; export SETUP_XFIG
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib/%N"
+else
+  XUSERFILESEARCHPATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib/%N:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+XFIGLIBDIR="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib"; export XFIGLIBDIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+XANIM_DIR="/fnal/ups/prd/xanim/v2_70_64/SunOS+5"; export XANIM_DIR
+#
+SETUP_XANIM='xanim v2_70_64 -f SunOS+5 -z /fnal/ups/db'; export SETUP_XANIM
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/xanim/v2_70_64/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/xanim/v2_70_64/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/src"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/src:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/inc"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/inc:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="."
+else
+  PYTHONPATH=".:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_WEB_CONFIG='sam_web_config v1_1_2 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_WEB_CONFIG
+#
+SAM_WEB_CONFIG_DIR="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev"; export SAM_WEB_CONFIG_DIR
+#
+MISWEB_CONFIG="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev/conf"; export MISWEB_CONFIG
+#
+SAMZILLA_CONFIG="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev/conf"; export SAMZILLA_CONFIG
+#
+SAM_DB_SERVER_LOG="/home/sam/private/dbserver__d0ora3__dev"; export SAM_DB_SERVER_LOG
+#
+SAM_DB_OWNER="samdev"; export SAM_DB_OWNER
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q web_dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLweb_dev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.web_dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+SETUP_SAM_DB_SERVER='sam_db_server v3_8_1_2 -f NULL -z /fnal/ups/db'; export SETUP_SAM_DB_SERVER
+#
+SAM_DB_SERVER_DIR="/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL"; export SAM_DB_SERVER_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL/bin"
+else
+  PATH="${PATH}:/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL/bin"
+fi
+export PATH
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v3_4_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v3_4_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v3_4_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v3_4_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="${SAM_DB_SERVER_DIR}/lib"
+else
+  PYTHONPATH="${PYTHONPATH}:${SAM_DB_SERVER_DIR}/lib"
+fi
+export PYTHONPATH
+#
+SAM_DB_SERVER_CLASS="ServantFactory"; export SAM_DB_SERVER_CLASS
+#
+SAM_DB_SERVER_MODULE="SAMDbServer"; export SAM_DB_SERVER_MODULE
+#
+SAM_DB_SERVER_MAIL_LIST="sam-auto@fnal.gov"; export SAM_DB_SERVER_MAIL_LIST
+#
+ORACLE_DIR="/oracle/ora1/oracle/v8_0_5"; export ORACLE_DIR
+#
+SETUP_ORACLE='oracle v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE
+#
+ORACLE_HOME="/oracle/ora1/oracle/v8_0_5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+WEBCGI_DIR="/fnal/ups/prd/webCGI/v0_1/NULL"; export WEBCGI_DIR
+#
+SETUP_WEBCGI='webCGI v0_1 -f NULL -z /fnal/ups/db'; export SETUP_WEBCGI
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/webCGI/v0_1/NULL/src"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/webCGI/v0_1/NULL/src"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_MONITOR='sam_monitor v3_1i -f NULL -z /fnal/ups/db'; export SETUP_SAM_MONITOR
+#
+SAM_MONITOR_DIR="/fnal/ups/prd/sam_monitor/v3_1i/NULL"; export SAM_MONITOR_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_monitor/v3_1i/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_monitor/v3_1i/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+SETUP_HTMLGEN='HTMLgen v2_1 -f NULL -z /fnal/ups/db'; export SETUP_HTMLGEN
+#
+HTMLGEN_DIR="/fnal/ups/prd/HTMLgen/v2_1/NULL"; export HTMLGEN_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/HTMLgen/v2_1/NULL"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/HTMLgen/v2_1/NULL"
+fi
+export PYTHONPATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+/bin/rm -f /var/tmp/aaaAQaqL3
+
+
+01/16/02 12:04:33 blomberg
+From: "Laurelin of Middle Earth" <lauri@fnal.gov>
+To: <helpdesk@fnal.gov>
+Subject: Additional info for 000000000023708
+Date: Wednesday, January 16, 2002 11:55 AM
+
+From a session under the 'lauri' account, where I first did
+
+	cd $HOME/prd/sam_user
+	setup -r`pwd` -Mups -Uups -msam_user.table sam_user
+	cd ../sam_monitor
+	setup -r`pwd` -Mups -Uups -msam_monitor.table sam_monitor
+
+the output from 
+
+	tmpfile=`ups setup systools, misperl, -qdev sam_faq, -qdev sam_admin, -qdev sam_web_config, -qweb_dev sam_config, 	sam_db_server, oracle v8_0_5, fnorb, webCGI, s
+	am_monitor`
+	mail lauri@fnal.gov < $tmpfile
+	. $tmpfile
+
+BUT NOTE, making this little change to the start 
+file for apache MADE A BIGGER CHANGE: when I did
+the restartapache, THIS TIME IT WORKED (when previously
+it did NOT under identical circumstances).
+
+I did it twice to make sure -- each time, the 'missing'
+environmental variables were, in fact, set.
+
+Ugh.  -- lauri
+
+-------- Original Message --------
+From: Lauri Carpenter <lauri@d0ora3.fnal.gov>
+To: lauri@fnal.gov
+
+unset TEMPLATE_HOME_DIR
+#
+unset SETUP_TEMPLATE_HOME
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/systools/v6_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SYSTOOLSUTL_DIR
+#
+unset SETUP_SYSTOOLSUTL
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SETUP_CMDBINGEN
+#
+unset CMDBINGEN_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CMDBIN_DIR
+#
+unset SETUP_CMDBIN
+#
+unset SETUP_CMDBINUTL
+#
+unset SETUP_CMDBINCMD
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+if [ "${PERL5LIB:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch
+  PERL5LIB="`$UPS_DIR/bin/dropit -e -p "$PERL5LIB" -i':' -d':' "$upstmp"`";
+  if [ "${PERL5LIB:-}" = "" ]; then unset PERL5LIB; fi
+  unset upstmp
+fi
+#
+unset PERL_DIR
+#
+unset SETUP_PERL
+#
+unset SETUP_CMDSCRIPTSUSER
+#
+unset SETUP_CMDSCRIPTSLGRP
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cmdscripts/v1_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SETUP_CMDSCRIPTSGUID
+#
+unset SETUP_CMDSCRIPTSBASE
+#
+unset SETUP_CMDSCRIPTSHELL
+#
+unset SETUP_CMDSCRIPTSCTRL
+#
+unset CMDSCRIPTS_DIR
+#
+unset SETUP_CMDSCRIPTS
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/systools/v6_0/NULL/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset SYSTOOLS_DIR
+#
+unset SETUP_SYSTOOLS
+#
+SETUP_SYSTOOLS='systools v6_0 -f NULL -z /fnal/ups/db'; export SETUP_SYSTOOLS
+#
+SYSTOOLS_DIR="/fnal/ups/prd/systools/v6_0/NULL"; export SYSTOOLS_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_PERL='perl v5_006_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PERL
+#
+PERL_DIR="/fnal/ups/prd/perl/v5_006_1/SunOS+5"; export PERL_DIR
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1/arch:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/5.6.1:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1/arch:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PERL5LIB:-}" = "" ]; then
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1"
+else
+  PERL5LIB="/fnal/ups/prd/perl/v5_006_1/SunOS+5/lib/site_perl/5.6.1:${PERL5LIB}"
+fi
+export PERL5LIB
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/perl/v5_006_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDBINCMD='cmdbincmd v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINCMD
+#
+SETUP_CMDBINUTL='cmdbinutl v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINUTL
+#
+SETUP_CMDBIN='cmdbin v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBIN
+#
+CMDBIN_DIR="/fnal/ups/prd/cmdbin/v1_0/SunOS+5"; export CMDBIN_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTS='cmdscripts v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTS
+#
+CMDSCRIPTS_DIR="/fnal/ups/prd/cmdscripts/v1_0/NULL"; export CMDSCRIPTS_DIR
+#
+SETUP_CMDSCRIPTSBASE='cmdscriptsbase v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSBASE
+#
+SETUP_CMDSCRIPTSCTRL='cmdscriptsctrl v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSCTRL
+#
+SETUP_CMDSCRIPTSGUID='cmdscriptsguid v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSGUID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdscripts/v1_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/cmdscripts/v1_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTSLGRP='cmdscriptslgrp v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSLGRP
+#
+SETUP_CMDSCRIPTSHELL='cmdscriptshell v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSHELL
+#
+CMDBINGEN_DIR="/fnal/ups/prd/cmdbin/v1_0/SunOS+5"; export CMDBINGEN_DIR
+#
+SETUP_CMDBINGEN='cmdbingen v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CMDBINGEN
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cmdbin/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_CMDSCRIPTSUSER='cmdscriptsuser v1_0 -f NULL -z /fnal/ups/db'; export SETUP_CMDSCRIPTSUSER
+#
+TEMPLATE_HOME_DIR="/fnal/ups/prd/template_home/v1_3/NULL"; export TEMPLATE_HOME_DIR
+#
+SETUP_TEMPLATE_HOME='template_home v1_3 -f NULL -z /fnal/ups/db'; export SETUP_TEMPLATE_HOME
+#
+cat > /dev/null <<'true'
+#
+SETUP_LOGIN='login v1_6 -f NULL -z /fnal/ups/db'; export SETUP_LOGIN
+#
+if [ "${MACH_ID:-}" = "" ]; then MACH_ID="`funame -n`"; export MACH_ID; fi;
+#
+if [ "${MACH_TYPE:-}" = "" ]; then MACH_TYPE="`funame -m`"; export MACH_TYPE; fi;
+#
+if [ "${MACH_OS:-}" = "" ]; then MACH_OS="`ups flavor -1`"; export MACH_OS; fi;
+#
+if [ "${MACH_REL:-}" = "" ]; then MACH_REL="`ups flavor | sed -e 's/.*+//'`"; export MACH_REL; fi;
+#
+SETUP_SETPATH='setpath v1_9 -f NULL -z /fnal/ups/db'; export SETUP_SETPATH
+#
+if [ "${UPS_FLAVOR_1:-}" = "" ]; then UPS_FLAVOR_1="`ups flavor -1`"; export UPS_FLAVOR_1; fi;
+#
+if [ "${UPS_FLAVOR_2:-}" = "" ]; then UPS_FLAVOR_2="`ups flavor -2`"; export UPS_FLAVOR_2; fi;
+#
+setpath_tmp="`echo ${HOME}/bin.${UPS_FLAVOR_2} | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+setpath_tmp="`echo ${HOME}/bin.${UPS_FLAVOR_1} | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+setpath_tmp="`echo ${HOME}/bin | /bin/sed -e 's://:/:g'`"; export setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD ${setpath_tmp}`"; export PATH
+#
+unset setpath_tmp
+#
+PATH="`${UPS_DIR}/bin/dropit -sEeD /usr/krb5/bin /usr/local/bin /opt/SUNWspro/bin /usr/ccs/bin /usr/lang /usr/bsd /usr/bin /usr/sbin /usr/lbin /usr/ucb /etc /usr/etc /bin /sbin /usr/afsws/bin /usr/openwin/bin /usr/bin/X11 /usr/X11/bin /usr/lpp/X11/Xamples/bin /usr/X11R6/bin /usr/sccs`"; export PATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=.
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="."
+else
+  PATH="${PATH}:."
+fi
+export PATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=`id | grep 'uid=0' > /dev/null && echo . || echo NOT`
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${MANPATH:-}" = "" ]; then MANPATH="."; export MANPATH; fi;
+#
+MANPATH="`${UPS_DIR}/bin/dropit -sEeD -p$MANPATH /fnal/ups/catman /fnal/ups/man /afs/fnal.gov/ups/catman /afs/fnal.gov/ups/man /usr/local/catman /usr/local/man /opt/SUNWspro/man /usr/ccs/catman /usr/ccs/man /usr/catman /usr/man /usr/share/catman /usr/share/man /usr/afsws/catman /usr/afsws/man /usr/openwin/catman /usr/openwin/man /usr/products/catman /usr/products/man /afs/fnal.gov/products/catman /afs/fnal.gov/products/man`"; export MANPATH
+#
+tmpmans="`ups list -aKCATMAN_TARGET_DIR:MAN_TARGET_DIR | perl -pe 's:[\t\f\n\r -#]+: :g; s: /afs/\.: /afs/:g;'`"; export tmpmans
+#
+tmpmans="`${UPS_DIR}/bin/dropit -feDs -p. -d' ' $tmpmans`"; export tmpmans
+#
+MANPATH="`${UPS_DIR}/bin/dropit -fEeDs -p$MANPATH $tmpmans`"; export MANPATH
+#
+if [ "${MANPATH:-}" != "" ]
+then
+  upstmp=.
+  MANPATH="`$UPS_DIR/bin/dropit -e -p "$MANPATH" -i':' -d':' "$upstmp"`";
+  if [ "${MANPATH:-}" = "" ]; then unset MANPATH; fi
+  unset upstmp
+fi
+#
+unset tmpmans
+#
+umask 022
+#
+SETUP_SETTERM='setterm v1_5 -f NULL -z /fnal/ups/db'; export SETUP_SETTERM
+#
+TTY=`tty`; export TTY
+#
+if [ "${TERM:-}" = "" ]; then TERM="vt100"; export TERM; fi;
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || stty sane
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || stty echoe kill '^x' erase '^?' intr '^c'
+#
+/bin/sh -c '[ "$TERM" = "iris-ansi" -o "$TERM" = "iris-ansi-net" -o "$TERM" = "hp" ]' && stty erase '^h'
+#
+TTYPE=`echo $TERM | cut -c1`; export TTYPE
+#
+TERM=`/bin/sh -c '[ -r /usr/lib/terminfo/$TTYPE/$TERM -o -r /usr/share/lib/terminfo/$TTYPE/$TERM -o -r /usr/share/terminfo/$TTYPE/$TERM ]' && echo $TERM || echo vt100`; export TERM
+#
+unset TTYPE
+#
+TERM=`/bin/sh -c '[ "$TERM" = "network" -o "$TERM" = "dumb" -o "$TERM" = "sun" ]' && echo vt100 || echo $TERM`; export TERM
+#
+/bin/sh -c '[ "$TTY" = "not a tty" ]' || echo Terminal type is ${TERM}
+#
+sh -c 'chmod 622 `tty` >/dev/null 2>&1'
+#
+SETUP_SETXWIN='setxwin v1_13 -f SunOS+5 -z /fnal/ups/db'; export SETUP_SETXWIN
+#
+if [ "${USER:-}" = "" ]; then USER="$LOGNAME"; export USER; fi;
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="$HOME/.Xdefaults"
+else
+  XUSERFILESEARCHPATH="$HOME/.Xdefaults:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="$HOME/.Xresources"
+else
+  XUSERFILESEARCHPATH="$HOME/.Xresources:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+OPENWINHOME="/usr/openwin"; export OPENWINHOME
+#
+if [ "${MANPATH:-}" != "" ]
+then
+  upstmp=/usr/openwin/man
+  MANPATH="`$UPS_DIR/bin/dropit -e -p "$MANPATH" -i':' -d':' "$upstmp"`";
+  if [ "${MANPATH:-}" = "" ]; then unset MANPATH; fi
+  unset upstmp
+fi
+#
+if [ "${MANPATH:-}" = "" ]; then
+  MANPATH="/usr/openwin/man"
+else
+  MANPATH="${MANPATH}:/usr/openwin/man"
+fi
+export MANPATH
+#
+if [ "${XUSERFILESEARCHPATH:-}" != "" ]
+then
+  upstmp=/usr/openwin/lib/app-defaults/%N
+  XUSERFILESEARCHPATH="`$UPS_DIR/bin/dropit -e -p "$XUSERFILESEARCHPATH" -i':' -d':' "$upstmp"`";
+  if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then unset XUSERFILESEARCHPATH; fi
+  unset upstmp
+fi
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="/usr/openwin/lib/app-defaults/%N"
+else
+  XUSERFILESEARCHPATH="/usr/openwin/lib/app-defaults/%N:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+_this_term=`tty | sed -e 's:/dev/::' -e 's/not a tty/not_a_tty/g'`; export _this_term
+#
+remote=`finger -lpm ${USER} | grep 'from' | grep ${_this_term}'[^0-9]' | tail -1 | sed -e 's/.* from //'`; export remote
+#
+unset _this_term
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY=""; export DISPLAY; fi;
+#
+unsetme=`/bin/sh -c '[ ${DISPLAY}X = X ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="no_ups_disp_found"; export DISPLAY; fi;
+#
+ups_disp="${remote}:0.0"; export ups_disp
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found ]' || /bin/sh -c 'xdpyinfo -display '$ups_disp' > /tmp/.xtest'"$$"' 2> /tmp/.xtesterr'"$$"' &'
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+ups_disp=`/bin/sh -c '[ -s /tmp/.xtest'"$$"' ]' && echo $ups_disp || echo no_ups_disp_found`; export ups_disp
+#
+rm -f /tmp/.xtest$$ /tmp/.xtesterr$$
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="$ups_disp"; export DISPLAY; fi;
+#
+ups_disp=":0.0"; export ups_disp
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found ]' || /bin/sh -c 'xdpyinfo -display '$ups_disp' > /tmp/.xtest'"$$"' 2> /tmp/.xtesterr'"$$"' &'
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || ls /tmp /tmp /tmp > /dev/null
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+/bin/sh -c '[ $DISPLAY != no_ups_disp_found -o -s /tmp/.xtest'"$$"' -o -s /tmp/.xtesterr'"$$"' ]' || sleep 1
+#
+ups_disp=`/bin/sh -c '[ -s /tmp/.xtest'"$$"' ]' && echo $ups_disp || echo no_ups_disp_found`; export ups_disp
+#
+rm -f /tmp/.xtest$$ /tmp/.xtesterr$$
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+if [ "${DISPLAY:-}" = "" ]; then DISPLAY="$ups_disp"; export DISPLAY; fi;
+#
+unsetme=`/bin/sh -c '[ $DISPLAY = no_ups_disp_found ]' && echo DISPLAY || echo unsetme`; export unsetme
+#
+unset $unsetme
+#
+unsetme="unsetme"; export unsetme
+#
+unset unsetme
+#
+unset remote
+#
+unset ups_disp
+#
+INFO_DIR="/fnal/ups/prd/Info/v1_6/NULL"; export INFO_DIR
+#
+SETUP_INFO='Info v1_6 -f NULL -z /fnal/ups/db'; export SETUP_INFO
+#
+Info () { /fnal/ups/prd/Info/v1_6/NULL/bin/Info "$@" ;}
+#
+EMULATE="none"; export EMULATE
+#
+TZ="CST6CDT"; export TZ
+#
+PAGER="`/bin/sh -c '[ -x /usr/local/bin/less ]' && echo /usr/local/bin/less || echo more`"; export PAGER
+#
+if [ "${LOGNAME:-}" = "" ]; then LOGNAME="${USER}"; export LOGNAME; fi;
+#
+/bin/sh -c '/bin/mail -e >/dev/null 2>&1 && echo You have mail'
+#
+/bin/sh -c '[ -d /usr/news ] && [ -x /usr/bin/news ]' && /usr/bin/news
+#
+Info -new
+#
+if [ -s /usr/local/etc/local.login.sh ]; then
+  . /usr/local/etc/local.login.sh
+fi
+#
+SETUP_SHRC='shrc v1_10 -f SunOS+5 -z /fnal/ups/db'; export SETUP_SHRC
+#
+fermimail () { /usr/ucb/Mail "$@" ;}
+#
+man () { /usr/bin/man -F "$@" ;}
+#
+if [ "${MACH_ID:-}" = "" ]; then MACH_ID="`funame -n`"; export MACH_ID; fi;
+#
+if [ "${MACH_TYPE:-}" = "" ]; then MACH_TYPE="`funame -m`"; export MACH_TYPE; fi;
+#
+if [ "${MACH_OS:-}" = "" ]; then MACH_OS="`ups flavor -1`"; export MACH_OS; fi;
+#
+if [ "${MACH_REL:-}" = "" ]; then MACH_REL="`ups flavor | sed -e 's/.*+//'`"; export MACH_REL; fi;
+#
+if [ "${SETUP_SETPATH:-}" = "" ]; then SETUP_SETPATH="Not_Set"; export SETUP_SETPATH; fi;
+#
+_temp="$SETUP_SETPATH"; export _temp
+#
+if [ "${SETUP_SETPATH:-}" != "" ]
+then
+  upstmp=Not_Set
+  SETUP_SETPATH="`$UPS_DIR/bin/dropit -e -p "$SETUP_SETPATH" -i':' -d':' "$upstmp"`";
+  if [ "${SETUP_SETPATH:-}" = "" ]; then unset SETUP_SETPATH; fi
+  unset upstmp
+fi
+#
+(unset ENV; /bin/sh -c '[ "$_temp" = Not_Set ]') && . `ups setup setpath` || true
+#
+unset _temp
+#
+if [ "${MANPATH:-}" = "" ]; then MANPATH=""; export MANPATH; fi;
+#
+if [ -s /usr/local/etc/local.shrc ]; then
+  . /usr/local/etc/local.shrc
+fi
+#
+true
+#
+'true'
+#
+SETUP_SYSTOOLSUTL='systoolsutl v1_0 -f NULL -z /fnal/ups/db'; export SETUP_SYSTOOLSUTL
+#
+SYSTOOLSUTL_DIR="/fnal/ups/prd/systools/v6_0/NULL"; export SYSTOOLSUTL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/systools/v6_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_MISPERL='misperl v2_2_4 -f NULL -z /fnal/ups/db'; export SETUP_MISPERL
+#
+MISPERL_DIR="/fnal/ups/prd/misperl/v2_2_4/NULL"; export MISPERL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/misperl/v2_2_4/NULL/bin"
+else
+  PATH="${PATH}:/fnal/ups/prd/misperl/v2_2_4/NULL/bin"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/HTMLgen/v2_1/NULL
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset HTMLGEN_DIR
+#
+unset SETUP_HTMLGEN
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset PYTHONHOME
+#
+unset PYTHON_DIR
+#
+unset SETUP_PYTHON
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset BLT_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TK_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset TCL_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TCL_DIR
+#
+unset SETUP_TCL
+#
+unset TK_DIR
+#
+unset SETUP_TK
+#
+unset BLT_DIR
+#
+unset SETUP_BLT
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset FNORB_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cpp/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CPP_DIR
+#
+unset SETUP_CPP
+#
+unset SETUP_FNORB
+#
+SETUP_SAM_FAQ='sam_faq b1_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_FAQ
+#
+SAM_FAQ_DIR="/fnal/ups/prd/sam_faq/b1_0/NULLdev"; export SAM_FAQ_DIR
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLdev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/bin"
+else
+  PATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/bin:${PATH}"
+fi
+export PATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_HTMLGEN='HTMLgen v2_1 -f NULL -z /fnal/ups/db'; export SETUP_HTMLGEN
+#
+HTMLGEN_DIR="/fnal/ups/prd/HTMLgen/v2_1/NULL"; export HTMLGEN_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/HTMLgen/v2_1/NULL"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/HTMLgen/v2_1/NULL"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/inc"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_faq/b1_0/NULLdev/inc:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset FNORB_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cpp/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CPP_DIR
+#
+unset SETUP_CPP
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset PYTHONHOME
+#
+unset PYTHON_DIR
+#
+unset SETUP_PYTHON
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset BLT_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TK_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset TCL_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TCL_DIR
+#
+unset SETUP_TCL
+#
+unset TK_DIR
+#
+unset SETUP_TK
+#
+unset BLT_DIR
+#
+unset SETUP_BLT
+#
+unset SETUP_FNORB
+#
+SETUP_SAM_ADMIN='sam_admin v4_0_1 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_ADMIN
+#
+SAM_ADMIN_DIR="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev"; export SAM_ADMIN_DIR
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLdev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/bin"
+else
+  PATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/bin:${PATH}"
+fi
+export PATH
+#
+autodest () { samadmin autodest "$@" ;}
+#
+tapetest () { samadmin tapetest "$@" ;}
+#
+encpstats () { samadmin encpstats "$@" ;}
+#
+SETUP_GNUPLOT='gnuplot v3_7 -f SunOS+5 -z /fnal/ups/db'; export SETUP_GNUPLOT
+#
+GNUPLOT_DIR="/fnal/ups/prd/gnuplot/v3_7/SunOS+5"; export GNUPLOT_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+GNUHELP="/fnal/ups/prd/gnuplot/v3_7/SunOS+5/share/gnuplot.gih"; export GNUHELP
+#
+XIMAGETOOLS_DIR="/fnal/ups/prd/ximagetools/v4_0/NULL"; export XIMAGETOOLS_DIR
+#
+SETUP_XIMAGETOOLS='ximagetools v4_0 -f NULL -z /fnal/ups/db'; export SETUP_XIMAGETOOLS
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/ximagetools/v4_0/NULL/bin"
+else
+  PATH="/fnal/ups/prd/ximagetools/v4_0/NULL/bin:${PATH}"
+fi
+export PATH
+#
+IMAGELIBS_DIR="/fnal/ups/prd/imagelibs/v1_0/SunOS+5"; export IMAGELIBS_DIR
+#
+SETUP_IMAGELIBS='imagelibs v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_IMAGELIBS
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/imagelibs/v1_0/SunOS+5"
+else
+  PATH="/fnal/ups/prd/imagelibs/v1_0/SunOS+5:${PATH}"
+fi
+export PATH
+#
+GHOSTSCRIPT_DIR="/fnal/ups/prd/ghostscript/v5_50/SunOS+5"; export GHOSTSCRIPT_DIR
+#
+SETUP_GHOSTSCRIPT='ghostscript v5_50 -f SunOS+5 -z /fnal/ups/db'; export SETUP_GHOSTSCRIPT
+#
+GS_FONTPATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/fonts"; export GS_FONTPATH
+#
+GS_LIB="/fnal/ups/prd/ghostscript/v5_50/SunOS+5:/fnal/ups/prd/ghostscript/v5_50/SunOS+5/fonts:/fnal/ups/prd/ghostscript/v5_50/SunOS+5/misc"; export GS_LIB
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/ghostscript/v5_50/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+IMAGEMAGICK_DIR="/fnal/ups/prd/imagemagick/v4_04/SunOS+5"; export IMAGEMAGICK_DIR
+#
+SETUP_IMAGEMAGICK='imagemagick v4_04 -f SunOS+5 -z /fnal/ups/db'; export SETUP_IMAGEMAGICK
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/imagemagick/v4_04/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/imagemagick/v4_04/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+XFIG_DIR="/fnal/ups/prd/xfig/v3_20/SunOS+5"; export XFIG_DIR
+#
+SETUP_XFIG='xfig v3_20 -f SunOS+5 -z /fnal/ups/db'; export SETUP_XFIG
+#
+if [ "${XUSERFILESEARCHPATH:-}" = "" ]; then
+  XUSERFILESEARCHPATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib/%N"
+else
+  XUSERFILESEARCHPATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib/%N:${XUSERFILESEARCHPATH}"
+fi
+export XUSERFILESEARCHPATH
+#
+XFIGLIBDIR="/fnal/ups/prd/xfig/v3_20/SunOS+5/lib"; export XFIGLIBDIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/xfig/v3_20/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+XANIM_DIR="/fnal/ups/prd/xanim/v2_70_64/SunOS+5"; export XANIM_DIR
+#
+SETUP_XANIM='xanim v2_70_64 -f SunOS+5 -z /fnal/ups/db'; export SETUP_XANIM
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/xanim/v2_70_64/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/xanim/v2_70_64/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/src"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/src:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/inc"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_admin/v4_0_1/NULLdev/inc:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="."
+else
+  PYTHONPATH=".:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_SAM_WEB_CONFIG='sam_web_config v1_1_2 -f NULL -z /fnal/ups/db -q dev'; export SETUP_SAM_WEB_CONFIG
+#
+SAM_WEB_CONFIG_DIR="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev"; export SAM_WEB_CONFIG_DIR
+#
+MISWEB_CONFIG="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev/conf"; export MISWEB_CONFIG
+#
+SAMZILLA_CONFIG="/fnal/ups/prd/sam_web_config/v1_1_2/NULLdev/conf"; export SAMZILLA_CONFIG
+#
+SAM_DB_SERVER_LOG="/home/sam/private/dbserver__d0ora3__dev"; export SAM_DB_SERVER_LOG
+#
+SAM_DB_OWNER="samdev"; export SAM_DB_OWNER
+#
+SETUP_SAM_CONFIG='sam_config v3_2_0 -f NULL -z /fnal/ups/db -q web_dev'; export SETUP_SAM_CONFIG
+#
+SAM_CONFIG_DIR="/fnal/ups/prd/sam_config/v3_2_0/NULLweb_dev"; export SAM_CONFIG_DIR
+#
+SAM_NAMING_SERVICE_IOR="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export SAM_NAMING_SERVICE_IOR
+#
+FNORB_NAMING_SERVICE="IOR:000000000000002a49444c3a6f6f632e636f6d2f436f734e616d696e672f4f424e616d696e67436f6e746578743a312e3000000000000001000000000000002c000100000000001064306f7261332e666e616c2e676f7600232800000000000c4e616d655365727669636500"; export FNORB_NAMING_SERVICE
+#
+SAM_LOG_SERVER_ADDR="d0db-dev.fnal.gov:30583"; export SAM_LOG_SERVER_ADDR
+#
+SAM_INFO_SERVER_NAME="SAMInfoServer.web_dev:SAMInfoServer"; export SAM_INFO_SERVER_NAME
+#
+SAM_DB_SERVER_NAME="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_NAME
+#
+SAM_DB_SERVER_SYSTEM="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_SYSTEM
+#
+SAM_DB_SERVER_USER="SAMDbServer.user_dev:SAMDbServer"; export SAM_DB_SERVER_USER
+#
+SAM_DB_SERVER_DLSAM="SAMDbServer.dlsam_dev:SAMDbServer"; export SAM_DB_SERVER_DLSAM
+#
+SAM_DB_SERVER_WEB="SAMDbServer.web_dev:SAMDbServer"; export SAM_DB_SERVER_WEB
+#
+SAM_DB_SERVER_STATION="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_STATION
+#
+SAM_DB_SERVER_PMASTER="${SAM_DB_SERVER_SYSTEM}"; export SAM_DB_SERVER_PMASTER
+#
+SAM_DB_SERVER_LEVEL="3:-1"; export SAM_DB_SERVER_LEVEL
+#
+ORACLE_SID="d0ofdev1"; export ORACLE_SID
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset FNORB_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cpp/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CPP_DIR
+#
+unset SETUP_CPP
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset PYTHONHOME
+#
+unset PYTHON_DIR
+#
+unset SETUP_PYTHON
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset BLT_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TK_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset TCL_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TCL_DIR
+#
+unset SETUP_TCL
+#
+unset TK_DIR
+#
+unset SETUP_TK
+#
+unset BLT_DIR
+#
+unset SETUP_BLT
+#
+unset SETUP_FNORB
+#
+SETUP_SAM_DB_SERVER='sam_db_server v3_8_1_2 -f NULL -z /fnal/ups/db'; export SETUP_SAM_DB_SERVER
+#
+SAM_DB_SERVER_DIR="/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL"; export SAM_DB_SERVER_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL/bin"
+else
+  PATH="${PATH}:/fnal/ups/prd/sam_db_server/v3_8_1_2/NULL/bin"
+fi
+export PATH
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+SETUP_PYTHON_DCORACLE='python_dcoracle v1_3_2_o805p21 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON_DCORACLE
+#
+ORACLE_CLIENT_DIR="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_CLIENT_DIR
+#
+SETUP_ORACLE_CLIENT='oracle_client v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE_CLIENT
+#
+ORACLE_HOME="/fnal/ups/prd/oracle_client/v8_0_5/SunOS+5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+PYTHON_DCORACLE_DIR="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"; export PYTHON_DCORACLE_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5"
+else
+  PYTHONPATH="/fnal/ups/prd/python_dcoracle/v1_3_2_o805p21/SunOS+5:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v3_4_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v3_4_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v3_4_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v3_4_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="${SAM_DB_SERVER_DIR}/lib"
+else
+  PYTHONPATH="${PYTHONPATH}:${SAM_DB_SERVER_DIR}/lib"
+fi
+export PYTHONPATH
+#
+SAM_DB_SERVER_CLASS="ServantFactory"; export SAM_DB_SERVER_CLASS
+#
+SAM_DB_SERVER_MODULE="SAMDbServer"; export SAM_DB_SERVER_MODULE
+#
+SAM_DB_SERVER_MAIL_LIST="sam-auto@fnal.gov"; export SAM_DB_SERVER_MAIL_LIST
+#
+ORACLE_DIR="/oracle/ora1/oracle/v8_0_5"; export ORACLE_DIR
+#
+SETUP_ORACLE='oracle v8_0_5 -f SunOS+5 -z /fnal/ups/db'; export SETUP_ORACLE
+#
+ORACLE_HOME="/oracle/ora1/oracle/v8_0_5"; export ORACLE_HOME
+#
+if [ "${LD_LIBRARY_PATH:-}" = "" ]; then
+  LD_LIBRARY_PATH="${ORACLE_HOME}/lib"
+else
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}/lib"
+fi
+export LD_LIBRARY_PATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="${ORACLE_HOME}/bin"
+else
+  PATH="${ORACLE_HOME}/bin:${PATH}"
+fi
+export PATH
+#
+ORACLE_TNSNAMES_DIR="/fnal/ups/prd/oracle_tnsnames/v24/NULL"; export ORACLE_TNSNAMES_DIR
+#
+SETUP_ORACLE_TNSNAMES='oracle_tnsnames v24 -f NULL -z /fnal/ups/db'; export SETUP_ORACLE_TNSNAMES
+#
+TNS_ADMIN="/fnal/ups/prd/oracle_tnsnames/v24/NULL/etc"; export TNS_ADMIN
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset FNORB_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cpp/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CPP_DIR
+#
+unset SETUP_CPP
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset PYTHONHOME
+#
+unset PYTHON_DIR
+#
+unset SETUP_PYTHON
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset BLT_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TK_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset TCL_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TCL_DIR
+#
+unset SETUP_TCL
+#
+unset TK_DIR
+#
+unset SETUP_TK
+#
+unset BLT_DIR
+#
+unset SETUP_BLT
+#
+unset SETUP_FNORB
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+WEBCGI_DIR="/fnal/ups/prd/webCGI/v0_1/NULL"; export WEBCGI_DIR
+#
+SETUP_WEBCGI='webCGI v0_1 -f NULL -z /fnal/ups/db'; export SETUP_WEBCGI
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/webCGI/v0_1/NULL/src"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/webCGI/v0_1/NULL/src"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/HTMLgen/v2_1/NULL
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset HTMLGEN_DIR
+#
+unset SETUP_HTMLGEN
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+unset FNORB_DIR
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/cpp/v1_0/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset CPP_DIR
+#
+unset SETUP_CPP
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/python/v2_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset PYTHONHOME
+#
+unset PYTHON_DIR
+#
+unset SETUP_PYTHON
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset BLT_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/blt/v2_4u/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TK_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3
+  TCLLIBPATH="`$UPS_DIR/bin/dropit -e -p "$TCLLIBPATH" -i' ' -d' ' "$upstmp"`";
+  if [ "${TCLLIBPATH:-}" = "" ]; then unset TCLLIBPATH; fi
+  unset upstmp
+fi
+#
+unset TCL_LIBRARY
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+unset TCL_DIR
+#
+unset SETUP_TCL
+#
+unset TK_DIR
+#
+unset SETUP_TK
+#
+unset BLT_DIR
+#
+unset SETUP_BLT
+#
+unset SETUP_FNORB
+#
+unset SAM_DB_SERVER_NAME
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=.
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/d0ora3/home/lauri/prd/sam_user/data
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/d0ora3/home/lauri/prd/sam_user/src/python
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+if [ "${PATH:-}" != "" ]
+then
+  upstmp=/d0ora3/home/lauri/prd/sam_user/bin
+  PATH="`$UPS_DIR/bin/dropit -e -p "$PATH" -i':' -d':' "$upstmp"`";
+  if [ "${PATH:-}" = "" ]; then unset PATH; fi
+  unset upstmp
+fi
+#
+if [ "${PYTHONPATH:-}" != "" ]
+then
+  upstmp=/d0ora3/home/lauri/prd/sam_monitor/lib
+  PYTHONPATH="`$UPS_DIR/bin/dropit -e -p "$PYTHONPATH" -i':' -d':' "$upstmp"`";
+  if [ "${PYTHONPATH:-}" = "" ]; then unset PYTHONPATH; fi
+  unset upstmp
+fi
+#
+SETUP_SAM_MONITOR='sam_monitor v3_1i -f NULL -z /fnal/ups/db'; export SETUP_SAM_MONITOR
+#
+SAM_MONITOR_DIR="/fnal/ups/prd/sam_monitor/v3_1i/NULL"; export SAM_MONITOR_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_monitor/v3_1i/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_monitor/v3_1i/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_FNORB='fnorb v1_1b_6 -f SunOS+5.6 -z /fnal/ups/db'; export SETUP_FNORB
+#
+SETUP_BLT='blt v2_4u -f SunOS+5 -z /fnal/ups/db'; export SETUP_BLT
+#
+BLT_DIR="/fnal/ups/prd/blt/v2_4u/SunOS+5"; export BLT_DIR
+#
+SETUP_TK='tk v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TK
+#
+TK_DIR="/fnal/ups/prd/tk/v8_3_1/SunOS+5"; export TK_DIR
+#
+SETUP_TCL='tcl v8_3_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_TCL
+#
+TCL_DIR="/fnal/ups/prd/tcl/v8_3_1/SunOS+5"; export TCL_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+TCL_LIBRARY="${TCL_DIR}/lib/tcl8.3"; export TCL_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tcl/v8_3_1/SunOS+5/lib/tcl8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+TK_LIBRARY="${TK_DIR}/lib/tk8.3"; export TK_LIBRARY
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3"
+else
+  TCLLIBPATH="/fnal/ups/prd/tk/v8_3_1/SunOS+5/lib/tk8.3 ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+BLT_LIBRARY="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"; export BLT_LIBRARY
+#
+if [ "${TCLLIBPATH:-}" = "" ]; then
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt"
+else
+  TCLLIBPATH="/fnal/ups/prd/blt/v2_4u/SunOS+5/lib/blt ${TCLLIBPATH}"
+fi
+export TCLLIBPATH
+#
+SETUP_PYTHON='python v2_1 -f SunOS+5 -z /fnal/ups/db'; export SETUP_PYTHON
+#
+PYTHON_DIR="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHON_DIR
+#
+PYTHONHOME="/fnal/ups/prd/python/v2_1/SunOS+5"; export PYTHONHOME
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/python/v2_1/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-dynload:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-stdwin:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/lib-tk:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat"
+else
+  PYTHONPATH="/fnal/ups/prd/python/v2_1/SunOS+5/lib/python2.0/plat:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+SETUP_CPP='cpp v1_0 -f SunOS+5 -z /fnal/ups/db'; export SETUP_CPP
+#
+CPP_DIR="/fnal/ups/prd/cpp/v1_0/SunOS+5"; export CPP_DIR
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin"
+else
+  PATH="/fnal/ups/prd/cpp/v1_0/SunOS+5/bin:${PATH}"
+fi
+export PATH
+#
+FNORB_DIR="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"; export FNORB_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6"
+else
+  PYTHONPATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PATH:-}" = "" ]; then
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script"
+else
+  PATH="/fnal/ups/prd/fnorb/v1_1b_6/SunOS+5.6/script:${PATH}"
+fi
+export PATH
+#
+SETUP_HTMLGEN='HTMLgen v2_1 -f NULL -z /fnal/ups/db'; export SETUP_HTMLGEN
+#
+HTMLGEN_DIR="/fnal/ups/prd/HTMLgen/v2_1/NULL"; export HTMLGEN_DIR
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/HTMLgen/v2_1/NULL"
+else
+  PYTHONPATH="${PYTHONPATH}:/fnal/ups/prd/HTMLgen/v2_1/NULL"
+fi
+export PYTHONPATH
+#
+SAM_COMMON_DIR="/fnal/ups/prd/sam_common/v4_0_0_0/NULL"; export SAM_COMMON_DIR
+#
+SETUP_SAM_COMMON='sam_common v4_0_0_0 -f NULL -z /fnal/ups/db'; export SETUP_SAM_COMMON
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/stub:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+if [ "${PYTHONPATH:-}" = "" ]; then
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib"
+else
+  PYTHONPATH="/fnal/ups/prd/sam_common/v4_0_0_0/NULL/lib:${PYTHONPATH}"
+fi
+export PYTHONPATH
+#
+/bin/rm -f /var/tmp/aaaYcai3q
+

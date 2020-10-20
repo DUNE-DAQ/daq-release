@@ -1,0 +1,14 @@
+FILE = chain
+PRODUCT = flute
+CHAIN = current
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v1_0
+QUALIFIERS = "song"
+  DECLARER = dsilas
+  DECLARED = 1998-07-08
+  MODIFIER = dsilas
+  MODIFIED = 1998-07-08
+

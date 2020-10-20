@@ -1,0 +1,37 @@
+FILE = table
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = declare
+   Execute("echo declare",NO_UPS_ENV)
+ACTION = undeclare
+   Execute("echo undeclare",NO_UPS_ENV)
+ACTION = current
+   Execute("echo current",NO_UPS_ENV)
+ACTION = uncurrent
+   Execute("echo uncurrent",NO_UPS_ENV)
+ACTION = new
+   Execute("echo new",NO_UPS_ENV)
+ACTION = unnew
+   Execute("echo unnew",NO_UPS_ENV)
+ACTION = test
+   Execute("echo test",NO_UPS_ENV)
+ACTION = untest
+   Execute("echo untest",NO_UPS_ENV)
+ACTION = old
+   Execute("echo old",NO_UPS_ENV)
+ACTION = unold
+   Execute("echo unold",NO_UPS_ENV)
+ACTION = development
+   Execute("echo development",NO_UPS_ENV)
+ACTION = undevelopment
+   Execute("echo undevelopment",NO_UPS_ENV)
+ACTION = configure
+   Execute("echo configure",NO_UPS_ENV)
+ACTION = unconfigure
+   Execute("echo unconfigure",NO_UPS_ENV)
+ACTION = leash
+   Execute("echo leash",NO_UPS_ENV)
+ACTION = unleash
+   Execute("echo unleash",NO_UPS_ENV)

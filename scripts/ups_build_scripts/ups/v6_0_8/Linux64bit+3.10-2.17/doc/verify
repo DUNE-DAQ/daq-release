@@ -1,0 +1,28 @@
+
+Things to remember to verify when reading a ups file.
+=====================================================
+
+- Better error return when reading invalid keywords,
+  e.g reading 'FLAVIR' when 'FLAVOR' was expected.
+
+- Check keyword spelling,
+  e.g reading invalid keyword 'COMNEN'.
+
+- Check delimiter in QUALIFIERS,
+  e.g if any char not [0,9,a,z,A,Z] and ':' print a warning.
+  
+- Check that each FLAVOR is followed by a QUALIFIERS.
+
+- Check that no VERSION is specified in a TABLE file.
+
+- Check that all support UPS_ environmentals are actually in
+  the file as ${UPS_blaablaa} and not just $UPS_blaablaa.
+  This decision to force this was based on time constraints
+  of setup.  DjF
+
+- Check for dublicate instances in ups files.
+  e.g (FLAVOR=IRIX, QUALIFIERS=a:b) and (FLAVOR=IRIX, QUALIFIERS=b:a)
+  is a dublicate.
+
+- Check that a chain file name (<name>.chain) is the same as specifyed
+  by chain key (CHAIN=<name>) in the file.

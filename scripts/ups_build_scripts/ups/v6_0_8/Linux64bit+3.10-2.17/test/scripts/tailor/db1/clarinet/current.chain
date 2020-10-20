@@ -1,0 +1,44 @@
+#*************************************************
+# Chain File 
+#*************************************************
+# 
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+File=Chain
+Product=clarinet
+Chain=current
+# 
+Flavor=ANY
+Qualifiers=""
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+#
+Flavor=IRIX+7.3
+Qualifiers="virport"
+Version=v2_0
+Declarer="silas"
+Declared="6-29-98
+
+#
+Flavor=NULL
+Qualifiers=""
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+#
+Flavor=PLUM
+Qualifiers="worm"
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+# 
+Flavor=OSF1
+Qualifiers=""
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+

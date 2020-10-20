@@ -1,0 +1,25 @@
+D:NAME=../db1
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt, CHAIN=test
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt, CHAIN=mydog
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt, CHAIN=current
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=        NULL, QUALIFIERS=nodbg:opt
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt, CHAIN=current
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=    IRIX+6.2, QUALIFIERS=
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=    IRIX+6.2, QUALIFIERS=
+C:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        OSF1, QUALIFIERS=, CHAIN=test
+V:PRODUCT=         lassie, VERSION=      v2_0, FLAVOR=        OSF1, QUALIFIERS=
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=        OSF1, QUALIFIERS=
+V:PRODUCT=         lassie, VERSION=      v1_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=        NULL, QUALIFIERS=nodbg:opt
+V:PRODUCT=         lassie, VERSION=      v1_0, FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
+V:PRODUCT=         lassie, VERSION=      v1_0, FLAVOR=    IRIX+6.2, QUALIFIERS=
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=    IRIX+6.2, QUALIFIERS=
+C:PRODUCT=         lassie, VERSION=      v1_0, FLAVOR=        OSF1, QUALIFIERS=, CHAIN=current
+V:PRODUCT=         lassie, VERSION=      v1_0, FLAVOR=        OSF1, QUALIFIERS=
+T:PRODUCT=         lassie, VERSION=    (null), FLAVOR=        OSF1, QUALIFIERS=

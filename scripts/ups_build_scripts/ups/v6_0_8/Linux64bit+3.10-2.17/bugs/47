@@ -1,0 +1,15 @@
+Priority: Low
+State: Verified
+
+This is what stopped me from continuing the generic install on the linux
+servers associated with cmsun1.  The files that would get installed in
+/fnal/ups/etc would overwrite the files that were there and that had
+SunOS references. Apparently this is ok because these files work in a mixed
+platform environment.
+
+I was assuming that they would not work because they were not NULL but platform
+specific.  I spent a lot of time last week looking for something about this
+in the new ups/upd manual and the only manuals but did not find anything about 
+it.  So I am suggesting that this kind of information be added for future
+reference.
+

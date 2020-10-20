@@ -1,0 +1,15 @@
+FILE = version
+PRODUCT = penguin
+VERSION = v1_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = rtokarek
+  DECLARED = 1998-06-10
+  MODIFIER = highpriest
+  MODIFIED = 1998-06-22
+  PROD_DIR = /NULL/penguin/
+  UPS_DIR = ups
+  TABLE_FILE = penguin.table

@@ -1,0 +1,16 @@
+Product:          doomed
+Flavor:           IRIX+5
+                  IRIX+4
+                  IRIX+3
+                  IRIX+2
+                  IRIX+1
+                  IRIX+0
+                  IRIX
+                  NULL
+                  ANY
+Osname:           IRIX+5
+Qualifiers:       
+DB:               /thunder
+                  /lightening
+Chains:           current
+ugo_v 0 and UPS_VERBOSE 0

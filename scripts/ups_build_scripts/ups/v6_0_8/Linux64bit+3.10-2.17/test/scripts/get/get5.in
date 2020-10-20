@@ -1,0 +1,17 @@
+Name         = jessie	
+Tilde        = __YOUR_LP_GOES_HERE__/dir/filename	
+Version      = v2_0	
+Flavor       = NULL	
+Qualifiers   = red	
+Prod dir     = /usr/products/jessie_relative	
+Shell        = csh	
+Options      = 	
+Verbose      = 	
+Extended     = 	
+This Db      = ../list/db1	
+Setup        = jessie v2_0 -f NULL -z ../list/db1 -q red	
+Origin       = 	
+Compile      = ../list/db1/jessie/v2_0.NULL.compile	
+Ups_dir      = /usr/products/jessie_relative/ups	
+PRODUCTS     = ../list/db1	
+Junk         = ${JUNK}	

@@ -1,0 +1,9 @@
+rabbit v1_0 -f NULL -z ../db3
+|__asta v1_0 -f NULL -z ../db2
+|  |__lassie v1_0 -f NULL -z ../db1
+|  |  |__spot v3_0 -f NULL -z ../db1
+|  |__snif v1_0 -f NULL -z ../db2
+|__fly v1_0 -f NULL -z ../db1
+|__rover v1_0 -f NULL -z ../db1
+   |__snoopy v1_0 -f NULL -z ../db1
+   |__astro v1_0 -f NULL -z ../db1

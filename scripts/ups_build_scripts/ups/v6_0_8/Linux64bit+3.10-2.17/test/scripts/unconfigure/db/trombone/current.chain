@@ -1,0 +1,51 @@
+#****************************************************************
+# Chain File
+#****************************************************************
+#
+# Keywords are NOT case sensitive.
+# Required Keywords.
+# flavor=FLAVOR
+# version=VERSION
+#
+#
+File=Chain
+Product=trombone
+Chain=current
+#
+Flavor=NULL
+Qualifiers="RED"
+Version=v2_0
+Declarer="silas"
+Declared=6-25-98
+#
+Flavor=PLUM
+Qualifiers="music"
+Version=v1_0
+Declarer="silas"
+Declared=6-25-98
+
+#
+Flavor=Irix+5.1
+Qualifiers="red"
+Version=v1_0
+Declarer="silas"
+Declared=6-25-98
+*
+Flavor=Irix+3
+Qualifiers=""
+Version=v1_0
+Declarer="silas"
+Declared=6-25-98
+#
+Flavor=Irix+6.2
+Qualifiers="nodbg:opt"
+Version=v2_0
+Declarer="silas"
+Declared=6-25-98
+#
+Flavor=OSF1
+Qualifiers=""
+Version=v2_0
+Declarer="silas"
+Declared=6-25-98
+

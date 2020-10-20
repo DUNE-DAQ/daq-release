@@ -1,0 +1,30 @@
+UPS help command: modify
+
+           Allow editor modification of the UPS Database files.  
+           The altered files are verified before being rewritten.
+
+     Valid Options:
+          -? print out usage information 
+          -A nodes : authorized nodes 
+          -c current chain 
+          -d development chain 
+          -E run the editor in $EDITOR on the requested file (the default) 
+          -f flavor : flavor to use (operating system[+release]) 
+          -H flavor : use this as the flavor and build a flavor table from it 
+          -m tableFile : table file name
+          -M tableFileDir : table file directory 
+          -n new chain 
+          -N any file parsable by UPS 
+          -o old chain 
+          -p "description" : product description 
+          -q qualifiers : colon separated list ofrequired or optional qualifiers
+             that are to be part of the instance
+          -r dir : set $PROD_DIR to dir 
+          -t test chain 
+          -T archivefile : archive file 
+          -U upsDir : ups directory location 
+          -v print out extra 'debugging' info (-vv for even more etc. etc.)
+          -V do not delete the temp file 
+          -z database : use this database to get instance information 
+          -Z time this command (does not include sourcing of temp file for
+             setup/unsetup

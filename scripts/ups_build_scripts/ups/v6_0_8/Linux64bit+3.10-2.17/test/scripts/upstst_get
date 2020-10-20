@@ -1,0 +1,35 @@
+#!/bin/sh
+# ============================================================================
+# test the get routines
+# ============================================================================
+unset PRODUCTS
+cd $UPS_DIR/test/scripts/get
+#=================================================================
+# doctor the flavor-specific files first
+#=================================================================
+sed -e s:__YOUR_LP_GOES_HERE__:`grep '^lp:' /etc/passwd | cut -d: -f6`: get1.in >get1.in.temp
+sed -e s:__YOUR_LP_GOES_HERE__:`grep '^lp:' /etc/passwd | cut -d: -f6`: get2.in >get2.in.temp
+sed -e s:__YOUR_LP_GOES_HERE__:`grep '^lp:' /etc/passwd | cut -d: -f6`: get5.in >get5.in.temp
+sed -e s/__YOUR_FLAVOR_HERE__/`ups flavor`/ get3.in >get3.in.temp
+sed -e s/__YOUR_FLAVOR_HERE__/`ups flavor`/ get4.in >get4.in.temp
+sed -e s/__YOUR_FLAVOR_HERE__/`ups flavor`/ relchk.in >relchk.in.temp
+#=================================================================
+env UPS_SHELL=csh $UPS_DIR/test/ups_test << EOD
+#=================================================================
+#
+upsget_translation -z ../list/db1 -f NULL -q "nodbg:opt" lassie v2_0 -e -O "-blah" -out get1.out -diff get1.in.temp
+upsget_translation -z ../list/db1 -f NULL -q "nodbg:opt" lassie v2_0 -r /dog/house -out get2.out -diff get2.in.temp
+upsget_translation -z ../list/db1 -f NULL -q "red" jessie v2_0 -out get5.out -diff get5.in.temp -H IRIX+6.2
+upsget_allout -z ../list/db1 -f NULL -q "nodbg:opt" lassie v2_0 -out get3.out -diff get3.in.temp -H IRIX+6.2
+quit
+EOD
+env UPS_SHELL=sh $UPS_DIR/test/ups_test << EOD2
+upsget_allout -z ../list/db1 -f NULL -q "nodbg:opt" lassie v2_0 -out get4.out -diff get4.in.temp -H IRIX+6.2
+# need to do jessie to check relative path here too 
+upsget_allout -z ../list/db1 -f NULL -q "red" jessie v2_0 -out relchk.out -diff relchk.in.temp -H IRIX+6.2
+quit
+EOD2
+#=================================================================
+# clean up
+#=================================================================
+rm *.in.temp

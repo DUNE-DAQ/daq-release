@@ -1,0 +1,9 @@
+#!/bin/sh
+# ============================================================================
+# test ups exist
+# ============================================================================
+cd $UPS_DIR/test/scripts/exist
+$UPS_DIR/bin/ups exist exists v1_0 -f NULL -z ./db1
+if [ $? -ne 0 ]; then echo "Exist -- failed to report existing product"; fi
+$UPS_DIR/bin/ups exist doesntexist v1_0 -f NULL -z ./db1
+if [ $? -eq 0 ]; then echo "Exist -- Incorrectly reported nonexistent product"; fi

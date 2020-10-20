@@ -1,0 +1,9 @@
+FILE = TABLE
+PRODUCT = spot
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   dodefaults()
+   sourcerequired( spot_v1_0 , UPS_ENV)

@@ -1,0 +1,81 @@
+File=Table
+Product=ups
+#*************************************************
+# Starting Group definition
+Group:
+Flavor=ANY
+Qualifiers=""
+
+MAN_SOURCE_DIR=${UPS_PROD_DIR}/man/man
+CATMAN_SOURCE_DIR=${UPS_PROD_DIR}/man/catman
+
+Common:
+   Action=install_init_d
+     Execute(${UPS_UPS_DIR}/install_init_d.sh, UPS_ENV)
+
+   Action=current
+    #Execute( echo script is: && cat $BASH_SOURCE, NO_UPS_ENV)
+    Execute( echo "Doing ups current for SETUPS_DIR ${SETUPS_DIR}" , NO_UPS_ENV)
+    If( test -n "${SETUPS_DIR}" && test -w "${SETUPS_DIR}" )
+     #Execute( set -x , NO_UPS_ENV)
+     Execute( test -d ${SETUPS_DIR}/.old || mkdir ${SETUPS_DIR}/.old, NO_UPS_ENV)
+     Execute( mv -f  ${SETUPS_DIR}/setup ${SETUPS_DIR}/setups.* ${SETUPS_DIR}/.old 2>/dev/null	, NO_UPS_ENV)
+     Execute( cp ${UPS_UPS_DIR}/setups    ${SETUPS_DIR}	          , NO_UPS_ENV)
+     Execute( cp ${UPS_UPS_DIR}/setups.p* ${SETUPS_DIR}	          , NO_UPS_ENV)
+     Execute( cd ${SETUPS_DIR}					  , NO_UPS_ENV)
+     Execute( ln -s setups  ${SETUPS_DIR}/setups.sh		  , NO_UPS_ENV)
+     Execute( ln -s setups  ${SETUPS_DIR}/setups.csh		  , NO_UPS_ENV)
+     Execute( ln -s setups  ${SETUPS_DIR}/setup	  		  , NO_UPS_ENV)
+
+     # make sure there is a setups_layout scriptlet
+     Execute( test -r ${SETUPS_DIR}/setups_layout || (cd ${SETUPS_DIR} && sh ${UPS_UPS_DIR}/find_layout.sh), UPS_ENV)
+
+     # now execute it to update SETUPS_SAVE...
+     Execute( /bin/bash -c ". ${SETUPS_DIR}/setups" 		, NO_UPS_ENV)
+
+    Else()
+
+     Execute( test -n "${SETUPS_DIR}" && echo "\$SETUPS_DIR=${SETUPS_DIR} not writable", NO_UPS_ENV)
+    EndIf( test -n "${SETUPS_DIR}" && test -w "${SETUPS_DIR}" )
+
+   Action=uncurrent
+     Execute( mv ${SETUPS_DIR}/.old/* ${SETUPS_DIR}		, NO_UPS_ENV)
+
+   Action=unconfigure
+
+   Action=setup
+     setupenv()
+     proddir()
+# Typically this next line would not be done since it's doing the same thing
+# as the proddir() line above but in "testing" many people are not defining
+# this product as ups but as erupt (Elegant Redesign of Unix Product Tool)
+# the ups rewrite product name
+     envSet(UPS_DIR, ${UPS_PROD_DIR})
+     pathPrepend(PATH, ${UPS_PROD_DIR}/bin, :)
+#    addAlias(ups,${UPS_PROD_DIR}/bin/ups %s)
+     addAlias(setup,'${UPS_SOURCE} `${UPS_PROD_DIR}/bin/ups setup %s`')
+     addAlias(unsetup,'${UPS_SOURCE} `${UPS_PROD_DIR}/bin/ups unsetup %s`')
+#     addAlias(unsetup_all, eval `printenv | grep "^SETUP_" | sed -e "s/SETUP_[^=]*=//" -e "/^ups /d" -e "s/^\([^ ]*\)/echo unsetup -j \1;unsetup -j \1/" -e "s/\(.*\)/\1;/"` )
+#     addAlias(unsetup_all, eval `ups active | sed -e 1d -e "/^ups /d" -e "s/^/unsetup -j /" -e "s/\(.*\)/\1;/"` )
+     addAlias(unsetup_all, eval `ups active | sed -e 1d -e "/^ups /d" -e "s/^\([^ ]*\)/echo unsetup -j \1;unsetup -j \1/" -e "s/\(.*\)/\1;/"` )
+# we now have a perl script in ups, but we don't set it up to 
+# avoid various problems.
+#     setupOptional(perl)
+#
+End:
+# End Group definition
+#*************************************************
+
+Flavor=ANY
+qualifiers=build
+
+action=setup
+  proddir()
+  setupenv()
+  envSet(UPS_DIR, ${UPS_PROD_DIR})
+  pathPrepend(PATH, ${UPS_PROD_DIR}/bin, :)
+# addAlias(ups,${UPS_PROD_DIR}/bin/ups %s)
+  addAlias(setup,'${UPS_SOURCE} `${UPS_PROD_DIR}/bin/ups setup %s`')
+  addAlias(unsetup,'${UPS_SOURCE} `${UPS_PROD_DIR}/bin/ups unsetup %s`')
+  setupOptional (upd)
+

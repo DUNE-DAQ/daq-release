@@ -1,0 +1,37 @@
+#*************************************************
+# Chain File
+#*************************************************
+#
+# Leading white space is ignored.
+# Keywords are NOT case sensitive.
+# Required keywords.
+# flavor=FLAVOR
+# version=VERSION
+File=Chain
+Product=clarinet
+Chain=woodwinds
+#
+Flavor=IRIX+5.1
+Qualifiers="alpha"
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+#
+Flavor=IRIX+3.1
+Qualifiers="elm"
+Version=v2_0
+Declarer="silas"
+Declared=6-29-98
+#
+Flavor=IRIX+5.2
+Qualifiers="nedit"
+Version=v2_0
+Declarer="silas"
+Declared=6-29-98
+#
+Flavor=IRIX+6
+Qualifiers="bus"
+Version=v1_0
+Declarer="silas"
+Declared=6-29-98
+

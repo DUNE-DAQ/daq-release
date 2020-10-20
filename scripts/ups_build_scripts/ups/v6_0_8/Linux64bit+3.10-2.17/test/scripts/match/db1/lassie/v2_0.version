@@ -1,0 +1,43 @@
+FILE = VERSION
+PRODUCT = lassie
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /NULL/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie.table
+
+FLAVOR = IRIX+5.3
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX53/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie.table
+
+FLAVOR = IRIX+5
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX5/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie.table
+
+FLAVOR = IRIX+6.2
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /IRIX62/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie.table
+
+FLAVOR = OSF1
+QUALIFIERS = ""
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = /OSF1/lassie
+  UPS_DIR = ups
+  TABLE_FILE = lassie.table

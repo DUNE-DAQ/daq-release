@@ -1,0 +1,14 @@
+FILE = TABLE
+PRODUCT = baritone
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = " "
+COMMON:
+
+ACTION = CONFIGURE
+         envSet (zilch, -f)
+         envSet (${UPS_PROD_DIR}/ups/configure, UPS_ENV)
+END:
+

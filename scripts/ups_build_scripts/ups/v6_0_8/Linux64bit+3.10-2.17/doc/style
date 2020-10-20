@@ -1,0 +1,29 @@
+
+An ERUPT c style:
+(see skeleton.c and skeleton.h)
+
+ 1) For a given .c file there should be a .h file with same name.
+ 2) .h files should have code inclosed by #idndef _UPS_XYZ_H and #endif.
+ 3) The file names (c modules) should start with ups_ and be all lower
+    case, where words are seperated by underscore.
+ 4) All files should have a header with entries: FILE, DESCRIPTION,
+    AUTHORS and MODIFICATIONS.
+ 5) All functions should have a header with entries: name,
+    description, input, output, return.
+ 6) Functions and variables should be all lowercase where words are
+    separated by an underscore, like: 'this_is_a_functions'.
+ 7) Constants or macros should be all uppercase, where words are
+    separated by underscore, like 'THIS_IS_A_CONSTANT'.
+ 8) enum variables can follow 6 or start with an e_.
+ 9) Exported functions and variables should start with a module
+    identifier, like, 'uxyz_...'.
+10) Variables at file scope (global variables) should start with a 'g_'.
+11) Private functions and variables at functions scope, should 
+    just follow 6).
+12) Private functions and variables at file scope should be declared
+    static.
+13) A .h file should include what is needed for that .h file (it's nice
+    if a .h file can compile by it self).
+14) Procedures that are not public and cannot be static are prefaced
+    with a 'p_'. 
+15) New types (typedef's) start with a t_.

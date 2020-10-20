@@ -1,0 +1,11 @@
+FILE = VERSION
+PRODUCT = jessie
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = "red"
+  DECLARED = 1-1-98
+  DECLARER = jetson
+  PROD_DIR = jessie_relative
+  UPS_DIR = ups
+  TABLE_FILE = v2_0.table

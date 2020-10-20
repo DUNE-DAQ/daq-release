@@ -1,0 +1,13 @@
+FILE = chain
+PRODUCT = oboe
+CHAIN = test
+
+#*************************************************
+#
+FLAVOR = NULL
+VERSION = v2_0
+QUALIFIERS = "senior"
+  DECLARER = dsilas
+  DECLARED = 1998-07-09
+  MODIFIER = dsilas
+  MODIFIED = 1998-07-09

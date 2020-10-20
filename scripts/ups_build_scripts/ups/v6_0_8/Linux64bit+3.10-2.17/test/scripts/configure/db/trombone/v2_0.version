@@ -1,0 +1,15 @@
+FILE = version
+PRODUCT = trombone
+VERSION = v2_0
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = rtokarek
+  DECLARED = 1998-06-10
+  MODIFIER = highpriest
+  MODIFIED = 1998-06-22
+  PROD_DIR = /NULL/trombone/
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table

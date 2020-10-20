@@ -1,0 +1,172 @@
+.TH DROPIT 1 "Fermi"
+.SH NAME
+dropit \- remove colon separated fields containing substrings
+.SH SYNOPSIS
+.B "dropit [\-[aefscDEPS]] ... [\-i\fIinput_delimiter\fB] [\-d\fIoutput_delimiter\fB] [\-n\fInull_replacement\fB] [\-p\fIstring\fB] [\fIstring\fB] ..."
+.SH DESCRIPTION
+\fBdropit\fP's intended purpose is to remove program library names from a
+PATH shell variable value, which has colon separated fields.
+\fBdropit\fP is usable in sh, ksh, and csh shell script and source files.
+\fBdropit\fP  initially always removes the specified field or fields except
+when restricted from doing so by the \fB-S\fP option for the specifications of
+`/bin' and `.'.  Null fields are replaced by the null field replacement
+value, the default is `.' which is the UNIX current directory specification.
+This corresponds to the meaning of a null field in a path specification.
+.PP
+Even though the program's intended usage is adjustment of shell program
+PATH environment variable values, the program has been and may be used
+as a general purpose delimited character string editor.  The program may
+be difficult to use for such purposes a because of its design.
+.PP
+\fBThe selection options:\fP
+.TP 5
+.B -e
+specifies that the field match is to be exact.
+This non-default option is the recommended mode of selection behavior.
+.TP
+.B -a
+specifies that the field match is to be anchored to the beginning of the field.
+This non-default option should be used only after due consideration.
+.TP
+.I none
+the default is a substring match anywhere in the field.
+Using this default option is most likely not a good idea;
+using it frequently causes surprising results.
+This was the original behavior of this program and was
+implememented this way because of the intended use by
+the original requestor.
+.PP
+\fBThe non-selection options:\fP
+.TP
+.B -s
+specifies that the arguments are to be reinserted into the field list.
+By default, those insertions are at the end of field list;
+see the \fB-f\fP option for placement at the beginning of the field list.
+This combination can be given as \fB-sf\fP.
+.TP
+.B -f
+specifies, if \fB-s\fP is also specified, that the insertions are to
+done at the beginning of the field list.
+.TP
+.B -c
+specifies defaults appropriate for the C shell are to be set; otherwise,
+defaults for Bourne and Korn shell are set.  The default output delimiter
+becomes ` ' instead of `:'.
+.TP
+.B -D
+specifies that duplicate specifications are to be removed retaining the
+first occurrence.
+.TP
+.B -E
+specifies that any nonexistent or non-directory entries are to be removed.
+.TP
+.B -P
+specifies that an appropriate list of system directories are to be added
+at the front of the field list \fIafter\fP the argument or arguments specified
+removals and insertions have been done.
+The purpose of this is to protect one from system programs being silently
+replaced by non system and probably non-standard variant programs.
+.TP
+.B -S
+specifies a \fIsafer\fP mode of operation is to be used.  A null argument
+and an argument of '/bin' can not be removed.  Duplicate removal will be
+done even if not otherwise specified.  If the field list is empty after
+the removals, insertations and duplicate removals if requested, then
+the field list will be made to be an appropriate minimal list of system
+directories and checked for being existing directories.  If the field
+list remains empty, then it will be made to be `/bin`.  Note, the explicit
+current directory specification, `.', can be removed.
+.TP
+\fB -i\fP delimiter
+specifies the character that separates the fields.
+.TP
+\fB -d\fP delimiter
+specifies the string that separates the output fields.
+.TP
+\fB -n\fP string
+specifies null field replacement.  The default value is `.'.
+.TP
+\fB -p\fP string
+specifies the path string to be processed.  If \fB-c\fP is
+specified, then the default \fB-i\fP is ` '; otherwise `:'.
+.TP
+.B [strings] ...
+are the fields to be processed.
+.SH EXAMPLES
+The value of $PATH assumed in the examples below is:
+.br
+     /usr/sbin:/usr/bsd:/usr/bin:/bin:/etc:/usr/etc:
+.br
+     /usr/bin/X11:/usr/local/bin://bin
+
+The result of "dropit -d, /etc":
+.br
+     /usr/sbin,/usr/bsd,/usr/bin,/bin,/usr/bin/X11,
+.br
+     /usr/local/bin,//bin
+
+The result of "dropit -d' '  /usr //":
+.br
+     /bin /etc
+
+The value of $path
+.br
+     /usr/sbin /usr/bsd /usr/bin /bin /etc /usr/etc
+.br
+     /usr/bin/X11./usr/local/bin //bin
+
+The result of "dropit -i' ' -d' ' -p "$path" /usr //
+.br
+    /bin /etc
+
+.SH USAGE SUGGESTIONS
+Suggested sh and ksh usage in .profile:
+.br
+     PATH=`dropit -s /etc /funkern`; export PATH
+
+Suggested csh usage in .cshrc or .login:
+.br
+     set path=(`dropit -sc /etc /funkern`)
+
+Alternative csh usage in .cshrc or .login:
+.br
+     set path=(`dropit -i' ' -d' ' -p"$path" /etc /funkern`)
+
+Suggested sh and ksh usage in ups setup.sh scripts:
+.br
+     PATH=`dropit -esf /etc /funkern`; export PATH
+
+Suggested csh usage in ups setup.csh scripts:
+.br
+     set path=(`dropit -cesf /etc /funkern`)
+
+Alternative csh usage
+.br
+     set path=(`dropit -i' ' -d' ' -s -f -p"$path" /etc /funkern`)
+
+Suggested sh and ksh usage in ups unsetup.sh scripts:
+.br
+     PATH=`dropit -e /etc /funkern`; export PATH
+
+Suggested csh usage:
+.br
+     set path=(`dropit -ce /etc /funkern`)
+
+Alternative csh usage
+.br
+     set path=(`dropit -i' ' -d' ' -p"$path" /etc /funkern`)
+
+.SH "SEE ALSO"
+sh(1), ksh(1) and csh(1)
+.SH WARNINGS
+A null substring is generally not a good idea;
+the results can be very disconcerting.
+Recovery may require relogining in, manual specification of a new PATH
+environment variable value or manually source'ing the shell's start up scripts.
+In the case of C shell variants, the proper way to set the shell PATH
+environment variable value is to set the `path' shell non environment
+variable value (see also the csh man page on this topic).
+.PP
+-d' ' and -i' ' indicates a space between two single quotes after the option
+letter
+

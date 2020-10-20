@@ -1,0 +1,77 @@
+#!/bin/sh
+# ============================================================================
+# test the ugo routines
+# ============================================================================
+PRODUCTS="/thunder 	   /lightening"; export PRODUCTS
+SETUP_TITANIC="doomed -H IRIX+5" ; export SETUP_TITANIC
+SETUP_LUSITANIA="lusitania -f CHERRY v1_0" ; export SETUP_LUSITANIA
+SETUP_BISMARK="bismark -g current -q +a?b?c -f RUM_RAISIN"; export SETUP_BISMARK
+
+cd $UPS_DIR/test/scripts/ugo
+$UPS_DIR/test/ups_test << EOD
+#ups_echo "================================================================="
+#
+# testing simple parsing
+#
+upsugo_next -options "" -out /dev/null -8 -status UPS_INVALID_ARGUMENT 
+upserr_clear
+upsugo_next -out /dev/null -a -c -d 
+upserr_clear
+upsugo_next -out /dev/null -encmds 3 -a -c -d one, -a -c -d two, -a -c -d three 
+upserr_clear
+upsugo_next -out /dev/null myprod myversion junk -status UPS_INVALID_ARGUMENT
+upserr_clear
+upsugo_next -out /dev/null myprod myversion -m -status UPS_NOVALUE_ARGUMENT
+upserr_clear
+#
+# testing qualifiers
+#
+upsugo_next -out simple.out -diff simple.in -a -c -d -f CHOCOLATE
+upsugo_next -out qualifier.out -diff qualifier.in -f CHOCOLATE -q "+a:+aardvark:+Bear:+Canary:?cat:+dog:+123:+___big-dog:?fat-cat" 
+upserr_clear
+upsugo_next -out qualifier2.out -diff qualifier2.in -f CHOCOLATE -f VANILLA -f ROCKYROAD -q "+a:+aardvark" -q "+Bear:+Canary:+___:+:+:+:+dog:+big-dog:+123" -q "?fat-cat:?cat" -q "+aardvark" 
+upserr_clear
+#
+# testing chains
+#
+upsugo_next -out chain.out -diff chain.in -f CHOCOLATE -c -o -l -n -t -d -g dog -g cat -g "blue:red"
+upserr_clear
+#
+# testing everything else
+#
+# note that -a changes the output of Flavor. Do not specify a "-f" in the
+# test because we want to make sure it Flavor is '*'.
+#
+upsugo_next -out rest.out -diff rest.in -a -A hercules:neptune:zeus -B -C -D origin -e -E -F -h "  levinworth :alcatraz" -j -k -K west:largo:limepie -l -M /jupiter:/mars -m titan -N sam:shameful -O "-power_steering -ac -abs" -p "It was a dark and stormy night." -P -r /myprod:/yourprod -S -T a.tar:b.tar -u command_file_dir -b command_fish -U /fred:/barney -v -V -w -W -x -X -y -Y -z"popeye:sinbad:   ahab"   -Z
+#
+upsugo_next -out proda.out -diff proda.in -fIRIX:AIX ProdA
+upsugo_next -out prodb.out -diff prodb.in -f"IRIX:AIX" ProdB
+upsugo_next -out prodc.out -diff prodc.in -f "IRIX :AIX" ProdC
+upsugo_next -out prodd.out -diff prodd.in -H IRIX+5.3 -p"EEK! I haven't a clue scooby doo" ProdD
+upsugo_next -out prode.out -diff prode.in -H IRIX+5.3 -q?cat ProdE
+upsugo_next -out prodf.out -diff prodf.in -H IRIX+5.3 -q"?cat:+dog" ProdF
+upsugo_next -out prodg.out -diff prodg.in -H IRIX+5.3 -q"?mouse : ?cat :+dog" ProdG
+upsugo_next -out prodh.out -diff prodh.in -H IRIX+5.3 -q"?no?comma?here" ProdH
+# should pack....
+upsugo_next -out prodi.out -diff prodi.in -H IRIX+5.3 -q"+But caption:+ you have spaces " ProdI
+#
+# test upsugo_env
+#
+upsugo_env -out titanic.out -diff titanic.in titanic
+upsugo_env -out lusitania.out -diff lusitania.in lusitania 
+upsugo_env -out bismark.out -diff bismark.in bismark 
+#
+# test upsugo_bldcmd
+#
+upsugo_bldcmd -out titanic2.out -diff titanic2.in "doomed -H IRIX+5"
+upsugo_bldcmd -out lusitania.out -diff lusitania.in "lusitania -f CHERRY v1_0"
+upsugo_bldcmd -out bismark.out -diff bismark.in "bismark -g current -q +a?b?c -f RUM_RAISIN"
+
+quit
+EOD
+
+unset PRODUCTS
+$UPS_DIR/test/ups_test << EOD2
+upsugo_next -out /dev/null -status UPS_NO_DATABASE
+quit
+EOD2

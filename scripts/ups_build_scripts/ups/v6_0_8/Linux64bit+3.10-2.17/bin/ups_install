@@ -1,0 +1,677 @@
+#!/usr/local/bin/perl 
+#!/usr/bin/env perl 
+#
+#  Before executing this file, the following should have been done -
+#
+#    o Obtain and unwind the most recent tarfiles for UPS/UPD/Perl.
+#    o Define UPS_DIR to point to the new UPS home area.
+#    o Define UPD_DIR to point to the UPD home area.
+#    o Define PERL_DIR to point to the PERL home area.
+#    o Edit the updconfig file for your system
+#    o Edit the updusr.pm file for your system
+#
+###############################################################################
+#
+# This script takes 1 parameter, a name of a file.  If the file does not exist,
+# it will prompt the user for all of the necessary information and then save
+# the answers in the file.  The next time the script is invoked with the
+# parameter as the file, it will not prompt the user, but will read the info
+# from the file.
+#
+###############################################################################
+#  This file will help you install ups/upd on your system.  This installation
+#  procedure is very interactive and will ask many questions.  It does the
+#  following based on the answers it receives.
+#
+#    1 Verify the environment is correct (UPS_DIR, UPD_DIR and PERL_DIR are
+#        defined.
+#    2 Prompt the user for all the necessary information
+#    3 Write this information to a file which can be used for subsequent
+#        invocations of this install.
+#    4 Rename the old style Fermi files in /usr/local/etc, if necessary.
+#    5 Create the new UPS database(s) if necessary (this includes all of
+#        it's standard subdirectories).
+#    6 Create the directory for the UPD usercode (if necessary).
+#    7 Create the man/catman/info directories (if necessary).
+#    8 Create the dbconfig file with the correct information (if necessary).
+#    9 Create the ups database list file in the SETUPS_DIR area (if necessary).
+#   10 Copy the upd config files to the UPD usercode area (if necessary).
+#   11 Copy the old startup/shutdown information to the new area (if
+#        necessary).
+#   12 Convert the old database(s) to the new format (if necessary).
+#   13 Declare the new UPS/UPD/PERL to the new database (if necessary).
+#   14 Output the information on how to make these versions current (go live).
+#   15 If SETUPS_DIR is not /usr/local/etc, suggest that links be made to the
+#        new files.
+#   16 Suggest that the old funame and dropit be removed.
+#   17 Warn the user about modifying the system boot files to point to the
+#        new startup/shutdown directories.
+#
+################################################################################
+#  Information obtained from the user is the following. Defaults are in (). 
+#  Associated keywords are in [].
+#
+#    o Version of new ups. () [UPS_VERSION]
+#    o Version of new upd. () [UPD_VERSION]
+#    o Version of new perl. () [PERL_VERSION]
+#    o List of old products databases. () [OLD_DB]
+#    o List of new products databases. () [NEW_DB]
+#    o Database in which old UPS/UPD were declared. [UPS_OLD_DB]
+#    o Database in which UPS/UPD will be declared. [UPS_DB]
+#    o Location of UPD usercode directory. (new_db_location/.updfiles)
+#        [UPD_USERCODE_DIR]
+#    o Location of updated updconfig/upsusr.pm files. () [UPDCONFIG]
+#    o Location of new style setups.sh and setups.csh files. (/usr/local/etc)
+#        [SETUPS_DIR]
+#    o Common prefix for location of products (if any). (/usr/products)
+#        [PROD_DIR_PREFIX]
+#    o Location of man pages directory. (/usr/products/man) [MAN_TARGET_DIR]
+#    o Location of catman pages directory. (/usr/products/catman)
+#        [CATMAN_TARGET_DIR]
+#    o Location of info files directory. (/usr/products/info) [INFO_TARGET_DIR]
+#
+###############################################################################
+
+use vars qw(%userHash, @userArray);
+
+###############################################################################
+#
+# Define any subroutines we use
+#
+sub prompt {
+  my $key = shift(@_);
+  my $string = shift(@_);
+  my $default = shift(@_);
+  my $mustHave = shift(@_);
+
+TRY:
+  print STDOUT "\n";
+  print STDOUT "Please enter $string (d: $default): ";
+  chop($ans = <STDIN>);
+  $ans =~ tr/\s//;      # remove whitespace
+  if ($ans eq "") {
+    # nothing was entered, use the default if we have it.  if there is none and
+    # this entry was marked as MUST have, then we need to ask again.
+    if ($default eq " " && $mustHave == 1) {
+      print STDOUT "WARNING: There is no default and a value must be entered\n";
+      goto TRY;
+    } else {
+      # use the default
+      $userHash{$key} = $default;
+    }
+  } else {
+    $userHash{$key} = $ans;
+  }
+  # remove spaces
+  $userHash{$key} =~ s?\s*??g;
+}
+
+sub getInputFile {
+  my $filename = shift(@_);
+
+  $FILE = $filename;
+  open FILE or die "Can't find input file $FILE\n";
+  while (chop($line = <FILE>)) {
+    ($key, $value) = split /=/, $line;
+    $key =~ tr/\s//;      # remove whitespace
+    $value =~ tr/\s//;    # remove whitespace
+    $userHash{$key} = $value;
+  }
+}
+
+sub validateUserInfo {
+  for $i (0 .. $#userArray) {
+    if (! (exists $userHash{$userArray[$i][0]})) {
+      print STDOUT "INFORMATIONAL: $userArray[$i][0] did not exist in the file\n";
+      if ($userArray[$i][3] == 1) {
+        # the value is needed, we don't have it so bomb out
+	print STDOUT "ERROR: This value MUST be specified, exiting.\n";
+        exit 1;
+      } else {
+	# use the default
+	$userHash{$userArray[$i][0]} = $userHash{$userArray[$i][2]};
+	# remove spaces
+	$userHash{$userArray[$i][0]} =~ s?\s*??g;
+      }
+    }
+  }
+}
+
+###############################################################################
+#
+# See if a filename was entered, if so, use that to get the information we need
+# if the file does not exist, use that name to write for where to write the
+# user information
+#
+if ($#ARGV == 0) {
+   $filename = $ARGV[0];
+   if ( -s $filename) {
+     # the file exists, is it a text file
+     if (-T $filename) {
+       # file is a text file, do not prompt, use it
+       $doPrompt = "";
+     } else {
+       # file is not a text file, do not use it
+       $doPrompt = 1;
+     }
+   } else {
+     # file does not exist, we will write the prompted user's answeres into it
+     $doPrompt = 1;
+   }
+} else {
+   $filename = "";
+   $doPrompt = 1;
+}
+
+# set up array containing keywords for all the information we will need to get
+# from the user, the prompt to get it and the default. 
+#
+#   array elements : keyword name
+#                    prompt to display to the user
+#                    default value
+#                    1 if this entry cannot be defaulted
+
+@userArray = (
+  ["UPS_VERSION", "version of new UPS", " ", "1"],
+  ["UPD_VERSION", "version of new UPD (if not entered, UPD will not \nbe declared to the new UPS database", " ", "0"],
+  ["PERL_VERSION", "version of new PERL (if not entered, PERL will not \nbe declared to the new UPS database", " ", "0"],
+  ["OLD_DB", "colon separated list of old UPS database locations", " ", "0"],
+  ["NEW_DB", "colon separated list of new UPS database locations", " ", "1"],
+  ["UPS_OLD_DB", "directory of the UPS database where the old ups was declared", " ", "0"],
+  ["UPS_DB", "directory of the UPS database where the new ups will be declared", " ", "1"],
+  ["UPD_USERCODE_DIR", "directory of the UPD usercode directory", "UPS_DB/.updfiles", "1"],
+  ["UPDCONFIG", "directory of the edited 'updconfig' file", " ", "0"],
+  ["SETUPS_DIR", "directory where to install the UPS login scripts (setups.[c]sh)", "/usr/local/etc", "1"],
+  ["PROD_DIR_PREFIX", "colon separated list of prefixes common to directory of\n   all products declared in a UPS database (need 1 per new UPS database)", " ", "0"],
+  ["MAN_TARGET_DIR", "colon separated list of directories where to install\n    man pages (need 1 per new UPS database)", " ", "0"],
+  ["CATMAN_TARGET_DIR", "colon separated list of directories where to install\n    catman pages (need 1 per new UPS database)", " ", "0"],
+  ["INFO_TARGET_DIR", "colon separated list of directories where to install\n    info pages (need 1 per new UPS database)", " ", "0"]
+      );
+
+# the order of the following, MUST match the order in the above array.
+$UPS_VERSION = 0;
+$UPD_VERSION = 1;
+$PERL_VERSION = 2;
+$OLD_DB = 3;
+$NEW_DB = 4;
+$UPS_OLD_DB = 5;
+$UPS_DB = 6;
+$UPD_USERCODE_DIR = 7;
+$UPDCONFIG = 8;
+$SETUPS_DIR = 9;
+$PROD_DIR_PREFIX = 10;
+$MAN_TARGET_DIR = 11;
+$CATMAN_TARGET_DIR = 12;
+$INFO_TARGET_DIR = 13;
+
+$old_dir = "/usr/local/etc";
+
+###############################################################################
+#
+# 1. VERIFY THAT UPS_DIR, UPD_DIR AND PERL_DIR HAVE BEEN SET
+#
+$upsdir = $ENV{"UPS_DIR"};
+$upddir = $ENV{"UPD_DIR"};
+$perldir = $ENV{"PERL_DIR"};
+
+$error = 0;
+if ($upsdir eq "") {
+  print STDERR "ERROR: UPS_DIR must point to the UPS product directory\n";
+  $error = 1;
+} else {
+  # make sure it points to the new ups
+  if (! -e "$upsdir/ups/ups.table") {
+    print STDERR "ERROR: UPS_DIR must point to the **NEW** UPS product directory\n";
+    $error = 1;
+  }
+}
+if ($upddir eq "") {
+  print STDERR "WARNING: UPD_DIR does not point to the UPD product directory\n";
+  print STDERR "         UPD will not be declared to UPS.\n";
+}
+if ($perldir eq "") {
+  print STDERR "WARNING: PERL_DIR does not point to the PERL product directory.\n";
+  print STDERR "         PERL will not be declared to UPS.\n";
+}
+###############################################################################
+#
+# 2. PROMPT THE USER FOR ALL THE NECESSARY INFORMATION
+#
+# only proceed if no errors were encountered
+if ($error == 0) {
+  if ($doPrompt) {
+    # no filename was entered, prompt for all the info
+    for $i (0 .. $#userArray) {
+      prompt($userArray[$i][0], $userArray[$i][1], $userArray[$i][2],
+	     $userArray[$i][3]);
+    }
+#
+# 3. WRITE THIS INFORMATION TO A FILE WHICH CAN BE USED FOR SUBSEQUENT
+#      INVOCATIONS OF THIS INSTALL.
+    if ($filename ne "") {
+      open FILE, ">$filename";
+      foreach $key (sort keys %userHash) {
+	print FILE "$key=$userHash{$key}\n";
+      }
+      close FILE;
+    }
+  } else {
+    # read in the entered file and get the input from there
+    getInputFile($filename);
+
+    # validate that we have all the info we need
+    validateUserInfo();
+  }
+# validate the information where necessary
+#
+# UPS_VERSION, UPD_VERSION, PERL_VERSION - nothing to do
+#
+# OLD_DB - make sure the directories exist and are readable
+#
+  @old_db = split /:/, $userHash{$userArray[$OLD_DB][0]};
+
+  foreach $elem (@old_db) {
+    if (! (-d $elem) || ! (-r $elem)) {
+      print STDOUT "ERROR: The old UPS database '$elem' does not exist \n";
+      print STDOUT "       or is not readable.\n";
+      exit 1;
+    }
+  }
+#
+# NEW_DB - see if the directories exist
+#
+  @new_db = split /:/, $userHash{$userArray[$NEW_DB][0]};
+
+  for $i(0 .. $#new_db) {
+    if (-e $new_db[$i]) {
+      print STDOUT "INFORMATIONAL: The directory '$new_db[$i]' already \n";
+      print STDOUT "               exists, the old db '$old_db[$i]' will\n";
+      print STDOUT "               not be converted.\n";
+      $convert[$i] = 0;
+    } else {
+      $convert[$i] = 1;
+    }
+  }
+# there must be the same number of elements in the two arrays
+  if (($#old_db != -1) && ($#old_db != $#new_db)) {
+    print STDOUT "ERROR: The number of old UPS dbs must be = the number of\n";
+    print STDOUT "       new UPS dbs.\n";
+    exit 1;
+  }
+#
+# UPS_OLD_DB - if an OLD_DB was entered, this must have been entered too
+#
+  if (($#old_db != -1) && ($userHash{$userArray[$UPS_OLD_DB][0]} eq "")) {
+    print STDOUT "ERROR: Value for UPS database where old UPS was declared\n";
+    print STDOUT "       must be entered.\n";
+    exit 1;
+  }
+#
+# UPS_DB - nothing to be done
+#
+# UPD_USERCODE_DIR - if used the default, translate UPS_DB
+#
+  if ($userHash{$userArray[$UPD_USERCODE_DIR][0]} eq $userArray[$UPD_USERCODE_DIR][2]) {
+    $userHash{$userArray[$UPD_USERCODE_DIR][0]} =~ s/UPS_DB/$userHash{$userArray[$UPS_DB][0]}/s;
+  }
+#
+# UPDCONFIG -  nothing to be done
+#
+# SETUPS_DIR - nothing to be done
+#
+# PROD_DIR_PREFIX - there must be the same number of elements as in @new_db
+#
+  @prod_dir_prefix = split /:/, $userHash{$userArray[$PROD_DIR_PREFIX][0]};
+  if (($#prod_dir_prefix != -1) && ($#prod_dir_prefix != $#new_db)) {
+    print STDOUT "ERROR: The number of PROD_DIR_PREFIX's must be = the number of\n";
+    print STDOUT "       new UPS dbs.\n";
+    exit 1;
+  }
+#
+# MAN_TARGET_DIR/CATMAN_TARGET_DIR/INFO_TARGET_DIR - there must be the same
+#      number of elements as in @new_db
+#
+  @man_dir = split /:/, $userHash{$userArray[$MAN_TARGET_DIR][0]};
+  if (($#man_dir != -1) && ($#man_dir != $#new_db)) {
+    print STDOUT "ERROR: The number of MAN_TARGET_DIR's must be = the number of\n";
+    print STDOUT "       new UPS dbs.\n";
+    exit 1;
+  }
+  @catman_dir = split /:/, $userHash{$userArray[$CATMAN_TARGET_DIR][0]};
+  if (($#catman_dir != -1) && ($#catman_dir != $#new_db)) {
+    print STDOUT "ERROR: The number of CATMAN_TARGET_DIR's must be = the number of\n";
+    print STDOUT "       new UPS dbs.\n";
+    exit 1;
+  }
+  @info_dir = split /:/, $userHash{$userArray[$INFO_TARGET_DIR][0]};
+  if (($#info_dir != -1) && ($#info_dir != $#new_db)) {
+    print STDOUT "ERROR: The number of INFO_TARGET_DIR's must be = the number of\n";
+    print STDOUT "       new UPS dbs.\n";
+    exit 1;
+  }
+###############################################################################
+#
+# 4. COPY THE OLD STYLE FERMI FILES IN /usr/local/etc, IF NECESSARY.
+#
+  $prefix = "ups1.";
+  foreach $elem ("setups.csh", "setups.sh") {
+    if ((-e "$old_dir/$elem") && (! -e "$old_dir/$prefix$elem")) {
+      if (-w $old_dir) {
+	`cp $old_dir/$elem $old_dir/$prefix$elem`;
+	print STDOUT "DONE: '$old_dir/$elem' copied to $old_dir/$prefix$elem\n";
+      } else {
+	# The old directory is not writable.
+        print STDOUT "WARNING: '$old_dir' is not writeable, $elem will not\n"; 
+	print STDOUT "         be copied to $old_dir/$prefix$elem\n";
+      }
+    }
+  }
+###############################################################################
+#
+# 5. Create the new UPS database(s) if necessary (this includes all of
+#        it's standard subdirectories).
+#
+  foreach $elem (@new_db) {
+    if (! -e $elem) {
+      `mkdir -p $elem`;
+      `mkdir $elem/.upsfiles`;
+      `mkdir $elem/.upsfiles/startup`;
+      `mkdir $elem/.upsfiles/shutdown`;
+      `mkdir $elem/.upsfiles/statistics`;
+      `chmod -R g+w $elem`;
+      `chmod 777 $elem/.upsfiles/statistics`;
+      print STDOUT "DONE: Created $elem and it's subdirectories\n";
+    }
+  }
+###############################################################################
+#
+# 6. Create the directory for the UPD usercode (if necessary).
+#
+  if (! -e $userHash{$userArray[$UPD_USERCODE_DIR][0]}) {
+    `mkdir -p $userHash{$userArray[$UPD_USERCODE_DIR][0]}`;
+    print STDOUT "DONE: Created $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n";
+  }
+###############################################################################
+#
+# 7. Create the man/catman/info directories (if necessary).
+#
+  foreach $elem (@man_dir) {
+    if (! -e $elem) {
+      `mkdir -p $elem`;
+      `chmod g+w $elem`;
+      print STDOUT "DONE: Created $elem\n";
+    }
+  }
+  foreach $elem (@catman_dir) {
+    if (! -e $elem) {
+      `mkdir -p $elem`;
+      `chmod g+w $elem`;
+      print STDOUT "DONE: Created $elem\n";
+    }
+  }
+  foreach $elem (@info_dir) {
+    if (! -e $elem) {
+      `mkdir -p $elem`;
+      `chmod g+w $elem`;
+      print STDOUT "DONE: Created $elem\n";
+    }
+  }
+###############################################################################
+#
+# 8. Create the dbconfig file with the correct information (if necessary).
+#
+  $suffix = "_new";
+  for $i(0 .. $#new_db) {
+    $dbconfig = "$new_db[$i]/.upsfiles/dbconfig";
+    if (! -e $dbconfig) {
+      # copy the template file from the ups home area 
+      $file = `cat $upsdir/ups/dbconfig.template`;
+
+      # now we must edit the dbconfig file to include the correct information
+      if ($#prod_dir_prefix != -1) {
+	$file =~ s?\n\s*#*\s*PROD_DIR_PREFIX\s*=.*\n?\nPROD_DIR_PREFIX = $prod_dir_prefix[$i]\n?i;
+	print STDOUT "DONE: Edited the PROD_DIR_PREFIX line.\n";
+      } else {
+	$file =~ s?\n\s*#*\s*PROD_DIR_PREFIX\s*=.*\n?\nPROD_DIR_PREFIX = \n?i;
+	print STDOUT "DONE: Commented out the PROD_DIR_PREFIX line.\n";
+      }
+      if ($#man_dir != -1) {
+	$file =~ s?\n\s*#*\s*MAN_TARGET_DIR\s*=.*\n?\nMAN_TARGET_DIR = $man_dir[$i]\n?i;
+	print STDOUT "DONE: Edited the MAN_TARGET_DIR line.\n";
+      } else {
+	$file =~ s?\n\s*#*\s*MAN_TARGET_DIR\s*=.*\n?\nMAN_TARGET_DIR = \n?i;
+	print STDOUT "DONE: Commented out the MAN_TARGET_DIR line.\n";
+      }
+      if ($#catman_dir != -1) {
+	$file =~ s?\n\s*#*\s*CATMAN_TARGET_DIR\s*=.*\n?\nCATMAN_TARGET_DIR = $catman_dir[$i]\n?i;
+	print STDOUT "DONE: Edited the CATMAN_TARGET_DIR line.\n";
+      } else {
+	$file =~ s?\n\s*#*\s*CATMAN_TARGET_DIR\s*=.*\n?\nCATMAN_TARGET_DIR = \n?i;
+	print STDOUT "DONE: Commented out the CATMAN_TARGET_DIR line.\n";
+      }
+      if ($#info_dir != -1) {
+	$file =~ s?\n\s*#*\s*INFO_TARGET_DIR\s*=.*\n?\nINFO_TARGET_DIR = $info_dir[$i]\n?i;
+	print STDOUT "DONE: Edited the INFO_TARGET_DIR line.\n";
+      } else {
+	$file =~ s?\n\s*#*\s*INFO_TARGET_DIR\s*=.*\n?\nINFO_TARGET_DIR = \n?i;
+	print STDOUT "DONE: Commented out the INFO_TARGET_DIR line.\n";
+      }
+      # only edit the following info if db is the one where ups is declared
+      if ($new_db[$i] eq $userHash{$userArray[$UPS_DB][0]}) {
+	$file =~ s?\n\s*#*\s*SETUPS_DIR\s*=.*\n?\nSETUPS_DIR = $userHash{$userArray[$SETUPS_DIR][0]}\n?i;
+	print STDOUT "DONE: Edited the SETUPS_DIR line.\n";
+	$file =~ s?\n\s*#*\s*UPD_USERCODE_DIR\s*=.*\n?\nUPD_USERCODE_DIR = $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n?i;
+	print STDOUT "DONE: Edited the UPD_USERCODE_DIR line.\n";
+      }
+      open FILE, ">$dbconfig";
+      print FILE $file;
+      close FILE;
+      print STDOUT "DONE: Copied the edited dbconfig.template to\n";
+      print STDOUT "      $new_db[$i]/.upsfiles\n";
+    }
+  }
+###############################################################################
+#
+# 9. Create the ups database list file in the SETUPS_DIR area (if necessary).
+#
+  $upsdb_list = "$userHash{$userArray[$SETUPS_DIR][0]}/upsdb_list";
+  if (! -e $userHash{$userArray[$SETUPS_DIR][0]}) {
+    # directory does not exist, create it
+    `mkdir -p $userHash{$userArray[$SETUPS_DIR][0]}`;
+    print STDOUT "DONE: Create $userHash{$userArray[$SETUPS_DIR][0]}\n";
+  }
+  if (! -e $upsdb_list) {
+    if (-w $userHash{$userArray[$SETUPS_DIR][0]}) {
+      # copy the template file from the ups home area
+      $file = `cat $upsdir/ups/upsdb_list.template`;
+
+      # first, comment out all the lines
+      $file =~ s?\n[^#]?\n# ?g;
+
+      # now add in the users ups databases
+      open FILE, ">$upsdb_list";
+      print FILE "$file\n";  
+
+      foreach $new_db (@new_db) {
+        print FILE "$new_db\n";
+      }
+      close FILE;
+      print STDOUT "DONE: Edited the $upsdb_list file.\n";
+      print STDOUT "DONE: Copied the edited upsdb_list.template file to\n";
+      print STDOUT "      $upsdb_list\n";
+    } else {
+      print STDOUT "ERROR: '$userHash{$userArray[$SETUPS_DIR][0]}' is not writeable,\n";
+      print STDOUT "       could not create the upsdb_list file.\n";
+    }
+  }
+###############################################################################
+#
+# 10. Copy the upd config files into the UPD usercode area (if necessary).
+#
+  if (-w $userHash{$userArray[$UPD_USERCODE_DIR][0]}) {
+    if (! -e "$userHash{$userArray[$UPD_USERCODE_DIR][0]}/updconfig") {
+      # if we have a user edited one, copy it, else just use the template
+      if (($userHash{$userArray[$UPDCONFIG][0]} ne "") &&
+	  (-e "$userHash{$userArray[$UPDCONFIG][0]}/updconfig")) {
+	`cp $userHash{$userArray[$UPDCONFIG][0]}/updconfig $userHash{$userArray[$UPD_USERCODE_DIR][0]}`;
+	print STDOUT "DONE: Copied $userHash{$userArray[$UPDCONFIG][0]}/updconfig to $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n";
+      } elsif ($upddir ne "") {
+	`cp $upddir/ups/updconfig.template $userHash{$userArray[$UPD_USERCODE_DIR][0]}/updconfig`;
+	print STDOUT "WARNING: Do not have edited updconfig file, copied the\n";
+	print STDOUT "         template to $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n";
+      } else {
+	print STDOUT "WARNING: Could not locate a updconfig file.\n";
+      }
+    }
+    if (! -e "$userHash{$userArray[$UPD_USERCODE_DIR][0]}/updusr.pm") {
+      # if we have a user edited one, copy it, else just use the template
+      if (($userHash{$userArray[$UPDCONFIG][0]} ne "") &&
+	  (-e "$userHash{$userArray[$UPDCONFIG][0]}/updusr.pm")) {
+	`cp $userHash{$userArray[$UPDCONFIG][0]}/updusr.pm $userHash{$userArray[$UPD_USERCODE_DIR][0]}`;
+	print STDOUT "DONE: Copied $userHash{$userArray[$UPDCONFIG][0]}/updusr.pm to $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n";
+      } elsif ($upddir ne "") {
+	`cp $upddir/ups/updusr.pm.template $userHash{$userArray[$UPD_USERCODE_DIR][0]}/updusr.pm`;
+	print STDOUT "WARNING: Do not have edited updusr.pm file, copied the\n";
+	print STDOUT "         template to $userHash{$userArray[$UPD_USERCODE_DIR][0]}\n";
+      } else {
+	print STDOUT "WARNING: Could not locate a updusr.pm file.\n";
+      }
+    }
+  }
+###############################################################################
+#
+# 11. Copy the old startup information to the new area (if necessary).
+#
+  $start_dir = "$userHash{$userArray[$UPS_DB][0]}/.upsfiles/startup";
+  $stop_dir = "$userHash{$userArray[$UPS_DB][0]}/.upsfiles/shutdown";
+  if ((! -e "$start_dir/ups_startup.csh") &&
+      (-e "$userHash{$userArray[$UPS_OLD_DB][0]}/../startup")) {
+    `cp $userHash{$userArray[$UPS_OLD_DB][0]}/../startup/* $start_dir`;
+    print STDOUT "DONE: Copied old startup files to $start_dir\n";
+  }
+  if ((! -e "$stop_dir/ups_shutdown.csh") &&
+      (-e "$userHash{$userArray[$UPS_OLD_DB][0]}/../shutdown")) {
+    `cp $userHash{$userArray[$UPS_OLD_DB][0]}/../shutdown/* $stop_dir`;
+    print STDOUT "DONE: Copied old shutdown files to $stop_dir\n";
+  }
+###############################################################################
+#
+# 12. Convert the old database(s) to the new format (if necessary).
+#
+  for $i(0 .. $#old_db) {
+    if ($convert[$i]) {
+      print STDOUT "INFORMATIONAL: Starting convert of $old_db[$i], this\n";
+      print STDOUT "               may take awhile.\n";
+      `csh -fc "sh -c 'OLD_PRODUCTS=$old_db[$i];export OLD_PRODUCTS;PRODUCTS=$new_db[$i];export PRODUCTS;$upsdir/bin/ups_convert'"`;
+      foreach $elem (ups, upd) {
+	if (-e "$new_db[$i]/$elem") {
+	  `mv $new_db[$i]/$elem $new_db[$i]/$elem.old`;
+	}
+      }
+      print STDOUT "DONE: Converted old db '$old_db[$i]' to new db '$new_db[$i]'.\n";
+    }
+  }
+###############################################################################
+#
+# 13. Declare the new UPS/UPD/PERL to the new database (if necessary).
+#
+  $new_upsdir = $upsdir;
+  $new_upddir = $upddir;
+  $new_perldir = $perldir;
+  if ($#prod_dir_prefix != -1) {
+    # remove the equivalent of PROD_DIR_PREFIX from the various roots dir
+    for $i(0 .. $#new_db) {
+      # find the database which is the UPS database
+      if ($new_db[$i] eq $userHash{$userArray[$UPS_DB][0]}) {
+	$new_upsdir =~ s?$prod_dir_prefix[$i]/{0,1}??g;
+	$new_upddir =~ s?$prod_dir_prefix[$i]/{0,1}??g;
+	$new_perldir =~ s?$prod_dir_prefix[$i]/{0,1}??g;
+	break;
+      }
+    }
+  }
+
+  $prod_dir = `$upsdir/bin/ups list -K PROD_DIR -z $userHash{$userArray[$UPS_DB][0]} -2 ups $userHash{$userArray[$UPS_VERSION][0]}`;
+  if ($prod_dir eq "") {
+    if (-e $upsdb_list) {
+      `csh -fc "sh -c 'UPS_SHELL=sh;export UPS_SHELL;$upsdir/bin/ups declare -r $new_upsdir -2 -m ups.table ups $userHash{$userArray[$UPS_VERSION][0]} -z $userHash{$userArray[$UPS_DB][0]}'"`;
+      print STDOUT "DONE: Declared ups $userHash{$userArray[$UPS_VERSION][0]} to $userHash{$userArray[$UPS_DB][0]}.\n";
+    } else {
+      print STDOUT "WARNING: Not declaring ups, $upsdb_list does not exist,\n";
+      print STDOUT "         this is needed for the configure.\n";
+    }
+  }
+
+  if (($userHash{$userArray[$UPD_VERSION][0]} ne "") && ($upddir ne "")) {
+    $prod_dir = `$upsdir/bin/ups list -K PROD_DIR -z $userHash{$userArray[$UPS_DB][0]} -0 upd $userHash{$userArray[$UPD_VERSION][0]}`;
+    if ($prod_dir eq "") {
+      `csh -fc "sh -c 'UPS_SHELL=sh;export UPS_SHELL;$upsdir/bin/ups declare -r $new_upddir -0 -m upd.table upd $userHash{$userArray[$UPD_VERSION][0]} -z $userHash{$userArray[$UPS_DB][0]}'"`;
+    print STDOUT "DONE: Declared upd $userHash{$userArray[$UPD_VERSION][0]} to $userHash{$userArray[$UPS_DB][0]}.\n";
+    }
+  }
+
+  if (($userHash{$userArray[$PERL_VERSION][0]} ne "") && ($perldir ne "")) {
+    $prod_dir = `$upsdir/bin/ups list -K PROD_DIR -z $userHash{$userArray[$UPS_DB][0]} -2 perl $userHash{$userArray[$PERL_VERSION][0]}`;
+    if ($prod_dir eq "") {
+      `csh -fc "sh -c 'UPS_SHELL=sh;export UPS_SHELL;$upsdir/bin/ups declare -r $new_perldir -2 -U ups -m perl.table perl $userHash{$userArray[$PERL_VERSION][0]} -z $userHash{$userArray[$UPS_DB][0]}'"`;
+    print STDOUT "DONE: Declared perl $userHash{$userArray[$PERL_VERSION][0]} to $userHash{$userArray[$UPS_DB][0]}.\n";
+    }
+  }
+###############################################################################
+#
+# 14. Output the information on how to make these versions current (go live).
+#
+  print STDOUT "INFORMATIONAL: In order to declare these new versions of UPS/UPD/PERL\n";
+  print STDOUT "               as current and thus to 'go live', execute the\n";
+  print STDOUT "               following commands (examples uses sh syntax)-\n";
+  print STDOUT "\n";
+  print STDOUT "  UPS_SHELL=sh;export UPS_SHELL\n";
+  print STDOUT "  UPS_DIR=$upsdir;export UPS_DIR\n";
+  print STDOUT "  PRODUCTS=$userHash{$userArray[$UPS_DB][0]};export PRODUCTS\n";
+  print STDOUT "  \$UPS_DIR/bin/ups declare -c -2 ups $userHash{$userArray[$UPS_VERSION][0]}\n";
+  if ($perldir ne "") {
+   print STDOUT "  \$UPS_DIR/bin/ups declare -c -2 perl $userHash{$userArray[$PERL_VERSION][0]}\n";
+  }
+  if ($upddir ne "") {
+    print STDOUT "  \$UPS_DIR/bin/ups declare -c -0 upd $userHash{$userArray[$UPD_VERSION][0]}\n";
+  }
+  print STDOUT "\n";
+  print STDOUT "               You must change the fermi.[c]shrc files to source\n";
+  print STDOUT "               the new setups.[c]sh files if they are different\n";
+  print STDOUT "               from the old ones.  Else, if this is a first time\n";
+  print STDOUT "               installation, modify your login file to source\n";
+  print STDOUT "               $userHash{$userArray[$SETUPS_DIR][0]}.setups.[c]sh\n";
+  print STDOUT "               You must then logout and then login to get the\n";
+  print STDOUT "               new UPS.\n";
+###############################################################################
+#
+# 15. If SETUPS_DIR is not /usr/local/etc, suggest that links be made to the
+#        new files.
+#
+  if (($userHash{$userArray[$SETUPS_DIR][0]} ne $old_dir) &&
+      ($#old_db != -1)) {
+    print STDOUT "INFORMATIONAL: To avoid having to change user login scripts,\n";
+    print STDOUT "               create symbolic links in $old_dir (for setups.[c]sh)\n";
+    print STDOUT "               to $userHash{$userArray[$SETUPS_DIR][0]}/setups.[c]sh.\n";
+  }
+###############################################################################
+#
+# 16. Suggest that the old funame and dropit be removed.
+#
+  foreach $elem (funame, dropit) {
+    if (-e "$old_dir/$elem") {
+      print STDOUT "INFORMATIONAL: The new UPS contains the '$elem' binary.\n";
+      print STDOUT "               You may wish to remove it from $old_dir,\n";
+      print STDOUT "               or create a symbolic link to the new one.\n";
+    }
+  }
+###############################################################################
+#
+# 17. Warn the user about modifying the system boot files to point to the
+#        new startup/shutdown directories.
+#
+  print STDOUT "INFORMATIONAL: If your system has products which need to be\n";
+  print STDOUT "               started at system boot time or stopped at system\n";
+  print STDOUT "               shutdown time, you must edit the appropriate\n";
+  print STDOUT "               system files as indicated in the UPS documentation.\n";
+}

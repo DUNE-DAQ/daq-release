@@ -1,0 +1,28 @@
+FILE = version
+PRODUCT = bee3
+VERSION = v4_1
+
+#*************************************************
+#
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARER = rtokarek
+  DECLARED = 1998-06-03 20.58.12 GMT
+  MODIFIER = rtokarek
+  MODIFIED = 1998-06-03 20.58.12 GMT
+  PROD_DIR = /NULL/bee1
+  UPS_DIR = ups
+  TABLE_FILE = bee1.table
+
+#*************************************************
+#
+FLAVOR = CHERRY
+QUALIFIERS = "linus"
+  DECLARER = rtokarek
+  DECLARED = 1998-06-08 18.18.11 GMT
+  MODIFIER = rtokarek
+  MODIFIED = 1998-06-08 18.18.11 GMT
+  PROD_DIR = /NULL/bee3
+  UPS_DIR = blah
+  TABLE_DIR = ups
+  TABLE_FILE = kitchen.table

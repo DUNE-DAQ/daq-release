@@ -1,0 +1,14 @@
+File=Table
+Product=rivendell
+#*************************************************
+# Starting Group definition
+Group:
+Flavor=NULL
+Qualifiers=""
+
+Common:
+   Action=setup
+End:
+# End Group definition
+#*************************************************
+

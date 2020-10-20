@@ -1,0 +1,8 @@
+FILE = TABLE
+PRODUCT = asta
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+ACTION = SETUP
+   setupRequired("lassie v6_0")

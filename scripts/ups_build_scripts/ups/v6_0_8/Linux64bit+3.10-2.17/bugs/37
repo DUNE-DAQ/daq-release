@@ -1,0 +1,6 @@
+Priority: Low
+State: Unverified
+
+Trim leading/trailing whitespace from -G string value, to avoid an error.
+1 day.  Low priority.
+

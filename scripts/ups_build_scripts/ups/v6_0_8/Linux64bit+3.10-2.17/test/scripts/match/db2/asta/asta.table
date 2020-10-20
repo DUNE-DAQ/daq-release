@@ -1,0 +1,13 @@
+FILE = TABLE
+PRODUCT = asta
+
+GROUP:
+
+FLAVOR = NULL
+QUALIFIERS = "nick:nora"
+
+FLAVOR = NULL
+QUALIFIERS = ""
+
+COMMON:
+END:

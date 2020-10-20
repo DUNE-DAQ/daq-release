@@ -1,0 +1,31 @@
+FILE = VERSION
+PRODUCT = trombone
+VERSION = v2_0
+
+FLAVOR = NULL
+QUALIFIERS = "RED"
+  DECLARED = 6-23-98
+  DECLARER = jessicat
+  PROD_DIR = /NULL/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+
+FLAVOR = IRIX+6.2
+QUALIFIERS = "nodbg:opt"
+  DECLARED = 6-23-98
+  DECLARER = silas
+  PROD_DIR = /IRIX62/trombone
+  UPS_DIR = ups
+  TABLE_FILE = trombone.table
+
+FLAVOR = OSF1
+QUALIFIERS = ""
+  DECLARED = 6-23-98
+  DECLARER = silas
+  MODIFIED = 6-23-98
+  MODIFIER = silas
+  PROD_DIR = /OSF1/trombone
+  UPS_DIR = ups
+  TABLE_DIR = ups
+  TABLE_FILE = trombone.table
+

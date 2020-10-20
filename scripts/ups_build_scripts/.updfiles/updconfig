@@ -1,0 +1,149 @@
+#
+# Template upd config file.
+# Look for ">>>" and edit appropriately.
+#
+# This file can be used as-is IF:
+#	- you have ONE ups database
+#	- your product root hierarchy is 
+#	  ${PROD_DIR_PREFIX}/<product>/<version>/<flavor>
+#	- your table files live in
+#	  ${UPS_THIS_DB}/product/<version>.table
+#
+
+File = updconfig
+
+#
+#>>> Define GROUP.
+#    If all of your products go in the same database,
+#    using the same naming conventions, you can
+#    group them all together.
+GROUP:
+  product       = ANY
+  flavor        = ANY
+  qualifiers    = ANY
+  options       = ANY
+  dist_database = ANY
+  dist_node     = ANY
+
+COMMON:
+#>>> Define UPS_THIS_DB.
+#    This is the database into which the above products will
+#    be declared by upd.
+#    Default:
+#    UPS_THIS_DB is set to the database where UPD was declared.
+#    You may need to set it differently for the products you're describing.
+     UPS_THIS_DB = "${UPD_USERCODE_DB}"
+#
+#    Other examples might be:
+#    UPS_THIS_DB = "/usr/products/ups_database"
+#    UPS_THIS_DB = "~cdfsoft/declared"
+
+#>>> Define UPS_PROD_DIR.
+#    The UPS_PROD_DIR determines the product root file
+#    hierarchy for products in the ups database being 
+#    described.
+#    Examples are shown below for the case of the product
+#    instance "mh v1_6_6 IRIX+6".  Uncomment the 
+#    one that matches your system.
+#    In all of the example, the UPS_PROD_DIR is a RELATIVE
+#    path; this means that the product will be declared with
+#    a relative path (relative to PROD_DIR_PREFIX).
+#
+#    prod_dir: /usr/products/mh/v1_6_6/IRIX+6
+     UPS_PROD_DIR = "${UPS_PROD_NAME}/${UPS_PROD_VERSION}/${DASH_PROD_FLAVOR}${DASH_PROD_QUALIFIERS}"
+
+#
+#    prod_dir: /usr/products/IRIX/mh/v1_6_6
+#    UPS_PROD_DIR = "${UPS_BASE_FLAVOR}/${UPS_PROD_NAME}/${UPS_PROD_VERSION}${DASH_PROD_QUALIFIERS}"
+#
+#    prod_dir: /usr/products/IRIX+6/mh/v1_6_6
+#    UPS_PROD_DIR = "${DASH_PROD_FLAVOR}/${UPS_PROD_NAME}/${UPS_PROD_VERSION}${DASH_PROD_QUALIFIERS}"
+#
+#    prod_dir: /afs/fnal/ups/mh/v1_6_6/IRIX+6
+#    UPS_PROD_DIR = "/afs/fnal/ups/${UPS_PROD_NAME}/${UPS_PROD_VERSION}/${DASH_PROD_FLAVOR}${DASH_PROD_QUALIFIERS}"
+#
+#    prod_dir: ${ENVVAR}/mh/v1_6_6/IRIX+6
+#    UPS_PROD_DIR = "\${ENVVAR}/${UPS_PROD_NAME}/${UPS_PROD_VERSION}/${DASH_PROD_FLAVOR}${DASH_PROD_QUALIFIERS}"
+#
+
+#>>> Define UNWIND_PROD_DIR.
+#    The UNWIND_PROD_DIR is the directory into which the product
+#    is unwound.  In most cases, it will be the same as the UPS_PROD_DIR
+#    defined above; in AFS space, or under certain NFS mounting configurations,
+#    you may unwind the product in a directory that has a different name
+#    than the directory where you declare it.
+#
+#    THE DEFAULT IS THAT THE UNWIND_PROD_DIR IS THE SAME AS THE
+#    UPS_PROD_DIR.  NOTE that you need to prepend PROD_DIR_PREFIX
+#    if the UPS_PROD_DIR was specified as a relative path!
+#    Change this is your situation is different!
+
+#     Default:
+  UNWIND_PROD_DIR = "${PROD_DIR_PREFIX}/${UPS_PROD_DIR}"
+#
+#     AFS unwind dir:
+# UNWIND_PROD_DIR = "/afs/.fnal.gov/ups/${UPS_PROD_NAME}/${UPS_PROD_VERSION}/${DASH_PROD_FLAVOR}${DASH_PROD_QUALIFIERS}"
+#
+#     Declared based on environmental variable:
+# UNWIND_PROD_DIR = "${ENVVAR}/${UPS_PROD_NAME}/${UPS_PROD_VERSION}/${DASH_PROD_FLAVOR}${DASH_PROD_QUALIFIERS}"
+
+
+#>>> Define UPS_UPS_DIR.
+#    The UPS_UPS_DIR is the products' ups directory.
+#    Default is the directory named "ups" under the product root directory.
+      UPS_UPS_DIR = "ups"
+
+#>>> Define UNWIND_UPS_DIR.
+#    The UNWIND_UPS_DIR is where to unwind the ups directory.
+#    The default is the same directory as the UPS_UPS_DIR.
+   UNWIND_UPS_DIR = "${UNWIND_PROD_DIR}/${UPS_UPS_DIR}"
+
+#>>> Define UPS_TABLE_FILE, UNWIND_TABLE_DIR, 
+#>>> and optionally, UPS_TABLE_DIR.
+#    The naming convention for table files.  The default
+#    is to put the table file in the ups database, so that
+#    one table file may be used for multiple flavors of the
+#    product.  If you put your table files here,
+#    you should NOT set UPS_TABLE_DIR.
+#    Change this if your situation is different!
+#
+#    Default:
+##   UPS_TABLE_FILE = "${UPS_PROD_VERSION}.table"
+## UNWIND_TABLE_DIR = "${UPS_THIS_DB}/${UPS_PROD_NAME}"
+#   UPS_TABLE_DIR = "${UNWIND_TABLE_DIR}"
+#
+#    Possible alternative, where the table files live
+#    within the product's ups directory.  Note,
+#    in this case you ALSO should not set UPS_TABLE_DIR.
+#
+ UPS_TABLE_FILE  = "${UPS_PROD_NAME}.table"
+UNWIND_TABLE_DIR = "${UNWIND_UPS_DIR}"
+##  UPS_TABLE_DIR = "${UNWIND_TABLE_DIR}"
+
+
+#>>> Define PREDECLARE, POSTDECLARE actions
+#
+#  Actions which take place after the product is
+#  unwound, before the product is declared.
+#  Uncomment and modify as appropriate.
+#
+#  ACTION = PREDECLARE
+#
+#      example: you may wish to make the directory
+#      where the product has been unwound group writeable:
+#      EXECUTE ( "chmod -R g+w ${UNWIND_PROD_DIR}", NO_UPS_ENV )
+#
+#      example: in AFS space, you may need to release
+#      the read-write volume before you can declare the product:
+#      EXECUTE ( "upd_volrelease ${UNWIND_PROD_DIR}", NO_UPS_ENV )
+
+#
+#  Actions which take place after the product is
+#  declared.
+#  Uncomment and modify as appropriate.
+#
+#  ACTION = POSTDECLARE
+#       example: in AFS space, you may need to release
+#       the read-write ups database
+#       EXECUTE ( "upd_volrelease ${UPS_THIS_DB}", NO_UPS_ENV )
+END:

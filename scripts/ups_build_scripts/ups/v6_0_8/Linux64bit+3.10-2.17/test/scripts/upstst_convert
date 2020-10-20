@@ -1,0 +1,82 @@
+#!/bin/sh
+
+# testconvert: script to test the ups_convert procedure
+
+# assume that $UPS_DIR is set to the correct path
+# for the version of ups that we're testing
+
+# cases tested:
+
+echo "================================================================="
+echo "testconvert"
+echo "converting old database"
+OLD_PRODUCTS=${UPS_DIR}/test/scripts/convert/old-db; export OLD_PRODUCTS
+PRODUCTS=${UPS_DIR}/test/scripts/convert/new-db;     export PRODUCTS
+cd ${UPS_DIR}/test/scripts/convert
+rm -rf new-db/*
+
+${UPS_DIR}/bin/ups_convert
+
+echo "\nconversion succeeded, prepare for tests:"
+unset RIVENDELL_DIR
+unset SHIRE_DIR
+
+#
+# fake the setup of rivendell; see if RIVENDELL_DIR gets set
+#
+echo "test1: default actions with no old setup scripts (RIVENDELL_DIR gets set)"
+. `${UPS_DIR}/bin/ups setup -z ${UPS_DIR}/test/scripts/convert/new-db rivendell`
+if [ "x${RIVENDELL_DIR}" != "x" ]
+then
+    echo "\tpass."
+else
+    echo "\tFAIL: ups_convert is NOT converting empty ups directories correctly."
+    echo "\t      (examine \${UPS_DIR}/test/scripts/convert/new-db/rivendell/rivendell.table for details)"
+fi
+
+#
+# RIVENDELL_DIR specification: old syntax was $UPS_DIR/blah.
+# New specification by ups_convert should be ${UPS_DIR}/blah.
+#
+echo "test2: \$PROD_DIR -> \${PROD_DIR} conversion (no expansion, add {})"
+rivendell_dir=`grep "PROD_DIR=" ${UPS_DIR}/test/scripts/convert/new-db/rivendell/current.version | cut -f2 -d'='`
+if [ "x${rivendell_dir}" = "x\${UPS_DIR}/test/scripts/convert/old-products/rivendell" ]
+then
+    echo "\tpass."
+else
+    echo "\tFAIL: ups_convert is NOT converting \$PROD_DIR -> \${PROD_DIR} correctly."
+    echo "\t      old-db: \$UPS_DIR/test/scripts/convert/old-products/rivendell"
+    echo "\t      new-db: ${rivendell_dir}"
+    echo "\t   should-be: \${UPS_DIR}/test/scripts/convert/old-products/rivendell"
+fi
+
+#
+# BREE_DIR specification: old syntax was ${UPS_DIR}/blah.
+# New specification by ups_convert should also be ${UPS_DIR}/blah.
+#
+echo "test2: \${PROD_DIR} -> \${PROD_DIR} conversion (no expansion, keep {})"
+bree_dir=`grep "PROD_DIR=" ${UPS_DIR}/test/scripts/convert/new-db/bree/new.version | cut -f2 -d'='`
+if [ "x${bree_dir}" = "x\${UPS_DIR}/test/scripts/convert/old-products/bree" ]
+then
+    echo "\tpass."
+else
+    echo "\tFAIL: ups_convert is NOT converting \$PROD_DIR -> \${PROD_DIR} correctly."
+    echo "\t      old-db: \$UPS_DIR/test/scripts/convert/old-products/bree"
+    echo "\t      new-db: ${bree_dir}"
+    echo "\t   should-be: \${UPS_DIR}/test/scripts/convert/old-products/bree"
+fi
+
+echo "test3: ~USER -> ~USER conversion (no expansion, keep ~)"
+shire_dir=`grep "PROD_DIR=" ${UPS_DIR}/test/scripts/convert/new-db/shire/current.version | cut -f2 -d'='`
+if [ "x${shire_dir}" = "x~bilbo/test/scripts/convert/old-products/shire" ]
+then
+    echo "\tpass."
+else
+    echo "\tFAIL: ups_convert is NOT converting ~USER -> ~USER correctly."
+    echo "\t      old-db: ~bilbo/test/scripts/convert/old-products/shire"
+    echo "\t      new-db: ${shire_dir}"
+    echo "\t   should-be: ~bilbo/test/scripts/convert/old-products/shire"
+fi
+
+
+

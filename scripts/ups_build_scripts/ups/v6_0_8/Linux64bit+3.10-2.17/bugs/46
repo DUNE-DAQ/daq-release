@@ -1,0 +1,5 @@
+Priority: Low
+State: Dodged
+
+Add a check so that user-defined action "install" must be done as root?
+We've handled this with the InstallAsRoot scheme.

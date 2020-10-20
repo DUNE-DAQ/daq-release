@@ -1,0 +1,10 @@
+FILE = VERSION
+PRODUCT = ife
+VERSION = v1_0
+
+FLAVOR = NULL
+QUALIFIERS = ""
+  DECLARED = 2001-09-21-15:01
+  DECLARER = mengel
+  TABLE_FILE = good.table
+  PROD_DIR = 
