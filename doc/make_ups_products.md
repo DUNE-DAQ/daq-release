@@ -7,7 +7,7 @@ The instructions below applies only to systems running CentOS 7 or Scientific Li
 1. Checkout the `daq-release` package;
   `git clone https://github.com/DUNE-DAQ/daq-release.git`
 2. Under `daq-release/scripts/ups_build_scripts`, you will find subdirectories of package names which contains the version of the package and corresponding build script, together with its ups table file;
-3. Create a new working directory, and copy all the contents under `daq-release/scripts/ups_build_scripts` to the working directory;
+3. Create a new working directory (`$WORK_DIR`), and copy all the contents under `daq-release/scripts/ups_build_scripts` to the working directory with `cp -rT daq-release/scripts/ups_build_scripts/ $WORK_DIR` (note the options used with the `cp` command to handle hidden directories `.upsfiles` and `.updfiles`);
 4. set up the build environment by running `source $WORK_DIR/setup`
 
 
