@@ -1,0 +1,49 @@
+File=Table
+Product=pistache
+
+#*************************************************
+# Starting Group definition
+Group:
+
+  Flavor=ANY
+  Qualifiers="e19:prof"
+
+  Action=DefineFQ
+    prodDir(_FQ_DIR,${UPS_PROD_FLAVOR}-e19-prof)
+
+  Action=ExtraSetup
+    setupRequired(gcc v8_2_0)
+
+  Flavor=ANY
+  Qualifiers="e19:debug"
+
+  Action=DefineFQ
+    prodDir(_FQ_DIR,${UPS_PROD_FLAVOR}-e19-debug)
+
+  Action=ExtraSetup
+    setupRequired(gcc v8_2_0)
+
+Common:
+   Action=setup
+      setupenv()
+      proddir()
+      envSet(PISTACHE_VERSION, ${UPS_PROD_VERSION})
+      exeActionRequired(DefineFQ)
+      envSet(PISTACHE, ${PISTACHE_FQ_DIR})
+      envSet(PISTACHE_LIB, ${PISTACHE_FQ_DIR}/lib64)
+      envSet(PISTACHE_INC, ${PISTACHE_FQ_DIR}/include)
+      # Add the lib directory to (DY)LD_LIBRARY_PATH
+      if ( test `uname` = "Darwin" )
+        envPrepend(DYLD_LIBRARY_PATH, ${PISTACHE_FQ_DIR}/lib64)
+      else()
+        envPrepend(LD_LIBRARY_PATH, ${PISTACHE_FQ_DIR}/lib64)
+      endif ( test `uname` = "Darwin" )
+      pathPrepend(PATH, ${PISTACHE_FQ_DIR}/bin)
+      # Requirements.
+      exeActionRequired(ExtraSetup)
+      # Useful variables.
+      envPrepend(CMAKE_PREFIX_PATH, ${PISTACHE_FQ_DIR}/lib64 )
+      envPrepend(PKG_CONFIG_PATH, ${PISTACHE_LIB}/pkgconfig)
+End:
+# End Group definition
+#*************************************************
