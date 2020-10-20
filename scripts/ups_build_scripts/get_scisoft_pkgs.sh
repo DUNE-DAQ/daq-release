@@ -4,7 +4,7 @@ function get_scisoft_pkg(){
 	pkgs=( $@ )
 	for ((i=0; i<${#pkgs[@]}; i+=2)); do
 		echo "Getting ${pkgs[i]} from: ${pkgs[i+1]}"
-		#curl "${pkgs[i+1]}" 2>/dev/null| tar xj 2>/dev/null
+		curl "${pkgs[i+1]}" 2>/dev/null| tar xj 2>/dev/null
 	  	RESULT=$?
 	  	if [ $RESULT -eq 0 ]; then
 		  	echo "Successfully obtained ${pkgs[i]} from SciSoft."
