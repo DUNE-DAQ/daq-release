@@ -33,7 +33,7 @@ Put the built UPS packages under the working directory.
 At this step, the build script and its corresponding UPS table file should already exist in your working directory. To build each of the additional dependencies, one should run each of the build script one by one, such as:
 
 ```shell
-pushd $WORK_DIR/ers/v00_26_00c && ./build_ers.sh $WORK_DIR e19 prof tar && popd
+pushd $WORK_DIR/ers/v0_26_00c && ./build_ers.sh $WORK_DIR e19 prof tar && popd
 ```
 
 ## Publish tarballs to cvmfs
