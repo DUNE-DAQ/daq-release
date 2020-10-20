@@ -1,6 +1,8 @@
 # Steps to build UPS products
 
-## Set up build environment
+The instructions below applies only to systems running CentOS 7 or Scientific Linux 7. For other platforms, please exercise these instructions inside the [dunedaq/sl7](https://hub.docker.com/repository/docker/dunedaq/sl7) docker image using the `latest` tag (`dunedaq/sl7:latest`).
+
+## Set up a working directory and the build environment
 
 1. Checkout the `daq-release` package;
   `git clone https://github.com/DUNE-DAQ/daq-release.git`
@@ -13,9 +15,15 @@
 
 Script [get_scisoft_pkgs.sh](https://github.com/DUNE-DAQ/daq-release/blob/master/scripts/ups_build_scripts/get_scisoft_pkgs.sh) is provided in this repo under `scripts/ups_build_scripts`.
 
-This script contains a list of packages and their corresponding URLs of prebuilt tarballs on SciSoft's web server. The script will retrieve all the tarballs listed and unroll them in the current directory.
+This script contains four lists of packages and their corresponding URLs of prebuilt tarballs on SciSoft's web server:
+  * `PKGS_MINIMAL` is a minimal set of packages needed for build opt variant of UPS products of the DAQ develop release;
+  * `PKGS_DEBUG` includes additional packages/variants needed for the debug build;
+  * `PKGS_OLDER_VERSIONS` contains older versions of packages in DUNE DAQ's cvmfs repo;
+  * `PKGS_NEWER_VERSIONS` contains packages/versions which have not been used by any release, but are currently in cvmfs for developers to play with.
+By default, the script will retrieve packages listed in `PKGS_MINIMAL` and unpack them under the current directory.
 
-Before building DAQ's own UPS packages, it's recommended to run this script first. One may not need all the listed packages if the goal is to build a specific package or one type of variant only.
+
+Before building DAQ's own UPS packages, it's recommended to run this script first. (Note: one may not need all of the packages in `PKGS_MINIMAL` if the goal is to build one specific package).
 
 ## Build `folly` and its dependencies in `daq-externals` (more details to add in this section)
 
