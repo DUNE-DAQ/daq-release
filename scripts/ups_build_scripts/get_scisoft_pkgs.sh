@@ -1,16 +1,15 @@
 #!/bin/bash
 
 function get_scisoft_pkg(){
-	pkgs=$@
-	for ((i=0; i<${#pkgs[@]}; i+=1)); do
-		ipkg=( ${pkgs[i]} )
-		echo "Getting ${ipkg[0]} from: ${ipkg[1]}"
-		curl "${ipkg[1]}" 2>/dev/null| tar xj 2>/dev/null
+	pkgs=( $@ )
+	for ((i=0; i<${#pkgs[@]}; i+=2)); do
+		echo "Getting ${pkgs[i]} from: ${pkgs[+1]}"
+		curl "${pkgs[i+1]}" 2>/dev/null| tar xj 2>/dev/null
 	  	RESULT=$?
 	  	if [ $RESULT -eq 0 ]; then
-		  	echo "Successfully obtained ${ipkg[0]} from SciSoft."
+		  	echo "Successfully obtained ${pkgs[i]} from SciSoft."
 	  	else
-		  	echo "Failed to obtain ${ipkg[0]} from SciSoft, exit now!"
+		  	echo "Failed to obtain ${pkgs[i]} from SciSoft, exit now!"
 		  	exit 10
 	  	fi
 	done
