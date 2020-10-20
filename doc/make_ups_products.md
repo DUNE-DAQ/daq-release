@@ -17,6 +17,16 @@ This script contains a list of packages and their corresponding URLs of prebuilt
 
 Before building DAQ's own UPS packages, it's recommended to run this script first. One may not need all the listed packages if the goal is to build a specific package or one type of variant only.
 
+## Build `folly` and its dependencies in `daq-externals` (more details to add in this section)
+
+Follow instructions in [`daq-externals`](https://github.com/DUNE-DAQ/daq-externals) for building [folly](https://github.com/facebook/folly), and a set of its dependencies:
+  * [double-conversion](https://github.com/google/double-conversion)
+  * [fmt](https://github.com/fmtlib/fmt)
+  * [glog](https://github.com/google/glog)
+  * [googletest](https://github.com/google/googletest)
+  * [libevent](https://github.com/libevent/libevent)
+
+Put the built UPS packages under the working directory.
 
 ## Build additional external dependencies
 
