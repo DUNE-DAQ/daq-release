@@ -18,6 +18,7 @@ function get_scisoft_pkg(){
 PKGS_NEWER_VERSIONS=(
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-debug.tar.bz2
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-prof.tar.bz2
+cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_3/cmake-3.17.3-sl7-x86_64.tar.bz2
 sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.03.00-sl7-x86_64.tar.bz2
 )
 
@@ -31,7 +32,6 @@ cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_12_2/cmake-3.12.2-sl7-x
 cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_13_1/cmake-3.13.1-sl7-x86_64.tar.bz2
 cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_13_2/cmake-3.13.2-sl7-x86_64.tar.bz2
 cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_14_3/cmake-3.14.3-sl7-x86_64.tar.bz2
-cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_2/cmake-3.17.2-sl7-x86_64.tar.bz2
 ninja https://scisoft.fnal.gov/scisoft/packages/ninja/v1_8_2/ninja-1.8.2-sl7-x86_64.tar.bz2
 python https://scisoft.fnal.gov/scisoft/packages/python/v3_7_2/python-3.7.2-sl7-x86_64.tar.bz2
 )
@@ -53,7 +53,7 @@ cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_10_00/cetlib-3.10.00-
 cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_04_01/cetlib_except-1.04.01-slf7-x86_64-e19-prof.tar.bz2
 cetpkgsupport https://scisoft.fnal.gov/scisoft/packages/cetpkgsupport/v1_14_01/cetpkgsupport-1.14.01-noarch.tar.bz2
 clang https://scisoft.fnal.gov/scisoft/packages/clang/v7_0_0rc3/clang-7.0.0rc3-sl7-x86_64.tar.bz2
-cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_3/cmake-3.17.3-sl7-x86_64.tar.bz2
+cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_2/cmake-3.17.2-sl7-x86_64.tar.bz2
 cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_14_0/cppunit-1.14.0-sl7-x86_64-e19-prof.tar.bz2
 git https://scisoft.fnal.gov/scisoft/packages/git/v2_20_1/git-2.20.1-sl7-x86_64.tar.bz2
 hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_04_01/hep_concurrency-1.04.01-slf7-x86_64-e19-prof.tar.bz2
