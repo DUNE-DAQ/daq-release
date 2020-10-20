@@ -28,6 +28,12 @@ def get_field(fman, fkey):
     return fvalue
 
 
+def append_to_file(fname, out_string):
+    with open(fname, 'a') as ofile:
+        ofile.write(out_string)
+    return
+
+
 def parse_release_file(fname):
     if not os.path.exists(fname):
         print("Error: -- Manifest file {} does not exist".format(fname))
@@ -41,19 +47,20 @@ def parse_release_file(fname):
     return fman
 
 
-def cmd_setup_product_path(fman):
+def cmd_setup_product_path(fname, fman):
     setup_string = ""
     for i in fman["product_paths"]:
         setup_string += ". {}/setup\n".format(i)
         setup_string += """if [[ "$?" != 0 ]]; then
-  echo "Executing \". {}/setup\" resulted in a nonzero return value; returning..."
+  echo "Executing \". {}/setup\" returned a nonzero value; returning..."
   return 10
 fi\n""".format(i)
-    print(setup_string)
+
+    append_to_file(fname, setup_string)
     return setup_string
 
 
-def cmd_products_setup(fman, fsection):
+def cmd_products_setup(fname, fman, fsection):
     """return line seperated UPS setup commands to be used in 'eval' in bash
     scripts"""
     setup_string = 'setup_returns=""\n'
@@ -66,13 +73,13 @@ def cmd_products_setup(fman, fsection):
                 i["name"], i["version"])
         setup_string += 'setup_returns=$setup_returns"$? "\n'
     setup_string += """if ! [[ "$setup_returns" =~ [1-9] ]]; then
-  echo "All setup calls on the packages returned 0, indicative of success"
+  echo "All setups of products completed successfully.s"
 else
-  echo "At least one of the required packages this script attempted to set up didn't set up correctly; returning..." >&2
+  echo "One or more of setups failed; returning..." >&2
   return 1
 fi
 """
-    print(setup_string)
+    append_to_file(fname, setup_string)
     return setup_string
 
 
@@ -96,43 +103,21 @@ if __name__ == "__main__":
         description="Parse DUNE DAQ release manifest files.",
         epilog="Questions and comments to dingpf@fnal.gov",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--release-tarball', action='store_true',
+    parser.add_argument('-t', '--tarball', action='store_true',
                         help='''Generate bash commands for \
                         setting up UPS product path;''')
-    parser.add_argument('--release-relpath', action='store_true',
-                        help='''generate line separated bash \
-                        commands of setting up UPS products for \
-                        external dependencies;''')
-    parser.add_argument('--setup-prebuilt', action='store_true',
-                        help='''generate line separated bash commands \
-                        of setting up ups products for prebuilt daq \
-                        packages;''')
-    parser.add_argument('--git-checkout', action='store_true',
-                        help='''Run git clone and checkout commands \
-                        for DAQ source packages from GitHub repos;''')
-    parser.add_argument('-s', '--src-dir', default='./sourcecode',
-                        help="source code directory;")
-    parser.add_argument('-r', '--release', default='develop',
-                        help="set the DAQ release to use;")
-    parser.add_argument('-p', '--path-to-manifest', default='./daq-release',
-                        help="set the path to DAQ release manifest files;")
-    parser.add_argument('-u', '--users-manifest',
+    parser.add_argument('-i', '--input-manifest',
                         default=None,
-                        help="set the path to user's manifest files;")
+                        help="path to the release manifest file;")
 
     args = parser.parse_args()
 
-    if args.release == "develop":
-        release = "develop"
-    else:
-        release = args.release.replace('.', '-')
-    release_manifest = "{}/release_{}.yaml".format(
-            args.path_to_manifest, release)
-    user_manifest = args.users_manifest
+    fman = parse_release_file(args.input_manifest)
 
-    fnames = [release_manifest]
-    if user_manifest is not None:
-        fnames.append(user_manifest)
+    print(yaml.dump(fman, default_flow_style=False, sort_keys=False))
 
-    # print(fman)
-    # print(yaml.dump(fman, default_flow_style=False, sort_keys=False))
+    release = get_field(fman, "release")
+    if release != "develop":
+        release = release.replace('.', '-')
+
+    print("INFO: release is: ... {}".format(release))
