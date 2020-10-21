@@ -25,16 +25,41 @@ By default, the script will retrieve packages listed in `PKGS_MINIMAL` and unpac
 
 Before building DAQ's own UPS packages, it's recommended to run this script first. (Note: one may not need all of the packages in `PKGS_MINIMAL` if the goal is to build one specific package).
 
-## Build `folly` and its dependencies in `daq-externals` (more details to add in this section)
+## Build `folly` and its dependencies with `cetbuildtools`
 
-Follow instructions in [`daq-externals`](https://github.com/DUNE-DAQ/daq-externals) for building [folly](https://github.com/facebook/folly), and a set of its dependencies:
+`folly` and its dependencies are set up to be built into UPS packages with `cetbuildtools` using recipes written in [`daq-externals`](https://github.com/DUNE-DAQ/daq-externals) for building [folly](https://github.com/facebook/folly). The dependencies are:
   * [double-conversion](https://github.com/google/double-conversion)
   * [fmt](https://github.com/fmtlib/fmt)
   * [glog](https://github.com/google/glog)
   * [googletest](https://github.com/google/googletest)
   * [libevent](https://github.com/libevent/libevent)
 
-Put the built UPS packages under the working directory.
+Here are the steps to build these UPS products (using `fmt` as an example):
+
+```shell
+# create another working directory
+mkdir -p $WORK_DIR/../daq-externals-workdir
+
+# checkout daq-externals package
+cd $WORK_DIR/../daq-externals-workdir
+git clone https://github.com/DUNE-DAQ/daq-externals.git
+
+# setup 
+# To build one package, e.g. fmt:
+mkdir $WORK_DIR/../daq-externals-workdir/build_fmt
+export CETPKG_INSTALL=$WORK_DIR
+source $WORK_DIR/../daq-externals-workdir/daq-externals/ups/multi-project/fmt/ups/setup_for_development -p e19
+buildtool -A -c -l -bti -j8
+
+# the UPS products will be installed under $WORK_DIR together with UPS products from SciSoft
+# In addition, a tarball of the UPS product can be found in the build directory.
+ls $WORK_DIR/../daq-externals-workdir/build_fmt/fmt-6.2.1-slf7-x86_64-e19-prof.tar.bz2 
+
+```
+
+Building other dependencies is a similar process as above. Once finished, one can continue with building `folly` using similar steps.
+
+==A script doing all the above for folly and its dependencies will be provided soon.==
 
 ## Build additional external dependencies
 
