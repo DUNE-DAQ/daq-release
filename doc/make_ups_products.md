@@ -14,6 +14,85 @@ chmod +x bootstrap-ups-build.sh
 ./bootstrap-ups-build.sh
 ```
 
+Once finished running the script, your working directory will look like
+
+```shell
+# tree -L 2
+.
+├── bootstrap-ups-build.sh
+├── build_pkgs_cet
+│   ├── build_double_conversion
+│   ├── build_fmt
+│   ├── build_folly
+│   ├── build_glog
+│   ├── build_googletest
+│   └── build_libevent
+├── daq-externals
+│   ├── cmake-externalproject
+│   ├── README.md
+│   └── ups
+├── daq-release
+│   ├── develop.yaml
+│   ├── doc
+│   ├── README.md
+│   ├── release_develop.yaml
+│   ├── release_v1-0-0.yaml
+│   ├── release_v1-1-0.yaml
+│   ├── scripts
+│   ├── user_template.yaml
+│   ├── user_workenv.yaml
+│   └── v1-1-0.yaml
+├── products
+│   ├── boost
+│   ├── cetbuildtools
+│   ├── cetlib
+│   ├── cetlib_except
+│   ├── cetpkgsupport
+│   ├── clang
+│   ├── cmake
+│   ├── cppunit
+│   ├── double_conversion
+│   ├── ers
+│   ├── fmt
+│   ├── folly
+│   ├── gcc
+│   ├── get_scisoft_pkgs.sh
+│   ├── git
+│   ├── glog
+│   ├── googletest
+│   ├── hdf5
+│   ├── hep_concurrency
+│   ├── highfive
+│   ├── libevent
+│   ├── ninja
+│   ├── nlohmann_json
+│   ├── pistache
+│   ├── pistache-2020.10.07-sl7-x86_64-e19-prof.tar.bz2
+│   ├── python
+│   ├── pyyaml
+│   ├── setup -> ups/v6_0_8/Linux64bit+3.10-2.17/ups/setup
+│   ├── setups -> ups/v6_0_8/Linux64bit+3.10-2.17/ups/setups
+│   ├── setups_layout
+│   ├── sqlite
+│   ├── ssibuildshims
+│   ├── tbb
+│   ├── TRACE
+│   └── ups
+└── tarballs
+    ├── double_conversion-3.1.5-slf7-x86_64-e19-prof.tar.bz2
+    ├── ers-0.26.00c-sl7-x86_64-e19-prof.tar.bz2
+    ├── fmt-6.2.1-slf7-x86_64-e19-prof.tar.bz2
+    ├── folly-2020.05.25-slf7-x86_64-e19-prof.tar.bz2
+    ├── glog-0.4.0-slf7-x86_64-e19-prof.tar.bz2
+    ├── googletest-1.8.1-slf7-x86_64-e19-prof.tar.bz2
+    ├── highfive-2.2.2-sl7-x86_64-e19-prof.tar.bz2
+    ├── libevent-2.1.8-slf7-x86_64-e19-prof.tar.bz2
+    ├── nlohmann_json-3.9.0b-sl7-x86_64-e19-prof.tar.bz2
+    └── pyyaml-5.3.1-sl7-x86_64-p383b.tar.bz2
+
+45 directories, 25 files
+```
+
 ## Step-by-step instructions
 
 ### Set up a working directory and the build environment
