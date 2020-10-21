@@ -3,11 +3,12 @@
 The instructions below applies only to systems running CentOS 7 or Scientific Linux 7. For other platforms, please exercise these instructions inside the [dunedaq/sl7](https://hub.docker.com/repository/docker/dunedaq/sl7) docker image using the `latest` tag (`dunedaq/sl7:latest`).
 
 
-## Doing everything on one-go
+## Doing everything together
 
-A bootstrap has been written for the current UPS products used by the develop release (as of 10/20/2020). It is named `bootstrap-ups-build.sh` under `daq-release/scripts`. One can run this script in an empty directory to build all the currently used UPS products. The tarballs will be stored under `$PWD/tarballs` by default.
+A bootstrap has been written for the current UPS products used by the develop release (as of 10/20/2020). It is named `bootstrap-ups-build.sh` under `daq-release/scripts`. Running this script in an empty directory will build all the currently used UPS products. The tarballs made by the build will be stored under `$PWD/tarballs` by default.
 
 ```shell
+# change to am empty directory, then run the following
 curl -O https://raw.githubusercontent.com/DUNE-DAQ/daq-release/master/scripts/bootstrap-ups-build.sh
 chmod +x bootstrap-ups-build.sh
 ./bootstrap-ups-build.sh
