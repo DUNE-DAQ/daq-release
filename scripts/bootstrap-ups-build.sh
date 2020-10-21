@@ -58,7 +58,7 @@ done
 # Build UPS products with ssibuildshims
 ###
 cd $PROD_DIR
-for i in `find . -name build_*.sh`; do
+for i in `find . -maxdepth 3 -name build_*.sh`; do
   pushd `dirname $i`
   IBUILD_SH=`basename $i`
   if [[ "$i" == *"pyyaml"* ]]; then
