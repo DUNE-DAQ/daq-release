@@ -23,6 +23,7 @@ echo "INFO [`eval $timenow`]: Finished cloning daq-release and daq-externals rep
 
 cp -rT $WORK_DIR/daq-release/scripts/ups_build_scripts/ $PROD_DIR
 cd $PROD_DIR
+source setup
 ./get_scisoft_pkgs.sh 
 echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 
