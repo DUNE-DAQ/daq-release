@@ -8,9 +8,9 @@ The instructions below applies only to systems running CentOS 7 or Scientific Li
 A bootstrap has been written for the current UPS products used by the develop release (as of 10/20/2020). It is named `bootstrap-ups-build.sh` under `daq-release/scripts`. One can run this script in an empty directory to build all the currently used UPS products. The tarballs will be stored under `$PWD/tarballs` by default.
 
 ```shell
-curl -O https://raw.githubusercontent.com/DUNE-DAQ/daq-buildtools/v1.2.1/bin/quick-start.sh
-chmod +x quick-start.sh
-./quick-start.sh
+curl -O https://raw.githubusercontent.com/DUNE-DAQ/daq-release/master/scripts/bootstrap-ups-build.sh
+chmod +x bootstrap-ups-build.sh
+./bootstrap-ups-build.sh
 ```
 
 ## Set up a working directory and the build environment
