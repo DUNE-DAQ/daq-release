@@ -30,6 +30,7 @@ echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 ###
 # Build UPS products with cetbuildtools
 ###
+(
 export CETPKG_INSTALL=$PROD_DIR
 export CETPKG_J=$NCORE
 cd $CET_BUILD_DIR
@@ -50,12 +51,12 @@ for i in `find $CET_BUILD_DIR -name "*tar.bz2"`; do
   mv $i $TAR_DIR
   echo "INFO: Moved tarball to $TAR_DIR: $i"
 done
+)
 
 ###
 # Build UPS products with ssibuildshims
 ###
 cd $PROD_DIR
-source setup
 for i in `find . -name build_*.sh`; do
   pushd `dirname $i`
   IBUILD_SH=`basename $i`
