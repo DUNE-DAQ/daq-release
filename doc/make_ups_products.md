@@ -67,7 +67,6 @@ Once finished running the script, your working directory will look like
 │   ├── ninja
 │   ├── nlohmann_json
 │   ├── pistache
-│   ├── pistache-2020.10.07-sl7-x86_64-e19-prof.tar.bz2
 │   ├── python
 │   ├── pyyaml
 │   ├── setup -> ups/v6_0_8/Linux64bit+3.10-2.17/ups/setup
@@ -88,6 +87,7 @@ Once finished running the script, your working directory will look like
     ├── highfive-2.2.2-sl7-x86_64-e19-prof.tar.bz2
     ├── libevent-2.1.8-slf7-x86_64-e19-prof.tar.bz2
     ├── nlohmann_json-3.9.0b-sl7-x86_64-e19-prof.tar.bz2
+    ├── pistache-2020.10.07-sl7-x86_64-e19-prof.tar.bz2
     └── pyyaml-5.3.1-sl7-x86_64-p383b.tar.bz2
 
 45 directories, 25 files
