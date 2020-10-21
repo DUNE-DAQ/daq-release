@@ -57,7 +57,6 @@ package=pistache
 pkgver=v2020_10_07
 ssibuildshims_version=v1_04_13
 cmake_version=v3_17_2
-setup cmake $cmake_version
 
 get_this_dir
 
@@ -150,6 +149,7 @@ git submodule update --init
 
 ### Package specific stuff
 
+setup cmake $cmake_version
 cd ${blddir}
 cmake -G "Unix Makefiles" \
         -DCMAKE_BUILD_TYPE=Release \
