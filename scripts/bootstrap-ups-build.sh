@@ -16,14 +16,15 @@ timenow="date \"+%D %T\""
 ###
 # Get tarballs from SciSoft and unpack them under $PROD_DIR
 ###
+cd $PROD_DIR
+source setup
+setup git
 cd $WORK_DIR
 git clone https://github.com/DUNE-DAQ/daq-release.git
 git clone https://github.com/DUNE-DAQ/daq-externals.git
 echo "INFO [`eval $timenow`]: Finished cloning daq-release and daq-externals repo from DUNE-DAQ@github."
 
 cp -rT $WORK_DIR/daq-release/scripts/ups_build_scripts/ $PROD_DIR
-cd $PROD_DIR
-source setup
 ./get_scisoft_pkgs.sh 
 echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 
