@@ -55,7 +55,7 @@ fi
 
 package=pistache
 pkgver=v2020_10_07
-ssibuildshims_version=v1_04_14
+ssibuildshims_version=v1_04_13
 cmake_version=v3_17_2
 
 get_this_dir

@@ -61,6 +61,7 @@ hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_04_
 ninja https://scisoft.fnal.gov/scisoft/packages/ninja/v1_10_0/ninja-1.10.0-sl7-x86_64.tar.bz2
 python https://scisoft.fnal.gov/scisoft/packages/python/v3_8_3b/python-3.8.3b-sl7-x86_64.tar.bz2
 sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_26_00_00/sqlite-3.26.00.00-sl7-x86_64.tar.bz2
+sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.03.00-sl7-x86_64.tar.bz2
 tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2019_3/tbb-2019.3-sl7-x86_64-e19-prof.tar.bz2
 TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_15_09/TRACE-3.15.09-sl7-x86_64.tar.bz2
 )
