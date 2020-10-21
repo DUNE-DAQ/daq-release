@@ -40,6 +40,7 @@ boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_70_0/boost-1.70.0-sl7-x
 cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_10_00/cetlib-3.10.00-slf7-x86_64-e19-debug.tar.bz2
 cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_04_01/cetlib_except-1.04.01-slf7-x86_64-e19-debug.tar.bz2
 cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_14_0/cppunit-1.14.0-sl7-x86_64-e19-debug.tar.bz2
+hdf5 https://scisoft.fnal.gov/scisoft/packages/hdf5/v1_12_0a/hdf5-1.12.0a-sl7-x86_64-e19-debug.tar.bz2
 hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_04_01/hep_concurrency-1.04.01-slf7-x86_64-e19-debug.tar.bz2
 tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2019_3/tbb-2019.3-sl7-x86_64-e19-debug.tar.bz2
 )
@@ -57,6 +58,7 @@ cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_14_3/cmake-3.14.3-sl7-x
 cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_2/cmake-3.17.2-sl7-x86_64.tar.bz2
 cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_14_0/cppunit-1.14.0-sl7-x86_64-e19-prof.tar.bz2
 git https://scisoft.fnal.gov/scisoft/packages/git/v2_20_1/git-2.20.1-sl7-x86_64.tar.bz2
+hdf5 https://scisoft.fnal.gov/scisoft/packages/hdf5/v1_12_0a/hdf5-1.12.0a-sl7-x86_64-e19-prof.tar.bz2
 hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_04_01/hep_concurrency-1.04.01-slf7-x86_64-e19-prof.tar.bz2
 ninja https://scisoft.fnal.gov/scisoft/packages/ninja/v1_10_0/ninja-1.10.0-sl7-x86_64.tar.bz2
 python https://scisoft.fnal.gov/scisoft/packages/python/v3_8_3b/python-3.8.3b-sl7-x86_64.tar.bz2
