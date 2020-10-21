@@ -16,9 +16,6 @@ timenow="date \"+%D %T\""
 ###
 # Get tarballs from SciSoft and unpack them under $PROD_DIR
 ###
-cd $PROD_DIR
-source setup
-setup git
 cd $WORK_DIR
 git clone https://github.com/DUNE-DAQ/daq-release.git
 git clone https://github.com/DUNE-DAQ/daq-externals.git
@@ -31,6 +28,8 @@ echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 ###
 # Build UPS products with cetbuildtools
 ###
+cd $PROD_DIR
+source setup
 (
 export CETPKG_INSTALL=$PROD_DIR
 export CETPKG_J=$NCORE
