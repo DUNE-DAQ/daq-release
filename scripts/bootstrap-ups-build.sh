@@ -30,7 +30,7 @@ echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 # Build UPS products with cetbuildtools
 ###
 cd $PROD_DIR
-source setup
+source $PROD_DIR/setup
 (
 export CETPKG_INSTALL=$PROD_DIR
 export CETPKG_J=$NCORE
