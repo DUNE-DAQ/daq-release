@@ -42,7 +42,7 @@ for i in double_conversion fmt glog googletest libevent folly; do
   pushd ${ibuild_dir}
   source ${isrc_dir}/setup_for_development -p e19
   echo "INFO [`eval $timenow`]: Running \"buildtool -A -c -l -bti -j${NCORE}\""
-  buildtool -A -c -l -bti -j8
+  buildtool -A -c -l -bti -j${NCORE}
   echo "INFO [`eval $timenow`]: Finished building UPS product: ${i}"
   popd
 done
