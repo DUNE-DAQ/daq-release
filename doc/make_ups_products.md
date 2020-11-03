@@ -140,6 +140,7 @@ git clone https://github.com/DUNE-DAQ/daq-externals.git
 # setup 
 # To build one package, e.g. fmt:
 mkdir $WORK_DIR/../daq-externals-workdir/build_fmt
+cd $WORK_DIR/../daq-externals-workdir/build_fmt
 export CETPKG_INSTALL=$WORK_DIR
 source $WORK_DIR/../daq-externals-workdir/daq-externals/ups/multi-project/fmt/ups/setup_for_development -p e19
 buildtool -A -c -l -bti -j8
