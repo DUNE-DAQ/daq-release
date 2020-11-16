@@ -1,0 +1,37 @@
+# See $CETBUILDTOOLS_DIR/templates/product_deps.template for a more
+# fully annotated product_deps file.
+
+# Product specification
+parent glog v0_4_0
+defaultqual e19
+
+# Table-file variable setup specification.
+incdir      fq_dir include
+libdir      fq_dir      lib64
+bindir      fq_dir      bin
+
+# define product/version pairs
+product		version
+gcc		v8_2_0
+cetbuildtools	v7_15_01	-	only_for_build
+end_product_list
+
+# Matrix of qualifiers versus dependent products
+qualifier	gcc	notes
+e19:debug	-nq-
+e19:opt		-nq-
+e19:prof	-nq-
+end_qualifier_list
+
+table_fragment_begin
+# this is a table file fragment
+# it will be copied verbatim
+table_fragment_end
+
+# Preserve tabs and formatting in emacs and vi / vim:
+
+### Local Variables:
+### tab-width: 8
+### End:
+
+# vi:set ts=8 noexpandtab:

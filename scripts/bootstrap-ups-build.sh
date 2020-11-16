@@ -18,8 +18,7 @@ timenow="date \"+%D %T\""
 ###
 cd $WORK_DIR
 git clone https://github.com/DUNE-DAQ/daq-release.git
-git clone https://github.com/DUNE-DAQ/daq-externals.git
-echo "INFO [`eval $timenow`]: Finished cloning daq-release and daq-externals repo from DUNE-DAQ@github."
+echo "INFO [`eval $timenow`]: Finished cloning daq-release repo from DUNE-DAQ@github."
 
 cp -rT $WORK_DIR/daq-release/scripts/ups_build_scripts/ $PROD_DIR
 cd $PROD_DIR
@@ -37,7 +36,7 @@ export CETPKG_J=$NCORE
 cd $CET_BUILD_DIR
 for i in double_conversion fmt glog googletest libevent folly; do
   ibuild_dir=build_${i}
-  isrc_dir=$WORK_DIR/daq-externals/ups/multi-product/${i}/ups
+  isrc_dir=$WORK_DIR/daq-release/scripts/cetbuildtools_scripts/${i}/ups
   mkdir -p ${ibuild_dir}
   pushd ${ibuild_dir}
   source ${isrc_dir}/setup_for_development -p e19
