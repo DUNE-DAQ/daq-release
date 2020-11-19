@@ -67,6 +67,7 @@ sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.
 tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2019_3/tbb-2019.3-sl7-x86_64-e19-prof.tar.bz2
 TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_15_09/TRACE-3.15.09-sl7-x86_64.tar.bz2
 gdb https://scisoft.fnal.gov/scisoft/packages/gdb/v9_2/gdb-9.2-sl7-x86_64.tar.bz2
+zmq https://scisoft.fnal.gov/scisoft/packages/zmq/v4_3_1/zmq-4.3.1-sl7-x86_64-e19.tar.bz2
 )
 
 

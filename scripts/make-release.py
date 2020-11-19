@@ -24,7 +24,8 @@ def get_field(fman, fkey):
     try:
         fvalue = fman[fkey]
     except KeyError:
-        print("Field {} does not exist in the manifest file!".format(fkey))
+        print("Error: Field {} does not exist in the manifest file!".format(
+            fkey))
     return fvalue
 
 
