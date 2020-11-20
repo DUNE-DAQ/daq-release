@@ -63,6 +63,9 @@ for i in `find . -maxdepth 3 -name build_*.sh`; do
   if [[ "$i" == *"pyyaml"* ]]; then
     echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR p383b tar\""
     ./`basename $i` $PROD_DIR p383b tar
+  elif [[ "$i" == *"zmq"* ]]; then
+    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR e19 tar\""
+    ./`basename $i` $PROD_DIR e19 tar
   else
     echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR e19 prof tar\""
     ./`basename $i` $PROD_DIR e19 prof tar
