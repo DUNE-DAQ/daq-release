@@ -20,6 +20,7 @@ boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-prof.tar.bz2
 cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_3/cmake-3.17.3-sl7-x86_64.tar.bz2
 sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.03.00-sl7-x86_64.tar.bz2
+TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_16_02/TRACE-3.16.02-sl7-x86_64.tar.bz2
 )
 
 PKGS_OLDER_VERSIONS=(
