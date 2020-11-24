@@ -211,7 +211,9 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--work-dir', default=None, required=True,
                         help="Path to DAQ software working directory;")
     parser.add_argument('-t', '--tarball-dir', default=None, required=True,
-                        help="Path to the destination tarball directory.")
+                        help="Path to the destination tarball directory;")
+    parser.add_argument('-p', '--package-name', default=None,
+                        help="Name of package to be 'UPSified'; if not supplied, all currently installed packages will be 'UPSified';")
     parser.add_argument('-e', '--equalifier', default='e19',
                         help="e qualifier;")
     parser.add_argument('-d', '--debug', action='store_true',
@@ -228,5 +230,5 @@ if __name__ == "__main__":
     else:
         dqual = "prof"
 
-    create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir)
+    create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.package_name)
 
