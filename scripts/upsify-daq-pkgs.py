@@ -22,16 +22,18 @@ please check!'.format(cmd))
     return out
 
 
-def get_version(dir):
-    cmd = """cd {};git symbolic-ref --short -q HEAD \
-        || git describe --tags --exact-match 2> /dev/null \
-        || git rev-parse --short HEAD""".format(dir)
+def get_version(cdir):
+    #cmd = """cd {};git symbolic-ref --short -q HEAD \
+    #    || git describe --tags --exact-match 2> /dev/null \
+    #    || git rev-parse --short HEAD""".format(dir)
+    cmd = "cd {}; git tag --points-at HEAD|tail -n 1 ".format(cdir)
     output = check_output(cmd);
     version = output[0].decode('utf-8').strip()
     return version
 
-def get_commit_hash(dir):
-    cmd = "cd {}; git rev-parse --short HEAD".format(dir)
+
+def get_commit_hash(cdir):
+    cmd = "cd {}; git rev-parse --short HEAD".format(cdir)
     output = check_output(cmd);
     commit_hash = output[0].decode('utf-8').strip()
     return commit_hash
@@ -61,6 +63,7 @@ TABLE_FILE = {pkg}.table""".format(pkg=pkg, ver=ver, equal=equal, dqual=dqual, u
 
 def make_ups_table_file(pkg, ver, equal="e19", dqual="prof", has_inc=True,
                         has_lib=True, has_bin=False):
+    print("making ups table file for {} has_lib {} has_bin {} has_inc {}".format(pkg, has_lib, has_bin, has_inc))
     table_content="""File    = table
 Product = {pkg}
 
@@ -93,25 +96,25 @@ Common:
     if has_lib:
         table_content +="""
     # lib dir
-    envSet(${{UPS_PROD_NAME_UC}}_LIB, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/lib64)
+    envSet(${{UPS_PROD_NAME_UC}}_LIB, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/lib64)
     pathPrepend(LD_LIBRARY_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
     pathPrepend(CET_PLUGIN_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
     pathPrepend(CMAKE_PREFIX_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}})
     pathPrepend(PKG_CONFIG_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}})
-"""
+""".format(pkg=pkg)
     if has_inc:
         table_content +="""
     # include dir
-    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{UPS_PROD_DIR}}/include)
-"""
+    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{UPS_PROD_DIR}}/{pkg}/include)
+""".format(pkg=pkg)
 
     if has_bin:
         table_content +="""
     # add the bin directory to the path
-    pathPrepend(PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/bin )
+    pathPrepend(PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/bin )
     # dropit -E removes non-existent directories
     Execute(dropit -E, NO_UPS_ENV, PATH)
-"""
+""".format(pkg=pkg)
     table_content += """
 End:
 # End Group definition
@@ -149,8 +152,11 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
         version = vdot_ver # branch name, or commit hash
     commit_hash = get_commit_hash(source_dir)
     tmp_dir = tempfile.mkdtemp()
+    orig_pkg_name = pkg_name
+    pkg_name = pkg_name.replace('-','_')
     ups_dir = os.path.join(tmp_dir, pkg_name)
     flavor_dir = os.path.join(ups_dir, version, flavor)
+    flavor_install_dir = os.path.join(ups_dir, version, flavor, orig_pkg_name)
     print("Info -- creating UPS package: ", pkg_name)
     print("Info -- version: ", version)
     print("Info -- commit hash: ", commit_hash)
@@ -158,21 +164,28 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
 
     # prepare flavor subdir
     os.makedirs(flavor_dir)
+    os.makedirs(flavor_install_dir)
     #shutil.copytree(install_dir, dest)
-    copy_install_dir_cmd = "cp -pr {}/* {}".format(install_dir, flavor_dir)
+    copy_install_dir_cmd = "cp -pr {}/* {}".format(install_dir, flavor_install_dir)
     check_output(copy_install_dir_cmd)
 
     # prepare ups table file
     ups_table_dir = os.path.join(ups_dir, version, "ups")
     os.makedirs(ups_table_dir)
+    has_include = False
+    has_bin = False
+    has_lib = False
+    print("tesing include dir {}".format(os.path.exists(os.path.join(install_dir, "include"))))
     if os.path.exists(os.path.join(install_dir, "include")):
         has_include = True
     else:
         has_include = False
-    if os.path.exists(os.path.join(install_dir, "lib")):
+    print("tesing lib dir {}".format(os.path.exists(os.path.join(install_dir, "lib64"))))
+    if os.path.exists(os.path.join(install_dir, "lib64")):
         has_lib = True
     else:
         has_lib = False
+    print("tesing bin dir {}".format(os.path.exists(os.path.join(install_dir, "bin"))))
     if os.path.exists(os.path.join(install_dir, "bin")):
         has_bin = True
     else:
@@ -190,10 +203,12 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
 
     # tar up product dir.
     tar_name = "{}-{}-sl7-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, equal, dqual)
+    print(tar_name)
     tar_cmd = "cd {} && tar -cvjSf {} {} && mv {} {}".format(
         tmp_dir, tar_name, pkg_name, tar_name, dest_dir)
+    print(tar_cmd)
     check_output(tar_cmd)
-    shutil.rmtree(tmp_dir)
+    #shutil.rmtree(tmp_dir)
     return
 
 
@@ -230,5 +245,7 @@ if __name__ == "__main__":
     else:
         dqual = "prof"
 
-    create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.package_name)
-
+    if args.package_name != None:
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.package_name)
+    else:
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir)
