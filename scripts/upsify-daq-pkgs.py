@@ -62,7 +62,7 @@ TABLE_FILE = {pkg}.table""".format(pkg=pkg, ver=ver, equal=equal, dqual=dqual, u
 
 
 def make_ups_table_file(pkg, ver, equal="e19", dqual="prof", has_inc=True,
-                        has_lib=True, has_bin=False):
+                        has_lib=True, has_bin=False, renamed=False):
     print("making ups table file for {} has_lib {} has_bin {} has_inc {}".format(pkg, has_lib, has_bin, has_inc))
     table_content="""File    = table
 Product = {pkg}
@@ -93,6 +93,8 @@ Common:
 
     #exeActionRequired(GetProducts)
 """.format(pkg=pkg, equal=equal, dqual=dqual, ver=ver)
+    if renamed:
+        pkg = pkg.replace('_','-')
     if has_lib:
         table_content +="""
     # lib dir
@@ -152,8 +154,11 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
         version = vdot_ver # branch name, or commit hash
     commit_hash = get_commit_hash(source_dir)
     tmp_dir = tempfile.mkdtemp()
+    renamed = False
     orig_pkg_name = pkg_name
-    pkg_name = pkg_name.replace('-','_')
+    if '-' in pkg_name:
+        pkg_name = pkg_name.replace('-','_')
+        renamed = True
     ups_dir = os.path.join(tmp_dir, pkg_name)
     flavor_dir = os.path.join(ups_dir, version, flavor)
     flavor_install_dir = os.path.join(ups_dir, version, flavor, orig_pkg_name)
@@ -191,7 +196,7 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
     else:
         has_bin = False
     with open("{}/{}.table".format(ups_table_dir, pkg_name), 'w') as tf:
-        tcontent = make_ups_table_file(pkg_name, version, equal, dqual, has_lib, has_lib, has_bin)
+        tcontent = make_ups_table_file(pkg_name, version, equal, dqual, has_lib, has_lib, has_bin, renamed)
         tf.write(tcontent)
 
     # preprae version dir and version file
