@@ -1,0 +1,15 @@
+FILE = version
+PRODUCT = pugixml
+VERSION = v1_11
+
+#*************************************************
+#
+FLAVOR = Linux64bit+3.10-2.17
+QUALIFIERS = "e19"
+  DECLARER = root
+  DECLARED = 2020-12-02 08.19.23 GMT
+  MODIFIER = root
+  MODIFIED = 2020-12-02 08.19.23 GMT
+  PROD_DIR = pugixml/v1_11
+  UPS_DIR = ups
+  TABLE_FILE = pugixml.table
