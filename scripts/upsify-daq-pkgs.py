@@ -107,7 +107,7 @@ Common:
     if has_inc:
         table_content +="""
     # include dir
-    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{UPS_PROD_DIR}}/{pkg}/include)
+    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{UPS_PROD_NAME_UC}}_FQ_DIR/{pkg}/include)
 """.format(pkg=pkg)
 
     if has_bin:
