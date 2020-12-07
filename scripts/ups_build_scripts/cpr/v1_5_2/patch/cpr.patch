@@ -1,0 +1,12 @@
+diff -Naur old/cpr-1.5.2/cpr/session.cpp new/cpr-1.5.2/cpr/session.cpp
+--- old/cpr-1.5.2/cpr/session.cpp	2020-10-20 13:24:44.000000000 +0000
++++ new/cpr-1.5.2/cpr/session.cpp	2020-12-07 16:51:29.469041956 +0000
+@@ -373,7 +373,7 @@
+ #endif
+         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, opts.verify_peer ? ON : OFF);
+         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, opts.verify_host ? 2L : 0L);
+-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYSTATUS, opts.verify_status ? ON : OFF);
++        //curl_easy_setopt(curl, CURLOPT_SSL_VERIFYSTATUS, opts.verify_status ? ON : OFF);
+         curl_easy_setopt(curl, CURLOPT_SSLVERSION,
+                          opts.ssl_version
+ #if SUPPORT_MAX_TLS_VERSION
