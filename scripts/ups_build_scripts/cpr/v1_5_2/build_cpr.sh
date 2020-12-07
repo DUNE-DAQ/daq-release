@@ -139,11 +139,12 @@ setup cmake v3_17_2
 
 CC=${cc} \
 CXX=${cxx}  \
-cmake ${extra_command} -DCMAKE_BUILD_TYPE=Release \
+cmake ${extra_command} \
 -DBUILD_CPR_TESTS=OFF \
 -DUSE_SYSTEM_CURL=ON \
 -DCMAKE_INSTALL_PREFIX=${pkgdir} \
 ${pkgdir}/${package}-${pkgdotver}
+#-DCMAKE_BUILD_TYPE=Release \
 
 make -j $ncore || ssi_die "Failed in 'make'"
 
@@ -165,7 +166,7 @@ if [ -d ${pkgdir}/bin/${package} ]; then
 fi
 
 pushd ${pkgdir}/lib64
-for i in `find . -type l`; do j=`echo $i|grep -o ".*.so" `; rm -f $i; ln -s $j.2.6.4 $i; done
+cp ${pkgdir}/${package}-${pkgdotver}/cpr-config.cmake .
 popd
 
 

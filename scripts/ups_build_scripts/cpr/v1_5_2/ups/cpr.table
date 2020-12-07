@@ -38,12 +38,12 @@ Common:
 	  execute( true, NO_UPS_ENV )
       endif ( sh -c 'for dd in include;do [ -d ${CPR_BASE}/$dd ] && exit;done;exit 1' )
       # add the lib directory to LD_LIBRARY_PATH if it exists
-      envSet (CPR_LIB_DIR, ${UPS_PROD_DIR}/${CPR_FQ}/lib)
-      envSet (CPR_LIB, ${UPS_PROD_DIR}/${CPR_FQ}/lib)
+      envSet (CPR_LIB_DIR, ${UPS_PROD_DIR}/${CPR_FQ}/lib64)
+      envSet (CPR_LIB, ${UPS_PROD_DIR}/${CPR_FQ}/lib64)
       if ( test `uname` = "Darwin" )
-	envPrepend(DYLD_LIBRARY_PATH, ${CPR_BASE}/lib)
+	envPrepend(DYLD_LIBRARY_PATH, ${CPR_BASE}/lib64)
       else()
-	envPrepend(LD_LIBRARY_PATH, ${CPR_BASE}/lib)
+	envPrepend(LD_LIBRARY_PATH, ${CPR_BASE}/lib64)
       endif ( test `uname` = "Darwin" )
       # add the bin directory to the path if it exists
       if    ( sh -c 'for dd in bin;do [ -d ${CPR_BASE}/$dd ] && exit;done;exit 1' )
@@ -51,6 +51,7 @@ Common:
       else ()
           execute( true, NO_UPS_ENV )
       endif ( sh -c 'for dd in bin;do [ -d ${CPR_BASE}/$dd ] && exit;done;exit 1' )
+      envPrepend(CMAKE_PREFIX_PATH, ${CPR_FQ_DIR})
       # requirements
 
 End:
