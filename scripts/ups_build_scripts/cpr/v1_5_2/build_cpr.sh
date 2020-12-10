@@ -166,7 +166,8 @@ if [ -d ${pkgdir}/bin/${package} ]; then
 fi
 
 pushd ${pkgdir}/lib64
-cp ${pkgdir}/${package}-${pkgdotver}/cpr-config.cmake .
+mkdir -l cmake/cpr
+cp ${pkgdir}/${package}-${pkgdotver}/cpr-config.cmake cmake/cpr/
 popd
 
 
