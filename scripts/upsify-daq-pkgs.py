@@ -7,6 +7,7 @@ import subprocess
 import getpass
 import datetime
 import argparse
+import os.path as path
 
 
 def check_output(cmd):
@@ -15,9 +16,11 @@ def check_output(cmd):
     out = irun.communicate()
     rc = irun.returncode
     if rc != 0:
-        print('Error: command "{}" has exit non-zero exit status,\
-please check!'.format(cmd))
-        print('Output from the commnd: {}'.format(out))
+        print('\nERROR: command "{}" has exit non-zero exit status,\
+please check!\n'.format(cmd))
+        print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
+        print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+
         exit(10)
     return out
 
@@ -240,10 +243,10 @@ if __name__ == "__main__":
                         help="flag for the 'debug' qualifer ('prof' if unset).")
 
     args = parser.parse_args()
-    workdir = args.work_dir
+    workdir = path.abspath(args.work_dir)
     install_dir = os.path.join(workdir, "install")
     source_dir = os.path.join(workdir, "sourcecode")
-    dest_dir = args.tarball_dir
+    dest_dir = path.abspath(args.tarball_dir)
     equal = args.equalifier
     if args.debug:
         dqual = "debug"
