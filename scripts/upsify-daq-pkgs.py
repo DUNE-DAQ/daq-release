@@ -7,7 +7,6 @@ import subprocess
 import getpass
 import datetime
 import argparse
-import os.path as path
 
 
 def check_output(cmd):
@@ -279,10 +278,10 @@ if __name__ == "__main__":
                         help="flag for the 'debug' qualifer ('prof' if unset).")
 
     args = parser.parse_args()
-    workdir = path.abspath(args.work_dir)
+    workdir = os.path.abspath(args.work_dir)
     install_dir = os.path.join(workdir, "install")
     source_dir = os.path.join(workdir, "sourcecode")
-    dest_dir = path.abspath(args.tarball_dir)
+    dest_dir = os.path.abspath(args.tarball_dir)
     equal = args.equalifier
     if args.debug:
         dqual = "debug"
