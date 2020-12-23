@@ -172,6 +172,7 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
         git_version = vdot_ver # branch name, or commit hash
     commit_hash = get_commit_hash(source_dir)
     version = git_version if git_version else commit_hash
+    dot_ver = dot_ver if git_version else commit_hash
     tmp_dir = tempfile.mkdtemp()
     renamed = False
     orig_pkg_name = pkg_name
