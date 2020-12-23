@@ -61,8 +61,8 @@ shift $((OPTIND -1))
 
 if [[ "$ups_list_file" == "NOTSET" ]]; then
   echo "[Error]: UPS list file must be speficied with option '-f'."
-  echo "[Error]: If the dunedaq development environment has been set, you"
-  echo "[Error]: can create this file by 'ups active | tail -n +2 > ups_list_file.txt'"
+  echo "[Error]: Example can be found in the 'daq-release' repo."
+  echo "[Error]: E.g. daq-release/configs/dunedaq-v2.0.0.release"
   echo "Exit now..."
   exit 2
 else
