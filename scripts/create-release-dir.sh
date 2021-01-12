@@ -18,6 +18,7 @@ function create_products_link {
     mkdir ${prod_name}
     pushd ${prod_name}
     ln -s ../../$rel_prd_path/${prod_name}/${prod_version} .
+    ln -s ../../$rel_prd_path/${prod_name}/${prod_version}.version .
     popd
   done
 }
@@ -100,6 +101,7 @@ mkdir ups
 pushd ups
 ups_string=(${dune_ups[0]})
 ln -s ../../$rel_products_dir/${ups_string[0]}/${ups_string[1]} .
+ln -s ../../$rel_products_dir/${ups_string[0]}/${ups_string[1]}.version .
 popd # ups
 
 ln -s ${ups_string[0]}/${ups_string[1]}/Linux64bit+3.10-2.17/ups/setup
