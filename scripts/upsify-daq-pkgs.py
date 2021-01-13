@@ -81,7 +81,11 @@ Qualifiers = "{equal}:{dqual}"
 
 
   Action = GetFQDir
-    envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/slf7.x86_64.{equal}.{dqual} )
+    if ( printenv CET_SUBDIR > /dev/null )
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/${{CET_SUBDIR}}.{equal}.{dqual} )
+    else()
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/`get-directory-name subdir`.{equal}.{dqual} )
+    endif ( printenv CET_SUBDIR > /dev/null )
     fileTest( ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}, -d, "${{${{UPS_PROD_NAME_UC}}_FQ_DIR}} directory not found: SETUP ABORTED")
 
   #Action = GetProducts
