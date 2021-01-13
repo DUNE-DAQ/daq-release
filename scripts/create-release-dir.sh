@@ -18,6 +18,7 @@ function create_products_link {
     prod_version=${iprd_arr[1]}
     mkdir ${prod_name}
     pushd ${prod_name}
+    [[ -d "${products_dir}/${prod_name}/current.chain" ]] && ln -s ../../$rel_prd_path/${prod_name}/current.chain .
     ln -s ../../$rel_prd_path/${prod_name}/${prod_version} .
     ln -s ../../$rel_prd_path/${prod_name}/${prod_version}.version .
     popd
