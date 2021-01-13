@@ -131,7 +131,7 @@ Common:
     if has_share:
         table_content +=f"""
     envSet(${{UPS_PROD_NAME_UC}}_SHARE, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/share)
-    pathPrepend(DAQ_SHARE_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/share )
+    pathPrepend(DUNEDAQ_SHARE_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/share )
 """
 
     if has_python:
@@ -168,7 +168,7 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", p
     if not os.path.exists(install_dir):
         print(f"Error: install directory {install_dir} does not exist!")
         exit(11)
-    if  not os.path.exists(source_dir):
+    if not os.path.exists(source_dir):
         print(f"Error: sourcecode directoy {source_dir} does not exist!")
         exit(12)
     if not os.path.exists(dest_dir):
