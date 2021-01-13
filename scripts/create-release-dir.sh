@@ -1,7 +1,7 @@
 #!/bin/bash
 
 products_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products"
-release_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases-tmp"
+release_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases"
 release_name="dunedaq-v2.0.0"
 #release_name="dunedaq-develop"
 tarball="cvmfs_${release_name}.tar.gz"
