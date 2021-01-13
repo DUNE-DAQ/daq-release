@@ -6,6 +6,7 @@ release_name="dunedaq-v2.0.0"
 #release_name="dunedaq-develop"
 tarball="cvmfs_${release_name}.tar.gz"
 ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release
+release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
 function create_products_link {
   prd_list_name=$1[@]
@@ -27,6 +28,7 @@ while getopts ":f:P:R:r:t:h" opt; do
   case ${opt} in
     f )
        ups_list_file=$OPTARG
+       release_config_dir=$OPTARG
        ;;
     P )
        products_dir=$OPTARG
@@ -43,7 +45,7 @@ while getopts ":f:P:R:r:t:h" opt; do
     h )
       echo "Usage:"
       echo "    create-release-dir.sh  -h Display this help message."
-      echo "    <-f> <ups_list_file>"
+      echo "    <-f> <release_config_dir>"
       echo "    [-P] <products_dir>"
       echo "    [-R] <release_dir>"
       echo "    [-r] <release_name>"
@@ -60,14 +62,55 @@ done
 
 shift $((OPTIND -1))
 
-if [[ "$ups_list_file" == "NOTSET" ]]; then
+if [[ "$release_config_dir" == "NOTSET" ]]; then
   echo "[Error]: UPS list file must be speficied with option '-f'."
   echo "[Error]: Example can be found in the 'daq-release' repo."
   echo "[Error]: E.g. daq-release/configs/dunedaq-v2.0.0.release"
   echo "Exit now..."
   exit 2
+fi
+
+if [ ! -f "$release_config_dir/release_manifest" ]; then
+  echo "[Error]: UPS list file must exist in the release config directory."
+  echo "[Error]: Example can be found in the 'daq-release' repo."
+  echo "[Error]: E.g. daq-release/configs/dunedaq-v2.0.0/release_manifest"
+  echo "Exit now..."
+  exit 3
 else
-  source $ups_list_file
+  source $release_config_dir/release_manifest
+fi
+
+tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
+mkdir $tmp_dir/$release_name
+
+if [ ! -f "$release_config_dir/dbt-build-order.cmake" ]; then
+  echo "[Error]: dbt-build-order.cmake is missing."
+  echo "[Error]: Example can be found in the 'daq-release' repo"
+  echo "[Error]: under daq-release/configs/dunedaq-v2.0.0/"
+  echo "Exit now..."
+  exit 3
+else
+  cp $release_config_dir/dbt-build-order.cmake $tmp_dir/$release_name
+fi
+
+if [ ! -f "$release_config_dir/dbt-settings.sh" ]; then
+  echo "[Error]: dbt-settings.sh is missing."
+  echo "[Error]: Example can be found in the 'daq-release' repo"
+  echo "[Error]: under daq-release/configs/dunedaq-v2.0.0/"
+  echo "Exit now..."
+  exit 3
+else
+  cp $release_config_dir/dbt-settings.sh $tmp_dir/$release_name
+fi
+
+if [ ! -f "$release_config_dir/pyvenv_requirements.txt" ]; then
+  echo "[Error]: pyvenv_requirements.txt is missing."
+  echo "[Error]: Example can be found in the 'daq-release' repo"
+  echo "[Error]: under daq-release/configs/dunedaq-v2.0.0/"
+  echo "Exit now..."
+  exit 3
+else
+  cp $release_config_dir/pyvenv_requirements.txt $tmp_dir/$release_name
 fi
 
 if ! [ -w $(dirname "${tarball}") ]; then
@@ -81,9 +124,6 @@ echo "[Info]: Release directory: ${release_dir}"
 echo "[Info]: Release name: ${release_name}"
 
 
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-mkdir $tmp_dir/$release_name
 pushd $tmp_dir/$release_name
 
 ## Step 1. get `dbt-build-order.cmake, dbt-settings.sh, dunedaq_area.sh and pyvenv_requirements.sh from daq-builtools repo`;
