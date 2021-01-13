@@ -41,7 +41,9 @@ def get_commit_hash(cdir):
     return commit_hash
 
 
-def make_ups_version_file(pkg, ver, chash, equal="e19", dqual="prof"):
+def make_ups_version_file(pkg, ver, chash, equal="e19", dqual="prof", cver="c7"):
+    kvers = {'c7':'Linux64bit+3.10-2.17', 'c8':'Linux64bit+4.18-2.28'}
+    kver = kvers[cver]
     version_content = """FILE = version
 PRODUCT = {pkg}
 VERSION = {ver}
@@ -50,7 +52,7 @@ VERSION = {ver}
 
 #*************************************************
 #
-FLAVOR = Linux64bit+3.10-2.17
+FLAVOR = {kver}
 QUALIFIERS = "{equal}:{dqual}"
 DECLARER = {user}
 DECLARED = {tnow}
@@ -58,7 +60,7 @@ MODIFIER = {user}
 MODIFIED = {tnow} CDT
 PROD_DIR = {pkg}/{ver}
 UPS_DIR = ups
-TABLE_FILE = {pkg}.table""".format(pkg=pkg, ver=ver, equal=equal, dqual=dqual, user=getpass.getuser(),
+TABLE_FILE = {pkg}.table""".format(pkg=pkg, kver=kver, ver=ver, equal=equal, dqual=dqual, user=getpass.getuser(),
                                    chash= chash, tnow=datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
     return version_content
 
@@ -79,7 +81,11 @@ Qualifiers = "{equal}:{dqual}"
 
 
   Action = GetFQDir
-    envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/slf7.x86_64.{equal}.{dqual} )
+    if ( printenv CET_SUBDIR > /dev/null )
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/${{CET_SUBDIR}}.{equal}.{dqual} )
+    else()
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/`get-directory-name subdir`.{equal}.{dqual} )
+    endif ( printenv CET_SUBDIR > /dev/null )
     fileTest( ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}, -d, "${{${{UPS_PROD_NAME_UC}}_FQ_DIR}} directory not found: SETUP ABORTED")
 
   #Action = GetProducts
@@ -143,12 +149,18 @@ End:
     return table_content
 
 
-def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name=""):
+def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", pkg_name=""):
+    kvers = {'c7':'Linux64bit+3.10-2.17', 'c8':'Linux64bit+4.18-2.28'}
+    tarvers = {'c7':'sl7', 'c8':'c8'}
+    kver = kvers[cver]
+    tarver = tarvers[cver]
     flavor = f"slf7.x86_64.{equal}.{dqual}"
+    if cver == 'c8':
+        flavor = f"slf8.x86_64.{equal}.{dqual}"
     if pkg_name == "":
         pkg_list = [f.name for f in os.scandir(install_dir) if f.is_dir()]
         for ipkg in pkg_list:
-            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, ipkg)
+            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver, ipkg)
         return
     else:
         install_dir = os.path.join(install_dir, pkg_name)
@@ -241,12 +253,12 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
     # preprae version dir and version file
     ups_version_dir = os.path.join(ups_dir, f"{version}.version")
     os.makedirs(ups_version_dir)
-    with open("{}/Linux64bit+3.10-2.17_{}_{}".format(ups_version_dir, equal, dqual), 'w') as vf:
-        vcontent = make_ups_version_file(pkg_name, version, commit_hash, equal, dqual)
+    with open("{}/{}_{}_{}".format(ups_version_dir, kver, equal, dqual), 'w') as vf:
+        vcontent = make_ups_version_file(pkg_name, version, commit_hash, equal, dqual, cver)
         vf.write(vcontent)
 
     # tar up product dir.
-    tar_name = "{}-{}-sl7-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, equal, dqual)
+    tar_name = "{}-{}-{}-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, tarver, equal, dqual)
     print(tar_name)
     tar_cmd = "cd {} && tar -cvjSf {} {} && mv {} {}".format(
         tmp_dir, tar_name, pkg_name, tar_name, dest_dir)
@@ -275,6 +287,8 @@ if __name__ == "__main__":
                         help="Name of package to be 'UPSified'; if not supplied, all currently installed packages will be 'UPSified';")
     parser.add_argument('-e', '--equalifier', default='e19',
                         help="e qualifier;")
+    parser.add_argument('-c', '--centos-version', default='c7', choices=['c7','c8'],
+                        help="CentOS version;")
     parser.add_argument('-d', '--debug', action='store_true',
                         help="flag for the 'debug' qualifer ('prof' if unset).")
 
@@ -290,6 +304,6 @@ if __name__ == "__main__":
         dqual = "prof"
 
     if args.package_name != None:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.package_name)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version, args.package_name)
     else:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version)
