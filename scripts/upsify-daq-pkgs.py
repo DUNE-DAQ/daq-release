@@ -15,9 +15,11 @@ def check_output(cmd):
     out = irun.communicate()
     rc = irun.returncode
     if rc != 0:
-        print('Error: command "{}" has exit non-zero exit status,\
-please check!'.format(cmd))
-        print('Output from the commnd: {}'.format(out))
+        print('\nERROR: command "{}" has exit non-zero exit status,\
+please check!\n'.format(cmd))
+        print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
+        print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+
         exit(10)
     return out
 
@@ -39,7 +41,9 @@ def get_commit_hash(cdir):
     return commit_hash
 
 
-def make_ups_version_file(pkg, ver, chash, equal="e19", dqual="prof"):
+def make_ups_version_file(pkg, ver, chash, equal="e19", dqual="prof", cver="c7"):
+    kvers = {'c7':'Linux64bit+3.10-2.17', 'c8':'Linux64bit+4.18-2.28'}
+    kver = kvers[cver]
     version_content = """FILE = version
 PRODUCT = {pkg}
 VERSION = {ver}
@@ -48,7 +52,7 @@ VERSION = {ver}
 
 #*************************************************
 #
-FLAVOR = Linux64bit+3.10-2.17
+FLAVOR = {kver}
 QUALIFIERS = "{equal}:{dqual}"
 DECLARER = {user}
 DECLARED = {tnow}
@@ -56,15 +60,15 @@ MODIFIER = {user}
 MODIFIED = {tnow} CDT
 PROD_DIR = {pkg}/{ver}
 UPS_DIR = ups
-TABLE_FILE = {pkg}.table""".format(pkg=pkg, ver=ver, equal=equal, dqual=dqual, user=getpass.getuser(),
+TABLE_FILE = {pkg}.table""".format(pkg=pkg, kver=kver, ver=ver, equal=equal, dqual=dqual, user=getpass.getuser(),
                                    chash= chash, tnow=datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
     return version_content
 
 
 def make_ups_table_file(pkg, ver, equal="e19", dqual="prof", has_inc=True,
-                        has_lib=True, has_bin=False):
-    print("making ups table file for {} has_lib {} has_bin {} has_inc {}".format(pkg, has_lib, has_bin, has_inc))
-    table_content="""File    = table
+                        has_lib=True, has_bin=False, has_share=False, has_python=False, renamed=False):
+    print(f"making ups table file for {pkg} has_lib={has_lib} has_bin={has_bin} has_inc={has_inc} has_share={has_share} has_python={has_python}")
+    table_content=f"""File    = table
 Product = {pkg}
 
 #*************************************************
@@ -77,7 +81,11 @@ Qualifiers = "{equal}:{dqual}"
 
 
   Action = GetFQDir
-    envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/slf7.x86_64.{equal}.{dqual} )
+    if ( printenv CET_SUBDIR > /dev/null )
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/${{CET_SUBDIR}}.{equal}.{dqual} )
+    else()
+      envSet( ${{UPS_PROD_NAME_UC}}_FQ_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/`get-directory-name subdir`.{equal}.{dqual} )
+    endif ( printenv CET_SUBDIR > /dev/null )
     fileTest( ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}, -d, "${{${{UPS_PROD_NAME_UC}}_FQ_DIR}} directory not found: SETUP ABORTED")
 
   #Action = GetProducts
@@ -92,75 +100,105 @@ Common:
     exeActionRequired(GetFQDir)
 
     #exeActionRequired(GetProducts)
-""".format(pkg=pkg, equal=equal, dqual=dqual, ver=ver)
+"""
+
+    if renamed:
+        pkg = pkg.replace('_','-')
     if has_lib:
-        table_content +="""
+        table_content +=f"""
     # lib dir
     envSet(${{UPS_PROD_NAME_UC}}_LIB, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/lib64)
     pathPrepend(LD_LIBRARY_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
     pathPrepend(CET_PLUGIN_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
     pathPrepend(CMAKE_PREFIX_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}})
     pathPrepend(PKG_CONFIG_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}})
-""".format(pkg=pkg)
+"""
+
     if has_inc:
-        table_content +="""
+        table_content +=f"""
     # include dir
-    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{UPS_PROD_DIR}}/{pkg}/include)
-""".format(pkg=pkg)
+    envSet(${{UPS_PROD_NAME_UC}}_INC, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/include)
+"""
 
     if has_bin:
-        table_content +="""
+        table_content +=f"""
     # add the bin directory to the path
     pathPrepend(PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/bin )
     # dropit -E removes non-existent directories
     Execute(dropit -E, NO_UPS_ENV, PATH)
-""".format(pkg=pkg)
+"""
+
+    if has_share:
+        table_content +=f"""
+    envSet(${{UPS_PROD_NAME_UC}}_SHARE, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/share)
+    pathPrepend(DUNEDAQ_SHARE_PATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/share )
+"""
+
+    if has_python:
+        table_content +=f"""
+    pathPrepend(PYTHONPATH, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/lib64/python )
+"""
+
+
     table_content += """
 End:
 # End Group definition
 #*************************************************
     """
+
     return table_content
 
 
-def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name=""):
-    flavor = "slf7.x86_64.{}.{}".format(equal, dqual)
+def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", pkg_name=""):
+    kvers = {'c7':'Linux64bit+3.10-2.17', 'c8':'Linux64bit+4.18-2.28'}
+    tarvers = {'c7':'sl7', 'c8':'c8'}
+    kver = kvers[cver]
+    tarver = tarvers[cver]
+    flavor = f"slf7.x86_64.{equal}.{dqual}"
+    if cver == 'c8':
+        flavor = f"slf8.x86_64.{equal}.{dqual}"
     if pkg_name == "":
         pkg_list = [f.name for f in os.scandir(install_dir) if f.is_dir()]
         for ipkg in pkg_list:
-            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, ipkg)
+            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver, ipkg)
         return
     else:
         install_dir = os.path.join(install_dir, pkg_name)
         source_dir = os.path.join(source_dir, pkg_name)
     if not os.path.exists(install_dir):
-        print("Error: install directory {} does not exist!".format(install_dir))
+        print(f"Error: install directory {install_dir} does not exist!")
         exit(11)
-    if  not os.path.exists(source_dir):
-        print("Error: sourcecode directoy {} does not exist!".format(source_dir))
+    if not os.path.exists(source_dir):
+        print(f"Error: sourcecode directoy {source_dir} does not exist!")
         exit(12)
     if not os.path.exists(dest_dir):
-        print("Warning: output tarball directory {} does not exist, creating now...".format(dest_dir))
+        print(f"Warning: output tarball directory {dest_dir} does not exist, creating now...")
         os.makedirs(dest_dir)
     vdot_ver = get_version(source_dir)
     dot_ver = vdot_ver
     if '.' in vdot_ver:
-        version = vdot_ver.replace('.','_')
+        git_version = vdot_ver.replace('.','_')
         if dot_ver.startswith('v'):
             dot_ver = dot_ver[1:]
     else:
-        version = vdot_ver # branch name, or commit hash
+        git_version = vdot_ver # branch name, or commit hash
     commit_hash = get_commit_hash(source_dir)
+    version = git_version if git_version else commit_hash
+    dot_ver = dot_ver if git_version else commit_hash
     tmp_dir = tempfile.mkdtemp()
+    renamed = False
     orig_pkg_name = pkg_name
-    pkg_name = pkg_name.replace('-','_')
+    if '-' in pkg_name:
+        pkg_name = pkg_name.replace('-','_')
+        renamed = True
     ups_dir = os.path.join(tmp_dir, pkg_name)
     flavor_dir = os.path.join(ups_dir, version, flavor)
     flavor_install_dir = os.path.join(ups_dir, version, flavor, orig_pkg_name)
     print("Info -- creating UPS package: ", pkg_name)
-    print("Info -- version: ", version)
+    print("Info -- git version: ", git_version)
     print("Info -- commit hash: ", commit_hash)
     print("Info -- flavor: ", flavor)
+    print("Info -- ups version: ", version)
 
     # prepare flavor subdir
     os.makedirs(flavor_dir)
@@ -175,34 +213,52 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, pkg_name="")
     has_include = False
     has_bin = False
     has_lib = False
-    print("tesing include dir {}".format(os.path.exists(os.path.join(install_dir, "include"))))
+    has_share = False
+    has_python = False
+
+    print("testing include dir {}".format(os.path.exists(os.path.join(install_dir, "include"))))
     if os.path.exists(os.path.join(install_dir, "include")):
         has_include = True
     else:
         has_include = False
-    print("tesing lib dir {}".format(os.path.exists(os.path.join(install_dir, "lib64"))))
+
+    print("testing lib dir {}".format(os.path.exists(os.path.join(install_dir, "lib64"))))
     if os.path.exists(os.path.join(install_dir, "lib64")):
         has_lib = True
     else:
         has_lib = False
-    print("tesing bin dir {}".format(os.path.exists(os.path.join(install_dir, "bin"))))
+
+    print("testing bin dir {}".format(os.path.exists(os.path.join(install_dir, "bin"))))
     if os.path.exists(os.path.join(install_dir, "bin")):
         has_bin = True
     else:
         has_bin = False
+
+    print("testing share dir {}".format(os.path.exists(os.path.join(install_dir, "share"))))
+    if os.path.exists(os.path.join(install_dir, "share")):
+        has_share = True
+    else:
+        has_share = False
+
+    print("testing python dir {}".format(os.path.exists(os.path.join(install_dir, "python"))))
+    if os.path.exists(os.path.join(install_dir, "lib64/python")):
+        has_python = True
+    else:
+        has_python = False
+
     with open("{}/{}.table".format(ups_table_dir, pkg_name), 'w') as tf:
-        tcontent = make_ups_table_file(pkg_name, version, equal, dqual, has_lib, has_lib, has_bin)
+        tcontent = make_ups_table_file(pkg_name, version, equal, dqual, has_lib, has_lib, has_bin, has_share, has_python, renamed)
         tf.write(tcontent)
 
     # preprae version dir and version file
-    ups_version_dir = os.path.join(ups_dir, "{}.version".format(version))
+    ups_version_dir = os.path.join(ups_dir, f"{version}.version")
     os.makedirs(ups_version_dir)
-    with open("{}/Linux64bit+3.10-2.17_{}_{}".format(ups_version_dir, equal, dqual), 'w') as vf:
-        vcontent = make_ups_version_file(pkg_name, version, commit_hash, equal, dqual)
+    with open("{}/{}_{}_{}".format(ups_version_dir, kver, equal, dqual), 'w') as vf:
+        vcontent = make_ups_version_file(pkg_name, version, commit_hash, equal, dqual, cver)
         vf.write(vcontent)
 
     # tar up product dir.
-    tar_name = "{}-{}-sl7-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, equal, dqual)
+    tar_name = "{}-{}-{}-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, tarver, equal, dqual)
     print(tar_name)
     tar_cmd = "cd {} && tar -cvjSf {} {} && mv {} {}".format(
         tmp_dir, tar_name, pkg_name, tar_name, dest_dir)
@@ -231,14 +287,16 @@ if __name__ == "__main__":
                         help="Name of package to be 'UPSified'; if not supplied, all currently installed packages will be 'UPSified';")
     parser.add_argument('-e', '--equalifier', default='e19',
                         help="e qualifier;")
+    parser.add_argument('-c', '--centos-version', default='c7', choices=['c7','c8'],
+                        help="CentOS version;")
     parser.add_argument('-d', '--debug', action='store_true',
                         help="flag for the 'debug' qualifer ('prof' if unset).")
 
     args = parser.parse_args()
-    workdir = args.work_dir
+    workdir = os.path.abspath(args.work_dir)
     install_dir = os.path.join(workdir, "install")
     source_dir = os.path.join(workdir, "sourcecode")
-    dest_dir = args.tarball_dir
+    dest_dir = os.path.abspath(args.tarball_dir)
     equal = args.equalifier
     if args.debug:
         dqual = "debug"
@@ -246,6 +304,6 @@ if __name__ == "__main__":
         dqual = "prof"
 
     if args.package_name != None:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.package_name)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version, args.package_name)
     else:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version)
