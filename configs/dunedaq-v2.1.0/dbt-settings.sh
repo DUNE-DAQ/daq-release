@@ -1,6 +1,6 @@
 dune_products_dirs=(
-    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.0.1/externals"
-    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.0.1/packages"
+    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.1.0/externals"
+    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.1.0/packages"
     #"/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev" 
 )
 
@@ -20,7 +20,7 @@ dune_products=(
     "restcmd v1_0_2 e19:prof"
     # Note: "daq_cmake" with underscore is the UPS product name.
     # One can use either "daq-cmake" or "daq_cmake" in this file.
-    "daq-cmake v1_2_0 e19:prof"
+    "daq-cmake v1_2_1 e19:prof"
     "appfwk v2_0_1 e19:prof"
     "listrev v2_0_1 e19:prof"
 )
