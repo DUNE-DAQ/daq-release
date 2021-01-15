@@ -1,0 +1,34 @@
+File=Table
+Product=timing_board_software
+
+#*************************************************
+# Starting Group definition
+Group:
+
+Flavor=ANY
+Qualifiers=e19:prof
+
+  Action=DefineFQ
+    envSet (TIMING_BOARD_SOFTWARE_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-prof)
+
+  Action = ExtraSetup
+    setupRequired( uhal v2_6_4 -q +e19:+prof )
+    setupRequired( python v3_8_3b )
+
+
+Common:
+   Action=setup
+      setupenv()
+      proddir()
+      ExeActionRequired(DefineFQ)
+      envSet(TIMING_BOARD_SOFTWARE, ${UPS_PROD_DIR})
+      envSet(TIMING_BOARD_SOFTWARE_VERSION, ${UPS_PROD_VERSION})
+      # add the lib directory to LD_LIBRARY_PATH
+      envSet(TIMING_BOARD_SOFTWARE_LIB, ${TIMING_BOARD_SOFTWARE_FQ_DIR}/lib)
+      envSet(TIMING_BOARD_SOFTWARE_INC, ${UPS_PROD_DIR}/include)
+      envPrepend(LD_LIBRARY_PATH, ${TIMING_BOARD_SOFTWARE_FQ_DIR}/lib)
+      # requirements
+      exeActionRequired(ExtraSetup)
+End:
+# End Group definition
+#*************************************************
