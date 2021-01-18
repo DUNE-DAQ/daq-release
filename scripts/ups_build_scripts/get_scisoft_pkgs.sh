@@ -67,7 +67,7 @@ TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_15_09/TRACE-3.15.09-sl7
 gdb https://scisoft.fnal.gov/scisoft/packages/gdb/v9_2/gdb-9.2-sl7-x86_64.tar.bz2
 zmq https://scisoft.fnal.gov/scisoft/packages/zmq/v4_3_1/zmq-4.3.1-sl7-x86_64-e19.tar.bz2
 )
-
+if   [[ $COMP == 8.2.0 ]]; then
 PKGS_DEBUG=(
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_70_0/boost-1.70.0-sl7-x86_64-e19-debug.tar.bz2
 cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_10_00/cetlib-3.10.00-slf7-x86_64-e19-debug.tar.bz2
@@ -87,7 +87,29 @@ hdf5 https://scisoft.fnal.gov/scisoft/packages/hdf5/v1_12_0a/hdf5-1.12.0a-sl7-x8
 hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_04_01/hep_concurrency-1.04.01-slf7-x86_64-e19-prof.tar.bz2
 tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2019_3/tbb-2019.3-sl7-x86_64-e19-prof.tar.bz2
 )
+fi
 
+if   [[ $COMP == 9.3.0 ]]; then
+PKGS_DEBUG=(
+boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e20-debug.tar.bz2
+cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_11_01/cetlib-3.11.01-slf7-x86_64-e20-debug.tar.bz2
+cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_05_00/cetlib_except-1.05.00-slf7-x86_64-e20-debug.tar.bz2
+cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_15_1/cppunit-1.15.1-sl7-x86_64-e20-debug.tar.bz2
+hdf5 https://scisoft.fnal.gov/scisoft/packages/hdf5/v1_12_0a/hdf5-1.12.0a-sl7-x86_64-e20-debug.tar.bz2
+hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_05_00/hep_concurrency-1.05.00-slf7-x86_64-e20-debug.tar.bz2
+tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2020_2a/tbb-2020.2a-sl7-x86_64-e20-debug.tar.bz2
+)
+
+PKGS_PROD=(
+boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e20-prof.tar.bz2
+cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_11_01/cetlib-3.11.01-slf7-x86_64-e20-prof.tar.bz2
+cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_05_00/cetlib_except-1.05.00-slf7-x86_64-e20-prof.tar.bz2
+cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_15_1/cppunit-1.15.1-sl7-x86_64-e20-prof.tar.bz2
+hdf5 https://scisoft.fnal.gov/scisoft/packages/hdf5/v1_12_0a/hdf5-1.12.0a-sl7-x86_64-e20-prof.tar.bz2
+hep_concurrency https://scisoft.fnal.gov/scisoft/packages/hep_concurrency/v1_05_00/hep_concurrency-1.05.00-slf7-x86_64-e20-prof.tar.bz2
+tbb https://scisoft.fnal.gov/scisoft/packages/tbb/v2020_2a/tbb-2020.2a-sl7-x86_64-e20-prof.tar.bz2
+)
+fi
 
 PKGS_ALL=(
 ${PKGS_MINIMAL[@]}
