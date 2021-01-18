@@ -17,6 +17,8 @@ dune_products=(
     "nlohmann_json v3_9_0b e19:prof"
     "ninja v1_10_0"
     "pistache v2020_10_07 e19:prof"
+    "highfive v2_2_2 e19:prof"
+
     "cmdlib v1_0_2 e19:prof"
     "restcmd v1_0_2 e19:prof"
     # Note: "daq_cmake" with underscore is the UPS product name.
