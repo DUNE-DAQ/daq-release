@@ -6,7 +6,7 @@ We are following the [shared repository model](https://docs.github.com/en/github
 
 We use [two access roles](https://home.fnal.gov/~dingpf/repo_access_role.png) for each repo.
 
-* Maintain: one or two developers have the "Maintianer" role to each repository;
+* Maintain: one or two developers have the "Maintainer" role to each repository;
 * Write: a GitHub team of developers.
 
 Teams are entities of the DUNE-DAQ project, thus they can be used across multiple repos.
@@ -33,7 +33,7 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
 
 ## Development workflow (feature branches)
 
-Developer is recommended to follow the follwoing development workflow regardless of the amount of committed code change, e.g. either making a quick bugfix or adding a major feature. The workflow contais the following steps:
+Developer is recommended to follow the following development workflow regardless of the amount of committed code change, e.g. either making a quick bugfix or adding a major feature. The workflow contains the following steps:
 
 1. Create a GitHub issue in the repo describe the bugfix or proposed feature; [optional for non-significant bugfixes]
 2. Create a topic branch; (`git checkout develop; git checkout -b dingpf/issue_12_feature_dev_demo`)
