@@ -16,9 +16,10 @@ dune_products=(
     "ninja v1_10_0"
     "pistache v2020_10_07 e19:prof"
     "highfive v2_2_2b e19:prof"
+    "zmq v4_3_1b e19"
     # Note: "daq_cmake" with underscore is the UPS product name.
     # One can use either "daq-cmake" or "daq_cmake" in this file.
-    "daq-cmake v1_2_2 e19:prof"
+    "daq-cmake v1_2_3 e19:prof"
     "cmdlib v1_0_2b e19:prof"
     "restcmd v1_0_2b e19:prof"
     "appfwk v2_1_0 e19:prof"
@@ -29,6 +30,7 @@ dune_products=(
     "trigemu v1_0_0 e19:prof"
     "readout v1_0_1 e19:prof"
     "minidaqapp v1_2_0 e19:prof"
+    "ipm v1_1_0 e19:prof"
 )
 
 dune_python_version="v3_8_3b"
