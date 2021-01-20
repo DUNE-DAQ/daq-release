@@ -53,7 +53,7 @@ Package maintainers are the primary developers who make version tags of a packag
 2. Create a release branch; (`git checkout -b release-v2.2.0 develop`)
 3. Make necessary changes such as bump versions in `CMakeLists.txt` in the release branch, commit and push;
 4. Optional: (especially if protection rules are in place for the `master` branch)create a pull request of the release branch against both the `master` branch;
-5. If not using step 4, merge the release branch to `master` (`git checkout master; git merge --no-ff release-v2.2.0 # always use the --no-ff option`), otherwise review&merge the pull requests (perferably done by other developers, protection rules can be set to enforce reviewing rules);
+5. If not using step 4, merge the release branch to `master` (`git checkout master; git merge --no-ff release-v2.2.0 # always use the --no-ff option`), otherwise review&merge the pull requests (preferably done by other developers, protection rules can be set to enforce reviewing rules);
 6. Tag the master branch; (`git tag -a v2.2.0 # use annotated tag`)
 7. Merge the release branch to `develop` (if protection rules are in place for `develop`, one may need to create another pull request in this case); (`git checkout develop; git merge --no-ff release-v2.2.0`)
 8. Optional: delete the release branch.
