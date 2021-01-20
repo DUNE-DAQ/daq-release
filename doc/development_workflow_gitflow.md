@@ -29,7 +29,7 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
   * release branches
     * branch off from `develop`,
     * merge back to `develop` and `master`
-* Protected branch settings: protected branches are optional *for the moment*, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
+* Protected branch settings: protected branches are optional **for the moment**, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
 
 ## Tags of DAQ repositories
 
@@ -74,8 +74,8 @@ Package maintainers are the primary developers who make version tags of a packag
 
 * Using `#Issue_Number` in your commit message will make GitHub add links to the commit on the issue page;
 * Use `user/repo#issue_number` to link issues in a different repo, e.g. `DUNE-DAQ/daq-cmake#1`;
-* Delete a git tag: `git tag -d v1.0.1`;
-* Push the deletion of a tag to GitHub: `git push --delete origin v1.0.1`;
+* **Use with caution** Delete a git tag: `git tag -d v1.0.1` **Do not delete any tag which might be used by others**;
+* Push the deletion of a tag to GitHub: `git push --delete origin v1.0.1` **Do not delete any tag which might be used by others**;
 * Delete a remote branch: `git push origin --delete feature/branch_name` (not recommended; recommend to delete branches via GitHub web UI);
 * List all tags in GitHub repo: `git ls-remote --tags origin`;
 * Fetch all branches and tags: `git fetch --all --tags`.
