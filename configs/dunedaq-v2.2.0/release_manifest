@@ -1,13 +1,13 @@
 dune_packages=(
-  "appfwk            v2_0_1          e19:prof"
+  "appfwk            v2_1_0          e19:prof"
   "daq_cmake         v1_2_2          e19:prof"
   "cmdlib            v1_0_2b         e19:prof"
-  "restcmd           v1_0_2          e19:prof"
+  "restcmd           v1_0_2b         e19:prof"
   "readout           v1_0_1          e19:prof"
   "listrev           v2_0_1b         e19:prof"
   "dataformats       v1_0_0          e19:prof"
   "dfmessages        v1_0_0          e19:prof"
-  "dfmodules         v1_0_0          e19:prof"
+  "dfmodules         v1_1_1          e19:prof"
   "minidaqapp        v1_2_0          e19:prof"
   "trigemu           v1_0_0          e19:prof"
 )
