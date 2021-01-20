@@ -29,7 +29,7 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
   * release branches
     * branch off from `develop`,
     * merge back to `develop` and `master`
-* Protected branch settings: protected branches are optional, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
+* Protected branch settings: protected branches are optional *for the moment*, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
 
 ## Tags of DAQ repositories
 
