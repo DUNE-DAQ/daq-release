@@ -31,6 +31,18 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
     * merge back to `develop` and `master`
 * Protected branch settings: protected branches are optional, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
 
+## Tags of DAQ repositories
+
+We have two types of tags for DAQ repositories:
+
+1. Version tags: 
+ * made by repo maintainers
+ * in the format of `vX.X.X` where X is a digit.
+2. DAQ release tags: 
+ * made by the software coordination team;
+ * alias to a version tag;
+ * in the format of `dunedaq-vX.X.X` where X is a digit.
+
 ## Development workflow (feature branches)
 
 Developer is recommended to follow the following development workflow regardless of the amount of committed code change, e.g. either making a quick bugfix or adding a major feature. The workflow contains the following steps:
