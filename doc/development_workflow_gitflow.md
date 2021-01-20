@@ -60,7 +60,7 @@ Package maintainers are the primary developers who make version tags of a packag
 
 ## Useful tips
 
-* Using `#Issue_Number` in your commit message will make GitHub add links to the commit in the issue page;
+* Using `#Issue_Number` in your commit message will make GitHub add links to the commit on the issue page;
 * Use `user/repo#issue_number` to link issues in a different repo, e.g. `DUNE-DAQ/daq-cmake#1`;
 * Delete a git tag: `git tag -d v1.0.1`;
 * Push the deletion of a tag to GitHub: `git push --delete origin v1.0.1`;
