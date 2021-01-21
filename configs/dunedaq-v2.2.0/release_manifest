@@ -45,3 +45,8 @@ dune_externals=(
 dune_ups=(
   "ups               v6_0_8                  "
 )
+
+dune_extras=(
+  "daq_buildtools    v2_0_1                  "
+  "daq_release       v1_2_1                  "
+)
