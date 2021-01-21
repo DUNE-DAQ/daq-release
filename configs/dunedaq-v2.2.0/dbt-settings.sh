@@ -21,7 +21,7 @@ dune_products=(
     # One can use either "daq-cmake" or "daq_cmake" in this file.
     "daq-cmake v1_2_3 e19:prof"
     "cmdlib v1_0_2b e19:prof"
-    "restcmd v1_0_2b e19:prof"
+    "restcmd v1_0_3 e19:prof"
     "appfwk v2_1_0 e19:prof"
     "listrev v2_0_1b e19:prof"
     "dataformats v1_0_0 e19:prof"
