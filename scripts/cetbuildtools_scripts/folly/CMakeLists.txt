@@ -32,7 +32,7 @@ cet_cmake_env()
 cet_set_compiler_flags(DIAGS VIGILANT WERROR EXTRA_FLAGS -pedantic)
 cet_report_compiler_flags()
 
-find_ups_boost(v1_70_00)
+find_ups_boost(v1_73_00)
 find_ups_product(cetbuildtools v2_03_00)
 find_ups_product(double_conversion v3_1_5)
 find_ups_product(fmt v6_2_1)

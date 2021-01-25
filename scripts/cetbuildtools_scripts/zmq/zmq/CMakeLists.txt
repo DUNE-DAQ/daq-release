@@ -12,6 +12,7 @@ ExternalProject_Add (
   INSTALL_DIR    ${PROJECT_BINARY_DIR}/external_staging
   CMAKE_ARGS     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 		 -DENABLE_DRAFTS=on
+                 -DZMQ_BUILD_FRAMEWORK=on
 )
 
 # We have to use relative paths for the DESTINATION (which are
@@ -20,4 +21,6 @@ ExternalProject_Add (
 install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/lib64
        DESTINATION ${flavorqual_dir})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/include
+       DESTINATION ${flavorqual_dir})
+install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/share
        DESTINATION ${flavorqual_dir})

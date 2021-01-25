@@ -16,7 +16,7 @@ ExternalProject_Add (
 # We have to use relative paths for the DESTINATION (which are
 # interpreted as being relative to ${CMAKE_INSTALL_PREFIX}), so that
 # CPack will work
-install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/lib64
+install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/share
        DESTINATION ${flavorqual_dir})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/external_staging/include
        DESTINATION ${flavorqual_dir})

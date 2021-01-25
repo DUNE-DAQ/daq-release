@@ -2,7 +2,7 @@
 # fully annotated product_deps file.
 
 # Product specification
-parent folly v2020_05_25
+parent folly v2020_05_25a
 defaultqual e19
 
 # Table-file variable setup specification.
@@ -18,7 +18,7 @@ double_conversion        v3_1_5
 fmt                      v6_2_1
 glog                     v0_4_0
 libevent                 v2_1_8
-boost                    v1_70_0
+boost                    v1_73_0
 end_product_list
 
 # Matrix of qualifiers versus dependent products

@@ -8,20 +8,17 @@ defaultqual e19
 # Table-file variable setup specification.
 incdir      fq_dir      include
 libdir      fq_dir      lib64
-bindir      fq_dir      bin
 
 # define product/version pairs
-product		version
+product         version	
 gcc		v8_2_0
-zmq		v4_3_1c
+zmq		v4_3_1c		
 cetbuildtools	v7_15_01	-	only_for_build
 end_product_list
 
 # Matrix of qualifiers versus dependent products
-qualifier	gcc	notes
-e19:debug	-nq-
-e19:opt		-nq-
-e19:prof	-nq-
+qualifier	gcc	zmq	notes
+e19:prof	-nq-    e19:prof
 end_qualifier_list
 
 table_fragment_begin

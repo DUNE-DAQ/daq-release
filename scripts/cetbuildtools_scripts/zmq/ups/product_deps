@@ -8,7 +8,6 @@ defaultqual e19
 # Table-file variable setup specification.
 incdir      fq_dir      include
 libdir      fq_dir      lib64
-bindir      fq_dir      bin
 
 # define product/version pairs
 product		version
