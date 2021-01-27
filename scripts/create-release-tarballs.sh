@@ -178,5 +178,7 @@ echo "curl https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-
 echo "curl https://scisoft.fnal.gov/scisoft/packages/gcc/v8_2_0/gcc-8.2.0-sl7-x86_64.tar.bz2|tar xj"
 echo "curl https://scisoft.fnal.gov/scisoft/packages/clang/v7_0_0rc3/clang-7.0.0rc3-sl7-x86_64.tar.bz2|tar xj"
 echo "popd; popd"
+echo "[Info]: ======================== Code snippet ends == ====================="
+echo "[Info]: One laste thing before the release can be used, edit the 'dune_product_dirs' in \$DUNE_DAQ_RELEASE_DIR/$release_name/dbt-settings.sh using the actual path on the deployment node."
 
 rm -rf $tmp_dir
