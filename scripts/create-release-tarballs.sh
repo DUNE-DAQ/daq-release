@@ -32,7 +32,7 @@ function copy_over_products {
 function fix_cvmfs_path_cmake {
   for i in `find $1 -name "*\.cmake"`; do
     if grep -q "libtbb.so" $i; then
-      sed -i -E "s/(cvmfs[^;]+)\/libtbb.so/\$ENV{TBB_LIB}\/libtbb.so/g" $i
+      sed -i -E "s/\/(cvmfs[^;]+)\/libtbb.so/\$ENV{TBB_LIB}\/libtbb.so/g" $i
     fi
     if grep -q "libcetlib_except.so" $i; then
       sed -i -E "s/(cvmfs[^;]+)\/libcetlib_except.so/\$ENV{CETLIB_EXCEPT_LIB}\/libcetlib_except.so/g" $i
