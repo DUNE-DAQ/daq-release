@@ -52,4 +52,10 @@ docker run --rm -it -v $WORKDIR:/scratch dunedaq/sl7-minimal:latest
 
 Once inside the docker container, you should be able to follow the [Compiling-and-running under v2.2.0 instructions](https://github.com/DUNE-DAQ/appfwk/wiki/Compiling-and-running-under-v2.2.0).
 
-Note that with the above docker command, only files created under `/scratch` are synced/saved to the host machine.
+Note that you will need to call `dbt-create.sh` with the `-r` option to specifiy the release directory `/scratch/dunedaq-local-releases`, i.e.
+
+```shell
+dbt-create.sh -r /scratch/dunedaq-local-releases dunedaq-v2.2.0
+```
+
+Please also note that with the above docker command, only files created under `/scratch` are synced/saved to the host machine.
