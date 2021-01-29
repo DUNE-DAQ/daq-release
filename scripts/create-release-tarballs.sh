@@ -43,6 +43,14 @@ function fix_cvmfs_path_cmake {
   done
 }
 
+function fix_cvmfs_path_dbt_settings {
+  for i in `find $1 -name "dbt-settings.sh"`; do
+    if grep -q "cvmfs" $i; then
+      sed -i "s/\/cvmfs\/dune.opensciencegrid.org\/dunedaq\/DUNE\/releases/\/scratch\/dunedaq-local-releases/g" $i
+    fi
+  done
+}
+
 while getopts ":f:P:R:r:t:h" opt; do
   case ${opt} in
     f )
