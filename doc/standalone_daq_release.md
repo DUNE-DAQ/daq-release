@@ -32,13 +32,13 @@ Now you can clean up the tarballs if you prefer.
 
 ## Use the local deployed release with a docker container
 
-We have a `dunedaq/sl7-minimal:latest` image available for building/testing/running the `dunedaq-v2.2.0` release. Before running the docker container, you will need to modify the release path in `$WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/dbt-settings.sh`. Assuming you will run the container with a bind mount `-v $WORKDIR:/scratch`, you should change `dune_product_dirs` to the following:
+We have a `dunedaq/sl7-minimal:latest` image available for building/testing/running the `dunedaq-v2.2.0` release.
 
+Before running the docker container, you will need to modify the release path in `$WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/dbt-settings.sh`. 
+
+Assuming you will run the container with a bind mount `-v $WORKDIR:/scratch`, the `dune_product_dirs` should look like the following. For you convinience, the initial `dbt-settings.sh` file already contains these paths. You may need to modify it accordingly if you run the container with a different bind mount.
 
 ```shell
-# Edit $WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/dbt-settings.sh
-# Replace product_dir with the following
-
  dune_products_dirs=(
      "/scratch/dunedaq-local-releases/dunedaq-v2.2.0/externals"
      "/scratch/dunedaq-local-releases/dunedaq-v2.2.0/packages"
@@ -53,8 +53,3 @@ docker run --rm -it -v $WORKDIR:/scratch dunedaq/sl7-minimal:latest
 Once inside the docker container, you should be able to follow the [Compiling-and-running under v2.2.0 instructions](https://github.com/DUNE-DAQ/appfwk/wiki/Compiling-and-running-under-v2.2.0).
 
 Note that with the above docker command, only files created under `/scratch` are synced/saved to the host machine.
-
-
-
-
-
