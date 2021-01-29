@@ -17,11 +17,11 @@ cd tarballs
 ## Got to https://cernbox.cern.ch/index.php/s/iduwhr3J6J3yay5
 ## Download all four tarballs into this directory
 
-mkdir $WORKDIR/dunedaq-releases
-cd $WORKDIR/dunedaq-releases
+mkdir $WORKDIR/dunedaq-local-releases
+cd $WORKDIR/dunedaq-local-releases
 tar xzf $WORKDIR/tarballs/dunedaq-v2.2.0-standalone.tar.gz
 
-cd $WORKDIR/dunedaq-releases/dunedaq-v2.2.0/externals
+cd $WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/externals
 tar xj $WORKDIR/tarballs/clang-7.0.0rc3-sl7-x86_64.tar.bz2
 tar xj $WORKDIR/tarballs/gcc-8.2.0-sl7-x86_64.tar.bz2
 tar xj $WORKDIR/tarballs/boost-1.73.0-sl7-x86_64-e19-prof.tar.bz2
@@ -32,16 +32,16 @@ Now you can clean up the tarballs if you prefer.
 
 ## Use the local deployed release with a docker container
 
-We have a `dunedaq/sl7-minimal:latest` image available for building/testing/running the `dunedaq-v2.2.0` release. Before running the docker container, you will need to modify the release path in `$WORKDIR/dunedaq-releases/dunedaq-v2.2.0/dbtsettings.sh`. Assuming you will run the container with a bind mount `-v $WORKDIR:/scratch`, you should change `dune_product_dirs` to the following:
+We have a `dunedaq/sl7-minimal:latest` image available for building/testing/running the `dunedaq-v2.2.0` release. Before running the docker container, you will need to modify the release path in `$WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/dbt-settings.sh`. Assuming you will run the container with a bind mount `-v $WORKDIR:/scratch`, you should change `dune_product_dirs` to the following:
 
 
 ```shell
-# Edit $WORKDIR/dunedaq-releases/dunedaq-v2.2.0/dbtsettings.sh
+# Edit $WORKDIR/dunedaq-local-releases/dunedaq-v2.2.0/dbt-settings.sh
 # Replace product_dir with the following
 
  dune_products_dirs=(
-     "/scratch/dunedaq-releases/dunedaq-v2.2.0/externals"
-     "/scratch/dunedaq-releases/dunedaq-v2.2.0/packages"
+     "/scratch/dunedaq-local-releases/dunedaq-v2.2.0/externals"
+     "/scratch/dunedaq-local-releases/dunedaq-v2.2.0/packages"
  )
 ```
 
