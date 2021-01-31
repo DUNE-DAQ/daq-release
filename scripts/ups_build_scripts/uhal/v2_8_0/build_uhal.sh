@@ -173,7 +173,7 @@ if [ -d ${pkgdir}/bin/${package} ]; then
 fi
 
 pushd ${pkgdir}/lib
-for i in `find . -type l`; do j=`echo $i|grep -o ".*.so" `; rm -f $i; ln -s $j.2.6.4 $i; done
+for i in `find . -type l`; do j=`echo $i|grep -o ".*.so" `; rm -f $i; ln -s $j.2.8.0 $i; done
 popd
 
 
