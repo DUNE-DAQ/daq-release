@@ -1,0 +1,77 @@
+File=Table
+Product=protobuf
+
+#*************************************************
+# Starting Group definition
+Group:
+
+Flavor=ANY
+Qualifiers=c7
+
+  Action=DefineFQ
+    envSet (PROTOBUF_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-${UPS_PROD_QUALIFIERS})
+
+  Action = ExtraSetup
+    setupRequired( clang v7_0_0 )
+
+Flavor=ANY
+Qualifiers=c2
+
+  Action=DefineFQ
+    envSet (PROTOBUF_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-${UPS_PROD_QUALIFIERS})
+
+  Action = ExtraSetup
+    setupRequired( clang v5_0_1 )
+
+Flavor=ANY
+Qualifiers=e19
+
+  Action=DefineFQ
+    envSet (PROTOBUF_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-${UPS_PROD_QUALIFIERS})
+
+  Action = ExtraSetup
+    setupRequired( gcc v8_2_0 )
+
+Flavor=ANY
+Qualifiers=e17
+
+  Action=DefineFQ
+    envSet (PROTOBUF_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-${UPS_PROD_QUALIFIERS})
+
+  Action = ExtraSetup
+    setupRequired( gcc v7_3_0 )
+
+Flavor=ANY
+Qualifiers=e15
+
+  Action=DefineFQ
+    envSet (PROTOBUF_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-${UPS_PROD_QUALIFIERS})
+
+  Action = ExtraSetup
+    setupRequired( gcc v6_4_0 )
+
+Common:
+   Action=setup
+      setupenv()
+      proddir()
+      ExeActionRequired(DefineFQ)
+      envSet(PROTOBUF, ${UPS_PROD_DIR})
+      envSet(PROTOBUF_VERSION, ${UPS_PROD_VERSION})
+      # add the lib directory to LD_LIBRARY_PATH
+      envSet(PROTOBUF_LIB, ${PROTOBUF_FQ_DIR}/lib)
+      envSet(PROTOBUF_INC, ${PROTOBUF_FQ_DIR}/include)
+      if ( test `uname` = "Darwin" )
+	envPrepend(DYLD_LIBRARY_PATH, ${PROTOBUF_FQ_DIR}/lib)
+       else()
+	envPrepend(LD_LIBRARY_PATH, ${PROTOBUF_FQ_DIR}/lib)
+      endif ( test `uname` = "Darwin" )
+      pathPrepend(PATH, ${PROTOBUF_FQ_DIR}/bin)
+      # useful variables
+      envPrepend(ROOT_INCLUDE_PATH, ${PROTOBUF_INC} )
+      envPrepend(CMAKE_PREFIX_PATH, ${PROTOBUF_FQ_DIR} )
+      envPrepend(PKG_CONFIG_PATH, ${PROTOBUF_FQ_DIR}/lib/pkgconfig )
+      # requirements
+      exeActionRequired(ExtraSetup)
+End:
+# End Group definition
+#*************************************************
