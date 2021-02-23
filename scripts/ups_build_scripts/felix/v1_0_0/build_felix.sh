@@ -73,7 +73,7 @@ get_ssibuildshims
 source define_basics --
 
 setup cmake v3_17_2 || ssi_die "Unable to setup cmake"
-etup python v3_8_3b || ssi_die "Unable to setup python"
+setup python v3_8_3b || ssi_die "Unable to setup python"
 setup boost v1_73_0 -q e19:prof || ssi_die "Unable to setup boost"
 
 export CMAKE_COMPILER=gcc8
@@ -133,14 +133,16 @@ git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/flxcard.git || ssi_die 
 pushd flxcard && git checkout 8208c3a && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/regmap.git || ssi_die "Unable to clone regmap git repo into ${PWD}"
 pushd regmap && git checkout adc0025 && popd
+git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/packetformat.git || ssi_die "Unable to clone packetformat git repo into ${PWD}"
+pushd packetformat && git checkout 15c0fc1 && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/client-template.git || ssi_die "Unable to clone client-template git repo into ${PWD}"
 pushd client-template && git checkout 390ec87 && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/external-catch.git external/catch || ssi_die "Unable to clone external-catch git repo into ${PWD}"
 pushd external/catch && git checkout 6a9aa08 && popd
 
 
-cmake_config cmake_config x86_64-centos7-gcc8-opt
-pushd cmake_config x86_64-centos7-gcc8-opt
+cmake_config x86_64-centos7-gcc8-opt
+pushd x86_64-centos7-gcc8-opt
 
 set -x
 
@@ -166,6 +168,7 @@ cp x86_64-centos7-gcc8-opt/regmap/lib* ${pkgdir}/lib
 cp x86_64-centos7-gcc8-opt/drivers_rcc/lib* ${pkgdir}/lib
 cp -r ${product_dir}/${package}/${pkgver}/cmake ${pkgdir}/lib
 
+cd ${pkgdir}
 rm -rf ${pkgdir}/software
 
 set +x
