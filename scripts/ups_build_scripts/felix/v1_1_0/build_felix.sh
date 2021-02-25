@@ -143,7 +143,7 @@ git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/external-catch.git exte
 pushd external/catch && git checkout 6a9aa08 && popd
 
 
-mv ${product_dir}/${package}/${pkgver}/cmake/ftools_CMakeLists.txt ftools/CMakeLists.txt
+cp ${product_dir}/${package}/${pkgver}/ftools_CMakeLists.txt ftools/CMakeLists.txt
 cmake_config x86_64-centos7-gcc8-opt
 pushd x86_64-centos7-gcc8-opt
 
