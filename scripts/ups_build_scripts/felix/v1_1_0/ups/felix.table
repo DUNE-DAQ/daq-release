@@ -34,12 +34,12 @@ Common:
       envSet(FELIX_VERSION, ${UPS_PROD_VERSION})
       envSet(FELIX_DIR, ${UPS_PROD_DIR})
       envSet(FELIX_INC, ${FELIX_FQ_DIR}/include)
-      envSet(FELIX_LIB, ${FELIX_FQ_DIR/lib )
+      envSet(FELIX_LIB, ${FELIX_FQ_DIR}/lib )
       envSet(FELIX_BIN, ${FELIX_FQ_DIR}/bin )
-      envPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
-      envPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
+      pathPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
+      pathPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
+      pathPrepend(PATH, ${FELIX_BIN})
       exeActionRequired(ExtraSetup)
-      pathPrepend(PATH, ${FELIX_BIN}, :)
 End:
 # End Group definition
 #*************************************************

@@ -72,6 +72,13 @@ get_this_dir
 get_ssibuildshims
 source define_basics --
 
+# declare now so we can setup
+# fake ups declare
+fakedb=${product_dir}/${package}/${pkgver}/fakedb
+${SSIBUILDSHIMS_DIR}/bin/fake_declare_product ${product_dir} ${package} ${pkgver} ${fullqual}
+
+setup -B ${package} ${pkgver} -q ${fullqual} -z ${fakedb}:${product_dir}:${PRODUCTS} || ssi_die "ERROR: fake setup failed"
+
 setup cmake v3_17_2 || ssi_die "Unable to setup cmake"
 setup python v3_8_3b || ssi_die "Unable to setup python"
 #setup boost v1_73_0 -q e19:prof || ssi_die "Unable to setup boost"
@@ -104,13 +111,6 @@ then
    echo "ERROR: failed to create ${pkgdir}"
    exit 1
 fi
-
-# declare now so we can setup
-# fake ups declare
-fakedb=${product_dir}/${package}/${pkgver}/fakedb
-${SSIBUILDSHIMS_DIR}/bin/fake_declare_product ${product_dir} ${package} ${pkgver} ${fullqual}
-
-setup -B ${package} ${pkgver} -q ${fullqual} -z ${fakedb}:${product_dir}:${PRODUCTS} || ssi_die "ERROR: fake setup failed"
 
 
 # doing build now
