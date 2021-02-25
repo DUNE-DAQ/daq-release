@@ -32,7 +32,7 @@ Common:
       envSet(FELIX_VERSION, ${UPS_PROD_VERSION})
       envSet(FELIX_DIR, ${UPS_PROD_DIR})
       envSet(FELIX_INC, ${FELIX_FQ_DIR}/include)
-      envSet(FELIX_LIB, ${UPS_PROD_DIR}/lib )
+      envSet(FELIX_LIB, ${FELIX_FQ_DIR}/lib )
       envPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
       envPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
       exeActionRequired(ExtraSetup)
