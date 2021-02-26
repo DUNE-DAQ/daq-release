@@ -16,10 +16,6 @@ function get_scisoft_pkg(){
 }
 
 PKGS_NEWER_VERSIONS=(
-boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-debug.tar.bz2
-boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-prof.tar.bz2
-cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_3/cmake-3.17.3-sl7-x86_64.tar.bz2
-sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.03.00-sl7-x86_64.tar.bz2
 TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_16_02/TRACE-3.16.02-sl7-x86_64.tar.bz2
 )
 
@@ -38,6 +34,7 @@ python https://scisoft.fnal.gov/scisoft/packages/python/v3_7_2/python-3.7.2-sl7-
 
 PKGS_DEBUG=(
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_70_0/boost-1.70.0-sl7-x86_64-e19-debug.tar.bz2
+boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-debug.tar.bz2
 cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_10_00/cetlib-3.10.00-slf7-x86_64-e19-debug.tar.bz2
 cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_04_01/cetlib_except-1.04.01-slf7-x86_64-e19-debug.tar.bz2
 cppunit https://scisoft.fnal.gov/scisoft/packages/cppunit/v1_14_0/cppunit-1.14.0-sl7-x86_64-e19-debug.tar.bz2
@@ -50,6 +47,9 @@ PKGS_MINIMAL=(
 ssibuildshims https://scisoft.fnal.gov/scisoft/packages/ssibuildshims/v1_04_13/ssibuildshims-1.04.13-noarch.tar.bz2
 gcc https://scisoft.fnal.gov/scisoft/packages/gcc/v8_2_0/gcc-8.2.0-sl7-x86_64.tar.bz2
 boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_70_0/boost-1.70.0-sl7-x86_64-e19-prof.tar.bz2
+boost https://scisoft.fnal.gov/scisoft/packages/boost/v1_73_0/boost-1.73.0-sl7-x86_64-e19-prof.tar.bz2
+cmake https://scisoft.fnal.gov/scisoft/packages/cmake/v3_17_3/cmake-3.17.3-sl7-x86_64.tar.bz2
+sqlite https://scisoft.fnal.gov/scisoft/packages/sqlite/v3_32_03_00/sqlite-3.32.03.00-sl7-x86_64.tar.bz2
 cetlib https://scisoft.fnal.gov/scisoft/packages/cetlib/v3_10_00/cetlib-3.10.00-slf7-x86_64-e19-prof.tar.bz2
 cetbuildtools https://scisoft.fnal.gov/scisoft/packages/cetbuildtools/v7_15_01/cetbuildtools-7.15.01-noarch.tar.bz2
 cetlib_except https://scisoft.fnal.gov/scisoft/packages/cetlib_except/v1_04_01/cetlib_except-1.04.01-slf7-x86_64-e19-prof.tar.bz2
@@ -70,6 +70,7 @@ TRACE https://scisoft.fnal.gov/scisoft/packages/TRACE/v3_15_09/TRACE-3.15.09-sl7
 gdb https://scisoft.fnal.gov/scisoft/packages/gdb/v9_2/gdb-9.2-sl7-x86_64.tar.bz2
 zmq https://scisoft.fnal.gov/scisoft/packages/zmq/v4_3_1/zmq-4.3.1-sl7-x86_64-e19.tar.bz2
 )
+
 
 
 PKGS_ALL=(
