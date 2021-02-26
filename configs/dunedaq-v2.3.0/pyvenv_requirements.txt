@@ -1,3 +1,4 @@
+#--index-url=file:///cvmfs/dune.opensciencegrid.org/pip-mirror/simple
 anyconfig==0.9.11
 attrs==20.2.0
 click==7.1.2
@@ -15,6 +16,4 @@ pyrsistent==0.17.3
 six==1.15.0
 requests==2.25.0
 h5py==3.1.0
-# PyPI already has another package named "moo";
-# Picking up moo from github repo:
-https://github.com/brettviren/moo/archive/0.5.2.tar.gz#egg=moo
+moo==0.5.5
