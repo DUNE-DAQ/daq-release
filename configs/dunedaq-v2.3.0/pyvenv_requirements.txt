@@ -1,3 +1,4 @@
+# Uncomment before release
 #--index-url=file:///cvmfs/dune.opensciencegrid.org/pip-mirror/simple
 anyconfig==0.9.11
 attrs==20.2.0
@@ -16,4 +17,6 @@ pyrsistent==0.17.3
 six==1.15.0
 requests==2.25.0
 h5py==3.1.0
-moo==0.5.5
+# Uncomment before release
+#moo==0.5.5
+https://github.com/brettviren/moo/archive/0.5.5.tar.gz#egg=moo

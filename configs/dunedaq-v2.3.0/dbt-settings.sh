@@ -13,6 +13,7 @@ dune_systems=(
 dune_devtools=(
     "cmake v3_17_2"
     "gdb v9_2"
+    "ninja v1_10_0"
     )
 
 dune_externals=(
@@ -20,7 +21,6 @@ dune_externals=(
     "TRACE v3_16_02"
     "folly v2020_05_25a e19:prof"
     "nlohmann_json v3_9_0c e19:prof"
-    "ninja v1_10_0"
     "pistache v2020_10_07 e19:prof"
     "highfive v2_2_2b e19:prof"
     "zmq v4_3_1c e19:prof"
@@ -31,10 +31,11 @@ dune_externals=(
 dune_daqpackages=(
     # Note: "daq_cmake" with underscore is the UPS product name.
     # One can use either "daq-cmake" or "daq_cmake" in this file.
-    "daq-cmake v1.3.1 e19:prof"
-    "ers v1.1.0 e19:prof"
-    "logging v1.0.0 e19:prof"
-    "cmdlib v1.1.0 e19:prof"
+    # "daq-cmake v1.3.1 e19:prof"
+    # "ers v1.1.0 e19:prof"
+    # "logging v1.0.0 e19:prof"
+    # "cmdlib v1.1.0 e19:prof"
+
     # "restcmd develop e19:prof"
     # "appfwk develop e19:prof"
     # "listrev develop e19:prof"
