@@ -1,4 +1,4 @@
---index-url=file:///cvmfs/dune.opensciencegrid.org/pip-mirror/simple
+--index-url=file:///cvmfs/dune.opensciencegrid.org/pip-repo/simple
 anyconfig==0.9.11
 attrs==20.2.0
 click==7.1.2
