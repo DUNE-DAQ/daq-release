@@ -4,7 +4,7 @@ products_dir="/home/dingpf/cvmfs_dune/dunedaq/DUNE/products"
 #products_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products"
 release_name="dunedaq-v2.2.0"
 #release_name="dunedaq-develop"
-tarball="cvmfs_${release_name}.tar.gz"
+tarball="dunedaq-${release_name}"
 ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release
 release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
@@ -72,8 +72,8 @@ while getopts ":f:P:R:r:t:h" opt; do
       echo "    <-f> <release_config_dir>"
       echo "    [-P] <products_dir>"
       echo "    [-r] <release_name>"
-      echo "    [-t] <tarball_name>"
-      echo "Example: ./create-release-tarballs.sh -f ./daq-release/configs/dunedaq-v2.2.0 -P /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products -t dunedaq-v2.2.0-standalone.tar.gz"
+      echo "    [-t] <tarball_prefix>"
+      echo "Example: ./create-release-tarballs.sh -f ./daq-release/configs/dunedaq-v2.2.0 -P /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products -t ./dunedaq-v2.2.0"
       exit 0
       ;;
    \? )
@@ -125,6 +125,7 @@ if [ ! -f "$release_config_dir/dbt-settings.sh" ]; then
   exit 3
 else
   cp $release_config_dir/dbt-settings.sh $tmp_dir/$release_name
+  fix_cvmfs_path_dbt_settings $tmp_dir/$release_name
 fi
 
 if [ ! -f "$release_config_dir/pyvenv_requirements.txt" ]; then
@@ -137,11 +138,14 @@ else
   cp $release_config_dir/pyvenv_requirements.txt $tmp_dir/$release_name
 fi
 
+tarball_ext="${tarball}_external_pkgs.tar.gz"
+tarball_daq="${tarball}_daq_pkgs.tar.gz"
 if ! [ -w $(dirname "${tarball}") ]; then
   echo "[Error]: The path to tarball is not writable: $tarball"
 fi
 
-echo "[Info]: Creating release tarball: ${tarball}"
+echo "[Info]: Creating release tarball containing external packages only: ${tarball_ext}"
+echo "[Info]: Creating additional release tarball with DAQ packages: ${tarball_daq}"
 echo "[Info]: UPS list file: ${ups_list_file}"
 echo "[Info]: Products directory: ${products_dir}"
 echo "[Info]: Release name: ${release_name}"
@@ -183,10 +187,13 @@ popd
 
 
 fix_cvmfs_path_cmake $tmp_dir/$release_name/packages
-tar -zcvf $tarball -C $tmp_dir $release_name
+mv $tmp_dir/$release_name/packages $tmp_dir
+tar -zcvf ${tarball_ext} -C $tmp_dir $release_name
+mv $tmp_dir/packages $tmp_dir/$release_name
+tar -zcvf ${tarball_daq} -C $tmp_dir $release_name/packages
 
-echo "[Info]: Tarball -- $tarball -- has been created."
-echo "[Info]: It can be expanded with 'tar -C RELEASE_AREA -zxf $tarball'"
+echo "[Info]: Tarball -- $tarball_ext and $tarball_daq -- has been created."
+echo "[Info]: It can be expanded with 'tar -C RELEASE_AREA -zxf $tarball_ext'"
 echo "[Info]: In addition, you will need gcc, boost, and clang from scisoft to complete the release."
 echo "[Info]: To do so, run the following:"
 echo "[Info]: ======================== Code snippet begins ====================="
@@ -194,7 +201,7 @@ echo "# create an empty directory for hosting the release;"
 echo "export DUNE_DAQ_RELEASE_DIR='./dunedaq-releases'"
 echo "mkdir -p \$DUNE_DAQ_RELEASE_DIR"
 echo "pushd \$DUNE_DAQ_RELEASE_DIR"
-echo "tar zxf $tarball # Or curl/wget to retrieve the tarball first if not having it locally yet"
+echo "tar zxf $tarball_ext # Or curl/wget to retrieve the tarball first if not having it locally yet"
 echo "# get additional UPS products needed: [gcc, boost, clang]; due to their size, those products"
 echo "# are not included in the release tarball."
 echo "pushd $release_name/externals/"
