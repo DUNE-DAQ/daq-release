@@ -1,8 +1,8 @@
 dune_products_dirs=(
-    # "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-develop/externals"
-    # "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-develop/packages"
-    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products" 
-    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev" 
+    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.3.0/externals"
+    "/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases/dunedaq-v2.3.0/packages"
+    #"/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products" 
+    #"/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev" 
 )
 
 dune_systems=(
