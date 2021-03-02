@@ -22,9 +22,9 @@ echo "INFO [`eval $timenow`]: Finished cloning daq-release repo from DUNE-DAQ@gi
 
 cp -rT $WORK_DIR/daq-release/scripts/ups_build_scripts/ $PROD_DIR
 cd $PROD_DIR
-./get_scisoft_pkgs.sh 
-#source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev/setup
-#source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products/setup
+#./get_scisoft_pkgs.sh 
+source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev/setup
+source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products/setup
 echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 
 ###
@@ -55,27 +55,5 @@ for i in `find $CET_BUILD_DIR -name "*tar.bz2"`; do
 done
 )
 
-###
-# Build UPS products with ssibuildshims
-###
-cd $PROD_DIR
-for i in `find . -maxdepth 3 -name build_*.sh`; do
-  pushd `dirname $i`
-  IBUILD_SH=`basename $i`
-  if [[ "$i" == *"pyyaml"* ]]; then
-    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR p383b tar\""
-    ./`basename $i` $PROD_DIR p383b tar
-  else
-    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR e19 prof tar\""
-    ./`basename $i` $PROD_DIR e19 prof tar
-  fi
-  echo "INFO [`eval $timenow`]: Finished running build script: ${i}"
-  popd
-done
-
-for i in `find $PROD_DIR -name "*tar.bz2"`; do
-  mv $i $TAR_DIR
-  echo "INFO: Moved tarball to $TAR_DIR: $i"
-done
 
 echo "INFO [`eval $timenow`]: Finished building all UPS product."

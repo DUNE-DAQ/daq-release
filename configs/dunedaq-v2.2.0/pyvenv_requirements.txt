@@ -17,4 +17,4 @@ requests==2.25.0
 h5py==3.1.0
 # PyPI already has another package named "moo";
 # Picking up moo from github repo:
--e git://github.com/brettviren/moo.git@0.5.2#egg=moo
+https://github.com/brettviren/moo/archive/0.5.2.tar.gz#egg=moo

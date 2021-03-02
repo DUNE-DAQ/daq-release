@@ -1,16 +1,13 @@
 dune_packages=(
-  "appfwk            v2_1_0          e19:prof"
-  "daq_cmake         v1_2_3          e19:prof"
-  "cmdlib            v1_0_2b         e19:prof"
-  "restcmd           v1_0_3          e19:prof"
-  "readout           v1_0_1          e19:prof"
-  "listrev           v2_0_1b         e19:prof"
-  "dataformats       v1_0_0          e19:prof"
-  "dfmessages        v1_0_0          e19:prof"
-  "dfmodules         v1_1_1          e19:prof"
-  "minidaqapp        v1_2_0          e19:prof"
-  "trigemu           v1_0_0          e19:prof"
-  "ipm               v1_1_0          e19:prof"
+  "appfwk            v2_2_0          e19:prof"
+  "daq_cmake         v1_3_1          e19:prof"
+  "cmdlib            v1_1_1          e19:prof"
+  "restcmd           v1_1_0          e19:prof"
+  "listrev           v2_1_1          e19:prof"
+  "ers               v1_1_0          e19:prof"
+  "logging           v1_0_1          e19:prof"
+  "opmonlib          v1_0_0          e19:prof"
+  "rcif              v1_0_1          e19:prof"
 )
 
 dune_externals=(
@@ -22,7 +19,6 @@ dune_externals=(
   "cmake             v3_17_2                 "
   "cppunit           v1_15_1a        e19:prof"
   "double_conversion v3_1_5          e19:pro"
-  "ers               v0_26_00d       e19:prof"
   "fmt               v6_2_1          e19:prof"
   "folly             v2020_05_25a    e19:prof"
   "gcc               v8_2_0                  "
@@ -39,7 +35,9 @@ dune_externals=(
   "sqlite            v3_32_03_00             "
   "tbb               v2020_2a        e19:prof"
   "TRACE             v3_16_02                "
-  "zmq               v4_3_1b         e19:prof"
+  "zmq               v4_3_1c         e19:prof"
+  "cppzmq            v4_3_0          e19:prof"
+  "msgpack_c         v3_3_0          e19:prof"
 )
 
 dune_ups=(
@@ -47,6 +45,6 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v2_0_1                  "
-  "daq_release       v1_2_1                  "
+  "daq_buildtools    v2_2_1                  "
+  "daq_release       v1_3_0                  "
 )
