@@ -2,7 +2,7 @@
 
 products_dir="/home/dingpf/cvmfs_dune/dunedaq/DUNE/products"
 #products_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products"
-release_name="dunedaq-v2.2.0"
+release_name="dunedaq-v2.3.0"
 #release_name="dunedaq-develop"
 tarball="dunedaq-${release_name}"
 ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release
@@ -94,14 +94,14 @@ if [[ "$release_config_dir" == "NOTSET" ]]; then
   exit 2
 fi
 
-if [ ! -f "$release_config_dir/release_manifest" ]; then
+if [ ! -f "$release_config_dir/release_manifest.sh" ]; then
   echo "[Error]: UPS list file must exist in the release config directory."
   echo "[Error]: Example can be found in the 'daq-release' repo."
-  echo "[Error]: E.g. daq-release/configs/dunedaq-v2.0.0/release_manifest"
+  echo "[Error]: E.g. daq-release/configs/dunedaq-v2.0.0/release_manifest.sh"
   echo "Exit now..."
   exit 3
 else
-  source $release_config_dir/release_manifest
+  source $release_config_dir/release_manifest.sh
 fi
 
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
