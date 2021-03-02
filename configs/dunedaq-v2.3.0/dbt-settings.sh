@@ -31,19 +31,13 @@ dune_externals=(
 dune_daqpackages=(
     # Note: "daq_cmake" with underscore is the UPS product name.
     # One can use either "daq-cmake" or "daq_cmake" in this file.
-    # "daq-cmake v1.3.1 e19:prof"
-    # "ers v1.1.0 e19:prof"
-    # "logging v1.0.0 e19:prof"
-    # "cmdlib v1.1.0 e19:prof"
-
-    # "restcmd develop e19:prof"
-    # "appfwk develop e19:prof"
-    # "listrev develop e19:prof"
-    # "dataformats develop e19:prof"
-    # "dfmessages develop e19:prof"
-    # "dfmodules develop e19:prof"
-    # "trigemu develop e19:prof"
-    # "readout develop e19:prof"
-    # "minidaqapp develop e19:prof"
-    # "ipm develop e19:prof"
+    "daq-cmake v1_3_1 e19:prof"
+    "appfwk v2_2_0 e19:prof"
+    "cmdlib v1_1_1 e19:prof"
+    "restcmd v1_1_0 e19:prof"
+    "listrev v2_1_1 e19:prof"
+    "ers v1_1_0 e19:prof"
+    "logging v1_0_1 e19:prof"
+    "opmonlib v1_0_0 e19:prof"
+    "rcif v1_0_1 e19:prof"
 )
