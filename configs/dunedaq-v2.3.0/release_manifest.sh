@@ -1,10 +1,10 @@
 dune_packages=(
   "appfwk            v2_2_0          e19:prof"
-  "daq_cmake         v1_3_1          e19:prof"
+  "daq_cmake         v1_3_2          e19:prof"
   "cmdlib            v1_1_1          e19:prof"
-  "restcmd           v1_1_0          e19:prof"
+  "restcmd           v1_1_1          e19:prof"
   "listrev           v2_1_1          e19:prof"
-  "ers               v1_1_0          e19:prof"
+  "ers               v1_1_1          e19:prof"
   "logging           v1_0_1          e19:prof"
   "opmonlib          v1_0_0          e19:prof"
   "rcif              v1_0_1          e19:prof"
