@@ -1,10 +1,11 @@
+--index-url=file:///cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/pypi-repo/simple
 anyconfig==0.9.11
 attrs==20.2.0
 click==7.1.2
 et-xmlfile==1.0.1
 fastjsonschema==2.14.5
 jdcal==1.4.1
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsonnet==0.16.0
 jsonpointer==2.0
 jsonschema==3.2.0
@@ -14,6 +15,8 @@ openpyxl==3.0.5
 pyrsistent==0.17.3
 six==1.15.0
 requests==2.25.0
-# PyPI already has another package named "moo";
-# Picking up moo from github repo:
-https://github.com/brettviren/moo/archive/0.5.1.tar.gz#egg=moo
+h5py==3.1.0
+Flask==1.1.2
+Werkzeug==1.0.1
+colorama==0.4.4
+moo==0.5.5
