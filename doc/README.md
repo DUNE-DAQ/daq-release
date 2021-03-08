@@ -1,7 +1,7 @@
 # Table of content
 
-1. [DUNE DAQ CI](ci_github_action.md)
-2. [Creating a new DAQ release](create_release.md)
+1. [DUNE DAQ CI](ci_github_action.md) (**outdated, updates needed**)
+2. [Creating a new DAQ release](create_release.md) (**outdated, updates needed**)
 3. [Gitflow](development_workflow_gitflow.md)
 4. [How to build external UPS products](make_ups_products.md)
 5. [How to publish files to cvmfs](publish_to_cvmfs.md)
