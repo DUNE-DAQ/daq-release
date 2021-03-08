@@ -7,3 +7,4 @@
 5. [How to publish files to cvmfs](publish_to_cvmfs.md)
 6. [How to use standalone release tarballs](standalone_daq_release.md)
 7. [How to package DAQ packages into UPS products](upsify_daq_packages.md)
+8. [How to add new modules to `pypi-repo`](add_modules_to_pypi_repo.md)
