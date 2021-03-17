@@ -17,7 +17,7 @@ If you have `pip2pi` installed, you can simply do the following to add any modul
 If you do not have `pip2pi` available, you can do the following to install it. Note that the latest official version (more than 2 years old) of `pip2pi` does not work well with python3. We have a patched version available [here](https://github.com/dingp/pip2pi/archive/1.0.0.tar.gz).
 
 1. setup python3, skip this step if you already have access to it:
-   * `source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products/setup; seutp python v3_8_3b`;
+   * `source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products/setup; setup python v3_8_3b`;
 2. create and activate a virtual environment:
    * `python -m venv pypi-repo-venv`
    * `source pypi-repo-venv/bin/activate`
