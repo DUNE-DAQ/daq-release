@@ -55,6 +55,7 @@ dune_externals=(
   "felix             v1_1_1          e19:prof"
   "pybind11          v2_6_2          e19:prof"
   "uhal              v2_8_0          e19:prof"
+  "pugixml           v1_11           e19     "
 )
 
 dune_ups=(
