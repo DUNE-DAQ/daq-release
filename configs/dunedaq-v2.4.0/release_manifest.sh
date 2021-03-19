@@ -15,7 +15,7 @@ dune_packages=(
   "dfmodules         v2_0_2          e19:prof"
   "trigemu           v2_1_0          e19:prof"
   "readout           v1_2_0          e19:prof"
-  "minidaqapp        v2_1_1          e19:prof"
+  "minidaqapp        v2_1_2          e19:prof"
   "ipm               v2_0_1          e19:prof"
   "timing            v5_3_0          e19:prof"
   "timinglibs        v1_0_0          e19:prof"
