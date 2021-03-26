@@ -1,6 +1,6 @@
 # daq-release
 
-![GitHub issues](https://img.shields.io/github/issues/DUNE-DAQ/daq-release)
+![GitHub issues](https://img.shields.io/github/issues/DUNE-DAQ/daq-release) ![GitHub pull requests](https://img.shields.io/github/issues-pr/DUNE-DAQ/daq-release)
 
 This is a repo containing release manifest files of DUNE DAQ releases.
 
