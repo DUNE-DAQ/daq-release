@@ -1,7 +1,5 @@
 # daq-release
 
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
-
 ![GitHub issues](https://img.shields.io/github/issues/DUNE-DAQ/daq-release)
 
 This is a repo containing release manifest files of DUNE DAQ releases.
