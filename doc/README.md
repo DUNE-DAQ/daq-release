@@ -1,4 +1,10 @@
-# Table of content
+# daq-release
+
+![GitHub issues](https://img.shields.io/github/issues/DUNE-DAQ/daq-release) ![GitHub pull requests](https://img.shields.io/github/issues-pr/DUNE-DAQ/daq-release) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/DUNE-DAQ/daq-release?label=latest%20tag) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/DUNE-DAQ/daq-release)
+
+This is a repo containing DUNE DAQ release making tools, configuarion files, and build scripts of external packages.
+
+## Table of content
 
 1. [DUNE DAQ CI](ci_github_action.md) (**outdated, updates needed**)
 2. [Creating a new DAQ release](create_release.md)
