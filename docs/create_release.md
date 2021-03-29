@@ -16,7 +16,7 @@ Here are the general steps of creating a new DAQ release.
       * use `products` and `products_dev` in cvmfs directly (change `dune_products_dirs` list);
       * commenting out any DAQ packages (in `dune_daqpackages` list);
       * update `dune_externals` with new versions of external UPS packages if necessary (assuming you already prepared the new version of external packages, if not, refer to [How-to-build-external-UPS-packages](make_ups_products.md)).
-    * modify `pyvenv_requirements.txt` with the updated list of required modules and versions (assuming any new modules or versions are already available in `pypi-repo` on cvmfs, otherwise, refer to [how-to-add-new-modules-to-pypi-repo](https://github.com/DUNE-DAQ/daq-release/blob/develop/doc/add_modules_to_pypi_repo.md) for instructions).
+    * modify `pyvenv_requirements.txt` with the updated list of required modules and versions (assuming any new modules or versions are already available in `pypi-repo` on cvmfs, otherwise, refer to [how-to-add-new-modules-to-pypi-repo](add_modules_to_pypi_repo.md) for instructions).
     * modify `dbt-build-order.cmake` (optional), if new DAQ packages will be included in the new release, modfiy this file to include them in the build-order list;
     * Come back later to modify `release_manifest.sh` once all preparation work are done, and new DAQ packages are available in cvmfs.
 3. Build and package DAQ packages
