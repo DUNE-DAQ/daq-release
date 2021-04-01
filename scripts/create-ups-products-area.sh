@@ -27,7 +27,10 @@ fi
 
 mkdir -p $target_products_dir
 pushd $target_products_dir
-curl https://github.com/DUNE-DAQ/daq-release/raw/develop/misc/ups-products-area.tar.gz|tar xf
+rm -f ups-products-area.tar.bz2
+wget https://github.com/DUNE-DAQ/daq-release/raw/develop/misc/ups-products-area.tar.bz2
+tar xf ups-products-area.tar.bz2
+rm -f ups-products-area.tar.bz2
 popd
 
 echo "Info: New UPS products area has been created at: $target_products_dir"
