@@ -1,28 +1,3 @@
-dune_packages=(
-  "appfwk          develop"
-  "cmdlib          develop"
-  "daq-cmake       develop"
-  "dataformats     develop"
-  "dfmessages      develop"
-  "dfmodules       develop"
-  "ers             develop"
-  "flxlibs         develop"
-  "influxopmon     develop"
-  "ipm             develop"
-  "listrev         develop"
-  "logging         develop"
-  "minidaqapp      develop"
-  "nwqueueadapters develop"
-  "opmonlib        develop"
-  "rcif            develop"
-  "readout         develop"
-  "restcmd         develop"
-  "serialization   develop"
-  "timing          develop"
-  "timinglibs      develop"
-  "trigemu         develop"
-)
-
 dune_externals=(
   "boost             v1_73_0         e19:prof"
   "cetlib            v3_11_01        e19:prof"
@@ -31,7 +6,7 @@ dune_externals=(
   #"clang             v7_0_0rc3               "
   "cmake             v3_17_2                 "
   "cppunit           v1_15_1a        e19:prof"
-  "double_conversion v3_1_5          e19:pro"
+  "ers 1ef2e0e"
   "fmt               v6_2_1          e19:prof"
   "folly             v2020_05_25a    e19:prof"
   "gcc               v8_2_0                  "
@@ -62,6 +37,32 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v2_3_0                  "
-  "daq_release       v1_4_1                  "
+  "develop "
+  "develop "
 )
+
+dune_packages=(
+  "appfwk abd89ed"
+  "cmdlib cd75122"
+  "daq-cmake 0baa41f"
+  "dataformats aeed358"
+  "dfmessages 5a4b097"
+  "dfmodules a91706c"
+  "ers 1ef2e0e"
+  "flxlibs 6815c5a"
+  "influxopmon 605d750"
+  "ipm 47690f9"
+  "listrev 1e3dc0c"
+  "logging 518a6ec"
+  "minidaqapp 1d88c68"
+  "ers 1ef2e0e"
+  "opmonlib 4312c85"
+  "rcif 5318188"
+  "readout 479074a"
+  "restcmd 1bc92fd"
+  "serialization bb72989"
+  "timing 63058a1"
+  "timing 63058a1"
+  "trigemu 1eaa264"
+)
+
