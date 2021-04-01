@@ -6,6 +6,7 @@ function update_hash {
     iprd_arr="${iprd_arr%\"}"
     iprd_arr=($iprd_arr)
     echo ${iprd_arr[1]}
+    orig_prod_name=${iprd_arr[0]}
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
     if [ "$branch_name" != "not_set" ]; then
@@ -16,7 +17,7 @@ function update_hash {
     cd ${prod_name}
     commit_hash=`git rev-parse --short HEAD`
     echo "${prod_name} ${commit_hash}"
-    sed -i "/.*${prod_name}.*/c\  \"${prod_name} ${commit_hash}\"" $release_manifest_file
+    sed -i "/.*\"${orig_prod_name} .*/c\  \"${orig_prod_name} ${commit_hash}\"" $release_manifest_file
     cd ..
 }
 
@@ -73,11 +74,12 @@ if [ "$update_all" -eq "1" ]; then
         update_hash ${dune_packages[i]}
     done
 else
-    if grep -q $package_name "$release_manifest_file"; then
-	prd_array=$(grep $package_name "$release_manifest_file")
+    echo $package_name
+    if grep -q \"$package_name\  "$release_manifest_file"; then
+	prd_array=$(grep \"$package_name\  "$release_manifest_file")
 	update_hash $prd_array
     else
-        echo "Error: package is not included in $release_manifest_file, exit now"
+        echo "Error: $package_name is not included in $release_manifest_file, exit now"
 	exit 3
     fi
 fi

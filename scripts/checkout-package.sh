@@ -76,8 +76,8 @@ if [ "$update_all" -eq "1" ]; then
         checkout_package ${dune_packages[i]}
     done
 else
-    if grep -q $package_name "$release_manifest_file"; then
-	prd_array=$(grep $package_name "$release_manifest_file")
+    if grep -q \"$package_name\  "$release_manifest_file"; then
+	prd_array=$(grep \"$package_name\  "$release_manifest_file")
 	checkout_package $prd_array
     else
         echo "Error: package is not included in $release_manifest_file, exit now"
