@@ -12,7 +12,7 @@ function checkout_package {
         prod_branch=$branch_name
     fi
     echo "$prod_name -- $prod_branch"
-    git clone git@github.com:DUNE-DAQ/${prod_name}.git
+    git clone https://github.com/DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
     git checkout ${prod_branch}
     cd ..
