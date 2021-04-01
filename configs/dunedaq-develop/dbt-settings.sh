@@ -1,6 +1,6 @@
 dune_products_dirs=(
-    "/scratch/releases/dunedaq-develop/externals"
-    "/scratch/releases/dunedaq-develop/packages"
+    "/releases/dunedaq-develop/externals"
+    "/releases/dunedaq-develop/packages"
 )
 
 dune_systems=(

@@ -1,4 +1,4 @@
---index-url=file:///scratch/pypi-repo/simple
+--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple
 anyconfig==0.9.11
 attrs==20.2.0
 click==7.1.2
