@@ -10,6 +10,17 @@ on:
   schedule:
     - cron: "0 7 * * *"
 
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Manual start the CI workflow'
+        # Default value if no value is explicitly provided
+        default: 'Yes'
+        # Input has to be provided for the workflow to run
+        required: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
@@ -68,6 +79,15 @@ jobs:
           export DBT_INSTALL_DIR=${DBT_AREA_ROOT}/install
           export DBT_SETUP_BUILD_ENVIRONMENT_SCRIPT_SOURCED=1
           dbt-build.sh --install
-          
-          
+          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o /release/dunedaq-develop
+          echo "dune_daqpackages=(">> /release/dunedaq-develop/dbt-settings.sh
+          find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> >> /release/dunedaq-develop/dbt-settings.sh
+          echo ")">> /release/dunedaq-develop/dbt-settings.sh
 
+    - name: upload build log
+      uses: actions/upload-artifact@v2
+      with:
+        name: log directory and dev release
+        path: |
+          $GITHUB_WORKSPACE/dev/log
+          /release/dunedaq-develop
