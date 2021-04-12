@@ -81,7 +81,7 @@ jobs:
           
           
     - name: upload build log
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: log directory and dev release
         path: |
