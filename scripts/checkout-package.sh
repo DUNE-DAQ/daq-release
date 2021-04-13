@@ -22,7 +22,7 @@ update_all=0
 branch_name="not_set"
 release_manifest_file="./release_manifest.sh"
 outdir="sourcecode"
-while getopts ":f:p:b:o:ah" opt; do
+while getopts ":f:p:b:no:ah" opt; do
   case ${opt} in
     f )
        release_manifest_file=$OPTARG
@@ -32,6 +32,9 @@ while getopts ":f:p:b:o:ah" opt; do
        ;;
     b )
        branch_name=$OPTARG
+       ;;
+    n )
+       NO_RELEASE_CHECK=true
        ;;
     o )
        outdir=$OPTARG
@@ -80,8 +83,13 @@ else
 	prd_array=$(grep \"$package_name\  "$release_manifest_file")
 	checkout_package $prd_array
     else
-        echo "Error: package is not included in $release_manifest_file, exit now"
-	exit 3
+    	if NO_RELEASE_CHECK; then
+            prd_array="$package_name $branch_name e19:prof"
+	    checkout_package $prd_array
+	else
+            echo "Error:  "NO_RELEASE_CHECK" is not turned on and package is not included in $release_manifest_file, exit now"
+	    exit 3
+	fi
     fi
 fi
 popd
