@@ -1,6 +1,6 @@
 dune_products_dirs=(
-    "/releases/dunedaq-develop/externals"
-    "/releases/dunedaq-develop/packages"
+    "/cvmfs/dunedaq.opensciencegrid.org/products"
+    "/cvmfs/dunedaq-development.opensciencegrid.org/products"
 )
 
 dune_systems=(
@@ -27,5 +27,6 @@ dune_systems=(
     "felix             v1_1_1       e19:prof"
     "pybind11          v2_6_2       e19:prof"
     "uhal              v2_8_0       e19:prof"
+    "cpr               v1_5_2       e19:prof"
     )
 
