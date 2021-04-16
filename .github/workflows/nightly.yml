@@ -92,11 +92,14 @@ jobs:
           mkdir -p /releases/nightly
           mv /releases/dunedaq-develop /releases/nightly/${nightly_tag}
 
-
-    - name: upload build log
+    - name: upload nightly tarball
       uses: actions/upload-artifact@v2
       with:
-        name: log directory and dev release
-        path: |
-          $GITHUB_WORKSPACE/dev/log
-          /releases/nightly
+        name: nightly release
+        path: /releases/nightly
+
+    - name: upload build log file
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_log
+        path: ${{ github.workspace }}/dev/log
