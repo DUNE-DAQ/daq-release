@@ -66,7 +66,7 @@ dune_packages=(
   "influxopmon 7f814a0"
   "nwqueueadapters 193810a"
   "erses fb6a75c"
-  "triggeralgs 9ed0b8f"
-  "trigger 58f0b19"
+  #"triggeralgs 9ed0b8f"
+  #"trigger 58f0b19"
 )
 
