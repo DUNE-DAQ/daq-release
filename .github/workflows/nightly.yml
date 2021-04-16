@@ -57,9 +57,6 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source $GITHUB_WORKSPACE/daq-buildtools/dbt-setup-env.sh
-          export DBT_ROOT=$GITHUB_WORKSPACE/daq-buildtools
-          source ${DBT_ROOT}/scripts/dbt-setup-tools.sh
-          add_many_paths PATH ${DBT_ROOT}/bin ${DBT_ROOT}/scripts
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
@@ -67,9 +64,7 @@ jobs:
     
     - name: setup build env and build the dev release
       run: |
-          export DBT_ROOT=$GITHUB_WORKSPACE/daq-buildtools
-          source ${DBT_ROOT}/scripts/dbt-setup-tools.sh
-          add_many_paths PATH ${DBT_ROOT}/bin ${DBT_ROOT}/scripts
+          source $GITHUB_WORKSPACE/daq-buildtools/dbt-setup-env.sh
           cd $GITHUB_WORKSPACE/dev
           export DBT_AREA_ROOT=$PWD
           export DBT_AREA_FILE="dbt-settings"
