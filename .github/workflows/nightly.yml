@@ -31,6 +31,9 @@ jobs:
       image: dunedaq/sl7-minimal:dev
     env:
       DBT_AREA_FILE: "dbt-settings"
+    defaults:
+      run:
+        shell: bash
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -53,6 +56,7 @@ jobs:
         
     - name: setup dev area and checkout code
       run: |
+          source $GITHUB_WORKSPACE/daq-buildtools/dbt-setup-env.sh
           export DBT_ROOT=$GITHUB_WORKSPACE/daq-buildtools
           source ${DBT_ROOT}/scripts/dbt-setup-tools.sh
           add_many_paths PATH ${DBT_ROOT}/bin ${DBT_ROOT}/scripts
