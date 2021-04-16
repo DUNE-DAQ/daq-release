@@ -60,7 +60,10 @@ jobs:
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          #$GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p daq-cmake -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p ers -b develop -o sourcecode
+    
     
     - name: setup build env and build the dev release
       run: |
@@ -79,7 +82,9 @@ jobs:
           export DBT_SETUP_BUILD_ENVIRONMENT_SCRIPT_SOURCED=1
           dbt-build.sh --install
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o /releases/dunedaq-develop/packages
+          echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> /releases/dunedaq-develop/dbt-settings.sh
+          echo "PROGRESS: updating dbt-settings.sh under /releases/dunedaq-develop"
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> /releases/dunedaq-develop/dbt-settings.sh
           echo ")">> /releases/dunedaq-develop/dbt-settings.sh
           nightly_tag="N$(date +%y-%m-%d)"
