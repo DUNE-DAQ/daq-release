@@ -60,7 +60,9 @@ jobs:
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          #$GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p daq-cmake -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p ers -b develop -o sourcecode
           
     
     - name: setup build env and build the dev release
@@ -89,14 +91,16 @@ jobs:
           nightly_tag="N$(date +%y-%m-%d)"
           sed -i 's,.*/cvmfs/dunedaq.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' /releases/dunedaq-develop/dbt-settings.sh
           sed -i 's,.*/cvmfs/dunedaq-development.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' /releases/dunedaq-develop/dbt-settings.sh
-          mkdir -p /releases/nightly
-          mv /releases/dunedaq-develop /releases/nightly/${nightly_tag}
+          mkdir -p $GITHUB_WORKSPACE/nightly
+          mv /releases/dunedaq-develop $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          cd $GITHUB_WORKSPACE/nightly
+          tar zcvf ${nightly_tag}.tar.gz ${nightly_tag}
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
       with:
         name: nightly release
-        path: /releases/nightly
+        path: ${{ github.workspace }}/nightly
 
     - name: upload build log file
       uses: actions/upload-artifact@v2
