@@ -80,7 +80,7 @@ jobs:
           dbt-build.sh --install
           nightly_tag="N$(date +%y-%m-%d)"
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
-          GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o /releases/dunedaq-develop/packages
