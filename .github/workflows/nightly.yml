@@ -95,6 +95,7 @@ jobs:
           mv /releases/dunedaq-develop $GITHUB_WORKSPACE/nightly/${nightly_tag}
           cd $GITHUB_WORKSPACE/nightly
           tar zcvf ${nightly_tag}.tar.gz ${nightly_tag}
+          rm -rf ${nightly_tag}
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
