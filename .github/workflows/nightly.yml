@@ -78,6 +78,11 @@ jobs:
           export DBT_INSTALL_DIR=${DBT_AREA_ROOT}/install
           export DBT_SETUP_BUILD_ENVIRONMENT_SCRIPT_SOURCED=1
           dbt-build.sh --install
+          nightly_tag="N$(date +%y-%m-%d)"
+          mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o /releases/dunedaq-develop/packages
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
@@ -85,12 +90,12 @@ jobs:
           cd /releases/dunedaq-develop/packages
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-          nightly_tag="N$(date +%y-%m-%d)"
+          
           sed -i 's,.*/cvmfs/dunedaq.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*/cvmfs/dunedaq-development.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-          mkdir -p $GITHUB_WORKSPACE/nightly
-          mv /releases/dunedaq-develop $GITHUB_WORKSPACE/nightly/${nightly_tag}
-          cp ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
+
+          mv /releases/dunedaq-develop/externals $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
           cd $GITHUB_WORKSPACE/nightly
           tar zcvf ${nightly_tag}.tar.gz ${nightly_tag}
           rm -rf ${nightly_tag}
