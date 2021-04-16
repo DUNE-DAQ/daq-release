@@ -60,10 +60,8 @@ jobs:
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          #$GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p daq-cmake -b develop -o sourcecode
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -p ers -b develop -o sourcecode
-    
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          
     
     - name: setup build env and build the dev release
       run: |
