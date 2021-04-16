@@ -83,6 +83,12 @@ jobs:
           echo " dune_daqpackages=(" >> /releases/dunedaq-develop/dbt-settings.sh
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> /releases/dunedaq-develop/dbt-settings.sh
           echo ")">> /releases/dunedaq-develop/dbt-settings.sh
+          nightly_tag="N$(date +%y-%m-%d)"
+          sed -i 's,.*/cvmfs/dunedaq.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' /releases/dunedaq-develop/dbt-settings.sh
+          sed -i 's,.*/cvmfs/dunedaq-development.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' /releases/dunedaq-develop/dbt-settings.sh
+          mkdir -p /releases/nightly
+          mv /releases/dunedaq-develop /releases/nightly/${nightly_tag}
+
 
     - name: upload build log
       uses: actions/upload-artifact@v2
@@ -90,4 +96,4 @@ jobs:
         name: log directory and dev release
         path: |
           $GITHUB_WORKSPACE/dev/log
-          /release/dunedaq-develop
+          /releases/nightly
