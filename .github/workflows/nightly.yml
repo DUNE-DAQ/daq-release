@@ -97,7 +97,7 @@ jobs:
           mv /releases/dunedaq-develop/externals $GITHUB_WORKSPACE/nightly/${nightly_tag}
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
           cd $GITHUB_WORKSPACE/nightly
-          tar zcvf ${nightly_tag}.tar.gz ${nightly_tag}
+          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
           rm -rf ${nightly_tag}
 
     - name: upload nightly tarball
