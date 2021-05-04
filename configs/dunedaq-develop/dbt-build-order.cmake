@@ -7,4 +7,4 @@
 # development area, the developer is encouraged to add it to its
 # appropriate place in this list
 
-set(build_order "daq-cmake" "ers" "erses" "logging" "cmdlib" "rcif" "restcmd" "opmonlib" "appfwk" "listrev" "daqdemos" "ipm" "serialization" "nwqueueadapters" "dataformats" "dfmessages" "dfmodules" "readout" "flxlibs" "trigemu" "influxopmon" "minidaqapp" "timing" "timinglibs""triggeralgs" "trigger")
+set(build_order "daq-cmake" "ers" "erses" "logging" "cmdlib" "rcif" "restcmd" "opmonlib" "appfwk" "listrev" "daqdemos" "ipm" "serialization" "nwqueueadapters" "dataformats" "dfmessages" "dfmodules" "readout" "flxlibs" "trigemu" "triggeralgs" "timing" "timinglibs" "trigger" "influxopmon" "minidaqapp")
