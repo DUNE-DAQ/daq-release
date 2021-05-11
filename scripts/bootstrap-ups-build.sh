@@ -36,7 +36,7 @@ source $PROD_DIR/setup
 export CETPKG_INSTALL=$PROD_DIR
 export CETPKG_J=$NCORE
 cd $CET_BUILD_DIR
-for i in double_conversion fmt glog googletest libevent folly zmq cppzmq msgpack_c pybind11 pugixml; do
+for i in double_conversion fmt glog googletest libevent folly zmq cppzmq msgpack_c pybind11 pugixml librdkafka; do
   ibuild_dir=build_${i}
   isrc_dir=$WORK_DIR/daq-release/scripts/cetbuildtools_scripts/${i}/ups
   mkdir -p ${ibuild_dir}

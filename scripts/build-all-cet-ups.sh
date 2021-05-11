@@ -20,12 +20,14 @@ cd $WORK_DIR
 git clone https://github.com/DUNE-DAQ/daq-release.git
 echo "INFO [`eval $timenow`]: Finished cloning daq-release repo from DUNE-DAQ@github."
 
-cp -rT $WORK_DIR/daq-release/scripts/ups_build_scripts/ $PROD_DIR
+export PATH=$WORK_DIR/daq-release/scripts:$PATH
+
+create-ups-products-area.sh -t $PROD_DIR
+
 cd $PROD_DIR
 #./get_scisoft_pkgs.sh 
 source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products_dev/setup
 source /cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products/setup
-echo "INFO [`eval $timenow`]: Finished getting packages from SciSoft."
 
 ###
 # Build UPS products with cetbuildtools
@@ -36,7 +38,7 @@ source $PROD_DIR/setup
 export CETPKG_INSTALL=$PROD_DIR
 export CETPKG_J=$NCORE
 cd $CET_BUILD_DIR
-for i in double_conversion fmt glog googletest libevent folly zmq cppzmq msgpack_c pybind11 pugixml; do
+for i in double_conversion fmt glog googletest libevent folly zmq cppzmq msgpack_c pybind11 pugixml librdkafka; do
   ibuild_dir=build_${i}
   isrc_dir=$WORK_DIR/daq-release/scripts/cetbuildtools_scripts/${i}/ups
   mkdir -p ${ibuild_dir}
