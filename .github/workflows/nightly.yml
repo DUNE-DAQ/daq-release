@@ -56,7 +56,7 @@ jobs:
         
     - name: setup dev area and checkout code
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/dbt-setup-env.sh
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
@@ -64,19 +64,15 @@ jobs:
     
     - name: setup build env and build the dev release
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/dbt-setup-env.sh
+
+              setup_repo_env="SETUP_$REPO"
+              [[ -z ${!setup_env_repo+x} ]] || unsetup $REPO
+              cp -pr $GITHUB_WORKSPACE/DUNE-DAQ/$REPO $GITHUB_WORKSPACE/dev/sourcecode
+              dbt-build.sh --install
+              $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -o /tarballs
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
           cd $GITHUB_WORKSPACE/dev
-          export DBT_AREA_ROOT=$PWD
-          export DBT_AREA_FILE="dbt-settings"
-          source ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-          setup_ups_product_areas || true
-          setup -B python ${dune_python_version} || true
-          source ${DBT_AREA_ROOT}/${DBT_VENV}/bin/activate 
-          setup_ups_products dune_devtools || true
-          setup_ups_products dune_systems || true
-          setup_ups_products dune_externals || true
-          export DBT_INSTALL_DIR=${DBT_AREA_ROOT}/install
-          export DBT_SETUP_BUILD_ENVIRONMENT_SCRIPT_SOURCED=1
+          dbt-workarea-env -s externals || true
           dbt-build.sh --install
           nightly_tag="N$(date +%y-%m-%d)"
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
