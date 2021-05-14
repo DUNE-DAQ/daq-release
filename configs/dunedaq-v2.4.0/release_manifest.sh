@@ -51,7 +51,6 @@ dune_externals=(
   "zmq               v4_3_1c         e19:prof"
   "cppzmq            v4_3_0          e19:prof"
   "msgpack_c         v3_3_0          e19:prof"
-  "msgpack_c         v3_3_0          e19:prof"
   "felix             v1_1_1          e19:prof"
   "pybind11          v2_6_2          e19:prof"
   "uhal              v2_8_0          e19:prof"

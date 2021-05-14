@@ -6,7 +6,6 @@ dune_externals=(
   #"clang             v7_0_0rc3               "
   "cmake             v3_17_2                 "
   "cppunit           v1_15_1a        e19:prof"
-  "ers 94c37ad"
   "fmt               v6_2_1          e19:prof"
   "folly             v2020_05_25a    e19:prof"
   "gcc               v8_2_0                  "
