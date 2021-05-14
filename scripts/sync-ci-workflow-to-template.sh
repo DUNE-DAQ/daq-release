@@ -34,8 +34,6 @@ function git_checkout_and_update_ci {
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
     prod_name=${iprd_arr[0]//_/-}
-    prod_ups_version=${iprd_arr[1]//_/.}
-    prod_version=${prod_ups_version//[^v.[:digit:]]/}
     git clone git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
     cp $workflow_file .github/workflows
