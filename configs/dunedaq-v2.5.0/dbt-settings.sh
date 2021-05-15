@@ -1,7 +1,8 @@
 dune_products_dirs=(
-    #"/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.4.0/packages"
-    #"/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.4.0/externals"
-    "/cvmfs/dunedaq.opensciencegrid.org/products"
+    "/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.5.0/packages"
+    "/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.5.0/externals"
+    #"/cvmfs/dunedaq.opensciencegrid.org/products"
+    #"/cvmfs/dunedaq-development.opensciencegrid.org/products"
 )
 
 dune_systems=(
@@ -37,8 +38,8 @@ dune_daqpackages=(
     "logging           v1_0_1c      e19:prof"
     "cmdlib            v1_1_2b      e19:prof"
     "restcmd           v1_1_2b      e19:prof"
-    "opmonlib          v2_0_0       e19:prof"
+    "opmonlib          v1_2_0       e19:prof"
     "rcif              v1_1_0       e19:prof"
     "appfwk            v2_3_0       e19:prof"
-    "listrev           v2_1_2       e19:prof"
+    "listrev           v2_1_3       e19:prof"
 )

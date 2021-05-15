@@ -1,8 +1,8 @@
 #!/bin/bash
 
-products_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products"
-release_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/releases"
-release_name="dunedaq-v2.4.0"
+products_dir="/cvmfs/dunedaq.opensciencegrid.org/products"
+release_dir="/cvmfs/dunedaq.opensciencegrid.org/releases"
+release_name="dunedaq-v2.5.0"
 #release_name="dunedaq-develop"
 tarball="cvmfs_${release_name}.tar.gz"
 ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release

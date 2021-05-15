@@ -4,10 +4,10 @@ dune_packages=(
   "logging           v1_0_1c         e19:prof"
   "cmdlib            v1_1_2b         e19:prof"
   "restcmd           v1_1_2b         e19:prof"
-  "opmonlib          v2_0_0          e19:prof"
+  "opmonlib          v1_2_0          e19:prof"
   "rcif              v1_1_0         e19:prof"
   "appfwk            v2_3_0          e19:prof"
-  "listrev           v2_1_2          e19:prof"
+  "listrev           v2_1_3          e19:prof"
 )
 
 dune_externals=(
@@ -20,6 +20,7 @@ dune_externals=(
   "cppunit           v1_15_1a        e19:prof"
   "fmt               v6_2_1          e19:prof"
   "folly             v2020_05_25a    e19:prof"
+  "double_conversion v3_1_5          e19:prof"
   "gcc               v8_2_0                  "
   "gdb               v9_2                    "
   "glog              v0_4_0          e19:prof"
