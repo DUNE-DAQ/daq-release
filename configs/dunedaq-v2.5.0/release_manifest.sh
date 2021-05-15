@@ -1,3 +1,15 @@
+dune_packages=(
+  "daq_cmake         v1_3_4          e19:prof"
+  "ers               v1_1_2b         e19:prof"
+  "logging           v1_0_1c         e19:prof"
+  "cmdlib            v1_1_2b         e19:prof"
+  "restcmd           v1_1_2b         e19:prof"
+  "opmonlib          v1_2_0          e19:prof"
+  "rcif              v1_1_0         e19:prof"
+  "appfwk            v2_3_0          e19:prof"
+  "listrev           v2_1_3          e19:prof"
+)
+
 dune_externals=(
   "boost             v1_73_0         e19:prof"
   "cetlib            v3_11_01        e19:prof"
@@ -41,32 +53,3 @@ dune_extras=(
   "daq_buildtools    v2_3_0                  "
   "daq_release       v1_4_1                  "
 )
-
-dune_packages=(
-  "daq_cmake a60de05"
-  "ers 94c37ad"
-  "logging 4337690"
-  "cmdlib ea839a2"
-  "restcmd e1992dc"
-  "opmonlib 4dfe733"
-  "rcif 06f46c5"
-  "appfwk 099c93f"
-  "listrev e811774"
-  "serialization 8d48d3b"
-  "flxlibs a6b9dfb"
-  "dataformats 1349b5a"
-  "dfmessages e940776"
-  "dfmodules d1acb40"
-  "trigemu ac34ed3"
-  "readout 690c6f0"
-  "minidaqapp ee81085"
-  "ipm 1bf0f5c"
-  "timing fd1f916"
-  "timinglibs 77e0a5d"
-  "influxopmon d54f5d4"
-  "nwqueueadapters d4a122d"
-  "erses 17d520a"
-  "triggeralgs aa7b305"
-  "trigger a59e174"
-)
-

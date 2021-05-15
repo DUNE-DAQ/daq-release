@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dune_packages_with_ci=(
+  "daq-cmake"
   "ers"
   "logging"
   "cmdlib"
