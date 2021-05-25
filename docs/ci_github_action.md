@@ -1,5 +1,9 @@
 # Nightly releases and Continous Integration for DUNE DAQ Software
 
+## New Features
+
+🆕 Checkout the [CI Dashboard](https://fnal.zoom.us/my/alessandro.thea?pwd=WTdXUm9XZ1lWaHVuSWdlUXNBYk5XUT09) to get an overview of recently CI build status for DAQ repositories in `DUNE-DAQ` organization.
+
 ## Introduction
 
 * Continous Integration:
