@@ -2,7 +2,7 @@
 
 ## New Features
 
-🆕 Checkout the [CI Dashboard](https://fnal.zoom.us/my/alessandro.thea?pwd=WTdXUm9XZ1lWaHVuSWdlUXNBYk5XUT09) to get an overview of recently CI build status for DAQ repositories in `DUNE-DAQ` organization.
+🆕 Checkout the [CI Dashboard](https://tiny.one/dunedaq-ci-dashboard) to get an overview of recently CI build status for DAQ repositories in `DUNE-DAQ` organization.
 
 ## Introduction
 
