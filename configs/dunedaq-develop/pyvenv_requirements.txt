@@ -21,5 +21,10 @@ Werkzeug==1.0.1
 colorama==0.4.4
 pexpect==4.8.0
 ptyprocess==0.7.0
-rich==9.13.0
+click-shell==2.0
+click-didyoumean==0.0.3
+sh==1.14.1
+graphviz==0.16
+rich==10.2.2
+nanorc==1.2.1
 moo==0.5.7
