@@ -38,7 +38,7 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v3_1_0                  "
+  "daq_buildtools    v3_0_1                  "
   "daq_release       v1_5_1                  "
 )
 
