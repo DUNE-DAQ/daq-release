@@ -84,7 +84,7 @@ else
 	prd_array=$(grep \"$package_name\  "$release_manifest_file")
 	checkout_package $prd_array
     else
-    	if $NO_RELEASE_CHECK; then
+        if $NO_RELEASE_CHECK; then
             prd_array="$package_name $branch_name e19:prof"
 	    checkout_package $prd_array
 	else
