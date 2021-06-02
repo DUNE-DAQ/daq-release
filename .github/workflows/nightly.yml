@@ -1,0 +1,103 @@
+# This is a basic workflow that is manually triggered
+
+name: Nightly workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  #push:
+    #branches: [ develop ]
+  schedule:
+    - cron: "0 7 * * *"
+
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Manual start the CI workflow'
+        # Default value if no value is explicitly provided
+        default: 'Yes'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  bulid_the_develop_release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container:
+      image: dunedaq/sl7-minimal:dev
+    env:
+      DBT_AREA_FILE: "dbt-settings"
+    defaults:
+      run:
+        shell: bash
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    
+    - name: Start the CI
+      run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
+
+    - name: Checkout daq-buildtools
+      uses: actions/checkout@v2
+      with:
+        repository: DUNE-DAQ/daq-buildtools
+        path: daq-buildtools
+
+    - name: Checkout daq-release
+      uses: actions/checkout@v2
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+        
+    - name: setup dev area and checkout code
+      run: |
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
+          cd dev
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+    
+    - name: setup build env and build the dev release
+      run: |
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          cd $GITHUB_WORKSPACE/dev
+          dbt-workarea-env -s externals || true
+          dbt-build.sh --install
+          nightly_tag="N$(date +%y-%m-%d)"
+          mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          echo "PROGRESS: created ups products for DAQ packages."
+          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo "PROGRESS: updating dbt-settings.sh under /releases/dunedaq-develop"
+          cd /releases/dunedaq-develop/packages
+          find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          
+          sed -i 's,.*/cvmfs/dunedaq.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          sed -i 's,.*/cvmfs/dunedaq-development.open,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+
+          mv /releases/dunedaq-develop/externals $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
+          cd $GITHUB_WORKSPACE/nightly
+          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
+          rm -rf ${nightly_tag}
+
+    - name: upload nightly tarball
+      uses: actions/upload-artifact@v2
+      with:
+        name: nightly release
+        path: ${{ github.workspace }}/nightly
+
+    - name: upload build log file
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_log
+        path: ${{ github.workspace }}/dev/log

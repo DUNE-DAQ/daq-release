@@ -1,41 +1,34 @@
 #!/bin/bash
 
+release_config_dir="/scratch/workdir/daq-release/configs/dunedaq-develop" 
 products_dir="/cvmfs/dunedaq.opensciencegrid.org/products"
-release_dir="/cvmfs/dunedaq.opensciencegrid.org/releases"
-release_name="dunedaq-v2.6.0"
-#release_name="dunedaq-develop"
-tarball="cvmfs_${release_name}.tar.gz"
-ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release
-release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
+release_name="N$(date +%y-%m-%d)"
+tarball="${release_name}.tar.gz"
+upstar_dir="/scratch/tarball"
 
 function create_products_link {
   prd_list_name=$1[@]
   prd_list=("${!prd_list_name}")
-  rel_prd_path=$2
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
     prod_name=${iprd_arr[0]}
     prod_version=${iprd_arr[1]}
     mkdir ${prod_name}
     pushd ${prod_name}
-    [[ -d "${products_dir}/${prod_name}/current.chain" ]] && ln -s ../../$rel_prd_path/${prod_name}/current.chain .
-    ln -s ../../$rel_prd_path/${prod_name}/${prod_version} .
-    ln -s ../../$rel_prd_path/${prod_name}/${prod_version}.version .
+    [[ -d "${products_dir}/${prod_name}/current.chain" ]] && ln -s ${products_dir}/${prod_name}/current.chain .
+    ln -s ${products_dir}/${prod_name}/${prod_version} .
+    ln -s ${products_dir}/${prod_name}/${prod_version}.version .
     popd
   done
 }
 
-while getopts ":f:P:R:r:t:h" opt; do
+while getopts ":f:P:R:r:t:w:h" opt; do
   case ${opt} in
     f )
-       ups_list_file=$OPTARG
        release_config_dir=$OPTARG
        ;;
     P )
        products_dir=$OPTARG
-       ;;
-    R )
-       release_dir=$OPTARG
        ;;
     r )
        release_name=$OPTARG
@@ -43,14 +36,17 @@ while getopts ":f:P:R:r:t:h" opt; do
     t )
        tarball=$OPTARG
        ;;
+    u )
+       upstar_dir=$OPTARG
+       ;;
     h )
       echo "Usage:"
       echo "    create-release-dir.sh  -h Display this help message."
       echo "    <-f> <release_config_dir>"
       echo "    [-P] <products_dir>"
-      echo "    [-R] <release_dir>"
       echo "    [-r] <release_name>"
       echo "    [-t] <tarball_name>"
+      echo "    [-u] <ups tarball dir>"
       exit 0
       ;;
    \? )
@@ -101,7 +97,12 @@ if [ ! -f "$release_config_dir/dbt-settings.sh" ]; then
   echo "Exit now..."
   exit 3
 else
-  cp $release_config_dir/dbt-settings.sh $tmp_dir/$release_name
+  _dbt_file=$tmp_dir/$release_name/dbt-settings.sh
+  cp $release_config_dir/dbt-settings.sh ${_dbt_file}
+  sed -i "s/\/scratch\/releases\/dunedaq-develop/\/cvmfs\/dunedaq-development.opensciencegrid.org\/nightly\/${release_name}/g" ${_dbt_file}
+  echo "dune_daqpackages=(" >> ${_dbt_file}
+  find "/scratch/releases/dunedaq-develop/packages/" -name "*.version" -type d |sed  "s/\/scratch\/releases\/dunedaq-develop\/packages\//   \"/g"|sed 's/\// /g'|sed 's/.version/ -q e19:prof"/g'>>${_dbt_file}
+  echo "    )">> ${_dbt_file}
 fi
 
 if [ ! -f "$release_config_dir/pyvenv_requirements.txt" ]; then
@@ -112,6 +113,7 @@ if [ ! -f "$release_config_dir/pyvenv_requirements.txt" ]; then
   exit 3
 else
   cp $release_config_dir/pyvenv_requirements.txt $tmp_dir/$release_name
+  sed -i 's/scratch/cvmfs\/dunedaq.opensciencegrid.org/g' $tmp_dir/$release_name/pyvenv_requirements.txt
 fi
 
 if ! [ -w $(dirname "${tarball}") ]; then
@@ -119,9 +121,7 @@ if ! [ -w $(dirname "${tarball}") ]; then
 fi
 
 echo "[Info]: Creating release tarball: ${tarball}"
-echo "[Info]: UPS list file: ${ups_list_file}"
 echo "[Info]: Products directory: ${products_dir}"
-echo "[Info]: Release directory: ${release_dir}"
 echo "[Info]: Release name: ${release_name}"
 
 
@@ -132,36 +132,18 @@ pushd $tmp_dir/$release_name
 
 ## Step 2. create externals and packages dir
 
-rel_products_dir=`realpath --relative-to="${release_dir%%+(/)}${release_dir:+/}$release_name" $products_dir`
 
 mkdir externals
 pushd externals
-cp -pr $products_dir/.updfiles .
-cp -pr $products_dir/.upsfiles .
-mkdir ups
-pushd ups
-ups_string=(${dune_ups[0]})
-ln -s ../../$rel_products_dir/${ups_string[0]}/${ups_string[1]} .
-ln -s ../../$rel_products_dir/${ups_string[0]}/${ups_string[1]}.version .
-ln -s ../../$rel_products_dir/${ups_string[0]}/current.chain .
-popd # ups
 
-ln -s ${ups_string[0]}/${ups_string[1]}/Linux64bit+3.10-2.17/ups/setup
-ln -s ${ups_string[0]}/${ups_string[1]}/Linux64bit+3.10-2.17/ups/setups
-
-cat <<EOF > setups_layout
-s_setenv UPS_THIS_DB \$SETUPS_DIR
-s_setenv PROD_DIR_PREFIX \$SETUPS_DIR
-EOF
-popd # externals
-cp -pr externals packages
-
-pushd externals
-create_products_link dune_externals $rel_products_dir
+create_products_link dune_externals
 popd
 
+mkdir packages
 pushd packages
-create_products_link dune_packages $rel_products_dir
+
+for i in `ls ${upstar_dir}/*.bz2`; do tar xf $i; done
+
 popd
 
 popd
@@ -169,6 +151,6 @@ popd
 tar -zcvf $tarball -C $tmp_dir $release_name
 
 echo "[Info]: Tarball -- $tarball -- has been created."
-echo "[Info]: It can be expanded under $release_dir with 'tar -C RELEASE_AREA -zxf $tarball'"
+echo "[Info]: It can be expanded under release_dir with 'tar -C RELEASE_AREA -zxf $tarball'"
 
 rm -rf $tmp_dir

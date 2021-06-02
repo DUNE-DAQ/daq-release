@@ -2,7 +2,7 @@
 
 products_dir="/home/dingpf/cvmfs_dune/dunedaq/DUNE/products"
 #products_dir="/cvmfs/dune.opensciencegrid.org/dunedaq/DUNE/products"
-release_name="dunedaq-v2.4.0"
+release_name="dunedaq-v2.6.0"
 #release_name="dunedaq-develop"
 tarball="dunedaq-${release_name}"
 ups_list_file="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0.release

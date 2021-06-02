@@ -149,7 +149,7 @@ End:
     return table_content
 
 
-def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", pkg_name=""):
+def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, install, cver="c7", pkg_name=""):
     kvers = {'c7':'Linux64bit+3.10-2.17', 'c8':'Linux64bit+4.18-2.28'}
     tarvers = {'c7':'sl7', 'c8':'c8'}
     kver = kvers[cver]
@@ -160,7 +160,7 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", p
     if pkg_name == "":
         pkg_list = [f.name for f in os.scandir(install_dir) if f.is_dir()]
         for ipkg in pkg_list:
-            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver, ipkg)
+            create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, install, cver, ipkg)
         return
     else:
         install_dir = os.path.join(install_dir, pkg_name)
@@ -257,14 +257,19 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, cver="c7", p
         vcontent = make_ups_version_file(pkg_name, version, commit_hash, equal, dqual, cver)
         vf.write(vcontent)
 
-    # tar up product dir.
-    tar_name = "{}-{}-{}-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, tarver, equal, dqual)
-    print(tar_name)
-    tar_cmd = "cd {} && tar -cvjSf {} {} && mv {} {}".format(
-        tmp_dir, tar_name, pkg_name, tar_name, dest_dir)
-    print(tar_cmd)
-    check_output(tar_cmd)
-    #shutil.rmtree(tmp_dir)
+    if install:
+        cmd = "rsync -ah {}/{} {} ".format( tmp_dir, pkg_name, dest_dir)
+        print(cmd)
+        check_output(cmd)
+    else:
+        # tar up product dir.
+        tar_name = "{}-{}-{}-x86_64-{}-{}.tar.bz2".format(pkg_name, dot_ver, tarver, equal, dqual)
+        print(tar_name)
+        cmd = "cd {} && tar -cvjSf {} {} && mv {} {}".format(
+            tmp_dir, tar_name, pkg_name, tar_name, dest_dir)
+        print(cmd)
+        check_output(cmd)
+    shutil.rmtree(tmp_dir)
     return
 
 
@@ -281,8 +286,6 @@ if __name__ == "__main__":
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-w', '--work-dir', default=None, required=True,
                         help="Path to DAQ software working directory;")
-    parser.add_argument('-t', '--tarball-dir', default=None, required=True,
-                        help="Path to the destination tarball directory;")
     parser.add_argument('-p', '--package-name', default=None,
                         help="Name of package to be 'UPSified'; if not supplied, all currently installed packages will be 'UPSified';")
     parser.add_argument('-e', '--equalifier', default='e19',
@@ -291,12 +294,16 @@ if __name__ == "__main__":
                         help="CentOS version;")
     parser.add_argument('-d', '--debug', action='store_true',
                         help="flag for the 'debug' qualifer ('prof' if unset).")
+    parser.add_argument('-i', '--install', action='store_true',
+                        help="flag for the 'debug' qualifer ('prof' if unset).")
+    parser.add_argument('-o', '--output-dir', default=None,
+                        help="installation directory, either tarballs or untarred ups packages.")
 
     args = parser.parse_args()
     workdir = os.path.abspath(args.work_dir)
     install_dir = os.path.join(workdir, "install")
     source_dir = os.path.join(workdir, "sourcecode")
-    dest_dir = os.path.abspath(args.tarball_dir)
+    dest_dir = os.path.abspath(args.output_dir)
     equal = args.equalifier
     if args.debug:
         dqual = "debug"
@@ -304,6 +311,6 @@ if __name__ == "__main__":
         dqual = "prof"
 
     if args.package_name != None:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version, args.package_name)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.install, args.centos_version, args.package_name)
     else:
-        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.centos_version)
+        create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, args.install, args.centos_version)
