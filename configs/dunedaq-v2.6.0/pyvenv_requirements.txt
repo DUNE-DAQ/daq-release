@@ -26,5 +26,5 @@ click-didyoumean==0.0.3
 sh==1.14.1
 graphviz==0.16
 rich==10.2.2
-nanorc==1.2.1
+nanorc==1.2.2
 moo==0.5.7

@@ -38,7 +38,7 @@ function git_checkout_and_update_ci {
     git clone git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
     cp $workflow_file .github/workflows
-    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo"
+    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo, rolling back linting feature (pending discussion next Tuesday)"
     git push
     popd
   done
