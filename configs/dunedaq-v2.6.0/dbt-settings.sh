@@ -41,7 +41,7 @@ dune_daqpackages=(
     "restcmd           v1_1_2c         e19:prof"
     "opmonlib          v1_3_0          e19:prof"
     "rcif              v1_1_0b         e19:prof"
-    "appfwk            v2_3_0b         e19:prof"
+    "appfwk            v2_3_1          e19:prof"
     "listrev           v2_1_3b         e19:prof"
     "serialization     v1_2_2          e19:prof"
     "flxlibs           v1_1_0          e19:prof"
