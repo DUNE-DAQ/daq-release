@@ -39,7 +39,7 @@ dune_daqpackages=(
     "logging           v1_0_2          e19:prof"
     "cmdlib            v1_1_2c         e19:prof"
     "restcmd           v1_1_2c         e19:prof"
-    "opmonlib          v1_2_1          e19:prof"
+    "opmonlib          v1_3_0          e19:prof"
     "rcif              v1_1_0b         e19:prof"
     "appfwk            v2_3_0b         e19:prof"
     "listrev           v2_1_3b         e19:prof"
@@ -53,10 +53,10 @@ dune_daqpackages=(
     "minidaqapp        v3_0_0          e19:prof"
     "ipm               v2_1_2          e19:prof"
     "timing            v5_4_1          e19:prof"
-    "timinglibs        v1_1_0          e19:prof"
+    "timinglibs        v1_1_1          e19:prof"
     "trigger           v1_0_4          e19:prof"
     "triggeralgs       v0_2_2          e19:prof"
-    "influxopmon       v1_2_0          e19:prof"
+    "influxopmon       v1_3_0          e19:prof"
     "nwqueueadapters   v1_3_1          e19:prof"
 )
 
