@@ -43,7 +43,7 @@ dune_extras=(
 )
 
 dune_packages=(
-  "daq_cmake         v1_4_1          e19:prof"
+  "daq_cmake         v1_4_2          e19:prof"
   "ers               v1_1_2c         e19:prof"
   "erses             v1_0_0          e19:prof"
   "logging           v1_0_2          e19:prof"
