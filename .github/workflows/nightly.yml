@@ -67,7 +67,7 @@ jobs:
           source $GITHUB_WORKSPACE/daq-buildtools/env.sh
           cd $GITHUB_WORKSPACE/dev
           dbt-workarea-env -s externals || true
-          dbt-build.sh --install
+          dbt-build.sh
           nightly_tag="N$(date +%y-%m-%d)"
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
