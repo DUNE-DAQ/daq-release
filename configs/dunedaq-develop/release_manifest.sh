@@ -31,6 +31,7 @@ dune_externals=(
   "uhal              v2_8_0          e19:prof"
   "cpr               v1_5_2          e19:prof"
   "pugixml           v1_11           e19     "
+  "librdkafka        v1_7_0          e19:prof"
 )
 
 dune_ups=(
@@ -68,4 +69,5 @@ dune_packages=(
   "triggeralgs 3340ec3"
   "influxopmon 80e1330"
   "nwqueueadapters dd8cb41"
+  "erskafka ab2fe75"
 )

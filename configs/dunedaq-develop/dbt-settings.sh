@@ -28,6 +28,7 @@ dune_externals=(
     "pybind11          v2_6_2       e19:prof"
     "uhal              v2_8_0       e19:prof"
     "cpr               v1_5_2       e19:prof"
+    "librdkafka        v1_7_0       e19:prof"
 )
 
 dune_daqpackages=(
