@@ -32,6 +32,7 @@
 ```sh
 dbt-create.sh -r /cvmfs/dunedaq-development.opensciencegrid.org/nightly <NYY-MM-DD> workdir
 ```
+  - or simply use `dbt-create.sh -n <NYY-MM-DD> workdir`
 
 ### How the nightly releases are made
 
