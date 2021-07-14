@@ -30,7 +30,7 @@
   - Just as a typical frozen release, 
   - use `-r` with the patth to the `nightly` directory in cvmfs
 ```sh
-dbt-create.sh –r /cvmfs/dunedaq-development.opensciencegrid.org/nightly <NYY-MM-DD> workdir
+dbt-create.sh -r /cvmfs/dunedaq-development.opensciencegrid.org/nightly <NYY-MM-DD> workdir
 ```
 
 ### How the nightly releases are made
