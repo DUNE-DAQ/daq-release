@@ -67,6 +67,7 @@ jobs:
           dbt-workarea-env -s externals || true
           dbt-build.sh
           nightly_tag="N$(date +%y-%m-%d)"
+          rm -rf $GITHUB_WORKSPACE/nightly/${nightly_tag}
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
