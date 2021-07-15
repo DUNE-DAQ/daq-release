@@ -27,8 +27,6 @@ jobs:
   bulid_the_develop_release:
     # The type of runner that the job will run on
     runs-on: [self-hosted]
-    container:
-      image: dunedaq/sl7-minimal:dev
     env:
       DBT_AREA_FILE: "dbt-settings"
     defaults:
