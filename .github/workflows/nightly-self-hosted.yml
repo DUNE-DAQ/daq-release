@@ -86,17 +86,19 @@ jobs:
           cp -pr /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_successful/externals $GITHUB_WORKSPACE/nightly/${nightly_tag}
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
           cd $GITHUB_WORKSPACE/nightly
-          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
-          rm -rf ${nightly_tag}
+          tar zcvf $GITHUB_WORKSPACE/dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
       with:
         name: nightly release
-        path: ${{ github.workspace }}/nightly
+        path: ${{ github.workspace }}/dunedaq-N*.tar.gz
 
     - name: upload build log file
       uses: actions/upload-artifact@v2
       with:
         name: build_log
         path: ${{ github.workspace }}/dev/log
+
+    - name: clean up
+      run: rm -rf $GITHUB_WORKSPACE/dev
