@@ -55,6 +55,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          rm -rf $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
