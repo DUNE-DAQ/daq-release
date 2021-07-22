@@ -76,7 +76,7 @@ jobs:
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh under /releases/dunedaq-develop"
-          cd /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_successful/packages
+          cd $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}

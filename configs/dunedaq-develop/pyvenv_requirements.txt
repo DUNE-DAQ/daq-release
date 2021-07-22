@@ -28,3 +28,5 @@ graphviz==0.16
 rich==10.2.2
 nanorc==1.2.2
 moo==0.5.7
+pytest==6.2.4
+integrationtest=1.0.0
