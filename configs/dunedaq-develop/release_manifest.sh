@@ -70,4 +70,5 @@ dune_packages=(
   "influxopmon 80e1330"
   "nwqueueadapters dd8cb41"
   "erskafka ab2fe75"
+  "dqm 0692f12"
 )

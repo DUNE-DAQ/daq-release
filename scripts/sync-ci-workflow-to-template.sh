@@ -27,6 +27,7 @@ dune_packages_with_ci=(
   "triggeralgs"
   "trigger"
   "erskafka"
+  "dqm"
 )
 
 function git_checkout_and_update_ci {
