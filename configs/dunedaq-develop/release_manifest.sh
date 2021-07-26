@@ -71,4 +71,5 @@ dune_packages=(
   "nwqueueadapters dd8cb41"
   "erskafka ab2fe75"
   "dqm 0692f12"
+  "lbrulibs deadbd4"
 )

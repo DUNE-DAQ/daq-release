@@ -28,6 +28,7 @@ dune_packages_with_ci=(
   "trigger"
   "erskafka"
   "dqm"
+  "lbrulibs"
 )
 
 function git_checkout_and_update_ci {
