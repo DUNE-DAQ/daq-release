@@ -8,7 +8,7 @@ on:
   #push:
     #branches: [ develop ]
   schedule:
-    - cron: "36 19 * * *"
+    - cron: "45 19 * * *"
 
   workflow_dispatch:
     # Inputs the workflow accepts.
