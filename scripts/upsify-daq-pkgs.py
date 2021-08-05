@@ -88,8 +88,8 @@ Qualifiers = "{equal}:{dqual}"
     endif ( printenv CET_SUBDIR > /dev/null )
     fileTest( ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}, -d, "${{${{UPS_PROD_NAME_UC}}_FQ_DIR}} directory not found: SETUP ABORTED")
 
-  #Action = GetProducts
-  #  setupRequired( dunedaq v1_0_0 )
+  Action = GetProducts
+    setupRequired( cetpkgsupport v1_14_01 )
 
 
 Common:
