@@ -25,6 +25,7 @@ Qualifiers=e19:prof
     setupRequired( gcc v8_2_0 )
     setupRequired( boost v1_73_0 -q+e19:+prof )
     setupRequired( yaml_cpp v0_6_3 -q+e19:+prof )
+    setupRequired( pybind11 v2_6_2 -q +e19:+prof )
 
 
 Common:

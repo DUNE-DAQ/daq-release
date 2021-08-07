@@ -63,7 +63,7 @@ fi
 # -------------------------------------------------------------------
 
 package=felix
-pkgver=v1_1_2
+pkgver=v1_2_0
 ssibuildshims_version=v1_04_13
 
 make_tarball_opts=("\${product_dir}" "\${package}" "\${pkgver}" "\${fullqual}")
@@ -95,6 +95,7 @@ export FC=`which gfortran`
 export CC=`which gcc`
 export CXX=`which g++`
 export COMPILER_PATH=${GCC_FQ_DIR}
+export REGMAP_VERSION=${REGMAP_VERSION:=0x0500}
 
 echo "========== CMAKE_PREFIX_PATH"
 echo $CMAKE_PREFIX_PATH
@@ -112,6 +113,21 @@ echo "building ${package} for ${OS}-${plat}-${qualdir} (flavor ${flvr})"
 # package dependent stuff goes here
 # -------------------------------------------------------------------
 
+flx_sofwtware_sha="bb41bf8"
+flx_cmake_tdaq_sha="d66ce21b"
+flx_drivers_rcc_sha="b37bd757"
+flx_flxcard_sha="683d9696"
+flx_regmap_sha="87ce47ba"
+flx_packetformat_sha="a84931eb"
+flx_client_template_sha="390ec871"
+flx_ftools_sha="1cfd1b56"
+flx_flxcard_py_sha="61001bd6"
+flx_catch_sha="6a9aa08a"
+#flx_json_sha="9714c19f"
+#flx_yaml-cpp_sha"67e5af05"
+#flx_pybind11_sha= (external"b75d6548"
+
+
 mkdir -p ${pkgdir}
 if [ ! -d ${pkgdir} ]
 then
@@ -127,31 +143,34 @@ cd ${pkgdir} || ssi_die "Unable to cd to ${pkgdir}"
 
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/software.git || ssi_die "Unable to clone software git repo into ${PWD}"
 cd software
-git checkout bb41bf8
+git checkout ${flx_sofwtware_sha}
 
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/cmake_tdaq.git || ssi_die "Unable to clone cmake_tdaq git repo into ${PWD}"
-pushd cmake_tdaq && git checkout 3f176ac && popd
+pushd cmake_tdaq && git checkout ${flx_cmake_tdaq_sha} && popd
 sed -i '2 i set(NOLCG TRUE)' cmake_tdaq/cmake/modules/FELIX.cmake
 export PATH=${pkgdir}/software/cmake_tdaq/bin:$PATH
 
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/drivers_rcc.git || ssi_die "Unable to clone drivers_rcc git repo into ${PWD}"
-pushd drivers_rcc && git checkout 7513ef2 && popd
+pushd drivers_rcc && git checkout ${flx_drivers_rcc_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/flxcard.git || ssi_die "Unable to clone flxcard git repo into ${PWD}"
-pushd flxcard && git checkout 8208c3a && popd
+pushd flxcard && git checkout ${flx_flxcard_sha} && popd
+# sed -i 's/REG_PCIE_ENDPOINTS/REG_PCIE_ENDPOINT/g' flxcard/src/FlxCard.cpp
+# sed -i 's/BF_PCIE_ENDPOINTS/BF_PCIE_ENDPOINT/g' flxcard/src/flx-info.cpp
+
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/regmap.git || ssi_die "Unable to clone regmap git repo into ${PWD}"
-pushd regmap && git checkout 48a6680 && popd
+pushd regmap && git checkout ${flx_regmap_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/packetformat.git || ssi_die "Unable to clone packetformat git repo into ${PWD}"
-pushd packetformat && git checkout a84931e && popd
+pushd packetformat && git checkout ${a84931eb} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/client-template.git || ssi_die "Unable to clone client-template git repo into ${PWD}"
-pushd client-template && git checkout 390ec87 && popd
+pushd client-template && git checkout ${flx_client_template_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/ftools.git || ssi_die "Unable to clone ftools git repo into ${PWD}"
-pushd ftools && git checkout 1398314 && popd
+pushd ftools && git checkout ${flx_ftools_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/flxcard_py.git || ssi_die "Unable to clone flxcard_py git repo into ${PWD}"
-pushd flxcard_py && git checkout 61001bd6 && popd
+pushd flxcard_py && git checkout ${flx_flxcard_py_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/external-catch.git external/catch || ssi_die "Unable to clone external-catch git repo into ${PWD}"
-pushd external/catch && git checkout 6a9aa08 && popd
-git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/external-pybind11.git external/pybind11 || ssi_die "Unable to clone external-pybind11 git repo into ${PWD}"
-pushd external/pybind11 && git checkout b75d654 && popd
+pushd external/catch && git checkout ${flx_catch_sha} && popd
+# git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/external-pybind11.git external/pybind11 || ssi_die "Unable to clone external-pybind11 git repo into ${PWD}"
+# pushd external/pybind11 && git checkout b75d654 && popd
 
 
 
@@ -166,52 +185,53 @@ ncore=`${SSIBUILDSHIMS_DIR}/bin/ncores`
 make -j $ncore || ssi_die "Failed in 'make'"
 popd
 
+echo "AAAAAAAAAAA"
 exit 10
 
-mkdir -p ${pkgdir}/include
-mkdir -p ${pkgdir}/lib
-mkdir -p ${pkgdir}/bin
+# mkdir -p ${pkgdir}/include
+# mkdir -p ${pkgdir}/lib
+# mkdir -p ${pkgdir}/bin
 
 
-cp -r drivers_rcc ${pkgdir}/
-cp -r regmap/regmap ${pkgdir}/include/
-cp -r drivers_rcc/cmem_rcc ${pkgdir}/include/
-cp -r drivers_rcc/rcc_error ${pkgdir}/include/
-cp -r flxcard/flxcard ${pkgdir}/include/
-cp -r flxcard_py/flxcard_py ${pkgdir}/include/
-cp -r packetformat/packetformat ${pkgdir}/include/
+# cp -r drivers_rcc ${pkgdir}/
+# cp -r regmap/regmap ${pkgdir}/include/
+# cp -r drivers_rcc/cmem_rcc ${pkgdir}/include/
+# cp -r drivers_rcc/rcc_error ${pkgdir}/include/
+# cp -r flxcard/flxcard ${pkgdir}/include/
+# cp -r flxcard_py/flxcard_py ${pkgdir}/include/
+# cp -r packetformat/packetformat ${pkgdir}/include/
 
-cp drivers_rcc/lib64/lib* ${pkgdir}/lib
-cp x86_64-centos7-gcc8-opt/flxcard/lib* ${pkgdir}/lib
-cp x86_64-centos7-gcc8-opt/packetformat/lib* ${pkgdir}/lib
-cp x86_64-centos7-gcc8-opt/regmap/lib* ${pkgdir}/lib
-cp x86_64-centos7-gcc8-opt/drivers_rcc/lib* ${pkgdir}/lib
-cp x86_64-centos7-gcc8-opt/ftools/libFlxTools* ${pkgdir}/lib
-cp -r ${product_dir}/${package}/${pkgver}/cmake ${pkgdir}/lib
+# cp drivers_rcc/lib64/lib* ${pkgdir}/lib
+# cp x86_64-centos7-gcc8-opt/flxcard/lib* ${pkgdir}/lib
+# cp x86_64-centos7-gcc8-opt/packetformat/lib* ${pkgdir}/lib
+# cp x86_64-centos7-gcc8-opt/regmap/lib* ${pkgdir}/lib
+# cp x86_64-centos7-gcc8-opt/drivers_rcc/lib* ${pkgdir}/lib
+# cp x86_64-centos7-gcc8-opt/ftools/libFlxTools* ${pkgdir}/lib
+# cp -r ${product_dir}/${package}/${pkgver}/cmake ${pkgdir}/lib
 
-cp x86_64-centos7-gcc8-opt/flxcard/flx-* ${pkgdir}/bin
-cp x86_64-centos7-gcc8-opt/ftools/f* ${pkgdir}/bin
+# cp x86_64-centos7-gcc8-opt/flxcard/flx-* ${pkgdir}/bin
+# cp x86_64-centos7-gcc8-opt/ftools/f* ${pkgdir}/bin
 
 
-cd ${pkgdir}
-rm -rf ${pkgdir}/software
+# cd ${pkgdir}
+# rm -rf ${pkgdir}/software
 
-set +x
+# set +x
 
-# real ups declare
-${SSIBUILDSHIMS_DIR}/bin/declare_product ${product_dir} ${package} ${pkgver} ${fullqual} || \
-  ssi_die "failed to declare ${package} ${pkgver} -q ${fullqual}"
+# # real ups declare
+# ${SSIBUILDSHIMS_DIR}/bin/declare_product ${product_dir} ${package} ${pkgver} ${fullqual} || \
+#   ssi_die "failed to declare ${package} ${pkgver} -q ${fullqual}"
 
-# -------------------------------------------------------------------
-# common bottom stuff
-# -------------------------------------------------------------------
+# # -------------------------------------------------------------------
+# # common bottom stuff
+# # -------------------------------------------------------------------
 
-setup_and_verify
+# setup_and_verify
 
-# this must be last
-if [ "${maketar}" = "tar" ] && [ -d ${pkgdir}/lib ]
-then
-   eval ${SSIBUILDSHIMS_DIR}/bin/make_distribution_tarball "${make_tarball_opts[@]}"
-fi
+# # this must be last
+# if [ "${maketar}" = "tar" ] && [ -d ${pkgdir}/lib ]
+# then
+#    eval ${SSIBUILDSHIMS_DIR}/bin/make_distribution_tarball "${make_tarball_opts[@]}"
+# fi
 
-exit 0
+# exit 0
