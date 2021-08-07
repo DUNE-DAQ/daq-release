@@ -115,9 +115,6 @@ then
    exit 1
 fi
 
-cp -r patch ${patchdir}
-cp -r ups ${product_dir}/${package}/${pkgver}
-
 # declare now so we can setup
 # fake ups declare
 fakedb=${product_dir}/${package}/${pkgver}/fakedb
