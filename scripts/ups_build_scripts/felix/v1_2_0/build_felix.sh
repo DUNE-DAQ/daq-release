@@ -194,6 +194,7 @@ mkdir -p ${pkgdir}/bin
 
 
 cp -r drivers_rcc ${pkgdir}/
+rm -rf ${pkgdir}/drivers_rcc/.git
 cp -r regmap/regmap ${pkgdir}/include/
 cp -r drivers_rcc/cmem_rcc ${pkgdir}/include/
 cp -r drivers_rcc/rcc_error ${pkgdir}/include/

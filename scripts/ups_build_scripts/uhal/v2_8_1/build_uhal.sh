@@ -121,14 +121,14 @@ fakedb=${product_dir}/${package}/${pkgver}/fakedb
 ${SSIBUILDSHIMS_DIR}/bin/fake_declare_product ${product_dir} ${package} ${pkgver} ${fullqual}
 setup -B ${package} ${pkgver} -q ${fullqual} -z ${fakedb}:${product_dir}:${PRODUCTS} || ssi_die "ERROR: fake setup failed"
 
-
 setup python v3_8_3b
 
 
 # doing build now
 cd ${pkgdir} || ssi_die "Unable to cd to ${pkgdir}"
 mkdir -p ${tardir}
-wget -O ${tardir}/${pkgtar} https://github.com/ipbus/ipbus-software/archive/v${pkgdotver}.tar.gz
+# wget -O ${tardir}/${pkgtar} https://github.com/ipbus/ipbus-software/archive/v${pkgdotver}.tar.gz
+curl -L --output ${tardir}/${pkgtar} https://github.com/ipbus/ipbus-software/archive/v${pkgdotver}.tar.gz
 tar xf ${tardir}/${pkgtar} || ssi_die "Unable to unwind ${tardir}/${pkgtar} into ${PWD}"
 
 # apply patch
