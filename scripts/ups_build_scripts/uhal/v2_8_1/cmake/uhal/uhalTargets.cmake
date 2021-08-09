@@ -55,7 +55,7 @@ add_library(uhal::log SHARED IMPORTED)
 
 set_target_properties(uhal::log PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libcactus_uhal_log.so.so"
+  IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libcactus_uhal_log.so"
 )
 
 # Create imported target uhal::grammars

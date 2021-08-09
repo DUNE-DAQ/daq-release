@@ -24,6 +24,6 @@ endmacro()
 
 ####################################################################################
 
-include("${CMAKE_CURRENT_LIST_DIR}/felixTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/uhalTargets.cmake")
 #check_required_components("cmem_rcc")
 #check_required_components("packetformat")
