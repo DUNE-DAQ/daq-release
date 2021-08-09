@@ -41,6 +41,7 @@ Common:
       pathPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
       pathPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
       pathPrepend(PATH, ${FELIX_BIN})
+      pathPrepend(PYTHONPATH, ${FELIX_FQ_DIR}/lib)
       exeActionRequired(ExtraSetup)
 End:
 # End Group definition
