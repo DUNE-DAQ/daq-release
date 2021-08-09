@@ -152,20 +152,22 @@ export EXTERN_PUGIXML_LIB_PREFIX=$PUGIXML_LIB
 Set=uhal \
 CC=${cc} \
 CXX=${cxx}  \
-make -j 8 || ssi_die "Failed in 'make'"
+make -j $ncore || ssi_die "Failed in 'make'"
 #make -j $ncore || ssi_die "Failed in 'make'"
 
 # NOW INSTALL
 incdir=${product_dir}/${package}/${pkgver}/include
 srcdir=${product_dir}/${package}/${pkgver}/src
 Set=uhal \
-make install prefix=${pkgdir} includedir=${incdir} || ssi_die "Failed to install"
+# make install prefix=${pkgdir} includedir=${incdir} || ssi_die "Failed to install"
+make install prefix=${pkgdir} || ssi_die "Failed to install"
 
 # NOW clean up
 #if [ -d ${incdir}/${package} ]; then
 #    mv ${incdir}/${package} ${incdir}
 #    rm -rf ${incdir}/${package}
 #fi
+cp -r ${product_dir}/${package}/${pkgver}/cmake ${pkgdir}/lib/
 
 if [ -d ${pkgdir}/bin/${package} ]; then
     find ${pkgdir}/bin -type f -exec mv {} ${pkgdir}/bin \;
