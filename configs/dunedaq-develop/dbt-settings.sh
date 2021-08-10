@@ -24,10 +24,10 @@ dune_externals=(
     "zmq               v4_3_1c      e19:prof"
     "cppzmq            v4_3_0       e19:prof"
     "msgpack_c         v3_3_0       e19:prof"
-    "felix             v1_1_1       e19:prof"
+    "felix             v1_2_0       e19:prof"
     "pybind11          v2_6_2       e19:prof"
-    "uhal              v2_8_0       e19:prof"
-    "cpr               v1_5_2       e19:prof"
+    "uhal              v2_8_1       e19:prof"
+    "cpr               v1_6_2       e19:prof"
     "librdkafka        v1_7_0       e19:prof"
 )
 
