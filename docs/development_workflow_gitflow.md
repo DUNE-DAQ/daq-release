@@ -84,20 +84,20 @@ Package maintainers are the primary developers who make version tags of a packag
 
 ### Repository access
 
-![repo-access](https://home.fnal.gov/~dingpf/repo_access_role.png)
+![repo-access](https://i.imgur.com/ddLJeif.png)
 
 ### Branch settings
 
-![branch-settings](https://home.fnal.gov/~dingpf/default-branch.png)
+![branch-settings](https://i.imgur.com/WbBJB86.png)
 
 ### Branch protection rules
 
-![branch-protection-rules](https://home.fnal.gov/~dingpf/branch-protection-rule.png)
+![branch-protection-rules](https://i.imgur.com/NMp0vMU.png)
 
 ### Managing branches
 
-![managing-branches](https://home.fnal.gov/~dingpf/managing-branches.png)
+![managing-branches](https://i.imgur.com/d25W5er.png)
 
 ### View Network Graph
 
-![network-graph](https://home.fnal.gov/~dingpf/network-graph.png)
+![network-graph](https://i.imgur.com/ogmjKYr.png)

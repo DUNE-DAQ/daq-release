@@ -1,0 +1,48 @@
+File=Table
+Product=felix
+
+#*************************************************
+# Starting Group definition
+Group:
+
+
+Flavor=ANY
+Qualifiers=e15:prof
+
+  Action=DefineFQ
+    envSet (FELIX_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e15-prof)
+
+  Action = ExtraSetup
+    setupRequired( gcc v6_4_0 )
+
+Flavor=ANY
+Qualifiers=e19:prof
+
+  Action=DefineFQ
+    envSet (FELIX_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-prof)
+
+  Action = ExtraSetup
+    setupRequired( gcc v8_2_0 )
+    setupRequired( boost v1_73_0 -q+e19:+prof )
+    setupRequired( yaml_cpp v0_6_3 -q+e19:+prof )
+    setupRequired( pybind11 v2_6_2 -q +e19:+prof )
+
+
+Common:
+   Action=setup
+      setupenv()
+      proddir()
+      ExeActionRequired(DefineFQ)
+      envSet(FELIX_VERSION, ${UPS_PROD_VERSION})
+      envSet(FELIX_DIR, ${UPS_PROD_DIR})
+      envSet(FELIX_INC, ${FELIX_FQ_DIR}/include)
+      envSet(FELIX_LIB, ${FELIX_FQ_DIR}/lib )
+      envSet(FELIX_BIN, ${FELIX_FQ_DIR}/bin )
+      pathPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
+      pathPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
+      pathPrepend(PATH, ${FELIX_BIN})
+      pathPrepend(PYTHONPATH, ${FELIX_FQ_DIR}/lib)
+      exeActionRequired(ExtraSetup)
+End:
+# End Group definition
+#*************************************************
