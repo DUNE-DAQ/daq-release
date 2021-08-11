@@ -78,7 +78,7 @@ set_target_properties(uhal::uhal PROPERTIES
 )
 
 # Create imported target uhal::test
-add_library(uhal::test SHARED IMPORTED)
+add_library(uhal::tests SHARED IMPORTED)
 
 set_target_properties(uhal::tests PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
