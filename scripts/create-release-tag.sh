@@ -1,6 +1,6 @@
 #!/bin/bash
 
-release_name="dunedaq-v2.6.0"
+release_name="dunedaq-v2.7.0"
 release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
 function git_checkout_and_tag {
