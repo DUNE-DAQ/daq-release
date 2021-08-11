@@ -80,7 +80,7 @@ set_target_properties(uhal::uhal PROPERTIES
 # Create imported target uhal::test
 add_library(uhal::test SHARED IMPORTED)
 
-set_target_properties(uhal::test PROPERTIES
+set_target_properties(uhal::tests PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
   IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libcactus_uhal_uhal.so"
   INTERFACE_LINK_LIBRARIES "uhal::log;uhal::uhal"      
@@ -102,7 +102,7 @@ endif()
 
 # Load information for each installed configuration.
 get_filename_component(_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-file(GLOB CONFIG_FILES "${_DIR}/felixTargets-*.cmake")
+file(GLOB CONFIG_FILES "${_DIR}/uhalTargets-*.cmake")
 foreach(f ${CONFIG_FILES})
   include(${f})
 endforeach()
