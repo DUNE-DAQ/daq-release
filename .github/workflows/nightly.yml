@@ -28,7 +28,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/sl7-minimal:dev
+      image: dunedaq/sl7-minimal:dev-ext
     env:
       DBT_AREA_FILE: "dbt-settings"
     defaults:
