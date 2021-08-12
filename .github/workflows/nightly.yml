@@ -74,6 +74,11 @@ jobs:
           nightly_tag="N$(date +%y-%m-%d)"
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
           
+
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          cd $GITHUB_WORKSPACE/dev
+          dbt-workarea-env -s externals || true
+
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
@@ -90,9 +95,6 @@ jobs:
           sed -i 's,.*packages.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
 
           # prepare external dir 
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
-          cd $GITHUB_WORKSPACE/dev
-          dbt-workarea-env -s externals || true
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh $GITHUB_WORKSPACE/nightly/${nightly_tag}/externals
           
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
