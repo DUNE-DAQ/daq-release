@@ -31,6 +31,7 @@ dune_externals=(
   "uhal              v2_8_1          e19:prof"
   "cpr               v1_5_2          e19:prof"
   "pugixml           v1_11           e19     "
+  "yaml_cpp          v0_6_3          e19:prof"
 )
 
 dune_ups=(
