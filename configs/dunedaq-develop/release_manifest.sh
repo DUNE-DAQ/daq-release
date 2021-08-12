@@ -32,6 +32,7 @@ dune_externals=(
   "cpr               v1_5_2          e19:prof"
   "pugixml           v1_11           e19     "
   "librdkafka        v1_7_0          e19:prof"
+  "yaml_cpp          v0_6_3          e19:prof"
 )
 
 dune_ups=(
