@@ -4,7 +4,8 @@ If you have `pip2pi` installed, you can simply do the following to add any modul
 
 1. `pip2pi $PATH_TO_PYPI_REPO <pypi_module_name==version>`;
     * `$PATH_TO_PYPI_REPO/<new_module_name>.whl` will be added after this;
-3. For tarballs, you can simply copy them over to the `pypi-repo` directory;
+    * This is the recommended way to install any packages from pypi.org as `pip2pi` will handle the dependencies automatically;
+3. For tarballs, you can simply copy them over to the `pypi-repo` directory (NOTE: this is to be used only on our self-brewed packages);
     * Remember to rename the tarball to `module-name_X.X.X.tar.gz` before the next step;
 4. Run `dir2pi $PATH_TO_PYPI_REPO` to generate new index files:
     * `$PATH_TO_PYPI_REPO/simple/index.html` will have a new entry for the newly-added module;
