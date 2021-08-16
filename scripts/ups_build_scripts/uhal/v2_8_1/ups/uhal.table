@@ -27,7 +27,7 @@ Common:
       envSet(UHAL_VERSION, ${UPS_PROD_VERSION})
       # add the lib directory to LD_LIBRARY_PATH
       envSet(UHAL_LIB, ${UHAL_FQ_DIR}/lib)
-      envSet(UHAL_INC, ${UPS_PROD_DIR}/include)
+      envSet(UHAL_INC, ${UHAL_FQ_DIR}/include)
       envPrepend(LD_LIBRARY_PATH, ${UHAL_FQ_DIR}/lib)
       pathPrepend(PATH, ${UHAL_FQ_DIR}/bin)
       pathPrepend(PYTHONPATH, ${UHAL_FQ_DIR}/lib/python3.8/site-packages)
