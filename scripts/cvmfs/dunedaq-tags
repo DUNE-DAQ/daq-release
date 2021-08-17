@@ -1,0 +1,16 @@
+# dune-tags
+#
+# David Adams
+# December 2017
+#
+# Lists the DUNE CVMFS tags.
+#
+# The CVMFS rollback command can be used to recover the state
+# corresponging to any of the tags. Chnages made after that tag
+# will then be lost.
+
+# source repo.sh to get cvmfs repo name
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/repo.sh
+
+cvmfs_server tag $REPO
