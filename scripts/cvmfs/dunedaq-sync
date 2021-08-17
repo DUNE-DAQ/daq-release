@@ -12,8 +12,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
 
 DIR_TO_SYNC=$1
-#SRCPATH=dingpf@docker-bd.fnal.gov:/home/dingpf/cvmfs_dunedaq/$DIR_TO_SYNC
-SRCPATH=/grid/fermiapp/products/dunedaq/dunedaq.opensciencegrid.org/$DIR_TO_SYNC
+SRCPATH=/grid/fermiapp/products/dunedaq/$REPO/$DIR_TO_SYNC
 DESTPATH=/cvmfs/$REPO
 ROPTS="-rvplt --stats"
 DRY_ROPTS="-rvpltn"
