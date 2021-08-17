@@ -31,6 +31,8 @@ def get_version(cdir):
     cmd = "cd {}; git tag --points-at HEAD|tail -n 1 ".format(cdir)
     output = check_output(cmd);
     version = output[0].decode('utf-8').strip()
+    if '/' in version:
+        version = ""
     return version
 
 
