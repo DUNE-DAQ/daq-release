@@ -53,7 +53,7 @@ dune_daqpackages=(
     "ipm               v2_1_2          e19:prof"
     "timing            v5_4_1          e19:prof"
     "timinglibs        v1_1_1          e19:prof"
-    "trigger           v1_0_4          e19:prof"
+    "trigger           v1_1_1          e19:prof"
     "triggeralgs       v0_2_2          e19:prof"
     "influxopmon       v1_3_0          e19:prof"
     "nwqueueadapters   v1_3_1          e19:prof"
