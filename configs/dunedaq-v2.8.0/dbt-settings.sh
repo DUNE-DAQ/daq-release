@@ -49,7 +49,7 @@ dune_daqpackages=(
     "serialization     v1_2_2b     e19:prof"
     "dfmessages        v2_2_0     e19:prof"
     "dataformats       v3_0_0     e19:prof"
-    "readout           v1_4_1     e19:prof"
+    "readout           v1_4_2     e19:prof"
     "dfmodules         v2_2_1     e19:prof"
     "flxlibs           v1_2_1     e19:prof"
     "lbrulibs          v1_0_3     e19:prof"

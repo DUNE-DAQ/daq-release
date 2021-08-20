@@ -48,7 +48,7 @@ dune_daqpackages=(
     "dfmessages        v2_1_0          e19:prof"
     "dfmodules         v2_2_1          e19:prof"
     "trigemu           v2_3_0          e19:prof"
-    "readout           v1_3_0          e19:prof"
+    "readout           v1_4_2          e19:prof"
     "minidaqapp        v3_0_0          e19:prof"
     "ipm               v2_1_2          e19:prof"
     "timing            v5_5_1          e19:prof"
