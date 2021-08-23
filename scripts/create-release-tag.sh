@@ -69,7 +69,7 @@ echo "[Info]: Release name: ${release_name}"
 
 pushd $tmp_dir
 
-git_checkout_and_tag dune_packages
+#git_checkout_and_tag dune_packages
 git_checkout_and_tag dune_extras
 
 popd
