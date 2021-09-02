@@ -42,12 +42,6 @@ jobs:
     - name: Start the CI
       run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
 
-    - name: Checkout daq-buildtools
-      uses: actions/checkout@v2
-      with:
-        repository: DUNE-DAQ/daq-buildtools
-        path: daq-buildtools
-
     - name: Checkout daq-release
       uses: actions/checkout@v2
       with:
@@ -56,15 +50,17 @@ jobs:
         
     - name: setup dev area and checkout code
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          source /cvmfs/dunedaq.openscience.org/setup_dunedaq.sh
+          setup_dbt dunedaq-v2.8.0
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
     
     - name: setup build env and build the dev release
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          source /cvmfs/dunedaq.openscience.org/setup_dunedaq.sh
+          setup_dbt dunedaq-v2.8.0
           cd $GITHUB_WORKSPACE/dev
           dbt-workarea-env -s externals || true
           dbt-build.sh
@@ -75,7 +71,8 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
           
 
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          source /cvmfs/dunedaq.openscience.org/setup_dunedaq.sh
+          setup_dbt dunedaq-v2.8.0
           cd $GITHUB_WORKSPACE/dev
           dbt-workarea-env -s externals || true
 
