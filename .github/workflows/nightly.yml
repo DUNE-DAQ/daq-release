@@ -51,7 +51,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt dunedaq-v2.8.0
+          setup_dbt latest
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
@@ -71,8 +71,8 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
           
 
-          source /cvmfs/dunedaq.openscience.org/setup_dunedaq.sh
-          setup_dbt dunedaq-v2.8.0
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
           cd $GITHUB_WORKSPACE/dev
           dbt-workarea-env -s externals || true
 
