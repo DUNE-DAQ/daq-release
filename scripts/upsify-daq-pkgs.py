@@ -109,6 +109,8 @@ Common:
         pkg = pkg.replace('_','-')
     if has_lib:
         table_content +=f"""
+    # src dir
+    envSet( ${{UPS_PROD_NAME_UC}}SOURCE_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/src )
     # lib dir
     envSet(${{UPS_PROD_NAME_UC}}_LIB, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/lib64)
     pathPrepend(LD_LIBRARY_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
