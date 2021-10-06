@@ -45,7 +45,7 @@ dune_extras=(
 )
 
 dune_packages=(
-  "daq_cmake dunedaq-v2.8.0"
+  "daq_cmake         v2.0.1"
   "ers               develop"
   "erses             develop"
   "logging           develop"
