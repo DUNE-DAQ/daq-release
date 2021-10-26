@@ -68,7 +68,7 @@ fi
 package=highfive
 pkgver=v2_3_1
 ssibuildshims_version=v1_04_13
-pkgtag="v2.2.2"
+pkgtag="v2.3.1"
 
 make_tarball_opts=("\${product_dir}" "\${package}" "\${pkgver}" "\${fullqual}")
 
