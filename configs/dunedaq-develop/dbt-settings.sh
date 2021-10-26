@@ -20,7 +20,7 @@ dune_externals=(
     "folly             v2020_05_25a e19:prof"
     "nlohmann_json     v3_9_0c      e19:prof"
     "pistache          v2020_10_07  e19:prof"
-    "highfive          v2_2_2b      e19:prof"
+    "highfive          v2_3_1       e19:prof"
     "zmq               v4_3_1c      e19:prof"
     "cppzmq            v4_3_0       e19:prof"
     "msgpack_c         v3_3_0       e19:prof"
@@ -29,6 +29,7 @@ dune_externals=(
     "uhal              v2_8_1       e19:prof"
     "cpr               v1_5_2       e19:prof"
     "librdkafka        v1_7_0       e19:prof"
+    "protobuf          v3_14_0      e19"
 )
 
 dune_daqpackages=(
@@ -57,5 +58,6 @@ dune_daqpackages=(
     "triggeralgs       v0_2_2          e19:prof"
     "influxopmon       v1_3_0          e19:prof"
     "nwqueueadapters   v1_3_1          e19:prof"
+    "wibmod            v1_2_0          e19:prof"
 )
 
