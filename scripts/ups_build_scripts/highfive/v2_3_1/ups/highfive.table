@@ -13,7 +13,7 @@ Qualifiers=e19:prof
     envSet (HIGHFIVE_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-prof)
 
   Action = ExtraSetup
-    setupRequired( boost v1_70_0 -q +e19:+prof )
+    setupRequired( boost v1_73_0 -q +e19:+prof )
     setupRequired( hdf5 v1_12_0a -q +e19:+prof )
 
 Flavor=ANY
@@ -23,7 +23,7 @@ Qualifiers=e19:debug
     envSet (HIGHFIVE_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-debug)
 
   Action = ExtraSetup
-    setupRequired( boost v1_70_0 -q +e19:+debug )
+    setupRequired( boost v1_73_0 -q +e19:+debug )
     setupRequired( hdf5 v1_12_0a -q +e19:+debug )
 
 Common:
