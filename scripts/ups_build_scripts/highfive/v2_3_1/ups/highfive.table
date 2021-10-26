@@ -1,0 +1,43 @@
+File=Table
+Product=highfive
+
+#*************************************************
+# Starting Group definition
+Group:
+
+
+Flavor=ANY
+Qualifiers=e19:prof
+
+  Action=DefineFQ
+    envSet (HIGHFIVE_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-prof)
+
+  Action = ExtraSetup
+    setupRequired( boost v1_70_0 -q +e19:+prof )
+    setupRequired( hdf5 v1_12_0a -q +e19:+prof )
+
+Flavor=ANY
+Qualifiers=e19:debug
+
+  Action=DefineFQ
+    envSet (HIGHFIVE_FQ_DIR, ${UPS_PROD_DIR}/${UPS_PROD_FLAVOR}-e19-debug)
+
+  Action = ExtraSetup
+    setupRequired( boost v1_70_0 -q +e19:+debug )
+    setupRequired( hdf5 v1_12_0a -q +e19:+debug )
+
+Common:
+   Action=setup
+      setupenv()
+      proddir()
+      ExeActionRequired(DefineFQ)
+      envSet(HIGHFIVE_DIR, ${UPS_PROD_DIR})
+      envSet(HIGHFIVE_VERSION, ${UPS_PROD_VERSION})
+      # add the lib directory to LD_LIBRARY_PATH
+      envSet(HIGHFIVE_INC, ${HIGHFIVE_FQ_DIR}/include)
+      envPrepend(CMAKE_PREFIX_PATH, ${HIGHFIVE_FQ_DIR})
+      # requirements
+      exeActionRequired(ExtraSetup)
+End:
+# End Group definition
+#*************************************************
