@@ -74,4 +74,5 @@ dune_packages=(
   "erskafka          develop"
   "dqm               develop"
   "lbrulibs          develop"
+  "wibmod            develop"
 )

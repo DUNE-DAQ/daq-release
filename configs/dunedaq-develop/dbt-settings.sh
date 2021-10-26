@@ -59,5 +59,8 @@ dune_daqpackages=(
     "influxopmon       v1_3_0          e19:prof"
     "nwqueueadapters   v1_3_1          e19:prof"
     "wibmod            v1_2_0          e19:prof"
+    "erskafka          v1_3_0          e19:prof"
+    "dqm               v1_1_2          e19:prof"
+    "lbrulibs          v1_0_3          e19:prof"
 )
 
