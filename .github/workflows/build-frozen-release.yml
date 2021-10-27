@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Name of the release to be built'
+        description: 'Name of the release to be built, expected to work with only the latest frozen release'
         default: 'dunedaq-develop'
         required: true
 
