@@ -1,0 +1,94 @@
+# This is a workflow that is manually triggered
+
+name: Build frozen release
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name of the release to be built'
+        default: 'dunedaq-develop'
+        required: true
+
+jobs:
+  bulid_the_release:
+    runs-on: ubuntu-latest
+    container:
+      image: dunedaq/sl7-minimal:dev-ext
+    env:
+      DBT_AREA_FILE: "dbt-settings"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v2
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+        
+    - name: setup work area and checkout code
+      run: |
+          export DUNEDAQ_RELEASE=${{ github.event.inputs.name }}
+
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs ${DUNEDAQ_RELEASE} dev
+          cd dev
+          cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/release_manifest.sh .
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
+    
+    - name: setup build env and build the release
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+          cd $GITHUB_WORKSPACE/dev
+          dbt-workarea-env -s externals || true
+          dbt-build.sh
+
+    - name: create release directory
+      run: |
+          export DUNEDAQ_RELEASE=${{ github.event.inputs.name }}
+          release_tag=${DUNEDAQ_RELEASE}
+          release_dir=$GITHUB_WORKSPACE/releases/${release_tag}
+          mkdir -p $release_dir
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+          cd $GITHUB_WORKSPACE/dev
+          dbt-workarea-env -s externals || true
+
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${release_dir}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/dbt-build-order.cmake ${release_dir}
+          cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/pyvenv_requirements.txt ${release_dir}
+          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o ${release_dir}/packages
+          echo "PROGRESS: created ups products for DAQ packages."
+          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo "PROGRESS: updating dbt-settings.sh"
+          cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          cd ${release_dir}/packages
+          find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          
+          sed -i 's,.*externals.*,"    /cvmfs/dunedaq.opensciencegrid.org/releases/'"$release_tag"'/externals,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          sed -i 's,.*packages.*,"    /cvmfs/dunedaq.opensciencegrid.org/releases/'"$release_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+
+          # prepare external dir 
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh ${release_dir}/externals
+          
+          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${release_dir}/dbt-settings.sh
+          cd $GITHUB_WORKSPACE/releases
+          tar zcvf ${release_tag}.tar.gz ${release_tag}
+          rm -rf ${release_tag}
+
+    - name: upload frozen release tarball
+      uses: actions/upload-artifact@v2
+      with:
+        name: frozen release
+        path: ${{ github.workspace }}/releases
+
+    - name: upload build log file
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_log
+        path: ${{ github.workspace }}/dev/log
