@@ -8,6 +8,7 @@ function checkout_package {
     echo ${iprd_arr[1]}
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
+    prod_ups_version=$(echo "$prod_branch" | tr '_' '.')
     prod_branch=$(echo "$prod_branch" | tr abc ' '|tr '_' '.')
     if [ "$branch_name" != "not_set" ]; then
         prod_branch=$branch_name
@@ -16,6 +17,10 @@ function checkout_package {
     git clone https://github.com/DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
     git checkout ${prod_branch}
+    if [ "$prod_branch" != "$prod_ups_version" ]; then
+        git tag ${prod_ups_version}
+	echo "INFO: creating local tag ${prod_ups_version} for ${prod_name}"
+    fi
     cd ..
 }
 
