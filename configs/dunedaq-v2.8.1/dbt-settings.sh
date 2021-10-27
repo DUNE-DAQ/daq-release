@@ -63,7 +63,7 @@ dune_daqpackages=(
     "triggeralgs       v0_3_0b     e19:prof"
     "dqm               v1_1_2     e19:prof"
     # Detector packages, will be moved out in the future
-    "wibmod            v1_1_0     e19:prof"
+    "wibmod            v1_2_0     e19:prof"
     "sspmodules        v1_0_0     e19:prof"
 )
 
