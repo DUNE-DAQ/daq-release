@@ -75,4 +75,5 @@ dune_packages=(
   "dqm               develop"
   "lbrulibs          develop"
   "wibmod            develop"
+  "sspmodules        develop"
 )
