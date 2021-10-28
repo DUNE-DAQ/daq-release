@@ -75,6 +75,6 @@ dune_packages=(
   "trigger           v1_1_2b     e19:prof"
   "triggeralgs       v0_3_0b     e19:prof"
   "dqm               v1_1_2     e19:prof"
-  "wibmod            v1_2_0     e19:prof"
+  "wibmod            v1_2_1     e19:prof"
   "sspmodules        v1_0_0     e19:prof"
 )
