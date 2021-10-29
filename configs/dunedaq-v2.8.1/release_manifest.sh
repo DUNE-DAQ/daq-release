@@ -41,7 +41,7 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v4_0_0                  "
+  "daq_buildtools    v4_1_0                  "
   "daq_release       v1_7_1                  "
 )
 
@@ -69,12 +69,12 @@ dune_packages=(
   "lbrulibs          v1_0_3b     e19:prof"
   "nwqueueadapters   v1_4_0b     e19:prof"
   "timing            v5_6_1     e19:prof"
-  "timinglibs        v1_3_0     e19:prof"
+  "timinglibs        v1_3_1     e19:prof"
   "trigemu           v2_3_0c     e19:prof"
-  "minidaqapp        v4_1_0     e19:prof"
+  "minidaqapp        v4_1_1     e19:prof"
   "trigger           v1_1_2b     e19:prof"
   "triggeralgs       v0_3_0b     e19:prof"
-  "dqm               v1_1_2     e19:prof"
+  "dqm               v1_1_3     e19:prof"
   "wibmod            v1_2_2     e19:prof"
   "sspmodules        v1_0_0     e19:prof"
 )
