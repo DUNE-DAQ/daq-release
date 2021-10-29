@@ -1,6 +1,6 @@
 #!/bin/bash
 
-release_name="dunedaq-v2.8.0"
+release_name="dunedaq-v2.8.1"
 release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
 function git_checkout_and_tag {
@@ -69,8 +69,8 @@ echo "[Info]: Release name: ${release_name}"
 
 pushd $tmp_dir
 
-#git_checkout_and_tag dune_packages
-git_checkout_and_tag dune_extras
+git_checkout_and_tag dune_packages
+#git_checkout_and_tag dune_extras
 
 popd
 
