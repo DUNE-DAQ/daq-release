@@ -14,17 +14,19 @@ cd daq-buildtools
 mkdir -p /var/tmp/dbt
 for i in `git tag`; do 
 	if [[ $i = v* ]]; then
+	        echo $i
 		git archive --format=tar --prefix=$i/ $i | (cd /var/tmp/dbt && tar xf -)
 	fi
 done
 
 for i in `git tag`; do 
-	if [[ $i = v* ]]; then
+	if [[ $i = dunedaq* ]]; then
 		for j in `git tag --points-at $(git show-ref -s $i)`; do
-			if [[ $j = "dunedaq-v"* ]]; then
+			echo $j
+			if [[ $j = "v"* ]]; then
 				cd /var/tmp/dbt
 				echo $i $j
-				ln -s $i $j
+				ln -s $j $i
 				cd /var/tmp/daq-buildtools
 			fi
 		done
