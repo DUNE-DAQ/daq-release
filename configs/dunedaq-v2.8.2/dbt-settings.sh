@@ -49,7 +49,7 @@ dune_daqpackages=(
     "ipm               v2_2_0b     e19:prof"
     "serialization     v1_2_2c     e19:prof"
     #"dfmessages        v2_2_0b     e19:prof"
-    #"detchannelsmap    v1_0_0     e19:prof"
+    #"detchannelmaps    v1_0_0     e19:prof"
     #"detdataformats    v1_0_0     e19:prof"
     #"daqdataformats    v1_0_0     e19:prof"
     #"readout           v1_4_3     e19:prof"
