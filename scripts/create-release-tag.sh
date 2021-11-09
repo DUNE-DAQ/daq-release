@@ -16,10 +16,10 @@ function git_checkout_and_tag {
     if git ls-remote --exit-code --tags origin ${release_name}; then
         echo "Info: tag ${release_name} exists, deleting it now"
 	git tag -d ${release_name}
-	#git push --delete origin ${release_name}
+	git push --delete origin ${release_name}
     fi
     git tag ${release_name}
-    #git push origin ${release_name}
+    git push origin ${release_name}
     popd
   done
 }
