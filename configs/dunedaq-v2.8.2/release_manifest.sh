@@ -42,7 +42,7 @@ dune_ups=(
 
 dune_extras=(
   "daq_buildtools    v4_1_0                  "
-  "daq_release       v1_7_1                  "
+  "daq_release       v1_7_2                  "
 )
 
 dune_packages=(
@@ -81,4 +81,13 @@ dune_packages=(
     "wibmod            v1_2_3     e19:prof"
     "sspmodules        v1_0_2     e19:prof"
     "hdf5libs          v1_0_1     e19:prof"
+)
+
+dune_services=(
+  "integrationtest      v1.2.0"
+  "nanorc               v2.0.5"
+  "microservices	v1.0.0"
+  "dqmanalysis	        v1.0.0"
+  "daqerrordisplay	v1.0.1"
+  "dqmplatform	        v1.1.0"
 )
