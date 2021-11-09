@@ -54,7 +54,7 @@ dune_packages=(
   "restcmd           develop"
   "opmonlib          develop"
   "rcif              develop"
-  "appfwk            patch/2.8.2"
+  "appfwk            patch/v2.8.2"
   "listrev           develop"
   "serialization     develop"
   "flxlibs           patch/2.8.2"
@@ -78,4 +78,5 @@ dune_packages=(
   "lbrulibs          patch/2.8.2"
   "wibmod            develop"
   "sspmodules        patch/2.8.2"
+  "hdf5libs          develop"
 )
