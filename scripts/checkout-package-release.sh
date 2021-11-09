@@ -9,7 +9,7 @@ function checkout_package {
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
     prod_ups_version=$(echo "$prod_branch" | tr '_' '.')
-    prod_branch=$(echo "$prod_branch" | tr abc ' '|tr '_' '.')
+    prod_branch=$(echo "$prod_branch" | tr [a-u] ' '|tr '_' '.')
     if [ "$branch_name" != "not_set" ]; then
         prod_branch=$branch_name
     fi
