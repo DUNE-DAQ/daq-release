@@ -1,4 +1,5 @@
 --index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple
+pip==21.3.1
 anyconfig==0.9.11
 attrs==20.2.0
 click==7.1.2
