@@ -13,8 +13,13 @@ function git_checkout_and_tag {
     prod_version=${prod_ups_version//[^v.[:digit:]]/}
     git clone git@github.com:DUNE-DAQ/${prod_name}.git -b ${prod_version}
     pushd ${prod_name}
+    if git ls-remote --exit-code --tags origin ${release_name}; then
+        echo "Info: tag ${release_name} exists, deleting it now"
+	git tag -d ${release_name}
+	#git push --delete origin ${release_name}
+    fi
     git tag ${release_name}
-    git push origin ${release_name}
+    #git push origin ${release_name}
     popd
   done
 }
@@ -69,8 +74,9 @@ echo "[Info]: Release name: ${release_name}"
 
 pushd $tmp_dir
 
-git_checkout_and_tag dune_packages
-#git_checkout_and_tag dune_extras
+for i in dune_packages dune_extras dune_others; do 
+    git_checkout_and_tag $i
+done
 
 popd
 
