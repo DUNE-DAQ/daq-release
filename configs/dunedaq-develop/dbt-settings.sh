@@ -20,7 +20,7 @@ dune_externals=(
     "folly             v2020_05_25a e19:prof"
     "nlohmann_json     v3_9_0c      e19:prof"
     "pistache          v2020_10_07  e19:prof"
-    "highfive          v2_2_2b      e19:prof"
+    "highfive          v2_3_1       e19:prof"
     "zmq               v4_3_1c      e19:prof"
     "cppzmq            v4_3_0       e19:prof"
     "msgpack_c         v3_3_0       e19:prof"
@@ -29,9 +29,12 @@ dune_externals=(
     "uhal              v2_8_1       e19:prof"
     "cpr               v1_5_2       e19:prof"
     "librdkafka        v1_7_0       e19:prof"
+    "protobuf          v3_14_0      e19"
 )
 
 dune_daqpackages=(
+    # Please ignore the following versions as they
+    # will get overwritten by the nightly release in cvmfs.
     "daq_cmake         v1_4_2          e19:prof"
     "ers               v1_1_2c         e19:prof"
     "erses             v1_0_0          e19:prof"
@@ -44,18 +47,27 @@ dune_daqpackages=(
     "listrev           v2_1_3b         e19:prof"
     "serialization     v1_2_2          e19:prof"
     "flxlibs           v1_1_0          e19:prof"
-    "dataformats       v2_1_0          e19:prof"
+    "daqdataformats    v1_0_0          e19:prof"
+    "detdataformats    v1_0_0          e19:prof"
+    "detchannelmaps    v1_0_0          e19:prof"
     "dfmessages        v2_1_0          e19:prof"
-    "dfmodules         v2_1_0          e19:prof"
+    "dfmodules         v2_2_1          e19:prof"
     "trigemu           v2_3_0          e19:prof"
-    "readout           v1_3_0          e19:prof"
+    "readout           v1_4_2          e19:prof"
     "minidaqapp        v3_0_0          e19:prof"
     "ipm               v2_1_2          e19:prof"
-    "timing            v5_4_1          e19:prof"
+    "timing            v5_5_1          e19:prof"
     "timinglibs        v1_1_1          e19:prof"
-    "trigger           v1_0_4          e19:prof"
+    "trigger           v1_1_2          e19:prof"
     "triggeralgs       v0_2_2          e19:prof"
     "influxopmon       v1_3_0          e19:prof"
     "nwqueueadapters   v1_3_1          e19:prof"
+    "erskafka          v1_3_0          e19:prof"
+    "dqm               v1_1_2          e19:prof"
+    "lbrulibs          v1_0_3          e19:prof"
+    # Detector packages, will be moved out in the future
+    "wibmod            v1_2_2          e19:prof"
+    "sspmodules        v1_0_0          e19:prof"
+    "hdf5libs          v1_0_1          e19:prof"
 )
 

@@ -7,6 +7,7 @@ import subprocess
 import getpass
 import datetime
 import argparse
+import shutil
 
 
 def check_output(cmd):
@@ -31,6 +32,8 @@ def get_version(cdir):
     cmd = "cd {}; git tag --points-at HEAD|tail -n 1 ".format(cdir)
     output = check_output(cmd);
     version = output[0].decode('utf-8').strip()
+    if '/' in version:
+        version = ""
     return version
 
 
@@ -106,6 +109,8 @@ Common:
         pkg = pkg.replace('_','-')
     if has_lib:
         table_content +=f"""
+    # src dir
+    envSet( ${{UPS_PROD_NAME_UC}}SOURCE_DIR, ${{${{UPS_PROD_NAME_UC}}_DIR}}/src )
     # lib dir
     envSet(${{UPS_PROD_NAME_UC}}_LIB, ${{${{UPS_PROD_NAME_UC}}_FQ_DIR}}/{pkg}/lib64)
     pathPrepend(LD_LIBRARY_PATH, ${{${{UPS_PROD_NAME_UC}}_LIB}})
@@ -192,6 +197,7 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, install, cve
         pkg_name = pkg_name.replace('-','_')
         renamed = True
     ups_dir = os.path.join(tmp_dir, pkg_name)
+    src_dir = os.path.join(ups_dir, version, "src")
     flavor_dir = os.path.join(ups_dir, version, flavor)
     flavor_install_dir = os.path.join(ups_dir, version, flavor, orig_pkg_name)
     print("Info -- creating UPS package: ", pkg_name)
@@ -199,6 +205,11 @@ def create_ups_pkg(install_dir, source_dir, equal, dqual, dest_dir, install, cve
     print("Info -- commit hash: ", commit_hash)
     print("Info -- flavor: ", flavor)
     print("Info -- ups version: ", version)
+
+
+    # prepare src subdir
+    shutil.copytree(source_dir, src_dir,
+              ignore=lambda directory, contents: ['.git'] if directory == source_dir else [])
 
     # prepare flavor subdir
     os.makedirs(flavor_dir)

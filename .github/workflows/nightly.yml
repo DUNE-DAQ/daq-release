@@ -42,12 +42,6 @@ jobs:
     - name: Start the CI
       run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
 
-    - name: Checkout daq-buildtools
-      uses: actions/checkout@v2
-      with:
-        repository: DUNE-DAQ/daq-buildtools
-        path: daq-buildtools
-
     - name: Checkout daq-release
       uses: actions/checkout@v2
       with:
@@ -56,36 +50,51 @@ jobs:
         
     - name: setup dev area and checkout code
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -b develop -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
     
     - name: setup build env and build the dev release
       run: |
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
           cd $GITHUB_WORKSPACE/dev
           dbt-workarea-env -s externals || true
           dbt-build.sh
+
+    - name: create release directory
+      run: |
           nightly_tag="N$(date +%y-%m-%d)"
           mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          
+
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+          cd $GITHUB_WORKSPACE/dev
+          dbt-workarea-env -s externals || true
+
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          clonevirtualenv.py $GITHUB_WORKSPACE/dev/dbt-pyvenv $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-pyvenv
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-          echo "PROGRESS: updating dbt-settings.sh under /releases/dunedaq-develop"
-          cd /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_successful/packages
+          echo "PROGRESS: updating dbt-settings.sh"
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          cd $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
           sed -i 's,.*externals.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*packages.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
 
-          mv /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_successful/externals $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          # prepare external dir 
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh $GITHUB_WORKSPACE/nightly/${nightly_tag}/externals
+          
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
           cd $GITHUB_WORKSPACE/nightly
           tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}

@@ -8,7 +8,10 @@ function checkout_package {
     echo ${iprd_arr[1]}
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
-    prod_branch=$(echo "$prod_branch" | tr abc ' '|tr '_' '.')
+    prod_ups_version=$(echo "$prod_branch" | tr '_' '.')
+    if [[ $prod_branch == v* ]]; then
+        prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
+    fi
     if [ "$branch_name" != "not_set" ]; then
         prod_branch=$branch_name
     fi
@@ -16,6 +19,10 @@ function checkout_package {
     git clone https://github.com/DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
     git checkout ${prod_branch}
+    if [ "$prod_branch" != "$prod_ups_version" ]; then
+        git tag ${prod_ups_version}
+	echo "INFO: creating local tag ${prod_ups_version} for ${prod_name}"
+    fi
     cd ..
 }
 
@@ -51,6 +58,9 @@ while getopts ":f:p:b:no:ah" opt; do
       echo "    [-p] <package name>"
       echo "    [-b] <branch name>"
       echo "    [-a] <checkout all DAQ packages>"
+      echo "Examples:"
+      echo "    checkout-package-release.sh -f <path_to_release_manifest.sh> -a"
+      echo "    checkout-package-release.sh -f <path_to_release_manifest.sh> -p daq-cmake"
       exit 0
       ;;
    \? )
