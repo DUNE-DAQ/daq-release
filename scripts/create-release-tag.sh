@@ -8,6 +8,7 @@ function git_checkout_and_tag {
   prd_list=("${!prd_list_name}")
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
+    echo "++++++++++++++++++++++++++++++++++++++++++++++"
     prod_name=${iprd_arr[0]//_/-}
     prod_ups_version=${iprd_arr[1]//_/.}
     prod_version=${prod_ups_version//[^v.[:digit:]]/}
@@ -20,6 +21,7 @@ function git_checkout_and_tag {
     fi
     git tag ${release_name}
     git push origin ${release_name}
+    git tag | grep dunedaq-v2.8.2
     popd
   done
 }
@@ -74,7 +76,7 @@ echo "[Info]: Release name: ${release_name}"
 
 pushd $tmp_dir
 
-for i in dune_packages dune_extras dune_others; do 
+for i in dune_packages dune_extras dune_services; do 
     git_checkout_and_tag $i
 done
 
