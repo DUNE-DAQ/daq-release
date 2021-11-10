@@ -58,6 +58,9 @@ while getopts ":f:p:b:no:ah" opt; do
       echo "    [-p] <package name>"
       echo "    [-b] <branch name>"
       echo "    [-a] <checkout all DAQ packages>"
+      echo "Examples:"
+      echo "    checkout-package-release.sh -f <path_to_release_manifest.sh> -a"
+      echo "    checkout-package-release.sh -f <path_to_release_manifest.sh> -p daq-cmake"
       exit 0
       ;;
    \? )
