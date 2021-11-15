@@ -80,7 +80,7 @@ dune_packages=(
   "dqm               develop"
   "lbrulibs          develop"
   "wibmod            develop"
-  "sspmodules        develop"
+  "sspmodules        readout_breakout"
   "hdf5libs          develop"
 )
 
