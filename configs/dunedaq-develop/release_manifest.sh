@@ -82,6 +82,7 @@ dune_packages=(
   "wibmod            develop"
   "sspmodules        develop"
   "hdf5libs          develop"
+  "utilities         develop"
 )
 
 dune_services=(
