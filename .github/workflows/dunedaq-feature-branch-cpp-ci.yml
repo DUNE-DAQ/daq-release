@@ -11,6 +11,11 @@ on:
       - '.github/**'
 
   workflow_dispatch:
+    inputs:
+      checkout_dev:
+        description: "Whether to checkout a package's develop branch if feature branch does not exist (Yes/No)?"
+        default: "No"
+        required: true
 
 
 jobs:
@@ -54,7 +59,15 @@ jobs:
               git checkout $branch_name
           fi
           mkdir -p $GITHUB_WORKSPACE/sourcecode
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh -o $GITHUB_WORKSPACE/sourcecode -b $branch_name -a -n
+          export checkout_dev=${{ github.event.inputs.checkout_dev }} 
+          if [[ ${checkout_dev} == "No" ]]; then
+              $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh -o $GITHUB_WORKSPACE/sourcecode -b $branch_name -a -n
+          elif [[ ${checkout_dev} == "Yes" ]]; then
+              $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh -o $GITHUB_WORKSPACE/sourcecode -b $branch_name -a
+          else
+              echo "Only Yes or No is allowed for the input field."
+              exit 1
+          fi
     
     - name: setup build env, build and lint the repo against the development release
       run: |
