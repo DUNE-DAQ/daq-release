@@ -1,4 +1,4 @@
-name: build-feature-branch-together
+name: Build feature branch together
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
