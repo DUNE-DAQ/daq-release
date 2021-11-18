@@ -40,6 +40,7 @@ jobs:
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest
+          cd $GITHUB_WORKSPACE
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs ${DUNEDAQ_RELEASE} dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/release_manifest.sh .
