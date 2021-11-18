@@ -83,6 +83,7 @@ dune_packages=(
   "sspmodules        develop"
   "hdf5libs          develop"
   "utilities         develop"
+  "networkmanager    develop"
 )
 
 dune_services=(

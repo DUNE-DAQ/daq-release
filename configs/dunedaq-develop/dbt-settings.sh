@@ -67,6 +67,7 @@ dune_daqpackages=(
     "lbrulibs          v1_0_3          e19:prof"
     "hdf5libs          v1_0_1          e19:prof"
     "utilities         v1_0_0          e19:prof"
+    "networkmanager    v1_0_0          e19:prof"
     # Detector packages, will be moved out in the future
     "wibmod            v1_2_2          e19:prof"
     "sspmodules        v1_0_0          e19:prof"
