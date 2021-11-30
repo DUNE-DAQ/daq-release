@@ -5,7 +5,7 @@ name: Build frozen release
 on:
   workflow_dispatch:
     inputs:
-      name:
+      release_name:
         description: 'Name of the release to be built, expected to work with only the latest frozen release'
         default: 'dunedaq-develop'
         required: true
@@ -30,7 +30,13 @@ jobs:
         
     - name: setup work area and checkout code
       run: |
-          export DUNEDAQ_RELEASE=${{ github.event.inputs.name }}
+          branch_name="${GITHUB_REF#refs/heads/}"
+          cd $GITHUB_WORKSPACE/daq-release
+          if git ls-remote --exit-code --heads origin $branch_name; then
+              git checkout $branch_name
+          fi
+
+          export DUNEDAQ_RELEASE=${{ github.event.inputs.release_name }}
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest
@@ -38,7 +44,7 @@ jobs:
           dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs ${DUNEDAQ_RELEASE} dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f ./release_manifest.sh -a -o sourcecode
+          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f ./release_manifest.sh -a -b $branch_name -o sourcecode 
     
     - name: setup build env and build the release
       run: |
@@ -50,7 +56,7 @@ jobs:
 
     - name: create release directory
       run: |
-          export DUNEDAQ_RELEASE=${{ github.event.inputs.name }}
+          export DUNEDAQ_RELEASE=${{ github.event.inputs.release_name }}
           release_tag=${DUNEDAQ_RELEASE}
           release_dir=$GITHUB_WORKSPACE/releases/${release_tag}
           mkdir -p $release_dir

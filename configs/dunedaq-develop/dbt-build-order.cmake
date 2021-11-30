@@ -7,4 +7,4 @@
 # development area, the developer is encouraged to add it to its
 # appropriate place in this list
 
-set(build_order "daq-cmake" "ers" "erskafka" "erses" "logging" "opmonlib" "cmdlib" "rcif" "restcmd" "utilities" "appfwk" "listrev" "daqdemos" "ipm" "serialization" "nwqueueadapters" "daqdataformats" "detdataformats" "detchannelmaps" "dfmessages" "trigemu" "triggeralgs" "timing" "timinglibs" "trigger" "readoutlibs" "fdreadoutlibs" "ndreadoutlibs" "readoutmodules" "flxlibs" "dfmodules" "influxopmon" "kafkaopmon" "minidaqapp" "dqm" "lbrulibs" "wibmod" "sspmodules" "hdf5libs")
+set(build_order "daq-cmake" "ers" "erskafka" "erses" "logging" "opmonlib" "cmdlib" "rcif" "restcmd" "utilities" "ipm" "networkmanager" "appfwk" "listrev" "daqdemos" "serialization" "nwqueueadapters" "daqdataformats" "detdataformats" "detchannelmaps" "dfmessages" "trigemu" "triggeralgs" "timing" "timinglibs" "trigger" "readoutlibs" "fdreadoutlibs" "ndreadoutlibs" "readoutmodules" "flxlibs" "dfmodules" "influxopmon" "kafkaopmon" "minidaqapp" "dqm" "lbrulibs" "wibmod" "sspmodules" "hdf5libs")
