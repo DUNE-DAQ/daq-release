@@ -1,8 +1,23 @@
-diff --git a/CMake/folly-deps.cmake b/CMake/folly-deps.cmake
-index d20f03d..19f7ff5 100644
---- a/CMake/folly-deps.cmake
-+++ b/CMake/folly-deps.cmake
-@@ -46,7 +46,7 @@ find_package(Boost 1.51.0 MODULE
+diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
+--- A/CMake/folly-config.cmake.in	2021-12-12 22:10:42.000000000 +0000
++++ B/CMake/folly-config.cmake.in	2021-12-14 18:14:55.161568113 +0000
+@@ -29,6 +29,12 @@
+ 
+ # Find folly's dependencies
+ find_dependency(fmt)
++find_dependency(glog)
++find_dependency(double-conversion)
++find_dependency(OpenSSL)
++find_dependency(LibLZMA)
++find_dependency(BZip2)
++find_dependency(Libevent)
+ 
+ set(Boost_USE_STATIC_LIBS "@FOLLY_BOOST_LINK_STATIC@")
+ find_dependency(Boost 1.51.0 MODULE
+diff -Naur A/CMake/folly-deps.cmake B/CMake/folly-deps.cmake
+--- A/CMake/folly-deps.cmake	2021-12-12 22:10:42.000000000 +0000
++++ B/CMake/folly-deps.cmake	2021-12-14 18:13:45.746472689 +0000
+@@ -48,7 +48,7 @@
  list(APPEND FOLLY_LINK_LIBRARIES ${Boost_LIBRARIES})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
  
@@ -11,49 +26,47 @@ index d20f03d..19f7ff5 100644
  list(APPEND FOLLY_LINK_LIBRARIES ${DOUBLE_CONVERSION_LIBRARY})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${DOUBLE_CONVERSION_INCLUDE_DIR})
  
-@@ -125,9 +125,10 @@ find_package(Libiberty)
+@@ -133,9 +133,10 @@
  list(APPEND FOLLY_LINK_LIBRARIES ${LIBIBERTY_LIBRARIES})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${LIBIBERTY_INCLUDE_DIRS})
  
 -find_package(LibAIO)
 -list(APPEND FOLLY_LINK_LIBRARIES ${LIBAIO_LIBRARIES})
 -list(APPEND FOLLY_INCLUDE_DIRECTORIES ${LIBAIO_INCLUDE_DIRS})
-+# find_package(LibAIO)
-+# list(APPEND FOLLY_LINK_LIBRARIES ${LIBAIO_LIBRARIES})
-+# list(APPEND FOLLY_INCLUDE_DIRECTORIES ${LIBAIO_INCLUDE_DIRS})
++#find_package(LibAIO)
++#list(APPEND FOLLY_LINK_LIBRARIES ${LIBAIO_LIBRARIES})
++#list(APPEND FOLLY_INCLUDE_DIRECTORIES ${LIBAIO_INCLUDE_DIRS})
 +set(LIBAIO_FOUND FALSE)
  
  find_package(LibUring)
  list(APPEND FOLLY_LINK_LIBRARIES ${LIBURING_LIBRARIES})
-@@ -226,13 +227,33 @@ if (NOT DEFINED fmt_CONFIG)
+@@ -304,12 +305,33 @@
      # Fallback on a normal search on the current system
-     find_package(fmt MODULE REQUIRED)
+     find_package(Fmt MODULE REQUIRED)
  endif()
 -target_link_libraries(folly_deps INTERFACE fmt::fmt)
--
++#target_link_libraries(folly_deps INTERFACE fmt::fmt)
+ 
 -list(REMOVE_DUPLICATES FOLLY_INCLUDE_DIRECTORIES)
 -target_include_directories(folly_deps INTERFACE ${FOLLY_INCLUDE_DIRECTORIES})
 -target_link_libraries(folly_deps INTERFACE
 -  ${FOLLY_LINK_LIBRARIES}
 -  ${FOLLY_SHINY_DEPENDENCIES}
 -  ${FOLLY_ASAN_FLAGS}
--)
-+# target_link_libraries(folly_deps INTERFACE fmt::fmt)
++#list(REMOVE_DUPLICATES FOLLY_INCLUDE_DIRECTORIES)
++#target_include_directories(folly_deps INTERFACE ${FOLLY_INCLUDE_DIRECTORIES})
++#target_link_libraries(folly_deps INTERFACE
++#  ${FOLLY_LINK_LIBRARIES}
++#  ${FOLLY_SHINY_DEPENDENCIES}
++#  ${
++#)
 +
-+# list(REMOVE_DUPLICATES FOLLY_INCLUDE_DIRECTORIES)
-+# target_include_directories(folly_deps PRIVATE ${FOLLY_INCLUDE_DIRECTORIES})
-+# target_link_libraries(folly_deps PRIVATE
-+#   ${FOLLY_LINK_LIBRARIES}
-+#   ${FOLLY_SHINY_DEPENDENCIES}
-+#   ${FOLLY_ASAN_FLAGS}
-+# )
- 
 +# libevent doesn't provide a target with an includes interface, so we do this manually
 +#target_include_directories(folly_deps PRIVATE ${LIBEVENT_INCLUDE_DIR})
 +target_include_directories(folly_deps
 +  INTERFACE
 +    $<BUILD_INTERFACE:${LIBEVENT_INCLUDE_DIR}>
-+)
+ )
 +target_link_libraries(folly_deps INTERFACE Boost::context
 +                                           Boost::filesystem
 +                                           Boost::program_options
@@ -68,62 +81,15 @@ index d20f03d..19f7ff5 100644
 +                                           BZip2::BZip2
 +                                           LibLZMA::LibLZMA
 +                                           )
-diff --git a/folly/detail/Demangle.h b/folly/detail/Demangle.h
-index b11ffc7..d4e5a33 100644
---- a/folly/detail/Demangle.h
-+++ b/folly/detail/Demangle.h
-@@ -18,11 +18,19 @@
- 
- #include <cstddef>
- 
--#if __has_include(<demangle.h>)
--#define FOLLY_DETAIL_HAVE_DEMANGLE_H 1
--#else
-+// PAR 2020-06-16: This looks for demangle.h on the system where folly
-+// is built, but we want to have relocatable UPS products that we can
-+// install on other systems that might not have libiberty installed,
-+// so we manually turn this off
-+
-+// #if __has_include(<demangle.h>)
-+// #define FOLLY_DETAIL_HAVE_DEMANGLE_H 1
-+// #else
-+// #define FOLLY_DETAIL_HAVE_DEMANGLE_H 0
-+// #endif
-+
- #define FOLLY_DETAIL_HAVE_DEMANGLE_H 0
--#endif
-+
- 
- namespace folly {
- namespace detail {
-diff --git a/CMake/folly-config.cmake.in b/CMake/folly-config.cmake.in
-index 1689f9a..b72ff3b 100644
---- a/CMake/folly-config.cmake.in
-+++ b/CMake/folly-config.cmake.in
-@@ -29,6 +29,13 @@ set(FOLLY_LIBRARIES Folly::folly)
- 
- # Find folly's dependencies
- find_dependency(fmt)
-+find_dependency(glog)
-+find_dependency(double-conversion)
-+find_dependency(OpenSSL)
-+find_dependency(LibLZMA)
-+find_dependency(BZip2)
-+find_dependency(Libevent)
-+
- 
- set(Boost_USE_STATIC_LIBS "@FOLLY_BOOST_LINK_STATIC@")
- find_dependency(Boost 1.51.0 MODULE
-diff -Naur a/folly/CMakeLists.txt b/folly/CMakeLists.txt
---- a/folly/CMakeLists.txt
-+++ b/folly/CMakeLists.txt
-@@ -27,7 +27,7 @@
+diff -Naur A/folly/CMakeLists.txt B/folly/CMakeLists.txt
+--- A/folly/CMakeLists.txt	2021-12-12 22:10:42.000000000 +0000
++++ B/folly/CMakeLists.txt	2021-12-14 18:15:23.101204050 +0000
+@@ -28,7 +28,7 @@
  )
-
+ 
  add_subdirectory(experimental/exception_tracer)
 -add_subdirectory(logging/example)
 +#add_subdirectory(logging/example)
-
+ 
  if (PYTHON_EXTENSIONS)
    # Create tree of symbolic links in structure required for successful
-

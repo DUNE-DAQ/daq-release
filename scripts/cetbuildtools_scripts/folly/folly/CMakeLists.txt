@@ -5,7 +5,7 @@ ExternalProject_Add (
 
   PREFIX         folly
   GIT_REPOSITORY https://github.com/facebook/folly
-  GIT_TAG        v2020.05.25.00
+  GIT_TAG        v2021.12.13.00
   GIT_SHALLOW    ON
 
   PATCH_COMMAND  patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/folly-make-relocatable.diff

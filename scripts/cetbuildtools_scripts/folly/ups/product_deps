@@ -2,7 +2,7 @@
 # fully annotated product_deps file.
 
 # Product specification
-parent folly v2020_05_25a
+parent folly v2021_12_13
 defaultqual e19
 
 # Table-file variable setup specification.
