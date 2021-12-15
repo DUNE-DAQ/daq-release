@@ -1,7 +1,7 @@
 diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
 --- A/CMake/folly-config.cmake.in	2021-12-12 22:10:42.000000000 +0000
 +++ B/CMake/folly-config.cmake.in	2021-12-14 18:14:55.161568113 +0000
-@@ -29,6 +29,12 @@
+@@ -29,6 +29,13 @@
  
  # Find folly's dependencies
  find_dependency(fmt)
@@ -11,6 +11,7 @@ diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
 +find_dependency(LibLZMA)
 +find_dependency(BZip2)
 +find_dependency(Libevent)
++find_dependency(zstd)
  
  set(Boost_USE_STATIC_LIBS "@FOLLY_BOOST_LINK_STATIC@")
  find_dependency(Boost 1.51.0 MODULE

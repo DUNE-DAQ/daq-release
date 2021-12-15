@@ -19,11 +19,12 @@ fmt                      v6_2_1
 glog                     v0_4_0
 libevent                 v2_1_8
 boost                    v1_73_0
+zstd                     v1_5_0
 end_product_list
 
 # Matrix of qualifiers versus dependent products
-qualifier	gcc	double_conversion       fmt             glog            libevent        boost   notes
-e19:prof	-nq-    e19:prof                e19:prof        e19:prof        e19:prof        e19:prof
+qualifier	gcc	double_conversion       fmt             glog            libevent        boost     zstd notes
+e19:prof	-nq-    e19:prof                e19:prof        e19:prof        e19:prof        e19:prof  e19:prof
 end_qualifier_list
 
 table_fragment_begin
