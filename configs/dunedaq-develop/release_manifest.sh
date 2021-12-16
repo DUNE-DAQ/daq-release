@@ -7,7 +7,7 @@ dune_externals=(
   "cmake             v3_17_2                 "
   "cppunit           v1_15_1a        e19:prof"
   "fmt               v6_2_1          e19:prof"
-  "folly             v2020_05_25a    e19:prof"
+  "folly             v2021_12_13     e19:prof"
   "double_conversion v3_1_5          e19:prof"
   "gcc               v8_2_0                  "
   "gdb               v9_2                    "
@@ -34,6 +34,7 @@ dune_externals=(
   "pugixml           v1_11           e19     "
   "librdkafka        v1_7_0          e19:prof"
   "yaml_cpp          v0_6_3          e19:prof"
+  "zstd              v1_5_0          e19:prof"
 )
 
 dune_ups=(

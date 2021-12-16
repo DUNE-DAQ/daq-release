@@ -11,7 +11,7 @@ diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
 +find_dependency(LibLZMA)
 +find_dependency(BZip2)
 +find_dependency(Libevent)
-+find_dependency(zstd)
++find_dependency(zstd MODULE COMPONENTS libzstd_shared REQUIRED)
  
  set(Boost_USE_STATIC_LIBS "@FOLLY_BOOST_LINK_STATIC@")
  find_dependency(Boost 1.51.0 MODULE
