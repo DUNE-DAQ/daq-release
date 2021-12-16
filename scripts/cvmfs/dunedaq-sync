@@ -1,0 +1,70 @@
+#! /bin/sh
+
+# dunedaq-sync
+# Pengfei Ding
+# January 2020
+#
+# Install dunedaq UPS products from a scratch area on docker-bd.fnal.gov
+# This area contains products used by current protoDUNE DAQ.
+
+# source repo.sh to get cvmfs repo name
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/repo.sh
+
+PATH_TO_SYNC=$1
+DIR_TO_SYNC=`dirname ${PATH_TO_SYNC}`
+SRCPATH=/grid/fermiapp/products/dunedaq/$REPO/$PATH_TO_SYNC
+DESTPATH=/cvmfs/$REPO/$DIR_TO_SYNC
+ROPTS="-rvplt --stats"
+DRY_ROPTS="-rvpltn"
+MYDATE=`date +%Y%m%d_%H%M%S`
+TAG=${DIR_TO_SYNC//\//_}-$MYDATE
+LOG=$HOME/dunedaq-sync.log
+RLOG=$HOME/logs/rsync_$TAG.log
+if [ ! -r $DESTPATH ]; then
+  echo Destination path not found: $DESTPATH
+  exit 3
+fi
+
+echo Source: $SRCPATH
+echo Destination: $DESTPATH
+echo Tag: $TAG
+
+echo >>$LOG
+echo -n Transaction $TAG: >>$LOG
+cvmfs_server transaction $REPO
+COM="rsync $DRY_ROPTS $SRCPATH $DESTPATH"
+echo "Doing a dry run of rsync:" | tee $RLOG
+echo $COM | tee $RLOG
+echo "-------------------" | tee $RLOG
+$COM 2>&1 | tee $RLOG
+echo ""
+echo "Do you wish to publish the above changes (if any)?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) break;;
+        No ) cvmfs_server abort $REPO; echo "rsync & publishing aborted!"|tee $RLOG; exit;;
+    esac
+done
+
+COM="rsync $ROPTS $SRCPATH $DESTPATH"
+echo "Running rsync:" | tee $RLOG
+echo $COM | tee $RLOG
+echo "-------------------" | tee $RLOG
+$COM 2>&1 | tee $RLOG
+RET=$?
+echo "-------------------"
+
+if [ $RET -eq 0 ]; then
+  echo
+  echo Rsync succeeded. Publishing change.
+  echo -n " rsync succeeded" >>$LOG
+  cvmfs_server publish -a $TAG $REPO
+else
+  echo Rsync failed with error $RET. Aborting.
+  echo -n " rsync failed with error $RET" >>$LOG
+  cvmfs_server abort $REPO
+fi
+
+echo >>$LOG
+echo Done
