@@ -10,14 +10,20 @@ function git_checkout_and_tag {
     iprd_arr=(${prod})
     echo "++++++++++++++++++++++++++++++++++++++++++++++"
     prod_name=${iprd_arr[0]//_/-}
+    if [ "$prod_name" = "elisa-client-api" ]; then
+        prod_name="elisa_client_api"
+    fi
     prod_ups_version=${iprd_arr[1]//_/.}
     prod_version=${prod_ups_version//[^v.[:digit:]]/}
     git clone git@github.com:DUNE-DAQ/${prod_name}.git -b ${prod_version}
     pushd ${prod_name}
     if git ls-remote --exit-code --tags origin ${release_name}; then
-        echo "Info: tag ${release_name} exists, deleting it now"
-	git tag -d ${release_name}
-	git push --delete origin ${release_name}
+        #echo "Info: tag ${release_name} exists, deleting it now"
+	#git tag -d ${release_name}
+	#git push --delete origin ${release_name}
+        echo "Info: tag ${release_name} exists, skipping it now"
+	popd
+	continue
     fi
     git tag ${release_name}
     git push origin ${release_name}
