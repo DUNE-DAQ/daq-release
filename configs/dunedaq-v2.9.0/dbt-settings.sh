@@ -57,7 +57,7 @@ dune_daqpackages=(
   "fdreadoutlibs     v1_0_0     e19:prof"
   "ndreadoutlibs     v1_0_0     e19:prof"
   "dfmodules         v2_4_0     e19:prof"
-  "flxlibs           v1_2_3b    e19:prof"
+  "flxlibs           v1_3_0     e19:prof"
   "lbrulibs          v1_0_6     e19:prof"
   "networkmanager    v1_0_2     e19:prof"
   "nwqueueadapters   v1_5_0     e19:prof"
@@ -70,6 +70,6 @@ dune_daqpackages=(
   "dqm               v1_2_0     e19:prof"
   "hdf5libs          v1_0_3     e19:prof"
   "wibmod            v1_2_5     e19:prof"
-  "sspmodules        v1_0_2b    e19:prof"
+  "sspmodules        v1_1_0     e19:prof"
 )
 

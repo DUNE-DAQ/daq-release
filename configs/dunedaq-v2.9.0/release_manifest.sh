@@ -94,5 +94,5 @@ dune_services=(
   "dqmanalysis	        v1.0.0"
   "daqerrordisplay	v1.0.1"
   "dqmplatform	        v1.1.0"
-  "elisa_client_apt     v0.1.0"
+  "elisa_client_api     v0.1.0"
 )
