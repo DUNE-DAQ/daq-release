@@ -71,7 +71,7 @@ dune_packages=(
   "fdreadoutlibs     v1_0_0     e19:prof"
   "ndreadoutlibs     v1_0_0     e19:prof"
   "dfmodules         v2_4_0     e19:prof"
-  "flxlibs           v1_2_3b    e19:prof"
+  "flxlibs           v1_3_0     e19:prof"
   "lbrulibs          v1_0_6     e19:prof"
   "networkmanager    v1_0_2     e19:prof"
   "nwqueueadapters   v1_5_0     e19:prof"
