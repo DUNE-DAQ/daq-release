@@ -84,7 +84,7 @@ dune_packages=(
   "dqm               v1_2_0     e19:prof"
   "hdf5libs          v1_0_3     e19:prof"
   "wibmod            v1_2_5     e19:prof"
-  "sspmodules        v1_0_2b    e19:prof"
+  "sspmodules        v1_1_0     e19:prof"
 )
 
 dune_services=(
