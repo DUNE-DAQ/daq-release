@@ -77,6 +77,7 @@ jobs:
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
+          sed -i 's,DUNE_DAQ_BASE_RELEASE.*,DUNE_DAQ_BASE_RELEASE="'"$release_tag"'",' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,"/cvmfs/dunedaq.open.*,"/cvmfs/dunedaq.opensciencegrid.org/releases/'"$release_tag"'/externals",' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,"/cvmfs/dunedaq-develop.*,"/cvmfs/dunedaq.opensciencegrid.org/releases/'"$release_tag"'/packages",' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
 
