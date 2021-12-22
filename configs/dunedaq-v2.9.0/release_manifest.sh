@@ -43,7 +43,7 @@ dune_ups=(
 
 dune_extras=(
   "daq_buildtools    v4_1_2                  "
-  "daq_release       develop                 "
+  "daq_release       v1_7_3                  "
 )
 
 dune_packages=(
@@ -89,7 +89,7 @@ dune_packages=(
 
 dune_services=(
   "integrationtest      v1.3.0"
-  "nanorc               v2.0.9"
+  "nanorc               v2.0.12"
   "microservices	v1.0.0"
   "dqmanalysis	        v1.0.0"
   "daqerrordisplay	v1.0.1"
