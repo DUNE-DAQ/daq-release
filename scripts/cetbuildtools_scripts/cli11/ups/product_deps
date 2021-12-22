@@ -2,29 +2,25 @@
 # fully annotated product_deps file.
 
 # Product specification
-parent folly v2021_12_13
+parent cli11 v2_1_2
 defaultqual e19
 
 # Table-file variable setup specification.
 incdir      fq_dir include
-libdir      fq_dir      lib
+libdir      fq_dir      lib64
 bindir      fq_dir      bin
 
 # define product/version pairs
-product                  version
-gcc                      v8_2_0
-cetbuildtools            v7_15_01	-	only_for_build
-double_conversion        v3_1_5
-fmt                      v6_2_1
-glog                     v0_4_0
-libevent                 v2_1_8
-boost                    v1_73_0
-zstd                     v1_5_0
+product		version
+gcc		v8_2_0
+cetbuildtools	v7_15_01	-	only_for_build
 end_product_list
 
 # Matrix of qualifiers versus dependent products
-qualifier	gcc	double_conversion       fmt             glog            libevent        boost     zstd notes
-e19:prof	-nq-    e19:prof                e19:prof        e19:prof        e19:prof        e19:prof  e19:prof
+qualifier	gcc		notes
+e19:debug	-nq-	   
+e19:opt		-nq-	
+e19:prof	-nq-	
 end_qualifier_list
 
 table_fragment_begin

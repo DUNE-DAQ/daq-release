@@ -8,20 +8,40 @@ function checkout_package {
     echo ${iprd_arr[1]}
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
-    prod_ups_version=$(echo "$prod_branch" | tr '_' '.')
-    if [[ $prod_branch == v* ]]; then
-        prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
-    fi
-    if [ "$branch_name" != "not_set" ]; then
-        prod_branch=$branch_name
-    fi
-    echo "$prod_name -- $prod_branch"
+    prod_ups_version=${iprd_arr[1]}
+
     git clone https://github.com/DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
+
+    if [[ $prod_branch == v* ]]; then
+	prod_ups_version=$(echo "$prod_ups_version" | tr '_' '.')
+        prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
+
+    fi
+
+    if [ "$branch_name" != "not_set" ]; then
+	if git ls-remote --exit-code --heads origin $branch_name; then
+	    prod_branch=$branch_name
+        else
+	    echo "INFO: remote branch $branch_name does not exist"
+            if $NO_DEV_CHECKOUT; then 
+		echo "INFO: skipping package checkout for $prod_name"
+		cd ..; rm -rf ${prod_name}
+                return 1;
+	    else
+	        echo "INFO: using branch name from release_manifest.sh."
+            fi
+	fi
+    fi
+
+    echo "INFO: checking out $prod_name, uisng branch $prod_branch"
     git checkout ${prod_branch}
-    if [ "$prod_branch" != "$prod_ups_version" ]; then
-        git tag ${prod_ups_version}
-	echo "INFO: creating local tag ${prod_ups_version} for ${prod_name}"
+
+    if [[ $prod_branch == v* ]]; then
+        if [ "$prod_branch" != "$prod_ups_version" ]; then
+            git tag ${prod_ups_version}
+	    echo "INFO: creating local tag ${prod_ups_version} for ${prod_name}"
+        fi
     fi
     cd ..
 }
@@ -30,6 +50,7 @@ update_all=0
 branch_name="not_set"
 release_manifest_file="./release_manifest.sh"
 outdir="sourcecode"
+NO_DEV_CHECKOUT=false
 while getopts ":f:p:b:no:ah" opt; do
   case ${opt} in
     f )
@@ -42,7 +63,7 @@ while getopts ":f:p:b:no:ah" opt; do
        branch_name=$OPTARG
        ;;
     n )
-       NO_RELEASE_CHECK=true
+       NO_DEV_CHECKOUT=true
        ;;
     o )
        outdir=$OPTARG
@@ -94,13 +115,8 @@ else
 	prd_array=$(grep \"$package_name\  "$release_manifest_file")
 	checkout_package $prd_array
     else
-        if $NO_RELEASE_CHECK; then
-            prd_array="$package_name $branch_name e19:prof"
-	    checkout_package $prd_array
-	else
-            echo "Error:  "NO_RELEASE_CHECK" is not turned on and package is not included in $release_manifest_file, exit now"
-	    exit 3
-	fi
+	echo "Error: package $package_name is not included in $release_manifest_file, exit now"
+	exit 3
     fi
 fi
 popd

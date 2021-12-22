@@ -89,6 +89,7 @@ jobs:
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
+          sed -i 's,dunedaq-develop,'"$nightly_tag"',' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*externals.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*packages.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
 

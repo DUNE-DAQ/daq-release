@@ -160,7 +160,7 @@ pushd flxcard && git -c advice.detachedHead=false checkout ${flx_flxcard_sha} &&
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/regmap.git || ssi_die "Unable to clone regmap git repo into ${PWD}"
 pushd regmap && git -c advice.detachedHead=false checkout ${flx_regmap_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/packetformat.git || ssi_die "Unable to clone packetformat git repo into ${PWD}"
-pushd packetformat && git -c advice.detachedHead=false checkout ${a84931eb} && popd
+pushd packetformat && git -c advice.detachedHead=false checkout ${flx_packetformat_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/client-template.git || ssi_die "Unable to clone client-template git repo into ${PWD}"
 pushd client-template && git -c advice.detachedHead=false checkout ${flx_client_template_sha} && popd
 git clone https://:@gitlab.cern.ch:8443/atlas-tdaq-felix/ftools.git || ssi_die "Unable to clone ftools git repo into ${PWD}"

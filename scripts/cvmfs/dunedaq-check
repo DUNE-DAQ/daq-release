@@ -1,0 +1,14 @@
+# dune-check
+#
+# David Adams
+# December 2017
+#
+# Check the integrity of the DUNE file system.
+#
+# This also lists all the catalogs.
+
+# source repo.sh to get cvmfs repo name
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/repo.sh
+
+cvmfs_server check $REPO

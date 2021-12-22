@@ -1,0 +1,12 @@
+# dune-help
+#
+# David Adams
+# December 2017
+#
+# Provides some guidance on maintaining CVMFS for DUNE.
+
+echo
+echo "For help on maintaining CVMFS for DUNE, see the scripts in $HOME/bin:"
+ls -1 $HOME/bin/dunedaq-*
+echo
+echo "CVMFS documentation is at https://media.readthedocs.org/pdf/cvmfs/latest/cvmfs.pdf"
