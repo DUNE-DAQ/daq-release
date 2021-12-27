@@ -42,12 +42,12 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v4_1_2                  "
+  "daq_buildtools    v4.1.2                  "
   "daq_release       develop                 "
 )
 
 dune_packages=(
-  "daq_cmake         v2_1_0"
+  "daq_cmake         v2.1.0"
   "ers               develop"
   "logging           develop"
   "cmdlib            develop"
