@@ -67,8 +67,8 @@ for i in `find . -maxdepth 3 -name build_*.sh`; do
     echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR p383b tar\""
     ./`basename $i` $PROD_DIR p383b tar
   else
-    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR e19 prof tar\""
-    ./`basename $i` $PROD_DIR e19 prof tar
+    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR ${BUILD_QUAL} prof tar\""
+    ./`basename $i` $PROD_DIR ${BUILD_QUAL} prof tar
   fi
   echo "INFO [`eval $timenow`]: Finished running build script: ${i}"
   popd
