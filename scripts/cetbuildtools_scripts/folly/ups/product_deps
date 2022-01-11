@@ -12,7 +12,8 @@ bindir      fq_dir      bin
 
 # define product/version pairs
 product                  version
-gcc                      v8_2_0
+gcc                      v8_2_0	e19
+gcc                      v9_3_0	e20
 cetbuildtools            v7_15_01	-	only_for_build
 double_conversion        v3_1_5
 fmt                      v6_2_1
@@ -25,6 +26,7 @@ end_product_list
 # Matrix of qualifiers versus dependent products
 qualifier	gcc	double_conversion       fmt             glog            libevent        boost     zstd notes
 e19:prof	-nq-    e19:prof                e19:prof        e19:prof        e19:prof        e19:prof  e19:prof
+e20:prof	-nq-    e20:prof                e20:prof        e20:prof        e20:prof        e20:prof  e20:prof
 end_qualifier_list
 
 table_fragment_begin

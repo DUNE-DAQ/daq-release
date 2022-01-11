@@ -6,7 +6,7 @@
 
 usage()
 {
-   echo "USAGE: `basename ${0}` <product_dir> <e19> <prof> [tar]"
+   echo "USAGE: `basename ${0}` <product_dir> <e19|e20> <prof> [tar]"
 }
 
 # -------------------------------------------------------------------
@@ -59,6 +59,11 @@ then
   cc=gcc
   cxx=g++
   cxxflg="-fPIC -std=c++17"
+elif [[ "${basequal}" == e2[0] ]]
+then
+  cc=gcc
+  cxx=g++
+  cxxflg="-fPIC -std=c++20"
 elif [[ "${basequal}" == c[27] ]]
 then
   cc=clang
