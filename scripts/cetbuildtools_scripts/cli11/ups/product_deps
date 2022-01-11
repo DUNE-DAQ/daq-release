@@ -12,7 +12,8 @@ bindir      fq_dir      bin
 
 # define product/version pairs
 product		version
-gcc		v8_2_0
+gcc		v8_2_0 e19
+gcc		v9_3_0 e20
 cetbuildtools	v7_15_01	-	only_for_build
 end_product_list
 
@@ -21,6 +22,9 @@ qualifier	gcc		notes
 e19:debug	-nq-	   
 e19:opt		-nq-	
 e19:prof	-nq-	
+e20:debug	-nq-	   
+e20:opt		-nq-	
+e20:prof	-nq-	
 end_qualifier_list
 
 table_fragment_begin
