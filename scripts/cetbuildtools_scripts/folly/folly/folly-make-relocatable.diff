@@ -1,7 +1,8 @@
-diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
---- A/CMake/folly-config.cmake.in	2021-12-12 22:10:42.000000000 +0000
-+++ B/CMake/folly-config.cmake.in	2021-12-14 18:14:55.161568113 +0000
-@@ -29,6 +29,13 @@
+diff --git a/CMake/folly-config.cmake.in b/CMake/folly-config.cmake.in
+index 1689f9a..3682f3b 100644
+--- a/CMake/folly-config.cmake.in
++++ b/CMake/folly-config.cmake.in
+@@ -29,6 +29,13 @@ set(FOLLY_LIBRARIES Folly::folly)
  
  # Find folly's dependencies
  find_dependency(fmt)
@@ -11,14 +12,15 @@ diff -Naur A/CMake/folly-config.cmake.in B/CMake/folly-config.cmake.in
 +find_dependency(LibLZMA)
 +find_dependency(BZip2)
 +find_dependency(Libevent)
-+find_dependency(zstd MODULE COMPONENTS libzstd_shared REQUIRED)
++find_dependency(zstd COMPONENTS libzstd_shared REQUIRED)
  
  set(Boost_USE_STATIC_LIBS "@FOLLY_BOOST_LINK_STATIC@")
  find_dependency(Boost 1.51.0 MODULE
-diff -Naur A/CMake/folly-deps.cmake B/CMake/folly-deps.cmake
---- A/CMake/folly-deps.cmake	2021-12-12 22:10:42.000000000 +0000
-+++ B/CMake/folly-deps.cmake	2021-12-14 18:13:45.746472689 +0000
-@@ -48,7 +48,7 @@
+diff --git a/CMake/folly-deps.cmake b/CMake/folly-deps.cmake
+index e0e02c0..930d331 100644
+--- a/CMake/folly-deps.cmake
++++ b/CMake/folly-deps.cmake
+@@ -48,7 +48,7 @@ find_package(Boost 1.51.0 MODULE
  list(APPEND FOLLY_LINK_LIBRARIES ${Boost_LIBRARIES})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
  
@@ -27,7 +29,16 @@ diff -Naur A/CMake/folly-deps.cmake B/CMake/folly-deps.cmake
  list(APPEND FOLLY_LINK_LIBRARIES ${DOUBLE_CONVERSION_LIBRARY})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${DOUBLE_CONVERSION_INCLUDE_DIR})
  
-@@ -133,9 +133,10 @@
+@@ -111,7 +111,7 @@ if (LZ4_FOUND)
+   list(APPEND FOLLY_LINK_LIBRARIES ${LZ4_LIBRARY})
+ endif()
+ 
+-find_package(Zstd MODULE)
++find_package(zstd CONFIG)
+ set(FOLLY_HAVE_LIBZSTD ${ZSTD_FOUND})
+ if(ZSTD_FOUND)
+   list(APPEND FOLLY_INCLUDE_DIRECTORIES ${ZSTD_INCLUDE_DIR})
+@@ -133,9 +133,10 @@ find_package(Libiberty)
  list(APPEND FOLLY_LINK_LIBRARIES ${LIBIBERTY_LIBRARIES})
  list(APPEND FOLLY_INCLUDE_DIRECTORIES ${LIBIBERTY_INCLUDE_DIRS})
  
@@ -41,19 +52,20 @@ diff -Naur A/CMake/folly-deps.cmake B/CMake/folly-deps.cmake
  
  find_package(LibUring)
  list(APPEND FOLLY_LINK_LIBRARIES ${LIBURING_LIBRARIES})
-@@ -304,12 +305,33 @@
+@@ -304,12 +305,34 @@ if (NOT DEFINED fmt_CONFIG)
      # Fallback on a normal search on the current system
      find_package(Fmt MODULE REQUIRED)
  endif()
 -target_link_libraries(folly_deps INTERFACE fmt::fmt)
-+#target_link_libraries(folly_deps INTERFACE fmt::fmt)
- 
+-
 -list(REMOVE_DUPLICATES FOLLY_INCLUDE_DIRECTORIES)
 -target_include_directories(folly_deps INTERFACE ${FOLLY_INCLUDE_DIRECTORIES})
 -target_link_libraries(folly_deps INTERFACE
 -  ${FOLLY_LINK_LIBRARIES}
 -  ${FOLLY_SHINY_DEPENDENCIES}
 -  ${FOLLY_ASAN_FLAGS}
++#target_link_libraries(folly_deps INTERFACE fmt::fmt)
++
 +#list(REMOVE_DUPLICATES FOLLY_INCLUDE_DIRECTORIES)
 +#target_include_directories(folly_deps INTERFACE ${FOLLY_INCLUDE_DIRECTORIES})
 +#target_link_libraries(folly_deps INTERFACE
@@ -81,11 +93,13 @@ diff -Naur A/CMake/folly-deps.cmake B/CMake/folly-deps.cmake
 +                                           OpenSSL::SSL
 +                                           BZip2::BZip2
 +                                           LibLZMA::LibLZMA
++                                           zstd::libzstd_shared
 +                                           )
-diff -Naur A/folly/CMakeLists.txt B/folly/CMakeLists.txt
---- A/folly/CMakeLists.txt	2021-12-12 22:10:42.000000000 +0000
-+++ B/folly/CMakeLists.txt	2021-12-14 18:15:23.101204050 +0000
-@@ -28,7 +28,7 @@
+diff --git a/folly/CMakeLists.txt b/folly/CMakeLists.txt
+index 883f27c..6e27b6a 100644
+--- a/folly/CMakeLists.txt
++++ b/folly/CMakeLists.txt
+@@ -28,7 +28,7 @@ install(
  )
  
  add_subdirectory(experimental/exception_tracer)
