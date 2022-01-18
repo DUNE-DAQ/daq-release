@@ -24,6 +24,7 @@ dune_externals=(
   "sqlite            v3_32_03_00             "
   "tbb               v2020_2a        e19:prof"
   "TRACE             v3_16_02                "
+  "fftw              v3_3_10                "
   "zmq               v4_3_1c         e19:prof"
   "cppzmq            v4_3_0          e19:prof"
   "msgpack_c         v3_3_0          e19:prof"
