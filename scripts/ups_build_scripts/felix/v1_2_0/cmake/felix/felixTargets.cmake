@@ -127,6 +127,7 @@ add_library(felix::regmap SHARED IMPORTED)
 set_target_properties(felix::regmap PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
         IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libregmap.so"
+	REGMAP_VERSION "0x0500"
 )
 
 
