@@ -5,6 +5,7 @@ PROD_DIR=${WORK_DIR}/products
 TAR_DIR=${WORK_DIR}/tarballs
 CET_BUILD_DIR=${WORK_DIR}/build_pkgs_cet
 NCORE=8
+BUILD_QUAL=${BUILD_QUAL:-e19}
 
 mkdir -p $WORK_DIR
 mkdir -p $PROD_DIR
@@ -41,7 +42,7 @@ for i in double_conversion fmt glog googletest libevent folly zmq cppzmq msgpack
   isrc_dir=$WORK_DIR/daq-release/scripts/cetbuildtools_scripts/${i}/ups
   mkdir -p ${ibuild_dir}
   pushd ${ibuild_dir}
-  source ${isrc_dir}/setup_for_development -p e19
+  source ${isrc_dir}/setup_for_development -p ${BUILD_QUAL}
   echo "INFO [`eval $timenow`]: Running \"buildtool -A -c -l -bti -j${NCORE}\""
   buildtool -A -c -l -bti -j${NCORE}
   echo "INFO [`eval $timenow`]: Finished building UPS product: ${i}"
@@ -66,8 +67,8 @@ for i in `find . -maxdepth 3 -name build_*.sh`; do
     echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR p383b tar\""
     ./`basename $i` $PROD_DIR p383b tar
   else
-    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR e19 prof tar\""
-    ./`basename $i` $PROD_DIR e19 prof tar
+    echo "INFO [`eval $timenow`]: Running \"./`basename $i` $PROD_DIR ${BUILD_QUAL} prof tar\""
+    ./`basename $i` $PROD_DIR ${BUILD_QUAL} prof tar
   fi
   echo "INFO [`eval $timenow`]: Finished running build script: ${i}"
   popd
