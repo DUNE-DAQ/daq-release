@@ -38,6 +38,7 @@ Common:
       envSet(FELIX_INC, ${FELIX_FQ_DIR}/include)
       envSet(FELIX_LIB, ${FELIX_FQ_DIR}/lib )
       envSet(FELIX_BIN, ${FELIX_FQ_DIR}/bin )
+      envSet(REGMAP_VERSION, "0x0500" )
       pathPrepend(LD_LIBRARY_PATH, ${FELIX_LIB})
       pathPrepend(CMAKE_PREFIX_PATH, ${FELIX_FQ_DIR})
       pathPrepend(PATH, ${FELIX_BIN})
