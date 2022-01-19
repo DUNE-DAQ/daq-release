@@ -19,6 +19,15 @@ Qualifiers=e19:prof
   Action = ExtraSetup
     setupRequired( gcc v8_2_0 )
 
+Flavor=ANY
+Qualifiers=e20:prof
+
+  Action=DefineFQ
+    envSet (ZSTD_FQ, ${UPS_PROD_FLAVOR}-e20-prof)
+
+  Action = ExtraSetup
+    setupRequired( gcc v9_3_0 )
+
 
 Common:
    Action=setup
