@@ -32,7 +32,7 @@ MarkupSafe==1.1.1
 moo==0.5.7
 nanorc==2.0.12
 networkx==2.6.3
-numpy==1.19.4
+numpy==1.21.0
 openpyxl==3.0.5
 packaging==21.0
 pexpect==4.8.0
