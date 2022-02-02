@@ -63,7 +63,7 @@ fi
 # -------------------------------------------------------------------
 
 package=felix
-pkgver=v1_2_0
+pkgver=v1_2_1
 ssibuildshims_version=v1_04_13
 
 make_tarball_opts=("\${product_dir}" "\${package}" "\${pkgver}" "\${fullqual}")
