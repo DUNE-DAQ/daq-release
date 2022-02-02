@@ -104,7 +104,7 @@ jobs:
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
       with:
-        name: nightly release
+        name: nightly_release
         path: ${{ github.workspace }}/nightly
 
     - name: upload build log file
@@ -112,3 +112,5 @@ jobs:
       with:
         name: build_log
         path: ${{ github.workspace }}/dev/log
+
+  bulid_the_docker_image_with_nightly_release:

@@ -25,7 +25,6 @@ dune_packages_with_ci=(
   "timing"
   "timinglibs"
   "trigger"
-  "readout"
   "flxlibs"
   "dfmodules"
   "influxopmon"
@@ -35,6 +34,13 @@ dune_packages_with_ci=(
   "lbrulibs"
   "wibmod"
   "sspmodules"
+  "utilities"
+  "readoutlibs"
+  "readoutmodules"
+  "fdreadoutlibs"
+  "ndreadoutlibs"
+  "networkmanager"
+  "hdf5libs"
 )
 
 function git_checkout_and_update_ci {
@@ -48,7 +54,7 @@ function git_checkout_and_update_ci {
     pushd ${prod_name}
     cp $workflow_file .github/workflows
     git add .github/workflows
-    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo, use cloned pyvenv from latest nightly release"
+    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo, use cloned pythonized dbt"
     git push
     popd
   done
