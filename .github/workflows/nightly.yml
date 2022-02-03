@@ -112,5 +112,3 @@ jobs:
       with:
         name: build_log
         path: ${{ github.workspace }}/dev/log
-
-  bulid_the_docker_image_with_nightly_release:
