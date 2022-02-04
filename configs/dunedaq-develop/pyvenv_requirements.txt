@@ -51,6 +51,7 @@ rich==10.14.0
 sh==1.14.1
 six==1.16.0
 toml==0.10.2
+transitions==0.8.10
 urllib3==1.26.5
 Werkzeug==1.0.1
 zmq==0.0.0
