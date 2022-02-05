@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  bulid_the_develop_release on SL7:
+  bulid_the_develop_release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
