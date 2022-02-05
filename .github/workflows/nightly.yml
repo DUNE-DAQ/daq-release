@@ -45,40 +45,38 @@ jobs:
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest
-          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev
-          cd dev
+          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
+          cd dev-${{ matrix.os_name }}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
           $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
     
     - name: setup build env and build the dev release
       run: |
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
-          cd $GITHUB_WORKSPACE/dev
+          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
+          source dbt-env.sh
           dbt-workarea-env -s externals || true
-          dbt-build.sh
+          dbt-build.py
 
     - name: create release directory
       run: |
           nightly_tag="N$(date +%y-%m-%d)"
-          mkdir -p $GITHUB_WORKSPACE/nightly/${nightly_tag}
+          nightly_workdir="$GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}"
+          mkdir -p ${nightly_workdir}/${nightly_tag}
           
-
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
-          cd $GITHUB_WORKSPACE/dev
+          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
+          source dbt-env.sh
           dbt-workarea-env -s externals || true
 
-          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake $GITHUB_WORKSPACE/nightly/${nightly_tag}
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt $GITHUB_WORKSPACE/nightly/${nightly_tag}
-          clonevirtualenv.py $GITHUB_WORKSPACE/dev/dbt-pyvenv $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-pyvenv
-          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -c ${{ matrix.os_name }} -i -o $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${nightly_workdir}/${nightly_tag}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake ${nightly_workdir}/${nightly_tag}
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt ${nightly_workdir}/${nightly_tag}
+          clonevirtualenv.py $GITHUB_WORKSPACE/dev/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
+          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh"
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-          cd $GITHUB_WORKSPACE/nightly/${nightly_tag}/packages
+          cd ${nightly_workdir}/${nightly_tag}/packages
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
@@ -87,10 +85,10 @@ jobs:
           sed -i 's,.*packages.*,"    /cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages,' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
 
           # prepare external dir 
-          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh $GITHUB_WORKSPACE/nightly/${nightly_tag}/externals
+          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh ${nightly_workdir}/${nightly_tag}/externals
           
-          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} $GITHUB_WORKSPACE/nightly/${nightly_tag}/dbt-settings.sh
-          cd $GITHUB_WORKSPACE/nightly
+          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
+          cd ${nightly_workdir}
           tar zcvf dunedaq-${nightly_tag}-${{ matrix.os_name }}.tar.gz ${nightly_tag}
           rm -rf ${nightly_tag}
 
@@ -98,10 +96,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nightly_release
-        path: ${{ github.workspace }}/nightly
+        path: ${{ github.workspace }}/nightly-${{ matrix.os_name }}
 
     - name: upload build log file
       uses: actions/upload-artifact@v2
       with:
         name: build_log
-        path: ${{ github.workspace }}/dev/log
+        path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log
