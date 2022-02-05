@@ -90,8 +90,8 @@ jobs:
           
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
           cd ${nightly_workdir}
-          [[ ${{ matrix.os_name }} == "c7" ]] && ln -s ${nightly_tag} last_successfull || ln -s ${nightly_tag} last_successfull_cs8
-          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag} last_successful*
+          #[[ ${{ matrix.os_name }} == "c7" ]] && ln -s ${nightly_tag} last_successfull || ln -s ${nightly_tag} last_successfull_cs8
+          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
           rm -rf ${nightly_tag}
 
     - name: upload nightly tarball
