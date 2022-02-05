@@ -22,8 +22,10 @@ jobs:
         include:
           - image: "dunedaq/sl7-minimal:dev-ext"
             os_name: "c7"
+            link: ""
           - image: "dunedaq/c8-minimal:dev-ext"
             os_name: "c8"
+            link: "-cs8"
     container:
       image: ${{ matrix.image }}
     env:
@@ -60,7 +62,7 @@ jobs:
 
     - name: create release directory
       run: |
-          nightly_tag="N$(date +%y-%m-%d)"
+          nightly_tag="N$(date +%y-%m-%d)-${{ matrix.link }}"
           nightly_workdir="$GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}"
           mkdir -p ${nightly_workdir}/${nightly_tag}
           
@@ -90,7 +92,7 @@ jobs:
           
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
           cd ${nightly_workdir}
-          tar zcvf dunedaq-${nightly_tag}-${{ matrix.os_name }}.tar.gz ${nightly_tag}
+          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
           rm -rf ${nightly_tag}
 
     - name: upload nightly tarball
