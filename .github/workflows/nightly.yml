@@ -72,7 +72,7 @@ jobs:
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake ${nightly_workdir}/${nightly_tag}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt ${nightly_workdir}/${nightly_tag}
           clonevirtualenv.py $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
-          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
+          $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev-${{ matrix.os_name }} -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh"
