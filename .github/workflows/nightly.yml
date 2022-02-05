@@ -15,6 +15,7 @@ on:
 
 jobs:
   bulid_the_develop_release:
+    name: ${{ matrix.os_name }}_build_dev_release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -70,7 +71,7 @@ jobs:
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${nightly_workdir}/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake ${nightly_workdir}/${nightly_tag}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt ${nightly_workdir}/${nightly_tag}
-          clonevirtualenv.py $GITHUB_WORKSPACE/dev/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
+          clonevirtualenv.py $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
@@ -95,11 +96,11 @@ jobs:
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
       with:
-        name: nightly_release
+        name: nightly_release_${{ matrix.os_name }}
         path: ${{ github.workspace }}/nightly-${{ matrix.os_name }}
 
     - name: upload build log file
       uses: actions/upload-artifact@v2
       with:
-        name: build_log
+        name: build_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log
