@@ -4,6 +4,7 @@ dune_externals=(
   "cetlib_except     v1_05_00        e19:prof"
   "cetpkgsupport     v1_14_01                "
   "clang             v7_0_0rc3               "
+  "cli11             v2_1_2          e19:prof"
   "cmake             v3_17_2                 "
   "cppunit           v1_15_1a        e19:prof"
   "fmt               v6_2_1          e19:prof"

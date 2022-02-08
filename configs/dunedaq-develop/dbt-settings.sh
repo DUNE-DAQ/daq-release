@@ -33,6 +33,7 @@ dune_externals=(
     "cpr               v1_5_2       e19:prof"
     "librdkafka        v1_7_0       e19:prof"
     "protobuf          v3_14_0      e19"
+    "cli11             v2_1_2       e19:prof"
 )
 
 dune_daqpackages=(
