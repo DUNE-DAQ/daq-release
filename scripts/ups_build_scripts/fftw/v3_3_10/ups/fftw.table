@@ -1,0 +1,57 @@
+File=Table
+Product=fftw
+#*************************************************
+# Starting Group definition
+Group:
+
+Flavor=ANY
+Qualifiers=
+
+  Action=DefineFQ
+    envSet (FFTW_FQ, ${UPS_PROD_FLAVOR})
+
+Flavor=ANY
+Qualifiers=debug
+
+  Action=DefineFQ
+    envSet (FFTW_FQ, ${UPS_PROD_FLAVOR}-debug)
+
+Flavor=ANY
+Qualifiers=opt
+
+  Action=DefineFQ
+    envSet (FFTW_FQ, ${UPS_PROD_FLAVOR}-opt)
+
+Flavor=ANY
+Qualifiers=prof
+
+  Action=DefineFQ
+    envSet (FFTW_FQ, ${UPS_PROD_FLAVOR}-prof)
+
+Common:
+   Action=setup
+      proddir()
+      setupenv()
+      ExeActionRequired(DefineFQ)
+      envSet( FFTW_VERSION, ${UPS_PROD_VERSION} )
+      prodDir(_FQ_DIR, ${FFTW_FQ})
+      # look for the include directory
+      prodDir( _INC, ${FFTW_FQ}/include )
+      prodDir(_INCLUDE_DIR, ${FFTW_FQ}/include)
+      prodDir(_LIBRARY, ${FFTW_FQ}/lib)
+      # add the lib directory to LD_LIBRARY_PATH 
+      if ( test `uname` = "Darwin" )
+      	envPrepend(DYLD_LIBRARY_PATH, ${FFTW_LIBRARY})
+      else()
+      	envPrepend(LD_LIBRARY_PATH, ${FFTW_LIBRARY})
+      endif ( test `uname` = "Darwin" )
+      # useful variables
+      envPrepend(ROOT_INCLUDE_PATH, ${FFTW_INC})
+      envPrepend(CMAKE_PREFIX_PATH, ${FFTW_FQ_DIR} )
+      envPrepend(PKG_CONFIG_PATH, ${FFTW_LIBRARY}/pkgconfig )
+      # add the bin directory to the path
+      pathPrepend(PATH, ${FFTW_FQ_DIR}/bin )
+
+End:
+# End Group definition
+#*************************************************
