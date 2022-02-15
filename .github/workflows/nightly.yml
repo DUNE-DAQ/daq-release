@@ -114,7 +114,8 @@ jobs:
             os_name: "c7"
           - image: "dunedaq/c8-minimal"
             os_name: "c8"
-    needs: [c7_build_dev_release, c8_build_dev_release]
+    needs: bulid_the_develop_release
+    #needs: [c7_build_dev_release, c8_build_dev_release]
     environment: dockerhub
     permissions:
       packages: write
