@@ -1,8 +1,6 @@
 name: Nightly workflow
 
 on:
-  #push:
-    #branches: [ develop ]
   schedule:
     - cron: "0 5 * * *"
 
@@ -22,7 +20,7 @@ jobs:
         include:
           - image: "dunedaq/sl7-minimal:cvmfs"
             os_name: "c7"
-          - image: "dunedaq/c8-minimal:dev-ext"
+          - image: "dunedaq/c8-minimal:cvmfs"
             os_name: "c8"
     container:
       image: ${{ matrix.image }}
@@ -105,3 +103,68 @@ jobs:
       with:
         name: build_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log
+
+  update_image:
+    name: ${{ matrix.os_name }}_update_image
+    needs: ${{ matrix.os_name }}_build_dev_release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "dunedaq/sl7-minimal"
+            os_name: "c7"
+          - image: "dunedaq/c8-minimal"
+            os_name: "c8"
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Download nightly release tarball artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: nightly_release_${{ matrix.os_name }}
+          path: ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
+
+      - name: prepare cvmfs mirror
+        run: |
+            cd ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
+            mkdir -p nightly
+            nightly_tag="N$(date +%y-%m-%d)"
+            last_link="last_successful"
+            [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-${{ matrix.os_name }}"
+            [[ ${{ matrix.os_name }} == "c8" ]] && last_link="${last_link}_${{ matrix.os_name }}"
+            cd nightly
+            tar xvf ../dunedaq-*.tar.gz
+            ln -s $nightly_tag $last_link
+	    cat <<EOF > Dockerfile
+FROM ${{ matrix.image }}:cvmfs
+MAINTAINER Pengfei Ding "dingpf@fnal.gov"
+ENV REFRESHED_AT ${nightly_tag}
+ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly
+ENTRYPOINT ["/bin/bash"]
+EOF
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ${{ matrix.image }}
+          tags: |
+            type=raw,value=dev
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
