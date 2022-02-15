@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "dunedaq/sl7-minimal:dev-ext"
+          - image: "dunedaq/sl7-minimal:cvmfs"
             os_name: "c7"
           - image: "dunedaq/c8-minimal:dev-ext"
             os_name: "c8"
