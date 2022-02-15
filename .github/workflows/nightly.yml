@@ -106,7 +106,6 @@ jobs:
 
   update_image:
     name: ${{ matrix.os_name }}_update_image
-    needs: ${{ matrix.os_name }}_build_dev_release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -115,6 +114,7 @@ jobs:
             os_name: "c7"
           - image: "dunedaq/c8-minimal"
             os_name: "c8"
+    needs: [c7_build_dev_release, c8_build_dev_release]
     environment: dockerhub
     permissions:
       packages: write
