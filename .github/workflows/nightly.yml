@@ -159,7 +159,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=dev
+            type=raw,value=devt
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
