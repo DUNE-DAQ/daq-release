@@ -135,11 +135,12 @@ jobs:
             last_link="last_successful"
             [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-${{ matrix.os_name }}"
             [[ ${{ matrix.os_name }} == "c8" ]] && last_link="${last_link}_${{ matrix.os_name }}"
+            image_name="${{ matrix.image }}:cvmfs"
             cd nightly
             tar xvf ../dunedaq-*.tar.gz
             ln -s $nightly_tag $last_link
 	    cat <<EOF > Dockerfile
-            FROM ${{ matrix.image }}:cvmfs
+            FROM ${image_name}
             MAINTAINER Pengfei Ding "dingpf@fnal.gov"
             ENV REFRESHED_AT ${nightly_tag}
             ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly
