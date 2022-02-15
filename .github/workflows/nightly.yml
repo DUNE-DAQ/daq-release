@@ -83,7 +83,6 @@ jobs:
           sed -i 's,dunedaq-develop,'"$nightly_tag"',' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*dunedaq.open.*,    "/cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/externals",' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           sed -i 's,.*open.*products.*,    "/cvmfs/dunedaq-development.opensciencegrid.org/nightly/'"$nightly_tag"'/packages",' ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
-       
 
           # prepare external dir 
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh ${nightly_workdir}/${nightly_tag}/externals
