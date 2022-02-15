@@ -141,6 +141,7 @@ jobs:
             cd nightly
             tar xvf ../dunedaq-*.tar.gz
             ln -s $nightly_tag $last_link
+            cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
