@@ -139,13 +139,11 @@ jobs:
             cd nightly
             tar xvf ../dunedaq-*.tar.gz
             ln -s $nightly_tag $last_link
-	    cat <<EOF > Dockerfile
-            FROM ${image_name}
-            MAINTAINER Pengfei Ding "dingpf@fnal.gov"
-            ENV REFRESHED_AT ${nightly_tag}
-            ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly
-            ENTRYPOINT ["/bin/bash"]
-            EOF
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
