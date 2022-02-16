@@ -89,8 +89,8 @@ jobs:
           
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
           cd ${nightly_workdir}
-          tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
-          mkdir ${{ github.workspace }}/nightly-${{ matrix.os_name }}
+          tar zcf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
+          mkdir -p ${{ github.workspace }}/nightly-${{ matrix.os_name }}
           mv dunedaq-${nightly_tag}.tar.gz ${{ github.workspace }}/nightly-${{ matrix.os_name }}
 
     - name: upload nightly tarball
