@@ -115,7 +115,6 @@ jobs:
           - image: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: bulid_the_develop_release
-    #needs: [c7_build_dev_release, c8_build_dev_release]
     environment: dockerhub
     permissions:
       packages: write
@@ -145,7 +144,7 @@ jobs:
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
-            echo 'ENTRYPOINT ["/bin/bash", "-l", "-c"]' >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
