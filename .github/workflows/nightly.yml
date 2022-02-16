@@ -59,7 +59,7 @@ jobs:
     - name: create release directory
       run: |
           nightly_tag="N$(date +%y-%m-%d)"
-          [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-${{ matrix.os_name }}"
+          [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-cs8"
           nightly_workdir="/cvmfs/dunedaq-development.opensciencegrid.org/nightly"
           mkdir -p ${nightly_workdir}/${nightly_tag}
           
@@ -73,10 +73,10 @@ jobs:
           clonevirtualenv.py $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev-${{ matrix.os_name }} -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
-          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh"
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           cd ${nightly_workdir}/${nightly_tag}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
@@ -90,7 +90,8 @@ jobs:
           mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
           cd ${nightly_workdir}
           tar zcvf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
-          rm -rf ${nightly_tag}
+          mkdir ${{ github.workspace }}/nightly-${{ matrix.os_name }}
+          mv dunedaq-${nightly_tag}.tar.gz ${{ github.workspace }}/nightly-${{ matrix.os_name }}
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v2
@@ -115,7 +116,6 @@ jobs:
           - image: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: bulid_the_develop_release
-    #needs: [c7_build_dev_release, c8_build_dev_release]
     environment: dockerhub
     permissions:
       packages: write
@@ -145,7 +145,7 @@ jobs:
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
-            echo 'ENTRYPOINT ["/bin/bash", "-l", "-c"]' >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
