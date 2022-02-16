@@ -60,7 +60,7 @@ jobs:
       run: |
           nightly_tag="N$(date +%y-%m-%d)"
           [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-${{ matrix.os_name }}"
-          nightly_workdir="$GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}"
+          nightly_workdir="/cvmfs/dunedaq-development.opensciencegrid.org/nightly"
           mkdir -p ${nightly_workdir}/${nightly_tag}
           
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
