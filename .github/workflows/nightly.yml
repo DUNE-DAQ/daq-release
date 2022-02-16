@@ -73,10 +73,10 @@ jobs:
           clonevirtualenv.py $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev-${{ matrix.os_name }} -c ${{ matrix.os_name }} -i -o ${nightly_workdir}/${nightly_tag}/packages
           echo "PROGRESS: created ups products for DAQ packages."
-          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh"
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           cd ${nightly_workdir}/${nightly_tag}/packages
+          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-settings.sh ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
+          echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           find . -type d -name "*.version"|grep -v ups|sed 's/\.\//"/g'|sed 's/\.version/ e19:prof\"/g'|tr '/' ' '>> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo ")">> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           
