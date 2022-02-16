@@ -66,6 +66,7 @@ jobs:
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
           source dbt-env.sh
           dbt-workarea-env -s externals || true
+          setup clang v7_0_0rc3 || true
 
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${nightly_workdir}/${nightly_tag}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake ${nightly_workdir}/${nightly_tag}
