@@ -1,0 +1,57 @@
+name: Update pypi-repo
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+    # update pypi-repo "0 1 * * *"
+    # publish pypi-repo to cvmfs "30 21 * * *(CST/CDT)" 30 1/2 * * *
+    # c8-cvmfs docker build on "0 3 * * *"
+    # sl7-cvmfs docker build on "0 4 * * *"
+    # nighlty release build on "0 5 * * *"
+    # publish to cvmfs on "0 1 * * *(CST/CDT)" 0 6/7 * * *
+    # package CI build on "0 7 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  update_pypi_repo:
+    name: update_pypi_repo
+    runs-on: ubuntu-latest
+    container:
+      image: dunedaq/c8-minimal:cvmfs
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v2
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+
+    - name: install pip2pi
+      run: |
+          mkdir -p $GITHUB_WORKSPACE/workdir
+          cd $GITHUB_WORKSPACE/workdir
+          source /cvmfs/dunedaq.opensciencegrid.org/products/setup
+          setup python v3_8_3b
+          python -m venv pypi-repo-venv
+          source pypi-repo-venv/bin/activate
+          pip install --upgrade pip
+          pip install https://github.com/dingp/pip2pi/archive/1.1.2.tar.gz
+        
+    - name: parse release_manifest and install all pkgs
+      run: |
+          cd $GITHUB_WORKSPACE/workdir
+          source pypi-repo-venv/bin/activate
+          manifest_file="$GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh"
+          repo_path="/cvmfs/dunedaq.opensciencegrid.org/pypi-repo"
+          $GITHUB_WORKSPACE/daq-release/scripts/create-pypi-repo.sh $manifest_file $repo_path
+          rsync -lptr $repo_path $GITHUB_WORKSPACE
+    
+    - name: upload pypi-repo
+      uses: actions/upload-artifact@v2
+      with:
+        name: pypi-repo
+        path: ${{ github.workspace }}/pypi-repo
