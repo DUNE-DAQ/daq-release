@@ -53,10 +53,14 @@ jobs:
           manifest_file="$GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh"
           repo_path="/cvmfs/dunedaq.opensciencegrid.org/pypi-repo"
           $GITHUB_WORKSPACE/daq-release/scripts/create-pypi-repo.sh $manifest_file $repo_path
-          rsync -lptr $repo_path $GITHUB_WORKSPACE
+          du -sh $repo_path
+          rsync -rvplt $repo_path $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
+          tar zcvf pypi-repo.tar.gz pypi-repo
+          du -sh pypi-repo.tar.gz
     
     - name: upload pypi-repo
       uses: actions/upload-artifact@v2
       with:
         name: pypi-repo
-        path: ${{ github.workspace }}/pypi-repo
+        path: ${{ github.workspace }}/pypi-repo.tar.gz
