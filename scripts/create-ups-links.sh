@@ -25,7 +25,7 @@ ups active|tail -n +2 | awk '{ printf "\"%s %s %s\"\n", $1, $2, $NF}'|while read
     prd_ver=$(echo $i|cut -d ' ' -f 2)
     products_dir=$(echo $i|cut -d ' ' -f 3)
 
-    exclude_list="clang ups"
+    exclude_list="ups"
     #exclude_list="gcc boost clang hdf5 ups"
     if [[ $exclude_list =~ (^|[[:space:]])"$prd"($|[[:space:]]) ]]; then
         continue
