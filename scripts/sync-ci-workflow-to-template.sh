@@ -29,7 +29,7 @@ dune_packages_with_ci=(
   "dfmodules"
   "influxopmon"
   "kafkaopmon"
-  "minidaqapp"
+  "daqconf"
   "dqm"
   "lbrulibs"
   "wibmod"

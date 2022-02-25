@@ -80,7 +80,7 @@ dune_packages=(
   "timing            develop"
   "timinglibs        develop"
   "trigemu           develop"
-  "minidaqapp        develop"
+  "daqconf           develop"
   "trigger           develop"
   "triggeralgs       develop"
   "dqm               develop"
