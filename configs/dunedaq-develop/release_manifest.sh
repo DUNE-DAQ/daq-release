@@ -122,7 +122,7 @@ dune_pythonmodules=(
   "h5py              3.1.0      pypi              " 
   "idna              2.10       pypi              " 
   "iniconfig         1.1.1      pypi              " 
-  "integrationtest   1.3.0      github_DUNE-DAQ   " 
+  "integrationtest   1.3.1      github_DUNE-DAQ   " 
   "itsdangerous      2.0.1      pypi              " 
   "jdcal             1.4.1      pypi              " 
   "Jinja2            2.11.3     pypi              " 
