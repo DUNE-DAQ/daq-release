@@ -43,7 +43,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           echo "source products setup"
-          source /cvmfs/dunedaq.opensciencegrid.org/products/setup
+          source /cvmfs/dunedaq.opensciencegrid.org/products/setup || true
           setup -B python ||true
           echo "setup python finished"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
