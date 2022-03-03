@@ -4,7 +4,6 @@ dune_packages_with_ci=(
   "daq-cmake"
   "ers"
   "erskafka"
-  "erses"
   "logging"
   "opmonlib"
   "cmdlib"
@@ -54,7 +53,7 @@ function git_checkout_and_update_ci {
     pushd ${prod_name}
     cp $workflow_file .github/workflows
     git add .github/workflows
-    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo, adding CS8 CI builds"
+    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo, using dbt-create.py"
     git push
     popd
   done
