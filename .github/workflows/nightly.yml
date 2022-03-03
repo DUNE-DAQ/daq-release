@@ -44,7 +44,7 @@ jobs:
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest || true
-          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
+          dbt-create.py -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
           cd dev-${{ matrix.os_name }}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
           $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
