@@ -43,7 +43,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt latest
           source /cvmfe/dunedaq.opensciencegrid.org/products/setup
           setup -B python || true
           which python
