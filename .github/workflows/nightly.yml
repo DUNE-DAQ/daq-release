@@ -43,10 +43,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
-          source /cvmfs/dunedaq.opensciencegrid.org/products/setup
-          setup -B python || true
-          which python
+          setup_dbt latest || true
           dbt-create.py -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
           cd dev-${{ matrix.os_name }}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
