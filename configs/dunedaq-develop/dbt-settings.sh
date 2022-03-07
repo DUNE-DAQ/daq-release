@@ -39,7 +39,7 @@ dune_externals=(
 dune_daqpackages=(
     # Please ignore the following versions as they
     # will get overwritten by the nightly release in cvmfs.
-  "daq_cmake         v2_1_0     e19:prof"
+  "daq_cmake         v2_1_2     e19:prof"
   "ers               v1_1_5     e19:prof"
   "logging           v1_0_5     e19:prof"
   "cmdlib            v1_1_5     e19:prof"
