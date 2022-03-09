@@ -91,7 +91,7 @@ dune_packages=(
 
 dune_services=(
   "integrationtest      v1.3.0"
-  "nanorc               v2.0.9"
+  "nanorc               v3.0.4"
   "microservices	v1.0.0"
   "dqmanalysis	        v1.0.0"
   "daqerrordisplay	v1.0.1"
@@ -131,7 +131,7 @@ dune_pythonmodules=(
   "jsonschema        3.2.0      pypi              " 
   "MarkupSafe        1.1.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
-  "nanorc            3.0.3      github_DUNE-DAQ   " 
+  "nanorc            3.0.4      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 
   "numpy             1.21.0     pypi              " 
   "openpyxl          3.0.5      pypi              " 
