@@ -75,7 +75,7 @@ dune_daqpackages=(
   "hdf5libs         v2_0_0        e19:prof"
   "rawdatautils     v1_0_0        e19:prof"
   "uhallibs         v1_0_1        e19:prof"
-  "dtpcontrols      v1_0_1        e19:prof"
+  "dtpcontrols      v1_0_2        e19:prof"
   "wibmod           v1_3_2        e19:prof"
   "sspmodules       v1_0_3        e19:prof"
 )
