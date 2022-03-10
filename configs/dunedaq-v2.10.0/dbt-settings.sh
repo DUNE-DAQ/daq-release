@@ -69,7 +69,7 @@ dune_daqpackages=(
   "timinglibs       v1_6_0        e19:prof"
   "trigemu          v2_3_2b       e19:prof"
   "daqconf          v5_0_0        e19:prof"
-  "trigger          v1_3_0        e19:prof"
+  "trigger          v1_3_1        e19:prof"
   "triggeralgs      v1_0_0        e19:prof"
   "dqm              v1_3_0        e19:prof"
   "hdf5libs         v2_0_0        e19:prof"
