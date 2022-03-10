@@ -1,21 +1,32 @@
 #!/bin/bash
 
+pushd () {
+    command pushd "$@" > /dev/null
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
 function checkout_package {
     iprd_arr="$@"
     iprd_arr="${iprd_arr#\"}"
     iprd_arr="${iprd_arr%\"}"
     iprd_arr=($iprd_arr)
-    echo ${iprd_arr[1]}
+    #echo ${iprd_arr[1]}
     prod_name=${iprd_arr[0]//_/-}
     prod_branch=${iprd_arr[1]}
     prod_ups_version=${iprd_arr[1]}
 
-    git clone https://github.com/DUNE-DAQ/${prod_name}.git
+    echo "INFO: -------- $prod_name ---------- $prod_branch"
+
+    git clone --quiet https://github.com/DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
 
     if [[ $prod_branch == v* ]]; then
 	prod_ups_version=$(echo "$prod_ups_version" | tr '_' '.')
         prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
+	prod_branch="${prod_branch%"${prod_branch##*[![:space:]]}"}"
 
     fi
 
@@ -34,7 +45,7 @@ function checkout_package {
 	fi
     fi
 
-    echo "INFO: checking out $prod_name, uisng branch $prod_branch"
+    #echo "INFO: checking out $prod_name, uisng branch/tag $prod_branch"
     git checkout ${prod_branch}
 
     if [[ $prod_branch == v* ]]; then
@@ -42,7 +53,18 @@ function checkout_package {
             git tag ${prod_ups_version}
 	    echo "INFO: creating local tag ${prod_ups_version} for ${prod_name}"
         fi
+	# Check version number in CMakeLists.txt
+	cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`
+	if [[ $prod_branch != "v$cmake_version" ]]; then
+	    echo -e '\033[0;31m' "ERROR: cmake package version does not match git tag. Pkg: ${prod_name} Tag: ${prod_branch} VERSION ${cmake_version}"
+	    echo -e '\033[0m'
+        else
+	    echo -e '\033[0;32m'"INFO: cmake package version matches git tag. Pkg: ${prod_name} Tag: ${prod_branch} VERSION ${cmake_version}"
+	    echo -e '\033[0m'
+
+	fi
     fi
+
     cd ..
 }
 
