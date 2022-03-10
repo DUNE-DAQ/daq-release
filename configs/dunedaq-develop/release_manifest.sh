@@ -93,12 +93,7 @@ dune_packages=(
 )
 
 dune_services=(
-  "integrationtest      v1.3.0"
-  "nanorc               v3.0.4"
   "microservices	v1.0.0"
-  "dqmanalysis	        v1.0.0"
-  "daqerrordisplay	v1.0.1"
-  "dqmplatform	        v1.1.0"
   "elisa_client_api     v0.1.0"
 )
 
