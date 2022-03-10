@@ -1,8 +1,9 @@
 DUNE_DAQ_BASE_RELEASE="dunedaq-v2.10.0"
 
 dune_products_dirs=(
-    "/cvmfs/dunedaq.opensciencegrid.org/products"
-    "/cvmfs/dunedaq-development.opensciencegrid.org/products"
+    "/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.10.0/externals"
+    "/cvmfs/dunedaq.opensciencegrid.org/releases/dunedaq-v2.10.0/packages"
+	     
 )
 
 dune_systems=(
