@@ -8,7 +8,7 @@ on:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix'
-        default: 'N'
+        default: ''
         required: true
 
 jobs:
@@ -58,7 +58,7 @@ jobs:
 
     - name: create release directory
       run: |
-          nightly_tag="${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+          nightly_tag="$N{{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
           [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-cs8"
           nightly_workdir="/cvmfs/dunedaq-development.opensciencegrid.org/nightly"
           mkdir -p ${nightly_workdir}/${nightly_tag}
@@ -133,7 +133,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
             mkdir -p nightly
-            nightly_tag="${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
             last_link="last_successful"
             [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-cs8"
             [[ ${{ matrix.os_name }} == "c8" ]] && last_link="${last_link}_cs8"
