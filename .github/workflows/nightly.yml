@@ -139,7 +139,7 @@ jobs:
             image_name="${{ matrix.image }}:cvmfs"
             cd nightly
             tar xvf ../dunedaq-*.tar.gz
-            ln -s N*-??-??-* $last_link
+            ln -s N*-??-??* $last_link
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
