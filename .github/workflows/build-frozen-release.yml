@@ -14,7 +14,7 @@ jobs:
   bulid_the_release:
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/sl7-minimal:dev-ext
+      image: dunedaq/sl7-minimal:cvmfs
     env:
       DBT_AREA_FILE: "dbt-settings"
     defaults:
