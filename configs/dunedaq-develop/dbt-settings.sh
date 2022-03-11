@@ -1,4 +1,4 @@
-DUNE_DAQ_BASE_RELEASE="dunedaq-develop"
+export DUNE_DAQ_BASE_RELEASE="dunedaq-develop"
 
 dune_products_dirs=(
     "/cvmfs/dunedaq.opensciencegrid.org/products"
