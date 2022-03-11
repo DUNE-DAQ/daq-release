@@ -9,7 +9,6 @@ on:
       tag-prefix:
         description: 'nightly tag prefix'
         default: ''
-        required: true
 
 jobs:
   bulid_the_develop_release:
