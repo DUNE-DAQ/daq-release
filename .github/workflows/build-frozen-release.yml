@@ -39,20 +39,19 @@ jobs:
           export DUNEDAQ_RELEASE=${{ github.event.inputs.release_name }}
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
+          setup_dbt latest || true
           cd $GITHUB_WORKSPACE
-          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs ${DUNEDAQ_RELEASE} dev
+          dbt-create.py -r $GITHUB_WORKSPACE/daq-release/configs ${DUNEDAQ_RELEASE} dev
           cd dev
           cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/release_manifest.sh .
           $GITHUB_WORKSPACE/daq-release/scripts/checkout-package-release.sh -f ./release_manifest.sh -a -b $branch_name -o sourcecode 
     
     - name: setup build env and build the release
       run: |
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
           cd $GITHUB_WORKSPACE/dev
+          source dbt-env.sh
           dbt-workarea-env -s externals || true
-          dbt-build.sh
+          dbt-build.py
 
     - name: create release directory
       run: |
@@ -60,15 +59,15 @@ jobs:
           release_tag=${DUNEDAQ_RELEASE}
           release_dir=$GITHUB_WORKSPACE/releases/${release_tag}
           mkdir -p $release_dir
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
           cd $GITHUB_WORKSPACE/dev
+          source dbt-env.sh
           dbt-workarea-env -s externals || true
 
           $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${release_dir}/packages
           cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/dbt-build-order.cmake ${release_dir}
           cp $GITHUB_WORKSPACE/daq-release/configs/${DUNEDAQ_RELEASE}/pyvenv_requirements.txt ${release_dir}
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -i -o ${release_dir}/packages
+          #$GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -o ${release_dir}/tarballs
           echo "PROGRESS: created ups products for DAQ packages."
           echo " dune_daqpackages=(" >> ${DBT_AREA_ROOT}/${DBT_AREA_FILE}
           echo "PROGRESS: updating dbt-settings.sh"
