@@ -94,7 +94,9 @@ dune_packages=(
 
 dune_services=(
   "microservices	v1.0.0"
-  "elisa_client_api     v0.1.0"
+  "nanorc               v3.0.4"
+  "integrationtest      v1.3.1"
+  "elisa-client-api     v0.1.0"
 )
 
 dune_pythonmodules=(
