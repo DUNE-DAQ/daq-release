@@ -57,7 +57,7 @@ jobs:
 
     - name: create release directory
       run: |
-          nightly_tag="$N{{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+          nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
           [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-cs8"
           nightly_workdir="/cvmfs/dunedaq-development.opensciencegrid.org/nightly"
           mkdir -p ${nightly_workdir}/${nightly_tag}
