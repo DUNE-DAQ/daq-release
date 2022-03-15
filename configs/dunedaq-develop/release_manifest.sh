@@ -129,7 +129,7 @@ dune_pythonmodules=(
   "jsonschema        3.2.0      pypi              " 
   "MarkupSafe        1.1.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
-  "nanorc            3.0.4      github_DUNE-DAQ   " 
+  "nanorc            3.0.5      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 
   "numpy             1.21.0     pypi              " 
   "openpyxl          3.0.5      pypi              " 
