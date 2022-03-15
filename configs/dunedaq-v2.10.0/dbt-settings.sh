@@ -38,7 +38,7 @@ dune_externals=(
 )
 
 dune_daqpackages=(
-  "daq-cmake        v2_1_2        e19:prof"
+  "daq_cmake        v2_1_2        e19:prof"
   "ers              v1_1_6        e19:prof"
   "logging          v1_0_5b       e19:prof"
   "cmdlib           v1_1_5b       e19:prof"
