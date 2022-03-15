@@ -44,7 +44,7 @@ dune_ups=(
 )
 
 dune_extras=(
-  "daq_buildtools    v4.1.5                  "
+  "daq_buildtools    v4.1.6                  "
   "daq_release       develop                 "
 )
 
@@ -77,13 +77,13 @@ dune_packages=(
   "lbrulibs         v1_0_8        e19:prof"
   "networkmanager   v1_0_3        e19:prof"
   "nwqueueadapters  v1_5_1        e19:prof"
-  "timing           v6_1_1        e19:prof"
-  "timinglibs       v1_6_1        e19:prof"
+  "timing           v6_1_2        e19:prof"
+  "timinglibs       v1_6_2        e19:prof"
   "trigemu          v2_3_2b       e19:prof"
   "daqconf          v5_0_2        e19:prof"
   "trigger          v1_3_1        e19:prof"
   "triggeralgs      v1_0_0        e19:prof"
-  "dqm              v1_3_0        e19:prof"
+  "dqm              v1_3_2        e19:prof"
   "hdf5libs         v2_0_0        e19:prof"
   "rawdatautils     v1_0_0        e19:prof"
   "uhallibs         v1_0_1        e19:prof"
@@ -94,7 +94,7 @@ dune_packages=(
 
 dune_services=(
   "microservices	v1.0.0"
-  "nanorc               v3.0.4"
+  "nanorc               v3.0.5"
   "integrationtest      v1.3.1"
   "elisa-client-api     v0.1.0"
 )
