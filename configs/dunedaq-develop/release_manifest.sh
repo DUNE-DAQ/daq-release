@@ -88,7 +88,6 @@ dune_packages=(
   "uhallibs          develop"
   "dtpcontrols       develop"
   "wibmod            develop"
-  "wibmod            develop"
   "sspmodules        develop"
 )
 
