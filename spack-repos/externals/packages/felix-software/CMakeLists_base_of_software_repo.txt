@@ -1,0 +1,11 @@
+project(FELIX)
+cmake_minimum_required(VERSION 3.4.3)
+
+# FELIX Specific
+
+set(DISABLE_PACKAGES flxtools fel distribution)
+
+# FELIX
+set(PACKAGE felix)
+set(PACKAGE_VERSION 4.1.1)
+include(FELIX)

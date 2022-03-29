@@ -1,0 +1,19 @@
+--- dir1/CMakeLists.txt	2022-03-02 20:48:08.000000000 +0100
++++ dir2/CMakeLists.txt	2022-03-08 20:10:58.170321945 +0100
+@@ -18,14 +18,14 @@
+ project(TRACE VERSION 3.16.02)
+ # cetbuildtools contains our cmake modules
+ 
+-find_package(cetmodules 1.04.00 REQUIRED)
++#find_package(cetmodules 1.04.00 REQUIRED)
+ #find_package(cetmodules 1.04.00 QUIET)
+ if (${cetmodules_FOUND})
+   MESSAGE(STATUS "Found cetmouldes.")
+   include(CetCMakeEnv)
+   cet_cmake_env(PAD_MINOR ON NO_BUILDTYPE UPS_PRODUCT_NAME TRACE)
+ else (${cetmodules_FOUND})
+-  MESSAGE(STATUS "Could not locate cetmodules.")
++  MESSAGE(STATUS "Could not locate cetmodules. This is expected.")
+ endif (${cetmodules_FOUND})
+ 
+ # Language standard requests.

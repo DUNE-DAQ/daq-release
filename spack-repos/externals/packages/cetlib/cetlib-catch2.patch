@@ -1,0 +1,13 @@
+diff --git a/cetlib/CMakeLists.txt b/cetlib/CMakeLists.txt
+index a0ece18..ac75302 100644
+--- a/cetlib/CMakeLists.txt
++++ b/cetlib/CMakeLists.txt
+@@ -73,7 +73,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
+ 
+ cet_make_exec(inc-expand LIBRARIES ${LIB_NAME})
+ cet_make_exec(get-accessible-paths LIBRARIES ${LIB_NAME})
+-cet_make_exec(cet-bootstrap LIBRARIES ${LIB_NAME})
++cet_make_exec(cet-bootstrap LIBRARIES ${LIB_NAME} Catch2::Catch2)
+ 
+ # ----------------------------------------------------------------------
+ # Install this project's headers and sources:

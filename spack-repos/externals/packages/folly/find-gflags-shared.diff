@@ -1,0 +1,23 @@
+diff --git a/build/fbcode_builder/CMake/FindGflags.cmake b/build/fbcode_builder/CMake/FindGflags.cmake
+index 246ceac..59eac68 100644
+--- a/build/fbcode_builder/CMake/FindGflags.cmake
++++ b/build/fbcode_builder/CMake/FindGflags.cmake
+@@ -38,8 +38,16 @@ if (gflags_FOUND)
+   if (NOT Gflags_FIND_QUIETLY)
+     message(STATUS "Found gflags from package config ${gflags_CONFIG}")
+   endif()
+-  # Re-export the config-specified libs with our local names
+-  set(LIBGFLAGS_LIBRARY ${gflags_LIBRARIES})
++  # P. Rodrigues 2020-09-01: gflags_LIBRARIES gets set to
++  # 'gflags_shared' by find_package(gflags), but the actual library is
++  # libgflags.so(.X.Y.Z). Get the library location (and therefore its
++  # actual name) from the target property if available
++  get_target_property(GFLAGS_TARGET_LOCATION ${GFLAGS_TARGET} LOCATION)
++  if(GFLAGS_TARGET_LOCATION)
++    set(LIBGFLAGS_LIBRARY ${GFLAGS_TARGET_LOCATION})
++  else()
++    set(LIBGFLAGS_LIBRARY ${gflags_LIBRARIES})
++  endif()
+   set(LIBGFLAGS_INCLUDE_DIR ${gflags_INCLUDE_DIR})
+   set(LIBGFLAGS_FOUND ${gflags_FOUND})
+   # cmake module compat
