@@ -24,7 +24,18 @@
           version: v5_3_1
           variant: ~
 
+    devtools:
+        - name: pyyaml
+          version: v5_3_1
+          variant: ~
+
+    systems:
+        - name: pyyaml
+          version: v5_3_1
+          variant: ~
+
     packages:
         - name: ers
           version: v0_26_00c
           variant: ~
+          depends_on: # list... 

@@ -10,13 +10,12 @@ from spack import *
 class Ndreadoutlibs(CMakePackage):
     """No documentation yet (Dec-11-2021)"""
 
-    homepage = "https://github.com/DUNE-DAQ/ndreadoutlibs"
-    url      = "https://github.com/DUNE-DAQ/ndreadoutlibs"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ndreadoutlibs"
+    git      = "https://github.com/DUNE-DAQ/ndreadoutlibs.git"
 
     maintainers = ['jcfreeman2']
 
-    version("develop", branch="develop", git="https://github.com/DUNE-DAQ/ndreadoutlibs")
-    version("1.0.0", sha256="e905da00add6cdc8bf650f2571c29b612542d12ec688c10bfd95d79bbc5fbe5e", extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/ndreadoutlibs/legacy.tar.gz/dunedaq-v2.9.0")
+    version("VERSION", commit="HASH")
 
     depends_on("ers")
     depends_on("appfwk")
@@ -31,12 +30,12 @@ class Ndreadoutlibs(CMakePackage):
     depends_on("daq-cmake")
     depends_on("py-moo", type='build')
 
-    # DBT_DEBUG is used by daq-cmake to set compiler options 
-    def cmake_args(self): 
-        if str(self.spec.variants['build_type']) == "build_type=Debug": 
-            return ["-DDBT_DEBUG=true"] 
-        else: 
-            return ["-DDBT_DEBUG=false"] 
+    # DBT_DEBUG is used by daq-cmake to set compiler options
+    def cmake_args(self):
+        if str(self.spec.variants['build_type']) == "build_type=Debug":
+            return ["-DDBT_DEBUG=true"]
+        else:
+            return ["-DDBT_DEBUG=false"]
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

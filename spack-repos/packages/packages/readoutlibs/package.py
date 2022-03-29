@@ -11,12 +11,11 @@ class Readoutlibs(CMakePackage):
     """Base classes for construction of readout-related DAQ modules"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/readoutlibs/"
-    url      = "https://github.com/DUNE-DAQ/readoutlibs"
+    git      = "https://github.com/DUNE-DAQ/readoutlibs.git"
 
     maintainers = ['jcfreeman2']
 
-    version("develop", branch="develop", git="https://github.com/DUNE-DAQ/readoutlibs")
-    version("1.0.0", sha256="917b6a820797f8dded34e9ebffa0c8ab6eea0da65cc42487533bfeb78e94c846", extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/readoutlibs/legacy.tar.gz/dunedaq-v2.9.0")
+    version("VERSION", commit="HASH")
 
     depends_on("ers")
     depends_on("appfwk")
@@ -30,12 +29,12 @@ class Readoutlibs(CMakePackage):
     depends_on("daq-cmake")
     depends_on("py-moo", type='build')
 
-    # DBT_DEBUG is used by daq-cmake to set compiler options 
-    def cmake_args(self): 
-        if str(self.spec.variants['build_type']) == "build_type=Debug": 
-            return ["-DDBT_DEBUG=true"] 
-        else: 
-            return ["-DDBT_DEBUG=false"] 
+    # DBT_DEBUG is used by daq-cmake to set compiler options
+    def cmake_args(self):
+        if str(self.spec.variants['build_type']) == "build_type=Debug":
+            return ["-DDBT_DEBUG=true"]
+        else:
+            return ["-DDBT_DEBUG=false"]
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

@@ -11,13 +11,12 @@ class Erses(CMakePackage):
     """Insert ERS messages into a searchable database"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/dunedaq-v2.8.0/packages/erses/"
-    url =      "https://github.com/DUNE-DAQ/erses"
+    git =      "https://github.com/DUNE-DAQ/erses.git"
 
     maintainers = ["jcfreeman2"]
 
-    version("develop", branch="develop", git=url)
+    version("VERSION", commit="HASH")
 
-    version("1.0.0", sha256='cc171ad7ad870901b296d4c814f96efe732cb332611fb5d5b5ee7d2e52775168', extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/erses/legacy.tar.gz/dunedaq-v2.8.0")
 
     depends_on("daq-cmake")
     depends_on("ers")
@@ -27,12 +26,12 @@ class Erses(CMakePackage):
 
     depends_on('py-moo', type='build')
 
-    # DBT_DEBUG is used by daq-cmake to set compiler options 
-    def cmake_args(self): 
-        if str(self.spec.variants['build_type']) == "build_type=Debug": 
-            return ["-DDBT_DEBUG=true"] 
-        else: 
-            return ["-DDBT_DEBUG=false"] 
+    # DBT_DEBUG is used by daq-cmake to set compiler options
+    def cmake_args(self):
+        if str(self.spec.variants['build_type']) == "build_type=Debug":
+            return ["-DDBT_DEBUG=true"]
+        else:
+            return ["-DDBT_DEBUG=false"]
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

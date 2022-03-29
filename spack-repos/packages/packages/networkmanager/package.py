@@ -11,12 +11,11 @@ class Networkmanager(CMakePackage):
     """Provides an interface for performing network sends and receives directly from DAQ modules"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/networkmanager/"
-    url      = "https://github.com/DUNE-DAQ/networkmanager"
+    git      = "https://github.com/DUNE-DAQ/networkmanager.git"
 
     maintainers = ['jcfreeman2']
 
-    version("develop", branch="develop", git="https://github.com/DUNE-DAQ/networkmanager")
-    version("1.0.2", sha256="dc47f5d45b37026f09c50c21514fc087270c55d35fb717bf83ea599f7878371c", extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/networkmanager/legacy.tar.gz/dunedaq-v2.9.0")
+    version("VERSION", commit="HASH")
 
     depends_on("ipm")
     depends_on("logging")
@@ -29,12 +28,12 @@ class Networkmanager(CMakePackage):
     depends_on("py-moo", type='build')
     depends_on("daq-cmake")
 
-    # DBT_DEBUG is used by daq-cmake to set compiler options 
-    def cmake_args(self): 
-        if str(self.spec.variants['build_type']) == "build_type=Debug": 
-            return ["-DDBT_DEBUG=true"] 
-        else: 
-            return ["-DDBT_DEBUG=false"] 
+    # DBT_DEBUG is used by daq-cmake to set compiler options
+    def cmake_args(self):
+        if str(self.spec.variants['build_type']) == "build_type=Debug":
+            return ["-DDBT_DEBUG=true"]
+        else:
+            return ["-DDBT_DEBUG=false"]
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

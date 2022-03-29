@@ -7,11 +7,13 @@
 from spack import *
 
 
-class Systems(BundlePackage):
-    """The DUNE DAQ programming languages"""
+class Devtools(BundlePackage):
+    """The DUNE DAQ development tools"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
     version("RELEASE")
 
+    # Generate from release YAML file
+    depends_on("systems@RELEASE")
     # Additional dependencies defined in YAML file to be filled below

@@ -11,13 +11,11 @@ class Wibmod(CMakePackage):
     """WIB configuration and monitoring interface for DUNE's appfwk"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/wibmod/"
-    url =      "https://github.com/DUNE-DAQ/wibmod"
+    git =      "https://github.com/DUNE-DAQ/wibmod.git"
 
     maintainers = ["jcfreeman2"]
 
-    version("develop", branch="develop", git="https://github.com/DUNE-DAQ/wibmod")
-    version("1.2.5", sha256="e84d203ff7a255d0620e3a1b1897e0acfe1791a2206c9b60b762239ed68b9b48", extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/wibmod/legacy.tar.gz/dunedaq-v2.9.0")
-    version("1.2.3", sha256='b61aed5c68eb51d8559df3e8bc19e7971bbe16b26d29aa22312f98020f28c266', extension="tar.gz", url="https://codeload.github.com/DUNE-DAQ/wibmod/legacy.tar.gz/dunedaq-v2.8.2")
+    version("VERSION", commit="HASH")
 
     depends_on("ers")
     depends_on("logging")
@@ -33,12 +31,12 @@ class Wibmod(CMakePackage):
     depends_on("daq-cmake")
     depends_on('py-moo', type='build')
 
-    # DBT_DEBUG is used by daq-cmake to set compiler options 
-    def cmake_args(self): 
-        if str(self.spec.variants['build_type']) == "build_type=Debug": 
-            return ["-DDBT_DEBUG=true"] 
-        else: 
-            return ["-DDBT_DEBUG=false"] 
+    # DBT_DEBUG is used by daq-cmake to set compiler options
+    def cmake_args(self):
+        if str(self.spec.variants['build_type']) == "build_type=Debug":
+            return ["-DDBT_DEBUG=true"]
+        else:
+            return ["-DDBT_DEBUG=false"]
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
