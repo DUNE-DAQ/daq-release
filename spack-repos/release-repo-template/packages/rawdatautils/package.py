@@ -10,8 +10,8 @@ from spack import *
 class Rawdatautils(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rawdatalibs/"
-    git =      "https://github.com/DUNE-DAQ/rawdatalibs.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rawdatautils/"
+    git =      "https://github.com/DUNE-DAQ/rawdatautils.git"
 
     maintainers = ["jcfreeman2"]
 
