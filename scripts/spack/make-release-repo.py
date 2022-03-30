@@ -3,6 +3,15 @@
 import os
 import yaml
 import argparse
+import shutil
+import subprocess
+import tempfile
+
+
+class MyDumper(yaml.Dumper):
+
+    def increase_indent(self, flow=False, indentless=False):
+        return super(MyDumper, self).increase_indent(flow, False)
 
 
 def parse_yaml_file(fname):
@@ -18,14 +27,68 @@ def parse_yaml_file(fname):
     return fman
 
 
+def check_output(cmd):
+    irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    out = irun.communicate()
+    rc = irun.returncode
+    if rc != 0:
+        print('\nERROR: command "{}" has exit non-zero exit status,\
+please check!\n'.format(cmd))
+        print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
+        print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+
+        exit(10)
+    return out
+
+
+def get_commit_hash(repo, tag_or_branch):
+    tmp_dir = tempfile.mkdtemp()
+    cmd = f"""cd {tmp_dir}; \
+        git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; cd {repo}; \
+        git checkout --quiet {tag_or_branch}; \
+        git rev-parse --short HEAD"""
+    output = check_output(cmd)
+    shutil.rmtree(tmp_dir)
+    commit_hash = output[0].decode('utf-8').strip()
+    print(f"Info: updating commit hash for {repo} with commit hash {commit_hash}")
+    cmd = "cd /tmp; rm -rf daq_repo_*"
+    output = check_output(cmd);
+    return commit_hash
+
+
 class DAQRelease:
+
     def __init__(self, yaml_file):
         self.yaml = yaml_file
         self.rdict = parse_yaml_file(self.yaml)
 
+    def copy_release_yaml(self, repo_path, update_hash=False):
+        repo_dir = os.path.join(repo_path, self.rdict["release"])
+        os.makedirs(repo_dir, exist_ok=True)
+        self.yaml = shutil.copy2(self.yaml, repo_dir)
+        # Now modify self.yaml and update self.rdict
+        if update_hash:
+            for i in range(len(self.rdict["dunedaq"])):
+                ipkg = self.rdict["dunedaq"][i]
+                iname = ipkg["name"]
+                irepo = f"https://github.com/DUNE-DAQ/{iname}"
+                iver = ipkg["version"]
+                ihash = ipkg["commit"]
+                if iver != "develop":
+                    itag = 'v' + iver
+                else:
+                    itag = iver
+                ihash = get_commit_hash(iname, iver)
+                self.rdict["dunedaq"][i]["commit"] = ihash
+            # rewrite YAML
+            with open(self.yaml, 'w') as outfile:
+                yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
+        return
+
     def generate_repo_file(self, repo_path):
         repo_dir = os.path.join(repo_path, self.rdict["release"])
-        os.makedirs(repo_dir)
+        os.makedirs(repo_dir, exist_ok=True)
         with open(os.path.join(repo_dir, "repo.yaml"), 'w') as f:
             repo_string = "repo:\n  namespace: '{}'\n".format(
                 self.rdict["release"])
@@ -100,12 +163,15 @@ if __name__ == "__main__":
                         help='''path to the template directory;''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
+    parser.add_argument('-u', '--update-hash', action='store_true',
+                        help="whether to update commit hash in the YAML file;")
     parser.add_argument('-o', '--output-path', required=True,
                         help="path for the generated repo;")
 
     args = parser.parse_args()
 
     daq_release = DAQRelease(args.input_manifest)
+    daq_release.copy_release_yaml(args.output_path, args.update_hash)
     daq_release.generate_repo_file(args.output_path)
     daq_release.generate_daq_package(args.output_path, args.template_path)
     daq_release.generate_umbrella_package(args.output_path, args.template_path)
