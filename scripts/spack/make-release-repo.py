@@ -155,6 +155,15 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
+    def generate_repo(self, outdir, tempdir, update_hash, release_name):
+        if release_name is not None:
+            self.set_release(release_name)
+        self.copy_release_yaml(outdir, update_hash)
+        self.generate_repo_file(outdir)
+        self.generate_daq_package(outdir, tempdir)
+        self.generate_umbrella_package(outdir, tempdir)
+        return
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -177,9 +186,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     daq_release = DAQRelease(args.input_manifest)
-    if args.release_name is not None:
-        daq_release.set_release(args.release_name)
-    daq_release.copy_release_yaml(args.output_path, args.update_hash)
-    daq_release.generate_repo_file(args.output_path)
-    daq_release.generate_daq_package(args.output_path, args.template_path)
-    daq_release.generate_umbrella_package(args.output_path, args.template_path)
+    daq_release.generate_repo(args.output_path, args.template_path,
+                              args.update_hash, args.release_name)
