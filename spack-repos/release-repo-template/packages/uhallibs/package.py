@@ -7,7 +7,7 @@
 from spack import *
 
 
-class Rcif(CMakePackage):
+class Uhallibs(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rcif/"

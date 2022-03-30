@@ -7,7 +7,7 @@
 from spack import *
 
 
-class Rcif(CMakePackage):
+class Rawdatautils(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rawdatalibs/"

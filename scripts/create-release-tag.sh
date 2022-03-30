@@ -25,7 +25,7 @@ function git_checkout_and_tag {
 	popd
 	continue
     fi
-    git tag ${release_name}
+    git tag -a ${release_name} -m "create release tag ${release_name}"
     git push origin ${release_name}
     git tag | grep $release_name
     popd
