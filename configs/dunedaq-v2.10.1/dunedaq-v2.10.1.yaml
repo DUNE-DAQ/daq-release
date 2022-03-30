@@ -78,15 +78,130 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "2.1.2"
-          commit: ""
+          version:  2.1.2
+          commit: e83a0ed
         - name: ers
-          version: "1.1.6"
-          commit: ""
+          version:  1.1.6
+          commit: 80cc8c7
         - name: logging
-          version: "1.0.5"
-          commit: ""
+          version:  1.0.5
+          commit: 380ab68
+        - name: cmdlib
+          version:  1.1.5
+          commit: fd28a35
+        - name: restcmd
+          version:  1.1.5
+          commit: 68825ea
+        - name: opmonlib
+          version:  1.3.4
+          commit: dce9a7f
+        - name: rcif
+          version:  1.1.1
+          commit: 6b871a4
+        - name: appfwk
+          version:  2.4.0
+          commit: c53722e
+        - name: listrev
+          version:  2.2.1
+          commit: 32c73a3
+        - name: utilities
+          version:  1.1.0
+          commit: b0b99ab
+        - name: erskafka
+          version:  1.4.0
+          commit: 7426e50
+        - name: kafkaopmon
+          version:  1.3.2
+          commit: 24606b9
+        - name: influxopmon
+          version:  1.5.3
+          commit: f2de619
+        - name: ipm
+          version:  2.3.1
+          commit: a7474ae
+        - name: serialization
+          version:  1.2.4
+          commit: 1e7ee0d
+        - name: dfmessages
+          version:  2.3.0
+          commit: de8e685
+        - name: detdataformats
+          version:  3.3.2
+          commit: 3144796
+        - name: detchannelmaps
+          version:  1.0.3
+          commit: 3a84056
+        - name: daqdataformats
+          version:  3.3.2
+          commit: 0d3c008
+        - name: readoutlibs
+          version:  1.0.2
+          commit: bf549f6
+        - name: readoutmodules
+          version:  1.0.2
+          commit: cf2adb4
+        - name: fdreadoutlibs
+          version:  1.0.3
+          commit: b56b6c8
+        - name: ndreadoutlibs
+          version:  1.0.2
+          commit: ce3724d
+        - name: dfmodules
+          version:  2.5.2
+          commit: 973dd58
+        - name: flxlibs
+          version:  1.3.1
+          commit: 9b912df
+        - name: lbrulibs
+          version:  1.0.8
+          commit: 1e2475c
+        - name: networkmanager
+          version:  1.0.3
+          commit: a7f68d1
+        - name: nwqueueadapters
+          version:  1.5.1
+          commit: c60f1ca
+        - name: timing
+          version:  6.1.4
+          commit: 4016726
+        - name: timinglibs
+          version:  1.6.3
+          commit: c09f994
+        - name: trigemu
+          version:  2.3.2
+          commit: e5e445e
+        - name: daqconf
+          version:  5.0.3
+          commit: 1474350
+        - name: trigger
+          version:  1.3.2
+          commit: 7c7d896
+        - name: triggeralgs
+          version:  1.0.0
+          commit: 2e01627
+        - name: dqm
+          version:  1.3.3
+          commit: e8c0068
+        - name: hdf5libs
+          version:  2.1.0
+          commit: 21549b0
+        - name: rawdatautils
+          version:  1.0.0
+          commit: fa6a16f
+        - name: uhallibs
+          version:  1.0.1
+          commit: 263c4f2
+        - name: dtpcontrols
+          version:  1.0.2
+          commit: d4f731e
+        - name: wibmod
+          version:  1.3.2
+          commit: ef7a5d8
+        - name: sspmodules
+          version:  1.0.3
+          commit: c60cd5f
 
+    # the following section is not used currently
     pymodules:
         - name: pip
           version: 22.0.3
