@@ -21,6 +21,7 @@ class DUNEDAQ(BundlePackage):
 
     depends_on("externals@RELEASE", when="@RELEASE")
 
-    for build_type in ["Debug", "RelWithDebInfo", "Release"]:
+
+    #for build_type in ["Debug", "RelWithDebInfo", "Release"]:
         # Folloing lines to be generated from release YAML file
         # depends_on(f"daq-cmake@2.1.0 build_type={build_type}", when=f"build_type={build_type}")

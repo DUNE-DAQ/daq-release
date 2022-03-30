@@ -76,7 +76,7 @@
           version: 8.2.0
           variant: "+binutils"
 
-    packages:
+    dunedaq:
         - name: daq-cmake
           version: "2.1.2"
           commit: ""
