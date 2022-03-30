@@ -16,14 +16,15 @@ function update_hash {
         prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
 	prod_branch="${prod_branch%"${prod_branch##*[![:space:]]}"}"
 	slack_ver=$(echo "$prod_branch" | tr [a-z] ' ')
+	slack_ver=$(echo $slack_ver|sed 's/ //g')
     fi
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git
     cd ${prod_name}
     git checkout --quiet ${prod_branch}
     commit_hash=`git rev-parse --short HEAD`
     echo "        - name: ${prod_name}"
-    echo "          version: ${slack_ver}"
-    echo "          commit: ${commit_hash}"
+    echo "          version: \"${slack_ver}\""
+    echo "          commit: \"${commit_hash}\""
     cd ..
 }
 
