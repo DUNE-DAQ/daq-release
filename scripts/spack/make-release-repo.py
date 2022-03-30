@@ -63,10 +63,13 @@ class DAQRelease:
         self.yaml = yaml_file
         self.rdict = parse_yaml_file(self.yaml)
 
+    def set_release(self, release):
+        self.rdict["release"] = release
+
     def copy_release_yaml(self, repo_path, update_hash=False):
         repo_dir = os.path.join(repo_path, self.rdict["release"])
         os.makedirs(repo_dir, exist_ok=True)
-        self.yaml = shutil.copy2(self.yaml, repo_dir)
+        self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
         # Now modify self.yaml and update self.rdict
         if update_hash:
             for i in range(len(self.rdict["dunedaq"])):
@@ -164,6 +167,8 @@ if __name__ == "__main__":
                         help='''path to the template directory;''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
+    parser.add_argument('-r', '--release-name',
+                        help="set release name;")
     parser.add_argument('-u', '--update-hash', action='store_true',
                         help="whether to update commit hash in the YAML file;")
     parser.add_argument('-o', '--output-path', required=True,
@@ -172,6 +177,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     daq_release = DAQRelease(args.input_manifest)
+    if args.release_name is not None:
+        daq_release.set_release(args.release_name)
     daq_release.copy_release_yaml(args.output_path, args.update_hash)
     daq_release.generate_repo_file(args.output_path)
     daq_release.generate_daq_package(args.output_path, args.template_path)
