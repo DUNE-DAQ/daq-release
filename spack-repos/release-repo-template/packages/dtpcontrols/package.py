@@ -23,7 +23,7 @@ class Dtpcontrols(CMakePackage):
     depends_on("uhal")
     depends_on("uhalibs")
 
-    depends_on("py-bind11")
+    depends_on("py-pybind11")
     depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
