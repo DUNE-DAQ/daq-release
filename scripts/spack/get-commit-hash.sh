@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## This file is for generating YAML entries of DAQ packages from old release_manifest.sh
+echo "WARNING: This file is for generating YAML entries of DAQ packages from old release_manifest.sh"
+echo "WARNING: To update commit hash of a release YAML file, please use the '-u' option with make-release-repo.py"
+
 function update_hash {
     iprd_arr="$@"
     iprd_arr="${iprd_arr#\"}"
