@@ -12,6 +12,6 @@ class Systems(BundlePackage):
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
-    version("RELEASE")
+    version("XRELEASEX")
 
     # Additional dependencies defined in YAML file to be filled below

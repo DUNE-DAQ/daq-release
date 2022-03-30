@@ -109,8 +109,8 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                lines = lines.replace("VERSION", ipkg["version"])
-                lines = lines.replace("HASH", ipkg["commit"])
+                lines = lines.replace("XVERSIONX", ipkg["version"])
+                lines = lines.replace("XHASHX", ipkg["commit"])
                 # get commit hash
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
@@ -130,7 +130,7 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                lines = lines.replace("RELEASE", self.rdict["release"])
+                lines = lines.replace("XRELEASEX", self.rdict["release"])
 
             # now add additional deps:
             if ipkg == 'dunedaq':

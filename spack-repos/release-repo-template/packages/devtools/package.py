@@ -12,8 +12,8 @@ class Devtools(BundlePackage):
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
-    version("RELEASE")
+    version("XRELEASEX")
 
     # Generate from release YAML file
-    depends_on("systems@RELEASE")
+    depends_on("systems@XRELEASEX")
     # Additional dependencies defined in YAML file to be filled below

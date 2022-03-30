@@ -15,7 +15,7 @@ class Ipm(CMakePackage):
 
     maintainers = ["jcfreeman2"]
 
-    version("VERSION", commit="HASH")
+    version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake")
     depends_on("logging")

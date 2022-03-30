@@ -15,7 +15,7 @@ class Hdf5libs(CMakePackage):
 
     maintainers = ["jcfreeman2"]
 
-    version("VERSION", commit="HASH")
+    version("XVERSIONX", commit="XHASHX")
 
     depends_on("logging")
     depends_on("highfive ~mpi")
