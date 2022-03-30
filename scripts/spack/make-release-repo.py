@@ -83,6 +83,7 @@ class DAQRelease:
                 self.rdict["dunedaq"][i]["commit"] = ihash
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
+                outfile.write('---\n')
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
