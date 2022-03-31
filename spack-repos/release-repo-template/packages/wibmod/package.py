@@ -19,14 +19,13 @@ class Wibmod(CMakePackage):
 
     depends_on("ers")
     depends_on("logging")
-    depends_on("serialization", when="@1.2.3")
     depends_on("appfwk")
     depends_on("cppzmq")
     depends_on("protobuf")
-    depends_on("highfive ~mpi", when="@1.2.5:")
-    depends_on("daqdataformats", when="@1.2.5:")
-    depends_on("detdataformats", when="@1.2.5:")
-    depends_on("detchannelmaps", when="@1.2.5:")
+    depends_on("highfive ~mpi")
+    depends_on("daqdataformats")
+    depends_on("detdataformats")
+    depends_on("detchannelmaps")
 
     depends_on("daq-cmake")
     depends_on('py-moo', type='build')

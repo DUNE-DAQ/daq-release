@@ -31,7 +31,6 @@ class Appfwk(CMakePackage):
     depends_on('nlohmann-json')
     depends_on('py-moo', type='build')
     depends_on('boost' )
-    # depends_on('trace', when="@:2.3.3")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
