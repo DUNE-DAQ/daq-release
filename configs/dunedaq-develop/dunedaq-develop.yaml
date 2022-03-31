@@ -59,7 +59,7 @@
 
     devtools:
         - name: cmake
-          version: 2.20.5
+          version: 3.20.5
           variant: ~
         - name: gdb
           version: 9.2

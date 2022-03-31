@@ -18,7 +18,7 @@ class Uhallibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake")
-    depends_on("felix")
+    depends_on("felix-software")
     depends_on("uhal")
 
     depends_on("boost")
