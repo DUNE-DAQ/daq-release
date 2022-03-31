@@ -10,8 +10,8 @@ from spack import *
 class Uhallibs(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rcif/"
-    git =      "https://github.com/DUNE-DAQ/rcif.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/uhallibs"
+    git =      "https://github.com/DUNE-DAQ/uhallibs.git"
 
     maintainers = ["jcfreeman2"]
 

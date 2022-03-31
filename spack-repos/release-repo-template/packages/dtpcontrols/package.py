@@ -10,8 +10,8 @@ from spack import *
 class Dtpcontrols(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rcif/"
-    git =      "https://github.com/DUNE-DAQ/rcif.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dtpcontrols/"
+    git =      "https://github.com/DUNE-DAQ/dtpcontrols.git"
 
     maintainers = ["jcfreeman2"]
 
@@ -21,7 +21,7 @@ class Dtpcontrols(CMakePackage):
     depends_on("ers")
     depends_on("logging")
     depends_on("uhal")
-    depends_on("uhalibs")
+    depends_on("uhallibs")
 
     depends_on("py-pybind11")
     depends_on("py-moo", type='build')
