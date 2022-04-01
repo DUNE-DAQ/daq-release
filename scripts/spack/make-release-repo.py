@@ -109,7 +109,10 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                lines = lines.replace("XVERSIONX", ipkg["version"])
+                if self.rdict["release"] == "dunedaq-develop":
+                    lines = lines.replace("XVERSIONX", self.rdict["release"])
+                else:
+                    lines = lines.replace("XVERSIONX", ipkg["version"])
                 lines = lines.replace("XHASHX", ipkg["commit"])
                 # get commit hash
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
