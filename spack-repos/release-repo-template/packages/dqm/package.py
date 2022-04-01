@@ -32,6 +32,8 @@ class Dqm(CMakePackage):
     depends_on("timinglibs")
     depends_on("librdkafka")
     depends_on("py-moo", type='build')
+    depends_on("openssl")
+    depends_on("krb5")
     depends_on("cyrus-sasl")
     depends_on("fftw")
 

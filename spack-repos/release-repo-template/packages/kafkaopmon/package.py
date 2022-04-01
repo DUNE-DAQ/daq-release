@@ -24,6 +24,8 @@ class Kafkaopmon(CMakePackage):
     depends_on("cyrus-sasl")
     depends_on("librdkafka")
     depends_on("ers")
+    depends_on("openssl")
+    depends_on("krb5")
     depends_on("boost")
     depends_on('py-moo', type='build')
 
