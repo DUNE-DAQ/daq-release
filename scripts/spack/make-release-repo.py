@@ -67,7 +67,7 @@ class DAQRelease:
         self.rdict["release"] = release
 
     def copy_release_yaml(self, repo_path, update_hash=False):
-        repo_dir = os.path.join(repo_path, self.rdict["release"])
+        repo_dir = os.path.join(repo_path, "spack-repo")
         os.makedirs(repo_dir, exist_ok=True)
         self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
         # Now modify self.yaml and update self.rdict
@@ -91,7 +91,7 @@ class DAQRelease:
         return
 
     def generate_repo_file(self, repo_path):
-        repo_dir = os.path.join(repo_path, self.rdict["release"])
+        repo_dir = os.path.join(repo_path, "spack-repo")
         os.makedirs(repo_dir, exist_ok=True)
         with open(os.path.join(repo_dir, "repo.yaml"), 'w') as f:
             repo_string = "repo:\n  namespace: '{}'\n".format(
@@ -99,8 +99,8 @@ class DAQRelease:
             f.write(repo_string)
         return
 
-    def generate_daq_package(self, repo_dir, template_dir):
-        repo_dir = os.path.join(repo_dir, self.rdict["release"], "packages")
+    def generate_daq_package(self, repo_path, template_dir):
+        repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         for ipkg in self.rdict["dunedaq"]:
             itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
@@ -123,8 +123,8 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_umbrella_package(self, repo_dir, template_dir):
-        repo_dir = os.path.join(repo_dir, self.rdict["release"], "packages")
+    def generate_umbrella_package(self, repo_path, template_dir):
+        repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         for ipkg in ['devtools', 'externals', 'systems', 'dunedaq']:
             itemp = os.path.join(template_dir, ipkg, 'package.py')
