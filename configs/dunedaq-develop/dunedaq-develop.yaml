@@ -29,7 +29,7 @@
         - name: msgpack-c
           version: 3.3.0
           variant: ~
-        - name: py-bind11
+        - name: py-pybind11
           version: 2.6.2
           variant: ~
         - name: uhal
