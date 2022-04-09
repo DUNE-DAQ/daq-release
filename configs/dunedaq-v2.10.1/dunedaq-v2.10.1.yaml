@@ -59,9 +59,9 @@
         - name: krb5
           version: 1.19.2
           variant: ~
-          #- name: py-pyyaml
-          #version: 1.1
-          #variant: ~
+        - name: py-pyyaml
+          version: 5.3.1
+          variant: ~
 
     devtools:
         - name: cmake
