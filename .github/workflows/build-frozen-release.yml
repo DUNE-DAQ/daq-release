@@ -89,13 +89,13 @@ jobs:
           rm -rf ${release_tag}
 
     - name: upload frozen release tarball
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: frozen release
         path: ${{ github.workspace }}/releases
 
     - name: upload build log file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build_log
         path: ${{ github.workspace }}/dev/log
