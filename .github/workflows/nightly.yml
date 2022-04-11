@@ -123,7 +123,7 @@ jobs:
 
     steps:
       - name: Download nightly release tarball artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: nightly_release_${{ matrix.os_name }}
           path: ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
