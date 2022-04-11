@@ -81,7 +81,7 @@ jobs:
           mv dunedaq-${nightly_tag}.tar.gz $GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}
 
     - name: upload nightly tarball
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: nightly_release_${{ matrix.os_name }}
         path: ${{ github.workspace }}/nightly-${{ matrix.os_name }}

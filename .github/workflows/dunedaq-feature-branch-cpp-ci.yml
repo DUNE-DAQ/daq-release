@@ -84,19 +84,19 @@ jobs:
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -o /tarballs
           
     - name: upload UPS tarball and log file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ups_package
         path: /tarballs
 
     - name: upload build log file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build_log
         path: ${{ github.workspace }}/dev/log/build*.log
 
     - name: upload linter output file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: linting_log
         path: ${{ github.workspace }}/dev/log/linting*.log
