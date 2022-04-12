@@ -57,6 +57,14 @@ Developer is recommended to follow the following development workflow regardless
    * approve pull requests and merge to `develop`;
    * delete the pull request branch once it's merged (optional), and close the linked issue.
 
+💡 If the targeted branch of the pull request has advanced, please do the following to bring the feature branch in sync before merging the PR:
+1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote;
+2. Switch back to the feature branch of the PR, merge the targeted branch into it, e.g. `git merge --no--ff <targeted branch name>`;
+3. Push the merge to remote, and continue with the PR review/merge process.
+
+:red_circle: Please don't use `git rebase` or `git push --force`. It will likely bring unexpected consequences.
+
+
 ## Tagging and releasing workflow (release branches)
 
 Package maintainers are the primary developers who make version tags of a package. The following workflow should be used when doing so.

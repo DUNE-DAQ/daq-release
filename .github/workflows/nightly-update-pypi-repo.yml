@@ -60,7 +60,7 @@ jobs:
           du -sh pypi-repo.tar.gz
     
     - name: upload pypi-repo
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: pypi-repo
         path: ${{ github.workspace }}/pypi-repo.tar.gz
