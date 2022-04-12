@@ -79,7 +79,7 @@ dune_packages=(
   "nwqueueadapters  v1_5_1c       e19:prof"
   "timing           v6_1_4c       e19:prof"
   "timinglibs       v1_6_3b       e19:prof"
-  "trigemu          v2_3_2c       e19:prof"
+  "trigemu          v2_3_2d       e19:prof"
   "daqconf          v5_0_4        e19:prof"
   "trigger          v1_3_4        e19:prof"
   "triggeralgs      v1_1_0        e19:prof"
