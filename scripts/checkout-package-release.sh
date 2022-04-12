@@ -25,7 +25,7 @@ function checkout_package {
 
     if [[ $prod_branch == v* ]]; then
 	prod_ups_version=$(echo "$prod_ups_version" | tr '_' '.')
-        prod_branch=$(echo "$prod_branch" | tr [a-g] ' '|tr '_' '.')
+        prod_branch=$(echo "$prod_branch" | tr [a-k] ' '|tr '_' '.')
 	prod_branch="${prod_branch%"${prod_branch##*[![:space:]]}"}"
 
     fi
@@ -46,7 +46,7 @@ function checkout_package {
     fi
 
     #echo "INFO: checking out $prod_name, uisng branch/tag $prod_branch"
-    git checkout ${prod_branch}
+    git checkout --quiet ${prod_branch}
 
     if [[ $prod_branch == v* ]]; then
         if [ "$prod_branch" != "$prod_ups_version" ]; then
