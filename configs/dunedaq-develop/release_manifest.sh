@@ -105,7 +105,7 @@ dune_pythonmodules=(
   "bitarray          2.3.4      pypi              " 
   "certifi           2020.12.5  pypi              " 
   "chardet           3.0.4      pypi              " 
-  "click             7.1.2      pypi              " 
+  "click             8.1.2      pypi              " 
   "click-didyoumean  0.0.3      pypi              " 
   "click-shell       2.0        pypi              " 
   "colorama          0.4.4      pypi              " 
