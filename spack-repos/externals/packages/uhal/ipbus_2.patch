@@ -1,0 +1,47 @@
+--- a/controlhub/Makefile	2021-01-29 02:18:00.000000000 +0100
++++ b/controlhub/Makefile	2021-07-20 17:37:57.717773541 +0200
+@@ -159,27 +159,10 @@
+ install:
+ 	cd scripts; find . -name "controlhub_*" -exec install -D -m 755 {} $(bindir)/{} \;
+ 	mkdir -p $(libdir) && cp -r rel/controlhub $(libdir)/
+-	install -D -m 644 pkg/rsyslog.d.conf /etc/rsyslog.d/controlhub.conf
+-	install -D -m 644 pkg/logrotate.d.conf /etc/logrotate.d/controlhub.conf
+-
+-	mkdir -p /etc/controlhub/default
+-	mv $(libdir)/controlhub/sys.config /etc/controlhub/default/sys.config
+-	sed -i "s|\".*core.config\"|\"$(libdir)/controlhub/core.config\"|" /etc/controlhub/default/sys.config
+-	sed -i "s|CONTROLHUB_CONFIG_FILE_DEFAULT=.*|CONTROLHUB_CONFIG_FILE_DEFAULT=/etc/controlhub/default/sys.config|" $(libdir)/controlhub/bin/controlhub
+-	sed -i "s|CONTROLHUB_CONFIG_FILE_OPTIONAL=.*|CONTROLHUB_CONFIG_FILE_OPTIONAL=/etc/controlhub/sys.config|" $(libdir)/controlhub/bin/controlhub
+ 
+ 	sed -i "s|CONTROLHUB_BIN_DIR=.*|CONTROLHUB_BIN_DIR=$(libdir)/controlhub/bin|" $(bindir)/controlhub_*
+ 
+-	mkdir -p /var/log/controlhub
+-	touch /var/log/controlhub/controlhub.log
+-	chmod 644 /var/log/controlhub/controlhub.log
+-ifeq (,$(shell /bin/bash -c "command -v service"))
+-	@echo " WARNING : 'service' command not detected! After the installation has finished, you should restart rsyslog to ensure that the ControlHub syslog config is loaded"
+-else
+-	-service rsyslog restart
+-endif
+-
+ uninstall:
+ 	rm -rf $(bindir)/controlhub*
+ 	rm -rf $(libdir)/controlhub
+-	rm -rf /etc/rsyslog.d/controlhub.conf /etc/logrotate.d/controlhub.conf /etc/controlhub/default
++
+--- a/uhal/python/Makefile	2021-01-29 02:18:00.000000000 +0100
++++ b/uhal/python/Makefile	2021-07-20 17:35:00.101657704 +0200
+@@ -27,11 +27,12 @@
+ 
+ 
+ IncludePaths = include  \
+-		pybind11/include \
++		${EXTERN_PYBIND11_INCLUDE_PREFIX} \
+ 		${EXTERN_BOOST_INCLUDE_PREFIX} \
+ 		${EXTERN_PUGIXML_INCLUDE_PREFIX} \
+ 		${PYTHON_INCLUDE_PREFIX} \
+ 		${BUILD_HOME}/uhal/log/include  \
++		${BUILD_HOME}/uhal/log/include/uhal/log  \
+ 		${BUILD_HOME}/uhal/grammars/include \
+ 		${BUILD_HOME}/uhal/uhal/include \
+ 		${BUILD_HOME}/uhal/tests/include

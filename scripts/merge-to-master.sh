@@ -1,6 +1,5 @@
 #!/bin/bash
 
-release_name="dunedaq-v2.10.1"
 release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
 function git_checkout_and_tag {
@@ -17,17 +16,17 @@ function git_checkout_and_tag {
     prod_version=${prod_ups_version//[^v.[:digit:]]/}
     git clone git@github.com:DUNE-DAQ/${prod_name}.git -b ${prod_version}
     pushd ${prod_name}
-    if git ls-remote --exit-code --tags origin ${release_name}; then
-        #echo "Info: tag ${release_name} exists, deleting it now"
-	#git tag -d ${release_name}
-	#git push --delete origin ${release_name}
-        echo "Info: tag ${release_name} exists, skipping it now"
-	popd
-	continue
+    git checkout master
+    git pull
+    git merge --no-ff ${prod_version} -m "Merge ${prod_version} into master"
+    read -r -p "INFO: Push merge to master, are you sure? [y/N] " response
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+        git push
+    else
+        echo "INFO: Return without pushing, please manually do the merge for $repo."
+        return 1
     fi
-    git tag -a ${release_name} -m "create release tag ${release_name}"
-    git push origin ${release_name}
-    git tag | grep $release_name
     popd
   done
 }
@@ -37,14 +36,10 @@ while getopts ":f:r:h" opt; do
     f )
        release_config_dir=$OPTARG
        ;;
-    r )
-       release_name=$OPTARG
-       ;;
     h )
       echo "Usage:"
       echo "    create-release-tag.sh  -h Display this help message."
       echo "    <-f> <release_config_dir>"
-      echo "    [-r] <release_name>"
       exit 0
       ;;
    \? )
@@ -76,9 +71,6 @@ else
 fi
 
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-echo "[Info]: Release name: ${release_name}"
-
 
 pushd $tmp_dir
 

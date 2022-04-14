@@ -1,0 +1,12 @@
+diff --git a/src_utility/CMakeLists.txt b/src_utility/CMakeLists.txt
+index 42257e1..31c6dd3 100644
+--- a/src_utility/CMakeLists.txt
++++ b/src_utility/CMakeLists.txt
+@@ -12,6 +12,7 @@ else (${cetmodules_FOUND})
+     trace_cntl
+     PUBLIC $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include>
+             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++  install(TARGETS trace_cntl DESTINATION bin)
+ endif (${cetmodules_FOUND})
+ 
+ #install_source()

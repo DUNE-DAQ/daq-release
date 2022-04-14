@@ -1,0 +1,19 @@
+--- spack-src/cetlib/CMakeLists.txt.orig	2021-03-15 15:22:02.829432000 -0500
++++ spack-src/cetlib/CMakeLists.txt	2021-03-15 15:22:17.335175000 -0500
+@@ -104,4 +104,4 @@
+ add_subdirectory(sqlite)
+ 
+ # Tests
+-add_subdirectory(test)
++#add_subdirectory(test)
+--- spack-src/CMakeLists.txt.orig	2021-03-15 15:42:30.227726000 -0500
++++ spack-src/CMakeLists.txt	2021-03-15 15:42:33.072726000 -0500
+@@ -32,6 +32,8 @@
+   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=thread -D__SANITIZE_THREAD__")
+ endif()
+ 
++find_package(TBB)
++
+ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
+ 
+ add_subdirectory(${PROJECT_NAME})  # source code

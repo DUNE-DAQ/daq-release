@@ -1,0 +1,9 @@
+--- spack-src/perllib/CMakeLists.txt.orig	2020-11-05 14:10:27.709868000 -0600
++++ spack-src/perllib/CMakeLists.txt	2020-11-05 14:11:12.343255000 -0600
+@@ -1,5 +1,5 @@
+ install(FILES PluginVersionInfo.pm.in
+-  DESTINATION ${${product}_perllib})
++  DESTINATION perllib)
+ 
+ cet_script(cetskelgen)
+ 

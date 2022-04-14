@@ -1,0 +1,215 @@
+---
+release: dunedaq-v2.10.2
+externals:
+  - name: boost
+    version: 1.73.0
+    variant: +context+container cxxstd=17
+  - name: cetlib
+    version: 3.13.04
+    variant: null
+  - name: trace
+    version: 3.16.02
+    variant: null
+  - name: nlohmann-json
+    version: 3.9.0
+    variant: null
+  - name: pistache
+    version: dunedaq-v2.8.0
+    variant: null
+  - name: highfive
+    version: 2.3.1
+    variant: ~mpi
+  - name: libzmq
+    version: 4.3.1
+    variant: null
+  - name: cppzmq
+    version: 4.3.0
+    variant: null
+  - name: msgpack-c
+    version: 3.3.0
+    variant: null
+  - name: py-pybind11
+    version: 2.6.2
+    variant: null
+  - name: uhal
+    version: 2.8.1
+    variant: null
+  - name: cpr
+    version: 1.5.2
+    variant: null
+  - name: librdkafka
+    version: 1.7.0
+    variant: null
+  - name: protobuf
+    version: 3.14.0
+    variant: null
+  - name: folly
+    version: 2021.12.13.00
+    variant: cxxstd=17
+  - name: felix-software
+    version: dunedaq-v2.10.0
+    variant: null
+  - name: fftw
+    version: 3.3.10
+    variant: ~mpi
+  - name: cli11
+    version: 2.1.2
+    variant: null
+  - name: krb5
+    version: 1.19.2
+    variant: null
+  - name: py-pyyaml
+    version: 5.3.1
+    variant: null
+devtools:
+  - name: cmake
+    version: 3.21.4
+    variant: null
+  - name: gdb
+    version: 9.2
+    variant: ~python
+  - name: ninja
+    version: 1.10.0
+    variant: null
+systems:
+  - name: python
+    version: 3.8.3
+    variant: null
+  - name: gcc
+    version: 8.2.0
+    variant: +binutils
+dunedaq:
+  - name: daq-cmake
+    version: 2.1.2
+    commit: 341ac25
+  - name: ers
+    version: 1.1.6
+    commit: '4363749'
+  - name: logging
+    version: 1.0.5
+    commit: 16144ba
+  - name: cmdlib
+    version: 1.1.5
+    commit: f098594
+  - name: restcmd
+    version: 1.1.5
+    commit: 41a4b23
+  - name: opmonlib
+    version: 1.3.4
+    commit: 3a87bed
+  - name: rcif
+    version: 1.1.1
+    commit: ecc0cee
+  - name: appfwk
+    version: 2.4.0
+    commit: 79e3734
+  - name: listrev
+    version: 2.2.1
+    commit: ef0fe27
+  - name: utilities
+    version: 1.1.0
+    commit: e02e011
+  - name: erskafka
+    version: 1.4.0
+    commit: c3c8469
+  - name: kafkaopmon
+    version: 1.3.2
+    commit: 96a658d
+  - name: influxopmon
+    version: 1.5.3
+    commit: 50230ba
+  - name: ipm
+    version: 2.3.1
+    commit: 851e471
+  - name: serialization
+    version: 1.2.4
+    commit: 20488ea
+  - name: dfmessages
+    version: 2.3.0
+    commit: d12dacb
+  - name: detdataformats
+    version: 3.3.3
+    commit: 5a6956b
+  - name: detchannelmaps
+    version: 1.0.3
+    commit: e3200cf
+  - name: daqdataformats
+    version: 3.3.2
+    commit: 1fc8b6a
+  - name: readoutlibs
+    version: 1.0.3
+    commit: 36cd29a
+  - name: readoutmodules
+    version: 1.0.3
+    commit: 75bc7df
+  - name: fdreadoutlibs
+    version: 1.1.0
+    commit: 4f00d0a
+  - name: ndreadoutlibs
+    version: 1.0.2
+    commit: 399d92c
+  - name: dfmodules
+    version: 2.5.2
+    commit: c87a5a6
+  - name: flxlibs
+    version: 1.3.1
+    commit: 354da13
+  - name: lbrulibs
+    version: 1.0.8
+    commit: ee65eb5
+  - name: networkmanager
+    version: 1.0.3
+    commit: c484d58
+  - name: nwqueueadapters
+    version: 1.5.1
+    commit: 707cad6
+  - name: timing
+    version: 6.1.4
+    commit: e95ede9
+  - name: timinglibs
+    version: 1.6.3
+    commit: 60ae7ea
+  - name: trigemu
+    version: 2.3.2
+    commit: 73f309f
+  - name: daqconf
+    version: 5.0.4
+    commit: 03bd323
+  - name: trigger
+    version: 1.3.4
+    commit: 1a7ae04
+  - name: triggeralgs
+    version: 1.1.0
+    commit: 34e7d54
+  - name: dqm
+    version: 1.3.3
+    commit: f6c075b
+  - name: hdf5libs
+    version: 2.1.0
+    commit: 2ea1bc1
+  - name: rawdatautils
+    version: 1.0.0
+    commit: 02f4d0a
+  - name: uhallibs
+    version: 1.0.1
+    commit: 364a015
+  - name: dtpcontrols
+    version: 1.0.2
+    commit: cb0d145
+  - name: wibmod
+    version: 1.3.2
+    commit: 86a6f54
+  - name: sspmodules
+    version: 1.0.3
+    commit: 1d69533
+pymodules:
+  - name: pip
+    version: 22.0.3
+    source: pypi
+  - name: nanorc
+    version: 3.0.5
+    commit: sds
+    source: github_DUNE-DAQ
+  - name: moo
+    version: 0.5.7
+    source: github_brettviren

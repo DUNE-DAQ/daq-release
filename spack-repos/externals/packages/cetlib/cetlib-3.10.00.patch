@@ -1,0 +1,220 @@
+--- a/CMakeLists.txt	2020-03-02 13:50:53.000000000 -0600
++++ b/CMakeLists.txt	2020-04-22 13:54:04.829876000 -0500
+@@ -12,11 +12,11 @@
+ #  make package (builds distribution tarfile)
+ # ======================================================================
+ 
+-cmake_minimum_required(VERSION 3.12...3.14 FATAL_ERROR)
+-project(cetlib LANGUAGES CXX C)
++cmake_minimum_required(VERSION 3.12)
++project(cetlib VERSION 3.10.00 LANGUAGES CXX C)
+ 
+ # cetbuildtools contains our cmake modules
+-find_package(cetbuildtools REQUIRED)
++find_package(cetmodules REQUIRED)
+ 
+ include(CetCMakeEnv)
+ cet_cmake_env()
+@@ -28,51 +28,21 @@
+   EXTRA_CXX_FLAGS -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -DBOOST_TEST_NO_OLD_TOOLS
+   )
+ 
+-if($ENV{CET_SANITIZE_ADDRESS})
+-  if(NOT "$ENV{GCC_FQ_DIR}" STREQUAL "")
+-    find_file(ASAN_LIB libasan.so NO_DEFAULT_PATH PATHS $ENV{GCC_FQ_DIR}/lib64)
+-  endif()
+-endif()
+-
+-if($ENV{CET_SANITIZE_THREAD})
+-  if(NOT "$ENV{GCC_FQ_DIR}" STREQUAL "")
+-    find_file(TSAN_LIB libtsan.so NO_DEFAULT_PATH PATHS $ENV{GCC_FQ_DIR}/lib64)
+-  endif()
+-endif()
+-
+-if ($ENV{CET_SANITIZE_ADDRESS})
+-cet_add_compiler_flags(CXX -fsanitize=address)
+-cet_add_compiler_flags(C -fsanitize=address)
+-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+-set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_MODULE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+-set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=address")
+-endif()
+-
+-if ($ENV{CET_SANITIZE_THREAD})
+-cet_add_compiler_flags(CXX -fsanitize=thread -D__SANITIZE_THREAD__)
+-cet_add_compiler_flags(C -fsanitize=thread -D__SANITIZE_THREAD__)
+-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=thread -D__SANITIZE_THREAD__")
+-set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_MODULE_LINKER_FLAGS_DEBUG} -fsanitize=thread -D__SANITIZE_THREAD__")
+-set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=thread -D__SANITIZE_THREAD__")
+-endif()
+-
+ cet_report_compiler_flags()
+ 
+ # ----------------------------------------------------------------------
+ # Describe build prerequisites:
+ 
+-find_ups_boost(BOOST_TARGETS v1_50_0)
+-find_ups_product(sqlite)
+-find_ups_product(cetlib_except v1_01_00)
+-find_ups_product(catch v1_11_0)
+-find_ups_product(hep_concurrency)
++find_package(Boost 1.50.0 REQUIRED COMPONENTS filesystem regex)
++find_library(SQLITE3 NAMES sqlite3 REQUIRED)
++find_package(cetlib_except 1.01.00 REQUIRED)
++find_package(Catch2 2.3.0 REQUIRED)
++find_package(hep_concurrency REQUIRED)
+ 
+-# SQLite
+-cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
+ # find openSSL
+ # when building on macOS, use CommonCrypto
+ if(NOT APPLE)
+-  find_package(OpenSSL REQUIRED )
++  find_package(OpenSSL REQUIRED)
+ endif()
+ 
+ # ----------------------------------------------------------------------
+@@ -80,12 +50,4 @@
+ 
+ add_subdirectory( ${PROJECT_NAME} )  # source code
+ add_subdirectory( perllib )          # Modular plugin skeleton generator
+-add_subdirectory( ups )              # ups files
+-
+-# ----------------------------------------------------------------------
+-# Packaging utility
+-
+-include(UseCPack)
+-
+-#
+-# ======================================================================
++add_subdirectory( cmakeConfig )              # cmakeConfig file
+diff --git a/cetlib/cet-bootstrap.cc b/cetlib/cet-bootstrap.cc
+new file mode 100644
+index 0000000..7688056
+--- /dev/null
++++ b/cetlib/cet-bootstrap.cc
+@@ -0,0 +1,49 @@
++#include "cetlib/detail/plugin_search_path.h"
++
++#include <cstdio>
++#include <cstring>
++#include <iostream>
++#include <iterator>
++#include <sstream>
++#include <string>
++#include <vector>
++
++extern "C" {
++#include <unistd.h>
++}
++
++void usage(int ecode = EXIT_FAILURE)
++{
++  std::cerr <<
++    R"(Usage: cet_bootstrap <program> <args>+
++       cet_bootstrap -h
++
++Execute the provided program and arguments in an environment where the contents
++of CET_PLUGIN_PATH have been injected into (DY)LD_LIBRARY_PATH.
++)";
++  exit(ecode);
++}
++
++int main(int argc, char **argv)
++{
++  // Check arguments.
++  if (argc < 2 || strncmp(argv[1], "-h", 2) == 0) {
++    usage();
++  }
++  // Inject CET_PLUGIN_PATH into dynamic library path.
++  (void) cet::detail::plugin_search_path();
++  // Execute specified program with arguments in the current
++  // environment.
++  std::vector<char *> newargs(argv+1, argv + argc);
++  newargs.push_back(nullptr); // Required by execvp calling convention.
++  execvp(argv[1], newargs.data());
++  // If we get here, execvp() has failed.
++  std::ostringstream errmsg;
++  errmsg << "cet_bootstrap: failure to execute ";
++  std::copy(newargs.cbegin(),
++            newargs.cbegin() + newargs.size() - 1,
++            std::ostream_iterator<char *>(errmsg, " "));
++  errmsg << "with error";
++  perror(errmsg.str().c_str());
++  exit(EXIT_FAILURE);
++}
+diff --git a/cetlib/test/CMakeLists.txt b/cetlib/test/CMakeLists.txt
+index e1aeddc..d53615a 100644
+--- a/cetlib/test/CMakeLists.txt
++++ b/cetlib/test/CMakeLists.txt
+@@ -162,7 +162,7 @@ cet_test(crc32_test USE_CATCH_MAIN SOURCES crc32_test.cc CRC32Calculator.cc TEST
+ 
+ # Use ParseAndAddCatchTests to generate a test for each test case.
+ cet_test(hypot_test USE_CATCH_MAIN NO_AUTO)
+-list(APPEND CMAKE_MODULE_PATH $ENV{CATCH_DIR}/share/cmake/catch)
++
+ include(ParseAndAddCatchTests)
+ set(AdditionalCatchParameters -s)
+ ParseAndAddCatchTests(hypot_test)
+diff --git a/cmakeConfig/CMakeLists.txt b/cmakeConfig/CMakeLists.txt
+new file mode 100644
+index 0000000..80a18ce
+--- /dev/null
++++ b/cmakeConfig/CMakeLists.txt
+@@ -0,0 +1,2 @@
++# Create package configuration and version files.
++cet_cmake_config(CONFIG_FRAGMENTS cetlib-fragment.cmake.in)
+diff --git a/cmakeConfig/cetlib-fragment.cmake.in b/cmakeConfig/cetlib-fragment.cmake.in
+new file mode 100644
+index 0000000..73b1aed
+--- /dev/null
++++ b/cmakeConfig/cetlib-fragment.cmake.in
+@@ -0,0 +1,6 @@
++find_package(cetlib_except REQUIRED)
++if(NOT APPLE)
++  find_package(OpenSSL REQUIRED)
++endif()
++find_package(hep_concurrency REQUIRED)
++find_package(Boost 1.50.0 COMPONENTS filesystem REQUIRED)
+diff --git a/perllib/CMakeLists.txt b/perllib/CMakeLists.txt
+index a0e177f..26fe0dd 100644
+--- a/perllib/CMakeLists.txt
++++ b/perllib/CMakeLists.txt
+@@ -1,5 +1,10 @@
++cet_project_var(PLUGINVERSIONINFO_PM_IN
++  TYPE FILEPATH
++  DOCSTRING "Location of Perl PluginVersionInfo.pm.in template file"
++  perllib/PluginVersionInfo.pm.in
++)
+ install(FILES PluginVersionInfo.pm.in
+-  DESTINATION ${${product}_perllib})
++  DESTINATION perllib)
+ 
+ cet_script(cetskelgen)
+ 
+diff --git a/perllib/CetSkel/cetskelgen/CMakeLists.txt b/perllib/CetSkel/cetskelgen/CMakeLists.txt
+index 46ab62f..66e8fcf 100644
+--- a/perllib/CetSkel/cetskelgen/CMakeLists.txt
++++ b/perllib/CetSkel/cetskelgen/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ configure_file(VersionInfo.pm.in ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.pm @ONLY)
+ 
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.pm
+-  DESTINATION ${${product}_perllib}/CetSkel/cetskelgen)
++  DESTINATION perllib/CetSkel/cetskelgen)
+diff --git a/perllib/PluginVersionInfo.pm.in b/perllib/PluginVersionInfo.pm.in
+index 86c5f2e..26e9066 100644
+--- a/perllib/PluginVersionInfo.pm.in
++++ b/perllib/PluginVersionInfo.pm.in
+@@ -1,9 +1,9 @@
+ use strict;
+ 
+-package CetSkelPlugins::@product@::PluginVersionInfo;
++package CetSkelPlugins::@PROJECT_NAME@::PluginVersionInfo;
+ 
+-sub product { return "@product@"; }
++sub product { return "@PROJECT_NAME@"; }
+ 
+-sub version { return "@version@"; }
++sub version { return "@PROJECT_VERSION@"; }
+ 
+ 1;

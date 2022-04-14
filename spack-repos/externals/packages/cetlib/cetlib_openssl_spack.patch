@@ -1,0 +1,38 @@
+diff --git a/cetlib/CMakeLists.txt b/cetlib/CMakeLists.txt
+index fb056f8..3b6588c 100644
+--- a/cetlib/CMakeLists.txt
++++ b/cetlib/CMakeLists.txt
+@@ -12,12 +12,6 @@ find_package(cetlib_except REQUIRED PUBLIC)
+ find_package(SQLite3 REQUIRED PUBLIC)
+ find_package(hep_concurrency REQUIRED PUBLIC)
+ 
+-# find openSSL
+-# when building on macOS, use CommonCrypto
+-if(NOT APPLE)
+-  find_package(OpenSSL REQUIRED PUBLIC)
+-endif()
+-
+ ####################################
+ # Libraries.
+ cet_make_library(LIBRARY_NAME container_algorithms INTERFACE
+@@ -61,13 +55,19 @@ cet_make_library(HEADERS_TARGET
+     PUBLIC
+       cetlib_except::cetlib_except
+       cetlib::container_algorithms
+-      ${OPENSSL_LIBRARIES}
+     PRIVATE
+       Boost::filesystem
+       Boost::regex
+       ${CMAKE_DL_LIBS}
+ )
+ 
++# find openSSL
++# when building on macOS, use CommonCrypto
++if(NOT APPLE)
++  find_package(OpenSSL REQUIRED PUBLIC)
++  target_link_libraries(cetlib PUBLIC OpenSSL::Crypto)
++endif()
++
+ cet_make_library(LIBRARY_NAME compiler_macros INTERFACE
+   SOURCE compiler_macros.h)
+ 
