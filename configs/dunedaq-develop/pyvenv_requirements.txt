@@ -8,8 +8,8 @@ bitarray==2.3.4
 certifi==2020.12.5
 chardet==3.0.4
 click==8.1.2
-click-didyoumean==0.0.3
-click-shell==2.0
+click-didyoumean==0.3.0
+click-shell==2.1
 colorama==0.4.4
 commonmark==0.9.1
 elisa-client-api==0.1.0
