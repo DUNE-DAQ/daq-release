@@ -45,7 +45,7 @@ dune_ups=(
 
 dune_extras=(
   "daq_buildtools    v4.1.6                  "
-  "daq_release       v1.7.5                  "
+  "daq_release       v1.7.6                  "
 )
 
 dune_packages=(
