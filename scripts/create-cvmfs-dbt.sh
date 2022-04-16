@@ -33,6 +33,8 @@ for i in `git tag`; do
 	fi
 done
 
+rm -rf /var/tmp/dbt/v*_for_docs
+
 rsync -vau /var/tmp/dbt $TARGET_DIR
 
 rm -rf /var/tmp/dbt
