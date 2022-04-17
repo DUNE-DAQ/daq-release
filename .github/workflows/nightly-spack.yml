@@ -101,15 +101,18 @@ jobs:
           spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
 
           # install the release
-          spack install
+          #spack install
 
-          spack load dunedaq@${DAQ_RELEASE}
+          #spack load dunedaq@${DAQ_RELEASE}
           python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
           source $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv/bin/activate
           python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$DAQ_RELEASE
-          tar zcf ${{ github.workspace }}/spack-nightly.tar.gz $SPACK_RELEASE/$DAQ_RELEASE ${{ github.workspace }}/spack-nightly
+          mkdir -p ${{ github.workspace }}/spack-nightly
+          mv $SPACK_RELEASE/$DAQ_RELEASE ${{ github.workspace }}/spack-nightly
+          cd  ${{ github.workspace }}
+          tar zcf spack-nightly.tar.gz spack-nightly
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v3
