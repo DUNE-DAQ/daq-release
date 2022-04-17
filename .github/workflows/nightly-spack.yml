@@ -162,7 +162,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ${{ matrix.image }}
+            dunedaq/sl7-minimal
           tags: |
             type=raw,value=spack-dev
 
