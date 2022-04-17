@@ -14,7 +14,6 @@ dune_packages_with_ci=(
  "networkmanager"  
  "appfwk"          
  "listrev"         
- "daqdemos"        
  "serialization"   
  "nwqueueadapters" 
  "daqdataformats"  
@@ -52,12 +51,14 @@ function git_checkout_and_update_ci {
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
     prod_name=${iprd_arr[0]//_/-}
-    git clone git@github.com:DUNE-DAQ/${prod_name}.git -b develop
+    echo "--------------------------------------------------------------"
+    echo "********************* $prod_name *****************************"
+    git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
     cp $workflow_file .github/workflows
     git add .github/workflows
     git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo"
-    git push
+    git push --quiet
     popd
   done
 }
