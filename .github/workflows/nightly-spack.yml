@@ -1,0 +1,170 @@
+name: Spack Nightly Workflow
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'nightly tag prefix'
+        default: ''
+
+jobs:
+  bulid_the_develop_release:
+    name: build_dev_release
+    runs-on: ubuntu-latest
+    container:
+      image: dunedaq/sl7-minimal:spack-externals
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Start the CI
+      run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
+
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+        
+    - name: setup directories and install spack
+      run: |
+          export SPACK_VERSION="0.17.1"
+          export DAQ_RELEASE="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+
+          export SPACK_RELEASE=/cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack-externals
+          export SPACK_TAR="v${SPACK_VERSION}.tar.gz"
+          mkdir -p ${SPACK_RELEASE}/${DAQ_RELEASE}
+          cd ${SPACK_RELEASE}
+          ln -s ${DAQ_RELEASE} last_successful
+          cd ${SPACK_RELEASE}/${DAQ_RELEASE}
+          wget https://github.com/spack/spack/archive/refs/tags/${SPACK_TAR}
+          tar xf $SPACK_TAR
+          ln -s spack-${SPACK_VERSION} spack-installation
+          rm -f $SPACK_TAR
+          source $SPACK_EXTERNALS/spack-0.17.1/share/spack/setup-env.sh
+          spack load py-pyyaml@5.3.1
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+          cd $DAQ_RELEASE_DIR
+          python3 scripts/spack/make-release-repo.py -u \
+            -i configs/dunedaq-develop/dunedaq-develop.yaml \
+            -t spack-repos/release-repo-template \
+            -r ${DAQ_RELEASE} \
+            -o ${SPACK_RELEASE}/${DAQ_RELEASE}
+
+          cd $SPACK_RELEASE/$DAQ_RELEASE
+          source spack-0.17.1/share/spack/setup-env.sh
+          spack repo add $SPACK_EXTERNALS/spack-repo-externals
+
+          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
+          repos:
+            - /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-repo-externals
+            - \$spack/var/spack/repos/builtin
+          EOT
+
+          spack repo list
+
+          # adding externals spack instance as an upstream
+
+          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
+          upstreams:
+            spack-externals:
+              install_tree: ${SPACK_EXTERNALS}/spack-0.17.1/opt/spack
+          EOT
+
+          cp $SPACK_EXTERNALS/spack-0.17.1/etc/spack/defaults/linux/compilers.yaml \
+            $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+          # verify the compilers have been added
+          spack compiler list
+
+          # modify the installation prefix for spack packages
+          # here we simply copy over the same settings as the externals instance
+          # use "\cp" as in RHEL, "cp" is an alias of "cp -i"; "\cp" will do "unalias".
+          \cp $SPACK_EXTERNALS/spack-0.17.1/etc/spack/defaults/config.yaml  $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+
+          # spack does not allow env names contain any dots 
+          export DUNEDAQ_SPACK_ENV=${DAQ_RELEASE//./-}
+          spack env create $DUNEDAQ_SPACK_ENV
+          spack env activate $DUNEDAQ_SPACK_ENV -p
+
+          # adding the release repo
+          spack repo add $SPACK_RELEASE/$DAQ_RELEASE/spack-repo
+
+          # add the release umbrella package to the spack environment
+          spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0
+
+          # run spack concretize to ensure the concretizer gets a successfully result before installation
+          spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
+
+          # install the release
+          spack install
+
+          spack load dunedaq@${DAQ_RELEASE}
+          python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
+          source $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv/bin/activate
+          python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
+          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
+          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$DAQ_RELEASE
+          tar zcf ${{ github.workspace }}/spack-nightly.tar.gz $SPACK_RELEASE/$DAQ_RELEASE ${{ github.workspace }}/spack-nightly
+
+    - name: upload nightly tarball
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_spack_release
+        path: ${{ github.workspace }}/spack-nightly.tar.gz
+
+
+  update_image:
+    name: update_image
+    runs-on: ubuntu-latest
+    needs: bulid_the_develop_release
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Download nightly release tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_spack_release
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            image_name="dunedaq/sl7-minimal:spack-externals"
+            tar xvf spack-nightly.tar.gz
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ${{ matrix.image }}
+          tags: |
+            type=raw,value=spack-dev
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
