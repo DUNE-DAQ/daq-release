@@ -39,8 +39,6 @@ jobs:
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack-externals
           export SPACK_TAR="v${SPACK_VERSION}.tar.gz"
           mkdir -p ${SPACK_RELEASE}/${DAQ_RELEASE}
-          cd ${SPACK_RELEASE}
-          ln -s ${DAQ_RELEASE} last_successful
           cd ${SPACK_RELEASE}/${DAQ_RELEASE}
           wget https://github.com/spack/spack/archive/refs/tags/${SPACK_TAR}
           tar xf $SPACK_TAR
@@ -109,16 +107,16 @@ jobs:
           python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$DAQ_RELEASE
-          mkdir -p ${{ github.workspace }}/spack-nightly
-          mv $SPACK_RELEASE/$DAQ_RELEASE ${{ github.workspace }}/spack-nightly
-          cd  ${{ github.workspace }}
-          tar zcf spack-nightly.tar.gz spack-nightly
+          cd $SPACK_RELEASE
+          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/spack-nightly
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/spack-nightly
 
     - name: upload nightly tarball
       uses: actions/upload-artifact@v3
       with:
         name: nightly_spack_release
-        path: ${{ github.workspace }}/spack-nightly.tar.gz
+        path: ${{ github.workspace }}/spack-nightly
 
 
   update_image:
@@ -140,9 +138,13 @@ jobs:
       - name: prepare cvmfs mirror
         run: |
             cd ${{ github.workspace }}/docker-build
+            mkdir -p spack-nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
             image_name="dunedaq/sl7-minimal:spack-externals"
-            tar xvf spack-nightly.tar.gz
+            cd spack-nightly
+            tar xvf ../${nightly_tag}.tar.gz
+            ln -s ${nightly_tag} last_successful
+            cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
