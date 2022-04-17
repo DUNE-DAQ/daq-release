@@ -122,6 +122,13 @@ jobs:
   update_image:
     name: update_image
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "dunedaq/sl7-minimal"
+            os_name: "c7"
+          - image: "dunedaq/c8-minimal"
+            os_name: "c8"
     needs: bulid_the_develop_release
     environment: dockerhub
     permissions:
@@ -140,7 +147,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p spack-nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="dunedaq/sl7-minimal:spack-externals"
+            image_name="${{ matrix.image }}:spack-externals"
             cd spack-nightly
             tar xvf ../${nightly_tag}.tar.gz
             ln -s ${nightly_tag} last_successful
@@ -162,7 +169,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            dunedaq/sl7-minimal
+            ${{ matrix.image }}
           tags: |
             type=raw,value=spack-dev
 
