@@ -209,6 +209,9 @@
         - name: sspmodules
           version: "dunedaq-develop"
           commit: null
+        - name: dtpctrllibs
+          version: "dunedaq-develop"
+          commit: null
     # the following section is not used currently
     pymodules:
         - name: pip              
