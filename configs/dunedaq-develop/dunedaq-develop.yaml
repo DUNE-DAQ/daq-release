@@ -81,6 +81,9 @@
         - name: gcc
           version: 8.2.0
           variant: "+binutils"
+        - name: openssh
+          version: 8.7p1
+          variant: ~  
 
     dunedaq:
         - name: daq-cmake
