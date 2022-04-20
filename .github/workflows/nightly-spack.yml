@@ -84,6 +84,7 @@ jobs:
           # here we simply copy over the same settings as the externals instance
           # use "\cp" as in RHEL, "cp" is an alias of "cp -i"; "\cp" will do "unalias".
           \cp $SPACK_EXTERNALS/spack-0.17.1/etc/spack/defaults/config.yaml  $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          sed -i 's/rpath/runpath/g' $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
 
           # spack does not allow env names contain any dots 
           export DUNEDAQ_SPACK_ENV=${DAQ_RELEASE//./-}
