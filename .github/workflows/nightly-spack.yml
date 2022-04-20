@@ -100,7 +100,7 @@ jobs:
           spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
 
           # install the release
-          spack install
+          #spack install
 
           spack load dunedaq@${DAQ_RELEASE}
           python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
