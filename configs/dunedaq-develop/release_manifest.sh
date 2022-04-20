@@ -135,6 +135,7 @@ dune_pythonmodules=(
   "packaging         21.0       pypi              " 
   "pexpect           4.8.0      pypi              " 
   "pluggy            0.13.1     pypi              " 
+  "psutil            5.9.0      pypi              "
   "ptyprocess        0.7.0      pypi              " 
   "py                1.10.0     pypi              " 
   "pydot             1.4.2      pypi              " 
