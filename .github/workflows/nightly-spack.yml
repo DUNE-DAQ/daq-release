@@ -105,6 +105,10 @@ jobs:
           python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
           source $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv/bin/activate
           python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
+          spack clean -a
+          despacktivate
+          spack clean -a
+
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$DAQ_RELEASE
           cd $SPACK_RELEASE
