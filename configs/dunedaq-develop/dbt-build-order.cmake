@@ -49,5 +49,6 @@ set(build_order "daq-cmake"
                 "uhallibs"
                 "dtpcontrols"
                 "rawdatautils"
+                "dtpctrllibs"
 )
 

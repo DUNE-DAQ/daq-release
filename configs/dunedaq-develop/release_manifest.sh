@@ -89,6 +89,7 @@ dune_packages=(
   "dtpcontrols       develop"
   "wibmod            develop"
   "sspmodules        develop"
+  "dtpctrllibs       develop"
 )
 
 dune_services=(
