@@ -31,6 +31,7 @@ class Trigger(CMakePackage):
     depends_on("networkmanager")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("readoutlibs")
     depends_on("hdf5libs")
     depends_on("cli11")
 
