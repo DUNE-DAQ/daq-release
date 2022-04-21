@@ -96,6 +96,9 @@ jobs:
 
           # add the release umbrella package to the spack environment
           spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0
+          spack add llvm@13.0.0%gcc@8.2.0
+          spack add gcc@9.4.0%gcc@8.2.0
+          spack add cppcheck@2.1%gcc@8.2.0
 
           # run spack concretize to ensure the concretizer gets a successfully result before installation
           spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
