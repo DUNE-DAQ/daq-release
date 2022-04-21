@@ -101,6 +101,7 @@ jobs:
           spack add cppcheck@2.1%gcc@8.2.0
 
           # run spack concretize to ensure the concretizer gets a successfully result before installation
+          set +e
           spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
 
           # install the release
