@@ -84,6 +84,7 @@ jobs:
           # here we simply copy over the same settings as the externals instance
           # use "\cp" as in RHEL, "cp" is an alias of "cp -i"; "\cp" will do "unalias".
           \cp $SPACK_EXTERNALS/spack-0.17.1/etc/spack/defaults/config.yaml  $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          sed -i 's/rpath/runpath/g' $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
 
           # spack does not allow env names contain any dots 
           export DUNEDAQ_SPACK_ENV=${DAQ_RELEASE//./-}
@@ -95,6 +96,9 @@ jobs:
 
           # add the release umbrella package to the spack environment
           spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0
+          spack add llvm@13.0.0%gcc@8.2.0
+          spack add gcc@9.4.0%gcc@8.2.0
+          spack add cppcheck@2.1%gcc@8.2.0
 
           # run spack concretize to ensure the concretizer gets a successfully result before installation
           spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
