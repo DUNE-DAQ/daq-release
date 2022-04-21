@@ -49,9 +49,7 @@ jobs:
           source $SPACK_EXTERNALS/spack-0.17.1/share/spack/setup-env.sh
           spack load py-pyyaml@5.3.1
           
-          export DAQ_RELEASE_DIR=$HOME/daq-release
-          
-          git clone https://github.com/DUNE-DAQ/daq-release $DAQ_RELEASE_DIR
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
           
           cd $DAQ_RELEASE_DIR
           
