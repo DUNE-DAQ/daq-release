@@ -109,10 +109,10 @@ jobs:
           spack add cppcheck@2.1%gcc@8.2.0
           
           # run spack concretize to ensure the concretizer gets a successfully result before installation
-          spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt
+          spack concretize --reuse | tee  $SPACK_RELEASE/$DAQ_RELEASE/concretizer_log.txt || true
           
           # install the release
-          spack install
+          spack install || true
 
           spack load dunedaq@${DAQ_RELEASE}
           python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
