@@ -62,6 +62,7 @@ jobs:
           cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
           repos:
             - /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-repo-externals
+            - /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-repo-N22-04-01
             - \$spack/var/spack/repos/builtin
           EOT
 
