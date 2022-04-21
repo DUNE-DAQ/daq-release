@@ -101,6 +101,7 @@ jobs:
           spack env activate $DUNEDAQ_SPACK_ENV -p
           
           # add the release umbrella package to the spack environment
+          spack add systems@${DAQ_RELEASE}%gcc@8.2.0
           spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0
           spack add llvm@13.0.0%gcc@8.2.0
           spack add gcc@9.4.0%gcc@8.2.0
