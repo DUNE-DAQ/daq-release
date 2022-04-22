@@ -98,7 +98,7 @@ dune_services=(
 )
 
 dune_pythonmodules=(
-  "pip               22.0.3     pypi              " 
+  "pip               22.0.4     pypi              " 
   "aniso8601         9.0.1      pypi              "
   "anyconfig         0.9.11     pypi              " 
   "anytree           2.8.0      pypi              " 
