@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: dunedaq-v2.11.0
 
     externals:
         - name: boost
