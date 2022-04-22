@@ -87,130 +87,130 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "dunedaq-develop"
+          version: v2.1.2
           commit: null
         - name: ers
-          version: "dunedaq-develop"
+          version: v1.1.6
           commit: null
         - name: logging
-          version: "dunedaq-develop"
+          version: v1.0.5
           commit: null
         - name: cmdlib
-          version: "dunedaq-develop"
+          version: v1.1.5
           commit: null
         - name: restcmd
-          version: "dunedaq-develop"
+          version: v1.1.5
           commit: null
         - name: opmonlib
-          version: "dunedaq-develop"
+          version: v1.3.5
           commit: null
         - name: rcif
-          version: "dunedaq-develop"
+          version: v1.1.2
           commit: null
         - name: appfwk
-          version: "dunedaq-develop"
+          version: v2.5.0
           commit: null
         - name: listrev
-          version: "dunedaq-develop"
+          version: v2.2.2
           commit: null
         - name: utilities
-          version: "dunedaq-develop"
+          version: v2.0.0
           commit: null
         - name: erskafka
-          version: "dunedaq-develop"
+          version: v1.4.0
           commit: null
         - name: kafkaopmon
-          version: "dunedaq-develop"
+          version: v1.3.2
           commit: null
         - name: influxopmon
-          version: "dunedaq-develop"
+          version: v1.5.3
           commit: null
         - name: ipm
-          version: "dunedaq-develop"
+          version: v2.4.0
           commit: null
         - name: serialization
-          version: "dunedaq-develop"
+          version: v1.2.4
           commit: null
         - name: dfmessages
-          version: "dunedaq-develop"
+          version: v2.3.0
           commit: null
         - name: detdataformats
-          version: "dunedaq-develop"
+          version: v3.3.3
           commit: null
         - name: detchannelmaps
-          version: "dunedaq-develop"
+          version: v1.0.3
           commit: null
         - name: daqdataformats
-          version: "dunedaq-develop"
+          version: v3.3.3
           commit: null
         - name: readoutlibs
-          version: "dunedaq-develop"
+          version: v1.0.4
           commit: null
         - name: readoutmodules
-          version: "dunedaq-develop"
+          version: v1.0.3
           commit: null
         - name: fdreadoutlibs
-          version: "dunedaq-develop"
+          version: v1.2.0
           commit: null
         - name: ndreadoutlibs
-          version: "dunedaq-develop"
+          version: v1.0.2
           commit: null
         - name: dfmodules
-          version: "dunedaq-develop"
+          version: v2.6.0
           commit: null
         - name: flxlibs
-          version: "dunedaq-develop"
+          version: v1.5.0
           commit: null
         - name: lbrulibs
-          version: "dunedaq-develop"
+          version: v1.1.0
           commit: null
         - name: networkmanager
-          version: "dunedaq-develop"
+          version: v1.0.4
           commit: null
         - name: nwqueueadapters
-          version: "dunedaq-develop"
+          version: v1.5.2
           commit: null
         - name: timing
-          version: "dunedaq-develop"
+          version: v6.1.4
           commit: null
         - name: timinglibs
-          version: "dunedaq-develop"
+          version: v1.6.3
           commit: null
         - name: trigemu
-          version: "dunedaq-develop"
+          version: v2.3.2
           commit: null
         - name: daqconf
-          version: "dunedaq-develop"
+          version: v5.1.0
           commit: null
         - name: trigger
-          version: "dunedaq-develop"
+          version: v1.3.4
           commit: null
         - name: triggeralgs
-          version: "dunedaq-develop"
+          version: v1.1.0
           commit: null
         - name: dqm
-          version: "dunedaq-develop"
+          version: v1.3.4
           commit: null
         - name: hdf5libs
-          version: "dunedaq-develop"
+          version: v2.1.0
           commit: null
         - name: rawdatautils
-          version: "dunedaq-develop"
+          version: v1.0.0
           commit: null
         - name: uhallibs
-          version: "dunedaq-develop"
+          version: v1.1.0
           commit: null
         - name: dtpcontrols
-          version: "dunedaq-develop"
-          commit: null
-        - name: wibmod
-          version: "dunedaq-develop"
-          commit: null
-        - name: sspmodules
-          version: "dunedaq-develop"
+          version: v2.0.1
           commit: null
         - name: dtpctrllibs
-          version: "dunedaq-develop"
+          version: v1.0.0
+          commit: null
+        - name: wibmod
+          version: v1.3.2
+          commit: null
+        - name: sspmodules
+          version: v1.0.3
           commit: null
     # the following section is not used currently
     pymodules:
@@ -317,7 +317,7 @@
           version: 0.5.7     
           source: github_brettviren  
         - name: nanorc           
-          version: 3.2.0     
+          version: 3.2.0
           source: github_DUNE-DAQ    
         - name: networkx         
           version: 2.6.3     
