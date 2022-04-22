@@ -212,6 +212,7 @@
         - name: sspmodules
           version: v1.0.3
           commit: null
+
     # the following section is not used currently
     pymodules:
         - name: pip
@@ -405,4 +406,4 @@
           source:  pypi
         - name: zmq
           version: 0.0.0
-        source:  pypi
+          source:  pypi
