@@ -105,8 +105,6 @@ dune_pythonmodules=(
   "attrs             20.2.0     pypi              " 
   "bidict            0.21.4     pypi              " 
   "bitarray          2.3.4      pypi              " 
-  "cactuscore-uhal-python38     2.8.1  pypi       "
-  "cactuscore-uhal-python38-gui 2.8.1  pypi       "
   "certifi           2020.12.5  pypi              " 
   "chardet           3.0.4      pypi              " 
   "click             8.1.2      pypi              " 

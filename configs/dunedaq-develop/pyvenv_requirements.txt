@@ -6,8 +6,6 @@ anytree==2.8.0
 attrs==20.2.0
 bidict==0.21.4
 bitarray==2.3.4
-cactuscore-uhal-python38==2.8.1
-cactuscore-uhal-python38-gui==2.8.1
 certifi==2020.12.5
 chardet==3.0.4
 click==8.1.2
