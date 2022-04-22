@@ -132,7 +132,7 @@ dune_pythonmodules=(
   "jsonnet           0.16.0     pypi              " 
   "jsonpointer       2.0        pypi              " 
   "jsonschema        3.2.0      pypi              " 
-  "MarkupSafe        2.1.1      pypi              " 
+  "MarkupSafe        2.0.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
   "nanorc            3.2.0      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 

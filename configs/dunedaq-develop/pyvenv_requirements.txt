@@ -33,7 +33,7 @@ Jinja2==3.1.1
 jsonnet==0.16.0
 jsonpointer==2.0
 jsonschema==3.2.0
-MarkupSafe==2.1.1
+MarkupSafe==2.0.1
 moo==0.5.7
 nanorc==3.2.0
 networkx==2.6.3
