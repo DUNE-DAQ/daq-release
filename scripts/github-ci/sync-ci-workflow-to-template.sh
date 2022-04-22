@@ -41,6 +41,7 @@ dune_packages_with_ci=(
  "sspmodules"      
  "uhallibs"
  "dtpcontrols"
+ "dtpctrllibs"
  "rawdatautils"
 )
 

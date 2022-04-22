@@ -14,7 +14,6 @@ dune_packages_with_ci=(
  "networkmanager"  
  "appfwk"          
  "listrev"         
- "daqdemos"        
  "serialization"   
  "nwqueueadapters" 
  "daqdataformats"  
@@ -42,6 +41,7 @@ dune_packages_with_ci=(
  "sspmodules"      
  "uhallibs"
  "dtpcontrols"
+ "dtpctrllibs"
  "rawdatautils"
 )
 
