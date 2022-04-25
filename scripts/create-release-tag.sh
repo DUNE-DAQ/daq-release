@@ -1,6 +1,6 @@
 #!/bin/bash
 
-release_name="dunedaq-v2.10.2"
+release_name="rc-dunedaq-v2.11.0-1"
 release_config_dir="NOTSET" # Example can be found at daq-release/configs/dunedaq-v2.0.0
 
 function git_checkout_and_tag {
@@ -25,7 +25,7 @@ function git_checkout_and_tag {
 	popd
 	continue
     fi
-    git tag -a ${release_name} -m "create release tag ${release_name}"
+    git tag -a ${release_name} -m "create release candidate tag ${release_name}"
     git push origin ${release_name}
     git tag | grep $release_name
     popd

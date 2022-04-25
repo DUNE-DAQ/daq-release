@@ -171,7 +171,7 @@
           version: v1.5.2
           commit: null
         - name: timing
-          version: v6.1.4
+          version: v6.1.5
           commit: null
         - name: timinglibs
           version: v1.6.3
@@ -180,13 +180,13 @@
           version: v2.3.2
           commit: null
         - name: daqconf
-          version: v5.1.0
+          version: v5.1.2
           commit: null
         - name: trigger
-          version: v1.3.5
+          version: v1.3.7
           commit: null
         - name: triggeralgs
-          version: v1.1.0
+          version: v1.1.1
           commit: null
         - name: dqm
           version: v1.3.4
