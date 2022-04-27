@@ -323,7 +323,7 @@
           version: 0.5.7
           source:  github_brettviren
         - name: nanorc
-          version: 3.2.0
+          version: 3.2.1
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3

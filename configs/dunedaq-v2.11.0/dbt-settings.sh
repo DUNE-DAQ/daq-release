@@ -66,7 +66,7 @@ dune_daqpackages=(
     "networkmanager   v1_0_4        e19:prof"
     "nwqueueadapters  v1_5_2        e19:prof"
     "timing           v6_1_5        e19:prof"
-    "timinglibs       v1_6_3d       e19:prof"
+    "timinglibs       v1_6_4        e19:prof"
     "trigemu          v2_3_2e       e19:prof"
     "daqconf          v5_1_2        e19:prof"
     "trigger          v1_3_7        e19:prof"

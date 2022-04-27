@@ -78,7 +78,7 @@ dune_packages=(
   "networkmanager   v1_0_4        e19:prof"
   "nwqueueadapters  v1_5_2        e19:prof"
   "timing           v6_1_5        e19:prof"
-  "timinglibs       v1_6_3d       e19:prof"
+  "timinglibs       v1_6_4        e19:prof"
   "trigemu          v2_3_2e       e19:prof"
   "daqconf          v5_1_2        e19:prof"
   "trigger          v1_3_7        e19:prof"
@@ -95,7 +95,7 @@ dune_packages=(
 
 dune_services=(
   "microservices	v1.0.0"
-  "nanorc               v3.2.0"
+  "nanorc               v3.2.1"
   "integrationtest      v1.3.2"
   "elisa-client-api     v0.1.0"
   "grafana-dashboards   v1.3.1"
@@ -138,7 +138,7 @@ dune_pythonmodules=(
   "jsonschema        3.2.0      pypi              " 
   "MarkupSafe        2.0.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
-  "nanorc            3.2.0      github_DUNE-DAQ   " 
+  "nanorc            3.2.1      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 
   "numpy             1.21.0     pypi              " 
   "openpyxl          3.0.5      pypi              " 

@@ -174,7 +174,7 @@
           version: v6.1.5
           commit: null
         - name: timinglibs
-          version: v1.6.3
+          version: v1.6.4
           commit: null
         - name: trigemu
           version: v2.3.2
@@ -324,7 +324,7 @@
           version: 0.5.7
           source:  github_brettviren
         - name: nanorc
-          version: 3.2.0
+          version: 3.2.1
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
