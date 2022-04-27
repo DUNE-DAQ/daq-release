@@ -145,7 +145,7 @@ dune_pythonmodules=(
   "ptyprocess        0.7.0      pypi              " 
   "py                1.10.0     pypi              " 
   "pydot             1.4.2      pypi              " 
-  "Pygments          2.10.0     pypi              " 
+  "Pygments          2.12.0     pypi              " 
   "pyparsing         2.4.7      pypi              " 
   "pyrsistent        0.17.3     pypi              " 
   "pytest            6.2.4      pypi              " 
