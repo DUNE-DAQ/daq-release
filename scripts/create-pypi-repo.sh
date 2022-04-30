@@ -24,8 +24,9 @@ function get_python_module {
 	github_url="https://github.com/${github_user}/${prod_name}/archive/refs/tags/v${prod_version}.tar.gz"
         if [ "$prod_name" = "elisa-client-api" ]; then
             orig_prod_name="elisa_client_api"
-	    github_url="https://github.com/${github_user}/${orig_prod_name}/archive/refs/tags/${prod_version}.tar.gz"
+	    github_url="https://github.com/${github_user}/${orig_prod_name}/archive/refs/tags/v${prod_version}.tar.gz"
         fi
+	echo "Checking $github_url ..."
 	if wget -q --method=HEAD $github_url; then
 	    echo "Found tag v${prod_version} in GitHub repo ${github_user}/${prod_name}."
 	else
