@@ -28,6 +28,10 @@ function get_python_module {
 	    echo "Tag v${prod_version} does not exist in GitHub repo ${github_user}/${prod_name}, trying the tag ${prod_version} without 'v' now."
 	    github_url="https://github.com/${github_user}/${prod_name}/archive/refs/tags/${prod_version}.tar.gz"
 	fi
+        if [ "$prod_name" = "elisa-client-api" ]; then
+            orig_prod_name="elisa_client_api"
+	    github_url="https://github.com/${github_user}/${orig_prod_name}/archive/refs/tags/${prod_version}.tar.gz"
+        fi
 	wget -O $repo_path/${prod_name}-${prod_version}.tar.gz $github_url 
     fi
   done
