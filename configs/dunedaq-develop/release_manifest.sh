@@ -134,6 +134,7 @@ dune_pythonmodules=(
   "jsonschema        3.2.0      pypi              " 
   "MarkupSafe        2.0.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
+  "matplotlib        3.5.2      pypi              "
   "nanorc            3.2.1      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 
   "numpy             1.21.0     pypi              " 

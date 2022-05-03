@@ -35,6 +35,7 @@ jsonpointer==2.0
 jsonschema==3.2.0
 MarkupSafe==2.0.1
 moo==0.5.7
+matplotlib==3.5.2
 nanorc==3.2.1
 networkx==2.6.3
 numpy==1.21.0
