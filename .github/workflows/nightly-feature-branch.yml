@@ -290,7 +290,7 @@ jobs:
         path: ${{ github.workspace }}/spack-nightly
 
   update_spack_image:
-    name: update_spack_image
+    name: ${{ matrix.os_name }}_update_spack_image
     runs-on: ubuntu-latest
     strategy:
       matrix:
