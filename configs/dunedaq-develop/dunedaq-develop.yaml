@@ -87,7 +87,7 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "develop"
+          version: "v2.1.2"
           commit: null
         - name: ers
           version: "develop"
@@ -108,13 +108,13 @@
           version: "develop"
           commit: null
         - name: appfwk
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: listrev
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: utilities
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: erskafka
           version: "develop"
@@ -129,10 +129,13 @@
           version: "develop"
           commit: null
         - name: serialization
-          version: "develop"
+          version: "feature/iomanager"
+          commit: null
+        - name: iomanager
+          version: "feature/iomanager"
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: detdataformats
           version: "develop"
@@ -144,28 +147,28 @@
           version: "develop"
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: readoutmodules
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: lbrulibs
           version: "develop"
           commit: null
         - name: networkmanager
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: nwqueueadapters
           version: "develop"
@@ -174,22 +177,22 @@
           version: "develop"
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: trigemu
           version: "develop"
           commit: null
         - name: daqconf
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: trigger
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: triggeralgs
           version: "develop"
           commit: null
         - name: dqm
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: hdf5libs
           version: "develop"
@@ -207,7 +210,7 @@
           version: "develop"
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: dtpctrllibs
           version: "develop"
