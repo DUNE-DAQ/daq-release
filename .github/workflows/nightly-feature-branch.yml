@@ -50,7 +50,6 @@ jobs:
       run: |
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
           source dbt-env.sh
-          cp -pr $GITHUB_WORKSPACE/sourcecode/* ./sourcecode
           dbt-workarea-env -s externals || true
           dbt-build.py
 
