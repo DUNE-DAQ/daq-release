@@ -20,6 +20,7 @@ class Readoutlibs(CMakePackage):
     depends_on("ers")
     depends_on("appfwk")
     depends_on("logging")
+    depends_on("iomanager")
     depends_on("opmonlib")
     depends_on("daqdataformats")
     depends_on("dfmessages")

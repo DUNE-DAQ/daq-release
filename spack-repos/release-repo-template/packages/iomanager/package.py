@@ -17,9 +17,12 @@ class Iomanager(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("appfwk")
+    depends_on("ipm")
+    depends_on("opmonlib")
+    depends_on('folly cxxstd=17')
     depends_on("serialization")
-    depends_on("dfmessages")
+    depends_on("utilities")
+    depends_on("networkmanager")
 
     depends_on("daq-cmake")
     depends_on("boost")

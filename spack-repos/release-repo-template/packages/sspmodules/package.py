@@ -24,6 +24,7 @@ class Sspmodules(CMakePackage):
     depends_on("readoutlibs")
     depends_on("fdreadoutlibs")
     depends_on("opmonlib")
+    depends_on("iomanager")
     depends_on("daq-cmake")
     depends_on('py-moo', type='build')
 

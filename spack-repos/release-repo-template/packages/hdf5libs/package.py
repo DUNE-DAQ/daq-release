@@ -20,8 +20,6 @@ class Hdf5libs(CMakePackage):
     depends_on("logging")
     depends_on("highfive ~mpi")
     depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("detchannelmaps")
     depends_on("cetlib")
     depends_on("ers")
     depends_on("daq-cmake")

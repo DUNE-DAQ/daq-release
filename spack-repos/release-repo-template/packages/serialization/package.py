@@ -18,7 +18,6 @@ class Serialization(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake")
-    depends_on("appfwk")
     depends_on("logging")
     depends_on("ers")
     depends_on("boost")
