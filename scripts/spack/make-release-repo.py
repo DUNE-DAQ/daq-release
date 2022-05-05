@@ -78,10 +78,6 @@ class DAQRelease:
                 irepo = f"https://github.com/DUNE-DAQ/{iname}"
                 iver = ipkg["version"]
                 ihash = ipkg["commit"]
-                if iver != "develop":
-                    itag = 'v' + iver
-                else:
-                    itag = iver
                 ihash = get_commit_hash(iname, iver)
                 self.rdict["dunedaq"][i]["commit"] = ihash
             # rewrite YAML
