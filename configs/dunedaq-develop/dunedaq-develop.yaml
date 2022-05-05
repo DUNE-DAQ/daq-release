@@ -173,9 +173,6 @@
         - name: networkmanager
           version: "feature/iomanager"
           commit: null
-        - name: nwqueueadapters
-          version: "develop"
-          commit: null
         - name: timing
           version: "develop"
           commit: null

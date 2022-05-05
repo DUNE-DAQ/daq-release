@@ -77,7 +77,6 @@ dune_packages=(
   "flxlibs           feature/iomanager"
   "lbrulibs          develop"
   "networkmanager    feature/iomanager"
-  "nwqueueadapters   develop"
   "timing            develop"
   "timinglibs        feature/iomanager"
   "trigemu           develop"
