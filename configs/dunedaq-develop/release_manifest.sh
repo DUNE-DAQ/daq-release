@@ -79,7 +79,7 @@ dune_packages=(
   "networkmanager    feature/iomanager"
   "timing            develop"
   "timinglibs        feature/iomanager"
-  "trigemu           develop"
+  "trigemu           feature/iomanager"
   "daqconf           feature/iomanager"
   "trigger           feature/iomanager"
   "triggeralgs       develop"

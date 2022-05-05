@@ -180,7 +180,7 @@
           version: "feature/iomanager"
           commit: null
         - name: trigemu
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
         - name: daqconf
           version: "feature/iomanager"
