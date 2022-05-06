@@ -21,6 +21,7 @@ class Triggeralgs(CMakePackage):
     depends_on("nlohmann-json")
     depends_on("trace")
     depends_on("detdataformats")
+    depends_on("boost")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

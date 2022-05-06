@@ -24,7 +24,7 @@ class Lbrulibs(CMakePackage):
     depends_on("ipm")
     depends_on("appfwk")
     depends_on("logging")
-    depends_on("boost")
+    depends_on("boost", type="build")
     depends_on("ers")
     depends_on("detdataformats")
     depends_on("py-moo", type='run')

@@ -24,6 +24,7 @@ class Sspmodules(CMakePackage):
     depends_on("readoutlibs")
     depends_on("fdreadoutlibs")
     depends_on("opmonlib")
+    depends_on("boost")
     depends_on("daq-cmake", type="build")
 
     def setup_run_environment(self, env):

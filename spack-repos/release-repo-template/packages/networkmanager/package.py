@@ -23,7 +23,7 @@ class Networkmanager(CMakePackage):
     depends_on("opmonlib")
     depends_on("ers")
     depends_on("nlohmann-json")
-    depends_on("boost")
+    depends_on("boost", type="build")
 
     depends_on("daq-cmake", type="build")
 

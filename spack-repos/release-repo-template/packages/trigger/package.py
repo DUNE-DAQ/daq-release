@@ -36,7 +36,7 @@ class Trigger(CMakePackage):
     depends_on("cli11")
 
 
-    depends_on('boost' )
+    depends_on('boost', type='build' )
     depends_on("py-moo", type='run')
 
 

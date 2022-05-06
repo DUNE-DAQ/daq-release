@@ -25,7 +25,7 @@ class Hdf5libs(CMakePackage):
     depends_on("cetlib")
     depends_on("ers")
     depends_on("daq-cmake", type="build")
-    depends_on("boost")
+    depends_on("boost", type="build")
     depends_on("nlohmann-json")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

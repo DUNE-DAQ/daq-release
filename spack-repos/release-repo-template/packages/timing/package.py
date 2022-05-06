@@ -22,6 +22,7 @@ class Timing(CMakePackage):
     depends_on('logging')
     depends_on('ers')
     depends_on('opmonlib')
+    depends_on("boost")
 
     depends_on('nlohmann-json')
     depends_on('uhal')

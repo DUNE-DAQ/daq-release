@@ -30,7 +30,7 @@ class Appfwk(CMakePackage):
     depends_on('folly cxxstd=17')
     depends_on('nlohmann-json')
     depends_on('py-moo', type='run')
-    depends_on('boost' )
+    depends_on('boost', type='build' )
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

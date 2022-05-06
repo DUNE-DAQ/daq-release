@@ -22,7 +22,7 @@ class Dfmessages(CMakePackage):
     depends_on("serialization")
     depends_on("daqdataformats")
 
-    depends_on('boost' )
+    depends_on('boost', type='build' )
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
