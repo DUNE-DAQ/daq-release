@@ -188,7 +188,7 @@ jobs:
             type=raw,value=spack-dev
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/docker-build
           push: true

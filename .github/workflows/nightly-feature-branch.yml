@@ -162,7 +162,7 @@ jobs:
             type=raw,value=dev-feature
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/docker-build-${{ matrix.os_name }}
           push: true
@@ -346,7 +346,7 @@ jobs:
             type=raw,value=spack-dev-feature
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
