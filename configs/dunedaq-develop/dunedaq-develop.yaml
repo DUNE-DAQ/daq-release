@@ -210,7 +210,7 @@
           version: "feature/iomanager"
           commit: null
         - name: dtpctrllibs
-          version: "develop"
+          version: "feature/iomanager"
           commit: null
     # the following section is not used currently
     pymodules:
