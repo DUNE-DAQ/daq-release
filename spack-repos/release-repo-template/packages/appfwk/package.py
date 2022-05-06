@@ -18,7 +18,7 @@ class Appfwk(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on('daq-cmake')
+    depends_on('daq-cmake', type='build')
     depends_on('logging')
     depends_on('cetlib')
     depends_on('ers')
@@ -29,7 +29,7 @@ class Appfwk(CMakePackage):
 
     depends_on('folly cxxstd=17')
     depends_on('nlohmann-json')
-    depends_on('py-moo', type='build')
+    depends_on('py-moo', type='run')
     depends_on('boost' )
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

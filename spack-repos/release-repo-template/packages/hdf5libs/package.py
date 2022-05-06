@@ -24,8 +24,7 @@ class Hdf5libs(CMakePackage):
     depends_on("detchannelmaps")
     depends_on("cetlib")
     depends_on("ers")
-    depends_on("daq-cmake")
-    depends_on('py-moo', type='build')
+    depends_on("daq-cmake", type="build")
     depends_on("boost")
     depends_on("nlohmann-json")
 

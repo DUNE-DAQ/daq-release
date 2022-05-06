@@ -18,7 +18,7 @@ class Trigger(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("ers")
     depends_on("serialization")
     depends_on("logging")
@@ -37,7 +37,7 @@ class Trigger(CMakePackage):
 
 
     depends_on('boost' )
-    depends_on("py-moo", type='build')
+    depends_on("py-moo", type='run')
 
 
 

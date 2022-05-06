@@ -24,8 +24,7 @@ class Sspmodules(CMakePackage):
     depends_on("readoutlibs")
     depends_on("fdreadoutlibs")
     depends_on("opmonlib")
-    depends_on("daq-cmake")
-    depends_on('py-moo', type='build')
+    depends_on("daq-cmake", type="build")
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

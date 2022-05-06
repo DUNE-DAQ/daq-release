@@ -17,7 +17,7 @@ class Ers(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on('daq-cmake')
+    depends_on('daq-cmake', type='build')
     depends_on('boost')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

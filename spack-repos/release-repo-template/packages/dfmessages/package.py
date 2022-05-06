@@ -17,7 +17,7 @@ class Dfmessages(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("nwqueueadapters")
     depends_on("serialization")
     depends_on("daqdataformats")

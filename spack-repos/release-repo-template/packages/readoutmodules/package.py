@@ -30,8 +30,8 @@ class Readoutmodules(CMakePackage):
     depends_on('folly cxxstd=17')
     depends_on("boost")
 
-    depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+    depends_on("daq-cmake", type="build")
+    depends_on("py-moo", type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -17,7 +17,7 @@ class Erskafka(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("ers")
     depends_on("librdkafka")
     depends_on('boost' )

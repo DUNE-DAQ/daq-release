@@ -17,7 +17,7 @@ class Rawdatautils(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("daqdataformats")
     depends_on("detdataformats")
 

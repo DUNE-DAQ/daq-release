@@ -17,13 +17,12 @@ class Dtpcontrols(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("ers")
     depends_on("logging")
     depends_on("uhal")
     depends_on("uhallibs")
 
-    depends_on("py-pybind11")
     depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

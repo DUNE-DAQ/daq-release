@@ -10,7 +10,6 @@ class Uhal(Package):
 
     version('2.8.1', sha256='73f26639a16ea65cecd367045ad0767a7eb4f5f8f488df1bbf121fc47aec3142', extension='tar.gz')
 
-    #depends_on('boost@1.75.0+debug', type='build')
     depends_on('boost', type='build')
     depends_on('pugixml@1.11', type=('build', 'link', 'run'))
     depends_on('gettext@0.21', type=('build', 'link', 'run'))

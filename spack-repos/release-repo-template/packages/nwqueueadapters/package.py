@@ -17,7 +17,7 @@ class Nwqueueadapters(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("appfwk")
     depends_on("utilities")
     depends_on("networkmanager")
@@ -27,7 +27,7 @@ class Nwqueueadapters(CMakePackage):
     depends_on("opmonlib")
     depends_on("ers")
     depends_on("boost")
-    depends_on("py-moo", type='build')
+    depends_on("py-moo", type='run')
 
     depends_on("nlohmann-json")
 

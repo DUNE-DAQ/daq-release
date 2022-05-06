@@ -27,7 +27,7 @@ class Ndreadoutlibs(CMakePackage):
     depends_on('folly cxxstd=17')
     depends_on("boost")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

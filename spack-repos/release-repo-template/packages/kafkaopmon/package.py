@@ -17,7 +17,7 @@ class Kafkaopmon(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("opmonlib")
     depends_on("cpr")
     depends_on("curl")

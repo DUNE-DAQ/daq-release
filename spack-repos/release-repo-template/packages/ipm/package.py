@@ -17,7 +17,7 @@ class Ipm(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("logging")
     depends_on("ers")
     depends_on("utilities")

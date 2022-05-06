@@ -18,7 +18,7 @@ class Dfmodules(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("trigger")
     depends_on("triggeralgs")
     depends_on("dfmessages")
@@ -30,7 +30,7 @@ class Dfmodules(CMakePackage):
     depends_on("ers")
 
     depends_on("logging")
-    depends_on("py-moo", type='build')
+    depends_on("py-moo", type='run')
 
     depends_on("highfive ~mpi")
     depends_on("boost")

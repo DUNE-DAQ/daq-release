@@ -18,7 +18,7 @@ class Dqm(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("readoutlibs")
 
     depends_on("appfwk")
@@ -31,7 +31,7 @@ class Dqm(CMakePackage):
     depends_on("boost")
     depends_on("timinglibs")
     depends_on("librdkafka")
-    depends_on("py-moo", type='build')
+    depends_on("py-moo", type='run')
     depends_on("openssl")
     depends_on("krb5")
     depends_on("cyrus-sasl")

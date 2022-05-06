@@ -17,7 +17,7 @@ class Restcmd(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
+    depends_on("daq-cmake", type="build")
     depends_on("cetlib")
     depends_on("logging")
     depends_on("cmdlib")
