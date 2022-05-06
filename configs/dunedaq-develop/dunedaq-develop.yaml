@@ -167,6 +167,9 @@
         - name: flxlibs
           version: "feature/iomanager"
           commit: null
+        - name: lbrulibs
+          version: "feature/iomanager"
+          commit: null
         - name: networkmanager
           version: "feature/iomanager"
           commit: null

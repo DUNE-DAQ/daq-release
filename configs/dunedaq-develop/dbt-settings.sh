@@ -64,6 +64,7 @@ dune_daqpackages=(
   "ndreadoutlibs    v1_0_2        e19:prof"
   "dfmodules        v2_5_1        e19:prof"
   "flxlibs          v1_3_1        e19:prof"
+  "lbrulibs         v1_1_0        e19:prof"
   "networkmanager   v1_0_3        e19:prof"
   "timing           v6_1_0        e19:prof"
   "timinglibs       v1_6_0        e19:prof"

@@ -74,6 +74,7 @@ dune_packages=(
   "fdreadoutlibs     feature/iomanager"
   "ndreadoutlibs     feature/iomanager"
   "dfmodules         feature/iomanager"
+  "lbrulibs          feature/iomanager"
   "flxlibs           feature/iomanager"
   "networkmanager    feature/iomanager"
   "timing            develop"
