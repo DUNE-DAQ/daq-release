@@ -91,8 +91,8 @@ jobs:
           \cp $SPACK_EXTERNALS/spack-0.17.1/etc/spack/defaults/config.yaml  $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
           sed -i 's/rpath/runpath/g' $SPACK_RELEASE/$DAQ_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
           
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@8.2.0 | tee $SPACK_RELEASE/$DAQ_RELEASE/spec_dunedaq_log.txt
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@8.2.0
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@8.2.0^trace/q7kxpcj | tee $SPACK_RELEASE/$DAQ_RELEASE/spec_dunedaq_log.txt
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@8.2.0^trace/q7kxpcj
           
           # spack does not allow env names contain any dots 
           export DUNEDAQ_SPACK_ENV=${DAQ_RELEASE//./-}
@@ -101,7 +101,7 @@ jobs:
           
           # add the release umbrella package to the spack environment
           spack add systems@${DAQ_RELEASE}%gcc@8.2.0
-          spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0
+          spack add dunedaq@${DAQ_RELEASE}%gcc@8.2.0^trace/q7kxpcj
           spack add llvm@13.0.0%gcc@8.2.0
           spack add gcc@9.4.0%gcc@8.2.0
           spack add cppcheck@2.1%gcc@8.2.0
