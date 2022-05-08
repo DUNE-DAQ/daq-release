@@ -10,7 +10,7 @@ from spack import *
 class Dfmessages(CMakePackage):
     """Dataflow messages"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dfmessages/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dfmessages.git"
 
     maintainers = ["jcfreeman2"]

@@ -10,7 +10,7 @@ from spack import *
 class Networkmanager(CMakePackage):
     """Provides an interface for performing network sends and receives directly from DAQ modules"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/networkmanager/"
+    homepage = "XHOMEPAGEX"
     git      = "https://github.com/DUNE-DAQ/networkmanager.git"
 
     maintainers = ['jcfreeman2']

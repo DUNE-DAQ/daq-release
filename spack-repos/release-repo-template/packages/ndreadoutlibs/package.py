@@ -10,7 +10,7 @@ from spack import *
 class Ndreadoutlibs(CMakePackage):
     """No documentation yet (Dec-11-2021)"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ndreadoutlibs"
+    homepage = "XHOMEPAGEX"
     git      = "https://github.com/DUNE-DAQ/ndreadoutlibs.git"
 
     maintainers = ['jcfreeman2']

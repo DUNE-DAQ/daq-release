@@ -10,7 +10,7 @@ from spack import *
 class Flxlibs(CMakePackage):
     """DAQ modules, utilities, and scripts for Upstream FELIX Readout Software"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/flxlibs/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/flxlibs.git"
 
     maintainers = ["jcfreeman2"]

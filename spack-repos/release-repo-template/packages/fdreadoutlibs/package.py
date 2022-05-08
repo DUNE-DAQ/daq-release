@@ -10,7 +10,7 @@ from spack import *
 class Fdreadoutlibs(CMakePackage):
     """Classes for working with far detector data (WIB, SSP, etc.)"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/fdreadoutlibs/"
+    homepage = "XHOMEPAGEX"
     git      = "https://github.com/DUNE-DAQ/fdreadoutlibs.git"
 
     maintainers = ['jcfreeman2']

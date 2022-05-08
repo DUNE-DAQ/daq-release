@@ -10,7 +10,7 @@ from spack import *
 class Triggeralgs(CMakePackage):
     """Trigger algorithms"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/triggeralgs/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/triggeralgs.git"
 
     maintainers = ["jcfreeman2"]

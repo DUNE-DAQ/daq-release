@@ -10,7 +10,7 @@ from spack import *
 class Daqdataformats(CMakePackage):
     """DUNE DAQ data formats"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/daqdataformats/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/daqdataformats.git"
 
     maintainers = ["jcfreeman2"]

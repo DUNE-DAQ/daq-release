@@ -10,7 +10,7 @@ from spack import *
 class Dataformats(CMakePackage):
     """Raw data reinterpretation utilities"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/dunedaq-v2.8.0/packages/dataformats/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dataformats.git"
 
     maintainers = ["jcfreeman2"]

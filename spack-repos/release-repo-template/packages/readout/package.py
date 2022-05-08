@@ -10,7 +10,7 @@ from spack import *
 class Readout(CMakePackage):
     """Upstream DAQ readout, DAQ modules, CCM interface implementations"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/dunedaq-v2.8.0/packages/readout/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/readout.git"
 
     maintainers = ["jcfreeman2"]

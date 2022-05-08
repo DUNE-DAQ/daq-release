@@ -10,7 +10,7 @@ from spack import *
 class Nwqueueadapters(CMakePackage):
     """DAQ modules that connect appfwk queues to IPM network connections"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/nwqueueadapters/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/nwqueueadapters.git"
 
     maintainers = ["jcfreeman2"]

@@ -10,7 +10,7 @@ from spack import *
 class Opmonlib(CMakePackage):
     """Operational monitoring library"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/opmonlib/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/opmonlib.git"
 
     maintainers = ['jcfreeman2']

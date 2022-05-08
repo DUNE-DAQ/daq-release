@@ -10,7 +10,7 @@ from spack import *
 class Lbrulibs(CMakePackage):
     """DAQ modules, utilities, and scripts for DUNE-ND Upstream DAQ Low Bandwidth Readout Unit"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/lbrulibs/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/lbrulibs.git"
 
     maintainers = ["jcfreeman2"]

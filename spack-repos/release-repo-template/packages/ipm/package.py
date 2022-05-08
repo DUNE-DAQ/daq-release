@@ -10,7 +10,7 @@ from spack import *
 class Ipm(CMakePackage):
     """Message passing between processes"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ipm/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/ipm.git"
 
     maintainers = ["jcfreeman2"]

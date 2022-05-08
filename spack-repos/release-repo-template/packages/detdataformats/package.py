@@ -10,7 +10,7 @@ from spack import *
 class Detdataformats(CMakePackage):
     """DUNE detectors data formats"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/detdataformats/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/detdataformats.git"
 
     maintainers = ["jcfreeman2"]

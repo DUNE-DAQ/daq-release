@@ -10,7 +10,7 @@ from spack import *
 class Cmdlib(CMakePackage):
     """Interfaces for commanded objects"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/cmdlib/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/cmdlib.git"
 
     maintainers = ['jcfreeman2']

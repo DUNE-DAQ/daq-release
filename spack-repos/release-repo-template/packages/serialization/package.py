@@ -10,7 +10,7 @@ from spack import *
 class Serialization(CMakePackage):
     """Utilities for C++ object serialization/deserialization"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/serialization/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/serialization.git"
 
     maintainers = ["jcfreeman2"]

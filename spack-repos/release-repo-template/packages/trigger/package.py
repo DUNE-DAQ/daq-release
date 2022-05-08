@@ -10,7 +10,7 @@ from spack import *
 class Trigger(CMakePackage):
     """Modules that make up the DUNE FD DAQ trigger system"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/trigger/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/trigger.git"
 
     maintainers = ["jcfreeman2"]

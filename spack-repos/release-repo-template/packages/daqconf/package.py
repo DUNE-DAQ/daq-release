@@ -10,7 +10,7 @@ from spack import *
 class Daqconf(CMakePackage):
     """Application to read out Felix data and store it in HDF5 files on disk"""
 
-    homepage = "https://github.com/DUNE-DAQ/daqconf"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/daqconf.git"
 
     maintainers = ["jcfreeman2"]

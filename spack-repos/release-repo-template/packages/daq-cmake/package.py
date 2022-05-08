@@ -10,7 +10,7 @@ from spack import *
 class DaqCmake(CMakePackage):
     """CMake support for DUNE-DAQ packages"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/"
+    homepage = "XHOMEPAGEX"
     git      = "https://github.com/DUNE-DAQ/daq-cmake.git"
 
     maintainers = ["jcfreeman2"]

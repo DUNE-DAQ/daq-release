@@ -10,7 +10,7 @@ from spack import *
 class Wibmod(CMakePackage):
     """WIB configuration and monitoring interface for DUNE's appfwk"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/wibmod/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/wibmod.git"
 
     maintainers = ["jcfreeman2"]

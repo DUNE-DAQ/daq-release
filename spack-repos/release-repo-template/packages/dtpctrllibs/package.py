@@ -10,7 +10,7 @@ from spack import *
 class Dtpctrllibs(CMakePackage):
     """DAQ modules for controlling DUNE Trigger Primitive generation firmware."""
 
-    homepage = "https://github.com/DUNE-DAQ/dtpctrllibs"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dtpctrllibs.git"
 
     maintainers = ["jcfreeman2"]

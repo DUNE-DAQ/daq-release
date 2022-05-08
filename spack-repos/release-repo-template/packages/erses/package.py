@@ -10,7 +10,7 @@ from spack import *
 class Erses(CMakePackage):
     """Insert ERS messages into a searchable database"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/dunedaq-v2.8.0/packages/erses/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/erses.git"
 
     maintainers = ["jcfreeman2"]

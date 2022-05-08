@@ -10,7 +10,7 @@ from spack import *
 class Hdf5libs(CMakePackage):
     """FIXME: Put a proper description of your package here."""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/hdf5libs/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/hdf5libs.git"
 
     maintainers = ["jcfreeman2"]

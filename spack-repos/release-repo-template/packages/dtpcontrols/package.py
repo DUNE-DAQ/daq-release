@@ -10,7 +10,7 @@ from spack import *
 class Dtpcontrols(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dtpcontrols/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dtpcontrols.git"
 
     maintainers = ["jcfreeman2"]

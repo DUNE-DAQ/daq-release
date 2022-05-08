@@ -10,7 +10,7 @@ from spack import *
 class Erskafka(CMakePackage):
     """The erskafka plugin"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/erskafka/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/erskafka.git"
 
     maintainers = ["jcfreeman2"]

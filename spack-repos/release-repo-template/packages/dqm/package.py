@@ -10,7 +10,7 @@ from spack import *
 class Dqm(CMakePackage):
     """Software and tools for data monitoring"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dqm/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dqm.git"
 
     maintainers = ["jcfreeman2"]

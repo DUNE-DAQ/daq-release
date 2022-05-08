@@ -10,7 +10,7 @@ from spack import *
 class Timing(CMakePackage):
     """C++ interface to the timing firmware"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/timing/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/timing.git"
 
     maintainers = ["jcfreeman2"]

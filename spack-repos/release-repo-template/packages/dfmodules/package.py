@@ -10,7 +10,7 @@ from spack import *
 class Dfmodules(CMakePackage):
     """Dataflow Applications"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dfmodules/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/dfmodules.git"
 
     maintainers = ["jcfreeman2"]

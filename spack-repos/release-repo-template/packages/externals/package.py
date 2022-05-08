@@ -10,7 +10,7 @@ from spack import *
 class Externals(BundlePackage):
     """A dummy package meant to pull in packages needed by DUNE DAQ developers"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
+    homepage = "XHOMEPAGEX"
 
     version("XRELEASEX")
 

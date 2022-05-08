@@ -10,7 +10,7 @@ from spack import *
 class Restcmd(CMakePackage):
     """HTTP REST backend based CommandFacility"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/restcmd/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/restcmd.git"
 
     maintainers = ["jcfreeman2"]

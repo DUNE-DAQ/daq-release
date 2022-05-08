@@ -3,7 +3,9 @@
 import os
 import yaml
 import argparse
+import re
 import shutil
+import sh
 import subprocess
 import tempfile
 
@@ -99,6 +101,31 @@ class DAQRelease:
             f.write(repo_string)
         return
 
+    def generate_homepage_url(self, name, ver):
+        if re.search(r"^dunedaq-v[0-9]", ver):
+            ver_in_url = ver[len("dunedaq-"):]
+            official_doc_page = f"https://dune-daq-sw.readthedocs.io/en/{ver_in_url}/packages/{name}/"
+        else:
+            official_doc_page = f"https://dune-daq-sw.readthedocs.io/en/latest/packages/{name}/"
+
+        try:
+            output = sh.curl(["--head", "--silent", "--fail", official_doc_page])
+            if output.exit_code == 0:
+                return official_doc_page
+        except sh.ErrorReturnCode:
+            pass # OK, we'll try another URL
+
+        github_page = f"https://github.com/DUNE-DAQ/{name}/"
+
+        try:
+            output = sh.curl(["--head", "--silent", "--fail", github_page])
+            if output.exit_code == 0:
+                return github_page
+        except sh.ErrorReturnCode:
+            # Now we give up
+            return "No official documentation page or even DUNE-DAQ GitHub page"
+
+
     def generate_daq_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
@@ -114,13 +141,15 @@ class DAQRelease:
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 lines = lines.replace("XHASHX", ipkg["commit"])
-                # get commit hash
+                lines = lines.replace("XHOMEPAGEX", self.generate_homepage_url(ipkg["name"], self.rdict["release"]))
+
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
+
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
-                print(f"Info: package.py has been written at {ipkgpy}.")
+                print(f"Info: package.py has been written at {os.getcwd()}/{ipkgpy}.")
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):

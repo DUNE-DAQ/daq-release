@@ -10,7 +10,7 @@ from spack import *
 class Detchannelmaps(CMakePackage):
     """DUNE detectors channel maps"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/detchannelmaps/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/detchannelmaps.git"
 
     maintainers = ["jcfreeman2"]

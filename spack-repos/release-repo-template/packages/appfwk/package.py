@@ -10,7 +10,7 @@ from spack import *
 class Appfwk(CMakePackage):
     """Home of daq_application and tools for writing DAQ modules"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/appfwk/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/appfwk.git"
 
     maintainers = ["jcfreeman2"]

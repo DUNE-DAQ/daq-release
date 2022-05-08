@@ -10,7 +10,7 @@ from spack import *
 class Timinglibs(CMakePackage):
     """Timing control and monitoring"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/timinglibs/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/timinglibs.git"
 
     maintainers = ["jcfreeman2"]

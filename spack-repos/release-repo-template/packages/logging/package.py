@@ -10,7 +10,7 @@ from spack import *
 class Logging(CMakePackage):
     """Contains the functions DUNE DAQ packages use to output text"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/logging/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/logging.git"
 
     maintainers = ["jcfreeman2"]

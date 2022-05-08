@@ -10,7 +10,7 @@ from spack import *
 class Rcif(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/rcif/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/rcif.git"
 
     maintainers = ["jcfreeman2"]

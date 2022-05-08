@@ -10,7 +10,7 @@ from spack import *
 class Minidaqapp(CMakePackage):
     """Application to read out Felix data and store it in HDF5 files on disk"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/minidaqapp/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/minidaqapp.git"
 
     maintainers = ["jcfreeman2"]

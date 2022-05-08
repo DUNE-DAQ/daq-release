@@ -10,7 +10,7 @@ from spack import *
 class Trigemu(CMakePackage):
     """Trigger decision emulator for readout application tests"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/trigemu/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/trigemu.git"
 
     maintainers = ["jcfreeman2"]

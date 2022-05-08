@@ -11,7 +11,7 @@ import os
 class Listrev(CMakePackage):
     """Educational example of DAQ modules for new developers"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/listrev/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/listrev.git"
 
     maintainers = ["jcfreeman2"]

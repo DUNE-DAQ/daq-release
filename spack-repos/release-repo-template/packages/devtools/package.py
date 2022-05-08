@@ -10,7 +10,7 @@ from spack import *
 class Devtools(BundlePackage):
     """The DUNE DAQ development tools"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
+    homepage = "XHOMEPAGEX"
 
     version("XRELEASEX")
 

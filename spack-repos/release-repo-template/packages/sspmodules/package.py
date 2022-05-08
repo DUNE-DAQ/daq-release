@@ -10,7 +10,7 @@ from spack import *
 class Sspmodules(CMakePackage):
     """SiPM Signal Processor (SSP) readout related modules and utilities"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/sspmodules/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/sspmodules.git"
 
     maintainers = ["jcfreeman2"]

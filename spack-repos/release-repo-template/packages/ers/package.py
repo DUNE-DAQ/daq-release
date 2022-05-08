@@ -10,7 +10,7 @@ from spack import *
 class Ers(CMakePackage):
     """A fork of the ATLAS Error Reporting System"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ers/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/ers.git"
 
     maintainers = ["jcfreeman2"]

@@ -10,7 +10,7 @@ from spack import *
 class Kafkaopmon(CMakePackage):
     """Converts JSON objects into Kafka messages"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/kafkaopmon/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/kafkaopmon.git"
 
     maintainers = ["jcfreeman2"]

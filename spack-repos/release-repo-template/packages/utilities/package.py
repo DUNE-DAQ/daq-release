@@ -10,7 +10,7 @@ from spack import *
 class Utilities(CMakePackage):
     """Self-explanatory"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/utilities/"
+    homepage = "XHOMEPAGEX"
     git      = "https://github.com/DUNE-DAQ/utilities.git"
 
     maintainers = ['jcfreeman2']

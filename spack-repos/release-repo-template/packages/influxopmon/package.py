@@ -10,7 +10,7 @@ from spack import *
 class Influxopmon(CMakePackage):
     """Influx database based plugin for operational monitoring"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/influxopmon/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/influxopmon.git"
 
     maintainers = ["jcfreeman2"]
