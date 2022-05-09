@@ -25,6 +25,7 @@ class Timing(CMakePackage):
 
     depends_on('nlohmann-json')
     depends_on('uhal')
+    depends_on("py-pybind11")
     depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

@@ -7,28 +7,26 @@
 from spack import *
 
 
-class Readoutlibs(CMakePackage):
-    """Base classes for construction of readout-related DAQ modules"""
+class Iomanager(CMakePackage):
+    """Package providing a unified API"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/readoutlibs/"
-    git      = "https://github.com/DUNE-DAQ/readoutlibs.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/iomanager/"
+    git =      "https://github.com/DUNE-DAQ/iomanager.git"
 
-    maintainers = ['jcfreeman2']
+    maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("iomanager")
+    depends_on("ipm")
     depends_on("opmonlib")
-    depends_on("daqdataformats")
-    depends_on("dfmessages")
     depends_on('folly cxxstd=17')
-    depends_on("boost")
+    depends_on("serialization")
+    depends_on("utilities")
+    depends_on("networkmanager")
 
     depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+    depends_on("boost")
+    depends_on('py-moo', type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -21,9 +21,9 @@ class Cmdlib(CMakePackage):
     depends_on('nlohmann-json')
     depends_on('cetlib')
     depends_on('logging')
-    depends_on('boost' )
     depends_on('ers')
 
+    depends_on('intel-tbb')
     depends_on('py-moo', type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
