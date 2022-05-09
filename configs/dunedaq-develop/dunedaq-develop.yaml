@@ -111,13 +111,13 @@
           version: "develop"
           commit: null
         - name: appfwk
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: listrev
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: utilities
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: erskafka
           version: "develop"
@@ -132,13 +132,13 @@
           version: "develop"
           commit: null
         - name: serialization
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: iomanager
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: dfmessages
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: detdataformats
           version: "develop"
@@ -150,49 +150,49 @@
           version: "develop"
           commit: null
         - name: readoutlibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: readoutmodules
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: fdreadoutlibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: ndreadoutlibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: dfmodules
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: flxlibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: lbrulibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: networkmanager
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: timing
           version: "develop"
           commit: null
         - name: timinglibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: trigemu
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: daqconf
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: trigger
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: triggeralgs
           version: "develop"
           commit: null
         - name: dqm
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: hdf5libs
           version: "develop"
@@ -210,10 +210,10 @@
           version: "develop"
           commit: null
         - name: sspmodules
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
         - name: dtpctrllibs
-          version: "feature/iomanager"
+          version: "develop"
           commit: null
     # the following section is not used currently
     pymodules:
