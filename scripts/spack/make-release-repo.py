@@ -122,9 +122,13 @@ class DAQRelease:
             if output.exit_code == 0:
                 return github_page
         except sh.ErrorReturnCode:
-            # Now we give up
-            return "No official documentation page or even DUNE-DAQ GitHub page"
+            pass
 
+        # We're probably dealing with an umbrella package if we've made it to this point
+        if re.search(r"^dunedaq-v[0-9]", ver):
+            return f"https://dune-daq-sw.readthedocs.io/en/{ver_in_url}/"
+        else:
+            return f"https://dune-daq-sw.readthedocs.io/en/latest/"
 
     def generate_daq_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
@@ -163,6 +167,7 @@ class DAQRelease:
             with open(itemp, 'r') as f:
                 lines = f.read()
                 lines = lines.replace("XRELEASEX", self.rdict["release"])
+                lines = lines.replace("XHOMEPAGEX", self.generate_homepage_url(ipkg, self.rdict["release"]))
 
             # now add additional deps:
             if ipkg == 'dunedaq':
@@ -180,13 +185,14 @@ class DAQRelease:
                     if not self.rdict["release"].startswith("dunedaq"):
                         iver = self.rdict["release"]
                     lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
-                print(f"Info: package.py has been written at {ipkgpy}.")
+                print(f"Info: package.py has been written at {os.getcwd()}/{ipkgpy}.")
         return
 
     def generate_repo(self, outdir, tempdir, update_hash, release_name):
