@@ -33,7 +33,6 @@ class Readout(CMakePackage):
     depends_on("logging")
 
     depends_on('boost')
-    depends_on("py-moo", type='build')
 
 
 

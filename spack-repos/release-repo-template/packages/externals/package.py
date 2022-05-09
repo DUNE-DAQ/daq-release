@@ -8,12 +8,14 @@ from spack import *
 
 
 class Externals(BundlePackage):
-    """A dummy package meant to pull in packages needed by DUNE DAQ developers"""
+    """An umbrella package meant to pull in non-DUNE packages needed by DUNE packages"""
 
     homepage = "XHOMEPAGEX"
 
     version("XRELEASEX")
 
+    variant('dev', default=False, description='Load in tools used to develop DUNE DAQ packages')
+
     # Generate from release YAML file
-    depends_on("devtools@XRELEASEX")
+    depends_on("devtools@XRELEASEX", when="+dev")
     # Additional dependencies defined in YAML file to be filled below

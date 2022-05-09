@@ -8,7 +8,7 @@ from spack import *
 
 
 class Devtools(BundlePackage):
-    """The DUNE DAQ development tools"""
+    """An umbrella package which pulls in the DUNE DAQ development tools"""
 
     homepage = "XHOMEPAGEX"
 

@@ -22,7 +22,6 @@ class Rawdatautils(CMakePackage):
     depends_on("detdataformats")
 
     depends_on("boost", type="build")
-    depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

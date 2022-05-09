@@ -22,7 +22,6 @@ class Uhallibs(CMakePackage):
     depends_on("uhal")
 
     depends_on("boost")
-    depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

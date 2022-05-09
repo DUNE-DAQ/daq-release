@@ -8,7 +8,7 @@ from spack import *
 
 
 class Dunedaq(BundlePackage):
-    """A dummy package meant to pull in all the packages in the DUNE DAQ suite"""
+    """An umbrella package meant to pull in all the packages in the DUNE DAQ suite"""
 
     homepage = "XHOMEPAGEX"
 
@@ -19,7 +19,10 @@ class Dunedaq(BundlePackage):
             values=('Debug', 'Release', 'RelWithDebInfo'),
             multi=True)
 
-    depends_on("externals@XRELEASEX", when="@XRELEASEX")
+    variant('dev', default=False, description='Load in tools used to develop DUNE DAQ packages')
+
+    depends_on("externals@XRELEASEX +dev", when="@XRELEASEX +dev")
+    depends_on("externals@XRELEASEX ~dev", when="@XRELEASEX ~dev")
 
     def setup_run_environment(self, env):
         env.set('DUNE_DAQ_BASE_RELEASE', "XRELEASEX")

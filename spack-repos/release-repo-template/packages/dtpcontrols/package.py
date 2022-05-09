@@ -24,7 +24,6 @@ class Dtpcontrols(CMakePackage):
     depends_on("uhallibs")
     depends_on("boost")
 
-    depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
