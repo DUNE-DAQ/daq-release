@@ -184,7 +184,11 @@ class DAQRelease:
                 else:
                     if not self.rdict["release"].startswith("dunedaq"):
                         iver = self.rdict["release"]
-                    lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+
+                    if iname == "daq-cmake":
+                        lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}} +dev")'
+                    else:
+                        lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
 
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
