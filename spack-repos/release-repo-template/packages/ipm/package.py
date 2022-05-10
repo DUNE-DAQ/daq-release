@@ -26,6 +26,7 @@ class Ipm(CMakePackage):
     depends_on("opmonlib")
 
     depends_on("cppzmq")
+    depends_on('py-moo', type='build')
     depends_on("nlohmann-json")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
