@@ -15,7 +15,6 @@ class Dpdk(MesonPackage):
 
     maintainers = ['jcfreeman2']
 
-    version('21.11', sha256='3246e3ed68ee2b369a5d8be2c06cf108a669e157f4d41c5bcbbb216bf5abd3a1')
     version('22.03', sha256='b2de5f08bcd5733f90d4d7e6c032515908dad8fc8d267ac6a253442d9b83a7c5')
     version('21.11.1', sha256='e0d1c442087ead6759d129ce7d7e3b87b4a01cd71047c621ebc35bb637027658')
     version('21.11', sha256='3246e3ed68ee2b369a5d8be2c06cf108a669e157f4d41c5bcbbb216bf5abd3a1')
