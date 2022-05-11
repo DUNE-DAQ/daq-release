@@ -19,9 +19,9 @@ class DaqCmake(CMakePackage):
 
     variant('dev', default=True, description='Load in tools used to develop DUNE DAQ packages')
 
-    depends_on("py-pybind11", type=("run"), when="+dev")
-    depends_on("py-moo", type=("run"), when="+dev")
-    depends_on("cmake", when="+dev")
+    depends_on("py-pybind11", type=("link", "run"), when="+dev")
+    depends_on("py-moo", type=("link", "run"), when="+dev")
+    depends_on("cmake", type=("build", "link", "run"), when="+dev")
     
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
