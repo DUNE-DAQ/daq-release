@@ -186,7 +186,8 @@ class DAQRelease:
                         iver = self.rdict["release"]
 
                     if iname == "daq-cmake":
-                        lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}} +dev")'
+                        lines += f'\n        depends_on(f"{iname}@{iver}+dev build_type={{build_type}}", when=f"build_type={{build_type}} +dev")'
+                        lines += f'\n        depends_on(f"{iname}@{iver}~dev build_type={{build_type}}", when=f"build_type={{build_type}} ~dev")'
                     else:
                         lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
 
