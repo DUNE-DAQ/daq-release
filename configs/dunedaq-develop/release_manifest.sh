@@ -85,6 +85,7 @@ dune_packages=(
   "triggeralgs       develop"
   "dqm               develop"
   "hdf5libs          develop"
+  "rawdatautils      develop"
   "uhallibs          develop"
   "dtpcontrols       develop"
   "wibmod            develop"
