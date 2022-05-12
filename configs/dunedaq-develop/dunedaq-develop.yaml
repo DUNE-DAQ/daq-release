@@ -65,6 +65,9 @@
         - name: intel-tbb
           version: 2020.3
           variant: ~
+        - name: dpdk
+          version: 20.02
+          variant: ~
 
     devtools:
         - name: cmake
