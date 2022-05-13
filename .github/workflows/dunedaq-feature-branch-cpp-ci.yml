@@ -80,7 +80,7 @@ jobs:
           [[ -z ${!setup_env_repo+x} ]] || unsetup $REPO
           cp -pr $GITHUB_WORKSPACE/sourcecode/* $GITHUB_WORKSPACE/dev/sourcecode
           dbt-build.sh
-          dbt-build.sh --lint
+          #dbt-build.sh --lint
           $GITHUB_WORKSPACE/daq-release/scripts/upsify-daq-pkgs.py -w $GITHUB_WORKSPACE/dev -o /tarballs
           
     - name: upload UPS tarball and log file

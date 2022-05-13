@@ -19,23 +19,20 @@ class Dqm(CMakePackage):
 
 
     depends_on("daq-cmake", type="build")
-    depends_on("readoutlibs")
-
-    depends_on("appfwk")
-    depends_on("opmonlib")
+    depends_on("daqdataformats")
     depends_on("detdataformats")
     depends_on("detchannelmaps")
-    depends_on("daqdataformats")
-    depends_on("highfive ~mpi")
-    depends_on("ers")
-    depends_on("boost")
-    depends_on("timinglibs")
+    depends_on("dfmessages")
+    depends_on("iomanager")
     depends_on("librdkafka")
+    depends_on("timinglibs")
+    depends_on("boost")
+    depends_on("fftw ~mpi")
     depends_on("py-moo", type='run')
+
     depends_on("openssl")
     depends_on("krb5")
     depends_on("cyrus-sasl")
-    depends_on("fftw ~mpi")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

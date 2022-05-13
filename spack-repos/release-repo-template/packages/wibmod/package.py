@@ -22,10 +22,6 @@ class Wibmod(CMakePackage):
     depends_on("appfwk")
     depends_on("cppzmq")
     depends_on("protobuf")
-    depends_on("highfive ~mpi")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("detchannelmaps")
 
     depends_on("daq-cmake", type="build")
     depends_on('py-moo', type='run')

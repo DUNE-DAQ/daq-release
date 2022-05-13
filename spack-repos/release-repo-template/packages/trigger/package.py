@@ -17,29 +17,23 @@ class Trigger(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-
     depends_on("daq-cmake", type="build")
     depends_on("ers")
+    depends_on('boost', type='build' )
     depends_on("serialization")
     depends_on("logging")
     depends_on("appfwk")
     depends_on("triggeralgs")
     depends_on("dfmessages")
     depends_on("timinglibs")
-    depends_on("nwqueueadapters")
     depends_on("utilities")
-    depends_on("networkmanager")
+    depends_on("iomanager")
     depends_on("daqdataformats")
     depends_on("detdataformats")
-    depends_on("readoutlibs")
+    depends_on("detchannelmaps")
     depends_on("hdf5libs")
     depends_on("cli11")
-
-
-    depends_on('boost', type='build' )
     depends_on("py-moo", type='run')
-
-
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

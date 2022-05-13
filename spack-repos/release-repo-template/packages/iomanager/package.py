@@ -7,20 +7,26 @@
 from spack import *
 
 
-class Dfmessages(CMakePackage):
-    """Dataflow messages"""
+class Iomanager(CMakePackage):
+    """Package providing a unified API"""
 
-    homepage = "XHOMEPAGEX"
-    git =      "https://github.com/DUNE-DAQ/dfmessages.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/iomanager/"
+    git =      "https://github.com/DUNE-DAQ/iomanager.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake", type="build")
-    depends_on("daqdataformats")
+    depends_on("ipm")
+    depends_on("opmonlib")
+    depends_on('folly cxxstd=17')
     depends_on("serialization")
-    depends_on('boost', type='build' )
+    depends_on("utilities")
+    depends_on("networkmanager")
+
+    depends_on("daq-cmake")
+    depends_on("boost")
+    depends_on('py-moo', type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
@@ -34,4 +40,3 @@ class Dfmessages(CMakePackage):
         env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
-

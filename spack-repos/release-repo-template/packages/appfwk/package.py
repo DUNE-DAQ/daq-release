@@ -25,9 +25,9 @@ class Appfwk(CMakePackage):
     depends_on('cmdlib')
     depends_on('rcif')
     depends_on('networkmanager')
+    depends_on('iomanager')
     depends_on('opmonlib')
 
-    depends_on('folly cxxstd=17')
     depends_on('nlohmann-json')
     depends_on('py-moo', type='run')
     depends_on('boost', type='build' )

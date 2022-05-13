@@ -29,7 +29,7 @@ class Timinglibs(CMakePackage):
     depends_on("opmonlib")
     depends_on("cmdlib")
     depends_on("ers")
-    depends_on("networkmanager")
+    depends_on("iomanager")
     depends_on("boost")
 
     depends_on("nlohmann-json")

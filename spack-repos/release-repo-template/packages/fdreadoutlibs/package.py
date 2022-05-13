@@ -18,11 +18,13 @@ class Fdreadoutlibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("ers")
+    depends_on("iomanager")
     depends_on("appfwk")
     depends_on("logging")
     depends_on("opmonlib")
     depends_on("readoutlibs")
     depends_on("daqdataformats")
+    depends_on("detchannelmaps")
     depends_on("detdataformats")
     depends_on("trigger")
     depends_on("triggeralgs")

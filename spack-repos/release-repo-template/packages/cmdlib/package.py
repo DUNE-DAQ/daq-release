@@ -18,10 +18,10 @@ class Cmdlib(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type="build")
-    depends_on('nlohmann-json')
     depends_on('cetlib')
+    depends_on('intel-tbb')
+    depends_on('nlohmann-json')
     depends_on('logging')
-    depends_on('boost' )
     depends_on('ers')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

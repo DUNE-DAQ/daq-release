@@ -18,6 +18,7 @@ class Sspmodules(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("appfwk")
+    depends_on("iomanager")
     depends_on("logging")
     depends_on("ers")
     depends_on("detdataformats")
