@@ -18,7 +18,7 @@ dune_devtools=(
 
 dune_externals=(
     "cetlib            v3_11_01     e19:prof"
-    "TRACE             v3_16_02"
+    "TRACE             v3_17_04"
     "fftw              v3_3_10"
     "folly             v2021_12_13  e19:prof"
     "nlohmann_json     v3_9_0c      e19:prof"
