@@ -5,7 +5,6 @@ import yaml
 import argparse
 import re
 import shutil
-import sh
 import subprocess
 import tempfile
 
@@ -104,21 +103,21 @@ class DAQRelease:
         else:
             official_doc_page = f"https://dune-daq-sw.readthedocs.io/en/latest/packages/{name}/"
 
-        try:
-            output = sh.curl(["--head", "--silent", "--fail", official_doc_page])
-            if output.exit_code == 0:
-                return official_doc_page
-        except sh.ErrorReturnCode:
-            pass # OK, we'll try another URL
+        irun = subprocess.Popen(f"curl --head --silent --fail {official_doc_page}" , shell=True, stdout=subprocess.PIPE)
+        out = irun.communicate()
+        retval = irun.returncode
+
+        if retval == 0:
+            return official_doc_page
 
         github_page = f"https://github.com/DUNE-DAQ/{name}/"
 
-        try:
-            output = sh.curl(["--head", "--silent", "--fail", github_page])
-            if output.exit_code == 0:
-                return github_page
-        except sh.ErrorReturnCode:
-            pass
+        irun = subprocess.Popen(f"curl --head --silent --fail {github_page}" , shell=True, stdout=subprocess.PIPE)
+        out = irun.communicate()
+        retval = irun.returncode
+
+        if retval == 0:
+            return github_page
 
         # We're probably dealing with an umbrella package if we've made it to this point
         if re.search(r"^dunedaq-v[0-9]", ver):
