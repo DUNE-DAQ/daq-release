@@ -23,7 +23,6 @@ class Erskafka(CMakePackage):
     depends_on('boost' )
 
     depends_on("openssl")
-    depends_on("cyrus-sasl")
     depends_on("nlohmann-json")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

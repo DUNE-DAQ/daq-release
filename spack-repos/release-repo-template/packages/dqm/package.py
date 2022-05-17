@@ -32,7 +32,6 @@ class Dqm(CMakePackage):
 
     depends_on("openssl")
     depends_on("krb5")
-    depends_on("cyrus-sasl")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

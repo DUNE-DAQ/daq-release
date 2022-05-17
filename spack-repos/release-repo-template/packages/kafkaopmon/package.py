@@ -21,7 +21,6 @@ class Kafkaopmon(CMakePackage):
     depends_on("opmonlib")
     depends_on("cpr")
     depends_on("curl")
-    depends_on("cyrus-sasl")
     depends_on("librdkafka")
     depends_on("ers")
     depends_on("openssl")
