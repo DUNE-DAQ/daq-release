@@ -126,14 +126,14 @@ jobs:
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$RC_RELEASE
           cd $SPACK_RELEASE
           tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/spack-nightly
-          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/spack-nightly
+          mkdir -p $GITHUB_WORKSPACE/candidate-releases
+          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidate-releases
 
-    - name: upload spack nightly tarball
+    - name: upload candidate release  tarball
       uses: actions/upload-artifact@v3
       with:
         name: nightly_spack_release
-        path: ${{ github.workspace }}/spack-nightly
+        path: ${{ github.workspace }}/candidate-releases
 
   update_spack_image:
     name: ${{ matrix.os_name }}_update_spack_image
@@ -145,33 +145,32 @@ jobs:
             os_name: "c7"
           - image: "dunedaq/c8-minimal"
             os_name: "c8"
-    needs: build_the_develop_release_spack
+    needs: build_the_candidate_release_spack
     environment: dockerhub
     permissions:
       packages: write
       contents: read
 
     steps:
-      - name: Download spack nightly release tarball artifact
+      - name: Download spack candidate release tarball artifact
         uses: actions/download-artifact@v3
         with:
-          name: nightly_spack_release
+          name: candidate_release
           path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-nightly
+      - name: prepare cvmfs mirror for candidate release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p spack-nightly
-            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            mkdir -p candidate_releases
+            RC_RELEASE=${{ github.event.inputs.release-tag }}
             image_name="${{ matrix.image }}:spack-externals"
-            cd spack-nightly
-            tar xvf ../${nightly_tag}.tar.gz
-            ln -s ${nightly_tag} last_successful
+            cd candidate_releases
+            tar xvf ../${RC_RELEASE}.tar.gz
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
-            echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
+            echo "ENV CANDIDATE_RELEASE ${RC_RELEASE}" >> Dockerfile
+            echo "ADD candidate_releases /cvmfs/dunedaq-development.opensciencegrid.org/candidate_releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
@@ -187,7 +186,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-rc
+            type=raw,value=spack-candidate-release
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
