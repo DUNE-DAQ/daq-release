@@ -33,9 +33,10 @@ Jinja2==3.1.1
 jsonnet==0.16.0
 jsonpointer==2.0
 jsonschema==3.2.0
+kubernetes==23.6.0
 MarkupSafe==2.0.1
 moo==0.5.7
-nanorc==3.2.2
+nanorc==3.2.3
 networkx==2.6.3
 numpy==1.21.0
 openpyxl==3.0.5
