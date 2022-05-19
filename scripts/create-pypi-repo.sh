@@ -7,7 +7,6 @@ manifest_file=$1
 repo_path=$2
 HERE=$(cd $(dirname $(readlink -f ${BASH_SOURCE})) && pwd)
 
-# convert manifest YAML file to bash array?
 $HERE/spack/make-release-repo.py -o /tmp -i $HERE/../configs/dunedaq-develop/dunedaq-develop.yaml --pypi-manifest
 source /tmp/pypi_manifest.sh
 
@@ -25,17 +24,17 @@ function get_python_module {
 	pip2pi $repo_path ${prod_name}==${prod_version}
     else
 	github_user=${prod_path#*_}
-	github_url="https://github.com/${github_user}/${prod_name}/archive/refs/tags/v${prod_version}.tar.gz"
+        github_url="https://codeload.github.com/${github_user}/${prod_name}/tar.gz/refs/tags/v${prod_version}"
         if [ "$prod_name" = "elisa-client-api" ]; then
             orig_prod_name="elisa_client_api"
-	    github_url="https://github.com/${github_user}/${orig_prod_name}/archive/refs/tags/v${prod_version}.tar.gz"
+            github_url="https://codeload.github.com/${github_user}/${orig_prod_name}/tar.gz/refs/tags/v${prod_version}"
         fi
 	echo "Checking $github_url ..."
-	if wget -q --method=HEAD $github_url; then
+	if curl -I $github_url | grep "200 OK"; then
 	    echo "Found tag v${prod_version} in GitHub repo ${github_user}/${prod_name}."
 	else
 	    echo "Tag v${prod_version} does not exist in GitHub repo ${github_user}/${prod_name}, trying the tag ${prod_version} without 'v' now."
-	    github_url="https://github.com/${github_user}/${prod_name}/archive/refs/tags/${prod_version}.tar.gz"
+            github_url="https://codeload.github.com/${github_user}/${prod_name}/tar.gz/refs/tags/${prod_version}"
 	fi
 	wget -O $repo_path/${prod_name}-${prod_version}.tar.gz $github_url 
     fi
