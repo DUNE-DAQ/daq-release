@@ -18,7 +18,7 @@ jobs:
     name: update_pypi_repo
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/c8-minimal:spack-externals
+      image: dunedaq/sl7-minimal:spack-externals
     defaults:
       run:
         shell: bash
