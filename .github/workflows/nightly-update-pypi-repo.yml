@@ -62,7 +62,7 @@ jobs:
           cd $GITHUB_WORKSPACE/workdir
           source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
           spack load py-pyyaml@5.3.1
-          $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv_requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
+          $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
           python -m venv dbt-pyvenv
           source dbt-pyvenv/bin/activate
           python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt

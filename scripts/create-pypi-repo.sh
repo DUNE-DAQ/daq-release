@@ -7,11 +7,9 @@ manifest_file=$1
 repo_path=$2
 HERE=$(cd $(dirname $(readlink -f ${BASH_SOURCE})) && pwd)
 
+# convert manifest YAML file to bash array?
 $HERE/spack/make-release-repo.py -o /tmp -i $HERE/../configs/dunedaq-develop/dunedaq-develop.yaml --pypi-manifest
 source /tmp/pypi_manifest.sh
-
-# convert manifest YAML file to bash array?
-source $manifest_file
 
 function get_python_module {
   prd_list_name=$1[@]
