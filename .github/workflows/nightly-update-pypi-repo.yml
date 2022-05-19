@@ -67,6 +67,13 @@ jobs:
           source dbt-pyvenv/bin/activate
           python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
 
+    - name: generaete pip freeze
+      run: |
+          cd $GITHUB_WORKSPACE/workdir
+          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
+          spack load py-pyyaml@5.3.1
+          source dbt-pyvenv/bin/activate
+          pip freeze > $GITHUB_WORKSPACE/pip-freeze.txt
     
     - name: upload pypi-repo
       uses: actions/upload-artifact@v3
@@ -79,3 +86,9 @@ jobs:
       with:
         name: pyvenv_requirements
         path: ${{ github.workspace }}/pyvenv_requirements.txt
+
+    - name: upload pip-freeze.txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: pip_freeze
+        path: ${{ github.workspace }}/pip-freeze.txt
