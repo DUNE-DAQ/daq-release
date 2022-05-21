@@ -195,7 +195,7 @@ jobs:
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest || true
-          dbt-setup-release -n ${{ matrix.link }}
+          dbt-setup-release -n ${{ matrix.link }} || true
           mkdir -p ${GITHUB_WORKSPACE}/${{ matrix.os_name }}
           declare -x > ${GITHUB_WORKSPACE}/${{ matrix.os_name }}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${{ matrix.os_name }}/dbt-setup-release-env.sh
