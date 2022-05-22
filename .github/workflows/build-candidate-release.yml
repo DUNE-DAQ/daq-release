@@ -132,7 +132,7 @@ jobs:
     - name: upload candidate release  tarball
       uses: actions/upload-artifact@v3
       with:
-        name: nightly_spack_release
+        name: candidate_release
         path: ${{ github.workspace }}/candidate-releases
 
   update_spack_image:
