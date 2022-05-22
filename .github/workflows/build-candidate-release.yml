@@ -114,6 +114,11 @@ jobs:
           # install the release
           spack install || true
 
+          $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+          python -m venv dbt-pyvenv
+          source dbt-pyvenv/bin/activate
+          python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
+
           spack load dunedaq@${RC_RELEASE}
           python3.8 -m venv $SPACK_RELEASE/$RC_RELEASE/dbt-pyvenv 
           source $SPACK_RELEASE/$RC_RELEASE/dbt-pyvenv/bin/activate
