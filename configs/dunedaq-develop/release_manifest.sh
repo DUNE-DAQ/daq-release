@@ -79,7 +79,6 @@ dune_packages=(
   "networkmanager    develop"
   "timing            develop"
   "timinglibs        develop"
-  "trigemu           develop"
   "daqconf           develop"
   "trigger           develop"
   "triggeralgs       develop"
