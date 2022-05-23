@@ -114,21 +114,18 @@ jobs:
           # install the release
           spack install || true
 
+          spack load dunedaq@${RC_RELEASE}
           $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
           python -m venv dbt-pyvenv
           source dbt-pyvenv/bin/activate
           python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
 
-          spack load dunedaq@${RC_RELEASE}
-          python3.8 -m venv $SPACK_RELEASE/$RC_RELEASE/dbt-pyvenv 
-          source $SPACK_RELEASE/$RC_RELEASE/dbt-pyvenv/bin/activate
-          python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
           spack clean -a
           spack env deactivate
           spack clean -a
-          #generate pyvenv_requirements.txt from release YAML file;
-          #cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$RC_RELEASE
-          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$RC_RELEASE
+          
+          cp $GITHUB_WORKSPACE/pyvenv_requirements.txt $SPACK_RELEASE/$RC_RELEASE
+          cp $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/dbt-build-order.cmake $SPACK_RELEASE/$RC_RELEASE
           cd $SPACK_RELEASE
           tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/candidate-releases
