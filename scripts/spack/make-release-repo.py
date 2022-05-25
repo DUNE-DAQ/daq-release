@@ -105,7 +105,7 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                if not self.rdict["release"].startswith("dunedaq"):
+                if "dunedaq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
