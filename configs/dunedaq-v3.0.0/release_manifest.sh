@@ -89,7 +89,7 @@ dune_packages=(
     "dtpcontrols         v2_0_2            e19:prof"
     "dtpctrllibs         v1_0_1            e19:prof"
     "wibmod              v1_3_2e           e19:prof"
-    "sspmodules          v1_1_0            e19:prof"
+    "sspmodules          v1_1_1            e19:prof"
 )
 
 dune_services=(
