@@ -144,7 +144,7 @@
           version: "v3.4.0"
           commit: null
         - name: detchannelmaps
-          version: "v1.0.3"
+          version: "v1.1.0"
           commit: null
         - name: daqdataformats
           version: "v3.3.3"
@@ -180,7 +180,7 @@
           version: "v1.7.0"
           commit: null
         - name: daqconf
-          version: "v5.2.0"
+          version: "v5.2.1"
           commit: null
         - name: trigger
           version: "v1.4.1"
@@ -189,7 +189,7 @@
           version: "v1.1.2"
           commit: null
         - name: dqm
-          version: "v1.3.5"
+          version: "v1.3.6"
           commit: null
         - name: hdf5libs
           version: "v2.1.0"
