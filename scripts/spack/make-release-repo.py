@@ -78,10 +78,6 @@ class DAQRelease:
                 irepo = f"https://github.com/DUNE-DAQ/{iname}"
                 iver = ipkg["version"]
                 ihash = ipkg["commit"]
-                if iver != "develop":
-                    itag = 'v' + iver
-                else:
-                    itag = iver
                 ihash = get_commit_hash(iname, iver)
                 self.rdict["dunedaq"][i]["commit"] = ihash
             # rewrite YAML
@@ -109,7 +105,7 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                if not self.rdict["release"].startswith("dunedaq"):
+                if "dunedaq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
@@ -148,7 +144,7 @@ class DAQRelease:
                     else:
                         lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
                 else:
-                    if not self.rdict["release"].startswith("dunedaq"):
+                    if "dunedaq" not in self.rdict["release"]:
                         iver = self.rdict["release"]
                     lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
             lines += '\n'
@@ -169,6 +165,28 @@ class DAQRelease:
         self.generate_umbrella_package(outdir, tempdir)
         return
 
+    def generate_pypi_manifest(self, output_file):
+        with open(output_file, 'w') as f:
+            f.write("dune_pythonmodules=(\n")
+            for i in self.rdict['pymodules']:
+                iname = i["name"]
+                iversion = i["version"]
+                isource = i["source"]
+                iline = f' "{iname}   {iversion}   {isource}"'
+                f.write(iline + '\n')
+            f.write(")\n")
+        return
+
+    def generate_pyvenv_requirements(self, output_file):
+        with open(output_file, 'w') as f:
+            f.write("--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple\n")
+            for i in self.rdict['pymodules']:
+                iname = i["name"]
+                iversion = i["version"]
+                iline = f'{iname}=={iversion}'
+                f.write(iline + '\n')
+        return
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -186,10 +204,23 @@ if __name__ == "__main__":
     parser.add_argument('-u', '--update-hash', action='store_true',
                         help="whether to update commit hash in the YAML file;")
     parser.add_argument('-o', '--output-path', required=True,
-                        help="path for the generated repo;")
+                        help="path to the generated spack repo;")
+    parser.add_argument('--pypi-manifest', action='store_true',
+                        help="whether to generate file containing bash array for python modules;")
+    parser.add_argument('--pyvenv-requirements', action='store_true',
+                        help="whether to generate requirements file for pyvenv;")
 
     args = parser.parse_args()
 
     daq_release = DAQRelease(args.input_manifest)
-    daq_release.generate_repo(args.output_path, args.template_path,
-                              args.update_hash, args.release_name)
+    if args.pypi_manifest:
+        os.makedirs(args.output_path, exist_ok=True)
+        outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
+        daq_release.generate_pypi_manifest(outfile)
+    if args.pyvenv_requirements:
+        os.makedirs(args.output_path, exist_ok=True)
+        outfile = os.path.join(args.output_path, 'pyvenv_requirements.txt')
+        daq_release.generate_pyvenv_requirements(outfile)
+    if not args.pypi_manifest and not args.pyvenv_requirements:
+        daq_release.generate_repo(args.output_path, args.template_path,
+                                  args.update_hash, args.release_name)
