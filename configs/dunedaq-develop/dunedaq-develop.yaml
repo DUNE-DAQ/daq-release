@@ -259,6 +259,9 @@
         - name: commonmark
           version: 0.9.1
           source:  pypi
+        - name: docker
+          version: 5.0.3
+          source:  pypi
         - name: elisa-client-api
           version: 0.1.0
           source:  github_DUNE-DAQ
@@ -381,6 +384,9 @@
           source:  pypi
         - name: pyrsistent
           version: 0.17.3
+          source:  pypi
+        - name: PySocks
+          version: 1.7.1
           source:  pypi
         - name: pytest
           version: 6.2.4
