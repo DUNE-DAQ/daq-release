@@ -212,7 +212,7 @@
         - name: dtpctrllibs
           version: "develop"
           commit: null
-    # the following section is not used currently
+
     pymodules:
         - name: pip
           version: 22.0.4
