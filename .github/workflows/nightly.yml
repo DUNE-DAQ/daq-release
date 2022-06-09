@@ -194,7 +194,7 @@ jobs:
     - name: create dbt-setup-release-env.sh
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt legacy-ups || true
           dbt-setup-release -n ${{ matrix.link }} || true
           mkdir -p ${GITHUB_WORKSPACE}/${{ matrix.os_name }}
           declare -x > ${GITHUB_WORKSPACE}/${{ matrix.os_name }}/dbt-setup-release-env.sh
