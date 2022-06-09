@@ -20,29 +20,29 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
 * Required long-lived branches: `develop`, `master`;
 * Default branch: `develop`;
 * Short-lived branches:
-  * feature branches
-    * branch off from `develop`,
-    * merge back to `develop`;
-  * hotfix branches
-    * branch off from `master`,
-    * merge back to `develop` and `master`
-  * release branches
-    * branch off from `develop`,
-    * merge back to `develop` and `master`
+    * feature branches
+        * branch off from `develop`,
+        * merge back to `develop`;
+    * hotfix branches
+        * branch off from `master`,
+        * merge back to `develop` and `master`
+    * release branches
+        * branch off from `develop`,
+        * merge back to `develop` and `master`
 * Protected branch settings: protected branches are optional **for the moment**, repo maintainers can choose to "protect" `develop` and/or `master` branches. [Protections rules](https://docs.github.com/en/github/administering-a-repository/about-protected-branches#about-branch-protection-settings) can be further set up against those branches, such as require pull request reviews before merging, restrict who can push to matching branches, etc.
 
 ## Tags of DAQ repositories
 
 We have two types of tags for DAQ repositories:
 
-1. Version tags: 
- * made by repo maintainers
- * in the format of `vX.Y.Z` where `X`, `Y` and `Z` is a digit for `MAJOR, MINOR, PATCH` version respectively;
- * to a minimum, if `X` is not advanced in a newer DAQ release, and a new tag is needed, the minor version `Y` should be advanced.
-2. DAQ release tags: 
- * made by the software coordination team;
- * alias to a version tag;
- * in the format of `dunedaq-vX.X.X` where X is a digit.
+* Version tags: 
+    * made by repo maintainers
+    * in the format of `vX.Y.Z` where `X`, `Y` and `Z` is a digit for `MAJOR, MINOR, PATCH` version respectively;
+    * at a minimum, if `X` is not advanced in a newer DAQ release, and a new tag is needed, the minor version `Y` should be advanced.
+* DAQ release tags: 
+    * made by the software coordination team;
+    * alias to a version tag;
+    * in the format of `dunedaq-vX.X.X` where X is a digit.
 
 ## Development workflow (feature branches)
 
@@ -53,10 +53,10 @@ Developer is recommended to follow the following development workflow regardless
 3. Make code development, commit, and push the topic branch to GitHub; (`git push -u origin dingpf/issue_12_feature_dev_demo`)
 4. Create pull request to `develop` branch when the topic branch is ready to be reviewed and merged, link the issue created in step 1 to the pull request;
 5. The pull request gets reviewed by other developers who can:
-   * comment on the commits in the PR;
-   * request changes;
-   * approve pull requests and merge to `develop`;
-   * delete the pull request branch once it's merged (enabled by GitHub by default), and close the linked issue (automatically done by GitHub for the linked issues).
+    * comment on the commits in the PR;
+    * request changes;
+    * approve pull requests and merge to `develop`;
+    * delete the pull request branch once it's merged (enabled by GitHub by default), and close the linked issue (automatically done by GitHub for the linked issues).
 
 💡 If the targeted branch of the pull request has advanced, please do the following to bring the feature branch in sync before merging the PR:
 1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote;
