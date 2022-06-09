@@ -38,7 +38,7 @@ jsonschema==3.2.0
 kubernetes==23.6.0
 MarkupSafe==2.0.1
 moo==0.5.7
-nanorc==3.2.3
+nanorc==4.0.1
 networkx==2.6.3
 numpy==1.21.0
 oauthlib==3.2.0
