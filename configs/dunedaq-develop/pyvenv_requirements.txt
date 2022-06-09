@@ -14,6 +14,7 @@ click-didyoumean==0.3.0
 click-shell==2.1
 colorama==0.4.4
 commonmark==0.9.1
+docker==5.0.3
 elisa-client-api==0.1.0
 et-xmlfile==1.0.1
 fastjsonschema==2.14.5
@@ -38,7 +39,7 @@ jsonschema==3.2.0
 kubernetes==23.6.0
 MarkupSafe==2.0.1
 moo==0.5.7
-nanorc==3.2.3
+nanorc==4.0.1
 networkx==2.6.3
 numpy==1.21.0
 oauthlib==3.2.0
@@ -55,6 +56,7 @@ pydot==1.4.2
 Pygments==2.10.0
 pyparsing==2.4.7
 pyrsistent==0.17.3
+PySocks==1.7.1
 pytest==6.2.4
 python-dateutil==2.8.2
 python-ipmi==0.5.1
