@@ -105,7 +105,7 @@ class DAQRelease:
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
-                if not self.rdict["release"].startswith("dunedaq"):
+                if "dunedaq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
@@ -144,7 +144,7 @@ class DAQRelease:
                     else:
                         lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
                 else:
-                    if not self.rdict["release"].startswith("dunedaq"):
+                    if "dunedaq" not in self.rdict["release"]:
                         iver = self.rdict["release"]
                     lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
             lines += '\n'

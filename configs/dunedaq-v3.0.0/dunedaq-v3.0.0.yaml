@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: rc-dunedaq-v3.0.0-3
 
     externals:
         - name: boost
@@ -90,129 +90,129 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.1.2"
+          version: "v2.1.3"
           commit: null
         - name: ers
-          version: "develop"
+          version: "v1.1.6"
           commit: null
         - name: logging
-          version: "develop"
+          version: "v1.0.6"
           commit: null
         - name: cmdlib
-          version: "develop"
+          version: "v1.1.5"
           commit: null
         - name: restcmd
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: opmonlib
-          version: "develop"
+          version: "v1.3.5"
           commit: null
         - name: rcif
-          version: "develop"
+          version: "v1.1.2"
           commit: null
         - name: appfwk
-          version: "develop"
+          version: "v2.6.1"
           commit: null
         - name: listrev
-          version: "develop"
+          version: "v3.0.0"
           commit: null
         - name: utilities
-          version: "develop"
+          version: "v2.1.0"
           commit: null
         - name: erskafka
-          version: "develop"
+          version: "v1.4.1"
           commit: null
         - name: kafkaopmon
-          version: "develop"
+          version: "v1.3.2"
           commit: null
         - name: influxopmon
-          version: "develop"
+          version: "v1.5.4"
           commit: null
         - name: ipm
-          version: "develop"
+          version: "v2.5.1"
           commit: null
         - name: serialization
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: iomanager
-          version: "develop"
+          version: "v1.0.1"
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: "v2.4.0"
           commit: null
         - name: detdataformats
-          version: "develop"
+          version: "v3.4.1"
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: "v1.1.3"
           commit: null
         - name: daqdataformats
-          version: "develop"
+          version: "v3.3.3"
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: readoutmodules
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: "v1.1.0"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "v2.7.2"
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: "v1.6.1"
           commit: null
         - name: lbrulibs
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: networkmanager
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: timing
-          version: "develop"
+          version: "v6.2.0"
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: "v1.7.2"
           commit: null
         - name: daqconf
-          version: "develop"
+          version: "v5.3.1"
           commit: null
         - name: trigger
-          version: "develop"
+          version: "v1.4.2"
           commit: null
         - name: triggeralgs
-          version: "develop"
+          version: "v1.1.2"
           commit: null
         - name: dqm
-          version: "develop"
+          version: "v1.3.7"
           commit: null
         - name: hdf5libs
-          version: "develop"
+          version: "v2.1.0"
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: "v1.0.0"
           commit: null
         - name: uhallibs
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: dtpcontrols
-          version: "develop"
-          commit: null
-        - name: wibmod
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
+          version: "v2.0.2"
           commit: null
         - name: dtpctrllibs
-          version: "develop"
+          version: "v1.0.1"
           commit: null
-
+        - name: wibmod
+          version: "v1.4.1"
+          commit: null
+        - name: sspmodules
+          version: "v1.1.1"
+          commit: null
+    
     pymodules:
         - name: pip
           version: 22.0.4
