@@ -57,7 +57,7 @@ dune_daqpackages=(
     "detdataformats      v3_4_1            e19:prof"
     "detchannelmaps      v1_1_3            e19:prof"
     "daqdataformats      v3_3_3b           e19:prof"
-    "readoutlibs         v1_1_0            e19:prof"
+    "readoutlibs         v1_1_1            e19:prof"
     "readoutmodules      v1_1_1            e19:prof"
     "fdreadoutlibs       v1_3_0            e19:prof"
     "ndreadoutlibs       v1_1_0            e19:prof"

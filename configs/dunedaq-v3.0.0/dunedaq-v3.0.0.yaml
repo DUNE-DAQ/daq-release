@@ -150,7 +150,7 @@
           version: "v3.3.3"
           commit: null
         - name: readoutlibs
-          version: "v1.1.0"
+          version: "v1.1.1"
           commit: null
         - name: readoutmodules
           version: "v1.1.1"
