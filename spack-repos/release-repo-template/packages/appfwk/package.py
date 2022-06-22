@@ -24,7 +24,6 @@ class Appfwk(CMakePackage):
     depends_on('ers')
     depends_on('cmdlib')
     depends_on('rcif')
-    depends_on('networkmanager')
     depends_on('iomanager')
     depends_on('opmonlib')
 

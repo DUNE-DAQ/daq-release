@@ -170,9 +170,6 @@
         - name: lbrulibs
           version: "develop"
           commit: null
-        - name: networkmanager
-          version: "develop"
-          commit: null
         - name: timing
           version: "develop"
           commit: null
