@@ -186,7 +186,7 @@
           version: "v1.4.3"
           commit: null
         - name: triggeralgs
-          version: "v1.1.2"
+          version: "v1.1.3"
           commit: null
         - name: dqm
           version: "v1.3.7"
