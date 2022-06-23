@@ -76,7 +76,6 @@ dune_packages=(
   "dfmodules         develop"
   "lbrulibs          develop"
   "flxlibs           develop"
-  "networkmanager    develop"
   "timing            develop"
   "timinglibs        develop"
   "daqconf           develop"

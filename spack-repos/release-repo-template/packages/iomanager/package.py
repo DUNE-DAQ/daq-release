@@ -22,7 +22,6 @@ class Iomanager(CMakePackage):
     depends_on('folly cxxstd=17')
     depends_on("serialization")
     depends_on("utilities")
-    depends_on("networkmanager")
 
     depends_on("daq-cmake")
     depends_on("boost")
