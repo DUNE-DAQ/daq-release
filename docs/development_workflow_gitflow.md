@@ -15,20 +15,19 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
 
 ## Branches of DAQ repositories
 
-<img src="https://nvie.com/img/git-model@2x.png" style="float:right" width="300" height="400">
-
-* Required long-lived branches: `develop` (default branch of each repository);
-* Release preparation branches `prep-release/dunedaq-v*` (i.e. `prep-release/dunedaq-v3.1.0`)
+* **Long-lived branches: `develop`** (default branch of each repository);
+* **Release preparation branches `prep-release/dunedaq-vX.Y.Z`** (i.e. `prep-release/dunedaq-v3.1.0`)
     * branch off from the tag created on the `develop` branch at the time of tag collection during a release cycle;
     * can be updated via PRs with at lease one approval review before release cut-off time, 
     * in general, should be merged to `develop` after release cut-off.
-* Patch branches `patch/dunedaq-v*` (i.e. `patch/dunedaq-v3.0.x`)
+* **Patch branches `patch/dunedaq-vX.Y.x`** (i.e. `patch/dunedaq-v3.0.x`)
     * branch off from a tagged version used in the release where the fixes apply;
     * merge back to `develop` if the fixes apply and should be used by the future releases
 
-* Protected branch settings:
-    * `develop`: "Require a pull request before merging" -- all commits must be made to a non-protected branch and submitted via a pull request before they can be merged;
-    * `patch` and `prep-release` branches: in addition to the protection rules used in the `develop` branch, pull request to these branches require at least one approval review before they can be merged.
+## Branch protection rules
+
+* **`develop`** branch: require pull requests. All commits must be made to a non-protected branch and submitted via a pull request before they can be merged.
+* **`patch/*` and `prep-release/*`** branches: in addition to requring pull requests for new commits, the pull request must have at least one approval review before they can be merged.
 
 ## Tags of DAQ repositories
 
@@ -45,9 +44,9 @@ We have two types of tags for DAQ repositories:
 
 ## Release cycle 
 
-We have adopted a three-phase release cycle:
-1. Phase-1, active development period.
-2. Phase-2, testing period.
+We have adopted a three-phased release cycle:
+1. Phase-1, active development period;
+2. Phase-2, testing period;
 3. Phase-3, post release (patch release) period.
 
 ### Phase 1 - Active Development Period
@@ -67,7 +66,8 @@ In this period, developers make frequent updates to the `develop` branch via pul
 
 :red_circle: Please don't use `git rebase` or `git push --force`. It will likely bring unexpected consequences.
 
-At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet.
+**At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet.
+**
 
 ### Phase 2 - Testing Period
 
