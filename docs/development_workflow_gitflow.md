@@ -59,15 +59,8 @@ In this period, developers make frequent updates to the `develop` branch via pul
 4. Create a pull request to the `develop` branch and link the issue to the pull request if one was created in step 1;
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
-💡 If the targeted branch of the pull request has advanced, please do the following to bring the feature branch in sync before merging the PR:
-1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote;
-2. Switch back to the feature branch of the PR, merge the targeted branch into it, e.g. `git merge --no--ff <targeted branch name>`;
-3. Push the merge to remote, and continue with the PR review/merge process.
+💡 **At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet.**
 
-:red_circle: Please don't use `git rebase` or `git push --force`. It will likely bring unexpected consequences.
-
-**At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet.
-**
 
 ### Phase 2 - Testing Period
 
@@ -80,7 +73,16 @@ The start of this period is marked by the tag collection date and the build of i
 This is marked by the deployment of the release to cvmfs. No changes will be made to the deployed release, but critical bug fixes can be invited into an associated patch release. Once invited, developers should create a patch branch like `patch/dunedaq-vX.Y.x`, where `X` and `Y` denotes the MAJOR, MINOR release number, and lower-case letter `x` represents the PATCH. The patch branch should be based on the final tag used by the deployed frozen release.
 
 
+
 ## Useful tips
+
+
+💡 If the targeted branch of a pull request has advanced, please do the following to bring the feature branch in sync before merging the PR:
+1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote;
+2. Switch back to the feature branch of the PR, merge the targeted branch into it, e.g. `git merge --no--ff <targeted branch name>`;
+3. Push the merge to remote, and continue with the PR review/merge process.
+
+:red_circle: Please don't use `git rebase` or `git push --force`. It will likely bring unexpected consequences.
 
 * Using `#Issue_Number` in your commit message will make GitHub add links to the commit on the issue page;
 * Use `user/repo#issue_number` to link issues in a different repo, e.g. `DUNE-DAQ/daq-cmake#1`;
@@ -90,6 +92,7 @@ This is marked by the deployment of the release to cvmfs. No changes will be mad
 * List all tags in GitHub repo: `git ls-remote --tags origin`;
 * Fetch all branches and tags: `git fetch --all --tags`.
 
+<!---
 ## Screenshots of some examples
 
 ### Repository access
@@ -111,3 +114,4 @@ This is marked by the deployment of the release to cvmfs. No changes will be mad
 ### View Network Graph
 
 ![network-graph](https://i.imgur.com/ogmjKYr.png)
+--->
