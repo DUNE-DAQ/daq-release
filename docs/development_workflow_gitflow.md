@@ -11,7 +11,7 @@ We use [two access roles](https://home.fnal.gov/~dingpf/repo_access_role.png) fo
 
 Teams are entities of the DUNE-DAQ project, thus they can be used across multiple repos.
 
-A team is usually managed by DAQ working group leaders. Developers obtain write access by being added into a team. 
+A team is usually managed by DAQ working group leaders. Developers obtain write access by being added into a team. Refer to the [List of teams and repositories](team_repos.md) page to find a list of teams and repositories each team has write access to.
 
 ## Branches of DAQ repositories
 
