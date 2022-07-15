@@ -28,6 +28,7 @@ class Appfwk(CMakePackage):
     depends_on('opmonlib')
 
     depends_on('nlohmann-json')
+    depends_on("pistache@dunedaq-v2.8.0")
     depends_on('py-moo', type='build')
     depends_on('boost' )
 
