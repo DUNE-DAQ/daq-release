@@ -59,14 +59,18 @@ In this period, developers make frequent updates to the `develop` branch via pul
 4. Create a pull request to the `develop` branch and link the issue to the pull request if one was created in step 1;
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
-💡 **At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet.**
+💡 **At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet. Instructions on how to do this are right below.**
 
 
 ### Phase 2 - Testing Period
 
-In this period, changes related to the release will be made to the `prep-release/<release-name>` branch.
+This period is begun on the developer side by bumping the version of the package on the develop branch. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
+1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet is by convention linked to [from the top of the "Instructions for setting up a development area" page of the daqconf Wiki](https://github.com/DUNE-DAQ/daqconf/wiki/Instructions-for-setting-up-a-development-software-area)
+2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`, and go through a trivial PR if the `develop` branch hasn't yet had its protection rule removed by the software coordination team for the release process.
+3. With `CMakeLists.txt` modified on `develop`, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
+4. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
-The start of this period is marked by the tag collection date and the build of initial candidate release. If any fixes were needed after testing the candidate release, developers will need to create a `prep-release/<release-name>` branch if it does not exist yet. This branch should be based on the initial tag for the release. The fixes can be made to the `prep-release/<release-name>` branch via pull requests with at lease one approval review.
+The start of the testing period is marked by the tag collection date and the build of initial candidate release. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. Changes which do get made will be made to a `prep-release/v<X.Y.Z>` branch; if one doesn't exist, it should be created. This branch should be based on the initial tag for the release. The fixes can be made to the `prep-release/v<X.Y.Z>` branch via pull requests with at lease one approval review.
 
 ### Phase 3 - Post Release Period
 
