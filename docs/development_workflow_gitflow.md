@@ -59,7 +59,13 @@ In this period, developers make frequent updates to the `develop` branch via pul
 4. Create a pull request to the `develop` branch and link the issue to the pull request if one was created in step 1;
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
-💡 **At the end of this phase, package maintainer of a repository should create a tag on the develop branch, and update the tag collector spreadsheet. Instructions on how to do this are right below.**
+The active development period comes to an end when the develop branch is ready to be tagged. The procedure for this is described in the next section. It is _highly_ recommended that before this is done the package's codebase is checked for:
+
+1. [compliance with our coding guidelines](https://dune-daq-sw.readthedocs.io/en/latest/packages/styleguide/) -- in particular that `dbt-build` is run with the `--lint` option and no major issues revealed
+2. `dbt-clang-format.sh` is run on the codebase so that whitespace formatting is correct
+3. If your package is a dependency of another package, a correct set `find_dependency` calls in `cmake/<packagename>Config.cmake.in`. It's often the case that developers update dependencies in `CMakeLists.txt` without making the corresponding update(s) in `cmake/<packagename>Config.cmake.in`.
+
+Details on the first two steps above can be found in the [daq-buildtools documentation](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-buildtools/#useful-build-options). Details on the third step can be found in the [daq-cmake documentation](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/#installing-your-project-as-a-local-package).
 
 
 ### Phase 2 - Testing Period
