@@ -29,7 +29,7 @@ h5py==3.1.0
 idna==2.10
 importlib-metadata==4.11.3
 iniconfig==1.1.1
-integrationtest==1.3.2
+integrationtest==1.4.0
 itsdangerous==2.0.1
 jdcal==1.4.1
 Jinja2==3.1.1
@@ -39,7 +39,7 @@ jsonschema==3.2.0
 kubernetes==23.6.0
 MarkupSafe==2.0.1
 moo==0.5.7
-nanorc==4.0.2
+nanorc==4.1.0
 networkx==2.6.3
 numpy==1.21.0
 oauthlib==3.2.0
