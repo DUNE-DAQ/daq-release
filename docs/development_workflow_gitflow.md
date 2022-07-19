@@ -76,7 +76,7 @@ This period is begun on the developer side by bumping the version of the package
 3. With `CMakeLists.txt` modified on `develop`, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
 4. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
-The start of the testing period is marked by the tag collection date and the build of initial candidate release. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. Changes which do get made will be made to a `prep-release/v<X.Y.Z>` branch; if one doesn't exist, it should be created. This branch should be based on the initial tag for the release. The fixes can be made to the `prep-release/v<X.Y.Z>` branch via pull requests with at lease one approval review.
+The start of the testing period is marked by the tag collection date and the build of initial candidate release. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. Changes which do get made will be made to a `prep-release/dunedaq-v<X.Y.Z>` branch; if one doesn't exist, it should be created. This branch should be based on the initial tag for the release. The fixes can be made to the `prep-release/dunedaq-v<X.Y.Z>` branch via pull requests with at lease one approval review.
 
 ### Phase 3 - Post Release Period
 
