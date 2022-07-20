@@ -73,8 +73,9 @@ Details on the first two steps above can be found in the [daq-buildtools documen
 This period is begun on the developer side by bumping the version of the package on the develop branch. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
 1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet is by convention linked to [from the top of the "Instructions for setting up a development area" page of the daqconf Wiki](https://github.com/DUNE-DAQ/daqconf/wiki/Instructions-for-setting-up-a-development-software-area)
 2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`, and go through a trivial PR if the `develop` branch hasn't yet had its protection rule removed by the software coordination team for the release process.
-3. With `CMakeLists.txt` modified on `develop`, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
-4. Mark your package as "Tag Ready" on the tag collector spreadsheet
+3. With the `CMakeLists.txt` modification committed on `develop`, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
+4. Push your `develop` branch and your tag to the central repo: `git push origin develop; git push --tags`
+5. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
 The start of the testing period is marked by the tag collection date and the build of initial candidate release. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. Changes which do get made will be made to a `prep-release/dunedaq-v<X.Y.Z>` branch; if one doesn't exist, it should be created. This branch should be based on the initial tag for the release. The fixes can be made to the `prep-release/dunedaq-v<X.Y.Z>` branch via pull requests with at lease one approval review.
 
