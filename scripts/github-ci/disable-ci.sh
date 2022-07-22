@@ -3,7 +3,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
 
-function trigger_ci_all {
+function disable_ci_all {
   prd_list_name=$1[@]
   workflow_file=$2
   prd_list=("${!prd_list_name}")
