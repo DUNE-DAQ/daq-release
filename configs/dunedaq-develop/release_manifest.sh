@@ -135,7 +135,7 @@ dune_pythonmodules=(
   "kubernetes        23.6.0     pypi              " 
   "MarkupSafe        2.0.1      pypi              " 
   "moo               0.5.7      github_brettviren " 
-  "nanorc            4.1.1      github_DUNE-DAQ   " 
+  "nanorc            4.1.0      github_DUNE-DAQ   " 
   "networkx          2.6.3      pypi              " 
   "numpy             1.21.0     pypi              " 
   "openpyxl          3.0.5      pypi              " 
