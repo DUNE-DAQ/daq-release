@@ -165,7 +165,7 @@
           version: "v2.8.2"
           commit: null
         - name: flxlibs
-          version: "v1.7.1"
+          version: "v1.7.2"
           commit: null
         - name: lbrulibs
           version: "v1.2.1"
