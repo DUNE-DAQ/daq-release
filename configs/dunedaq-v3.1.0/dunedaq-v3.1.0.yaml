@@ -1,5 +1,5 @@
 ---
-    release: rc-dunedaq-v3.1.0-2
+    release: dunedaq-v3.1.0
 
     externals:
         - name: boost
@@ -111,10 +111,10 @@
           version: "v1.2.3"
           commit: null
         - name: appfwk
-          version: "v2.7.0"
+          version: "v2.7.1"
           commit: null
         - name: listrev
-          version: "v3.1.0"
+          version: "v3.1.1"
           commit: null
         - name: utilities
           version: "v2.1.0"
@@ -156,28 +156,28 @@
           version: "v1.2.1"
           commit: null
         - name: fdreadoutlibs
-          version: "v1.4.0"
+          version: "v1.4.2"
           commit: null
         - name: ndreadoutlibs
           version: "v1.1.1"
           commit: null
         - name: dfmodules
-          version: "v2.8.1"
+          version: "v2.8.2"
           commit: null
         - name: flxlibs
           version: "v1.7.1"
           commit: null
         - name: lbrulibs
-          version: "v1.2.0"
+          version: "v1.2.1"
           commit: null
         - name: timing
-          version: "v7.0.0"
+          version: "v7.0.1"
           commit: null
         - name: timinglibs
-          version: "v2.0.0"
+          version: "v2.0.2"
           commit: null
         - name: daqconf
-          version: "v5.4.0"
+          version: "v5.4.1"
           commit: null
         - name: trigger
           version: "v1.5.0"
