@@ -15,7 +15,7 @@ jobs:
     name: build_dev_release_spack
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/sl7-minimal:spack-externals
+      image: ghcr.io/dune-daq/sl7-minimal:spack-externals-slim
     defaults:
       run:
         shell: bash
