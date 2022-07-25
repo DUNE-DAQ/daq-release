@@ -16,7 +16,7 @@ jobs:
     name: build_candidate_release_spack
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/sl7-minimal:spack-externals
+      image: dunedaq/sl7-minimal:spack-externals-slim
     defaults:
       run:
         shell: bash
