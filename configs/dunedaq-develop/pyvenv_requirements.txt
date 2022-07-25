@@ -41,7 +41,7 @@ MarkupSafe==2.0.1
 moo==0.5.7
 nanorc==4.1.1
 networkx==2.6.3
-numpy==1.21.0
+numpy==1.22.0
 oauthlib==3.2.0
 openpyxl==3.0.5
 packaging==21.0
