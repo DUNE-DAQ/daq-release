@@ -143,9 +143,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "dunedaq/sl7-minimal"
+          - image: "ghcr.io/dune-daq/sl7-minimal"
+            dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
-          - image: "dunedaq/c8-minimal"
+          - image: "ghcr.io/dune-daq/c8-minimal"
+            dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_frozen_release_spack
     environment: dockerhub
@@ -186,7 +188,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ matrix.image }}
+            ${{ matrix.dockerimage }}
           tags: |
             type=raw,value=spack-frozen-release
 
