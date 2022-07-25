@@ -163,9 +163,10 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p spack-nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="${{ matrix.image }}:spack-externals-slim"
+            image_name="${{ matrix.image }}:spack-externals"
             cd spack-nightly
             tar xvf ../${nightly_tag}.tar.gz
+            rm -rf ../${nightly_tag}.tar.gz
             ln -s ${nightly_tag} last_successful
             cd ..
             echo "FROM ${image_name}"> Dockerfile
