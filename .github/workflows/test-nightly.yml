@@ -2,6 +2,10 @@ name: Test Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'nightly tag prefix'
+        default: ''
 
 jobs:
   build_the_develop_release_spack:
@@ -35,15 +39,22 @@ jobs:
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v2
 
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+
     - name: check pypi-repo existence
       run: |
         ls /cvmfs/dunedaq.opensciencegrid.org/
 
     - name: start docker container with bind mount cvmfs
       run: |
-        mkdir -p $GITHUB_WORKSPACE/cvmfs_dunedaq_dev
-        echo "#!/bin/bash" > $GITHUB_WORKSPACE/cvmfs_dunedaq_dev/test.sh
-        echo "ls /cvmfs/dunedaq.opensciencegrid.org" >> $GITHUB_WORKSPACE/cvmfs_dunedaq_dev/test.sh
-        echo "ls /cvmfs/dunedaq-development.opensciencegrid.org" >> $GITHUB_WORKSPACE/cvmfs_dunedaq_dev/test.sh
-        chmod +x $GITHUB_WORKSPACE/cvmfs_dunedaq_dev/test.sh
-        docker run --rm -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/cvmfs_dunedaq_dev:/cvmfs/dunedaq-development.opensciencegrid.org ghcr.io/dune-daq/sl7-minimal:latest /cvmfs/dunedaq-development.opensciencegrid.org/test.sh
+        export SPACK_VERSION="0.17.1"
+        export DAQ_RELEASE="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+
+        mkdir -p $GITHUB_WORKSPACE/scratch
+        mv $GITHUB_WORKSPACE/daq-release $GITHUB_WORKSPACE/scratch
+
+        docker run --rm -e SPACK_VERSION -e DAQ_RELEASE -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-minimal:latest /scratch/daq-release/scripts/build-nightly-release.sh
