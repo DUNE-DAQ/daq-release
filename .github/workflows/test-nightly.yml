@@ -57,7 +57,7 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/scratch
         mv $GITHUB_WORKSPACE/daq-release $GITHUB_WORKSPACE/scratch
 
-        docker run --rm -e SPACK_VERSION -e DAQ_RELEASE -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-minimal:spack /scratch/daq-release/scripts/build-nightly-release.sh
+        docker run --rm -e SPACK_VERSION -e DAQ_RELEASE -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-spack:latest /scratch/daq-release/scripts/build-nightly-release.sh
 
         cd $GITHUB_WORKSPACE/scratch
         tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
