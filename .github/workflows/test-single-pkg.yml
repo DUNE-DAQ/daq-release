@@ -48,7 +48,7 @@ jobs:
         EOT
         chmod +x build_pkg.sh
 
-        docker run --rm -v /cvmfs:/cvmfs -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-spack:latest /scratch/build_pkg.sh
+        docker run --rm -v /cvmfs:/cvmfs:shared -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-spack:latest /scratch/build_pkg.sh
 
     - name: upload build log file
       uses: actions/upload-artifact@v2
