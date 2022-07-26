@@ -139,10 +139,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/sl7-minimal"
+          - image: "ghcr.io/dune-daq/sl7-externals"
             dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
-          - image: "ghcr.io/dune-daq/c8-minimal"
+          - image: "ghcr.io/dune-daq/sl7-externals"
             dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_develop_release_spack
@@ -163,7 +163,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p spack-nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="${{ matrix.image }}:spack-externals"
+            image_name="${{ matrix.image }}:latest"
             cd spack-nightly
             tar xvf ../${nightly_tag}.tar.gz
             rm -rf ../${nightly_tag}.tar.gz
