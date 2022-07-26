@@ -40,9 +40,9 @@ jobs:
         shell: bash
 
     steps:
-      - uses: cvmfs-contrib/github-action-cvmfs@v2
-        with:
-          cvmfs_repositories: 'dunedaq.opensciencegrid.org'
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+      with:
+        cvmfs_repositories: 'dunedaq.opensciencegrid.org'
 
     - name: check pypi-repo existence
       run: |
