@@ -114,7 +114,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/DUNE-DAQ/pypi-repo
+            ghcr.io/dune-daq/pypi-repo
           tags: |
             type=raw,value=latest
             type=schedule,pattern={{date 'YYYYMMDD'}}
