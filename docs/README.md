@@ -1,6 +1,6 @@
 # About daq-release
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/DUNE-DAQ/daq-release?label=latest%20tag)[![Nightly workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly.yml/badge.svg?branch=develop)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly.yml)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/DUNE-DAQ/daq-release?label=latest%20tag)[![Spack Nightly Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-spack.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-spack.yml)
 
 This is a repo containing DUNE DAQ release making tools, configuarion files, and build scripts of external packages. 
 
