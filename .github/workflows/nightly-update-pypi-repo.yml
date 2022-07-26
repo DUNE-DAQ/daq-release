@@ -92,3 +92,56 @@ jobs:
       with:
         name: pip_freeze
         path: ${{ github.workspace }}/pip-freeze.txt
+
+  update_image:
+    name: update_pypi_image
+    runs-on: ubuntu-latest
+    needs: update_pypi_repo
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/DUNE-DAQ/pypi-repo
+          tags: |
+            type=raw,value=latest
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+
+      - name: Download pypi repo tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pypi-repo
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror pypi-repo
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            tar xvf pypi-repo.tar.gz
+            rm -f pypi-repo.tar.gz
+            nightly_tag="$(date +%y-%m-%d)"
+            cd ..
+            echo "FROM quay.io/centos/centos:stream8"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Dockerfile
+            echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
