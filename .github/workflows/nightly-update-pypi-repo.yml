@@ -131,7 +131,6 @@ jobs:
             tar xvf pypi-repo.tar.gz
             rm -f pypi-repo.tar.gz
             nightly_tag="$(date +%y-%m-%d)"
-            cd ..
             echo "FROM quay.io/centos/centos:stream8"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Dockerfile
