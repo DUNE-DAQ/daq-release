@@ -58,3 +58,107 @@ jobs:
         mv $GITHUB_WORKSPACE/daq-release $GITHUB_WORKSPACE/scratch
 
         docker run --rm -e SPACK_VERSION -e DAQ_RELEASE -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-minimal:latest /scratch/daq-release/scripts/build-nightly-release.sh
+
+        cd $GITHUB_WORKSPACE/scratch
+        tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+        mkdir -p $GITHUB_WORKSPACE/spack-nightly
+        mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/spack-nightly
+
+    - name: upload spack nightly tarball
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_spack_release
+        path: ${{ github.workspace }}/spack-nightly
+
+  update_image:
+    name: update_spack_image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "ghcr.io/dune-daq/sl7-externals"
+            dockerimage: "dunedaq/sl7-minimal"
+            os_name: "c7"
+          - image: "ghcr.io/dune-daq/c8-externals"
+            dockerimage: "dunedaq/c8-minimal"
+            os_name: "c8"
+    needs: test_cvmfs
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Download spack nightly release tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_spack_release
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p spack-nightly
+            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            image_name="${{ matrix.image }}:latest"
+            cd spack-nightly
+            tar xvf ../${nightly_tag}.tar.gz
+            rm -rf ../${nightly_tag}.tar.gz
+            ln -s ${nightly_tag} last_successful
+            cd ..
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq-development.opensciencegrid.org/pypi-repo /cvmfs/dunedaq-development.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ matrix.dockerimage }}
+          tags: |
+            type=raw,value=spack-dev
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: "dunedaq/sl7-minimal:spack-dev"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest-spack || true
+          dbt-setup-release -n last_successful
+          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+
+    - name: upload dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: dbt_setup_release_env
+        path: ${{ github.workspace }}/dbt-setup-release-env.sh
+
