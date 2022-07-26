@@ -34,12 +34,7 @@ jobs:
 
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v2
-      with:
-        cvmfs_repositories: 'dunedaq.opensciencegrid.org'
 
     - name: check pypi-repo existence
       run: |
-        ls /cvmfs
-        ls /cvmfs/*
-        ls /cvmfs/*/*
-        printenv
+        ls /cvmfs/dunedaq.opensciencegrid.org/
