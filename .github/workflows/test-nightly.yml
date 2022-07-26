@@ -13,7 +13,7 @@ jobs:
         - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
     services:
       cvmfs:
-        image: ghcr.io/dune-daq/sl7-externals:latest
+        image: ghcr.io/dune-daq/pypi-repo:latest
         volumes:
           - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
     defaults:
@@ -21,6 +21,29 @@ jobs:
         shell: bash
 
     steps:
+    - name: check pypi-repo existence
+      run: |
+        ls /cvmfs
+        ls /cvmfs/*
+        ls /cvmfs/*/*
+        printenv
+
+  test_cvmfs:
+    name: test_cvmfs
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dune-daq/sl7-minimal:latest
+      volumes:
+        - /cvmfs:/cvmfs
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: cvmfs-contrib/github-action-cvmfs@v2
+        with:
+          cvmfs_repositories: 'dunedaq.opensciencegrid.org'
+
     - name: check pypi-repo existence
       run: |
         ls /cvmfs
