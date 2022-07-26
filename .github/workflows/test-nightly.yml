@@ -126,7 +126,7 @@ jobs:
           images: |
             ${{ matrix.dockerimage }}
           tags: |
-            type=raw,value=spack-dev
+            type=raw,value=spack-dev-test
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
