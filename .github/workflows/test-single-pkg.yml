@@ -79,11 +79,11 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
-        dbt-create -c -n last_successful dev-${{ matrix.os_name }}
-        cd dev-${{ matrix.os_name }}
+        dbt-create -c -n last_successful dev-ubuntu
+        cd dev-ubuntu
         source dbt-env.sh
         dbt-workarea-env || true
         spack unload ${{ github.event.inputs.pkg-name }}
-        mv /scratch/sourcecode/* sourcecode
+        mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         dbt-build --lint
         dbt-workarea-env
