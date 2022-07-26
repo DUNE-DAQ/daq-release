@@ -26,21 +26,17 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
-        path: sourcecode/${{ github.event.inputs.pkg-name }}
+        path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
 
     - name: start docker container with bind mount cvmfs
       run: |
 
-        mkdir -p $GITHUB_WORKSPACE/scratch
         cd $GITHUB_WORKSPACE/scratch
         cat << EOT > build_pkg.sh
         #!/bin/bash
         
         cd /scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest
-        #release_path=$(readlink -f /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly/last_successful)
-        #release_name=`basename $release_path`
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
         dbt-create -c -n last_successful dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
         source dbt-env.sh
@@ -65,3 +61,29 @@ jobs:
       with:
         name: spack_linting_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/scratch/dev-${{ matrix.os_name }}/log/linting*
+
+  build_single_pkg_on_ubuntu:
+    name: build single pkg
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+
+    - name: Checkout pkg
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
+        path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
+
+    - name: build pkg
+      run: |
+        cd $GITHUB_WORKSPACE/scratch
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
+        dbt-create -c -n last_successful dev-${{ matrix.os_name }}
+        cd dev-${{ matrix.os_name }}
+        source dbt-env.sh
+        dbt-workarea-env || true
+        spack unload ${{ github.event.inputs.pkg-name }}
+        mv /scratch/sourcecode/* sourcecode
+        dbt-build --lint
+        dbt-workarea-env
