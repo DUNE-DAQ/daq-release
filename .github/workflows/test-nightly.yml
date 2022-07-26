@@ -31,13 +31,6 @@ jobs:
   test_cvmfs:
     name: test_cvmfs
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/dune-daq/sl7-minimal:latest
-      volumes:
-        - /cvmfs:/cvmfs
-    defaults:
-      run:
-        shell: bash
 
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v2
