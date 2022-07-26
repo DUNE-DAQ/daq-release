@@ -42,4 +42,5 @@ dune_packages_with_ci=(
  "dtpctrllibs"
  "dpdklibs"
  "rawdatautils"
+ "ctbmodules"
 )
