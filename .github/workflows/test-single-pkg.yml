@@ -21,6 +21,10 @@ jobs:
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v2
 
+    - name: change dir permission
+      run: |
+        sudo chmod -R ugo+rwx /var/lib/cvmfs
+
     - name: Cache cvmfs cache
       id: cvmfs_cache
       uses: actions/cache@v3
@@ -67,3 +71,8 @@ jobs:
       with:
         name: spack_linting_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/scratch/dev-${{ matrix.os_name }}/log/linting*
+
+    - name: change dir permission again
+      run: |
+        sudo chmod -R ugo+rwx /var/lib/cvmfs
+
