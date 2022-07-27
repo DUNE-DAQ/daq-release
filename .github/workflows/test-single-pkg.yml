@@ -23,14 +23,19 @@ jobs:
 
     - name: change dir permission
       run: |
-        sudo chmod -R ugo+rwx /var/lib/cvmfs
+        sudo chmod -R go+rwx /var/lib/cvmfs
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
       uses: actions/cache@v3
       with:
         path: /var/lib/cvmfs
-        key: cvmfscache
+        key: cachecvmfs
+
+    - name: restore dir permission
+      run: |
+        sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
+        sudo chmod -R go-rwx /var/lib/cvmfs
 
     - name: Checkout pkg
       uses: actions/checkout@v3
@@ -74,5 +79,5 @@ jobs:
 
     - name: change dir permission again
       run: |
-        sudo chmod -R ugo+rwx /var/lib/cvmfs
+        sudo chmod -R go+rwx /var/lib/cvmfs
 
