@@ -12,7 +12,6 @@ jobs:
   build_single_pkg:
     name: build single pkg
     runs-on: ubuntu-latest
-    needs: build_single_pkg_on_ubuntu
     strategy:
       matrix:
         include:
