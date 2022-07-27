@@ -43,7 +43,7 @@ jobs:
         source dbt-env.sh
         dbt-workarea-env || true
         spack unload ${{ github.event.inputs.pkg-name }}
-        mv /scratch/sourcecode/* sourcecode
+        mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         dbt-build --lint
         dbt-workarea-env
 
