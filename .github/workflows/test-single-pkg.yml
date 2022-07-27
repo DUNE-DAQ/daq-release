@@ -30,7 +30,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: /var/lib/cvmfs/shared
-        key: cvmfscache
+        key: cvmfscacheshared
 
     - name: Checkout pkg
       uses: actions/checkout@v3
