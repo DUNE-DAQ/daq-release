@@ -81,3 +81,47 @@ jobs:
       run: |
         sudo chmod -R go+rwx /var/lib/cvmfs
 
+  build_single_pkg_on_ubuntu:
+    name: build single pkg on ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+
+    - name: change dir permission
+      run: |
+        sudo chmod -R go+rwx /var/lib/cvmfs
+
+    - name: Cache cvmfs cache
+      id: cvmfs_cache
+      uses: actions/cache@v3
+      with:
+        path: /var/lib/cvmfs/shared
+        key: cachecvmfs
+
+    - name: restore dir permission
+      run: |
+        sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
+        sudo chmod -R go-rwx /var/lib/cvmfs
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+
+    - name: Checkout pkg
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
+        path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
+
+    - name: build pkg
+      run: |
+        sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+        cd $GITHUB_WORKSPACE/scratch
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
+        dbt-create -c -n last_successful dev-ubuntu
+        cd dev-ubuntu
+        source dbt-env.sh
+        dbt-workarea-env || true
+        spack unload ${{ github.event.inputs.pkg-name }}
+        mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
+        dbt-build --lint
+        dbt-workarea-env
+
