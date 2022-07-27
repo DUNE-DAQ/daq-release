@@ -9,44 +9,6 @@ on:
 
 jobs:
 
-  build_single_pkg_on_ubuntu:
-    name: build single pkg on ubuntu
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
-
-    - name: Cache cvmfs cache
-      id: cvmfs_cache
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-cvmfs
-      with:
-        path: /var/lib/cvmfs
-        key: ${{ runner.os }}-${{ env.cache-name }}
-        restore-keys: |
-          ${{ runner.os }}-
-
-    - name: Checkout pkg
-      uses: actions/checkout@v3
-      with:
-        repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
-        path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
-
-    - name: build pkg
-      run: |
-        sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
-        cd $GITHUB_WORKSPACE/scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
-        dbt-create -c -n last_successful dev-${{ matrix.os_name }}
-        cd dev-${{ matrix.os_name }}
-        source dbt-env.sh
-        dbt-workarea-env || true
-        spack unload ${{ github.event.inputs.pkg-name }}
-        mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
-        dbt-build --lint
-        dbt-workarea-env
-
   build_single_pkg:
     name: build single pkg
     runs-on: ubuntu-latest
@@ -56,8 +18,6 @@ jobs:
         include:
           - image: "dunedaq/sl7-minimal:spack-dev"
             os_name: "c7"
-          - image: "dunedaq/c8-minimal:spack-dev"
-            os_name: "c8"
 
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v2
