@@ -35,7 +35,7 @@ jobs:
 
     - name: build pkg
       run: |
-        ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+        sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
         dbt-create -c -n last_successful dev-${{ matrix.os_name }}
