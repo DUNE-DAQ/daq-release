@@ -24,13 +24,9 @@ jobs:
     - name: Cache cvmfs cache
       id: cvmfs_cache
       uses: actions/cache@v3
-      env:
-        cache-name: cache-cvmfs
       with:
         path: /var/lib/cvmfs
-        key: ${{ runner.os }}-${{ env.cache-name }}
-        restore-keys: |
-          ${{ runner.os }}-
+        key: cvmfscache
 
     - name: Checkout pkg
       uses: actions/checkout@v3
