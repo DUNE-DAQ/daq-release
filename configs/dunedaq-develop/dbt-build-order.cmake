@@ -48,5 +48,6 @@ set(build_order "daq-cmake"
                 "dtpcontrols"
                 "rawdatautils"
                 "dtpctrllibs"
+                "ctbmodules"
 )
 
