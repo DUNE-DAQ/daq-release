@@ -137,9 +137,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "dunedaq/sl7-minimal"
+          - image: "ghcr.io/dune-daq/sl7-externals"
+            dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
-          - image: "dunedaq/c8-minimal"
+          - image: "ghcr.io/dune-daq/c8-externals"
+            dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_develop_release_spack
     environment: dockerhub
@@ -159,17 +161,18 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p spack-nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="${{ matrix.image }}:spack-externals"
+            image_name="${{ matrix.image }}:latest"
             cd spack-nightly
             tar xvf ../${nightly_tag}.tar.gz
+            rm -rf ../${nightly_tag}.tar.gz
             ln -s ${nightly_tag} last_successful
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
