@@ -48,9 +48,9 @@ def get_commit_hash(repo, tag_or_branch):
     cmd = f"""cd {tmp_dir}; \
         git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; cd {repo}; \
         if git ls-remote --exit-code --heads origin {tag_or_branch}; then \
-          echo {tag_or_branch} \
+          echo {tag_or_branch}; \
         else \
-          echo "develop" \
+          echo "develop" ;\
         fi"""
     output = check_output(cmd)
     tag_or_branch = output[0].decode('utf-8').strip()
