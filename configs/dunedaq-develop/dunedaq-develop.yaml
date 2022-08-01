@@ -262,6 +262,9 @@
         - name: commonmark
           version: 0.9.1
           source:  pypi
+        - name: configparser
+          version: 5.2.0
+          source:  pypi
         - name: docker
           version: 5.0.3
           source:  pypi
