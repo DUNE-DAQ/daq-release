@@ -47,7 +47,7 @@ def get_commit_hash(repo, tag_or_branch):
     verify_branch = tag_or_branch
     cmd = f"""cd {tmp_dir}; \
         git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; cd {repo}; \
-        if git ls-remote --exit-code --heads origin {tag_or_branch}; then \
+        if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
           echo {tag_or_branch}; \
         else \
           echo "develop" ;\
@@ -60,7 +60,7 @@ def get_commit_hash(repo, tag_or_branch):
     output = check_output(cmd)
     shutil.rmtree(tmp_dir)
     commit_hash = output[0].decode('utf-8').strip()
-    print(f"Info: updating commit hash for {repo} with commit hash {commit_hash}")
+    print(f"Info: {repo:<20} | {tag_or_branch:<20} | {commit_hash}")
     cmd = "cd /tmp; rm -rf daq_repo_*"
     output = check_output(cmd);
     return commit_hash
