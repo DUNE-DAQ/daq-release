@@ -7,6 +7,9 @@ on:
       tag-prefix:
         description: 'nightly tag prefix'
         default: 'T'
+      feature-branch:
+        description: 'feature branch to use in DAQ repos wherever available'
+        default: ''
 
 jobs:
 
@@ -54,6 +57,7 @@ jobs:
           
           python3 scripts/spack/make-release-repo.py -u \
           	-i configs/dunedaq-develop/dunedaq-develop.yaml \
+          	-b ${{ github.event.inputs.feature-branch }} \
           	-t spack-repos/release-repo-template \
           	-r ${DAQ_RELEASE} \
           	-o ${SPACK_RELEASE}/${DAQ_RELEASE}
