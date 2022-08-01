@@ -247,6 +247,9 @@
         - name: click
           version: 8.1.2
           source:  pypi
+        - name: click-configfile
+          version: 0.2.3
+          source:  pypi
         - name: click-didyoumean
           version: 0.3.0
           source:  pypi
