@@ -44,8 +44,17 @@ please check!\n'.format(cmd))
 
 def get_commit_hash(repo, tag_or_branch):
     tmp_dir = tempfile.mkdtemp()
+    verify_branch = tag_or_branch
     cmd = f"""cd {tmp_dir}; \
         git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; cd {repo}; \
+        if git ls-remote --exit-code --heads origin {tag_or_branch}; then \
+          echo {tag_or_branch} \
+        else \
+          echo "develop" \
+        fi"""
+    output = check_output(cmd)
+    tag_or_branch = output[0].decode('utf-8').strip()
+    cmd = f"""cd {tmp_dir}/{repo}; \
         git checkout --quiet {tag_or_branch}; \
         git rev-parse --short HEAD"""
     output = check_output(cmd)
@@ -59,9 +68,10 @@ def get_commit_hash(repo, tag_or_branch):
 
 class DAQRelease:
 
-    def __init__(self, yaml_file):
+    def __init__(self, yaml_file, overwrite_branch = ""):
         self.yaml = yaml_file
         self.rdict = parse_yaml_file(self.yaml)
+        self.overwrite_branch = overwrite_branch
 
     def set_release(self, release):
         self.rdict["release"] = release
@@ -76,7 +86,10 @@ class DAQRelease:
                 ipkg = self.rdict["dunedaq"][i]
                 iname = ipkg["name"]
                 irepo = f"https://github.com/DUNE-DAQ/{iname}"
-                iver = ipkg["version"]
+                if self.overwrite_branch != "":
+                    iver = self.overwrite_branch
+                else:
+                    iver = ipkg["version"]
                 ihash = ipkg["commit"]
                 ihash = get_commit_hash(iname, iver)
                 self.rdict["dunedaq"][i]["commit"] = ihash
@@ -197,6 +210,9 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--template-path',
                         default="../../spack-repos/packages",
                         help='''path to the template directory;''')
+    parser.add_argument('-b', '--overwrite-branch',
+                        default="",
+                        help='''feature branch to checkout;''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
     parser.add_argument('-r', '--release-name',
@@ -212,7 +228,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    daq_release = DAQRelease(args.input_manifest)
+    daq_release = DAQRelease(args.input_manifest, args.overwrite_branch)
     if args.pypi_manifest:
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pypi_manifest.sh')

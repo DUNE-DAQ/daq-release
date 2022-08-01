@@ -43,6 +43,7 @@ dune_packages_with_ci=(
  "dtpcontrols"
  "dtpctrllibs"
  "rawdatautils"
+ "ctbmodules"
 )
 dune_package_non_cpp=(
  "nanorc"
@@ -61,7 +62,8 @@ function git_checkout_and_update_ci {
     pushd ${prod_name}
     cp $workflow_file .github/workflows
     git add .github/workflows
-    git commit -am "syncing $(basename $workflow_file) to the template in DUNE-DAQ/.github repo"
+    old_message=`git log -1|grep -v "^commit"`
+    git commit -am "syncing $(basename $workflow_file); previous commit: ${old_message}"
     git push --quiet
     popd
   done
@@ -74,7 +76,7 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/track_new_prs.yml
+git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/track_new_issues.yml
 
 popd
 
