@@ -81,7 +81,7 @@ The start of the testing period is marked by the tag collection date and the bui
 
 ### Phase 3 - Post Release Period
 
-This is marked by the deployment of the release to cvmfs. No changes will be made to the deployed release, but critical bug fixes can be invited into an associated patch release. Once invited, developers should create a patch branch like `patch/dunedaq-vX.Y.x`, where `X` and `Y` denotes the MAJOR, MINOR release number, and lower-case letter `x` represents the PATCH. The patch branch should be based on the final tag used by the deployed frozen release.
+This is marked by the deployment of the release to cvmfs. No changes will be made to the deployed release, but critical bug fixes can be invited into an associated patch release. Once invited, developers should create a patch branch like `patch/dunedaq-vX.Y.x`, where `X` and `Y` denotes the MAJOR, MINOR release number, and lower-case letter `x` represents the PATCH. The patch branch should be based on the final tag used by the deployed frozen release. When the code on the patch branch is ready, the package maintainer should make a version tag for the patch release off the patch branch. 
 
 
 
