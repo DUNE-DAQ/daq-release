@@ -18,7 +18,6 @@ class Daqdataformats(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake")
-    depends_on("detdataformats")
     depends_on('boost' )
     depends_on('py-moo', type='build')
 
