@@ -35,7 +35,7 @@ Once the release configuration is ready, one can start the CI build for candidat
 Once the build is completed successfully, login to `cvmfsdunedaqdev@oasiscfs01.fnal.gov` and run `~/pull_and_publish_candidate_release.sh` to pull down the candidate release from GitHub and publish it to cvmfs.
 
 
-## Building the release before cut-off
+## Building the frozen release
 
 The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `daq-release/configs` and the frozen release name (in most cases, these two fields should have the same value.)
 
