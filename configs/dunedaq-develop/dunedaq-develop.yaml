@@ -451,7 +451,7 @@
         - name: zmq
           version: 0.0.0
           source:  pypi
-        - name: pillow
+        - name: Pillow
           version: 9.2.0
           source:  pypi
         - name: cycler
