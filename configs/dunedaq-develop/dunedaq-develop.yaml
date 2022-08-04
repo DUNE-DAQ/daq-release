@@ -451,18 +451,3 @@
         - name: zmq
           version: 0.0.0
           source:  pypi
-        - name: Pillow
-          version: 9.1.0
-          source:  pypi
-        - name: cycler
-          version: 0.11.0
-          source:  pypi
-        - name: fonttools
-          version: 4.34.4
-          source:  pypi
-        - name: kiwisolver
-          version: 1.4.4
-          source:  pypi
-        - name: matplotlib
-          version: 3.5.2
-          source:  pypi
