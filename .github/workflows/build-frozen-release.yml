@@ -16,7 +16,7 @@ jobs:
     name: build_frozen_release_spack
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/sl7-minimal:spack-externals-slim
+      image: ghcr.io/dune-daq/sl7-slim-externals:latest
     defaults:
       run:
         shell: bash
@@ -143,10 +143,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/sl7-minimal"
+          - image: "ghcr.io/dune-daq/sl7-externals"
             dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
-          - image: "ghcr.io/dune-daq/c8-minimal"
+          - image: "ghcr.io/dune-daq/c8-externals"
             dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_frozen_release_spack
@@ -167,7 +167,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p frozen_releases
             RC_RELEASE=${{ github.event.inputs.release-tag }}
-            image_name="${{ matrix.image }}:spack-externals"
+            image_name="${{ matrix.image }}:latest"
             cd frozen_releases
             tar xvf ../${RC_RELEASE}.tar.gz
             rm -rf ../${RC_RELEASE}.tar.gz
