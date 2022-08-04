@@ -8,7 +8,7 @@ This is a repo containing DUNE DAQ release making tools, configuarion files, and
 
 ### For DAQ software developers and users:
 1. [DAQ software development workflow -- Gitflow](development_workflow_gitflow.md)
-2. [Continous Integraion for DUNE DAQ software](To-be-updated: ci_github_action.md)
+2. [To-be-updated: Continous Integraion for DUNE DAQ software](ci_github_action.md)
 
 ### For DAQ software coordiantion team:
 
