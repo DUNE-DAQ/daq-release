@@ -40,3 +40,14 @@ Once the build is completed successfully, login to `cvmfsdunedaqdev@oasiscfs01.f
 The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `daq-release/configs` and the frozen release name (in most cases, these two fields should have the same value.)
 
 To deploy the release, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` and run `~/pull_and_publish_frozen_release.sh`.  Note that the user is `cvmfsdunedaq` instead of `cvmfsdunedaqdev` (for the `dunedaq-development.opensicencgrid.org` repo).
+
+If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient. 
+
+To do so, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` as `cvmfsdunedaq`, then do:
+
+1. `REPO=dunedaq.opensciencegrid.org; cvmfs_server transaction $REPO`;
+2. change directory to `/cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`;
+3. (if needed) download the latest tagged version of dbt if it is not deployed yet, and expand it in the directory, rename the directory name using the tag;
+4. (if needed) move the `latest` link to the latest tag in the directory;
+5. create a symbolic link using the release tag, and point it to the latest tag in the directory;
+6. change to $HOME directory, and run `REPO=dunedaq.opensciencegrid.org; cvmfs_server publish $REPO` to publish the changes. (Note: it is important to not have open file descriptors under /cvmfs/ when publishing, thus one would need to change directories to somewhere outside of cvmfs before issuing the publishing command).
