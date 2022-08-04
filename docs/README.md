@@ -8,12 +8,10 @@ This is a repo containing DUNE DAQ release making tools, configuarion files, and
 
 ### For DAQ software developers and users:
 1. [DAQ software development workflow -- Gitflow](development_workflow_gitflow.md)
-2. [How to use standalone release tarballs](standalone_daq_release.md)
-3. [Continous Integraion for DUNE DAQ software](ci_github_action.md)
+2. [Continous Integraion for DUNE DAQ software](To-be-updated: ci_github_action.md)
 
 ### For DAQ software coordiantion team:
-1. [Creating a new DAQ release](create_release.md)
-2. [How to build external UPS products](make_ups_products.md)
-3. [How to publish files to cvmfs](publish_to_cvmfs.md)
-4. [How to package DAQ packages into UPS products](upsify_daq_packages.md)
-5. [How to add new modules to `pypi-repo`](add_modules_to_pypi_repo.md)
+
+1. [Creating a new DAQ release](create_release_spack.md)
+2. [How to publish files to cvmfs](publish_to_cvmfs.md)
+3. [How to add new modules to `pypi-repo`](add_modules_to_pypi_repo.md)
