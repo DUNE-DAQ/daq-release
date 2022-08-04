@@ -1,3 +1,0 @@
-
-ups declare bee3 v4_1 -f "CHERRY" -q "linus" -r "../db1/bee3" -z "/dev/NULL/db"  -U "blah"  -m "kitchen.table"  -M "ups"  -C 
-

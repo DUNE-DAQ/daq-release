@@ -1,6 +1,0 @@
-if (-e unreqfile1) then
-  source unreqfile1
-endif
-#
-unalias rambo
-#

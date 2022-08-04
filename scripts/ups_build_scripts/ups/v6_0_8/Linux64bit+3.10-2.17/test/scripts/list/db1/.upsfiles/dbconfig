@@ -1,3 +1,0 @@
-FILE = DBCONFIG
-UPD_USERCODE_DIR = /home/t1/votava/cvs/erupd/src/override
-PROD_DIR_PREFIX = /usr/products
