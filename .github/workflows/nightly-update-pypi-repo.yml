@@ -56,6 +56,12 @@ jobs:
           cd $GITHUB_WORKSPACE
           tar zcvf pypi-repo.tar.gz pypi-repo
           du -sh pypi-repo.tar.gz
+          
+    - name: upload pypi-repo
+      uses: actions/upload-artifact@v3
+      with:
+        name: pypi-repo
+        path: ${{ github.workspace }}/pypi-repo.tar.gz         
 
     - name: generaete pyvenv_requirements.txt and test installing dbt-pyvenv
       run: |
@@ -74,12 +80,6 @@ jobs:
           spack load py-pyyaml@5.3.1
           source dbt-pyvenv/bin/activate
           pip freeze > $GITHUB_WORKSPACE/pip-freeze.txt
-    
-    - name: upload pypi-repo
-      uses: actions/upload-artifact@v3
-      with:
-        name: pypi-repo
-        path: ${{ github.workspace }}/pypi-repo.tar.gz
 
     - name: upload pyvenv_requirements.txt
       uses: actions/upload-artifact@v3
