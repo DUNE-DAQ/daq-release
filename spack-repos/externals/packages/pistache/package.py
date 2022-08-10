@@ -1,4 +1,4 @@
-# Copyright 2013-2020 Lawrence Livermore National Security, LLC and other
+# Copyright 2013-2021 Lawrence Livermore National Security, LLC and other
 # Spack Project Developers. See the top-level COPYRIGHT file for details.
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
@@ -8,7 +8,8 @@ from spack import *
 import os
 import sys
 
-class Pistache(CMakePackage):
+
+class Pistache(MesonPackage):
     """An elegant C++ REST framework."""
 
     homepage = "http://pistache.io"
@@ -25,10 +26,22 @@ class Pistache(CMakePackage):
     # least) being identical between the ups product and the commit hash's, 
     # it's probably a safe bet that this is the hash we want
 
-    version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
-    version('master', branch='master')
+    version('dunedaq-v3.2.0', commit="d50d1c293d06744ddff942698738bbc19945fdf5")
     depends_on('openssl')
     depends_on('libpthread-stubs')
+    depends_on('meson', type='build')
+    depends_on('ninja', type='build')
+    depends_on('curl')
+
+    def meson_args(self):
+        return ['-DPISTACHE_USE_SSL=true',
+                '-DPISTACHE_BUILD_EXAMPLES=false',
+                '-DPISTACHE_BUILD_TESTS=false',
+                '-DPISTACHE_BUILD_DOCS=false']
+
+    def install(self, spec, prefix):
+        super().install(spec, prefix)
+        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
 
     def patch(self):
         os.mkdir(self.prefix + "/lib64")
@@ -41,8 +54,4 @@ class Pistache(CMakePackage):
              "PistacheTargets.cmake"), self.prefix + "/PistacheTargets.cmake")
         copy(join_path(os.path.dirname(__file__),
              "PistacheTargets-release.cmake"), self.prefix + "/PistacheTargets-release.cmake")
-
-    def install(self, spec, prefix):
-        super().install(spec, prefix)
-        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
 

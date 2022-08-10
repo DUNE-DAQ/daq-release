@@ -1,0 +1,11 @@
+diff --git a/cetlib/CMakeLists.txt b/cetlib/CMakeLists.txt
+index a27ef08..8bc87fd 100644
+--- a/cetlib/CMakeLists.txt
++++ b/cetlib/CMakeLists.txt
+@@ -106,4 +106,4 @@ install_source(SUBDIRS detail)
+ add_subdirectory(sqlite)
+
+ # Tests
+-add_subdirectory(test)
++#add_subdirectory(test)
+

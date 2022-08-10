@@ -1,0 +1,10 @@
+diff --git a/hep_concurrency/CMakeLists.txt b/hep_concurrency/CMakeLists.txt
+index 79e6e23..eb29328 100644
+--- a/hep_concurrency/CMakeLists.txt
++++ b/hep_concurrency/CMakeLists.txt
+@@ -44,4 +44,4 @@ cet_make_library(LIBRARY_NAME cache INTERFACE
+ install_headers(SUBDIRS detail)
+ install_source(SUBDIRS detail)
+
+-add_subdirectory(test)
++#add_subdirectory(test)

@@ -12,8 +12,8 @@ class Uhal(Package):
 
     #depends_on('boost@1.75.0+debug', type='build')
     depends_on('boost', type='build')
-    depends_on('pugixml@1.11', type=('build', 'link', 'run'))
-    depends_on('gettext@0.21', type=('build', 'link', 'run'))
+    depends_on('pugixml', type=('build', 'link', 'run'))
+    depends_on('gettext', type=('build', 'link', 'run'))
     depends_on('py-pybind11', type=('build', 'link', 'run'))
 
     #patch('ipbus_2.patch', when='@2.8.0')

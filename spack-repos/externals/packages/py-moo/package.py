@@ -23,7 +23,7 @@ class PyMoo(PythonPackage):
     depends_on('py-jsonschema', type=('build', 'run'))        
     depends_on('py-fastjsonschema', type=('build', 'run'))
     depends_on('py-jsonpointer', type=('build', 'run'))        
-    depends_on('py-numpy@1.19.4 ~blas ~lapack', type=('build', 'run'))        
+    depends_on('py-numpy ~blas ~lapack', type=('build', 'run'))        
     depends_on('py-openpyxl', type=('build', 'run'))
 
     # DUNE-specific

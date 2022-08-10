@@ -34,3 +34,5 @@ class Dpdk(MesonPackage):
 
     depends_on("py-pyelftools")
     depends_on("libbsd")
+    depends_on('meson', type='build')
+    depends_on('ninja', type='build')
