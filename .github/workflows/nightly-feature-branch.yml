@@ -205,7 +205,7 @@ jobs:
           context: ${{ github.workspace }}/docker-build
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels 
+          labels: ${{ steps.meta.outputs.labels }}
 
   Spack_Build_against_dev_release:
     name: spack_build_against_dev_on_${{ matrix.os_name }}
