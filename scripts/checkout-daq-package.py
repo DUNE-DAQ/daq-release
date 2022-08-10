@@ -35,12 +35,13 @@ please check!\n'.format(cmd))
 
 
 def checkout_commit(repo, commit, outdir):
-    cmd = f"""mkdir -p {outdir}; cd {outdir} \
-        git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; \
+    cmd = f"""mkdir -p {outdir}; cd {outdir}; \
+        git clone https://github.com/DUNE-DAQ/{repo}.git; \
         cd {repo}; \
         git checkout {commit}
     """
     check_output(cmd)
+    print(f"Info: checked out {repo:<20} {commit:<20} under {outdir}.")
     return
 
 
