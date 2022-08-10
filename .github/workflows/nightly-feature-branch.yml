@@ -256,8 +256,8 @@ jobs:
           source dbt-env.sh
           dbt-workarea-env || true
           # Checkout all DAQ packages to sourcecode by reading the repo file.
-          python3 scripts/checkout-daq-package.py -a \
-                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/N22-00-00.yaml \
+          python3 $DAQ_RELEASE_DIR/scripts/checkout-daq-package.py -a \
+                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/spack-repo/N22-00-00.yaml \
                 -o sourcecode 
     
     - name: setup build env, build and lint the repo against the development release
