@@ -264,9 +264,7 @@ jobs:
       run: |
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
           source dbt-env.sh
-          dbt-workarea-env || true
-          spack unload --all
-          spack load externals
+          dbt-workarea-env -s externals || true
           dbt-build
 
     - name: upload build log file
