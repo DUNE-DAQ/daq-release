@@ -207,7 +207,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels 
 
-  Spack_Build_against_dev_release:
+  Spack_Build_all_pkgs_in_workarea:
     name: spack_build_against_dev_on_${{ matrix.os_name }}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -249,7 +249,7 @@ jobs:
           	-i configs/dunedaq-develop/dunedaq-develop.yaml \
           	-b ${{ github.event.inputs.feature-branch }} \
           	-t spack-repos/release-repo-template \
-          	-r ${DAQ_RELEASE} \
+          	-r N22-00-00 \
           	-o $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}
 
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
@@ -257,7 +257,7 @@ jobs:
           dbt-workarea-env || true
           # Checkout all DAQ packages to sourcecode by reading the repo file.
           python3 scripts/checkout-daq-package.py -a \
-                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/N22-*.yaml \
+                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/N22-00-00.yaml \
                 -o sourcecode 
     
     - name: setup build env, build and lint the repo against the development release
