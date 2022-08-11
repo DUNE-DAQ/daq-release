@@ -44,16 +44,17 @@ please check!\n'.format(cmd))
 
 def get_commit_hash(repo, tag_or_branch):
     tmp_dir = tempfile.mkdtemp()
-    verify_branch = tag_or_branch
-    cmd = f"""cd {tmp_dir}; \
-        git clone --quiet https://github.com/DUNE-DAQ/{repo}.git; cd {repo}; \
-        if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
-          echo {tag_or_branch}; \
-        else \
-          echo "develop" ;\
-        fi"""
+    cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
     output = check_output(cmd)
-    tag_or_branch = output[0].decode('utf-8').strip()
+    if not tag_or_branch.startswith('v'):
+        cmd = f"""cd {tmp_dir}/{repo}; \
+            if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
+              echo {tag_or_branch}; \
+            else \
+              echo "develop" ;\
+            fi"""
+        output = check_output(cmd)
+        tag_or_branch = output[0].decode('utf-8').strip()
     cmd = f"""cd {tmp_dir}/{repo}; \
         git checkout --quiet {tag_or_branch}; \
         git rev-parse --short HEAD"""
@@ -62,7 +63,7 @@ def get_commit_hash(repo, tag_or_branch):
     commit_hash = output[0].decode('utf-8').strip()
     print(f"Info: {repo:<20} | {tag_or_branch:<20} | {commit_hash}")
     cmd = "cd /tmp; rm -rf daq_repo_*"
-    output = check_output(cmd);
+    output = check_output(cmd)
     return commit_hash
 
 
