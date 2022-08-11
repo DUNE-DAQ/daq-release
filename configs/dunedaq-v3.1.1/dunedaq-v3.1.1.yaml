@@ -147,7 +147,7 @@
           version: "v3.5.0"
           commit: null
         - name: detchannelmaps
-          version: "v1.2.4"
+          version: "v1.2.5"
           commit: null
         - name: daqdataformats
           version: "v3.3.3"
@@ -183,7 +183,7 @@
           version: "v5.4.2"
           commit: null
         - name: trigger
-          version: "v1.5.0"
+          version: "v1.5.1"
           commit: null
         - name: triggeralgs
           version: "v1.1.4"
