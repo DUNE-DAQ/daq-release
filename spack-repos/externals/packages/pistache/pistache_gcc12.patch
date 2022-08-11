@@ -1,0 +1,12 @@
+diff --git a/include/pistache/typeid.h b/include/pistache/typeid.h
+index 18c3245..6574bc6 100644
+--- a/include/pistache/typeid.h
++++ b/include/pistache/typeid.h
+@@ -12,6 +12,7 @@
+ #pragma once
+
+ #include <functional>
++#include <cstddef>
+
+ namespace Pistache {
+

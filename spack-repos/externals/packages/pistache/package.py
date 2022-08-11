@@ -29,6 +29,7 @@ class Pistache(CMakePackage):
     version('master', branch='master')
     depends_on('openssl')
     depends_on('libpthread-stubs')
+    patch('pistache_gcc12.patch')
 
     def patch(self):
         os.mkdir(self.prefix + "/lib64")
