@@ -15,7 +15,7 @@
           version: 3.9.0
           variant: ~
         - name: pistache
-          version: dunedaq-v3.2.0
+          version: dunedaq-v2.8.0
           variant: ~
         - name: highfive
           version: 2.4.1
