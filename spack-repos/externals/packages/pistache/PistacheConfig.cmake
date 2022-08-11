@@ -32,7 +32,6 @@ endmacro()
 find_package(Threads REQUIRED)
 if (true)
     find_package(OpenSSL REQUIRED COMPONENTS SSL Crypto)
-    find_package(CURL REQUIRED)
 endif ()
 
 include("${CMAKE_CURRENT_LIST_DIR}/PistacheTargets.cmake")
