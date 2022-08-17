@@ -10,22 +10,21 @@ from spack import *
 class Iomanager(CMakePackage):
     """Package providing a unified API"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/iomanager/"
+    homepage = "XHOMEPAGEX"
     git =      "https://github.com/DUNE-DAQ/iomanager.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
+    depends_on("daq-cmake", type = "build")
     depends_on("ipm")
     depends_on("opmonlib")
     depends_on('folly cxxstd=17')
     depends_on("serialization")
     depends_on("utilities")
 
-    depends_on("daq-cmake")
     depends_on("boost")
-    depends_on('py-moo', type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
