@@ -1,8 +1,0 @@
-FILE = TABLE
-PRODUCT = snif
-
-FLAVOR = NULL
-QUALIFIERS = ""
-
-ACTION = SETUP
-   doDefaults()

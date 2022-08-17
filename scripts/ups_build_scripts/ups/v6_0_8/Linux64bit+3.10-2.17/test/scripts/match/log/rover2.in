@@ -1,7 +1,0 @@
-D:NAME=../db1
-V:PRODUCT=          rover, VERSION=      v2_0, FLAVOR=        NULL, QUALIFIERS=nodbg:opt
-T:PRODUCT=          rover, VERSION=    (null), FLAVOR=        NULL, QUALIFIERS=nodbg:opt
-V:PRODUCT=          rover, VERSION=      v2_0, FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
-T:PRODUCT=          rover, VERSION=    (null), FLAVOR=    IRIX+5.3, QUALIFIERS=nodbg:opt
-V:PRODUCT=          rover, VERSION=      v2_0, FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt
-T:PRODUCT=          rover, VERSION=    (null), FLAVOR=      IRIX+5, QUALIFIERS=nodbg:opt

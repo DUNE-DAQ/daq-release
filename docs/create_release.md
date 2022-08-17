@@ -1,5 +1,7 @@
 # Creating a new DAQ release
 
+:red_circle: Note: this page is outdated as we discontinued UPS-based releases.
+
 ## Overview
 
 Here are the general steps of creating a new DAQ release.

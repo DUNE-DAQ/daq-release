@@ -1,3 +1,0 @@
-lassie v4_0 -f NULL -z ../db1:dodefaults()
-   spot v3_0 -f NULL -z ../db1:sourcerequired(spot_v2_0, UPS_ENV)
-lassie v4_0 -f NULL -z ../db1:sourcerequired(lassie_v4_0, UPS_ENV)

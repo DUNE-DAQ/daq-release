@@ -20,6 +20,7 @@ class Librdkafka(AutotoolsPackage):
 
     depends_on('zstd')
     depends_on('lz4')
+    depends_on('openssl')
 
     def patch(self):
         os.symlink(self.prefix + "/lib", self.prefix + "/lib64")
@@ -32,8 +33,8 @@ class Librdkafka(AutotoolsPackage):
              "RdKafkaTargets.cmake"), self.prefix + "/RdKafkaTargets.cmake")
         copy(join_path(os.path.dirname(__file__),
              "RdKafkaTargets-noconfig.cmake"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
-     
-   
+
+
 
 
 

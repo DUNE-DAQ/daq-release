@@ -1,8 +1,0 @@
-FILE = TABLE
-PRODUCT = bee3
-
-#*************************************************
-#
-FLAVOR = NULL
-QUALIFIERS = ""
-

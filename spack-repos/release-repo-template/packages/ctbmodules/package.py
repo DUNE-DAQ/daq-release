@@ -7,26 +7,24 @@
 from spack import *
 
 
-class Hdf5libs(CMakePackage):
-    """FIXME: Put a proper description of your package here."""
+class Ctbmodules(CMakePackage):
+    """Control modules for the Central Trigger Board"""
 
-    homepage = "XHOMEPAGEX"
-    git =      "https://github.com/DUNE-DAQ/hdf5libs.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ctbmodules/"
+    git =      "https://github.com/DUNE-DAQ/ctbmodules.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
+    depends_on("daq-cmake")
+    depends_on("rcif")
+    depends_on("appfwk")
+    depends_on("opmonlib")
     depends_on("logging")
-    depends_on("highfive ~mpi")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("detchannelmaps")
-    depends_on("cetlib")
     depends_on("ers")
-    depends_on("daq-cmake", type="build")
-    depends_on("boost", type="build")
-    depends_on("nlohmann-json")
+
+    depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
@@ -37,8 +35,6 @@ class Hdf5libs(CMakePackage):
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
-        env.prepend_path('DUNEDAQ_SHARE_PATH', self.prefix + "/share")
+        env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
-
-

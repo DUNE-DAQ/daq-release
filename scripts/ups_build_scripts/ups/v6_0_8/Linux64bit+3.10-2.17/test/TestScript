@@ -1,5 +1,0 @@
-#! /bin/sh
-
-echo $UPS_DIR/bin/setup_fail > scripts/action/log/oregano.in
-
-cd $UPS_DIR/test/scripts; upstst_all

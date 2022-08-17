@@ -1,87 +1,164 @@
-name: Test workflow
+name: Test Workflow
 
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Manual start the CI workflow'
-        default: 'Yes'
-        required: true
+      tag-prefix:
+        description: 'nightly tag prefix'
+        default: ''
 
 jobs:
-  bulid_the_develop_release:
-    name: ${{ matrix.os_name }}_build_dev_release
+  build_the_develop_release_spack:
+    name: build_dev_release_spack
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - image: "dunedaq/sl7-minimal:cvmfs"
-            os_name: "c7"
-          - image: "dunedaq/c8-minimal:cvmfs"
-            os_name: "c8"
     container:
-      image: ${{ matrix.image }}
-    env:
-      DBT_AREA_FILE: "dbt-settings"
+      image: ghcr.io/dune-daq/sl7-minimal:latest
+      volumes:
+        - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
+    services:
+      cvmfs:
+        image: ghcr.io/dune-daq/pypi-repo:latest
+        volumes:
+          - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: Start the CI
-      run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
+    - name: check pypi-repo existence
+      run: |
+        ls /cvmfs
+        ls /cvmfs/*
+        ls /cvmfs/*/*
+        printenv
+
+  test_cvmfs:
+    name: test_cvmfs
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
 
     - name: Checkout daq-release
       uses: actions/checkout@v3
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release
-        
-    - name: setup dev area and checkout code
-      run: |
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest
-          dbt-create.sh -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
-          cd dev-${{ matrix.os_name }}
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
-          $GITHUB_WORKSPACE/daq-release/scripts/checkout-package.sh -f ./release_manifest.sh -a -o sourcecode
-    
-    - name: setup build env
-      run: |
-          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source dbt-env.sh
-          dbt-workarea-env -s externals || true
 
-    - name: create release directory
+    - name: check pypi-repo existence
       run: |
-          nightly_tag="N$(date +%y-%m-%d)"
-          [[ ${{ matrix.os_name }} == "c8" ]] && nightly_tag="${nightly_tag}-cs8"
-          nightly_workdir="/cvmfs/dunedaq-development.opensciencegrid.org/nightly"
-          mkdir -p ${nightly_workdir}/${nightly_tag}
-          
-          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source dbt-env.sh
-          dbt-workarea-env -s externals || true
-          setup clang v7_0_0rc3 || true
+        ls /cvmfs/dunedaq.opensciencegrid.org/
 
-          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-products-area.sh -t ${nightly_workdir}/${nightly_tag}/packages
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dbt-build-order.cmake ${nightly_workdir}/${nightly_tag}
-          cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/pyvenv_requirements.txt ${nightly_workdir}/${nightly_tag}
-          clonevirtualenv.py $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/dbt-pyvenv ${nightly_workdir}/${nightly_tag}/dbt-pyvenv
-          echo "PROGRESS: created ups products for DAQ packages."
-          echo "PROGRESS: updating dbt-settings.sh"
-          # prepare external dir 
-          ups active
-          $GITHUB_WORKSPACE/daq-release/scripts/create-ups-links.sh ${nightly_workdir}/${nightly_tag}/externals
-          
-          mv ${DBT_AREA_ROOT}/${DBT_AREA_FILE} ${nightly_workdir}/${nightly_tag}/dbt-settings.sh
-          cd ${nightly_workdir}
-          tar zcf dunedaq-${nightly_tag}.tar.gz ${nightly_tag}
-          mkdir -p $GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}
-          mv dunedaq-${nightly_tag}.tar.gz $GITHUB_WORKSPACE/nightly-${{ matrix.os_name }}
+    - name: start docker container with bind mount cvmfs
+      run: |
+        export SPACK_VERSION="0.17.1"
+        export DAQ_RELEASE="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
 
-    - name: upload nightly tarball
+        mkdir -p $GITHUB_WORKSPACE/scratch
+        mv $GITHUB_WORKSPACE/daq-release $GITHUB_WORKSPACE/scratch
+
+        docker run --rm -e SPACK_VERSION -e DAQ_RELEASE -v /cvmfs/dunedaq.opensciencegrid.org:/cvmfs/dunedaq.opensciencegrid.org -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-spack:latest /scratch/daq-release/scripts/build-nightly-release.sh
+
+        cd $GITHUB_WORKSPACE/scratch
+        tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+        mkdir -p $GITHUB_WORKSPACE/spack-nightly
+        mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/spack-nightly
+
+    - name: upload spack nightly tarball
       uses: actions/upload-artifact@v3
       with:
-        name: nightly_release_${{ matrix.os_name }}
-        path: ${{ github.workspace }}/nightly-${{ matrix.os_name }}
+        name: nightly_spack_release
+        path: ${{ github.workspace }}/spack-nightly
+
+  update_image:
+    name: update_spack_image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "ghcr.io/dune-daq/sl7-externals"
+            dockerimage: "dunedaq/sl7-minimal"
+            os_name: "c7"
+          - image: "ghcr.io/dune-daq/c8-externals"
+            dockerimage: "dunedaq/c8-minimal"
+            os_name: "c8"
+    needs: test_cvmfs
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Download spack nightly release tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_spack_release
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p spack-nightly
+            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            image_name="${{ matrix.image }}:latest"
+            cd spack-nightly
+            tar xvf ../${nightly_tag}.tar.gz
+            rm -rf ../${nightly_tag}.tar.gz
+            ln -s ${nightly_tag} last_successful
+            cd ..
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq-development.opensciencegrid.org/pypi-repo /cvmfs/dunedaq-development.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ matrix.dockerimage }}
+          tags: |
+            type=raw,value=spack-dev-test
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: "dunedaq/sl7-minimal:spack-dev"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest-spack || true
+          dbt-setup-release -n last_successful
+          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+
+    - name: upload dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: dbt_setup_release_env
+        path: ${{ github.workspace }}/dbt-setup-release-env.sh
+

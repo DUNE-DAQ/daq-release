@@ -24,13 +24,13 @@ class Appfwk(CMakePackage):
     depends_on('ers')
     depends_on('cmdlib')
     depends_on('rcif')
-    depends_on('networkmanager')
     depends_on('iomanager')
     depends_on('opmonlib')
 
     depends_on('nlohmann-json')
     depends_on('py-moo', type='run')
     depends_on('boost', type='build' )
+    depends_on("pistache@dunedaq-v2.8.0")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -1,8 +1,0 @@
-FILE = TABLE
-PRODUCT = fly
-
-FLAVOR = ANY
-QUALIFIERS = ""
-
-ACTION = SETUP
-   exeActionRequired(extra4)

@@ -18,7 +18,7 @@ jobs:
     name: update_pypi_repo
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/c8-minimal:cvmfs
+      image: dunedaq/sl7-minimal:spack-externals
     defaults:
       run:
         shell: bash
@@ -34,9 +34,8 @@ jobs:
       run: |
           mkdir -p $GITHUB_WORKSPACE/workdir
           cd $GITHUB_WORKSPACE/workdir
-          source /cvmfs/dunedaq.opensciencegrid.org/products/setup || true
-          setup python v3_8_3b || true
-          setup gcc v8_2_0 || true
+          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
+          spack load py-pyyaml@5.3.1
           python -m venv pypi-repo-venv
           source pypi-repo-venv/bin/activate
           echo "activated pyvenv"
@@ -46,11 +45,10 @@ jobs:
     - name: parse release_manifest and install all pkgs
       run: |
           cd $GITHUB_WORKSPACE/workdir
-          source /cvmfs/dunedaq.opensciencegrid.org/products/setup || true
-          setup python v3_8_3b || true
-          setup gcc v8_2_0 || true
+          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
+          spack load py-pyyaml@5.3.1
           source pypi-repo-venv/bin/activate
-          manifest_file="$GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh"
+          manifest_file="$GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml"
           repo_path="/cvmfs/dunedaq.opensciencegrid.org/pypi-repo"
           $GITHUB_WORKSPACE/daq-release/scripts/create-pypi-repo.sh $manifest_file $repo_path
           du -sh $repo_path
@@ -58,9 +56,91 @@ jobs:
           cd $GITHUB_WORKSPACE
           tar zcvf pypi-repo.tar.gz pypi-repo
           du -sh pypi-repo.tar.gz
-    
+          
     - name: upload pypi-repo
       uses: actions/upload-artifact@v3
       with:
         name: pypi-repo
-        path: ${{ github.workspace }}/pypi-repo.tar.gz
+        path: ${{ github.workspace }}/pypi-repo.tar.gz         
+
+    - name: generaete pyvenv_requirements.txt and test installing dbt-pyvenv
+      run: |
+          cd $GITHUB_WORKSPACE/workdir
+          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
+          spack load py-pyyaml@5.3.1
+          $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
+          python -m venv dbt-pyvenv
+          source dbt-pyvenv/bin/activate
+          python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
+
+    - name: generaete pip freeze
+      run: |
+          cd $GITHUB_WORKSPACE/workdir
+          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
+          spack load py-pyyaml@5.3.1
+          source dbt-pyvenv/bin/activate
+          pip freeze > $GITHUB_WORKSPACE/pip-freeze.txt
+
+    - name: upload pyvenv_requirements.txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: pyvenv_requirements
+        path: ${{ github.workspace }}/pyvenv_requirements.txt
+
+    - name: upload pip-freeze.txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: pip_freeze
+        path: ${{ github.workspace }}/pip-freeze.txt
+
+  update_image:
+    name: update_pypi_image
+    runs-on: ubuntu-latest
+    needs: update_pypi_repo
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/pypi-repo
+          tags: |
+            type=raw,value=latest
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+
+      - name: Download pypi repo tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pypi-repo
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror pypi-repo
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            tar xvf pypi-repo.tar.gz
+            rm -f pypi-repo.tar.gz
+            nightly_tag="$(date +%y-%m-%d)"
+            echo "FROM quay.io/centos/centos:stream8"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Dockerfile
+            echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

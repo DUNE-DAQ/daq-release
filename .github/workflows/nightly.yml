@@ -42,7 +42,7 @@ jobs:
     - name: setup dev area and checkout code
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt legacy-ups || true
           dbt-create -r $GITHUB_WORKSPACE/daq-release/configs dunedaq-develop dev-${{ matrix.os_name }}
           cd dev-${{ matrix.os_name }}
           cp $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/release_manifest.sh .
@@ -194,7 +194,7 @@ jobs:
     - name: create dbt-setup-release-env.sh
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt legacy-ups || true
           dbt-setup-release -n ${{ matrix.link }} || true
           mkdir -p ${GITHUB_WORKSPACE}/${{ matrix.os_name }}
           declare -x > ${GITHUB_WORKSPACE}/${{ matrix.os_name }}/dbt-setup-release-env.sh

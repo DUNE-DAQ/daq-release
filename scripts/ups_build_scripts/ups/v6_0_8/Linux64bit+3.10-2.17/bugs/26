@@ -1,8 +1,0 @@
-Priority: Low
-State: Fixed
-
-
-Better use of dropit should probably be made in PathAp/Prepend.
-5 days.  Important.
-
-Actually fixed EnvAp/Prepend, and made PathAp/Prepend use them.
