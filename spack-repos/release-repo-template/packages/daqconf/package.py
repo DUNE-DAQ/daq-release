@@ -17,7 +17,7 @@ class Daqconf(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on("py-moo", type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

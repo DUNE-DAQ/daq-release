@@ -18,7 +18,7 @@ class Lbrulibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on("readoutlibs")
     depends_on("ndreadoutlibs")
     depends_on("ipm")

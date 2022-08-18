@@ -23,7 +23,7 @@ class Wibmod(CMakePackage):
     depends_on("cppzmq")
     depends_on("protobuf")
 
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on('py-moo', type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

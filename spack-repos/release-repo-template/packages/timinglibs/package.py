@@ -18,7 +18,7 @@ class Timinglibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on("ers")
     depends_on("timing")
     depends_on("dfmessages")

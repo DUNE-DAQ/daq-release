@@ -18,7 +18,7 @@ class Dqm(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
 
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on("daqdataformats")
     depends_on("detdataformats")
     depends_on("detchannelmaps")

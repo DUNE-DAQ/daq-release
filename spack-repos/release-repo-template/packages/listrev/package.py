@@ -19,7 +19,7 @@ class Listrev(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("appfwk")
-    depends_on("daq-cmake", type="build")
+    depends_on("daq-cmake", type=("build", "run"))
     depends_on("rcif")
     depends_on("opmonlib")
     depends_on("logging")
