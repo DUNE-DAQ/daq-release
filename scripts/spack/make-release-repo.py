@@ -161,7 +161,7 @@ class DAQRelease:
 
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
-                print(f"Info: package.py has been written at {os.getcwd()}/{ipkgpy}.")
+                print(f"Info: from {os.getcwd()}, package.py has been written at {ipkgpy}.")
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):
@@ -201,7 +201,7 @@ class DAQRelease:
             ipkgpy = os.path.join(ipkg_dir, "package.py")
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
-                print(f"Info: package.py has been written at {os.getcwd()}/{ipkgpy}.")
+                print(f"Info: from {os.getcwd()}, package.py has been written at {ipkgpy}.")
         return
 
     def generate_repo(self, outdir, tempdir, update_hash, release_name):
