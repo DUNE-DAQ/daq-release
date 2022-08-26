@@ -18,6 +18,8 @@ class Rcif(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type="build")
+    depends_on("py-moo", type="build")
+
     depends_on("cmdlib")
     depends_on("opmonlib")
 

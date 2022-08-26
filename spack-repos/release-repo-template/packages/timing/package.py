@@ -17,8 +17,9 @@ class Timing(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-
     depends_on('daq-cmake', type='build')
+    depends_on("py-moo", type="build")
+
     depends_on('ers')
     depends_on('logging')
     depends_on('nlohmann-json')

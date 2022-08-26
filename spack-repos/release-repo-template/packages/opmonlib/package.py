@@ -17,8 +17,9 @@ class Opmonlib(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-
     depends_on('daq-cmake', type='build')
+    depends_on("py-moo", type="build")
+
     depends_on('cetlib')
     depends_on('ers')
     depends_on('logging')

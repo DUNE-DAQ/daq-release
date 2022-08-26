@@ -18,6 +18,8 @@ class Trigger(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type=("build", "run"))
+    depends_on("py-moo", type="build")
+
     depends_on("ers")
     depends_on('boost')
     depends_on("serialization")
@@ -35,7 +37,6 @@ class Trigger(CMakePackage):
     depends_on("hdf5libs")
     depends_on("cli11")
     depends_on("readoutlibs")
-    depends_on("py-moo", type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

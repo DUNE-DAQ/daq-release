@@ -24,7 +24,6 @@ class Trigemu(CMakePackage):
     depends_on("dfmessages")
     depends_on("opmonlib")
 
-    depends_on('py-moo', type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

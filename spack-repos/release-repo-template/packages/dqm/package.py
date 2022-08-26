@@ -19,6 +19,7 @@ class Dqm(CMakePackage):
 
 
     depends_on("daq-cmake", type=("build", "run"))
+    depends_on("py-moo", type="build")
     depends_on("daqdataformats")
     depends_on("detdataformats")
     depends_on("detchannelmaps")
@@ -28,7 +29,6 @@ class Dqm(CMakePackage):
     depends_on("timinglibs")
     depends_on("boost")
     depends_on("fftw ~mpi")
-    depends_on("py-moo", type='run')
 
     depends_on("openssl")
     depends_on("krb5")

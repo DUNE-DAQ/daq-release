@@ -17,6 +17,9 @@ class Sspmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    depends_on("daq-cmake", type="build")
+    depends_on("py-moo", type="build")
+
     depends_on("appfwk")
     depends_on("iomanager")
     depends_on("logging")
@@ -26,7 +29,6 @@ class Sspmodules(CMakePackage):
     depends_on("fdreadoutlibs")
     depends_on("opmonlib")
     depends_on("boost")
-    depends_on("daq-cmake", type="build")
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

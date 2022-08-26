@@ -18,6 +18,8 @@ class Serialization(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type="build")
+    depends_on("py-moo", type="build")
+
     depends_on("nlohmann-json")
     depends_on("msgpack-c")
     depends_on("logging")

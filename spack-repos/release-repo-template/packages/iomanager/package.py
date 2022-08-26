@@ -18,6 +18,7 @@ class Iomanager(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type = "build")
+    depends_on("py-moo", type="build")
     depends_on("ipm")
     depends_on("opmonlib")
     depends_on('folly cxxstd=17')

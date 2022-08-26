@@ -19,6 +19,7 @@ class Lbrulibs(CMakePackage):
 
 
     depends_on("daq-cmake", type=("build", "run"))
+    depends_on("py-moo", type="build")
     depends_on("readoutlibs")
     depends_on("ndreadoutlibs")
     depends_on("ipm")
@@ -27,7 +28,6 @@ class Lbrulibs(CMakePackage):
     depends_on("boost", type="build")
     depends_on("ers")
     depends_on("detdataformats")
-    depends_on("py-moo", type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

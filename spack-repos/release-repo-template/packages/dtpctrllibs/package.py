@@ -18,6 +18,7 @@ class Dtpctrllibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake", type=("build", "run"))
+    depends_on("py-moo", type="build")
     depends_on("appfwk")
     depends_on("ers")
     depends_on("logging")
@@ -27,7 +28,6 @@ class Dtpctrllibs(CMakePackage):
     depends_on("pugixml")
     depends_on("dtpcontrols")
 
-    depends_on("py-moo", type='run')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

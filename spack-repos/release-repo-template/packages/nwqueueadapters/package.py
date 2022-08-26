@@ -27,7 +27,6 @@ class Nwqueueadapters(CMakePackage):
     depends_on("opmonlib")
     depends_on("ers")
     depends_on("boost")
-    depends_on("py-moo", type='run')
 
     depends_on("nlohmann-json")
 

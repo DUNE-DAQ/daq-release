@@ -19,6 +19,7 @@ class Appfwk(CMakePackage):
 
 
     depends_on('daq-cmake', type=('build', 'run'))
+    depends_on('py-moo', type=('build'))
     depends_on('logging')
     depends_on('cetlib')
     depends_on('ers')
@@ -28,7 +29,6 @@ class Appfwk(CMakePackage):
     depends_on('opmonlib')
 
     depends_on('nlohmann-json')
-    depends_on('py-moo', type='run')
     depends_on('boost', type='build' )
     depends_on("pistache@dunedaq-v2.8.0")
 

@@ -17,6 +17,9 @@ class Hdf5libs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    depends_on("daq-cmake", type="build")
+    depends_on("py-moo", type="build")
+
     depends_on("logging")
     depends_on("highfive ~mpi")
     depends_on("daqdataformats")
@@ -24,7 +27,6 @@ class Hdf5libs(CMakePackage):
     depends_on("detchannelmaps")
     depends_on("cetlib")
     depends_on("ers")
-    depends_on("daq-cmake", type="build")
     depends_on("boost", type="build")
     depends_on("nlohmann-json")
 
