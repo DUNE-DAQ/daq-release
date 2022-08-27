@@ -18,4 +18,5 @@ class Externals(BundlePackage):
 
     # Generate from release YAML file
     depends_on("devtools@XRELEASEX", when="+dev")
+    depends_on("systems@XRELEASEX", when="~dev")
     # Additional dependencies defined in YAML file to be filled below
