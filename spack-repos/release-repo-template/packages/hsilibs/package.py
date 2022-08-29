@@ -25,7 +25,7 @@ class Hsilibs(CMakePackage):
     depends_on("rcif")
     depends_on("appfwk")
     depends_on("timing")
-    depends_on("nlohmann_json")
+    depends_on("nlohmann-json")
     depends_on("dfmessages")
     depends_on("readoutlibs")
     depends_on("timinglibs")
