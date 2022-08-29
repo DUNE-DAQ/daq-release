@@ -152,6 +152,9 @@
         - name: readoutlibs
           version: "develop"
           commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
         - name: readoutmodules
           version: "develop"
           commit: null
