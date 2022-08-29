@@ -35,7 +35,7 @@ class Hsilibs(CMakePackage):
     depends_on("iomanager")
     depends_on("daqdataformats")
     depends_on("detdataformats")
-    depends_on("Boost")
+    depends_on("boost")
     depends_on("pybind11")
     depends_on("py-moo", type='build')
 
