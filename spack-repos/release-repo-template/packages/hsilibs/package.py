@@ -7,7 +7,7 @@
 from spack import *
 
 
-class Lbrulibs(CMakePackage):
+class Hsilibs(CMakePackage):
     """HSI related code."""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/hsilibs/"
