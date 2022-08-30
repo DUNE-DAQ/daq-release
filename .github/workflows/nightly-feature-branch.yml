@@ -123,13 +123,14 @@ jobs:
           spack install || true
 
           spack load dunedaq@${DAQ_RELEASE}
+          $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/dunedaq-develop/dunedaq-develop.yaml
           python3.8 -m venv $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv 
           source $SPACK_RELEASE/$DAQ_RELEASE/dbt-pyvenv/bin/activate
-          python3.8 -m pip install -r $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt
+          python3.8 -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
           spack clean -a
           spack env deactivate
           spack clean -a
-          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
+          cp $GITHUB_WORKSPACE/pyvenv_requirements.txt $SPACK_RELEASE/$DAQ_RELEASE
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake $SPACK_RELEASE/$DAQ_RELEASE
           cd $SPACK_RELEASE
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
@@ -184,11 +185,14 @@ jobs:
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD spack-nightly /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+            
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -206,3 +210,75 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  Spack_Build_all_pkgs_in_workarea:
+    name: spack_build_against_dev_on_${{ matrix.os_name }}
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "dunedaq/sl7-minimal:spack-dev"
+            os_name: "c7"
+          - image: "dunedaq/c8-minimal:spack-dev"
+            os_name: "c8"
+    container:
+      image: ${{ matrix.image }}
+    defaults:
+      run:
+        shell: bash
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+        
+    - name: setup dev area
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
+          release_path=$(readlink -f /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly/last_successful)
+          release_name=`basename $release_path`
+          dbt-create -c -n ${release_name} dev-${{ matrix.os_name }}
+          
+    - name: checkout all DAQ packages
+      run: |
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+          cd $DAQ_RELEASE_DIR
+          python3 scripts/spack/make-release-repo.py -u \
+          	-i configs/dunedaq-develop/dunedaq-develop.yaml \
+          	-b ${{ github.event.inputs.feature-branch }} \
+          	-t spack-repos/release-repo-template \
+          	-r N22-00-00 \
+          	-o $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}
+
+          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
+          source dbt-env.sh
+          dbt-workarea-env || true
+          # Checkout all DAQ packages to sourcecode by reading the repo file.
+          python3 $DAQ_RELEASE_DIR/scripts/checkout-daq-package.py -a \
+                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/spack-repo/N22-00-00.yaml \
+                -o sourcecode 
+    
+    - name: setup build env, build and lint the repo against the development release
+      run: |
+          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
+          source dbt-env.sh
+          dbt-workarea-env -s externals || true
+          dbt-build
+
+    - name: upload build log file
+      uses: actions/upload-artifact@v2
+      with:
+        name: spack_build_log_${{ matrix.os_name }}
+        path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/build*.log
+
+    - name: upload linter output file
+      uses: actions/upload-artifact@v2
+      with:
+        name: spack_linting_log_${{ matrix.os_name }}
+        path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/linting*
