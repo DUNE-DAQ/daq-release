@@ -219,13 +219,14 @@ jobs:
 
     steps:
     
-    - name: create dbt-setup-release-env.sh
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest-spack || true
           dbt-setup-release -n last_successful
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
 
     - name: upload dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
@@ -233,3 +234,8 @@ jobs:
         name: dbt_setup_release_env
         path: ${{ github.workspace }}/dbt-setup-release-env.sh
 
+    - name: upload daq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: daq_app_rte
+        path: ${{ github.workspace }}/daq_app_rte.sh
