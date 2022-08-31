@@ -90,9 +90,9 @@ jobs:
 
           ### Install the release in a spack environment
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${DAQ_RELEASE}
