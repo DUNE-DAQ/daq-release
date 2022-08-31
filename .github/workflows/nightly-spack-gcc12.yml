@@ -64,6 +64,9 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
+          echo "*********** spack arch ************ "
+          spack arch
+
           cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
           repos:
             - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
