@@ -8,7 +8,7 @@ on:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix'
-        default: 'G'
+        default: ''
 
 jobs:
   build_the_develop_release_spack:
@@ -64,6 +64,9 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
+          echo "*********** spack arch ************ "
+          spack arch
+
           cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
           repos:
             - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
@@ -93,13 +96,13 @@ jobs:
 
           ### Install the release in a spack environment
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 target=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0  target=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${DAQ_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/dunedaq-develop/dunedaq-develop.yaml
 
           python -m venv ${SPACK_RELEASE}/../dbt-pyvenvsq
           source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate

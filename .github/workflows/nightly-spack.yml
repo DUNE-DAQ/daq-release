@@ -55,6 +55,9 @@ jobs:
           
           source $SPACK_EXTERNALS/spack-0.17.1/share/spack/setup-env.sh
           spack load py-pyyaml@5.3.1
+
+          echo "*********** spack arch ************ "
+          spack arch
           
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
           
@@ -222,7 +225,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest-spack || true
+          setup_dbt latest|| true
           dbt-setup-release -n last_successful
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
