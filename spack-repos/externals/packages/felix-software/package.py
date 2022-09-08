@@ -7,7 +7,7 @@ import spack.util.environment as envutil
 
 class FelixSoftware(Package):
 
-    git = "https://github.com/jcfreeman2/intentionallyempty.git"
+    has_code=False
 
     version("dunedaq-v2.10.0")
     version("dunedaq-v2.8.0")
@@ -15,8 +15,6 @@ class FelixSoftware(Package):
     depends_on('boost', type='build')
     depends_on('python', type='build')
     depends_on('cmake', type='build')
-#    depends_on('qt@5.15.2', type='build')
-#    depends_on('intel-tbb', type='build')
     depends_on('yaml-cpp@0.6.3', type='build')
     depends_on('czmq@4.1.1', type='build')
     depends_on('cppzmq', type='build')
