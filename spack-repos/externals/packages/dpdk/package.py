@@ -36,3 +36,7 @@ class Dpdk(MesonPackage):
     depends_on("libbsd")
     depends_on('meson', type='build')
     depends_on('ninja', type='build')
+
+    def setup_run_environment(self, env):
+        env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_INC", self.prefix + "/include" )
+        env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_LIB", self.prefix + "/lib" )
