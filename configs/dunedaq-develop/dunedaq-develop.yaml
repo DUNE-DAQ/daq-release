@@ -215,6 +215,9 @@
         - name: ctbmodules
           version: "develop"
           commit: null
+        - name: dpdklibs
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
@@ -341,7 +344,7 @@
           version: 2.0.1
           source:  pypi
         - name: moo
-          version: 0.5.7
+          version: 0.6.0
           source:  github_brettviren
         - name: nanorc
           version: 4.1.2

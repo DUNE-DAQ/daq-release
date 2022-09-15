@@ -50,5 +50,6 @@ set(build_order "daq-cmake"
                 "rawdatautils"
                 "dtpctrllibs"
                 "ctbmodules"
+		"dpdklibs"
 )
 
