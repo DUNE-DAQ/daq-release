@@ -197,7 +197,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "dunedaq/sl7-minimal:spack-gcc12-dev"
+      image: "dunedaq/sl7-minimal:spack-dev-gcc12"
     defaults:
       run:
         shell: bash
