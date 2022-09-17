@@ -42,7 +42,7 @@ moo==0.5.7
 nanorc==4.0.2
 networkx==2.6.3
 numpy==1.21.0
-oauthlib==3.2.0
+oauthlib==3.2.1
 openpyxl==3.0.5
 packaging==21.0
 pexpect==4.8.0
