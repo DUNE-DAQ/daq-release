@@ -72,6 +72,7 @@ jobs:
           cd $SPACK_RELEASE/$DAQ_RELEASE
           source spack-0.17.1/share/spack/setup-env.sh
           spack repo add $SPACK_EXTERNALS/spack-repo-externals
+          cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/dpdk/package.py $SPACK_EXTERNALS/spack-repo-externals/packages/dpdk/package.py
           
           cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
           repos:
