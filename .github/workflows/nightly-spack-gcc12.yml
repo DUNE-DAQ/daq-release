@@ -161,6 +161,9 @@ jobs:
             tar xvf ../${nightly_tag}.tar.gz
             rm -rf ../${nightly_tag}.tar.gz
             ln -s ${nightly_tag} last_successful
+            cd last_successful
+            ln -s spack-*-gcc-* default
+            cd ..
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
