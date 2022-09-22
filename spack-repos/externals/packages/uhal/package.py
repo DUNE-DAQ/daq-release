@@ -39,7 +39,10 @@ class Uhal(Package):
         env.set('EXTERN_PUGIXML_LIB_PREFIX', spec['pugixml'].prefix.lib64)
 
     def setup_run_environment(self, env):
-        env.prepend_path('PYTHONPATH', os.path.join(self.prefix.lib, "python3.8/site-packages"))
+        if self.spec['python'].satisfies('@3.8'):
+            env.prepend_path('PYTHONPATH', os.path.join(self.prefix.lib, "python3.8/site-packages"))
+        if self.spec['python'].satisfies('@3.10'):
+            env.prepend_path('PYTHONPATH', os.path.join(self.prefix.lib, "python3.10/site-packages"))
 
     def patch(self):
         copy(join_path(os.path.dirname(__file__),
