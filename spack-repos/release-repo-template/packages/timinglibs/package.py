@@ -31,7 +31,7 @@ class Timinglibs(CMakePackage):
     depends_on("ers")
     depends_on("iomanager")
     depends_on("boost")
-    depends_on("timinglibs")
+    depends_on("daqconf")
 
     depends_on("nlohmann-json")
     depends_on("pugixml")
