@@ -65,6 +65,9 @@
         - name: dpdk
           version: 22.03
           variant: ~
+        - name: fmt
+          version: 8.1.1
+          variant: "cxxstd=17 shared=True"
 
     devtools:
         - name: cmake
