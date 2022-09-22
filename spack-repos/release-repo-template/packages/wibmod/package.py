@@ -22,6 +22,7 @@ class Wibmod(CMakePackage):
     depends_on("appfwk")
     depends_on("cppzmq")
     depends_on("protobuf")
+    depends_on("daqconf")
 
     depends_on("daq-cmake")
     depends_on('py-moo', type='build')
