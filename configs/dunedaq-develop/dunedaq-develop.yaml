@@ -131,9 +131,6 @@
         - name: kafkaopmon
           version: "develop"
           commit: null
-        - name: influxopmon
-          version: "develop"
-          commit: null
         - name: ipm
           version: "develop"
           commit: null
@@ -323,7 +320,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 1.5.1
+          version: 1.5.2
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
