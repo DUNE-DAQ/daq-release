@@ -308,7 +308,7 @@
           version: 0.16
           source:  pypi
         - name: h5py
-          version: 3.7.0
+          version: 3.1.0
           source:  pypi
         - name: idna
           version: "2.10"
@@ -356,7 +356,7 @@
           version: 2.6.3
           source:  pypi
         - name: numpy
-          version: 1.23.0
+          version: 1.21.0
           source:  pypi
         - name: oauthlib
           version: 3.2.0
