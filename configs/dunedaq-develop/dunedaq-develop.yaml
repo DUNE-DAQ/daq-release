@@ -125,9 +125,6 @@
         - name: kafkaopmon
           version: "develop"
           commit: null
-        - name: influxopmon
-          version: "develop"
-          commit: null
         - name: ipm
           version: "develop"
           commit: null
