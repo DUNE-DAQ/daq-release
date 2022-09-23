@@ -12,8 +12,8 @@ on:
         required: true 
 
 jobs:
-  build_the_develop_release_spack:
-    name: build_dev_release_spack
+  build_the_frozen_release_spack:
+    name: build_frozen_release_spack
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:gcc12
@@ -141,7 +141,7 @@ jobs:
           - image: "ghcr.io/dune-daq/c8-slim-externals"
             dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
-    needs: build_the_develop_release_spack
+    needs: build_the_frozen_release_spack
     environment: dockerhub
     permissions:
       packages: write
