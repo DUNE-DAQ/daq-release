@@ -1,5 +1,5 @@
 ---
-    release: rc-dunedaq-v3.2.0-1
+    release: dunedaq-v3.2.0
 
     externals:
         - name: boost
