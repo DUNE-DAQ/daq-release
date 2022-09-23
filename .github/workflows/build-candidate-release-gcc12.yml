@@ -42,7 +42,7 @@ jobs:
           export DAQ_RELEASE=${{ github.event.inputs.release }}
           export RC_RELEASE=${{ github.event.inputs.release-tag }}
 
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidate-releases/$DAQ_RELEASE
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           mkdir -p ${SPACK_RELEASE}

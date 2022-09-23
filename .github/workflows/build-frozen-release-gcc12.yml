@@ -8,7 +8,7 @@ on:
         description: 'targeted release (one of subdirs under daq-release/configs)'
         required: true 
       release-tag:
-        description: 'release name, e.g. dunedaq-v3.0.0'
+        description: 'frozen release name, e.g. dunedaq-v3.0.0-1'
         required: true 
 
 jobs:
@@ -39,8 +39,10 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          export RC_RELEASE=${{ github.event.inputs.release-tag }}
+
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           mkdir -p ${SPACK_RELEASE}
@@ -57,10 +59,10 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/dunedaq-develop/dunedaq-develop.yaml \
-          -t spack-repos/release-repo-template \
-          -r ${DAQ_RELEASE} \
-          -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
+          	-i configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml \
+          	-t spack-repos/release-repo-template \
+          	-r ${RC_RELEASE} \
+                -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
@@ -99,13 +101,13 @@ jobs:
 
           ### Install the release in a spack environment
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
-          spack load dunedaq@${DAQ_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/dunedaq-develop/dunedaq-develop.yaml
+          spack load dunedaq@${RC_RELEASE}
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
 
           python -m venv ${SPACK_RELEASE}/../dbt-pyvenv
           source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate
@@ -118,15 +120,15 @@ jobs:
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
 
           cd $SPACK_RELEASE_DIR/../
-          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/nightly
-          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly
+          tar zcf ${RC_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/frozen-releases
+          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-releases
 
-    - name: upload spack nightly tarball
+    - name: upload spack frozen release tarball
       uses: actions/upload-artifact@v3
       with:
-        name: nightly_spack_release
-        path: ${{ github.workspace }}/nightly
+        name: frozen_release
+        path: ${{ github.workspace }}/frozen-releases
 
 
   update_image:
@@ -148,31 +150,25 @@ jobs:
       contents: read
 
     steps:
-      - name: Download spack nightly release tarball artifact
+      - name: Download spack frozen release tarball artifact
         uses: actions/download-artifact@v3
         with:
-          name: nightly_spack_release
+          name: frozen_release
           path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-nightly
+      - name: prepare cvmfs mirror for frozen release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p nightly
-            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="${{ matrix.image }}:gcc12"
-            cd nightly
-            tar xvf ../${nightly_tag}.tar.gz
-            rm -rf ../${nightly_tag}.tar.gz
-            ln -s ${nightly_tag} last_successful
-            cd last_successful
-            ln -s spack-*-gcc-* default
-            cd ..
+            mkdir -p frozen_releases
+            RC_RELEASE=${{ github.event.inputs.release-tag }}
+            image_name="${{ matrix.image }}:spack-externals"
+            cd frozen_releases
+            tar xvf ../${RC_RELEASE}.tar.gz
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
-            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo "ENV FROZEN_RELEASE ${RC_RELEASE}" >> Dockerfile
+            echo "ADD frozen_releases /cvmfs/dunedaq-development.opensciencegrid.org/frozen_releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
@@ -188,7 +184,7 @@ jobs:
           images: |
             ${{ matrix.dockerimage }}
           tags: |
-            type=raw,value=spack-dev-gcc12
+            type=raw,value=spack-frozen-release-gcc12
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
@@ -203,7 +199,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "dunedaq/sl7-minimal:spack-dev-gcc12"
+      image: "dunedaq/sl7-minimal:spack-frozen-release-gcc12"
     defaults:
       run:
         shell: bash
@@ -212,9 +208,10 @@ jobs:
     
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
+          export RC_RELEASE=${{ github.event.inputs.release-tag }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest-gcc12|| true
-          dbt-setup-release -n last_successful
+          dbt-setup-release -b frozen ${RC_RELEASE}
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh

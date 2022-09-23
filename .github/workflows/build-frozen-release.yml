@@ -181,7 +181,7 @@ jobs:
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV CANDIDATE_RELEASE ${RC_RELEASE}" >> Dockerfile
+            echo "ENV FROZEN_RELEASE ${RC_RELEASE}" >> Dockerfile
             echo "ADD frozen_releases /cvmfs/dunedaq-development.opensciencegrid.org/frozen_releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
