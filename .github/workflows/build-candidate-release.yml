@@ -172,16 +172,16 @@ jobs:
       - name: prepare cvmfs mirror for candidate release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p candidate_releases
+            mkdir -p candidate-releases
             RC_RELEASE=${{ github.event.inputs.release-tag }}
             image_name="${{ matrix.image }}:spack-externals"
-            cd candidate_releases
+            cd candidate-releases
             tar xvf ../${RC_RELEASE}.tar.gz
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV CANDIDATE_RELEASE ${RC_RELEASE}" >> Dockerfile
-            echo "ADD candidate_releases /cvmfs/dunedaq-development.opensciencegrid.org/candidate_releases" >> Dockerfile
+            echo "ADD candidate-releases /cvmfs/dunedaq-development.opensciencegrid.org/candidate-releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
