@@ -182,7 +182,7 @@ jobs:
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV FROZEN_RELEASE ${RC_RELEASE}" >> Dockerfile
-            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/releases" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack-releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
