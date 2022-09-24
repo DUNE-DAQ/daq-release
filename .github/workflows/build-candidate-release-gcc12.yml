@@ -120,7 +120,7 @@ jobs:
           cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
 
           cd $SPACK_RELEASE_DIR/../
-          tar zcf ${RC_RELEASE}.tar.gz ${DAQ_RELEASE}
+          tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/candidate-releases
           mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidate-releases
 
