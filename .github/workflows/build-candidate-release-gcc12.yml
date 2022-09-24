@@ -107,7 +107,7 @@ jobs:
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${RC_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/{DAQ_RELEASE}/${DAQ_RELEASE}.yaml
 
           python -m venv ${SPACK_RELEASE}/../dbt-pyvenv
           source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate
@@ -161,7 +161,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidates
             RC_RELEASE=${{ github.event.inputs.release-tag }}
-            image_name="${{ matrix.image }}:spack-externals"
+            image_name="${{ matrix.image }}:latest"
             cd candidates
             tar xvf ../${RC_RELEASE}.tar.gz
             cd rc-*

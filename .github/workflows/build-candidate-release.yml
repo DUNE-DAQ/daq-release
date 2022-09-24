@@ -174,7 +174,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidate-releases
             RC_RELEASE=${{ github.event.inputs.release-tag }}
-            image_name="${{ matrix.image }}:spack-externals"
+            image_name="${{ matrix.image }}:latest"
             cd candidate-releases
             tar xvf ../${RC_RELEASE}.tar.gz
             cd ..

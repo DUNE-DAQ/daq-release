@@ -172,17 +172,18 @@ jobs:
       - name: prepare cvmfs mirror for frozen release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p frozen_releases
+            mkdir -p releases
             RC_RELEASE=${{ github.event.inputs.release-tag }}
             image_name="${{ matrix.image }}:latest"
-            cd frozen_releases
+            cd releases
             tar xvf ../${RC_RELEASE}.tar.gz
             rm -rf ../${RC_RELEASE}.tar.gz
+            cd ${RC_RELEASE}
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV FROZEN_RELEASE ${RC_RELEASE}" >> Dockerfile
-            echo "ADD frozen_releases /cvmfs/dunedaq-development.opensciencegrid.org/frozen_releases" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
