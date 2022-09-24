@@ -160,7 +160,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p releases
-            DAQ_RELEASE=${{ github.event.inputs.release-tag }}
+            DAQ_RELEASE=${{ github.event.inputs.release }}
             image_name="${{ matrix.image }}:latest"
             cd releases
             tar xvf ../${DAQ_RELEASE}.tar.gz
@@ -211,7 +211,7 @@ jobs:
     
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
-          export DAQ_RELEASE=${{ github.event.inputs.release-tag }}
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest-gcc12|| true
           dbt-setup-release -b frozen ${DAQ_RELEASE}
