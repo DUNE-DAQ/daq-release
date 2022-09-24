@@ -107,7 +107,7 @@ jobs:
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${RC_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/{DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
 
           python -m venv ${SPACK_RELEASE}/../dbt-pyvenv
           source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate
