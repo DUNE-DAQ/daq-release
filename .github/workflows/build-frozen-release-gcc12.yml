@@ -161,7 +161,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p releases
             DAQ_RELEASE=${{ github.event.inputs.release }}
-            image_name="${{ matrix.image }}:latest"
+            image_name="${{ matrix.image }}:gcc12"
             cd releases
             tar xvf ../${DAQ_RELEASE}.tar.gz
             cd ${DAQ_RELEASE}
