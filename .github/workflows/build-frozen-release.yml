@@ -178,7 +178,6 @@ jobs:
             cd releases
             tar xvf ../${RC_RELEASE}.tar.gz
             rm -rf ../${RC_RELEASE}.tar.gz
-            cd ${RC_RELEASE}
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
