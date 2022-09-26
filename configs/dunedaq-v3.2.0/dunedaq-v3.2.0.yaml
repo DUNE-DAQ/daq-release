@@ -177,7 +177,7 @@
           version: "v2.1.0"
           commit: null
         - name: daqconf
-          version: "v5.5.0"
+          version: "v5.5.1"
           commit: null
         - name: trigger
           version: "v1.5.2"
@@ -344,7 +344,7 @@
           version: 0.6.3
           source:  github_brettviren
         - name: nanorc
-          version: 4.1.3
+          version: 4.1.4
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
