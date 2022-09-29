@@ -3,20 +3,15 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
 
-dune_packages=(
-	"elisa_client_api"
-	"grafana-dashboards"
-	"daq-systemtests"
-)
-
 function git_checkout_and_update_ci {
+  tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
+  pushd $tmp_dir
   prd_list_name=$1[@]
   workflow_file=$2
   prd_list=("${!prd_list_name}")
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
-    prod_name=${iprd_arr[0]}
-    #prod_name=${iprd_arr[0]//_/-}
+    prod_name=${iprd_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $prod_name *****************************"
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
@@ -29,30 +24,19 @@ function git_checkout_and_update_ci {
     git push --quiet
     popd
   done
+  popd
+  rm -rf $tmp_dir
 }
 
 
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-pushd $tmp_dir
-
-git clone https://github.com/DUNE-DAQ/.github.git
-
-git_checkout_and_update_ci dune_packages $tmp_dir/.github/workflow-templates/track_new_issues.yml
-
-popd
-
-rm -rf $tmp_dir
-
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-pushd $tmp_dir
+tmp_d=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
+pushd $tmp_d
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages $tmp_dir/.github/workflow-templates/track_new_prs.yml
+git_checkout_and_update_ci dune_packages $tmp_d/.github/workflow-templates/track_new_issues.yml
 
-popd
+git_checkout_and_update_ci dune_packages $tmp_d/.github/workflow-templates/track_new_prs.yml
 
-rm -rf $tmp_dir
-
+popd 
+rm -rf $tmp_d
