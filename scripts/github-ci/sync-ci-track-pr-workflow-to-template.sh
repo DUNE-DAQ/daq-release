@@ -1,53 +1,7 @@
 #!/bin/bash
 
-dune_packages_with_ci=(
- "daq-cmake"       
- "ers"             
- "erskafka"        
- "logging"         
- "opmonlib"        
- "cmdlib"          
- "rcif"            
- "restcmd"         
- "utilities"       
- "ipm"             
- "networkmanager"  
- "appfwk"          
- "listrev"         
- "serialization"   
- "nwqueueadapters" 
- "daqdataformats"  
- "detdataformats"  
- "detchannelmaps"  
- "dfmessages"      
- "trigemu"         
- "triggeralgs"     
- "timing"          
- "timinglibs"      
- "hdf5libs"        
- "trigger"         
- "readoutlibs"     
- "fdreadoutlibs"   
- "ndreadoutlibs"   
- "readoutmodules"  
- "flxlibs"         
- "dfmodules"       
- "influxopmon"     
- "kafkaopmon"      
- "daqconf"         
- "dqm"             
- "lbrulibs"        
- "wibmod"          
- "sspmodules"      
- "uhallibs"
- "dtpcontrols"
- "dtpctrllibs"
- "rawdatautils"
- "ctbmodules"
-)
-dune_package_non_cpp=(
- "nanorc"
-)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/repo.sh
 
 function git_checkout_and_update_ci {
   prd_list_name=$1[@]
@@ -76,7 +30,8 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/track_new_issues.yml
+git_checkout_and_update_ci dune_packages $tmp_dir/.github/workflow-templates/track_new_issues.yml
+git_checkout_and_update_ci dune_packages $tmp_dir/.github/workflow-templates/track_new_prs.yml
 
 popd
 
