@@ -64,6 +64,27 @@ def checkout_ref_and_tag(repo, ref, new_tag):
     return
 
 
+def checkout_and_delete_tag(repo, old_tag):
+    outdir = tempfile.mkdtemp()
+    cmd = f"""cd {outdir}; \
+        git clone https://github.com/DUNE-DAQ/{repo}.git; \
+        cd {repo}; \
+    """
+    check_output(cmd)
+    print(f"Info: checked out {repo:<20} {ref:<20} under {outdir}.")
+    cmd = f"""cd {outdir}; \
+        cd {repo}; \
+        if git ls-remote --exit-code --tags origin {old_tag}; then \
+            echo "INFO: found {old_tag}, deleting it."; \
+            git tag -d {old_tag}; \
+            git push --delete origin {old_tag}; \
+        fi; \
+    """
+    print(check_output(cmd)[0].decode('utf-8'))
+    shutil.rmtree(outdir)
+    return
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='checkout-daq-package.py',
@@ -75,8 +96,10 @@ if __name__ == "__main__":
     parser.add_argument('-r', '--ref', default=None,
                         help='''git ref, branch tag or commit hash; only to be
                         used with -p option for single package checkout''')
+    parser.add_argument('-d', '--delete', action='store_true',
+                        help='''delete the existing tag''')
     parser.add_argument('-t', '--tag', default=None, required=True,
-                        help='''new tag to be create'''),
+                        help='''new tag to be create''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
     parser.add_argument('-a', '--all-packages', action='store_true',
@@ -99,6 +122,7 @@ if __name__ == "__main__":
 
     new_tag = args.tag
 
+
     if args.all_packages:
         for i in pkgs:
             iname = i["name"]
@@ -107,7 +131,10 @@ if __name__ == "__main__":
                 iversion = "v" + iversion
             if "elisa" in iname:
                 iname.replace('-', '_')
-            checkout_ref_and_tag(iname, iversion, new_tag)
+            if args.delete:
+                checkout_and_delete_tag(iname, new_tag)
+            else:
+                checkout_ref_and_tag(iname, iversion, new_tag)
     elif args.package is not None:
         # verify entry in manifest file
         ref = ""
@@ -122,7 +149,10 @@ if __name__ == "__main__":
             exit(21)
         if args.ref is not None:
             ref = args.ref
-        checkout_ref_and_tag((args.package), ref, new_tag)
+        if args.delete:
+            checkout_and_delete_tag(iname, new_tag)
+        else:
+            checkout_ref_and_tag(iname, iversion, new_tag)
     else:
         print('Error: please specify "-a" or "-b <pkg>" option.')
         exit(22)
