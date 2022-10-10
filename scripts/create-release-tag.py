@@ -37,6 +37,34 @@ please check!\n'.format(cmd))
     return out
 
 
+def checkout_ref_and_retag(repo, ref, new_tag):
+    outdir = tempfile.mkdtemp()
+    cmd = f"""cd {outdir}; \
+        git clone https://github.com/DUNE-DAQ/{repo}.git; \
+        cd {repo}; \
+        git checkout {ref}
+    """
+    check_output(cmd)
+    print(f"Info: checked out {repo:<20} {ref:<20} under {outdir}.")
+    cmd = f"""cd {outdir}; \
+        cd {repo}; \
+        if git ls-remote --exit-code --tags origin {new_tag}; then \
+            echo "INFO: tag {new_tag} exists, deleting it before recreating."; \
+            git tag -d {new_tag}; \
+            git push --delete origin {new_tag}; \
+        fi; \
+        git tag -a {new_tag} -m "creating new tag {new_tag}" ; \
+        git push origin {new_tag} ; \
+        echo "INFO: created tag {new_tag} for {repo:<20} using {ref:<20}"
+
+    """
+    print(check_output(cmd)[0].decode('utf-8'))
+
+    print(f"Info: created {new_tag} for {repo:<20} using {ref:<20}.")
+    shutil.rmtree(outdir)
+    return
+
+
 def checkout_ref_and_tag(repo, ref, new_tag):
     outdir = tempfile.mkdtemp()
     cmd = f"""cd {outdir}; \
@@ -49,17 +77,17 @@ def checkout_ref_and_tag(repo, ref, new_tag):
     cmd = f"""cd {outdir}; \
         cd {repo}; \
         if git ls-remote --exit-code --tags origin {new_tag}; then \
-            echo "INFO: {new_tag} exists, deleting it before recreating."; \
-            git tag -d {new_tag}; \
-            git push --delete origin {new_tag}; \
-        fi; \
-        git tag -a {new_tag} -m "creating new tag {new_tag}" ; \
-        git push origin {new_tag}
+            echo "INFO: tag {new_tag} exists, skip now."; \
+        else \
+            git tag -a {new_tag} -m "creating new tag {new_tag}" ; \
+            git push origin {new_tag} ; \
+            echo "INFO: created tag {new_tag} for {repo:<20} using {ref:<20}"; \
+        fi
 
     """
     print(check_output(cmd)[0].decode('utf-8'))
 
-    print(f"Info: created {new_tag} for {repo:<20} using {ref:<20}.")
+    #print(f"Info: created {new_tag} for {repo:<20} using {ref:<20}.")
     shutil.rmtree(outdir)
     return
 
@@ -98,14 +126,14 @@ if __name__ == "__main__":
                         used with -p option for single package checkout''')
     parser.add_argument('-d', '--delete', action='store_true',
                         help='''delete the existing tag''')
+    parser.add_argument('-f', '--force', action='store_true',
+                        help='''delete the existing tag and re-tag''')
     parser.add_argument('-t', '--tag', default=None, required=True,
                         help='''new tag to be create''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
     parser.add_argument('-a', '--all-packages', action='store_true',
                         help="whether to checkout all DAQ pacakges;")
-    parser.add_argument('-o', '--output-path', default="./sourcecode",
-                        help="path to the output directory;")
 
     args = parser.parse_args()
 
@@ -126,33 +154,49 @@ if __name__ == "__main__":
     if args.all_packages:
         for i in pkgs:
             iname = i["name"]
-            iversion = i["version"]
-            if not iversion.startswith('v'):
-                iversion = "v" + iversion
+            ref = i["version"]
+            if not ref.startswith('v'):
+                ref = "v" + ref
             if "elisa" in iname:
-                iname.replace('-', '_')
+                iname = iname.replace('-', '_')
             if args.delete:
                 checkout_and_delete_tag(iname, new_tag)
             else:
-                checkout_ref_and_tag(iname, iversion, new_tag)
+                if args.force:
+                    checkout_ref_and_retag(iname, ref, new_tag)
+                else:
+                    checkout_ref_and_tag(iname, ref, new_tag)
+
     elif args.package is not None:
         # verify entry in manifest file
         ref = ""
         found = False
-        for i in pkgs:
-            if i["name"] == args.package:
-                found = True
-                ref = i["version"]
-                print(i)
-        if not found:
-            print(f"Error: package {args.package} is not found in {args.input_manifest}")
-            exit(21)
-        if args.ref is not None:
+        iname = ""
+        if args.ref is None:
+            for i in pkgs:
+                iname = i["name"]
+                if iname == args.package:
+                    found = True
+                    ref = i["version"]
+                    print(i)
+                    break
+            if not found:
+                print(f"Error: package {args.package} is not found in {args.input_manifest}")
+                exit(21)
+        else:
             ref = args.ref
+            iname = args.package
+        if not ref.startswith('v'):
+            ref = "v" + ref
+        if "elisa" in iname:
+            iname = iname.replace('-', '_')
         if args.delete:
             checkout_and_delete_tag(iname, new_tag)
         else:
-            checkout_ref_and_tag(iname, iversion, new_tag)
+            if args.force:
+                checkout_ref_and_retag(iname, ref, new_tag)
+            else:
+                checkout_ref_and_tag(iname, ref, new_tag)
     else:
         print('Error: please specify "-a" or "-b <pkg>" option.')
         exit(22)
