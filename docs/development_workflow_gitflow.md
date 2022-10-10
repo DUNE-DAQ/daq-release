@@ -18,11 +18,13 @@ A team is usually managed by DAQ working group leaders. Developers obtain write 
 * **Long-lived branches: `develop`** (default branch of each repository);
 * **Release preparation branches `prep-release/dunedaq-vX.Y.Z`** (i.e. `prep-release/dunedaq-v3.1.0`)
     * branch off from the tag created on the `develop` branch at the time of tag collection during a release cycle;
-    * can be updated via PRs with at lease one approval review before release cut-off time, 
-    * in general, should be merged to `develop` after release cut-off.
+    * can be updated via PRs with at least one approval review before release cut-off time; 
+    * in general, should be merged to `develop` after release cut-off by the software coordination team;
+    * in case of partial merge (cherry-pick) to develop or no merge at all, developers should notify the software coordination team, and handle the partial merge by themselves. 
 * **Patch branches `patch/dunedaq-vX.Y.x`** (i.e. `patch/dunedaq-v3.0.x`)
     * branch off from a tagged version used in the release where the fixes apply;
-    * merge back to `develop` if the fixes apply and should be used by the future releases
+    * if the fixes apply to develop branch and should be used by the future releases, merge the patch branch to `develop` after the patch release is made;
+    * in case of partial merge (cherry-pick) to develop or no merge at all, developers should notify the software coordination team, and handle the partial merge by themselves.
 
 ## Branch protection rules
 
