@@ -456,6 +456,12 @@
           source:  pypi
 
     others:
+        - name: daq-release
+          version: "develop"
+          commit: null
+        - name: daq-buildtools
+          version: "develop"
+          commit: null
         - name: daq-systemtest
           version: "develop"
           commit: null
