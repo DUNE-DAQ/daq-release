@@ -60,3 +60,4 @@ To do so, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` as `cvmfsdunedaq`, then do
   * `daq-release/scripts/create-release-tag.py -p <package> -r <ref_tag_or_branch_or_commit>` to tag a single package using specified ref;
   * `daq-release/scripts/create-release-tag.py -p <package> -i <release YAML file>` to tag a single package using ref found in in release YAML file;
   * `-d` to delete release tags if found, `-f` to recreate release tags.
+  
