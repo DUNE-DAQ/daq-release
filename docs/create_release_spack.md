@@ -7,6 +7,8 @@ Making a new DAQ release consists of:
 2. building/deploying candidate releases during the testing period of a release cycle;
 3. One last build of the release at the end of the testing period.
 
+Patch release is built in the same way as a regular release. It contains both the candiadte and frozen releases phase.
+
 
 ## Release configuration
 
@@ -30,24 +32,24 @@ Update the file with the new versions (and, if needed, new packages) in the rele
 
 ## Building candidate releases
 
-Once the release configuration is ready, one can start the CI build for candidate releases. The build can be started via GitHub API or webUI. Go to the "Actions" tab of `daq-release` repo on GitHub, and select "Build candidate release" in the list of workflows in the workflows tab, click the "run workflow" button. A drop-down menu will show up. Put in the release name for the release cycle (for locating the release configuration in the repo) and the candidate release name for this build, and then click "Run workflow" to start the build.
+* Once the release configuration is ready, one can start the CI build for candidate releases. The build can be started via GitHub API or webUI. Go to the "Actions" tab of `daq-release` repo on GitHub, and select "Build candidate release" in the list of workflows in the workflows tab, click the "run workflow" button. A drop-down menu will show up. Put in the release name for the release cycle (for locating the release configuration in the repo) and the candidate release name for this build, and then click "Run workflow" to start the build.
 
-Once the build is completed successfully, login to `cvmfsdunedaqdev@oasiscfs01.fnal.gov` and run `~/pull_and_publish_candidate_release.sh` to pull down the candidate release from GitHub and publish it to cvmfs.
+* Once the build is completed successfully, login to `cvmfsdunedaqdev@oasiscfs01.fnal.gov` and run `~/pull_and_publish_candidate_release.sh` to pull down the candidate release from GitHub and publish it to cvmfs.
 
 
 ## Building the frozen release
 
-The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `daq-release/configs` and the frozen release name (in most cases, these two fields should have the same value.)
+* The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `daq-release/configs` and the frozen release name (in most cases, these two fields should have the same value.)
 
-To deploy the release, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` and run `~/pull_and_publish_frozen_release.sh`.  Note that the user is `cvmfsdunedaq` instead of `cvmfsdunedaqdev` (for the `dunedaq-development.opensicencgrid.org` repo).
+* To deploy the release, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` and run `~/pull_and_publish_frozen_release.sh`.  Note that the user is `cvmfsdunedaq` instead of `cvmfsdunedaqdev` (for the `dunedaq-development.opensicencgrid.org` repo).
 
-If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient. 
-
+* If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient. 
 To do so, login to `cvmfsdunedaq@oasiscfs01.fnal.gov` as `cvmfsdunedaq`, then do:
+  1. `REPO=dunedaq.opensciencegrid.org; cvmfs_server transaction $REPO`;
+  2. change directory to `/cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`;
+  3. (if needed) download the latest tagged version of dbt if it is not deployed yet, and expand it in the directory, rename the directory name using the tag;
+  4. (if needed) move the `latest` link to the latest tag in the directory;
+  5. create a symbolic link using the release tag, and point it to the latest tag in the directory;
+  6. change to $HOME directory, and run `REPO=dunedaq.opensciencegrid.org; cvmfs_server publish $REPO` to publish the changes. (Note: it is important to not have open file descriptors under /cvmfs/ when publishing, thus one would need to change directories to somewhere outside of cvmfs before issuing the publishing command).
 
-1. `REPO=dunedaq.opensciencegrid.org; cvmfs_server transaction $REPO`;
-2. change directory to `/cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`;
-3. (if needed) download the latest tagged version of dbt if it is not deployed yet, and expand it in the directory, rename the directory name using the tag;
-4. (if needed) move the `latest` link to the latest tag in the directory;
-5. create a symbolic link using the release tag, and point it to the latest tag in the directory;
-6. change to $HOME directory, and run `REPO=dunedaq.opensciencegrid.org; cvmfs_server publish $REPO` to publish the changes. (Note: it is important to not have open file descriptors under /cvmfs/ when publishing, thus one would need to change directories to somewhere outside of cvmfs before issuing the publishing command).
+* After the frozen release is rolled out, regarding the `prep-release/dunedaq-vX.Y.Z` or `patch/dunedaq-vX.Y.Z` branches, the release coordinator should notify the software coordination team if anything should be kept out of the merge to develop. The software coordination team will do the merge across all relevant repositories. Developers should handle any partial merge (cherry-pick).
