@@ -460,3 +460,20 @@
         - name: zmq
           version: 0.0.0
           source:  pypi
+
+    others:
+        - name: daq-systemtest
+          version: "develop"
+          commit: null
+        - name: pocket
+          version: "develop"
+          commit: null
+        - name: microservices
+          version: "develop"
+          commit: null
+        - name: dqm-backend
+          version: "develop"
+          commit: null
+        - name: grafana-dashboards
+          version: "develop"
+          commit: null
