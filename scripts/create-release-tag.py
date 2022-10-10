@@ -144,6 +144,8 @@ if __name__ == "__main__":
         for i in fman["pymodules"]:
             if i["source"] == "github_DUNE-DAQ":
                 pkgs.append(i)
+        if "others" in fman:
+            pkgs += fman["others"]
     if len(pkgs) == 0:
         print("Error: proper release manifest file is required.")
         exit(20)
