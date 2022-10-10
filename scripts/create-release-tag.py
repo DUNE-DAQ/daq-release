@@ -130,7 +130,7 @@ if __name__ == "__main__":
                         help='''delete the existing tag and re-tag''')
     parser.add_argument('-t', '--tag', default=None, required=True,
                         help='''new tag to be create''')
-    parser.add_argument('-i', '--input-manifest', required=True,
+    parser.add_argument('-i', '--input-manifest',
                         help="path to the release manifest file;")
     parser.add_argument('-a', '--all-packages', action='store_true',
                         help="whether to checkout all DAQ pacakges;")
@@ -146,14 +146,14 @@ if __name__ == "__main__":
                 pkgs.append(i)
         if "others" in fman:
             pkgs += fman["others"]
-    if len(pkgs) == 0:
-        print("Error: proper release manifest file is required.")
-        exit(20)
 
     new_tag = args.tag
 
 
     if args.all_packages:
+        if len(pkgs) == 0:
+            print("Error: proper release manifest file is required.")
+            exit(20)
         for i in pkgs:
             iname = i["name"]
             ref = i["version"]
