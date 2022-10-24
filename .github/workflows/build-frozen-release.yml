@@ -199,6 +199,7 @@ jobs:
             ${{ matrix.dockerimage }}
           tags: |
             type=raw,value=spack-frozen-release
+            type=raw,value=${{ github.event.inputs.release }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
