@@ -40,6 +40,7 @@ dune_packages_with_ci=(
  "dpdklibs"
  "rawdatautils"
  "ctbmodules"
+ "hsilibs"
 )
 
 dune_packages=(
@@ -97,8 +98,8 @@ dune_packages=(
 "iomanager"
 "grafana-dashboards"
 "microservices"
-"hsilibs"
 "dtpemulator"
 "datafilter"
+"hsilibs"
 "daq-systemtest"
 )
