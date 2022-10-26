@@ -29,7 +29,7 @@ class Triggeralgs(CMakePackage):
             args.append("-DDBT_DEBUG=true")
         else:
             args.append("-DDBT_DEBUG=false")
-        args.append("-DCMAKE_CXX_FLAGS=\"-march=x86_64-v3\"")
+        args.append("-DCMAKE_CXX_FLAGS=\"-march=x86-64-v3\"")
         return args
 
     def setup_run_environment(self, env):
