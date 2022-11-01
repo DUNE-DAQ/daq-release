@@ -130,7 +130,7 @@ jobs:
         name: nightly_spack_release
         path: ${{ github.workspace }}/nightly
 
-  update_spack_image:
+  update_image:
     name: ${{ matrix.os_name }}_update_spack_image
     runs-on: ubuntu-latest
     strategy:
@@ -200,6 +200,39 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: "dunedaq/sl7-minimal:spack-dev-feature-gcc12"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -n last_successful
+          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+
+    - name: upload dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: dbt_setup_release_env
+        path: ${{ github.workspace }}/dbt-setup-release-env.sh
+
+    - name: upload daq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: daq_app_rte
+        path: ${{ github.workspace }}/daq_app_rte.sh
 
   Spack_Build_all_pkgs_in_workarea:
     name: spack_build_against_dev_on_${{ matrix.os_name }}
