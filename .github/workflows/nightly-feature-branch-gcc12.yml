@@ -136,10 +136,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/sl7-externals"
+          - image: "ghcr.io/dune-daq/sl7-slim-externals"
             dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
-          - image: "ghcr.io/dune-daq/c8-externals"
+          - image: "ghcr.io/dune-daq/c8-slim-externals"
             dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_develop_release_spack
