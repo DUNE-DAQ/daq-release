@@ -189,7 +189,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ matrix.image }}
+            ${{ matrix.dockerimage }}
           tags: |
             type=raw,value=spack-dev-feature-gcc12
 
