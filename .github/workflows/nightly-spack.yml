@@ -16,13 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:latest
-      volumes:
-        - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
-    services:
-      cvmfs:
-        image: ghcr.io/dune-daq/pypi-repo:latest
-        volumes:
-          - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
     defaults:
       run:
         shell: bash
