@@ -86,13 +86,13 @@ class DAQRelease:
             for i in range(len(self.rdict["dunedaq"])):
                 ipkg = self.rdict["dunedaq"][i]
                 iname = ipkg["name"]
-                irepo = f"https://github.com/DUNE-DAQ/{iname}"
                 if self.overwrite_branch != "":
                     iver = self.overwrite_branch
                 else:
                     iver = ipkg["version"]
                 ihash = ipkg["commit"]
-                ihash = get_commit_hash(iname, iver)
+                if not iname.startswith('py-'):
+                    ihash = get_commit_hash(iname, iver)
                 self.rdict["dunedaq"][i]["commit"] = ihash
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
