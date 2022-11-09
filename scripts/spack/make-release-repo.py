@@ -123,7 +123,8 @@ class DAQRelease:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
-                lines = lines.replace("XHASHX", ipkg["commit"])
+                if ipkg["commit"] is not None:
+                    lines = lines.replace("XHASHX", ipkg["commit"])
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
