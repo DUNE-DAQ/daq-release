@@ -32,6 +32,9 @@
         - name: py-pybind11
           version: 2.6.2
           variant: ~
+        - name: py-moo
+          version: 0.6.3
+          variant: ~
         - name: uhal
           version: 2.8.1
           variant: ~
