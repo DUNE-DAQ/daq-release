@@ -74,6 +74,8 @@ if __name__ == "__main__":
 
     if args.all_packages:
         for i in pkgs:
+            if i["name"].startswith("py-"):
+                continue
             checkout_commit(i["name"], i["commit"], args.output_path)
     elif args.package is not None:
         # verify entry in manifest file
