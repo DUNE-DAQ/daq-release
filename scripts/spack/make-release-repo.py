@@ -158,11 +158,12 @@ class DAQRelease:
                     else:
                         lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
                 else:
-                    if "dunedaq" not in self.rdict["release"]:
-                        iver = self.rdict["release"]
                     if iname.startswith("py-"):
+                        iver = idep["version"]
                         lines += f'\n        depends_on(f"{iname}@{iver}")'
                     else:
+                        if "dunedaq" not in self.rdict["release"]:
+                            iver = self.rdict["release"]
                         lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
