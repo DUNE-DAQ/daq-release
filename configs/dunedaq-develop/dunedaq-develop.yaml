@@ -289,6 +289,9 @@
         - name: docker
           version: 5.0.3
           source:  pypi
+        - name: daq-assettools
+          version: 1.0.0
+          source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: 0.1.0
           source:  github_DUNE-DAQ
