@@ -31,7 +31,8 @@ class HepConcurrency(CMakePackage):
     url = 'https://github.com/art-framework-suite/hep-concurrency/archive/refs/tags/v1_07_04.tar.gz'
 
     version('1.07.04', tag='v1_07_04', git=git_base, get_full_repo=True)  
-    version('1.05.00', tag='v1_05_00', git=git_base, get_full_repo=True)  
+    version('1.07.06', tag='v1_07_06', git=git_base, get_full_repo=True)  
+
 
     variant('cxxstd',
             default='17',
@@ -40,19 +41,19 @@ class HepConcurrency(CMakePackage):
             description='Use the specified C++ standard when building.')
 
     patch('hep_concurrency.1.04.01.patch', when='@1.04.01')
+    patch('hep_concurrency.1.07.06.patch', when='@1.07.06')
 
     depends_on('cmake', type='build')
 
     # Build-only dependencies.
     for build_type in ["Debug", "Release", "RelWithDebInfo"]:
-        depends_on(f'cetmodules@2.25.05 build_type={build_type}', when=f'@1.07.04: build_type={build_type}', type='build')
+        depends_on(f'cetmodules build_type={build_type}', when=f'@1.07.04: build_type={build_type}', type='build')
         depends_on(f'cetlib-except build_type={build_type}', when=f'build_type={build_type}', type=('build','run'))
 
     # Build / link dependencies.
     #depends_on('cppunit@1.15.1')
-    depends_on('catch2@2.13.4', when='@1.07.04:')
-    depends_on('intel-tbb@2020.3', when='@1.07.04:')
-    depends_on('intel-tbb@2020.2', when='@1.05.00')
+    depends_on('catch2')
+    depends_on('intel-tbb')
 
     if 'SPACKDEV_GENERATOR' in os.environ:
         generator = os.environ['SPACKDEV_GENERATOR']

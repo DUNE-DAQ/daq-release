@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: dunedaq-v3.2.1
 
     externals:
         - name: boost
@@ -99,127 +99,127 @@
           version: "v2.2.0"
           commit: null
         - name: ers
-          version: "develop"
+          version: "v1.1.7"
           commit: null
         - name: logging
-          version: "develop"
+          version: "v1.0.7"
           commit: null
         - name: cmdlib
-          version: "develop"
+          version: "v1.1.6"
           commit: null
         - name: restcmd
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: opmonlib
-          version: "develop"
+          version: "v1.3.5"
           commit: null
         - name: rcif
-          version: "develop"
+          version: "v1.2.3"
           commit: null
         - name: appfwk
-          version: "develop"
+          version: "v2.7.2"
           commit: null
         - name: listrev
-          version: "develop"
+          version: "v3.2.0"
           commit: null
         - name: utilities
-          version: "develop"
+          version: "v2.2.0"
           commit: null
         - name: erskafka
-          version: "develop"
+          version: "v1.4.2"
           commit: null
         - name: kafkaopmon
-          version: "develop"
+          version: "v1.4.0"
           commit: null
         - name: ipm
-          version: "develop"
+          version: "v2.5.1"
           commit: null
         - name: serialization
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: iomanager
-          version: "develop"
+          version: "v1.1.0"
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: "v2.6.0"
           commit: null
         - name: detdataformats
-          version: "develop"
+          version: "v3.6.1"
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: "v1.2.6"
           commit: null
         - name: daqdataformats
-          version: "develop"
+          version: "v3.4.1"
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: "v1.3.1"
           commit: null
         - name: hsilibs
-          version: "develop"
+          version: "v1.0.1"
           commit: null
         - name: readoutmodules
-          version: "develop"
+          version: "v1.3.3"
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: "v1.5.5"
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "v2.9.2"
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: "v1.7.6"
           commit: null
         - name: lbrulibs
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: timing
-          version: "develop"
+          version: "v7.1.1"
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: "v2.1.1"
           commit: null
         - name: daqconf
-          version: "develop"
+          version: "v5.5.4"
           commit: null
         - name: trigger
-          version: "develop"
+          version: "v1.5.3"
           commit: null
         - name: triggeralgs
-          version: "develop"
+          version: "v1.1.5"
           commit: null
         - name: dqm
-          version: "develop"
+          version: "v1.5.2"
           commit: null
         - name: hdf5libs
-          version: "develop"
+          version: "v2.3.2"
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: uhallibs
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dtpcontrols
-          version: "develop"
+          version: "v2.2.1"
           commit: null
         - name: wibmod
-          version: "develop"
+          version: "v1.4.5"
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: "v1.2.1"
           commit: null
         - name: dtpctrllibs
-          version: "develop"
+          version: "v1.2.1"
           commit: null
         - name: ctbmodules
-          version: "develop"
+          version: "v1.0.0"
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: "v0.0.2"
           commit: null
         - name: py-moo
           version: 0.6.3
@@ -289,9 +289,6 @@
         - name: docker
           version: 5.0.3
           source:  pypi
-        - name: daq-assettools
-          version: 1.0.0
-          source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: 0.1.0
           source:  github_DUNE-DAQ
@@ -365,7 +362,7 @@
           version: 0.6.3
           source:  github_brettviren
         - name: nanorc
-          version: 4.1.5
+          version: 4.1.6
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
@@ -478,23 +475,23 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: "v2.0.0"
           commit: null
         - name: daq-buildtools
-          version: "develop"
+          version: "v6.0.3"
           commit: null
         - name: daq-systemtest
-          version: "develop"
+          version: "v1.0.2"
           commit: null
         - name: pocket
-          version: "develop"
+          version: "v0.4.0"
           commit: null
         - name: microservices
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: dqm-backend
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: grafana-dashboards
-          version: "develop"
+          version: "v1.4.1"
           commit: null

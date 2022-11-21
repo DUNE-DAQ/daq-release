@@ -3,10 +3,10 @@
 
     externals:
         - name: boost
-          version: 1.73.0
-          variant: "+context+container cxxstd=17"
+          version: 1.77.0
+          variant: "+context+container cxxstd=2a"
         - name: cetlib
-          version: 3.13.04
+          version: 3.15.00
           variant: ~
         - name: trace
           version: 3.17.04
@@ -18,13 +18,16 @@
           version: dunedaq-v2.8.0
           variant: ~
         - name: highfive
-          version: 2.3.1
+          version: 2.4.1
+          variant: "~mpi  ^hdf5@1.12.0~mpi"
+        - name: hdf5
+          version: 1.12.0
           variant: "~mpi"
         - name: libzmq
-          version: 4.3.1
+          version: 4.3.4
           variant: ~
         - name: cppzmq
-          version: 4.3.0
+          version: 4.8.1
           variant: ~
         - name: msgpack-c
           version: 3.3.0
@@ -46,7 +49,7 @@
           variant: ~
         - name: folly
           version: 2021.12.13.00
-          variant: "cxxstd=17"
+          variant: "cxxstd=2a"
         - name: felix-software
           version: dunedaq-v2.10.0
           variant: ~
@@ -65,10 +68,13 @@
         - name: dpdk
           version: 22.03
           variant: ~
+        - name: fmt
+          version: 8.1.1
+          variant: "cxxstd=17 shared=True"
 
     devtools:
         - name: cmake
-          version: 3.21.4
+          version: 3.23.1
           variant: ~
         - name: gdb
           version: 9.2
@@ -79,10 +85,10 @@
 
     systems:
         - name: python
-          version: 3.8.3
+          version: 3.10.4
           variant: ~
         - name: gcc
-          version: 8.2.0
+          version: 12.1.0
           variant: "+binutils"
         - name: openssh
           version: 8.7p1
@@ -302,7 +308,7 @@
           version: 0.16
           source:  pypi
         - name: h5py
-          version: 3.1.0
+          version: 3.7.0
           source:  pypi
         - name: idna
           version: "2.10"
@@ -350,7 +356,7 @@
           version: 2.6.3
           source:  pypi
         - name: numpy
-          version: 1.21.0
+          version: 1.23.0
           source:  pypi
         - name: oauthlib
           version: 3.2.0

@@ -33,7 +33,6 @@ class CetlibExcept(CMakePackage):
     url = 'https://github.com/art-framework-suite/cetlib-except/archive/refs/tags/v1_07_04.tar.gz'
 
     version('1.07.04', tag='v1_07_04', git=git_base, get_full_repo=True)
-    version('1.05.00', tag='v1_05_00', git=git_base, get_full_repo=True)
 
 
     variant('cxxstd',
@@ -45,10 +44,10 @@ class CetlibExcept(CMakePackage):
     depends_on('cmake', type='build')
 
     for build_type in ["Debug", "Release", "RelWithDebInfo"]:
-        depends_on(f'cetmodules@2.25.05 build_type={build_type}', when=f'@1.07.04 build_type={build_type}', type='build')
+        depends_on(f'cetmodules build_type={build_type}', when=f'build_type={build_type}', type='build')
 #        depends_on(f'cetpkgsupport build_type={build_type}', when=f'build_type={build_type}', type=('build','run'))
     
-    depends_on('catch2@2.13.4', when="@1.07.04", type=('build','run'))
+    depends_on('catch2', type=('build','run'))
 
     if 'SPACKDEV_GENERATOR' in os.environ:
         generator = os.environ['SPACKDEV_GENERATOR']

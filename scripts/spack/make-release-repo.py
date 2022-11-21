@@ -197,11 +197,21 @@ class DAQRelease:
 
     def generate_pyvenv_requirements(self, output_file):
         with open(output_file, 'w') as f:
-            f.write("--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple\n")
+            #f.write("--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple\n")
             for i in self.rdict['pymodules']:
                 iname = i["name"]
                 iversion = i["version"]
-                iline = f'{iname}=={iversion}'
+                if i["source"] == "pypi":
+                    iline = f'{iname}=={iversion}'
+                if i["source"].startswith("github"):
+                    iline = f"git+https://github.com/"
+                    iuser = i["source"].replace("github_", "")
+                    if iname == "moo":
+                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
+                    elif iname == "elisa-client-api":
+                        iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
+                    else:
+                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
                 f.write(iline + '\n')
         return
 

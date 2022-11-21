@@ -24,10 +24,13 @@ class Triggeralgs(CMakePackage):
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
+        args = []
         if str(self.spec.variants['build_type']) == "build_type=Debug":
-            return ["-DDBT_DEBUG=true"]
+            args.append("-DDBT_DEBUG=true")
         else:
-            return ["-DDBT_DEBUG=false"]
+            args.append("-DDBT_DEBUG=false")
+        args.append("-DCMAKE_CXX_FLAGS=\"-march=x86-64-v3\"")
+        return args
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

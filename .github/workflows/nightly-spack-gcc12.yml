@@ -163,9 +163,11 @@ jobs:
             tar xvf ../${nightly_tag}.tar.gz
             rm -rf ../${nightly_tag}.tar.gz
             ln -s ${nightly_tag} last_successful
+
             cd last_successful
             ln -s spack-*-gcc-* default
             cd ..
+
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
@@ -196,6 +198,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env_${{ matrix.os_name }}

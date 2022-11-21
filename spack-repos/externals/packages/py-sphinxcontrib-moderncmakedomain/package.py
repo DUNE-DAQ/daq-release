@@ -15,4 +15,4 @@ class PySphinxcontribModerncmakedomain(PythonPackage):
 
     version('3.19', sha256='b2900cc170b94ad53c59ae50a01961dc4c3ae9c12a8ec582d017b17abd69cea1')
 
-    depends_on('py-sphinx@4.1.2')
+    depends_on('py-sphinx')

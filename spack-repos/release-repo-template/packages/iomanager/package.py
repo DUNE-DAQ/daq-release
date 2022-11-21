@@ -19,7 +19,7 @@ class Iomanager(CMakePackage):
 
     depends_on("ipm")
     depends_on("opmonlib")
-    depends_on('folly cxxstd=17')
+    depends_on('folly cxxstd=2a')
     depends_on("serialization")
     depends_on("utilities")
 

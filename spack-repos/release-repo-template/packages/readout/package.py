@@ -24,7 +24,7 @@ class Readout(CMakePackage):
     depends_on("triggeralgs")
     depends_on("dfmessages")
     depends_on("appfwk")
-    depends_on('folly cxxstd=17')
+    depends_on('folly cxxstd=2a')
     depends_on("dataformats", when="@1.4.2")
     depends_on("daqdataformats", when="@1.4.5:")
     depends_on("detdataformats", when="@1.4.5:")

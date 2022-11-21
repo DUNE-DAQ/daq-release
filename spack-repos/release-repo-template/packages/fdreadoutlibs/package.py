@@ -28,7 +28,7 @@ class Fdreadoutlibs(CMakePackage):
     depends_on("detdataformats")
     depends_on("trigger")
     depends_on("triggeralgs")
-    depends_on('folly cxxstd=17')
+    depends_on('folly cxxstd=2a')
     depends_on("boost")
 
     depends_on("daq-cmake")
