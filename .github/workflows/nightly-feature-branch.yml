@@ -56,6 +56,8 @@ jobs:
           rm -f $SPACK_TAR
           
           source $SPACK_EXTERNALS/spack-0.17.1/share/spack/setup-env.sh
+          echo "*********** spack arch ************ "
+          spack arch
           spack load py-pyyaml@5.3.1
           
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
@@ -240,7 +242,7 @@ jobs:
         
     - name: setup dev area
       run: |
-          source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
+          source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest-gcc8/env.sh
           release_path=$(readlink -f /cvmfs/dunedaq-development.opensciencegrid.org/spack-nightly/last_successful)
           release_name=`basename $release_path`
           dbt-create -c -n ${release_name} dev-${{ matrix.os_name }}
@@ -272,13 +274,13 @@ jobs:
           dbt-build
 
     - name: upload build log file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: spack_build_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/build*.log
 
     - name: upload linter output file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: spack_linting_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/linting*

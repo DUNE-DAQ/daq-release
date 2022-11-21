@@ -1,55 +1,11 @@
 #!/bin/bash
 
-dune_packages_with_ci=(
- "daq-cmake"       
- "ers"             
- "erskafka"        
- "logging"         
- "opmonlib"        
- "cmdlib"          
- "rcif"            
- "restcmd"         
- "utilities"       
- "ipm"             
- "networkmanager"  
- "appfwk"          
- "listrev"         
- "serialization"   
- "nwqueueadapters" 
- "daqdataformats"  
- "detdataformats"  
- "detchannelmaps"  
- "dfmessages"      
- "trigemu"         
- "triggeralgs"     
- "timing"          
- "timinglibs"      
- "hdf5libs"        
- "trigger"         
- "readoutlibs"     
- "fdreadoutlibs"   
- "ndreadoutlibs"   
- "readoutmodules"  
- "flxlibs"         
- "dfmodules"       
- "influxopmon"     
- "kafkaopmon"      
- "daqconf"         
- "dqm"             
- "lbrulibs"        
- "wibmod"          
- "sspmodules"      
- "uhallibs"
- "dtpcontrols"
- "dtpctrllibs"
- "rawdatautils"
- "ctbmodules"
-)
-dune_package_non_cpp=(
- "nanorc"
-)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/repo.sh
 
 function git_checkout_and_update_ci {
+  tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
+  pushd $tmp_dir
   prd_list_name=$1[@]
   workflow_file=$2
   prd_list=("${!prd_list_name}")
@@ -60,6 +16,7 @@ function git_checkout_and_update_ci {
     echo "********************* $prod_name *****************************"
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
+    mkdir -p ./github/workflows
     cp $workflow_file .github/workflows
     git add .github/workflows
     old_message=`git log -1|grep -v "^commit"`
@@ -67,17 +24,19 @@ function git_checkout_and_update_ci {
     git push --quiet
     popd
   done
+  popd
+  rm -rf $tmp_dir
 }
 
 
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-pushd $tmp_dir
+tmp_d=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
+pushd $tmp_d
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/track_new_issues.yml
+git_checkout_and_update_ci dune_packages $tmp_d/.github/workflow-templates/track_new_issues.yml
 
-popd
+git_checkout_and_update_ci dune_packages $tmp_d/.github/workflow-templates/track_new_prs.yml
 
-rm -rf $tmp_dir
+popd 
+rm -rf $tmp_d

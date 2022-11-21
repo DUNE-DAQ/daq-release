@@ -172,17 +172,17 @@ jobs:
       - name: prepare cvmfs mirror for frozen release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p frozen_releases
+            mkdir -p releases
             RC_RELEASE=${{ github.event.inputs.release-tag }}
             image_name="${{ matrix.image }}:latest"
-            cd frozen_releases
+            cd releases
             tar xvf ../${RC_RELEASE}.tar.gz
             rm -rf ../${RC_RELEASE}.tar.gz
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV CANDIDATE_RELEASE ${RC_RELEASE}" >> Dockerfile
-            echo "ADD frozen_releases /cvmfs/dunedaq-development.opensciencegrid.org/frozen_releases" >> Dockerfile
+            echo "ENV FROZEN_RELEASE ${RC_RELEASE}" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack-releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
@@ -199,6 +199,7 @@ jobs:
             ${{ matrix.dockerimage }}
           tags: |
             type=raw,value=spack-frozen-release
+            type=raw,value=${{ github.event.inputs.release }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
@@ -207,3 +208,38 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_spack_image
+    container:
+      image: "dunedaq/sl7-minimal:spack-frozen-release"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh
+      run: |
+          export RC_RELEASE=${{ github.event.inputs.release-tag }}
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -b frozen ${RC_RELEASE}
+          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+
+    - name: upload dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: dbt_setup_release_env
+        path: ${{ github.workspace }}/dbt-setup-release-env.sh
+
+    - name: upload daq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: daq_app_rte
+        path: ${{ github.workspace }}/daq_app_rte.sh

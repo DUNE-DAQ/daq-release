@@ -234,7 +234,9 @@ if __name__ == "__main__":
                         help="set release name;")
     parser.add_argument('-u', '--update-hash', action='store_true',
                         help="whether to update commit hash in the YAML file;")
-    parser.add_argument('-o', '--output-path', required=True,
+    parser.add_argument('-c', '--check-branch', action='store_true',
+                        help="check if branch exists in repo;")
+    parser.add_argument('-o', '--output-path',
                         help="path to the generated spack repo;")
     parser.add_argument('--pypi-manifest', action='store_true',
                         help="whether to generate file containing bash array for python modules;")
@@ -248,10 +250,14 @@ if __name__ == "__main__":
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
         daq_release.generate_pypi_manifest(outfile)
-    if args.pyvenv_requirements:
+    elif args.pyvenv_requirements:
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pyvenv_requirements.txt')
         daq_release.generate_pyvenv_requirements(outfile)
-    if not args.pypi_manifest and not args.pyvenv_requirements:
+    elif args.check_branch:
+        tmp_dir = tempfile.mkdtemp()
+        daq_release.copy_release_yaml(tmp_dir, True)
+        shutil.rmtree(tmp_dir)
+    else:
         daq_release.generate_repo(args.output_path, args.template_path,
                                   args.update_hash, args.release_name)

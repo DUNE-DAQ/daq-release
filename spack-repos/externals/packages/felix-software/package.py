@@ -7,7 +7,7 @@ import spack.util.environment as envutil
 
 class FelixSoftware(Package):
 
-    git = "https://github.com/jcfreeman2/intentionallyempty.git"
+    has_code=False
 
     version("dunedaq-v2.10.0")
     version("dunedaq-v2.8.0")

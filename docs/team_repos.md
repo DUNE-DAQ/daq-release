@@ -1,10 +1,9 @@
 # List of teams and repositories 
 
 
-##  ccm
-
-* Maintainer: Pierre Lasorak, Alex Tapper
-* Repos with write access:
+## ccm
+* Maintainer(s): Pierre Lasorak ,Alex Tapper
+* Repositories with write access:
   - appfwk
   - cmdlib
   - daq-systemtest
@@ -25,13 +24,12 @@
   - pocket
   - rcif
   - restcmd
-  - utilities
 
 ## core-sw
-
-* Maintainer: Kurt Biery, Roland Sipos
-* Repos with write access:
+* Maintainer(s): Kurt Biery ,Roland Sipos
+* Repositories with write access:
   - appfwk
+  - ctbmodules
   - daq-systemtest
   - daqconf
   - daqdataformats
@@ -39,29 +37,36 @@
   - ddpdemo
   - dfmessages
   - dfmodules
+  - dpdklibs
+  - fdreadoutlibs
   - hdf5libs
+  - hsilibs
   - integrationtest
   - iomanager
   - ipm
+  - lbrulibs
   - minidaqapp
+  - ndreadoutlibs
   - networkmanager
   - nwqueueadapters
+  - performancetest
+  - readoutlibs
+  - readoutmodules
   - serialization
+  - sspmodules
   - trigemu
   - utilities
 
 ## datafmts
-
-* Maintainer: Alessandro Thea
-* Repos with write access:
+* Maintainer(s): Alessandro Thea
+* Repositories with write access:
   - daqdataformats
   - detchannelmaps
   - detdataformats
 
 ## dqm
-
-* Maintainer: Pip Hamilton
-* Repos with write access:
+* Maintainer(s): Pip Hamilton
+* Repositories with write access:
   - daq-systemtest
   - dqm
   - dqm-backend
@@ -70,49 +75,34 @@
   - rawdatautils
 
 ## nd-udaq
-
-* Maintainer: Patrick Dunne
-* Repos with write access:
+* Maintainer(s): Patrick Dunne
+* Repositories with write access:
   - lbrulibs
   - minidaqapp
 
-## trigger
-
-* Maintainer: Philip Rodrigues
-* Repos with write access:
-  - daq-systemtest
-  - datafilter
-  - minidaqapp
-  - trigger
-  - triggeralgs
-  - triggermodules
-
 ## udaq
-
-* Maintainer: Jim Brooke
-* Repos with write access:
+* Maintainer(s): Jim Brooke
+* Repositories with write access:
   - daq-systemtest
-  - dpdklibs
   - dtpcontrols
   - dtpctrllibs
-  - fdreadoutlibs
+  - dtpemulator
+  - dtpfeedbacktools
   - flx-k8s-device-plugin
   - flxlibs
   - minidaqapp
-  - ndreadoutlibs
   - readout
-  - readoutlibs
-  - readoutmodules
-  - sspmodules
   - timing
   - timinglibs
   - uhallibs
-  - utilities
 
 ## wib
-
-* Maintainer: David Rivera
-* Repos with write access:
+* Maintainer(s): Alessandro Thea
+* Repositories with write access:
   - dune-wib-firmware
   - protodune-wib-firmware
   - wibmod
+
+
+Page was generated at: 30/09/2022 18:13:11
+

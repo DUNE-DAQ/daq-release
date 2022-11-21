@@ -16,13 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:latest
-      volumes:
-        - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
-    services:
-      cvmfs:
-        image: ghcr.io/dune-daq/pypi-repo:latest
-        volumes:
-          - pypi-repo:/cvmfs/dunedaq.opensciencegrid.org/pypi-repo
     defaults:
       run:
         shell: bash
@@ -55,6 +48,9 @@ jobs:
           
           source $SPACK_EXTERNALS/spack-0.17.1/share/spack/setup-env.sh
           spack load py-pyyaml@5.3.1
+
+          echo "*********** spack arch ************ "
+          spack arch
           
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
           
@@ -69,6 +65,7 @@ jobs:
           cd $SPACK_RELEASE/$DAQ_RELEASE
           source spack-0.17.1/share/spack/setup-env.sh
           spack repo add $SPACK_EXTERNALS/spack-repo-externals
+          cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/dpdk/package.py $SPACK_EXTERNALS/spack-repo-externals/packages/dpdk/package.py
           
           cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
           repos:
@@ -222,7 +219,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest-spack || true
+          setup_dbt latest-gcc8|| true
           dbt-setup-release -n last_successful
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
