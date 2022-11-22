@@ -15,7 +15,7 @@ jobs:
     name: build_dev_release_spack
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:gcc12
+      image: ghcr.io/dune-daq/sl7-slim-externals:latest
     defaults:
       run:
         shell: bash
@@ -157,7 +157,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
             nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
-            image_name="${{ matrix.image }}:gcc12"
+            image_name="${{ matrix.image }}:latest"
             cd nightly
             tar xvf ../${nightly_tag}.tar.gz
             rm -rf ../${nightly_tag}.tar.gz
