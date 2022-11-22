@@ -29,7 +29,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release
-        ref: dingpf/gcc12
 
     - name: install pip2pi
       run: |
