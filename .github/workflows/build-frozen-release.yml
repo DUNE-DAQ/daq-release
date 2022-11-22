@@ -1,4 +1,4 @@
-name: Build GCC 12 frozen release
+name: Build frozen release
 
 on:
 

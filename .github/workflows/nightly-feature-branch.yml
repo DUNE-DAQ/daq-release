@@ -1,4 +1,4 @@
-name: GCC 12 Feature Branch Workflow
+name: Feature Branch Workflow
 
 on:
 

@@ -1,4 +1,4 @@
-name: Build GCC 12 candidate release
+name: Build candidate release
 
 on:
 
