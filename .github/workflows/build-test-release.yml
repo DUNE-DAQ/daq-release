@@ -109,7 +109,7 @@ jobs:
           /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
 
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
-          source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate
+          source ${SPACK_RELEASE}/../.venv/bin/activate
 
 
           python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
@@ -209,18 +209,11 @@ jobs:
 
     steps:
 
-    - name: Checkout daq-buildtools
-      uses: actions/checkout@v3
-      with:
-        repository: DUNE-DAQ/daq-buildtools
-        path: daq-buildtools
-        ref: "dingpf/support_test_release_in_production_repo"
-
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh
       run: |
           export DAQ_RELEASE=${{ github.event.inputs.release }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          source $GITHUB_WORKSPACE/daq-buildtools/env.sh || true
+          setup_dbt latest|| true
           dbt-setup-release -b test ${DAQ_RELEASE}
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
