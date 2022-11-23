@@ -1,0 +1,239 @@
+name: Build test release
+
+on:
+
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'targeted release (one of subdirs under daq-release/configs)'
+        required: true 
+      build_number:
+        description: 'build number, starts from 1'
+        required: true 
+
+jobs:
+  build_the_test_release_spack:
+    name: build_test_release_spack
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dune-daq/sl7-slim-externals:latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Start the CI
+      run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
+
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+
+    - name: setup directories and install spack
+      run: |
+          export SPACK_VERSION=0.18.1
+          export GCC_VERSION=12.1.0
+          export EXT_VERSION=v1.0
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/test/spack/releases/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
+
+          mkdir -p ${SPACK_RELEASE}
+
+
+          cd ${SPACK_RELEASE}
+          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
+          tar xf v${SPACK_VERSION}.tar.gz
+          ln -s spack-${SPACK_VERSION} spack-installation
+          rm -f v${SPACK_VERSION}.tar.gz
+
+
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+
+          cd $DAQ_RELEASE_DIR
+          python3 scripts/spack/make-release-repo.py \
+          	-i configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml \
+          	-t spack-repos/release-repo-template \
+          	-r ${DAQ_RELEASE} \
+                -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
+
+          cd $SPACK_RELEASE
+          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
+          echo "*********** spack arch ************ "
+          spack arch
+
+          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
+          repos:
+            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+            - \$spack/var/spack/repos/builtin
+          EOT
+
+          spack repo list
+
+          cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/dpdk/package.py  ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals/packages/dpdk/package.py
+
+          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
+          upstreams:
+            spack-externals:
+              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+          EOT
+
+
+          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
+          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+          # verify the compilers have been added
+          spack compiler list
+
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+
+          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+
+
+
+          ### Install the release in a spack environment
+
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+
+          # Generate pyvenv_requirements.txt
+          spack load dunedaq@${DAQ_RELEASE}
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+
+          python -m venv ${SPACK_RELEASE}/../dbt-pyvenv
+          source ${SPACK_RELEASE}/../dbt-pyvenv/bin/activate
+
+
+          python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
+
+          spack clean -a
+
+          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
+
+          cd $SPACK_RELEASE_DIR/../
+          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/test-releases
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/test-releases
+
+    - name: upload spack test release tarball
+      uses: actions/upload-artifact@v3
+      with:
+        name: test_release
+        path: ${{ github.workspace }}/test-releases
+
+
+  update_image:
+    name: update_spack_image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "ghcr.io/dune-daq/sl7-slim-externals"
+            dockerimage: "dunedaq/sl7-minimal"
+            os_name: "c7"
+          - image: "ghcr.io/dune-daq/c8-slim-externals"
+            dockerimage: "dunedaq/c8-minimal"
+            os_name: "c8"
+    needs: build_the_test_release_spack
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Download spack test release tarball artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: test_release
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror for test release
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p releases
+            DAQ_RELEASE=${{ github.event.inputs.release }}
+            image_name="${{ matrix.image }}:latest"
+            cd releases
+            tar xvf ../${DAQ_RELEASE}.tar.gz
+            cd ${DAQ_RELEASE}
+            ln -s spack-*-gcc-* default
+            cd ..
+            cd ..
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV FROZEN_RELEASE ${DAQ_RELEASE}" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/test/spack/releases" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ matrix.dockerimage }}
+          tags: |
+            type=raw,value=spack-test-release
+            type=raw,value=${{ github.event.inputs.release }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: "dunedaq/sl7-minimal:spack-test-release"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Checkout daq-buildtools
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-buildtools
+        path: daq-buildtools
+        ref: "dingpf/support_test_release_in_production_repo"
+
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh
+      run: |
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          source $GITHUB_WORKSPACE/daq-buildtools/env.sh || true
+          dbt-setup-release -b test ${DAQ_RELEASE}
+          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+
+    - name: upload dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: dbt_setup_release_env
+        path: ${{ github.workspace }}/dbt-setup-release-env.sh
+
+    - name: upload daq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: daq_app_rte
+        path: ${{ github.workspace }}/daq_app_rte.sh
