@@ -18,7 +18,7 @@ jobs:
     name: update_pypi_repo
     runs-on: ubuntu-latest
     container:
-      image: dunedaq/sl7-minimal:spack-externals
+      image: ghcr.io/dune-daq/sl7-slim-externals:gcc12
     defaults:
       run:
         shell: bash
@@ -34,8 +34,8 @@ jobs:
       run: |
           mkdir -p $GITHUB_WORKSPACE/workdir
           cd $GITHUB_WORKSPACE/workdir
-          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
-          spack load py-pyyaml@5.3.1
+          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
+          spack load python
           python -m venv pypi-repo-venv
           source pypi-repo-venv/bin/activate
           echo "activated pyvenv"
@@ -45,8 +45,8 @@ jobs:
     - name: parse release_manifest and install all pkgs
       run: |
           cd $GITHUB_WORKSPACE/workdir
-          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
-          spack load py-pyyaml@5.3.1
+          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
+          spack load python
           source pypi-repo-venv/bin/activate
           manifest_file="$GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml"
           repo_path="/cvmfs/dunedaq.opensciencegrid.org/pypi-repo"
@@ -66,9 +66,8 @@ jobs:
     - name: generaete pyvenv_requirements.txt and test installing dbt-pyvenv
       run: |
           cd $GITHUB_WORKSPACE/workdir
-          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
-          spack load py-pyyaml@5.3.1
-          $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
+          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
+          /usr/bin/python3 $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
           python -m venv dbt-pyvenv
           source dbt-pyvenv/bin/activate
           python -m pip install -r $GITHUB_WORKSPACE/pyvenv_requirements.txt
@@ -76,8 +75,8 @@ jobs:
     - name: generaete pip freeze
       run: |
           cd $GITHUB_WORKSPACE/workdir
-          source `realpath /cvmfs/dunedaq.opensciencegrid.org/spack-externals/spack-installation/share/spack/setup-env.sh`
-          spack load py-pyyaml@5.3.1
+          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
+          spack load python
           source dbt-pyvenv/bin/activate
           pip freeze > $GITHUB_WORKSPACE/pip-freeze.txt
 
