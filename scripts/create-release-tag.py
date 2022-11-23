@@ -155,6 +155,8 @@ if __name__ == "__main__":
             print("Error: proper release manifest file is required.")
             exit(20)
         for i in pkgs:
+            if i["name"].startswith("py-"):
+                continue
             iname = i["name"]
             ref = i["version"]
             if not ref.startswith('v'):
