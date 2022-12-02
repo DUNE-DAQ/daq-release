@@ -19,10 +19,10 @@
           variant: ~
         - name: highfive
           version: 2.4.1
-          variant: "~mpi  ^hdf5@1.12.0~mpi"
+          variant: "~mpi  ^hdf5@1.12.0~mpi+threadsafe"
         - name: hdf5
           version: 1.12.0
-          variant: "~mpi"
+          variant: "~mpi +threadsafe"
         - name: libzmq
           version: 4.3.4
           variant: ~

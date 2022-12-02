@@ -28,8 +28,8 @@ class Highfive(CMakePackage):
     variant('boost', default=False, description='Support Boost')
 
     depends_on('boost @1.41:', when='+boost')
-    depends_on('hdf5 ~mpi', when='~mpi')
-    depends_on('hdf5 +mpi', when='+mpi')
+    depends_on('hdf5 ~mpi +threadsafe', when='~mpi')
+    depends_on('hdf5 +mpi +threadsafe', when='+mpi')
 
     def cmake_args(self):
         print(self.spec)
