@@ -41,7 +41,7 @@ jobs:
           export DAQ_RELEASE=${{ github.event.inputs.release }}
           export BUILD_NUMBER=${{ github.event.inputs.build_number }}
 
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/test/spack/releases/$DAQ_RELEASE
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/tests/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
           mkdir -p ${SPACK_RELEASE}
@@ -158,10 +158,10 @@ jobs:
       - name: prepare cvmfs mirror for test release
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p releases
+            mkdir -p tests
             DAQ_RELEASE=${{ github.event.inputs.release }}
             image_name="${{ matrix.image }}:latest"
-            cd releases
+            cd tests
             tar xvf ../${DAQ_RELEASE}.tar.gz
             cd ${DAQ_RELEASE}
             ln -s spack-*-gcc-* default
@@ -170,7 +170,7 @@ jobs:
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV FROZEN_RELEASE ${DAQ_RELEASE}" >> Dockerfile
-            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/test/spack/releases" >> Dockerfile
+            echo "ADD tests /cvmfs/dunedaq-develoment.opensciencegrid.org/tests" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to Docker Hub
