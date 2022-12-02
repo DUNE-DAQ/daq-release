@@ -276,7 +276,7 @@ jobs:
           	-o $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}
 
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source dbt-env.sh
+          source env.sh
           dbt-workarea-env || true
           # Checkout all DAQ packages to sourcecode by reading the repo file.
           python3 $DAQ_RELEASE_DIR/scripts/checkout-daq-package.py -a \
@@ -286,7 +286,7 @@ jobs:
     - name: setup build env, build and lint the repo against the development release
       run: |
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source dbt-env.sh
+          source env.sh
           dbt-workarea-env || true
           #dbt-workarea-env -s externals || true
           dbt-build
