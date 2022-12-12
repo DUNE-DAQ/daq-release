@@ -261,7 +261,7 @@ jobs:
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-create -c -n last_successful dev-${{ matrix.os_name }}
+          dbt-create -n last_successful dev-${{ matrix.os_name }}
           
     - name: checkout all DAQ packages
       run: |
