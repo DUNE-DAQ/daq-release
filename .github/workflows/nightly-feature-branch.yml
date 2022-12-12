@@ -284,7 +284,7 @@ jobs:
     - name: setup build env, build and lint the repo against the development release
       run: |
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source dbt-env.sh || true
+          source env.sh || true
           #dbt-workarea-env -s externals || true
           dbt-build
 
