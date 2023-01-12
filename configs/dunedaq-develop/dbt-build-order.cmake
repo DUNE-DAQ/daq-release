@@ -50,5 +50,12 @@ set(build_order "daq-cmake"
                 "dtpctrllibs"
                 "ctbmodules"
                 "dpdklibs"
+		"system"
+		"config"
+		"oks"
+		"genconfig"
+		"oks_utils"
+		"dal"
+		"oksconfig"
 )
 

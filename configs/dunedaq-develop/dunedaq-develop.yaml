@@ -233,6 +233,27 @@
         - name: py-fastjsonschema
           version: 2.14.5
           commit: null
+        - name: system
+          version: "develop"
+          commit: null
+        - name: config
+          version: "develop"
+          commit: null
+        - name: oks
+          version: "develop"
+          commit: null
+        - name: genconfig
+          version: "develop"
+          commit: null
+        - name: oks_util
+          version: "develop"
+          commit: null
+        - name: dal
+          version: "develop"
+          commit: null
+        - name: oksconfig
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
