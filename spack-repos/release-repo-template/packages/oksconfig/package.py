@@ -19,6 +19,7 @@ class Oksconfig(CMakePackage):
 
     depends_on("daq-cmake")
     depends_on("ers")
+    depends_on("config")
     depends_on("logging")
     depends_on("boost")
 
