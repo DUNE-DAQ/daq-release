@@ -245,7 +245,7 @@
         - name: genconfig
           version: "develop"
           commit: null
-        - name: oks_util
+        - name: oks_utils
           version: "develop"
           commit: null
         - name: dal
