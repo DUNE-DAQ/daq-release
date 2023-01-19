@@ -21,6 +21,7 @@ class Dal(CMakePackage):
     depends_on("ers")
     depends_on("logging")
     depends_on("config")
+    depends_on("genconfig")
     depends_on("okssystem")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
