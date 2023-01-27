@@ -21,6 +21,7 @@ class Config(CMakePackage):
     depends_on("boost")
     depends_on("ers")
     depends_on("logging")
+    depends_on("python")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
