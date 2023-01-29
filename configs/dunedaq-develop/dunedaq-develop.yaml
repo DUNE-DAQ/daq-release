@@ -254,9 +254,6 @@
         - name: oksconfig
           version: "develop"
           commit: null
-        - name: qt
-          version: 5.15.4
-          commit: null
 
     pymodules:
         - name: pip
