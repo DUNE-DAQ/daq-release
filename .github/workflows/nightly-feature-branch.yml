@@ -34,7 +34,7 @@ jobs:
         
     - name: setup directories and install spack
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.19.0
           export GCC_VERSION=12.1.0
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
@@ -100,9 +100,15 @@ jobs:
 
           ### Install the release in a spack environment
 
+	  which python
+	  python --version
+	  which python3
+	  python3 --version
+	  printenv
+
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
-          spack install --debug --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          LC_ALL=en_US.UTF-8 spack install --show-log-on-error --keep-stage --fail-fast --keep-prefix --verbose --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${DAQ_RELEASE}
