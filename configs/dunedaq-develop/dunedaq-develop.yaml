@@ -71,6 +71,9 @@
         - name: fmt
           version: 8.1.1
           variant: "cxxstd=17 shared=True"
+        - name: qt
+          version: 5.15.4
+          variant: ~
 
     devtools:
         - name: cmake
@@ -81,9 +84,6 @@
           variant: "~python"
         - name: ninja
           version: 1.10.0
-          variant: ~
-        - name: qt
-          version: 5.15.4
           variant: ~
 
     systems:
