@@ -34,7 +34,7 @@ jobs:
         
     - name: setup directories and install spack
       run: |
-          export SPACK_VERSION=0.19.0
+          export SPACK_VERSION=0.18.1
           export GCC_VERSION=12.1.0
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
