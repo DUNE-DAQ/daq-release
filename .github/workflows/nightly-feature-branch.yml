@@ -96,13 +96,27 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-
+	  echo "JCF: POTENTIALLY RELEVANT INFO ON HOST \""$(hostname)"\":"
+	  echo "PYTHON: " 
+	  which python
+	  python --version
+	  echo "PYTHON3: " 
+	  which python3
+	  python3 --version
+	  echo "LOCALE INFO: "
+	  locale
+	  echo "RPATH: "
+	  echo $RPATH | tr ":" "\n"
+	  echo "PYTHONPATH: "
+	  echo $PYTHONPATH | tr ":" "\n"
+	  echo "SPACK ENVIRONMENT STUFF: "
+	  printenv | grep SPACK
 
           ### Install the release in a spack environment
 
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --debug --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
           spack load dunedaq@${DAQ_RELEASE}
