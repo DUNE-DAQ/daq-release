@@ -137,10 +137,8 @@ jobs:
       matrix:
         include:
           - image: "ghcr.io/dune-daq/sl7-slim-externals"
-            dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
           - image: "ghcr.io/dune-daq/c8-slim-externals"
-            dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_frozen_release_spack
     environment: dockerhub
@@ -173,11 +171,12 @@ jobs:
             echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack/releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
-      - name: Log in to Docker Hub
+      - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -202,7 +201,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "dunedaq/sl7-minimal:spack-frozen-release"
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-frozen-release"
     defaults:
       run:
         shell: bash
