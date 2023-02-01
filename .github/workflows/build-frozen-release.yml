@@ -183,7 +183,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ matrix.dockerimage }}
+            ${{ matrix.image }}
           tags: |
             type=raw,value=spack-frozen-release
             type=raw,value=${{ github.event.inputs.release }}
