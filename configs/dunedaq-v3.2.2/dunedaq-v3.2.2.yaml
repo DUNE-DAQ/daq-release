@@ -216,7 +216,7 @@
           version: "v2.2.2"
           commit: null
         - name: ctbmodules
-          version: "v2.0.0"
+          version: "v2.0.1"
           commit: null
         - name: dpdklibs
           version: "v0.0.2"
