@@ -71,6 +71,18 @@
         - name: fmt
           version: 8.1.1
           variant: "cxxstd=17 shared=True"
+        - name: py-moo
+          version: 0.6.3
+          variant: ~
+        - name: py-anyconfig
+          version: 0.9.11
+          variant: ~
+        - name: py-jsonnet
+          version: 0.16.0
+          variant: ~
+        - name: py-fastjsonschema
+          version: 2.14.5
+          variant: ~
         - name: numactl
           version: 2.0.14
           variant: ~
@@ -223,18 +235,6 @@
           commit: null
         - name: dpdklibs
           version: "v0.0.2"
-          commit: null
-        - name: py-moo
-          version: 0.6.3
-          commit: null
-        - name: py-anyconfig
-          version: 0.9.11
-          commit: null
-        - name: py-jsonnet
-          version: 0.16.0
-          commit: null
-        - name: py-fastjsonschema
-          version: 2.14.5
           commit: null
 
     pymodules:
