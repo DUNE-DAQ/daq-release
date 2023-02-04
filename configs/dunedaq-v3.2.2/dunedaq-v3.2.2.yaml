@@ -71,6 +71,9 @@
         - name: fmt
           version: 8.1.1
           variant: "cxxstd=17 shared=True"
+        - name: numactl
+          version: 2.0.14
+          variant: ~
 
     devtools:
         - name: cmake
