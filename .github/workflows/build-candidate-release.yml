@@ -216,7 +216,7 @@ jobs:
           dbt-setup-release -b candidate ${RC_RELEASE}
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
 
     - name: upload dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
