@@ -228,7 +228,7 @@
           version: "v1.2.1"
           commit: null
         - name: dtpctrllibs
-          version: "v2.2.2"
+          version: "v1.2.2"
           commit: null
         - name: ctbmodules
           version: "v2.0.1"
