@@ -168,7 +168,7 @@
           version: "v3.4.1"
           commit: null
         - name: readoutlibs
-          version: "v1.3.2"
+          version: "v1.3.3"
           commit: null
         - name: hsilibs
           version: "v2.0.0"
