@@ -42,19 +42,19 @@ class Readoutlibs(CMakePackage):
         env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
-        env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
+        #env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
         env.prune_duplicate_paths('LIBRARY_PATH')
 
 
-    def setup_build_environment(self, env):
-        env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
-        env.prune_duplicate_paths('LIBRARY_PATH')
+    #def setup_build_environment(self, env):
+        #env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
+        #env.prune_duplicate_paths('LIBRARY_PATH')
 
-    def setup_dependent_run_environment(self, env, dependent_spec):
-        env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
-        env.prune_duplicate_paths('LIBRARY_PATH')
+    #def setup_dependent_run_environment(self, env, dependent_spec):
+        #env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
+        #env.prune_duplicate_paths('LIBRARY_PATH')
 
 
-    def setup_dependent_build_environment(self, env, dependent_spec):
-        env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
-        env.prune_duplicate_paths('LIBRARY_PATH')
+    #def setup_dependent_build_environment(self, env, dependent_spec):
+        #env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
+        #env.prune_duplicate_paths('LIBRARY_PATH')
