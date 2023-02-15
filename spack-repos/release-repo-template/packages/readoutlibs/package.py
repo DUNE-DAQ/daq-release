@@ -26,7 +26,6 @@ class Readoutlibs(CMakePackage):
     depends_on("dfmessages")
     depends_on('folly cxxstd=2a')
     depends_on("boost")
-    depends_on("numactl")
 
     depends_on("daq-cmake")
     depends_on("py-moo", type='build')
