@@ -7,7 +7,7 @@ Making a new DAQ release consists of:
 1. Preparations before testing the build:
    * Create release configurations once all tags have been collected;
    * Check version tags with version numbers used in `CMakeLists.txt`;
-   * Check dependencies in `CMakeLists.txt` matches those in `cmake.in` files;
+   * Check if dependencies in `CMakeLists.txt` matches those in `cmake/<pkgname>Config.cmake.in` files;
    * Update spack recipe files with new dependencies;
 2. Build/deploy candidate releases during the testing period of a release cycle;
 3. One last build of the release at the end of the testing period.
@@ -40,8 +40,8 @@ Update the file with the new versions (and, if needed, new packages) in the rele
 
 It's worth to do several checks before starting any test builds. These checks include:
 
-* Check version tags with version numbers used in `CMakeLists.txt`; The script `script/checkout-daq-package.py` in this repo can help here. `python3 script/checkout-daq-package.py -i <path-to-release-config-xml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers;
-* Check dependencies in `CMakeLists.txt` matches those in `cmake.in` files;
+* Check version tags with version numbers used in `CMakeLists.txt`; The script `script/checkout-daq-package.py` in this repo can help here. `python3 script/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers;
+* Check if dependencies in `CMakeLists.txt` matches those in `cmake/<pkgname>Config.cmake.in` files;
 * Update spack recipe files for DAQ packages with newly added dependencies.
 
 ## Building candidate releases
