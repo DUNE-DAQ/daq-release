@@ -97,7 +97,7 @@
   - timinglibs
 
 ## trigger
-* Maintainer(s): Jim Brooke
+* Maintainer(s): Josh Klein
 * Repositories with write access:
   - daq-systemtest
   - datafilter
