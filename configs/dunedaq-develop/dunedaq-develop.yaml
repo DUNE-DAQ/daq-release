@@ -332,7 +332,7 @@
           version: 2.0.2
           source:  pypi
         - name: gunicorn
-          version: 20.10.0
+          version: 20.1.0
           source:  pypi
         - name: h5py
           version: 3.7.0
