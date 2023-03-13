@@ -286,6 +286,9 @@
         - name: configparser
           version: 5.2.0
           source:  pypi
+        - name: connectivityserver
+          version: 1.0.0
+          source:  github_DUNE-DAQ
         - name: docker
           version: 5.0.3
           source:  pypi
@@ -316,11 +319,20 @@
         - name: future
           version: 0.18.2
           source:  pypi
+        - name: gevent
+          version: 22.10.2
+          source:  pypi
         - name: google-auth
           version: 2.6.6
           source:  pypi
         - name: graphviz
           version: 0.16
+          source:  pypi
+        - name: greenlet
+          version: 2.0.2
+          source:  pypi
+        - name: gunicorn
+          version: 20.10.0
           source:  pypi
         - name: h5py
           version: 3.7.0
@@ -477,6 +489,12 @@
           source:  pypi
         - name: zmq
           version: 0.0.0
+          source:  pypi
+        - name: zope.event
+          version: 4.6
+          source:  pypi
+        - name: zope.interface
+          version: 5.5.2
           source:  pypi
 
     others:
