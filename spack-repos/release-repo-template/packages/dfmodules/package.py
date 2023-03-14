@@ -31,6 +31,7 @@ class Dfmodules(CMakePackage):
     depends_on("trigger")
     depends_on("serialization")
     depends_on("readoutlibs")
+    depends_on("detchannelmaps")
 
     depends_on("py-moo", type='build')
 
