@@ -20,6 +20,7 @@ class Detchannelmaps(CMakePackage):
     depends_on("daq-cmake")
     depends_on("cetlib")
     depends_on("logging")
+    depends_on("serialization")
     depends_on("ers")
     depends_on('py-moo', type='build')
 
