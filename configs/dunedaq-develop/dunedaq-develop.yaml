@@ -9,7 +9,7 @@
           version: 3.15.00
           variant: ~
         - name: trace
-          version: 3.17.04
+          version: 3.17.09
           variant: ~
         - name: nlohmann-json
           version: 3.9.0
