@@ -244,6 +244,9 @@
         - name: anyconfig
           version: 0.9.11
           source:  pypi
+        - name: anyio
+          version: 3.6.2
+          source:  pypi
         - name: anytree
           version: 2.8.0
           source:  pypi
@@ -334,8 +337,14 @@
         - name: gunicorn
           version: 20.1.0
           source:  pypi
+        - name: h11
+          version: 0.14.0
+          source:  pypi
         - name: h5py
           version: 3.7.0
+          source:  pypi
+        - name: httpcore
+          version: 0.16.3
           source:  pypi
         - name: httpx
           version: 0.23.3
@@ -376,12 +385,21 @@
         - name: kubernetes
           version: 23.6.0
           source:  pypi
+        - name: markdown-it-py
+          version: 2.2.0
+          source:  pypi
         - name: MarkupSafe
           version: 2.0.1
+          source:  pypi
+        - name: mdurl
+          version: 0.1.2
           source:  pypi
         - name: moo
           version: 0.6.3
           source:  github_brettviren
+        - name: nanoid
+          version: 2.0.0
+          source:  pypi
         - name: nanorc
           version: 4.3.1
           source:  github_DUNE-DAQ
@@ -425,7 +443,7 @@
           version: 1.4.2
           source:  pypi
         - name: Pygments
-          version: 2.10.0
+          version: 2.14.0
           source:  pypi
         - name: pyparsing
           version: 2.4.7
@@ -460,8 +478,11 @@
         - name: requests-oauthlib
           version: 1.3.1
           source:  pypi
+        - name: rfc3986
+          version: 1.5.0
+          source:  pypi
         - name: rich
-          version: 10.14.0
+          version: 13.3.2
           source:  pypi
         - name: rsa
           version: 4.8
@@ -471,6 +492,9 @@
           source:  pypi
         - name: six
           version: 1.16.0
+          source:  pypi
+        - name: sniffio
+          version: 1.3.0
           source:  pypi
         - name: textual
           version: 0.10.1
