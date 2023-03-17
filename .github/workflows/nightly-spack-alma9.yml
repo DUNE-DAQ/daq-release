@@ -240,8 +240,10 @@ jobs:
         include:
           - image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev"
             os_name: "alma9"
-          - image: "ghcr.io/dune-daq/c8-slim-externals:spack-dev"
-            os_name: "c8"
+          # glibc is not forward-compatible. Base release is built in alma9 with glibc 2.34;
+          # cannot use those binaries on c8-spack image, where glibc is 2.23.
+          #- image: "ghcr.io/dune-daq/c8-slim-externals:spack-dev"
+          #  os_name: "c8"
     container:
       image: ${{ matrix.image }}
     defaults:
