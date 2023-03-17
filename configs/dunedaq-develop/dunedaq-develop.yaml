@@ -337,6 +337,9 @@
         - name: h5py
           version: 3.7.0
           source:  pypi
+        - name: httpx
+          version: 0.23.3
+          source:  pypi
         - name: idna
           version: "2.10"
           source:  pypi
@@ -468,6 +471,9 @@
           source:  pypi
         - name: six
           version: 1.16.0
+          source:  pypi
+        - name: textual
+          version: 0.10.1
           source:  pypi
         - name: toml
           version: 0.10.2
