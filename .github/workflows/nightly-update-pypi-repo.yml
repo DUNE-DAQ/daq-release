@@ -66,8 +66,8 @@ jobs:
     - name: generaete pyvenv_requirements.txt and test installing dbt-pyvenv
       run: |
           cd $GITHUB_WORKSPACE/workdir
-          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
           python3 $GITHUB_WORKSPACE/daq-release/scripts/spack/make-release-repo.py -o  $GITHUB_WORKSPACE --pyvenv-requirements -i $GITHUB_WORKSPACE/daq-release/configs/dunedaq-develop/dunedaq-develop.yaml
+          source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v1.0/spack-0.18.1-gcc-12.1.0/spack-installation/share/spack/setup-env.sh
           spack load python
           python -m venv dbt-pyvenv
           source dbt-pyvenv/bin/activate
