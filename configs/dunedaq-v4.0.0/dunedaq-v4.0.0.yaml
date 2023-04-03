@@ -180,7 +180,7 @@
           version: "v1.3.0"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "v2.10.0"
           commit: null
         - name: flxlibs
           version: "v1.8.0"
