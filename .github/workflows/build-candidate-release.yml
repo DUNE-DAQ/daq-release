@@ -8,7 +8,7 @@ on:
         description: 'targeted release (one of subdirs under daq-release/configs)'
         required: true 
       release-tag:
-        description: 'candidate release name, e.g. rc-dunedaq-v3.0.0-1'
+        description: 'candidate release name, e.g. rc-v3.0.0-1'
         required: true 
 
 jobs:
