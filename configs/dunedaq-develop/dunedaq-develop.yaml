@@ -379,9 +379,6 @@
         - name: jsonschema
           version: 3.2.0
           source:  pypi
-        - name: justintime
-          version: 1.0.0
-          source:  github_DUNE-DAQ
         - name: kafka-python
           version: 2.0.2
           source:  pypi
