@@ -22,6 +22,7 @@ class Dpdklibs(CMakePackage):
     depends_on("logging")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("fddetdataformats")
     depends_on("readoutlibs")
     depends_on("fdreadoutlibs")
     depends_on("dpdk")

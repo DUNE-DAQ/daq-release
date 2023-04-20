@@ -20,6 +20,7 @@ class Rawdatautils(CMakePackage):
     depends_on("daq-cmake")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("fddetdataformats")
     depends_on("fmt")
 
     depends_on("boost")

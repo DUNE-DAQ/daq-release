@@ -24,6 +24,7 @@ class Ndreadoutlibs(CMakePackage):
     depends_on("readoutlibs")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("nddetdataformats")
     depends_on('folly cxxstd=2a')
     depends_on("boost")
 
