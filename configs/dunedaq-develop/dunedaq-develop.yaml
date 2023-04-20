@@ -158,10 +158,10 @@
         - name: detdataformats
           version: "develop"
           commit: null
-        - name: fddataformats
+        - name: fddetdataformats
           version: "develop"
           commit: null
-        - name: nddataformats
+        - name: nddetdataformats
           version: "develop"
           commit: null
         - name: trgdataformats
