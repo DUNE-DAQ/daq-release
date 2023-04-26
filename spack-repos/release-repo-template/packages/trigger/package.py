@@ -29,6 +29,7 @@ class Trigger(CMakePackage):
     depends_on("iomanager")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("trgdataformats")
     depends_on("detchannelmaps")
     depends_on("readoutlibs")
     depends_on("hdf5libs")

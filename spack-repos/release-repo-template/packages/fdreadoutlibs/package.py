@@ -26,6 +26,7 @@ class Fdreadoutlibs(CMakePackage):
     depends_on("daqdataformats")
     depends_on("detchannelmaps")
     depends_on("detdataformats")
+    depends_on("fddetdataformats")
     depends_on("trigger")
     depends_on("triggeralgs")
     depends_on('folly cxxstd=2a')

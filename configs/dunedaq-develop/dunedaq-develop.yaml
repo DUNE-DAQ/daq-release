@@ -158,6 +158,15 @@
         - name: detdataformats
           version: "develop"
           commit: null
+        - name: fddetdataformats
+          version: "develop"
+          commit: null
+        - name: nddetdataformats
+          version: "develop"
+          commit: null
+        - name: trgdataformats
+          version: "develop"
+          commit: null
         - name: detchannelmaps
           version: "develop"
           commit: null

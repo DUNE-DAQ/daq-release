@@ -26,6 +26,7 @@ class Readoutmodules(CMakePackage):
     depends_on("ndreadoutlibs")
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("fddetdataformats")
     depends_on("dfmessages")
     depends_on('folly cxxstd=2a')
     depends_on("boost")
