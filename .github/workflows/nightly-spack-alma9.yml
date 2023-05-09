@@ -8,7 +8,7 @@ on:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix'
-        default: ''
+        default: 'T'
 
 jobs:
   build_the_develop_release_spack:
