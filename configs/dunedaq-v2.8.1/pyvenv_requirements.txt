@@ -16,7 +16,7 @@ pyrsistent==0.17.3
 six==1.16.0
 requests==2.25.0
 h5py==3.1.0
-Flask==1.1.2
+Flask==2.2.5
 Werkzeug==1.0.1
 colorama==0.4.4
 pexpect==4.8.0
