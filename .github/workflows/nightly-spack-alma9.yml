@@ -134,8 +134,6 @@ jobs:
         include:
           - image: "ghcr.io/dune-daq/alma9-slim-externals"
             os_name: "alma9"
-          - image: "ghcr.io/dune-daq/c8-slim-externals"
-            os_name: "c8"
     needs: build_the_develop_release_spack
     environment: dockerhub
     permissions:
