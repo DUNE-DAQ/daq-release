@@ -8,7 +8,7 @@ on:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix'
-        default: 'A'
+        default: ''
 
 jobs:
   build_the_develop_release_spack:
@@ -37,7 +37,7 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+          export DAQ_RELEASE="NA${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -153,7 +153,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            nightly_tag="N${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+            nightly_tag="NA${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
             image_name="${{ matrix.image }}:latest"
             cd nightly
             tar xvf ../${nightly_tag}.tar.gz
