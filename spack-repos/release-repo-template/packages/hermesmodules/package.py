@@ -8,7 +8,7 @@ from spack import *
 
 
 class Hermesmodules(CMakePackage):
-    """Home of daq_application and tools for writing DAQ modules"""
+    """The HERMES core modules and control libraries."""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/hermesmodules/"
     git =      "https://github.com/DUNE-DAQ/hermesmodules.git"
