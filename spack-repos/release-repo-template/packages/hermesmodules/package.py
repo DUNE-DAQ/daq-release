@@ -27,6 +27,7 @@ class Hermesmodules(CMakePackage):
     depends_on('opmonlib')
 
     depends_on('py-moo', type='build')
+    depends_on('py-pybind11')
     depends_on('boost' )
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
