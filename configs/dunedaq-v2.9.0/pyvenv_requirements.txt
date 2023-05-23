@@ -46,7 +46,7 @@ pyrsistent==0.17.3
 pytest==6.2.4
 python-ipmi==0.5.1
 pyzmq==22.3.0
-requests==2.25.0
+requests==2.31.0
 rich==10.14.0
 sh==1.14.1
 six==1.16.0
