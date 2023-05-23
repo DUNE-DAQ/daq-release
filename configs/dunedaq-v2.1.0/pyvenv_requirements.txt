@@ -13,7 +13,7 @@ numpy==1.19.4
 openpyxl==3.0.5
 pyrsistent==0.17.3
 six==1.15.0
-requests==2.25.0
+requests==2.31.0
 # PyPI already has another package named "moo";
 # Picking up moo from github repo:
 https://github.com/brettviren/moo/archive/0.5.1.tar.gz#egg=moo
