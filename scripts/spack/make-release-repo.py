@@ -73,6 +73,7 @@ class DAQRelease:
         self.yaml = yaml_file
         self.rdict = parse_yaml_file(self.yaml)
         self.overwrite_branch = overwrite_branch
+        self.rtype = self.rdict["type"]
 
     def set_release(self, release):
         self.rdict["release"] = release
@@ -82,9 +83,10 @@ class DAQRelease:
         os.makedirs(repo_dir, exist_ok=True)
         self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
         # Now modify self.yaml and update self.rdict
+        pkgs = self.rdict[self.rtype]]
         if update_hash:
-            for i in range(len(self.rdict["dunedaq"])):
-                ipkg = self.rdict["dunedaq"][i]
+            for i in range(len(pkgs)):
+                ipkg = pkgs[i]
                 iname = ipkg["name"]
                 if self.overwrite_branch != "":
                     iver = self.overwrite_branch
@@ -93,7 +95,7 @@ class DAQRelease:
                 ihash = ipkg["commit"]
                 if not iname.startswith('py-'):
                     ihash = get_commit_hash(iname, iver)
-                self.rdict["dunedaq"][i]["commit"] = ihash
+                self.rdict[self.rtype][i]["commit"] = ihash
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
                 outfile.write('---\n')
