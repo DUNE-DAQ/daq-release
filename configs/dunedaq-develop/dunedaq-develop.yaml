@@ -185,6 +185,12 @@
         - name: readoutmodules
           version: "develop"
           commit: null
+        - name: fdreadoutmodules
+          version: "develop"
+          commit: null
+        - name: ndreadoutmodules
+          version: "develop"
+          commit: null
         - name: fdreadoutlibs
           version: "develop"
           commit: null
