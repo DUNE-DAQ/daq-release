@@ -24,7 +24,7 @@ jobs:
         run: |
           date_tag=$(date +%y-%m-%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
-          echo "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
