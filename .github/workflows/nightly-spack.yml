@@ -12,7 +12,7 @@ on:
 
 jobs:
   make_nightly_tag:
-    name: build_dev_release_spack
+    name: create nightly tag
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
@@ -21,7 +21,10 @@ jobs:
         shell: bash
     steps:
       - id: create_nightly_tag
-        run: echo 'nightly_tag="${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"'  >>  "$GITHUB_OUTPUT"
+        run: |
+          date_tag=$(date +%y-%m-%d)
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
