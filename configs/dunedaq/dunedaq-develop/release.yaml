@@ -205,6 +205,15 @@
         - name: rawdatautils
           version: "develop"
           commit: null
+        - name: fddetdataformats
+          version: "develop"
+          commit: null
+        - name: fdreadoutlibs
+          version: "develop"
+          commit: null
+        - name: ndreadoutlibs
+          version: "develop"
+          commit: null
 
     others:
         - name: daq-release

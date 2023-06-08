@@ -12,9 +12,6 @@
         - name: nddetdataformats
           version: "develop"
           commit: null
-        - name: ndreadoutlibs
-          version: "develop"
-          commit: null
         - name: ndreadoutmodules
           version: "develop"
           commit: null
