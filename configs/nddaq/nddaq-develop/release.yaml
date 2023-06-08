@@ -9,9 +9,6 @@
         - name: lbrulibs
           version: "develop"
           commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
         - name: ndreadoutmodules
           version: "develop"
           commit: null

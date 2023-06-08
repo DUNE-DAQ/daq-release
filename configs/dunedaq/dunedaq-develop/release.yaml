@@ -208,6 +208,9 @@
         - name: fddetdataformats
           version: "develop"
           commit: null
+        - name: nddetdataformats
+          version: "develop"
+          commit: null
         - name: fdreadoutlibs
           version: "develop"
           commit: null
