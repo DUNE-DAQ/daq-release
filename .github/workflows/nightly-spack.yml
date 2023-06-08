@@ -208,7 +208,7 @@ jobs:
 
           spack clean -a
 
-          cp $DAQ_RELEASE_DIR/configs/{DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
+          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
@@ -305,7 +305,7 @@ jobs:
 
           spack clean -a
 
-          cp $DAQ_RELEASE_DIR/configs/{DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
+          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
