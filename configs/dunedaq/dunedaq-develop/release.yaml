@@ -163,12 +163,6 @@
         - name: detdataformats
           version: "develop"
           commit: null
-        - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
         - name: trgdataformats
           version: "develop"
           commit: null
@@ -181,25 +175,10 @@
         - name: readoutlibs
           version: "develop"
           commit: null
-        - name: hsilibs
-          version: "develop"
-          commit: null
         - name: readoutmodules
           version: "develop"
           commit: null
-        - name: fdreadoutlibs
-          version: "develop"
-          commit: null
-        - name: ndreadoutlibs
-          version: "develop"
-          commit: null
         - name: dfmodules
-          version: "develop"
-          commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
-        - name: lbrulibs
           version: "develop"
           commit: null
         - name: timing
@@ -224,27 +203,6 @@
           version: "develop"
           commit: null
         - name: rawdatautils
-          version: "develop"
-          commit: null
-        - name: uhallibs
-          version: "develop"
-          commit: null
-        - name: dtpcontrols
-          version: "develop"
-          commit: null
-        - name: wibmod
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
-          commit: null
-        - name: dtpctrllibs
-          version: "develop"
-          commit: null
-        - name: ctbmodules
-          version: "develop"
-          commit: null
-        - name: dpdklibs
           version: "develop"
           commit: null
 

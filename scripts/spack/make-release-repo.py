@@ -75,15 +75,17 @@ class DAQRelease:
         self.overwrite_branch = overwrite_branch
         self.rtype = self.rdict["type"]
 
-    def set_release(self, release):
-        self.rdict["release"] = release
+    def set_release(self, release_name, base_release=""):
+        if base_release != "":
+                self.rdict["base_release"] = base_release
+        self.rdict["release"] = release_name
 
     def copy_release_yaml(self, repo_path, update_hash=False):
         repo_dir = os.path.join(repo_path, "spack-repo")
         os.makedirs(repo_dir, exist_ok=True)
         self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
         # Now modify self.yaml and update self.rdict
-        pkgs = self.rdict[self.rtype]]
+        pkgs = self.rdict[self.rtype]
         if update_hash:
             for i in range(len(pkgs)):
                 ipkg = pkgs[i]
@@ -114,15 +116,17 @@ class DAQRelease:
     def generate_daq_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
-        for ipkg in self.rdict["dunedaq"]:
+        for ipkg in self.rdict[self.rtype]:
             itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
                 continue
             with open(itemp, 'r') as f:
                 lines = f.read()
+                # Nightlies
                 if "dunedaq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
+                # Forzen release
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
@@ -135,10 +139,10 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_umbrella_package(self, repo_path, template_dir):
+    def generate_external_umbrella_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
-        for ipkg in ['devtools', 'externals', 'systems', 'dunedaq']:
+        for ipkg in ['devtools', 'externals', 'systems']:
             itemp = os.path.join(template_dir, ipkg, 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
@@ -148,25 +152,16 @@ class DAQRelease:
                 lines = lines.replace("XRELEASEX", self.rdict["release"])
 
             # now add additional deps:
-            if ipkg == 'dunedaq':
-                lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
             for idep in self.rdict[ipkg]:
                 iname = idep["name"]
                 iver = idep["version"]
-                if ipkg != 'dunedaq':
-                    ivar = idep["variant"]
-                    if ivar == None:
-                        lines += f'\n    depends_on("{iname}@{iver}")'
-                    else:
-                        lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
+                # Externals, system/devtools etc, variant is used instead of
+                # version
+                ivar = idep["variant"]
+                if ivar == None:
+                    lines += f'\n    depends_on("{iname}@{iver}")'
                 else:
-                    if iname.startswith("py-"):
-                        iver = idep["version"]
-                        lines += f'\n        depends_on(f"{iname}@{iver}")'
-                    else:
-                        if "dunedaq" not in self.rdict["release"]:
-                            iver = self.rdict["release"]
-                        lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+                    lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
             os.makedirs(ipkg_dir)
@@ -176,9 +171,52 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_repo(self, outdir, tempdir, update_hash, release_name):
+    def generate_daq_umbrella_package(self, repo_path, template_dir):
+        repo_dir = os.path.join(repo_path, "spack-repo", "packages")
+        template_dir = os.path.join(template_dir, "packages")
+        ipkg = self.rtype
+        itemp = os.path.join(template_dir, ipkg, 'package.py')
+        if not os.path.exists(itemp):
+            print(f"Error: template file {itemp} is not found!")
+            return
+        with open(itemp, 'r') as f:
+            lines = f.read()
+            lines = lines.replace("XRELEASEX", self.rdict["release"])
+
+        # now add additional deps:
+        lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
+        if self.rtype != "dunedaq":
+            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        for idep in self.rdict[ipkg]:
+            iname = idep["name"]
+            iver = idep["version"]
+            if iname.startswith("py-"):
+                iver = idep["version"]
+                lines += f'\n        depends_on(f"{iname}@{iver}")'
+            else:
+                # Nightlies
+                if "dunedaq" not in self.rdict["release"]:
+                    iver = self.rdict["release"]
+                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        lines += '\n'
+
+        ipkg_dir = os.path.join(repo_dir, ipkg)
+        os.makedirs(ipkg_dir)
+        ipkgpy = os.path.join(ipkg_dir, "package.py")
+        with open(ipkgpy, 'w') as o:
+            o.write(lines)
+            print(f"Info: package.py has been written at {ipkgpy}.")
+        return
+
+    def generate_umbrella_package(self, repo_path, template_dir):
+        if self.rtype == "dunedaq":
+            self.generate_external_umbrella_package(repo_path, template_dir)
+        self.generate_daq_umbrella_package(repo_path, template_dir)
+        return
+
+    def generate_repo(self, outdir, tempdir, update_hash, release_name, base_release):
         if release_name is not None:
-            self.set_release(release_name)
+            self.set_release(release_name, base_release)
         self.copy_release_yaml(outdir, update_hash)
         self.generate_repo_file(outdir)
         self.generate_daq_package(outdir, tempdir)
@@ -246,6 +284,8 @@ if __name__ == "__main__":
                         help="whether to generate file containing bash array for python modules;")
     parser.add_argument('--pyvenv-requirements', action='store_true',
                         help="whether to generate requirements file for pyvenv;")
+    parser.add_argument('--base-release',
+                        help="base release name")
 
     args = parser.parse_args()
 
@@ -264,4 +304,5 @@ if __name__ == "__main__":
         shutil.rmtree(tmp_dir)
     else:
         daq_release.generate_repo(args.output_path, args.template_path,
-                                  args.update_hash, args.release_name)
+                                  args.update_hash, args.release_name,
+                                  args.base_release)
