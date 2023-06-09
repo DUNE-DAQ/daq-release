@@ -7,7 +7,7 @@
 from spack import *
 
 
-class OksUtils(CMakePackage):
+class Oksutils(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksutils/"
