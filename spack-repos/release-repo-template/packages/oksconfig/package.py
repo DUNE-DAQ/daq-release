@@ -7,7 +7,7 @@
 from spack import *
 
 
-class Oksconfig(CMakePackage):
+class Oksoksdbinterfaces(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksconfig/"
@@ -20,7 +20,7 @@ class Oksconfig(CMakePackage):
     depends_on("daq-cmake")
     depends_on("oks")
     depends_on("oks_utils")
-    depends_on("config")
+    depends_on("oksdbinterfaces")
     depends_on("logging")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

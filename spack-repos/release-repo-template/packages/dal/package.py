@@ -20,7 +20,7 @@ class Dal(CMakePackage):
     depends_on("daq-cmake")
     depends_on("ers")
     depends_on("logging")
-    depends_on("config")
+    depends_on("oksdbinterfaces")
     depends_on("genconfig")
     depends_on("okssystem")
 

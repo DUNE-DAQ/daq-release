@@ -7,21 +7,21 @@
 from spack import *
 
 
-class Oks(CMakePackage):
+class Coredal(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oks/"
-    git =      "https://github.com/DUNE-DAQ/oks.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/coredal/"
+    git =      "https://github.com/DUNE-DAQ/coredal.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("daq-cmake")
-    depends_on("boost")
     depends_on("ers")
     depends_on("logging")
     depends_on("oksdbinterfaces")
+    depends_on("genconfig")
     depends_on("okssystem")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

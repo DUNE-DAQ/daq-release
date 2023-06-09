@@ -254,23 +254,10 @@
         - name: dpdklibs
           version: "develop"
           commit: null
-<<<<<<< HEAD
-        - name: py-moo
-          version: 0.6.3
-          commit: null
-        - name: py-anyconfig
-          version: 0.9.11
-          commit: null
-        - name: py-jsonnet
-          version: 0.16.0
-          commit: null
-        - name: py-fastjsonschema
-          version: 2.14.5
-          commit: null
         - name: okssystem
           version: "develop"
           commit: null
-        - name: config
+        - name: oksdbinterfaces
           version: "develop"
           commit: null
         - name: oks
@@ -285,11 +272,12 @@
         - name: dal
           version: "develop"
           commit: null
+        - name: coredal
+          version: "develop"
+          commit: null
         - name: oksconfig
           version: "develop"
           commit: null
-=======
->>>>>>> develop
 
     pymodules:
         - name: pip
