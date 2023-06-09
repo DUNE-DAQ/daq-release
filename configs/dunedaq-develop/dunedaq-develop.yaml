@@ -278,6 +278,9 @@
         - name: oksconfig
           version: "develop"
           commit: null
+        - name: dbe
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
