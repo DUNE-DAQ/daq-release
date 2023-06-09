@@ -19,7 +19,7 @@ class Oksconfig(CMakePackage):
 
     depends_on("daq-cmake")
     depends_on("oks")
-    depends_on("oks_utils")
+    depends_on("oksutils")
     depends_on("oksdbinterfaces")
     depends_on("logging")
 

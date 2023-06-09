@@ -11,7 +11,7 @@ class Oksutils(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksutils/"
-    git =      "https://github.com/DUNE-DAQ/oks_utils.git"
+    git =      "https://github.com/DUNE-DAQ/oksutils.git"
 
     maintainers = ["jcfreeman2"]
 
