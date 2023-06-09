@@ -7,25 +7,19 @@
 from spack import *
 
 
-class Ndreadoutlibs(CMakePackage):
-    """No documentation yet (Dec-11-2021)"""
+class Ndreadoutmodules(CMakePackage):
+    """DAQ modules for constructing readout-focused processes"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ndreadoutlibs"
-    git      = "https://github.com/DUNE-DAQ/ndreadoutlibs.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ndreadoutmodules/"
+    git      = "https://github.com/DUNE-DAQ/ndreadoutmodules.git"
 
     maintainers = ['jcfreeman2']
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
     depends_on("appfwk")
-    depends_on("logging")
     depends_on("opmonlib")
-    depends_on("readoutlibs")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("nddetdataformats")
-    depends_on('folly cxxstd=2a')
+    depends_on("readoutmodules")
     depends_on("boost")
 
     depends_on("daq-cmake")

@@ -23,6 +23,7 @@ class Dqm(CMakePackage):
 
     depends_on("daqdataformats")
     depends_on("detdataformats")
+    depends_on("fddetdataformats")
     depends_on("detchannelmaps")
     depends_on("dfmessages")
     depends_on("iomanager")

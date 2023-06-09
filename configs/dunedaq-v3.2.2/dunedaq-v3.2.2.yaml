@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: dunedaq-v3.2.2
 
     externals:
         - name: boost
@@ -9,7 +9,7 @@
           version: 3.15.00
           variant: ~
         - name: trace
-          version: 3.17.09
+          version: 3.17.04
           variant: ~
         - name: nlohmann-json
           version: 3.9.0
@@ -66,7 +66,7 @@
           version: 2020.3
           variant: ~
         - name: dpdk
-          version: 22.03.1
+          version: 22.03
           variant: ~
         - name: fmt
           version: 8.1.1
@@ -83,6 +83,9 @@
         - name: py-fastjsonschema
           version: 2.14.5
           variant: ~
+        - name: numactl
+          version: 2.0.14
+          variant: ~
 
     devtools:
         - name: cmake
@@ -93,9 +96,6 @@
           variant: "~python"
         - name: ninja
           version: 1.10.0
-          variant: ~
-        - name: qt
-          version: 5.15.4
           variant: ~
 
     systems:
@@ -111,185 +111,131 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.3.1"
+          version: "v2.2.0"
           commit: null
         - name: ers
-          version: "develop"
+          version: "v1.1.7"
           commit: null
         - name: logging
-          version: "develop"
+          version: "v1.0.7"
           commit: null
         - name: cmdlib
-          version: "develop"
+          version: "v1.1.6"
           commit: null
         - name: restcmd
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: opmonlib
-          version: "develop"
+          version: "v1.3.5"
           commit: null
         - name: rcif
-          version: "develop"
+          version: "v1.2.3"
           commit: null
         - name: appfwk
-          version: "develop"
-          commit: null
-        - name: hermesmodules
-          version: "develop"
+          version: "v2.7.2"
           commit: null
         - name: listrev
-          version: "develop"
+          version: "v3.2.1"
           commit: null
         - name: utilities
-          version: "develop"
+          version: "v2.2.0"
           commit: null
         - name: erskafka
-          version: "develop"
+          version: "v1.4.2"
           commit: null
         - name: kafkaopmon
-          version: "develop"
+          version: "v1.4.0"
           commit: null
         - name: ipm
-          version: "develop"
+          version: "v2.5.1"
           commit: null
         - name: serialization
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: iomanager
-          version: "develop"
+          version: "v1.1.0"
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: "v2.6.0"
           commit: null
         - name: detdataformats
-          version: "develop"
-          commit: null
-        - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
-        - name: trgdataformats
-          version: "develop"
+          version: "v3.6.2"
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: daqdataformats
-          version: "develop"
+          version: "v3.4.1"
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: "v1.3.3"
           commit: null
         - name: hsilibs
-          version: "develop"
+          version: "v2.0.0"
           commit: null
         - name: readoutmodules
-          version: "develop"
-          commit: null
-        - name: fdreadoutmodules
-          version: "develop"
-          commit: null
-        - name: ndreadoutmodules
-          version: "develop"
+          version: "v1.3.4"
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: "v1.5.6"
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "v2.9.3"
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: "v1.7.7"
           commit: null
         - name: lbrulibs
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: timing
-          version: "develop"
+          version: "v7.1.1"
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: "v2.1.2"
           commit: null
         - name: daqconf
-          version: "develop"
+          version: "v5.5.5"
           commit: null
         - name: trigger
-          version: "develop"
+          version: "v1.5.5"
           commit: null
         - name: triggeralgs
-          version: "develop"
+          version: "v1.1.7"
           commit: null
         - name: dqm
-          version: "develop"
+          version: "v1.5.2"
           commit: null
         - name: hdf5libs
-          version: "develop"
+          version: "v2.3.2"
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: "v1.2.3"
           commit: null
         - name: uhallibs
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dtpcontrols
-          version: "develop"
+          version: "v2.2.2"
           commit: null
         - name: wibmod
-          version: "develop"
+          version: "v1.4.6"
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: "v1.2.1"
           commit: null
         - name: dtpctrllibs
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: ctbmodules
-          version: "develop"
+          version: "v2.0.1"
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: "v0.0.2"
           commit: null
-<<<<<<< HEAD
-        - name: py-moo
-          version: 0.6.3
-          commit: null
-        - name: py-anyconfig
-          version: 0.9.11
-          commit: null
-        - name: py-jsonnet
-          version: 0.16.0
-          commit: null
-        - name: py-fastjsonschema
-          version: 2.14.5
-          commit: null
-        - name: okssystem
-          version: "develop"
-          commit: null
-        - name: config
-          version: "develop"
-          commit: null
-        - name: oks
-          version: "develop"
-          commit: null
-        - name: genconfig
-          version: "develop"
-          commit: null
-        - name: oks_utils
-          version: "develop"
-          commit: null
-        - name: dal
-          version: "develop"
-          commit: null
-        - name: oksconfig
-          version: "develop"
-          commit: null
-=======
->>>>>>> develop
 
     pymodules:
         - name: pip
@@ -300,9 +246,6 @@
           source:  pypi
         - name: anyconfig
           version: 0.9.11
-          source:  pypi
-        - name: anyio
-          version: 3.6.2
           source:  pypi
         - name: anytree
           version: 2.8.0
@@ -346,14 +289,11 @@
         - name: configparser
           version: 5.2.0
           source:  pypi
-        - name: connectivityserver
-          version: 1.0.0
-          source:  github_DUNE-DAQ
         - name: docker
           version: 5.0.3
           source:  pypi
         - name: daq-assettools
-          version: 1.1.0
+          version: 1.0.0
           source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: 0.1.0
@@ -379,32 +319,14 @@
         - name: future
           version: 0.18.2
           source:  pypi
-        - name: gevent
-          version: 22.10.2
-          source:  pypi
         - name: google-auth
           version: 2.6.6
           source:  pypi
         - name: graphviz
           version: 0.16
           source:  pypi
-        - name: greenlet
-          version: 2.0.2
-          source:  pypi
-        - name: gunicorn
-          version: 20.1.0
-          source:  pypi
-        - name: h11
-          version: 0.14.0
-          source:  pypi
         - name: h5py
           version: 3.7.0
-          source:  pypi
-        - name: httpcore
-          version: 0.16.3
-          source:  pypi
-        - name: httpx
-          version: 0.23.3
           source:  pypi
         - name: idna
           version: "2.10"
@@ -416,7 +338,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 1.7.0
+          version: 1.5.2
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
@@ -436,29 +358,17 @@
         - name: jsonschema
           version: 3.2.0
           source:  pypi
-        - name: kafka-python
-          version: 2.0.2
-          source:  pypi
         - name: kubernetes
           version: 23.6.0
-          source:  pypi
-        - name: markdown-it-py
-          version: 2.2.0
           source:  pypi
         - name: MarkupSafe
           version: 2.0.1
           source:  pypi
-        - name: mdurl
-          version: 0.1.2
-          source:  pypi
         - name: moo
           version: 0.6.3
           source:  github_brettviren
-        - name: nanoid
-          version: 2.0.0
-          source:  pypi
         - name: nanorc
-          version: 4.3.1
+          version: 4.1.7
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
@@ -500,7 +410,7 @@
           version: 1.4.2
           source:  pypi
         - name: Pygments
-          version: 2.14.0
+          version: 2.10.0
           source:  pypi
         - name: pyparsing
           version: 2.4.7
@@ -535,11 +445,8 @@
         - name: requests-oauthlib
           version: 1.3.1
           source:  pypi
-        - name: rfc3986
-          version: 1.5.0
-          source:  pypi
         - name: rich
-          version: 13.3.2
+          version: 10.14.0
           source:  pypi
         - name: rsa
           version: 4.8
@@ -549,12 +456,6 @@
           source:  pypi
         - name: six
           version: 1.16.0
-          source:  pypi
-        - name: sniffio
-          version: 1.3.0
-          source:  pypi
-        - name: textual
-          version: 0.10.1
           source:  pypi
         - name: toml
           version: 0.10.2
@@ -577,32 +478,26 @@
         - name: zmq
           version: 0.0.0
           source:  pypi
-        - name: zope.event
-          version: 4.6
-          source:  pypi
-        - name: zope.interface
-          version: 5.5.2
-          source:  pypi
 
     others:
         - name: daq-release
-          version: "develop"
+          version: "v2.0.2"
           commit: null
         - name: daq-buildtools
-          version: "develop"
+          version: "v7.0.0"
           commit: null
         - name: daq-systemtest
-          version: "develop"
+          version: "v1.0.2"
           commit: null
         - name: pocket
-          version: "develop"
+          version: "v0.4.0"
           commit: null
         - name: microservices
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: dqm-backend
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: grafana-dashboards
-          version: "develop"
+          version: "v1.4.1"
           commit: null

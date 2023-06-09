@@ -210,6 +210,8 @@ class DAQRelease:
                         iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
                     elif iname == "elisa-client-api":
                         iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
+                    elif iname == "connectivityserver":
+                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg=connection-service"
                     else:
                         iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
                 f.write(iline + '\n')

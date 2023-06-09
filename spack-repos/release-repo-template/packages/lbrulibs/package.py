@@ -27,6 +27,7 @@ class Lbrulibs(CMakePackage):
     depends_on("boost")
     depends_on("ers")
     depends_on("detdataformats")
+    depends_on("nddetdataformats")
     depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

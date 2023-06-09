@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: rc-v4.0.0-3
 
     externals:
         - name: boost
@@ -94,9 +94,6 @@
         - name: ninja
           version: 1.10.0
           variant: ~
-        - name: qt
-          version: 5.15.4
-          variant: ~
 
     systems:
         - name: python
@@ -111,185 +108,131 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.3.1"
+          version: "v2.2.1"
           commit: null
         - name: ers
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: logging
-          version: "develop"
+          version: "v1.0.8"
           commit: null
         - name: cmdlib
-          version: "develop"
+          version: "v1.1.7"
           commit: null
         - name: restcmd
-          version: "develop"
+          version: "v1.2.1"
           commit: null
         - name: opmonlib
-          version: "develop"
+          version: "v1.3.6"
           commit: null
         - name: rcif
-          version: "develop"
+          version: "v1.2.3"
           commit: null
         - name: appfwk
-          version: "develop"
-          commit: null
-        - name: hermesmodules
-          version: "develop"
+          version: "v2.8.0"
           commit: null
         - name: listrev
-          version: "develop"
+          version: "v3.2.2"
           commit: null
         - name: utilities
-          version: "develop"
+          version: "v2.2.1"
           commit: null
         - name: erskafka
-          version: "develop"
+          version: "v1.4.3"
           commit: null
         - name: kafkaopmon
-          version: "develop"
+          version: "v1.5.0"
           commit: null
         - name: ipm
-          version: "develop"
+          version: "v2.5.2"
           commit: null
         - name: serialization
-          version: "develop"
+          version: "v1.3.1"
           commit: null
         - name: iomanager
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: "v2.7.0"
           commit: null
         - name: detdataformats
-          version: "develop"
-          commit: null
-        - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
-        - name: trgdataformats
-          version: "develop"
+          version: "v3.7.1"
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: "v1.4.1"
           commit: null
         - name: daqdataformats
-          version: "develop"
+          version: "v3.5.0"
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: "v1.4.1"
           commit: null
         - name: hsilibs
-          version: "develop"
+          version: "v2.1.0"
           commit: null
         - name: readoutmodules
-          version: "develop"
-          commit: null
-        - name: fdreadoutmodules
-          version: "develop"
-          commit: null
-        - name: ndreadoutmodules
-          version: "develop"
+          version: "v1.3.5"
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: "v1.6.2"
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: "v2.10.1"
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: "v1.8.1"
           commit: null
         - name: lbrulibs
-          version: "develop"
+          version: "v1.3.0"
           commit: null
         - name: timing
-          version: "develop"
+          version: "v7.2.1"
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: "v2.2.1"
           commit: null
         - name: daqconf
-          version: "develop"
+          version: "v5.6.1"
           commit: null
         - name: trigger
-          version: "develop"
+          version: "v1.5.6"
           commit: null
         - name: triggeralgs
-          version: "develop"
+          version: "v1.1.8"
           commit: null
         - name: dqm
-          version: "develop"
+          version: "v1.6.0"
           commit: null
         - name: hdf5libs
-          version: "develop"
+          version: "v2.4.0"
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: "v1.3.1"
           commit: null
         - name: uhallibs
-          version: "develop"
+          version: "v1.2.0"
           commit: null
         - name: dtpcontrols
-          version: "develop"
+          version: "v2.2.2"
           commit: null
         - name: wibmod
-          version: "develop"
+          version: "v1.4.7"
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: dtpctrllibs
-          version: "develop"
+          version: "v1.2.2"
           commit: null
         - name: ctbmodules
-          version: "develop"
+          version: "v2.0.2"
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: "v1.0.0"
           commit: null
-<<<<<<< HEAD
-        - name: py-moo
-          version: 0.6.3
-          commit: null
-        - name: py-anyconfig
-          version: 0.9.11
-          commit: null
-        - name: py-jsonnet
-          version: 0.16.0
-          commit: null
-        - name: py-fastjsonschema
-          version: 2.14.5
-          commit: null
-        - name: okssystem
-          version: "develop"
-          commit: null
-        - name: config
-          version: "develop"
-          commit: null
-        - name: oks
-          version: "develop"
-          commit: null
-        - name: genconfig
-          version: "develop"
-          commit: null
-        - name: oks_utils
-          version: "develop"
-          commit: null
-        - name: dal
-          version: "develop"
-          commit: null
-        - name: oksconfig
-          version: "develop"
-          commit: null
-=======
->>>>>>> develop
 
     pymodules:
         - name: pip
@@ -458,7 +401,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 4.3.1
+          version: 5.0.2
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
@@ -586,23 +529,23 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: "v2.1.0"
           commit: null
         - name: daq-buildtools
-          version: "develop"
+          version: "v7.0.1"
           commit: null
         - name: daq-systemtest
-          version: "develop"
+          version: "v1.1.1"
           commit: null
         - name: pocket
-          version: "develop"
+          version: "v0.5.0"
           commit: null
         - name: microservices
-          version: "develop"
+          version: "v1.4.0"
           commit: null
         - name: dqm-backend
-          version: "develop"
+          version: "v1.2.1"
           commit: null
         - name: grafana-dashboards
-          version: "develop"
+          version: "v1.5.0"
           commit: null

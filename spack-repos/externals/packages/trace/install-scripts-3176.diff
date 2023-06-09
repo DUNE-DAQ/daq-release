@@ -1,0 +1,18 @@
+diff --git a/script/CMakeLists.txt b/script/CMakeLists.txt
+index 485e71c..fafeb60 100644
+--- a/script/CMakeLists.txt
++++ b/script/CMakeLists.txt
+@@ -23,6 +23,12 @@ if (${cetmodules_FOUND})
+
+   endif()
+ else (${cetmodules_FOUND})
+-  install(PROGRAMS bitN_to_mask trace_envvars trace_delta DESTINATION bin)
++  install(PROGRAMS bitN_to_mask
++                   trace_delta
++                   trace_maxents
++                   trace_envvars
++                   trace_feature_test.sh
++                   trace_functions.sh
++          DESTINATION bin)
+   install(PROGRAMS trace_functions.sh DESTINATION etc/profile.d)
+ endif (${cetmodules_FOUND})

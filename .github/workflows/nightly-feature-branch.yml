@@ -135,10 +135,8 @@ jobs:
       matrix:
         include:
           - image: "ghcr.io/dune-daq/sl7-slim-externals"
-            dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
           - image: "ghcr.io/dune-daq/c8-slim-externals"
-            dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_develop_release_spack
     environment: dockerhub
@@ -174,23 +172,24 @@ jobs:
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
             
-      - name: Log in to Docker Hub
+      - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ matrix.dockerimage }}
+            ${{ matrix.image }}
           tags: |
             type=raw,value=spack-dev-feature
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
@@ -202,7 +201,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "dunedaq/sl7-minimal:spack-dev-feature"
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-feature"
     defaults:
       run:
         shell: bash
@@ -216,7 +215,7 @@ jobs:
           dbt-setup-release -n last_successful
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
 
     - name: upload dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
@@ -237,9 +236,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "dunedaq/sl7-minimal:spack-dev"
+          - image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev"
             os_name: "c7"
-          - image: "dunedaq/c8-minimal:spack-dev"
+          - image: "ghcr.io/dune-daq/c8-slim-externals:spack-dev"
             os_name: "c8"
     container:
       image: ${{ matrix.image }}
@@ -280,6 +279,7 @@ jobs:
           python3 $DAQ_RELEASE_DIR/scripts/checkout-daq-package.py -a \
                 -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/spack-repo/N22-00-00.yaml \
                 -o sourcecode 
+          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake sourcecode/
     
     - name: setup build env, build and lint the repo against the development release
       run: |

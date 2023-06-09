@@ -44,6 +44,21 @@ def checkout_commit(repo, commit, outdir):
     print(f"Info: checked out {repo:<20} {commit:<20} under {outdir}.")
     return
 
+def checkout_tag(repo, commit, outdir):
+    cmd = f"""mkdir -p {outdir}; cd {outdir}; \
+        git clone https://github.com/DUNE-DAQ/{repo}.git; \
+        cd {repo}; \
+        git checkout {commit}; \
+        cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
+        tag=v"$cmake_version"; \
+        echo $tag ;\
+        echo $commit; \
+        if [[ $tag != "{commit}" ]]; then echo "Tag mismatches version in CMakeLists.txt" && exit 1; fi
+    """
+    check_output(cmd)
+    print(f"Info: verified version in CMake, checked out {repo:<20} {commit:<20} under {outdir}.")
+    return
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -60,6 +75,8 @@ if __name__ == "__main__":
                         help="path to the release manifest file;")
     parser.add_argument('-a', '--all-packages', action='store_true',
                         help="whether to checkout all DAQ pacakges;")
+    parser.add_argument('-c', '--check-tag', action='store_true',
+                        help="whether to check if tag is the same as used in CMakeLists.txt;")
     parser.add_argument('-o', '--output-path', default="./sourcecode",
                         help="path to the output directory;")
 
@@ -76,21 +93,30 @@ if __name__ == "__main__":
         for i in pkgs:
             if i["name"].startswith("py-"):
                 continue
-            checkout_commit(i["name"], i["commit"], args.output_path)
+            if args.check_tag:
+                checkout_tag(i["name"], i["version"], args.output_path)
+            else:
+                checkout_commit(i["name"], i["commit"], args.output_path)
     elif args.package is not None:
         # verify entry in manifest file
         commit = ""
+        version = ""
         found = False
         for i in pkgs:
             if i["name"] == args.package:
                 found = True
                 commit = i["commit"]
+                version = i["version"]
         if not found:
             print(f"Error: package {args.package} is not found in {args.input_manifest}")
             exit(21)
         if args.branch is not None:
             commit = args.branch
-        checkout_commit((args.package), commit, args.output_path)
+            version = args.branch
+        if args.check_tag:
+            checkout_tag((args.package), version, args.output_path)
+        else:
+            checkout_commit((args.package), commit, args.output_path)
     else:
         print('Error: please specify "-a" or "-b <pkg>" option.')
         exit(22)

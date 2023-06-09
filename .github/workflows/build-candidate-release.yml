@@ -8,7 +8,7 @@ on:
         description: 'targeted release (one of subdirs under daq-release/configs)'
         required: true 
       release-tag:
-        description: 'candidate release name, e.g. rc-dunedaq-v3.0.0-1'
+        description: 'candidate release name, e.g. rc-v3.0.0-1'
         required: true 
 
 jobs:
@@ -137,10 +137,8 @@ jobs:
       matrix:
         include:
           - image: "ghcr.io/dune-daq/sl7-slim-externals"
-            dockerimage: "dunedaq/sl7-minimal"
             os_name: "c7"
           - image: "ghcr.io/dune-daq/c8-slim-externals"
-            dockerimage: "dunedaq/c8-minimal"
             os_name: "c8"
     needs: build_the_candidate_release_spack
     environment: dockerhub
@@ -160,7 +158,7 @@ jobs:
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidates
             RC_RELEASE=${{ github.event.inputs.release-tag }}
-            image_name="${{ matrix.image }}:latest
+            image_name="${{ matrix.image }}:latest"
             cd candidates
             tar xvf ../${RC_RELEASE}.tar.gz
             cd rc-*
@@ -173,24 +171,25 @@ jobs:
             echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
-      - name: Log in to Docker Hub
+      - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ matrix.dockerimage }}
+            ${{ matrix.image }}
           tags: |
             type=raw,value=spack-candidate-release
             type=raw,value=${{ github.event.inputs.release-tag }}
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
@@ -202,7 +201,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "dunedaq/sl7-minimal:spack-candidate-release"
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-candidate-release"
     defaults:
       run:
         shell: bash
@@ -217,7 +216,7 @@ jobs:
           dbt-setup-release -b candidate ${RC_RELEASE}
           declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
 
     - name: upload dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3

@@ -6,6 +6,7 @@
 * Repositories with write access:
   - appfwk
   - cmdlib
+  - dal
   - daq-systemtest
   - daqconf
   - dqm
@@ -20,6 +21,9 @@
   - logging
   - minidaqapp
   - nanorc
+  - oksconfig
+  - okssystem
+  - oks_utils
   - opmonlib
   - pocket
   - rcif
@@ -45,6 +49,7 @@
   - iomanager
   - ipm
   - lbrulibs
+  - listrev
   - minidaqapp
   - ndreadoutlibs
   - networkmanager
@@ -74,11 +79,32 @@
   - dqmplatform
   - rawdatautils
 
+## facility
+* Maintainer(s): Bonnie King ,Alec Habig
+* Repositories with write access:
+  - microservices
+
 ## nd-udaq
 * Maintainer(s): Patrick Dunne
 * Repositories with write access:
   - lbrulibs
   - minidaqapp
+
+## timing
+* Maintainer(s): David Cussans
+* Repositories with write access:
+  - timing
+  - timinglibs
+
+## trigger
+* Maintainer(s): Josh Klein
+* Repositories with write access:
+  - daq-systemtest
+  - datafilter
+  - minidaqapp
+  - trigger
+  - triggeralgs
+  - triggermodules
 
 ## udaq
 * Maintainer(s): Jim Brooke
@@ -104,5 +130,5 @@
   - wibmod
 
 
-Page was generated at: 30/09/2022 18:13:11
+Page was generated at: 30/01/2023 08:22:52
 

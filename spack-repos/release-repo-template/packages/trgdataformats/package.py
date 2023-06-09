@@ -7,29 +7,20 @@
 from spack import *
 
 
-class Ndreadoutlibs(CMakePackage):
-    """No documentation yet (Dec-11-2021)"""
+class Trgdataformats(CMakePackage):
+    """DUNE detectors data formats"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ndreadoutlibs"
-    git      = "https://github.com/DUNE-DAQ/ndreadoutlibs.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/trgdataformats/"
+    git =      "https://github.com/DUNE-DAQ/trgdataformats.git"
 
-    maintainers = ['jcfreeman2']
+    maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("opmonlib")
-    depends_on("readoutlibs")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("nddetdataformats")
-    depends_on('folly cxxstd=2a')
-    depends_on("boost")
-
     depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+    depends_on("boost")
+    depends_on('py-pybind11' )
+    depends_on('py-moo', type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
@@ -40,6 +31,8 @@ class Ndreadoutlibs(CMakePackage):
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
-        env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
+        env.prepend_path('DUNEDAQ_SHARE_PATH', self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
+
+
