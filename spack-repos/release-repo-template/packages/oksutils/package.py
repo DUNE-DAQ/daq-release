@@ -10,7 +10,7 @@ from spack import *
 class OksUtils(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oks_utils/"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksutils/"
     git =      "https://github.com/DUNE-DAQ/oks_utils.git"
 
     maintainers = ["jcfreeman2"]
