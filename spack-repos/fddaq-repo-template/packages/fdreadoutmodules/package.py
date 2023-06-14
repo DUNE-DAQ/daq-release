@@ -15,11 +15,14 @@ class Fdreadoutmodules(CMakePackage):
 
     maintainers = ['jcfreeman2']
 
-    version("XVERSIONX", commit="XHASHX")
+    version("XVERSIONX", commit="b857490")
 
     depends_on("appfwk")
+    depends_on("logging")
     depends_on("opmonlib")
     depends_on("readoutmodules")
+    depends_on("fdreadoutlibs")
+    depends_on("fddetdataformats")
     depends_on("boost")
 
     depends_on("daq-cmake")

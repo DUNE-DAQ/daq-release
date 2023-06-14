@@ -15,18 +15,15 @@ class Readoutmodules(CMakePackage):
 
     maintainers = ['jcfreeman2']
 
-    version("XVERSIONX", commit="XHASHX")
+    version("XVERSIONX", commit="d590cbb")
 
     depends_on("ers")
     depends_on("appfwk")
     depends_on("logging")
     depends_on("opmonlib")
     depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("ndreadoutlibs")
     depends_on("daqdataformats")
     depends_on("detdataformats")
-    depends_on("fddetdataformats")
     depends_on("dfmessages")
     depends_on('folly cxxstd=2a')
     depends_on("boost")
