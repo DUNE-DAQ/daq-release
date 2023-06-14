@@ -20,7 +20,7 @@ class Ndreadoutmodules(CMakePackage):
     depends_on("appfwk")
     depends_on("opmonlib")
     depends_on("readoutmodules")
-    dependes_on("ndreadoutlibs")
+    depends_on("ndreadoutlibs")
     depends_on("boost")
 
     depends_on("daq-cmake")
