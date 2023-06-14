@@ -217,6 +217,33 @@
         - name: ndreadoutlibs
           version: "develop"
           commit: null
+        - name: okssystem
+          version: "develop"
+          commit: null
+        - name: oksdbinterfaces
+          version: "develop"
+          commit: null
+        - name: oks
+          version: "develop"
+          commit: null
+        - name: genconfig
+          version: "develop"
+          commit: null
+        - name: oksutils
+          version: "develop"
+          commit: null
+        - name: dal
+          version: "develop"
+          commit: null
+        - name: coredal
+          version: "develop"
+          commit: null
+        - name: oksconfig
+          version: "develop"
+          commit: null
+        - name: dbe
+          version: "develop"
+          commit: null
 
     others:
         - name: daq-release
