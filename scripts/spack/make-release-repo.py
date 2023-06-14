@@ -152,6 +152,8 @@ class DAQRelease:
                 iname = idep["name"]
                 iver = idep["version"]
                 if ipkg != 'dunedaq':
+                    if ipkg == "dbe":
+                        continue
                     ivar = idep["variant"]
                     if ivar == None:
                         lines += f'\n    depends_on("{iname}@{iver}")'
