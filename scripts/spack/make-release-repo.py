@@ -152,7 +152,7 @@ class DAQRelease:
                 iname = idep["name"]
                 iver = idep["version"]
                 if ipkg != 'dunedaq':
-                    if ipkg == "dbe":
+                    if iname == "dbe":
                         continue
                     ivar = idep["variant"]
                     if ivar == None:
