@@ -190,6 +190,8 @@ class DAQRelease:
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
+            if iname == "dbe":
+                continue
             if iname.startswith("py-"):
                 iver = idep["version"]
                 lines += f'\n        depends_on(f"{iname}@{iver}")'
