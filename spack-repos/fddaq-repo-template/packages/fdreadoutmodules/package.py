@@ -15,7 +15,7 @@ class Fdreadoutmodules(CMakePackage):
 
     maintainers = ['jcfreeman2']
 
-    version("XVERSIONX", commit="8d9c96e")
+    version("XVERSIONX", commit="XHASHX")
 
     depends_on("appfwk")
     depends_on("logging")
