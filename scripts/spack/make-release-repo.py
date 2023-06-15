@@ -151,9 +151,9 @@ class DAQRelease:
             for idep in self.rdict[ipkg]:
                 iname = idep["name"]
                 iver = idep["version"]
+                if iname == "dbe":
+                    continue
                 if ipkg != 'dunedaq':
-                    if iname == "dbe":
-                        continue
                     ivar = idep["variant"]
                     if ivar == None:
                         lines += f'\n    depends_on("{iname}@{iver}")'
