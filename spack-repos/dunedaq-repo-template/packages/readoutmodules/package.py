@@ -15,7 +15,7 @@ class Readoutmodules(CMakePackage):
 
     maintainers = ['jcfreeman2']
 
-    version("XVERSIONX", commit="XHASH")
+    version("XVERSIONX", commit="XHASHX")
 
     depends_on("ers")
     depends_on("appfwk")
