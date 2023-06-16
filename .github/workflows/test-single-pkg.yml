@@ -51,7 +51,7 @@ jobs:
         #!/bin/bash
         
         cd /scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v7.1.0/env.sh
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
         dbt-create -n last_fddaq dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
         source env.sh || true
@@ -116,7 +116,7 @@ jobs:
         LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH 
         export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v7.1.0/env.sh
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
         dbt-create -n last_fddaq dev-ubuntu
         cd dev-ubuntu
         source env.sh || true
