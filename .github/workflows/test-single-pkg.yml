@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "dunedaq/sl7-minimal:spack-dev"
+          - image: "ghcr.io/dune-daq/sl7-spack:latest"
             os_name: "c7"
 
     steps:
@@ -51,14 +51,13 @@ jobs:
         #!/bin/bash
         
         cd /scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
-        dbt-create -c -n last_successful dev-${{ matrix.os_name }}
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v7.1.0/env.sh
+        dbt-create -n last_fddaq dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
-        source dbt-env.sh
-        dbt-workarea-env || true
+        source env.sh || true
         spack unload ${{ github.event.inputs.pkg-name }}
         mv /scratch/sourcecode/* sourcecode
-        dbt-build --lint
+        dbt-build
         dbt-workarea-env
         EOT
         chmod +x build_pkg.sh
@@ -117,13 +116,12 @@ jobs:
         LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH 
         export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v5.0.9/env.sh
-        dbt-create -c -n last_successful dev-ubuntu
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/v7.1.0/env.sh
+        dbt-create -n last_fddaq dev-ubuntu
         cd dev-ubuntu
-        source dbt-env.sh
-        dbt-workarea-env || true
+        source env.sh || true
         spack unload ${{ github.event.inputs.pkg-name }}
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
-        dbt-build --lint
+        dbt-build
         dbt-workarea-env
 
