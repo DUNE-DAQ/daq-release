@@ -287,6 +287,9 @@ jobs:
           cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
           source env.sh || true
           #dbt-workarea-env -s externals || true
+          spack load qt
+          deactivate
+          source .venv/bin/activate
           dbt-build
 
     - name: upload build log file
