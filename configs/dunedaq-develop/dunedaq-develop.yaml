@@ -472,6 +472,9 @@
         - name: pluggy
           version: 0.13.1
           source:  pypi
+        - name: protobuf
+          version: 3.14.0
+          source:  pypi
         - name: psutil
           version: 5.9.0
           source:  pypi
