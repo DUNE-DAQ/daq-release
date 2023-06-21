@@ -114,7 +114,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
-          mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
+          mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
       uses: actions/upload-artifact@v3
