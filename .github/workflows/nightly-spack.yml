@@ -110,6 +110,34 @@ jobs:
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+
+          cd $SPACK_RELEASE_DIR/../
+          tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
+          mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
+
+    - name: upload empty spack tarball for dunedaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_spack_dunedaq
+        path: ${{ github.workspace }}/nightly-spack-dunedaq
+
+    - name: install spack for the fddaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export SPACK_VERSION=0.18.1
+          export GCC_VERSION=12.1.0
+          export EXT_VERSION=v1.0
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          cd $SPACK_RELEASE
+          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
           spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
           spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
           spack clean -a
