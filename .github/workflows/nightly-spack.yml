@@ -122,7 +122,7 @@ jobs:
         name: nightly_spack_dunedaq
         path: ${{ github.workspace }}/nightly-spack-dunedaq
 
-    - name: install spack for the fddaq release
+    - name: install spack for the dunedaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
