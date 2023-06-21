@@ -110,7 +110,7 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.3.2"
+          version: "v2.3.3"
           commit: null
         - name: ers
           version: "develop"
