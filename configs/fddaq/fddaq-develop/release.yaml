@@ -6,6 +6,12 @@
     base_release: dunedaq-develop
 
     fddaq:
+        - name: fddetdataformats
+          version: "develop"
+          commit: null
+        - name: fdreadoutlibs
+          version: "develop"
+          commit: null
         - name: fdreadoutmodules
           version: "develop"
           commit: null

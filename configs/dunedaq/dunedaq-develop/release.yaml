@@ -205,18 +205,6 @@
         - name: rawdatautils
           version: "develop"
           commit: null
-        - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
-        - name: fdreadoutlibs
-          version: "develop"
-          commit: null
-        - name: ndreadoutlibs
-          version: "develop"
-          commit: null
         - name: okssystem
           version: "develop"
           commit: null
