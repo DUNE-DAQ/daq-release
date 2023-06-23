@@ -289,7 +289,7 @@ jobs:
           #dbt-workarea-env -s externals || true
           spack load qt
           deactivate
-          source .venv/bin/activate
+          source $SPACK_RELEASES_DIR/$SPACK_RELEASE/.venv/bin/activate
           dbt-build
 
     - name: upload build log file
