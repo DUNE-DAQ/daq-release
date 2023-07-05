@@ -84,7 +84,13 @@ if __name__ == "__main__":
 
     pkgs = []
     if args.input_manifest is not None:
-        pkgs = parse_yaml_file(args.input_manifest)["dunedaq"]
+        yaml_dict = parse_yaml_file(args.input_manifest)
+        if "dunedaq" in yaml_dict:
+            pkgs = parse_yaml_file(args.input_manifest)["dunedaq"]
+        if "fddaq" in yaml_dict:
+            pkgs = parse_yaml_file(args.input_manifest)["fddaq"]
+        if "nddaq" in yaml_dict:
+            pkgs = parse_yaml_file(args.input_manifest)["nddaq"]
     if len(pkgs) == 0:
         print("Error: proper release manifest file is required.")
         exit(20)
