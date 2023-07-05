@@ -56,7 +56,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
 
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/dunedaq/${DAQ_RELEASE}/release..yaml \
+          -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${RC_RELEASE} \
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
