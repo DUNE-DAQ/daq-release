@@ -42,9 +42,6 @@
         - name: wibmod
           version: "develop"
           commit: null
-        - name: hsilibs
-          version: "develop"
-          commit: null
         - name: ctbmodules
           version: "develop"
           commit: null

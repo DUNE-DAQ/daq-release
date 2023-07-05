@@ -199,6 +199,9 @@
         - name: hdf5libs
           version: "develop"
           commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
         - name: okssystem
           version: "develop"
           commit: null
