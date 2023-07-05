@@ -1,55 +1,55 @@
 ---
-    release: fddaq-develop
+    release: fddaq-v4.1.0
 
     type: fddaq
 
-    base_release: dunedaq-develop
+    base_release: dunedaq-v4.1.0
 
     fddaq:
-        - name: rawdatautils
-          version: "develop"
-          commit: null
-        - name: dqm
-          version: "develop"
-          commit: null
-        - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: fdreadoutlibs
-          version: "develop"
-          commit: null
-        - name: fdreadoutmodules
-          version: "develop"
-          commit: null
-        - name: hsilibs
-          version: "develop"
+        - name: ctbmodules
+          version: v2.0.3
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: v1.1.0
           commit: null
-        - name: hermesmodules
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
-          commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
-        - name: dtpctrllibs
-          version: "develop"
+        - name: dqm
+          version: v1.7.0
           commit: null
         - name: dtpcontrols
-          version: "develop"
+          version: v2.2.2
+          commit: null
+        - name: dtpctrllibs
+          version: v1.2.2
+          commit: null
+        - name: fddetdataformats
+          version: v1.0.0
+          commit: null
+        - name: fdreadoutlibs
+          version: v1.7.0
+          commit: null
+        - name: fdreadoutmodules
+          version: v1.0.0
+          commit: null
+        - name: flxlibs
+          version: v1.8.2
+          commit: null
+        - name: hermesmodules
+          version: v1.0.0
+          commit: null
+        - name: hsilibs
+          version: v2.2.0
+          commit: null
+        - name: rawdatautils
+          version: v1.4.0
+          commit: null
+        - name: sspmodules
+          version: v1.3.0
           commit: null
         - name: uhallibs
-          version: "develop"
+          version: v1.2.0
           commit: null
         - name: wibmod
-          version: "develop"
-          commit: null
-        - name: ctbmodules
-          version: "develop"
+          version: v1.4.8
           commit: null
 
     pymodules:
