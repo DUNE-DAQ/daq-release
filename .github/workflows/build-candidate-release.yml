@@ -152,8 +152,8 @@ jobs:
 
           # fd-v4.1.0
           export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}
-          # rc-fd-v4.1.0-1
-          export RC_RELEASE=rc-${DET}-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+          # cfd-v4.1.0-1
+          export RC_RELEASE=c${DET}-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -276,7 +276,7 @@ jobs:
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=rc-fd-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+            fddaq_tag=cfd-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
 
@@ -330,7 +330,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
           DET=fd
-          daq_tag=rc-${DET}-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+          daq_tag=c${DET}-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -b candidate ${daq_tag}
