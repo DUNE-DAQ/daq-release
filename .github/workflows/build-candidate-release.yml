@@ -134,7 +134,7 @@ jobs:
     - name: upload spack candidate release tarball for dunedaq
       uses: actions/upload-artifact@v3
       with:
-        name: candidate_dunedaq
+        name: candidates_dunedaq
         path: ${{ github.workspace }}/candidate-releases
 
     - name: setup directories and install spack for the fddaq release
