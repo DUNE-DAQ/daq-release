@@ -28,8 +28,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: isc01
-      #runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:latest
