@@ -151,9 +151,9 @@ jobs:
 
 
           # fd-v4.1.0
-          export DAQ_RELEASE=${DET}-${{ github.event.inputs.release }}
+          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}
           # rc-fd-v4.1.0-1
-          export RC_RELEASE=rc-${DAQ_RELEASE}-${{ github.event.inputs.build-number }}
+          export RC_RELEASE=rc-${DET}-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -173,7 +173,7 @@ jobs:
           python3 scripts/spack/make-release-repo.py -u \
           -i configs/${DET}daq/${DAQ_RELEASE}/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
-          -r ${DAQ_RELEASE} \
+          -r ${RC_RELEASE} \
           --base-release ${RC_BASE_RELEASE} \
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
