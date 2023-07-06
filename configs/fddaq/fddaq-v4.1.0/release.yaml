@@ -10,7 +10,7 @@
           version: v2.0.3
           commit: null
         - name: dpdklibs
-          version: v1.1.0
+          version: v1.1.1
           commit: null
         - name: dqm
           version: v1.7.0
