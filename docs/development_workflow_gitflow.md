@@ -83,7 +83,7 @@ Developers need to bump the version of the package on the develop branch. Either
 
 #### During the testing period
 
-An initial candidate release will be built once the first round of tags are collected. That marks the start of the testing period. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. *
+An initial candidate release will be built once the first round of tags are collected. That marks the start of the testing period. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible.
 1. Changes which do get made will be made to a `prep-release/dunedaq-v<X.Y.Z>` branch; if one doesn't exist, it should be created;
 2. This branch should be based on the initial tag for the release; 
 3. The fixes can be made to the `prep-release/dunedaq-v<X.Y.Z>` branch via pull requests with at lease one approval review.
