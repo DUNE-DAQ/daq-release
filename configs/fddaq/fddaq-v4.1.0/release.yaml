@@ -22,10 +22,10 @@
           version: v1.2.2
           commit: null
         - name: fddetdataformats
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: fdreadoutlibs
-          version: v1.7.0
+          version: v1.7.1
           commit: null
         - name: fdreadoutmodules
           version: v1.0.0
@@ -40,7 +40,7 @@
           version: v2.2.0
           commit: null
         - name: rawdatautils
-          version: v1.4.0
+          version: v1.4.1
           commit: null
         - name: sspmodules
           version: v1.3.0
