@@ -146,13 +146,13 @@
           version: v1.5.0
           commit: null
         - name: ipm
-          version: v2.6.1
+          version: v2.6.2
           commit: null
         - name: serialization
           version: v1.3.1
           commit: null
         - name: iomanager
-          version: v1.3.0
+          version: v1.3.1
           commit: null
         - name: dfmessages
           version: v2.7.0
