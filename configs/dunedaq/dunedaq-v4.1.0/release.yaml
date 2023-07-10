@@ -152,7 +152,7 @@
           version: v1.3.1
           commit: null
         - name: iomanager
-          version: v1.3.1
+          version: v1.3.2
           commit: null
         - name: dfmessages
           version: v2.7.0
@@ -232,7 +232,7 @@
           version: v7.2.1
           commit: null
         - name: daq-systemtest
-          version: v2.0.0
+          version: v2.0.1
           commit: null
         - name: pocket
           version: v0.6.0
