@@ -124,7 +124,7 @@ class DAQRelease:
             with open(itemp, 'r') as f:
                 lines = f.read()
                 # Nightlies
-                if "dunedaq" not in self.rdict["release"]:
+                if "daq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
                 # Forzen release
                 else:
