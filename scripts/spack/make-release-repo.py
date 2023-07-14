@@ -197,7 +197,7 @@ class DAQRelease:
                 lines += f'\n        depends_on(f"{iname}@{iver}")'
             else:
                 # Nightlies
-                if "dunedaq" not in self.rdict["release"]:
+                if "daq" not in self.rdict["release"]:
                     iver = self.rdict["release"]
                 lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         lines += '\n'
