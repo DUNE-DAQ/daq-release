@@ -179,13 +179,13 @@
           version: v2.11.0
           commit: null
         - name: timing
-          version: v7.3.1
+          version: v7.3.2
           commit: null
         - name: timinglibs
           version: v2.3.0
           commit: null
         - name: daqconf
-          version: v6.0.1
+          version: v6.0.2
           commit: null
         - name: trigger
           version: v1.5.8
@@ -232,7 +232,7 @@
           version: v7.2.1
           commit: null
         - name: daq-systemtest
-          version: v2.0.1
+          version: v2.0.4
           commit: null
         - name: pocket
           version: v0.6.0

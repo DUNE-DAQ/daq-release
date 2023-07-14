@@ -110,6 +110,9 @@
         - name: connectivityserver
           version: 1.0.0
           source:  github_DUNE-DAQ
+        - name: deepdiff
+          version: 6.3.1
+          source:  pypi
         - name: docker
           version: 5.0.3
           source:  pypi
@@ -232,6 +235,9 @@
           source:  pypi
         - name: openpyxl
           version: 3.0.5
+          source:  pypi
+        - name: ordered-set
+          version: 4.1.0
           source:  pypi
         - name: packaging
           version: "21.0"
