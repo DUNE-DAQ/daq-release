@@ -270,7 +270,7 @@ jobs:
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=fd-${{ github.event.inputs.release }}
+            fddaq_tag=fddaq-${{ github.event.inputs.release }}
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
 
