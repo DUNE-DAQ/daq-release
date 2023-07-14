@@ -1,18 +1,18 @@
-name: Build candidate release
+name: Build frozen release
 
 on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'targeted release (e.g. v4.1.0)'
+        description: 'targeted release (e.g. dunedaq-v4.1.0)'
         required: true 
       build-number:
-        description: 'candidate release build number, e.g. 1'
+        description: 'frozen release build number, e.g. 1'
         required: true 
 
 jobs:
-  build_the_candidate_release_spack:
-    name: build_dev_release_spack
+  build_the_frozen_release_spack:
+    name: build_frozen_release_spack
     runs-on: ubuntu-latest
     #runs-on: daq
     container:
@@ -35,12 +35,10 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          # dunedaq-v4.1.0
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
-          # rc-v4.1.0-1
-          export RC_RELEASE=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
           mkdir -p ${SPACK_RELEASE}
 
@@ -56,10 +54,10 @@ jobs:
           cd $DAQ_RELEASE_DIR
 
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
-          -t spack-repos/dunedaq-repo-template \
-          -r ${RC_RELEASE} \
-          -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
+                -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
+          	-t spack-repos/release-repo-template \
+          	-r ${DAQ_RELEASE} \
+                -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
@@ -95,15 +93,15 @@ jobs:
           spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
-          tar zcf spack-${RC_RELEASE}.tar.gz ${RC_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/rc-spack-dunedaq
-          mv spack-${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/rc-spack-dunedaq
+          tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/frozen-spack-dunedaq
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
       uses: actions/upload-artifact@v3
       with:
-        name: rc_spack_dunedaq
-        path: ${{ github.workspace }}/rc-spack-dunedaq
+        name: frozen_spack_dunedaq
+        path: ${{ github.workspace }}/frozen-spack-dunedaq
 
     - name: install spack for the dunedaq release
       run: |
@@ -112,30 +110,28 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          # dunedaq-v4.1.0
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
-          # rc-v4.1.0-1
-          export RC_RELEASE=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
-          tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/candidate-releases
-          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidate-releases
+          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/frozen-releases
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-releases
 
-    - name: upload spack candidate release tarball for dunedaq
+    - name: upload spack frozen release tarball for dunedaq
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_dunedaq
-        path: ${{ github.workspace }}/candidate-releases
+        name: frozens_dunedaq
+        path: ${{ github.workspace }}/frozen-releases
 
     - name: setup directories and install spack for the fddaq release
       run: |
@@ -145,8 +141,14 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export RC_BASE_RELEASE=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_BASE_RELEASE
+          export DAQ_BASE_RELEASE=${{ github.event.inputs.release }}
+
+          export DAQ_RELEASE=${{ github.event.inputs.release }}
+          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
+
+          export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/frozens/$RC_BASE_RELEASE
           export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
 
@@ -154,7 +156,7 @@ jobs:
           export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}
           # fd-v4.1.0-c1
           export RC_RELEASE=${DET}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RC_RELEASE
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/frozens/$RC_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           mkdir -p ${SPACK_RELEASE}
@@ -227,14 +229,14 @@ jobs:
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/candidates-${DET}daq
-          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidates-${DET}daq
+          mkdir -p $GITHUB_WORKSPACE/frozens-${DET}daq
+          mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozens-${DET}daq
 
-    - name: upload spack candidate release tarball for fddaq
+    - name: upload spack frozen release tarball for fddaq
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_fddaq
-        path: ${{ github.workspace }}/candidates-fddaq
+        name: frozens_fddaq
+        path: ${{ github.workspace }}/frozens-fddaq
 
   update_image:
     name: update_spack_image_rc
@@ -246,32 +248,32 @@ jobs:
             os_name: "c7"
           - image: "ghcr.io/dune-daq/c8-slim-externals"
             os_name: "c8"
-    needs: build_the_candidate_release_spack
+    needs: build_the_frozen_release_spack
     environment: dockerhub
     permissions:
       packages: write
       contents: read
 
     steps:
-      - name: Download spack candidate release tarball artifact for dunedaq
+      - name: Download spack frozen release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
-          name: candidates_dunedaq
+          name: frozens_dunedaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack candidate release tarball artifact for fddaq
+      - name: Download spack frozen release tarball artifact for fddaq
         uses: actions/download-artifact@v3
         with:
-          name: candidates_fddaq
+          name: frozens_fddaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-candidates
+      - name: prepare cvmfs mirror spack-frozens
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p candidates
+            mkdir -p frozens
             image_name="${{ matrix.image }}:latest"
 
-            cd candidates
+            cd frozens
             dunedaq_tag=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
@@ -287,7 +289,7 @@ jobs:
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR ${fddaq_tag}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
+            echo "ADD frozens /cvmfs/dunedaq-development.opensciencegrid.org/frozens" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to the Container registry
@@ -333,7 +335,7 @@ jobs:
           daq_tag=${DET}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-setup-release -b candidate ${daq_tag}
+          dbt-setup-release -b frozen ${daq_tag}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
