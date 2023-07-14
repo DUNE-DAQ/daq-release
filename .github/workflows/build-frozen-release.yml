@@ -119,7 +119,7 @@ jobs:
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
           spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dbe@v1.0.0%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
