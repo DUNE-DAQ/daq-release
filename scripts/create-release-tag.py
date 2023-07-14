@@ -140,10 +140,16 @@ if __name__ == "__main__":
     pkgs = []
     if args.input_manifest is not None:
         fman = parse_yaml_file(args.input_manifest)
-        pkgs = fman["dunedaq"]
-        for i in fman["pymodules"]:
-            if i["source"] == "github_DUNE-DAQ":
-                pkgs.append(i)
+        keyname = "dunedaq"
+        if "fddaq" in fman:
+            keyname = "fddaq"
+        if "nddaq" in fman:
+            keyname = "nddaq"
+        pkgs = fman[keyname]
+        if "pymodules" in fman:
+            for i in fman["pymodules"]:
+                if i["source"] == "github_DUNE-DAQ":
+                    pkgs.append(i)
         if "others" in fman:
             pkgs += fman["others"]
 
