@@ -14,7 +14,7 @@ jobs:
   build_the_frozen_release_spack:
     name: build_frozen_release_spack
     #runs-on: ubuntu-latest
-    runs-on: daq
+    runs-on: isc01
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:latest
     defaults:
