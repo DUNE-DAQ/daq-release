@@ -7,7 +7,7 @@
 
     nddaq:
         - name: lbrulibs
-          version: v1.3.0
+          version: v1.4.0
           commit: null
         - name: ndreadoutmodules
           version: v1.0.0
