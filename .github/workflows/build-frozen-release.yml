@@ -281,7 +281,7 @@ jobs:
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR ${fddaq_tag}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/releases" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack/releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to the Container registry
