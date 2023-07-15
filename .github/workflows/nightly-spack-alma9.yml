@@ -1,4 +1,4 @@
-name: Alma9 Spack Nightly Workflow
+name: Spack Nightly Workflow
 
 on:
   schedule:
@@ -11,9 +11,25 @@ on:
         default: ''
 
 jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y-%m-%d)
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
   build_the_develop_release_spack:
     name: build_dev_release_spack
     runs-on: ubuntu-latest
+    needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:latest
     defaults:
@@ -30,14 +46,16 @@ jobs:
         repository: DUNE-DAQ/daq-release
         path: daq-release
 
-    - name: setup directories and install spack
+    - name: setup directories and install spack for the dunedaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export SPACK_VERSION=0.18.1
           export GCC_VERSION=12.1.0
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="NA${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
+          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -55,8 +73,8 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/dunedaq-develop/dunedaq-develop.yaml \
-          -t spack-repos/release-repo-template \
+          -i configs/dunedaq/dunedaq-develop/release.yaml \
+          -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
@@ -75,8 +93,6 @@ jobs:
 
           spack repo list
 
-          cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/dpdk/package.py  ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals/packages/dpdk/package.py
-
           cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
           upstreams:
             spack-externals:
@@ -93,17 +109,126 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-
-
-          ### Install the release in a spack environment
-
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
+          cd $SPACK_RELEASE_DIR/../
+          tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
+          mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-spack-dunedaq
+
+    - name: upload empty spack tarball for dunedaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_spack_dunedaq
+        path: ${{ github.workspace }}/nightly-spack-dunedaq
+
+    - name: install spack for the dunedaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export SPACK_VERSION=0.18.1
+          export GCC_VERSION=12.1.0
+          export EXT_VERSION=v1.0
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          cd $SPACK_RELEASE
+          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
           spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack clean -a
+
+          cd $SPACK_RELEASE_DIR/../
+          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/nightly-dunedaq
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
+
+    - name: upload spack nightly tarball for dunedaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_dunedaq
+        path: ${{ github.workspace }}/nightly-dunedaq
+
+    - name: setup directories and install spack for the fddaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export DET=fd
+          export SPACK_VERSION=0.18.1
+          export GCC_VERSION=12.1.0
+          export EXT_VERSION=v1.0
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
+          export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export DAQ_RELEASE="N${DET^^}${NIGHTLY_TAG}"
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          mkdir -p ${SPACK_RELEASE}
+
+
+          cd ${SPACK_RELEASE}
+          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
+          tar xf v${SPACK_VERSION}.tar.gz
+          ln -s spack-${SPACK_VERSION} spack-installation
+          rm -f v${SPACK_VERSION}.tar.gz
+
+
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+
+          cd $DAQ_RELEASE_DIR
+          python3 scripts/spack/make-release-repo.py -u \
+          -i configs/${DET}daq/${DET}daq-develop/release.yaml \
+          -t spack-repos/${DET}daq-repo-template \
+          -r ${DAQ_RELEASE} \
+          --base-release ${BASE_DAQ_RELEASE} \
+          -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
+
+          cd $SPACK_RELEASE
+          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
+          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
+          repos:
+            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+            - \$spack/var/spack/repos/builtin
+          EOT
+
+          spack repo list
+
+          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
+          upstreams:
+            ${BASE_DAQ_RELEASE}:
+              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
+            spack-externals:
+              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+          EOT
+
+          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
+          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+          spack compiler list
+
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+
+          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
 
           # Generate pyvenv_requirements.txt
-          spack load dunedaq@${DAQ_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py -o ${SPACK_RELEASE}/../ --pyvenv-requirements -i $DAQ_RELEASE_DIR/configs/dunedaq-develop/dunedaq-develop.yaml
+          spack load ${DET}daq@${DAQ_RELEASE}
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py \
+          -o ${SPACK_RELEASE}/../ \
+          --pyvenv-requirements \
+          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/release.yaml
 
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
           source ${SPACK_RELEASE}/../.venv/bin/activate
@@ -112,60 +237,179 @@ jobs:
 
           spack clean -a
 
-          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
+          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/nightly
-          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly
+          mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
 
-    - name: upload spack nightly tarball
+    - name: upload spack nightly tarball for fddaq
       uses: actions/upload-artifact@v3
       with:
-        name: nightly_spack_release
-        path: ${{ github.workspace }}/nightly
+        name: nightly_fddaq
+        path: ${{ github.workspace }}/nightly-fddaq
+
+    - name: setup directories and install spack for the nddaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export DET=nd
+          export SPACK_VERSION=0.18.1
+          export GCC_VERSION=12.1.0
+          export EXT_VERSION=v1.0
+          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
+          export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          export DAQ_RELEASE="N${DET^^}${NIGHTLY_TAG}"
+          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
+          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+          mkdir -p ${SPACK_RELEASE}
+
+
+          cd ${SPACK_RELEASE}
+          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
+          tar xf v${SPACK_VERSION}.tar.gz
+          ln -s spack-${SPACK_VERSION} spack-installation
+          rm -f v${SPACK_VERSION}.tar.gz
+
+
+          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+
+          cd $DAQ_RELEASE_DIR
+          python3 scripts/spack/make-release-repo.py -u \
+          -i configs/${DET}daq/${DET}daq-develop/release.yaml \
+          -t spack-repos/${DET}daq-repo-template \
+          -r ${DAQ_RELEASE} \
+          --base-release ${BASE_DAQ_RELEASE} \
+          -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
+
+          cd $SPACK_RELEASE
+          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
+          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
+          repos:
+            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+            - \$spack/var/spack/repos/builtin
+          EOT
+
+          spack repo list
+
+          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
+          upstreams:
+            ${BASE_DAQ_RELEASE}:
+              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
+            spack-externals:
+              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+          EOT
+
+          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
+          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+          spack compiler list
+
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+
+          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+
+          # Generate pyvenv_requirements.txt
+          spack load ${DET}daq@${DAQ_RELEASE}
+          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py \
+          -o ${SPACK_RELEASE}/../ \
+          --pyvenv-requirements \
+          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/release.yaml
+
+          python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
+          source ${SPACK_RELEASE}/../.venv/bin/activate
+
+          python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
+
+          spack clean -a
+
+          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake ${SPACK_RELEASE}/../
+
+          cd $SPACK_RELEASE_DIR/../
+          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
+          mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
+
+    - name: upload spack nightly tarball for nddaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_nddaq
+        path: ${{ github.workspace }}/nightly-nddaq
 
 
   update_image:
-    name: update_spack_image
+    name: update_spack_image_nightly
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
           - image: "ghcr.io/dune-daq/alma9-slim-externals"
-            os_name: "alma9"
-    needs: build_the_develop_release_spack
+            os_name: "al9"
+    needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
       packages: write
       contents: read
 
     steps:
-      - name: Download spack nightly release tarball artifact
+      - name: Download spack nightly release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
-          name: nightly_spack_release
+          name: nightly_dunedaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for fddaq
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_fddaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for nddaq
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_nddaq
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-nightly
+        env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            nightly_tag="NA${{ github.event.inputs.tag-prefix }}$(date +%y-%m-%d)"
             image_name="${{ matrix.image }}:latest"
-            cd nightly
-            tar xvf ../${nightly_tag}.tar.gz
-            rm -rf ../${nightly_tag}.tar.gz
-            ln -s ${nightly_tag} last_successful
 
-            cd last_successful
-            ln -s spack-*-gcc-* default
-            cd ..
+            cd nightly
+            dunedaq_tag="NB${NIGHTLY_TAG}"
+            tar xvf ../${dunedaq_tag}.tar.gz
+            rm -rf ../${dunedaq_tag}.tar.gz
+
+            fddaq_tag="NFD${NIGHTLY_TAG}"
+            tar xvf ../${fddaq_tag}.tar.gz
+            rm -rf ../${fddaq_tag}.tar.gz
+            ln -s ${fddaq_tag} last_fddaq
+            cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
+
+            nddaq_tag="NND${NIGHTLY_TAG}"
+            tar xvf ../${nddaq_tag}.tar.gz
+            rm -rf ../${nddaq_tag}.tar.gz
+            ln -s ${nddaq_tag} last_nddaq
+            cd last_nddaq; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${nightly_tag}" >> Dockerfile
+            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -184,7 +428,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev
+            type=raw,value=spack-dev-split
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v4
@@ -200,97 +444,53 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-split"
     defaults:
       run:
         shell: bash
 
     steps:
     
-    - name: create dbt-setup-release-env.sh and daq_app_rte.sh
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
+          export DET=fd
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-setup-release -n last_successful
-          declare -x > ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
-          declare -f >> ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/daq_app_rte.sh
+          dbt-setup-release -n last_${DET}daq
+          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
-
-    - name: upload dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
-      with:
-        name: dbt_setup_release_env
-        path: ${{ github.workspace }}/dbt-setup-release-env.sh
-
-    - name: upload daq_app_rte.sh
-      uses: actions/upload-artifact@v3
-      with:
-        name: daq_app_rte
-        path: ${{ github.workspace }}/daq_app_rte.sh
-
-  Spack_Build_all_pkgs_in_workarea:
-    name: spack_build_against_dev_on_${{ matrix.os_name }}
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev"
-            os_name: "alma9"
-          # glibc is not forward-compatible. Base release is built in alma9 with glibc 2.34;
-          # cannot use those binaries on c8-spack image, where glibc is 2.23.
-          #- image: "ghcr.io/dune-daq/c8-slim-externals:spack-dev"
-          #  os_name: "c8"
-    container:
-      image: ${{ matrix.image }}
-    defaults:
-      run:
-        shell: bash
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Runs a single command using the runners shell
-    
-    - name: Checkout daq-release
-      uses: actions/checkout@v3
-      with:
-        repository: DUNE-DAQ/daq-release
-        path: daq-release
-        
-    - name: setup dev area
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for nddaq
       run: |
+          export DET=nd
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-create -n last_successful dev-${{ matrix.os_name }}
-          
-    - name: checkout all DAQ packages
-      run: |
-          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
-          cd $DAQ_RELEASE_DIR
-          python3 scripts/spack/make-release-repo.py -u \
-          	-i configs/dunedaq-develop/dunedaq-develop.yaml \
-          	-b develop \
-          	-t spack-repos/release-repo-template \
-          	-r N22-00-00 \
-          	-o $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}
+          dbt-setup-release -n last_${DET}daq
+          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
-          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source env.sh || true          # Checkout all DAQ packages to sourcecode by reading the repo file.
-          python3 $DAQ_RELEASE_DIR/scripts/checkout-daq-package.py -a \
-                -i $GITHUB_WORKSPACE/spack-repo-${{ matrix.os_name }}/spack-repo/N22-00-00.yaml \
-                -o sourcecode 
-          cp $DAQ_RELEASE_DIR/configs/dunedaq-develop/dbt-build-order.cmake sourcecode/
-    
-    - name: setup build env, build and lint the repo against the development release
-      run: |
-          cd $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}
-          source env.sh || true
-          #dbt-workarea-env -s externals || true
-          dbt-build
-
-    - name: upload build log file
+    - name: upload fddaq-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
       with:
-        name: spack_build_log_${{ matrix.os_name }}
-        path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/build*.log
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+
+    - name: upload fddaq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq_app_rte.sh
+
+    - name: upload nddaq-dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: nddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
+
+    - name: upload nddaq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: nddaq_app_rte
+        path: ${{ github.workspace }}/nddaq_app_rte.sh
