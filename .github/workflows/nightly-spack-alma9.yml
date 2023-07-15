@@ -55,7 +55,7 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -131,7 +131,7 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -163,11 +163,11 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
           export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="N${DET^^}${NIGHTLY_TAG}"
+          export DAQ_RELEASE="NA${DET^^}${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -260,11 +260,11 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
+          export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
           export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE="N${DET^^}${NIGHTLY_TAG}"
+          export DAQ_RELEASE="NA${DET^^}${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
@@ -390,17 +390,17 @@ jobs:
             image_name="${{ matrix.image }}:latest"
 
             cd nightly
-            dunedaq_tag="NB${NIGHTLY_TAG}"
+            dunedaq_tag="NAB${NIGHTLY_TAG}"
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag="NFD${NIGHTLY_TAG}"
+            fddaq_tag="NAFD${NIGHTLY_TAG}"
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq
             cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
 
-            nddaq_tag="NND${NIGHTLY_TAG}"
+            nddaq_tag="NAND${NIGHTLY_TAG}"
             tar xvf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
             ln -s ${nddaq_tag} last_nddaq
