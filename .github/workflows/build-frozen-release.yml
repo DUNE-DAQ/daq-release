@@ -36,7 +36,7 @@ jobs:
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
-          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
@@ -111,7 +111,7 @@ jobs:
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
-          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
@@ -144,7 +144,7 @@ jobs:
           export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}
 
           export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}
-          export BUILD_NUMBER=${{ github.event.inputs.build_number }}
+          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
 
