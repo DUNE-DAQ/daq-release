@@ -241,7 +241,7 @@
           version: v1.5.0
           commit: null
         - name: dqm-backend
-          version: "develop"
+          version: v1.2.1
           commit: null
         - name: grafana-dashboards
           version: v1.7.0
