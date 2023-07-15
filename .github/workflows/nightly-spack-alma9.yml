@@ -1,4 +1,4 @@
-name: Spack Nightly Workflow
+name: Alma9 Spack Nightly Workflow
 
 on:
   schedule:
