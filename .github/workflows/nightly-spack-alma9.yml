@@ -113,9 +113,9 @@ jobs:
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
-          rm -rf *.tar.gz
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
+          rm -f $GITHUB_WORKSPACE/nightly-spack-dunedaq/*.tar.gz
           mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
@@ -147,6 +147,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/nightly-dunedaq
+          rm -f $GITHUB_WORKSPACE/nightly-dunedaq/*.tar.gz
           mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
 
     - name: upload spack nightly tarball for dunedaq
@@ -244,6 +245,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
           mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
 
     - name: upload spack nightly tarball for fddaq
@@ -341,6 +343,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
           mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
 
     - name: upload spack nightly tarball for nddaq
