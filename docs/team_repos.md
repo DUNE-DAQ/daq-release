@@ -91,7 +91,7 @@
   - minidaqapp
 
 ## timing
-* Maintainer(s): David Cussans
+* Maintainer(s): Stoyan Trilov, David Cussans
 * Repositories with write access:
   - timing
   - timinglibs
