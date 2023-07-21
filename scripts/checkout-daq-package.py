@@ -4,7 +4,7 @@ import os
 import yaml
 import argparse
 import subprocess
-
+import re
 
 def parse_yaml_file(fname):
     if not os.path.exists(fname):
@@ -19,41 +19,44 @@ def parse_yaml_file(fname):
     return fman
 
 
-def check_output(cmd):
+def check_output(cmd, is_success_required = True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
     out = irun.communicate()
     rc = irun.returncode
     if rc != 0:
-        print('\nERROR: command "{}" has exit non-zero exit status,\
+        if is_success_required:
+            print('\nERROR: command "{}" has exit non-zero exit status, \
 please check!\n'.format(cmd))
-        print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
-        print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+            print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
+            print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
 
-        exit(10)
-    return out
+            exit(10)
+        else:
+            print('Non-zero exit status from checkout attempt; this is acceptable')
+    else:
+        print("Checkout successful")
 
-
-def checkout_commit(repo, commit, outdir):
-    cmd = f"""mkdir -p {outdir}; cd {outdir}; \
-        git clone https://github.com/DUNE-DAQ/{repo}.git; \
-        cd {repo}; \
-        git checkout {commit}
+def checkout_commit(repo, commit, outdir, is_success_required):
+    cmd = f"""\nmkdir -p {outdir}; cd {outdir}; 
+git clone https://github.com/DUNE-DAQ/{repo}.git; 
+cd {repo}; 
+git checkout {commit}
     """
-    check_output(cmd)
-    print(f"Info: checked out {repo:<20} {commit:<20} under {outdir}.")
+    print(f"\nInfo: attempting checkout of {repo:<20} {commit:<20} under {outdir}")
+    check_output(cmd, is_success_required)
     return
 
 def checkout_tag(repo, commit, outdir):
-    cmd = f"""mkdir -p {outdir}; cd {outdir}; \
-        git clone https://github.com/DUNE-DAQ/{repo}.git; \
-        cd {repo}; \
-        git checkout {commit}; \
-        cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
-        tag=v"$cmake_version"; \
-        echo $tag ;\
-        echo $commit; \
-        if [[ $tag != "{commit}" ]]; then echo "Tag mismatches version in CMakeLists.txt" && exit 1; fi
+    cmd = f"""\nmkdir -p {outdir}; cd {outdir}; \
+git clone https://github.com/DUNE-DAQ/{repo}.git; \
+cd {repo}; \
+git checkout {commit}; \
+cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
+tag=v"$cmake_version"; \
+echo $tag ;\
+echo $commit; \
+if [[ $tag != "{commit}" ]]; then echo "Tag mismatches version in CMakeLists.txt ( $tag vs {commit} )" && exit 1; fi
     """
     check_output(cmd)
     print(f"Info: verified version in CMake, checked out {repo:<20} {commit:<20} under {outdir}.")
@@ -64,13 +67,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='checkout-daq-package.py',
         description="Tool for checking out DAQ package(s).",
-        epilog="Questions and comments to dingpf@fnal.gov",
+        epilog="Questions and comments to jcfree@fnal.gov",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-p', '--package', default=None,
                         help='''DAQ package to checkout;''')
     parser.add_argument('-b', '--branch', default=None,
-                        help='''branch/tag name, or commit hash; only to be
-                        used with -p option for single package checkout''')
+                        help='''branch name, tag name, or commit hash; the last two only to be used with the -p option for single package checkout''')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
     parser.add_argument('-a', '--all-packages', action='store_true',
@@ -102,7 +104,22 @@ if __name__ == "__main__":
             if args.check_tag:
                 checkout_tag(i["name"], i["version"], args.output_path)
             else:
-                checkout_commit(i["name"], i["commit"], args.output_path)
+                if args.branch is None:
+                    checkout_token = None
+                    if i["commit"] is not None:
+                        checkout_token = i["commit"]
+                    elif re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
+                        checkout_token = i["version"]
+                    else:
+                        checkout_token = "develop"
+
+                    checkout_commit(i["name"], checkout_token, args.output_path, is_success_required = True)
+                else:
+                    if i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
+                        print(f'\nError: package {i["name"]} is listed in {args.input_manifest}\nwith a commit hash and/or version; can\'t use the branch override\nargument to the script in this case')
+                        exit(30)
+                    checkout_commit(i["name"], args.branch, args.output_path, is_success_required = False)
+                    
     elif args.package is not None:
         # verify entry in manifest file
         commit = ""
