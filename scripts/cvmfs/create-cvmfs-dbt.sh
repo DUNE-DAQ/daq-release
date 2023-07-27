@@ -1,7 +1,6 @@
 #!/bin/bash
 
-TARGET_DIR=/home/dingpf/cvmfs_dunedaq/tools/
-##TARGET_DIR=/home/dingpf/cvmfs_dunedaq/tools/
+TARGET_DIR=$HOME/cvmfs_dunedaq/tools/
 
 mkdir -p /var/tmp
 cd /var/tmp
