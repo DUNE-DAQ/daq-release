@@ -35,6 +35,7 @@ jobs:
           export EXT_VERSION=v1.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
+          export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
           export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
@@ -56,7 +57,7 @@ jobs:
           python3 scripts/spack/make-release-repo.py -u \
                 -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
           	-t spack-repos/dunedaq-repo-template \
-          	-r ${DAQ_RELEASE} \
+          	-r ${DAQ_RELEASE_CONF} \
                 -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
@@ -143,6 +144,7 @@ jobs:
 
           export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
 
+          export DAQ_RELEASE_CONF=${DET}daq-${{ github.event.inputs.release }}
           export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}-a9
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
@@ -167,7 +169,7 @@ jobs:
           python3 scripts/spack/make-release-repo.py -u \
           -i configs/${DET}daq/${DAQ_RELEASE}/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
-          -r ${DAQ_RELEASE} \
+          -r ${DAQ_RELEASE_CONF} \
           --base-release ${DAQ_BASE_RELEASE} \
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
