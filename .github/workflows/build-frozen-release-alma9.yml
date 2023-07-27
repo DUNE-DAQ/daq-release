@@ -55,9 +55,9 @@ jobs:
           cd $DAQ_RELEASE_DIR
 
           python3 scripts/spack/make-release-repo.py -u \
-                -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
+                -i configs/dunedaq/${DAQ_RELEASE_CONF}/release.yaml \
           	-t spack-repos/dunedaq-repo-template \
-          	-r ${DAQ_RELEASE_CONF} \
+          	-r ${DAQ_RELEASE} \
                 -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
@@ -167,9 +167,9 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/${DET}daq/${DAQ_RELEASE}/release.yaml \
+          -i configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
-          -r ${DAQ_RELEASE_CONF} \
+          -r ${DAQ_RELEASE} \
           --base-release ${DAQ_BASE_RELEASE} \
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
@@ -210,7 +210,7 @@ jobs:
           /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py \
           -o ${SPACK_RELEASE}/../ \
           --pyvenv-requirements \
-          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE}/release.yaml
+          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml
 
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
           source ${SPACK_RELEASE}/../.venv/bin/activate
