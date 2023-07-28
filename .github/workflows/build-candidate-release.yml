@@ -97,6 +97,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${RC_RELEASE}.tar.gz ${RC_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/rc-spack-dunedaq
+          rm -rf $GITHUB_WORKSPACE/rc-spack-dunedaq/*
           mv spack-${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/rc-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
@@ -129,6 +130,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/candidate-releases
+          rm -rf $GITHUB_WORKSPACE/candidate-releases/*
           mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidate-releases
 
     - name: upload spack candidate release tarball for dunedaq
@@ -228,6 +230,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${RC_RELEASE}.tar.gz ${RC_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/candidates-${DET}daq
+          rm -rf $GITHUB_WORKSPACE/candidates-${DET}daq/*
           mv ${RC_RELEASE}.tar.gz $GITHUB_WORKSPACE/candidates-${DET}daq
 
     - name: upload spack candidate release tarball for fddaq
