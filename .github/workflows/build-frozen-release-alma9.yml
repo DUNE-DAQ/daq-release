@@ -96,6 +96,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/frozen-spack-dunedaq
+          rm -f $GITHUB_WORKSPACE/frozen-spack-dunedaq/*
           mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
@@ -126,6 +127,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/frozen-releases
+          rm -f $GITHUB_WORKSPACE/frozen-releases/*
           mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-releases
 
     - name: upload spack frozen release tarball for dunedaq
@@ -224,6 +226,7 @@ jobs:
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
           mkdir -p $GITHUB_WORKSPACE/frozens-${DET}daq
+          rm -f $GITHUB_WORKSPACE/frozens-${DET}daq/*
           mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozens-${DET}daq
 
     - name: upload spack frozen release tarball for fddaq
