@@ -223,6 +223,9 @@
         - name: dbe
           version: "develop"
           commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
 
     others:
         - name: daq-release

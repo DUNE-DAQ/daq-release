@@ -21,9 +21,6 @@
         - name: fdreadoutmodules
           version: "develop"
           commit: null
-        - name: hsilibs
-          version: "develop"
-          commit: null
         - name: dpdklibs
           version: "develop"
           commit: null
