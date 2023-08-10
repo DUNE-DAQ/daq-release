@@ -40,7 +40,7 @@
           version: v2.2.0
           commit: null
         - name: rawdatautils
-          version: v1.4.1
+          version: v1.4.2
           commit: null
         - name: sspmodules
           version: v1.3.0
