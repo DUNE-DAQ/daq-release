@@ -52,9 +52,6 @@
         - name: folly
           version: 2021.12.13.00
           variant: "cxxstd=2a"
-        - name: felix-software
-          version: dunedaq-v2.10.0
-          variant: ~
         - name: fftw
           version: 3.3.10
           variant: "~mpi"
