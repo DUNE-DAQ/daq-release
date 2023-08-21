@@ -43,6 +43,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          DET=fd
           mkdir -p $GITHUB_WORKSPACE/$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
