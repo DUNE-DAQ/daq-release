@@ -47,7 +47,10 @@
           version: 1.7.0
           variant: ~
         - name: protobuf
-          version: 4.21.3
+          version: 3.22.2
+          variant: ~
+        - name: grpc
+          version: 1.56.2
           variant: ~
         - name: folly
           version: 2021.12.13.00
