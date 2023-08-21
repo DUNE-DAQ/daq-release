@@ -26,6 +26,7 @@ class Dpdk(MesonPackage):
     depends_on("py-pyelftools")
     depends_on("libbsd")
     depends_on("numactl")
+    depends_on("openssl")
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_INC", self.prefix + "/include" )
