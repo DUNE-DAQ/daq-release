@@ -14,7 +14,8 @@ jobs:
   build_the_frozen_release_spack:
     name: build_frozen_release_spack
     #runs-on: ubuntu-latest
-    runs-on: isc01
+    #runs-on: isc01
+    runs-on: np04-build-alma9
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:latest
     defaults:
