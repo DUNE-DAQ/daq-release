@@ -1,4 +1,4 @@
-name: Nightly Integration Test Nightly Workflow
+name: Nightly Integration Test Workflow
 
 on:
   schedule:
