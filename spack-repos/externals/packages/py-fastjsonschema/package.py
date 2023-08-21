@@ -18,4 +18,7 @@ class PyFastjsonschema(PythonPackage):
 
     version('2.14.5', sha256='afbc235655f06356e46caa80190512e4d9222abfaca856041be5a74c665fa094')
 
-    
+    depends_on('py-setuptools', type='build')
+
+
+
