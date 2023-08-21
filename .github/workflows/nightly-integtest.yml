@@ -1,0 +1,55 @@
+name: Nightly Integration Test Nightly Workflow
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+
+  workflow_dispatch:
+
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y-%m-%d)
+          echo "nightly_tag=minimal_test_${date_tag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  minimal_system_integration_test:
+    name: minimal_system_integration_test
+    runs-on: isc01
+    needs: make_nightly_tag
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Checkout daq-systemtest
+      uses: actions/checkout@v3
+      with:
+        repository: DUNE-DAQ/daq-systemtest
+        path: daq-systemtest
+    
+    - name: setup release and run test
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          mkdir -p $GITHUB_WORKSPACE/$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/$NIGHTLY_TAG
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -n last_${DET}daq
+          pytest $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+          cd $GITHUB_WORKSPACE
+          rm -rf daq-systemtest
+          rm -rf $NIGHTLY_TAG
+
