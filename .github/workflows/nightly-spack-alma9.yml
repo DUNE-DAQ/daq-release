@@ -355,7 +355,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: ubuntu-latest
+    runs-on: isc01
     strategy:
       matrix:
         include:
