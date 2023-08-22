@@ -36,9 +36,9 @@
        #- name: dtpctrllibs
        #  version: "develop"
        #  commit: null
-        - name: dtpcontrols
-          version: "develop"
-          commit: null
+       #- name: dtpcontrols
+       #  version: "develop"
+       #  commit: null
        #- name: uhallibs
        #  version: "develop"
        #  commit: null
