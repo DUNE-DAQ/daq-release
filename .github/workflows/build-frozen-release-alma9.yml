@@ -17,7 +17,7 @@ jobs:
     runs-on: isc01
     #runs-on: np04-build-alma9
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:latest
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
@@ -31,9 +31,9 @@ jobs:
 
     - name: setup directories and install spack for the dunedaq release
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
@@ -92,7 +92,7 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
@@ -108,9 +108,9 @@ jobs:
 
     - name: install spack for the dunedaq release
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
@@ -121,8 +121,8 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@v1.0.0%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --reuse dbe@v1.0.0%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -140,9 +140,9 @@ jobs:
     - name: setup directories and install spack for the fddaq release
       run: |
           export DET=fd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
@@ -205,8 +205,8 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -267,7 +267,8 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p releases
-            image_name="${{ matrix.image }}:latest"
+            export EXT_VERSION=v2.0
+            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd releases
             dunedaq_tag=dunedaq-${{ github.event.inputs.release }}-a9

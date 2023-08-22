@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     #runs-on: daq
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:latest
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
     defaults:
       run:
         shell: bash
@@ -30,9 +30,9 @@ jobs:
 
     - name: setup directories and install spack for the dunedaq release
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           # dunedaq-v4.1.0
@@ -92,7 +92,7 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${RC_RELEASE}.tar.gz ${RC_RELEASE}
@@ -108,9 +108,9 @@ jobs:
 
     - name: install spack for the dunedaq release
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           # dunedaq-v4.1.0
@@ -123,8 +123,8 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
+          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -142,9 +142,9 @@ jobs:
     - name: setup directories and install spack for the fddaq release
       run: |
           export DET=fd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export RC_BASE_RELEASE=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
@@ -208,8 +208,8 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${RC_RELEASE}
@@ -272,7 +272,8 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidates
-            image_name="${{ matrix.image }}:latest"
+            export EXT_VERSION=v1.1
+            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd candidates
             dunedaq_tag=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
