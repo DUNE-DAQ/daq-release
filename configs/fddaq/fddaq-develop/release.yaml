@@ -30,9 +30,9 @@
         - name: sspmodules
           version: "develop"
           commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
+       #- name: flxlibs
+       #  version: "develop"
+       #  commit: null
        #- name: dtpctrllibs
        #  version: "develop"
        #  commit: null
