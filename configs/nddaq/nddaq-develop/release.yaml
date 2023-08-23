@@ -21,7 +21,7 @@
 
     pymodules:
         - name: pip
-          version: 22.0.4
+          version: 23.2.1
           source:  pypi
         - name: aniso8601
           version: 9.0.1
