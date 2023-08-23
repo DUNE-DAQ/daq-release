@@ -143,8 +143,7 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
-          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -375,6 +374,11 @@ jobs:
       contents: read
 
     steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
       - name: Download spack nightly release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
