@@ -14,6 +14,7 @@ class Protobuf(CMakePackage):
     url = "https://github.com/protocolbuffers/protobuf/archive/v3.18.0.tar.gz"
     maintainers("hyoklee")
 
+    version("4.22.4", sha256="721b01f57e65c82247b6ca4572160368cbb2ba55344eb3633d42b43f9ca3775e")
     version("3.22.2", sha256="2118051b4fb3814d59d258533a4e35452934b1ddb41230261c9543384cbb4dfc")
     version("3.21.12", sha256="930c2c3b5ecc6c9c12615cf5ad93f1cd6e12d0aba862b572e076259970ac3a53")
     version("3.21.9", sha256="1add10f9bd92775b91f326da259f243881e904dd509367d5031d4c782ba82810")
