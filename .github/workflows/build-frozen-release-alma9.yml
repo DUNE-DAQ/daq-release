@@ -251,6 +251,11 @@ jobs:
       contents: read
 
     steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
       - name: Download spack frozen release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
