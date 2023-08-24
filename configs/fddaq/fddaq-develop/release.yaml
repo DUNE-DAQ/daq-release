@@ -219,7 +219,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.0.4
+          version: 5.0.5
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
