@@ -421,7 +421,6 @@ jobs:
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
-            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
