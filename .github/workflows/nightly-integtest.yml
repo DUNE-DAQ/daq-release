@@ -25,7 +25,7 @@ jobs:
 
   minimal_system_integration_test:
     name: minimal_system_integration_test
-    runs-on: np04-build-alma9
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
@@ -49,6 +49,8 @@ jobs:
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n last_${DET}daq
+          export PATH=$HOME/bin:$PATH
+          type get-ticket.sh && get-ticket.sh
           pytest $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
           cd $GITHUB_WORKSPACE
           rm -rf daq-systemtest
