@@ -49,8 +49,9 @@ jobs:
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n last_${DET}daq
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
+          #export PATH=$HOME/bin:$PATH
+          #type get-ticket.sh && get-ticket.sh
+          kinit  -k -t /home/nfs/dunedaq/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
           pytest $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
           cd $GITHUB_WORKSPACE
           rm -rf daq-systemtest
