@@ -51,8 +51,17 @@ jobs:
           dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
-          pytest $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+          rm -f $GITHUB_WORKSPACE/test-results.xml
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
           cd $GITHUB_WORKSPACE
-          rm -rf daq-systemtest
           rm -rf $NIGHTLY_TAG
+          rm -rf daq-systemtest
 
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results@main
+      with:
+        path: ${{ github.workspace }}/test-results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true
