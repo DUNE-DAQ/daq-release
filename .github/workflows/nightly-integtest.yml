@@ -59,7 +59,7 @@ jobs:
 
     - name: Surface failing tests
       if: always()
-      uses: pmeier/pytest-results@main
+      uses: pmeier/pytest-results-action@main
       with:
         path: ${{ github.workspace }}/test-results.xml
         summary: true
