@@ -4,7 +4,8 @@ source $SCRIPT_DIR/repo.sh
 
 function git_checkout_and_update_ci {
   prd_list_name=$1[@]
-  workflow_file=$2
+  src_workflow_file=$2
+  dest_workflow_file=$3
   prd_list=("${!prd_list_name}")
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
@@ -30,7 +31,9 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml
+#git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
+
+git_checkout_and_update_ci dune_packages_with_ci_nd $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci_nd.yml dunedaq-develop-cpp-ci.yml
 
 popd
 

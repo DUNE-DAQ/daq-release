@@ -58,6 +58,13 @@ dune_packages_with_ci=(
   "lbrulibs"
 )
 
+dune_packages_with_ci_nd=(
+  "nddetdataformats"
+  "ndreadoutlibs"
+  "ndreadoutmodules"
+  "lbrulibs"
+)
+
 dune_packages=(
  "daq-cmake"       
  "dpdklibs"
