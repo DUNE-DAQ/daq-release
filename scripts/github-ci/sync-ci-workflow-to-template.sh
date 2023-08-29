@@ -13,6 +13,7 @@ function git_checkout_and_update_ci {
     echo "********************* $prod_name *****************************"
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
+    mkdir -p .github/workflows
     cp $workflow_file .github/workflows
     git add .github/workflows
     old_message=`git log -1|grep -v "^commit"`
