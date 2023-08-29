@@ -15,7 +15,7 @@ function git_checkout_and_update_ci {
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
     mkdir -p .github/workflows
-    cp $workflow_file .github/workflows
+    cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
     old_message=`git log -1|grep -v "^commit"`
     git commit -am "syncing $(basename $workflow_file); previous commit: ${old_message}"
