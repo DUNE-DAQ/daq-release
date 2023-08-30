@@ -11,8 +11,9 @@ class Highfive(CMakePackage):
     """HighFive - Header only C++ HDF5 interface"""
 
     homepage = "https://github.com/BlueBrain/HighFive"
-    url      = "https://github.com/BlueBrain/HighFive/archive/v1.2.tar.gz"
+    url      = "https://github.com/BlueBrain/HighFive/archive/v2.7.1.tar.gz"
 
+    version('2.7.1', sha256='25b4c51a94d1e670dc93b9b73f51e79b65d8ff49bcd6e5d5582d5ecd2789a249')
     version('2.4.1', sha256='6826471ef5c645ebf947d29574b302991525a8a8ff1ef687aba7311d9a0ea36f')
     version('2.4.0', sha256='ba0ed6d8e2e09e80849926f38c15a26cf4b80772084cea0555269a25fec02149')
     version('2.3.1', sha256='41728a1204bdfcdcef8cbc3ddffe5d744c5331434ce3dcef35614b831234fcd7')
