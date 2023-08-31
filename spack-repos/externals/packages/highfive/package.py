@@ -25,6 +25,8 @@ class Highfive(CMakePackage):
     version('2.1',   sha256='cc9e93baecc939c6984f220643338092b7e71ef666cb1e1c80f3dfde0eaa89f2')
     version('1.2',   sha256='4d8f84ee1002e8fd6269b62c21d6232aea3d56ce4171609e39eb0171589aab31')
 
+    patch('cmake_deps.patch', sha256='84200e200e56f90ce91f0bceb67494ebaf2a1f6c07d1c37d886701292b078d57', when='@2.7.1')
+
     variant('mpi', default=False, description='Support MPI')
     variant('boost', default=False, description='Support Boost')
 
