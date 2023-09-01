@@ -25,6 +25,9 @@
         - name: hdf5
           version: 1.12.0
           variant: "~mpi +threadsafe"
+        - name: libarchive
+          version: 3.6.2
+          variant: ~
         - name: libzmq
           version: 4.3.4
           variant: ~
@@ -68,7 +71,7 @@
           version: 2020.3
           variant: ~
         - name: dpdk
-          version: 22.03.1
+          version: 22.03
           variant: ~
         - name: fmt
           version: 8.1.1
