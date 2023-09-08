@@ -30,18 +30,18 @@
         - name: sspmodules
           version: "develop"
           commit: null
-       #- name: flxlibs
-       #  version: "develop"
-       #  commit: null
-       #- name: dtpctrllibs
-       #  version: "develop"
-       #  commit: null
-       #- name: dtpcontrols
-       #  version: "develop"
-       #  commit: null
-       #- name: uhallibs
-       #  version: "develop"
-       #  commit: null
+        - name: flxlibs
+          version: "develop"
+          commit: null
+        - name: dtpctrllibs
+          version: "develop"
+          commit: null
+        - name: dtpcontrols
+          version: "develop"
+          commit: null
+        - name: uhallibs
+          version: "develop"
+          commit: null
         - name: wibmod
           version: "develop"
           commit: null
