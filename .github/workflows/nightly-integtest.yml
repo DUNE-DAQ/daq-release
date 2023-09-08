@@ -25,7 +25,7 @@ jobs:
 
   minimal_system_integration_test:
     name: minimal_system_integration_test
-    runs-on: np04-build-alma9
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
@@ -49,8 +49,20 @@ jobs:
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n last_${DET}daq
-          pytest $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+          export PATH=$HOME/bin:$PATH
+          type get-ticket.sh && get-ticket.sh
+          rm -f $GITHUB_WORKSPACE/test-results.xml
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
           cd $GITHUB_WORKSPACE
-          rm -rf daq-systemtest
           rm -rf $NIGHTLY_TAG
+          rm -rf daq-systemtest
 
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+
+      with:
+        path: ${{ github.workspace }}/test-results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true
