@@ -55,7 +55,7 @@ jobs:
         dbt-create -n last_fddaq dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
         source env.sh || true
-        spack unload ${{ github.event.inputs.pkg-name }}
+        spack unload ${{ github.event.inputs.pkg-name }} || true
         mv /scratch/sourcecode/* sourcecode
         dbt-build
         dbt-workarea-env
@@ -117,11 +117,11 @@ jobs:
         export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -n last_fddaq dev-ubuntu
+        dbt-create -i -n last_fddaq dev-ubuntu
         cd dev-ubuntu
         source env.sh || true
-        spack load daq-cmake
-        spack unload ${{ github.event.inputs.pkg-name }}
+        #spack load daq-cmake 
+        spack unload ${{ github.event.inputs.pkg-name }} || true
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         dbt-build
         dbt-workarea-env
