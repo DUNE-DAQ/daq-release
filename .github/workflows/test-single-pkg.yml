@@ -37,6 +37,10 @@ jobs:
         sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
         sudo chmod -R go-rwx /var/lib/cvmfs
 
+    - name: install build-essential
+      run: |
+        sudo apt-get install build-essential
+
     - name: Checkout pkg
       uses: actions/checkout@v3
       with:
