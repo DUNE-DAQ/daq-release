@@ -9,6 +9,9 @@ on:
       tag-prefix:
         description: 'nightly tag prefix'
         default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
 
 jobs:
   make_nightly_tag:
@@ -31,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:latest
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
     defaults:
       run:
         shell: bash
@@ -50,9 +53,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE="NB${NIGHTLY_TAG}"
@@ -73,6 +76,7 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${{ github.event.inputs.feature-branch }} \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -106,10 +110,11 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
@@ -127,9 +132,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE="NB${NIGHTLY_TAG}"
@@ -139,8 +144,7 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -160,9 +164,9 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=fd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
@@ -187,6 +191,7 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${{ github.event.inputs.feature-branch }} \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -219,11 +224,12 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -258,9 +264,9 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=nd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NB${NIGHTLY_TAG}"
@@ -285,6 +291,7 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${{ github.event.inputs.feature-branch }} \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -317,11 +324,12 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -398,7 +406,8 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            image_name="${{ matrix.image }}:latest"
+            export EXT_VERSION=v1.1
+            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd nightly
             dunedaq_tag="NB${NIGHTLY_TAG}"
@@ -438,7 +447,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev-split
+            type=raw,value=spack-dev-v1.1
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v4
@@ -454,7 +463,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-split"
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
     defaults:
       run:
         shell: bash

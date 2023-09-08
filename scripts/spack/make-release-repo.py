@@ -42,7 +42,7 @@ please check!\n'.format(cmd))
     return out
 
 
-def get_commit_hash(repo, tag_or_branch):
+def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
     cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
     output = check_output(cmd)
@@ -51,7 +51,7 @@ def get_commit_hash(repo, tag_or_branch):
             if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
               echo {tag_or_branch}; \
             else \
-              echo "develop" ;\
+              echo {fall_back_tag} ;\
             fi"""
         output = check_output(cmd)
         tag_or_branch = output[0].decode('utf-8').strip()
@@ -96,7 +96,7 @@ class DAQRelease:
                     iver = ipkg["version"]
                 ihash = ipkg["commit"]
                 if not iname.startswith('py-'):
-                    ihash = get_commit_hash(iname, iver)
+                    ihash = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:

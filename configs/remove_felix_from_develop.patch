@@ -1,0 +1,35 @@
+diff --git a/configs/fddaq/fddaq-develop/release.yaml b/configs/fddaq/fddaq-develop/release.yaml
+index 0d6963d..9cea06f 100644
+--- a/configs/fddaq/fddaq-develop/release.yaml
++++ b/configs/fddaq/fddaq-develop/release.yaml
+@@ -30,18 +30,18 @@
+         - name: sspmodules
+           version: "develop"
+           commit: null
+-        - name: flxlibs
+-          version: "develop"
+-          commit: null
+-        - name: dtpctrllibs
+-          version: "develop"
+-          commit: null
+-        - name: dtpcontrols
+-          version: "develop"
+-          commit: null
+-        - name: uhallibs
+-          version: "develop"
+-          commit: null
++       #- name: flxlibs
++       #  version: "develop"
++       #  commit: null
++       #- name: dtpctrllibs
++       #  version: "develop"
++       #  commit: null
++       #- name: dtpcontrols
++       #  version: "develop"
++       #  commit: null
++       #- name: uhallibs
++       #  version: "develop"
++       #  commit: null
+         - name: wibmod
+           version: "develop"
+           commit: null

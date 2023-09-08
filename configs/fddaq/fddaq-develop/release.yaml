@@ -51,7 +51,7 @@
 
     pymodules:
         - name: pip
-          version: 22.0.4
+          version: 23.2.1
           source:  pypi
         - name: aniso8601
           version: 9.0.1
@@ -246,7 +246,7 @@
           version: 0.13.1
           source:  pypi
         - name: protobuf
-          version: 3.14.0
+          version: 4.22.4
           source:  pypi
         - name: psutil
           version: 5.9.0
