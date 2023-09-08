@@ -165,7 +165,7 @@ class Cmake(Package):
     patch(
         "cmake-findprotobuf.patch",
         sha256="4759c83e94606f7e69668b1f457fe7c5ff5d98826b5c23a837e4718cd4bcab90",
-        when="@3.23.0"
+        when="@3.23.1"
     )
 
     # Revert the change that introduced a regression when parsing mpi link
