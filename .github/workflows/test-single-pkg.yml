@@ -132,6 +132,9 @@ jobs:
         spack load daq-cmake || true
         spack unload ${{ github.event.inputs.pkg-name }} || true
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
+        dbt-workarea-env
+        ls -a $PWD
+        deactivate || true
+        source .venv/bin/activate
         dbt-build
         dbt-workarea-env
-
