@@ -37,10 +37,6 @@ jobs:
         sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
         sudo chmod -R go-rwx /var/lib/cvmfs
 
-    - name: install build-essential
-      run: |
-        sudo apt-get install build-essential
-
     - name: Checkout pkg
       uses: actions/checkout@v3
       with:
@@ -94,6 +90,10 @@ jobs:
     - name: change dir permission
       run: |
         sudo chmod -R go+rwx /var/lib/cvmfs
+
+    - name: install build-essential
+      run: |
+        sudo apt-get install build-essential
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
