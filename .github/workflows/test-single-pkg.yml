@@ -83,6 +83,9 @@ jobs:
   build_single_pkg_on_ubuntu:
     name: build single pkg on ubuntu
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v3
