@@ -125,7 +125,8 @@ jobs:
         dbt-create -i -n last_fddaq dev-ubuntu
         cd dev-ubuntu
         source env.sh || true
-        #spack load daq-cmake 
+        spack find --loaded -p
+        spack load daq-cmake || true
         spack unload ${{ github.event.inputs.pkg-name }} || true
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         dbt-build
