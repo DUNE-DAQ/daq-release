@@ -52,10 +52,6 @@ dune_packages_with_ci=(
   "dtpctrllibs"
   "ctbmodules"
   "dpdklibs"
-  "nddetdataformats"
-  "ndreadoutlibs"
-  "ndreadoutmodules"
-  "lbrulibs"
 )
 
 dune_packages_with_ci_nd=(
