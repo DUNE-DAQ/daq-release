@@ -76,6 +76,11 @@ jobs:
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
 
           cd $DAQ_RELEASE_DIR
+
+          # remove felix related pacakges from the release config
+          git apply configs/remove_felix_from_develop.patch
+
+
           python3 scripts/spack/make-release-repo.py -u \
           -b ${{ github.event.inputs.feature-branch }} \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
