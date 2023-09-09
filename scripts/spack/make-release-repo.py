@@ -61,7 +61,6 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     output = check_output(cmd)
     shutil.rmtree(tmp_dir)
     commit_hash = output[0].decode('utf-8').strip()
-    print(f"Info: {repo:<20} | {tag_or_branch:<20} | {commit_hash}")
     cmd = "cd /tmp; rm -rf daq_repo_*"
     output = check_output(cmd)
     return commit_hash
@@ -99,6 +98,7 @@ class DAQRelease:
                 if not iname.startswith('py-') and iname != "daq-cmake":
                     ihash = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
+                print(f"Info: {iname:<20} | {iver:<20} | {ihash}")
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
                 outfile.write('---\n')
