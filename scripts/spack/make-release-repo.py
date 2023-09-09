@@ -89,13 +89,13 @@ class DAQRelease:
             for i in range(len(pkgs)):
                 ipkg = pkgs[i]
                 iname = ipkg["name"]
-                if self.overwrite_branch != "":
+                # skip overwriting daq-cmake
+                if self.overwrite_branch != "" and iname != "daq-cmake":
                     iver = self.overwrite_branch
                 else:
                     iver = ipkg["version"]
                 ihash = ipkg["commit"]
-                # skip python package and daq-cmake
-                if not iname.startswith('py-') and iname != "daq-cmake":
+                if not iname.startswith('py-'):
                     ihash = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
                 print(f"Info: {iname:<20} | {iver:<20} | {ihash}")
