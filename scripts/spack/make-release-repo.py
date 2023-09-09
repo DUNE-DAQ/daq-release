@@ -95,7 +95,8 @@ class DAQRelease:
                 else:
                     iver = ipkg["version"]
                 ihash = ipkg["commit"]
-                if not iname.startswith('py-'):
+                # skip python package and daq-cmake
+                if not iname.startswith('py-') and iname != "daq-cmake":
                     ihash = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
             # rewrite YAML
