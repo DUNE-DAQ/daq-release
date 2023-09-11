@@ -20,7 +20,7 @@
           version: dunedaq-v2.8.0
           variant: ~
         - name: highfive
-          version: 2.4.1
+          version: 2.7.1
           variant: "~mpi  ^hdf5@1.12.0~mpi+threadsafe"
         - name: hdf5
           version: 1.12.0
