@@ -1,0 +1,81 @@
+cmake_minimum_required(VERSION 3.4.3)
+
+set(PACKAGE regmap)
+set(PACKAGE_VERSION 4.0.0)
+
+
+include(FELIX)
+
+set(CMAKE_CXX_FLAGS "--pedantic -Wall -fPIC")
+
+SET_DIRECTORY_PROPERTIES(PROPERTIES CLEAN_NO_CUSTOM 1)
+
+felix_add_external(catch ${catch_version})
+
+# FIXME check after migration to TDAQ
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/regenerate")
+  set(WUPPER_CODE_GEN ${CMAKE_CURRENT_SOURCE_DIR}/../wuppercodegen/wuppercodegen/cli.py)
+  set(REGISTER_MAP ${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/sources/templates/registers-4.10.yaml)
+  set(REGISTER_MAP5 ${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/sources/templates/registers-5.0.yaml)
+
+  add_custom_command(
+      OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/regmap/regmap-struct.h
+      COMMAND ${WUPPER_CODE_GEN} ${REGISTER_MAP} src/regmap-struct.h.template regmap/regmap-struct.h
+      DEPENDS src/regmap-struct.h.template ${REGISTER_MAP}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
+  add_custom_command(
+      OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/regmap/regmap-symbol.h
+      COMMAND ${WUPPER_CODE_GEN} ${REGISTER_MAP} src/regmap-symbol.h.template regmap/regmap-symbol.h
+      DEPENDS src/regmap-symbol.h.template ${REGISTER_MAP}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
+  add_custom_command(
+      OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/regmap-symbol.c
+      COMMAND ${WUPPER_CODE_GEN} ${REGISTER_MAP} src/regmap-symbol.c.template src/regmap-symbol.c
+      DEPENDS src/regmap-symbol.c.template ${REGISTER_MAP}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/regmap-symbol.yaml
+    COMMAND ${WUPPER_CODE_GEN} ${REGISTER_MAP} src/regmap-symbol.yaml.template src/regmap-symbol-4.yaml
+    DEPENDS src/regmap-symbol.yaml.template ${REGISTER_MAP}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/regmap-symbol.yaml
+    COMMAND ${WUPPER_CODE_GEN} ${REGISTER_MAP5} src/regmap-symbol.yaml.template src/regmap-symbol-5.yaml
+    DEPENDS src/regmap-symbol.yaml.template ${REGISTER_MAP}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+endif()
+
+
+tdaq_add_library(regmap regmap/regmap-common.h regmap/regmap-struct.h regmap/regmap-symbol.h src/regmap-symbol.c src/regmap-common.c)
+target_link_libraries(regmap)
+
+tdaq_add_library(regmap4 regmap/regmap4-common.h regmap/regmap4-struct.h regmap/regmap4-symbol.h src/regmap4-symbol.c src/regmap4-common.c)
+target_link_libraries(regmap4)
+
+tdaq_add_library(regmap5 regmap/regmap5-common.h regmap/regmap5-struct.h regmap/regmap5-symbol.h src/regmap5-symbol.c src/regmap5-common.c)
+target_link_libraries(regmap5)
+
+#
+# Prepare Unit Tests
+#
+#file(GLOB REGMAP_TEST_SOURCES unit_tests/*.cpp)
+#tdaq_add_executable(regmap-unit-test ${REGMAP_TEST_SOURCES})
+#target_include_directories(felix-bus-unit-test PRIVATE src)
+#target_link_libraries(regmap-unit-test regmap)
+
+#
+# Run unit tests
+#
+#add_test(regmap-unit-test regmap-unit-test)
+
+
+install(TARGETS regmap EXPORT felix DESTINATION lib)
