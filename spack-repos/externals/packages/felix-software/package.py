@@ -9,6 +9,7 @@ class FelixSoftware(Package):
 
     has_code=False
 
+    version("dunedaq-v4.2.0")
     version("dunedaq-v2.10.0")
     version("dunedaq-v2.8.0")
 
@@ -31,7 +32,19 @@ class FelixSoftware(Package):
     def install(self, spec, prefix):
 
         hashes = {}
-        if self.spec.satisfies('@dunedaq-v2.10.0'):
+        if self.spec.satisfies('@dunedaq-v4.2.0'):
+            hashes["cmake_tdaq"] = "d66ce21b"
+            hashes["drivers_rcc"] = "c5c21e00"
+            hashes["flxcard"] = "7614b8cc"
+            hashes["regmap"] = "f0fd698e"
+            hashes["packetformat"] = "a6933e36"
+            hashes["flxcard_py"] = "61001bd6"
+            hashes["ftools"] = "c326e788"
+            hashes["external-catch"] = "a9d9ad54"
+            
+            felix_version="dunedaq-v4.2.0"
+
+        elif self.spec.satisfies('@dunedaq-v2.10.0'):
             hashes["cmake_tdaq"] = "d66ce21b"
             hashes["drivers_rcc"] = "c5c21e00"
             hashes["flxcard"] = "7614b8cc"
@@ -90,10 +103,12 @@ class FelixSoftware(Package):
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/regmap.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/regmap.git')
             return_zero_or_exit('pushd regmap && git checkout %s && popd' % (hashes["regmap"]))
+            install(f"{os.path.dirname(__file__)}/regmap_CMakeLists.txt.{felix_version}", prefix+"/software/regmap/CMakeLists.txt")
 
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/packetformat.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/packetformat.git')
             return_zero_or_exit('pushd packetformat && git checkout %s && popd' % (hashes["packetformat"]))
+            install(f"{os.path.dirname(__file__)}/packetformat_CMakeLists.txt.{felix_version}", prefix+"/software/packetformat/CMakeLists.txt")
 
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/flxcard_py.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/flxcard_py.git')
