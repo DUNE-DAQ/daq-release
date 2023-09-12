@@ -79,10 +79,6 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
 
-          # remove felix related pacakges from the release config
-          git apply configs/remove_felix_from_develop.patch
-
-
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
