@@ -6,9 +6,13 @@ from shutil import copytree
 import spack.util.environment as envutil
 
 class FelixSoftware(Package):
+    """ Felix releated external packages."""
+
+    homepage = "https://github.com/DUNE-DAQ/daq-release/tree/develop/spack-repos/externals/packages/felix-software"
 
     has_code=False
 
+    version("dunedaq-v4.2.0")
     version("dunedaq-v2.10.0")
     version("dunedaq-v2.8.0")
 
@@ -31,7 +35,19 @@ class FelixSoftware(Package):
     def install(self, spec, prefix):
 
         hashes = {}
-        if self.spec.satisfies('@dunedaq-v2.10.0'):
+        if self.spec.satisfies('@dunedaq-v4.2.0'):
+            hashes["cmake_tdaq"] = "d66ce21b"
+            hashes["drivers_rcc"] = "c5c21e00"
+            hashes["flxcard"] = "7614b8cc"
+            hashes["regmap"] = "f0fd698e"
+            hashes["packetformat"] = "a6933e36"
+            hashes["flxcard_py"] = "61001bd6"
+            hashes["ftools"] = "c326e788"
+            hashes["external-catch"] = "a9d9ad54"
+
+            felix_version="dunedaq-v4.2.0"
+
+        elif self.spec.satisfies('@dunedaq-v2.10.0'):
             hashes["cmake_tdaq"] = "d66ce21b"
             hashes["drivers_rcc"] = "c5c21e00"
             hashes["flxcard"] = "7614b8cc"
@@ -40,7 +56,7 @@ class FelixSoftware(Package):
             hashes["flxcard_py"] = "61001bd6"
             hashes["ftools"] = "c326e788"
             hashes["external-catch"] = "6a9aa08a"
-            
+
             felix_version="dunedaq-v2.10.0"
 
         elif self.spec.satisfies('@dunedaq-v2.8.0'):
@@ -78,7 +94,7 @@ class FelixSoftware(Package):
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/cmake_tdaq.git')
             return_zero_or_exit('pushd cmake_tdaq && git checkout %s && popd' % (hashes["cmake_tdaq"]))
             return_zero_or_exit('sed -i \'2 i set(NOLCG TRUE)\' cmake_tdaq/cmake/modules/FELIX.cmake')
- 
+
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/drivers_rcc.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/drivers_rcc.git')
             return_zero_or_exit('pushd drivers_rcc && git checkout %s && popd' % (hashes["drivers_rcc"]))
@@ -90,10 +106,12 @@ class FelixSoftware(Package):
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/regmap.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/regmap.git')
             return_zero_or_exit('pushd regmap && git checkout %s && popd' % (hashes["regmap"]))
+            install(f"{os.path.dirname(__file__)}/regmap_CMakeLists.txt.{felix_version}", prefix+"/software/regmap/CMakeLists.txt")
 
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/packetformat.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/packetformat.git')
             return_zero_or_exit('pushd packetformat && git checkout %s && popd' % (hashes["packetformat"]))
+            install(f"{os.path.dirname(__file__)}/packetformat_CMakeLists.txt.{felix_version}", prefix+"/software/packetformat/CMakeLists.txt")
 
             print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/flxcard_py.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/flxcard_py.git')
@@ -109,7 +127,7 @@ class FelixSoftware(Package):
             return_zero_or_exit('pushd external/catch && git checkout %s && popd' % (hashes["external-catch"]))
 
             os.environ['PATH'] = prefix+"/software/cmake_tdaq/bin" + ":" + os.environ['PATH']
-            return_zero_or_exit('cmake_config x86_64-centos7-gcc8-opt') 
+            return_zero_or_exit('cmake_config x86_64-centos7-gcc8-opt')
             os.chdir("x86_64-centos7-gcc8-opt")
             make()
 
@@ -117,7 +135,7 @@ class FelixSoftware(Package):
         # Perform the same copies as in daq-release's build_felix.sh excepting ftools which may have build issues
 
         with working_dir(prefix):
-        
+
             for subdir in ["include", "lib", "bin"]:
                 os.mkdir(subdir)
 
