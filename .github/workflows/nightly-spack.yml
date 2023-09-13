@@ -519,3 +519,76 @@ jobs:
       with:
         name: nddaq_app_rte
         path: ${{ github.workspace }}/nddaq_app_rte.sh
+
+  publish_to_cvmfs:
+    name: publish to cvmfs
+    needs: generate_dbt_setup_release_env
+    runs-on: isc01
+
+    steps:
+    - name: download fddaq-dbt-setup-release-env.sh
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+
+    - name: download fddaq_app_rte.sh
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq_app_rte.sh
+
+    - name: download nddaq-dbt-setup-release-env.sh
+      uses: actions/download-artifact@v3
+      with:
+        name: nddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
+
+    - name: download nddaq_app_rte.sh
+      uses: actions/download-artifact@v3
+      with:
+        name: nddaq_app_rte
+        path: ${{ github.workspace }}/nddaq_app_rte.sh
+
+    - name: start docker container, and then rsync... 
+      run: |
+
+        IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
+        cd $GITHUB_WORKSPACE
+        cat << EOT > publish.sh
+        #!/bin/bash
+        
+
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
+        dbt-setup-release -n last_fddaq
+        
+        export KRB5CCNAME=$(mktemp)
+        /scratch-home/get-ticket.sh
+
+        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
+        mv /scratch/fddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
+        mv /scratch/fddaq-dbt-setup-dbt_setup_release_env.sh $fd_release_dir/dbt-setup-release-env.sh
+        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
+        mv /scratch/nddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
+        mv /scratch/nddaq-dbt-setup-dbt_setup_release_env.sh $fd_release_dir/dbt-setup-release-env.sh
+
+        PUBLISHER="oasiscfs01.fnal.gov"
+        CVMFSUSER="cvmfsdunedaqdev"
+        REPO=dunedaq-development.opensciencegrid.org
+        DEST=/cvmfs/$REPO/sandbox/spack-nightly
+        #DEST=/cvmfs/$REPO/nightly
+
+        # Open transaction
+        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server transaction ${REPO}"
+        # rsync
+        cd /cvmfs/$REPO
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? ${CVMFSUSER}@{PUBLISHER}:$DEST
+        # publish
+        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server publish ${REPO}"
+        EOT
+        chmod +x publish.sh
+
+        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
+        rm -f $GITHUB_WORKSPACE/publish.sh
