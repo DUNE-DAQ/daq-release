@@ -39,22 +39,24 @@ jobs:
       run:
         shell: bash
     steps:
-      - id: check_cvmfs_deployment
-        run: |
-          cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
-          cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
-          echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
-          [[ ${cvmfs_deployment_flag} == 'no' ]] && exit 1
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: check_cvmfs_delpoyment_flag
-    if: always()
     runs-on: isc01
 
+
     steps:
+    - name: check_cvmfs_deployment
+      id: do_deployment
+      run: |
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'no' ]] && exit 1
+      continue-on-error: true
+
     - name: start docker container, and then rsync... 
-      if: needs.check_cvmfs_delpoyment_flag.result == 'success'
+      if: steps.do_deployment.outcome == 'success'
       run: |
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
 
@@ -102,6 +104,6 @@ jobs:
         rm -f $GITHUB_WORKSPACE/publish.sh
 
     - name: finish job
-      if: needs.check_cvmfs_delpoyment_flag.result != 'success'
+      if: steps.do_deployment.outcome != 'success'
       run: |
           echo "Finishing jobs"
