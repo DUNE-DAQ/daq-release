@@ -49,7 +49,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: check_cvmfs_delpoyment_flag
-    
+    if: always()
     runs-on: isc01
 
     steps:
