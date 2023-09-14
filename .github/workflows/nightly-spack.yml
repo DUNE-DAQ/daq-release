@@ -552,43 +552,44 @@ jobs:
 
     - name: start docker container, and then rsync... 
       run: |
-
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
+
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
         #!/bin/bash
         
-
+        
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
         dbt-setup-release -n last_fddaq
         
         export KRB5CCNAME=$(mktemp)
         /scratch-home/get-ticket.sh
 
+        klist -l
+        
         fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
-        mv /scratch/fddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
-        mv /scratch/fddaq-dbt-setup-dbt_setup_release_env.sh $fd_release_dir/dbt-setup-release-env.sh
+        mv /scratch/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/fddaq-dbt-setup-dbt-setup-release_env.sh \$fd_release_dir/dbt-setup-release-env.sh
         nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
-        mv /scratch/nddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
-        mv /scratch/nddaq-dbt-setup-dbt_setup_release_env.sh $fd_release_dir/dbt-setup-release-env.sh
-
-        PUBLISHER="oasiscfs01.fnal.gov"
-        CVMFSUSER="cvmfsdunedaqdev"
-        REPO=dunedaq-development.opensciencegrid.org
-        DEST=/cvmfs/$REPO/sandbox/spack-nightly
-        #DEST=/cvmfs/$REPO/nightly
-
+        mv /scratch/nddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/nddaq-dbt-setup-dbt-setup-release_env.sh \$fd_release_dir/dbt-setup-release-env.sh
+        
+        export CVMFS_SERVER="oasiscfs01.fnal.gov"
+        export CVMFS_USER="cvmfsdunedaqdev"
+        export REPO=dunedaq-development.opensciencegrid.org
+        export DEST=/cvmfs/\$REPO/nightly
+        
         # Open transaction
-        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server transaction ${REPO}"
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
         # rsync
-        cd /cvmfs/$REPO
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? ${CVMFSUSER}@{PUBLISHER}:$DEST
+        cd /cvmfs/\$REPO
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
-        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server publish ${REPO}"
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
         EOT
         chmod +x publish.sh
-
+        
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
