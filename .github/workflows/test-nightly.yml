@@ -32,13 +32,6 @@ jobs:
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
-  check_cvmfs_delpoyment_flag:
-    name: check cvmfs deployment flag
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
 
   publish_to_cvmfs:
     name: publish to cvmfs
