@@ -592,6 +592,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
         EOT
         chmod +x publish.sh
-        
+
+        docker pull $IMAGE
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
