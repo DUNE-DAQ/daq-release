@@ -58,7 +58,7 @@ jobs:
       env:
         DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
       run: |
-        [[ ${DO_DEPLOYMENT}} == 'no' ]] && exit 0
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
 
