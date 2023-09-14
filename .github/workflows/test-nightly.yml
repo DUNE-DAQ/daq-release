@@ -58,6 +58,7 @@ jobs:
       env:
         DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
       run: |
+        [[ ${DO_DEPLOYMENT}} == 'no' ]] && exit 0
 
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
 
@@ -99,6 +100,6 @@ jobs:
         EOT
         chmod +x publish.sh
 
-        [[ ${DO_DEPLOYMENT}} != 'no' ]] && docker pull $IMAGE
-        [[ ${DO_DEPLOYMENT}} != 'no' ]] && docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
+        docker pull $IMAGE
+        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
