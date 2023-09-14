@@ -103,5 +103,5 @@ jobs:
 
     - name: finish job
       if: needs.check_cvmfs_delpoyment_flag.result != 'success'
-        run: |
+      run: |
           echo "Finishing jobs"
