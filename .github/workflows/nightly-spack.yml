@@ -600,6 +600,7 @@ jobs:
         export REPO=dunedaq-development.opensciencegrid.org
         export DEST=/cvmfs/\$REPO/nightly
         
+        spack clean -a
         # Open transaction
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
         # rsync
