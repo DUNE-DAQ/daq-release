@@ -554,7 +554,7 @@ jobs:
 
     - name: start docker container, and then rsync... 
       run: |
-        IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v2.0"
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
