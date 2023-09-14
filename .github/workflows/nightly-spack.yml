@@ -534,10 +534,16 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: [make_nightly_tag, generate_dbt_setup_release_env]
-    if: ${{needs.make_nightly_tag.outputs.cvmfs_deployment}} != 'no'
     runs-on: isc01
 
     steps:
+    - name: Check if deployment is needed
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+      run: |
+        echo "Do cvmfs deployment: ${DO_DEPLOYMENT}"
+
+
     - name: download fddaq-dbt-setup-release-env.sh
       uses: actions/download-artifact@v3
       with:
@@ -563,7 +569,10 @@ jobs:
         path: ${{ github.workspace }}/nddaq_app_rte.sh
 
     - name: start docker container, and then rsync... 
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
       run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
 
         cd $GITHUB_WORKSPACE

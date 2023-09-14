@@ -12,6 +12,9 @@ on:
       feature-branch:
         description: 'feature branch to be used across all DAQ repos wherever possible.'
         default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
 
 jobs:
   make_nightly_tag:
@@ -27,6 +30,12 @@ jobs:
         run: |
           date_tag=$(date +%y-%m-%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+      - id: set_cvmfs_deployment_flag
+        run: |
+          cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+          cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+          echo "cvmfs_deployment=${cvmfs_deployment_flag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
@@ -524,10 +533,16 @@ jobs:
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: generate_dbt_setup_release_env
+    needs: [make_nightly_tag, generate_dbt_setup_release_env]
     runs-on: isc01
 
     steps:
+    - name: Check if deployment is needed
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+      run: |
+        echo "Do cvmfs deployment: ${DO_DEPLOYMENT}"
+
     - name: download fddaq-dbt-setup-release-env.sh
       uses: actions/download-artifact@v3
       with:
@@ -553,7 +568,11 @@ jobs:
         path: ${{ github.workspace }}/nddaq_app_rte.sh
 
     - name: start docker container, and then rsync... 
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
       run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+
         IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
 
         cd $GITHUB_WORKSPACE

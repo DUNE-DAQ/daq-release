@@ -32,7 +32,6 @@ jobs:
           date_tag=$(date +%y-%m-%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
-
       - id: set_cvmfs_deployment_flag
         run: |
           cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
