@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
-      deployment: ${{ steps.set_cvmfs_deployment_flag.outputs.cvmfs_deployment }}
     defaults:
       run:
         shell: bash
@@ -32,33 +31,31 @@ jobs:
           date_tag=$(date +%y-%m-%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
-      - id: set_cvmfs_deployment_flag
+
+  check_cvmfs_delpoyment_flag:
+    name: check cvmfs deployment flag
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: check_cvmfs_deployment
         run: |
           cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
           cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
-          echo "cvmfs_deployment=${cvmfs_deployment_flag}"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
+          echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+          [[ ${cvmfs_deployment_flag} == 'no' ]] && exit 1
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: make_nightly_tag
-    if: ${{needs.make_nightly_tag.outputs.deployment}} != 'no'
+    needs: check_cvmfs_delpoyment_flag
+    
     runs-on: isc01
 
     steps:
-
-    - name: Check if deployment is needed
-      env:
-        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
-      run: |
-        echo "Do cvmfs deployment: ${DO_DEPLOYMENT}"
-
     - name: start docker container, and then rsync... 
-      env:
-        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+      if: needs.check_cvmfs_delpoyment_flag.result == 'success'
       run: |
-        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
-
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
 
         cd $GITHUB_WORKSPACE
@@ -103,3 +100,8 @@ jobs:
         docker pull $IMAGE
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
+
+    - name: finish job
+      if: needs.check_cvmfs_delpoyment_flag.result != 'success'
+        run: |
+          echo "Finishing jobs"
