@@ -51,6 +51,8 @@ jobs:
         
         export KRB5CCNAME=$(mktemp)
         /scratch-home/get-ticket.sh
+        
+        klist -l
 
         fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
         #mv /scratch/fddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
@@ -59,21 +61,21 @@ jobs:
         #mv /scratch/nddaq_app_rte.sh $fd_release_dir/daq_app_rte.sh
         #mv /scratch/nddaq-dbt-setup-dbt-setup-release_env.sh $fd_release_dir/dbt-setup-release-env.sh
 
-        export PUBLISHER="oasiscfs01.fnal.gov"
-        export CVMFSUSER="cvmfsdunedaqdev"
+        export CVMFS_SERVER="oasiscfs01.fnal.gov"
+        export CVMFS_USER="cvmfsdunedaqdev"
         export REPO=dunedaq-development.opensciencegrid.org
         export DEST=/cvmfs/$REPO/sandbox/spack-nightly
         #export DEST=/cvmfs/$REPO/nightly
 
         # Open transaction
-        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server transaction ${REPO}"
+        ssh -o StrictHostKeyChecking=no -l ${CVMFS_USER} ${CVMFS_SERVER} "cvmfs_server transaction ${REPO}"
         # rsync
         cd /cvmfs/$REPO
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq ${CVMFSUSER}@{PUBLISHER}:$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? ${CVMFSUSER}@{PUBLISHER}:$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq ${CVMFS_USER}@{CVMFS_SERVER}:$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq ${CVMFS_USER}@{CVMFS_SERVER}:$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? ${CVMFS_USER}@{CVMFS_SERVER}:$DEST
         # publish
-        ssh -o StrictHostKeyChecking=no ${CVMFSUSER}@${PUBLISHER} "cvmfs_server publish ${REPO}"
+        ssh -o StrictHostKeyChecking=no ${CVMFS_USER}@${CVMFS_SERVER} "cvmfs_server publish ${REPO}"
         EOT
         chmod +x publish.sh
 
