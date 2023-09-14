@@ -43,7 +43,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: make_nightly_tag
-    if: ${{needs.make_nightly_tag.outputs.cvmfs_deployment}} != 'no'
+    if: ${{needs.make_nightly_tag.outputs.deployment}} != 'no'
     runs-on: isc01
 
     steps:
