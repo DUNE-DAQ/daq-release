@@ -12,13 +12,17 @@ on:
       feature-branch:
         description: 'feature branch to be used across all DAQ repos wherever possible.'
         default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
 
 jobs:
   make_nightly_tag:
-    name: create nightly tag
+    name: create nightly tag and decide if deploying to cvmfs
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+      deployment: ${{ steps.set_cvmfs_deployment_flag.outputs.cvmfs_deployment }}
     defaults:
       run:
         shell: bash
@@ -29,9 +33,17 @@ jobs:
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
+      - id: set_cvmfs_deployment_flag
+        run: |
+          cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+          cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+          echo "cvmfs_deployment=${cvmfs_deployment_flag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
   publish_to_cvmfs:
     name: publish to cvmfs
-      #needs: generate_dbt_setup_release_env
+    needs: make_nightly_tag
+    if: ${{needs.make_nightly_tag.outputs.cvmfs_deployment}} != 'no'
     runs-on: isc01
 
     steps:
@@ -78,6 +90,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
         EOT
         chmod +x publish.sh
-        
+
+        docker pull $IMAGE
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
