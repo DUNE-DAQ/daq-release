@@ -31,12 +31,6 @@ jobs:
           date_tag=$(date +%y-%m-%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
-      - id: set_cvmfs_deployment_flag
-        run: |
-          cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
-          cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
-          echo "cvmfs_deployment=${cvmfs_deployment_flag}"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
@@ -533,43 +527,49 @@ jobs:
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: [make_nightly_tag, generate_dbt_setup_release_env]
+    needs: generate_dbt_setup_release_env
     runs-on: isc01
 
     steps:
-    - name: Check if deployment is needed
-      env:
-        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+    - name: check_cvmfs_deployment
+      id: do_deployment
       run: |
-        echo "Do cvmfs deployment: ${DO_DEPLOYMENT}"
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'no' ]] && exit 1
+      continue-on-error: true
 
     - name: download fddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: fddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: download fddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
     - name: download nddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: nddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
 
     - name: download nddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: nddaq_app_rte
         path: ${{ github.workspace }}/nddaq_app_rte.sh
 
     - name: start docker container, and then rsync... 
-      env:
-        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+      if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
