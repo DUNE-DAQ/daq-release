@@ -48,7 +48,15 @@ jobs:
 
     steps:
 
+    - name: Check if deployment is needed
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
+      run: |
+        echo "Do cvmfs deployment: ${DO_DEPLOYMENT}"
+
     - name: start docker container, and then rsync... 
+      env:
+        DO_DEPLOYMENT: ${{needs.make_nightly_tag.outputs.deployment}}
       run: |
 
         IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
@@ -91,6 +99,6 @@ jobs:
         EOT
         chmod +x publish.sh
 
-        docker pull $IMAGE
-        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
+        [[ ${DO_DEPLOYMENT}} != 'no' ]] && docker pull $IMAGE
+        [[ ${DO_DEPLOYMENT}} != 'no' ]] && docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
         rm -f $GITHUB_WORKSPACE/publish.sh
