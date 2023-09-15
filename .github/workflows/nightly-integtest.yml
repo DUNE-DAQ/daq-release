@@ -20,7 +20,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y-%m-%d)
-          echo "nightly_tag=minimal_test_${date_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=NFD${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   minimal_system_integration_test:
@@ -44,17 +44,18 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           DET=fd
-          mkdir -p $GITHUB_WORKSPACE/$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/$NIGHTLY_TAG
+          mkdir -p $GITHUB_WORKSPACE/minimaL_test_$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-setup-release -n last_${DET}daq
+          dbt-setup-release -n $NIGHTLY_TAG
+          #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/test-results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
           cd $GITHUB_WORKSPACE
-          rm -rf $NIGHTLY_TAG
+          rm -rf minimal_test_$NIGHTLY_TAG
           rm -rf daq-systemtest
 
     - name: Surface failing tests
