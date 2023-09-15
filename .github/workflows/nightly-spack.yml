@@ -43,11 +43,9 @@ jobs:
         shell: bash
 
     steps:
-    - name: Start the CI
-      run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
 
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release
