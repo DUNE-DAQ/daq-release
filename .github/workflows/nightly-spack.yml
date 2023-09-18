@@ -533,7 +533,7 @@ jobs:
         cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
         cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
         echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
-        [[ ${cvmfs_deployment_flag} == 'no' ]] && exit 1
+        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
       continue-on-error: true
 
     - name: download fddaq-dbt-setup-release-env.sh
