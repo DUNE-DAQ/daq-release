@@ -44,7 +44,7 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           DET=fd
-          mkdir -p $GITHUB_WORKSPACE/minimaL_test_$NIGHTLY_TAG
+          mkdir -p $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
