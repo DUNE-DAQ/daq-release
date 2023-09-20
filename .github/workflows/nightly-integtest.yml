@@ -20,7 +20,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y-%m-%d)
-          echo "nightly_tag=NFD${date_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=NAFD${date_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   minimal_system_integration_test:
