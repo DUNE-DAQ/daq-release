@@ -29,7 +29,7 @@ class Snbmodules(CMakePackage):
     depends_on("libtorrent")
     depends_on("logging")
     depends_on("hdf5libs")
-    depends_on("nlohmann_json")
+    depends_on("nlohmann-json")
     depends_on("highfive")
     depends_on("daqdataformats")
     depends_on("detdataformats")
