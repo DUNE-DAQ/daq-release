@@ -7,7 +7,7 @@
 from spack import *
 
 
-class snbmodules(CMakePackage):
+class Snbmodules(CMakePackage):
     """The HERMES core modules and control libraries."""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/snbmodules/"
