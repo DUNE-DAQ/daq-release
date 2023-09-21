@@ -43,12 +43,15 @@ unset(_expectedTargets)
 
 # Compute the installation prefix relative to this file.
 get_filename_component(_IMPORT_PREFIX "${CMAKE_CURRENT_LIST_FILE}" PATH)
+get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
 
 add_library(rclone::rclone SHARED IMPORTED)
 
 set_target_properties(rclone::rclone PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib64/librclone.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/librclone.so"
 )
 
 
@@ -58,7 +61,7 @@ endif()
 
 # Load information for each installed configuration.
 get_filename_component(_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-file(GLOB CONFIG_FILES "${_DIR}/felixTargets-*.cmake")
+file(GLOB CONFIG_FILES "${_DIR}/rcloneTargets-*.cmake")
 foreach(f ${CONFIG_FILES})
   include(${f})
 endforeach()
