@@ -18,6 +18,9 @@
         - name: ndreadoutlibs
           version: "develop"
           commit: null
+        - name: nddaqconf
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip

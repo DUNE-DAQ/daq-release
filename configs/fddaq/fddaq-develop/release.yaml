@@ -51,6 +51,9 @@
         - name: snbmodules
           version: "develop"
           commit: null
+        - name: fddaqconf
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
