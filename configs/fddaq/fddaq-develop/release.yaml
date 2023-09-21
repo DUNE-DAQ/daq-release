@@ -48,6 +48,9 @@
         - name: ctbmodules
           version: "develop"
           commit: null
+        - name: fddaqconf
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
