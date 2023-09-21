@@ -91,6 +91,12 @@
         - name: py-fastjsonschema
           version: 2.14.5
           variant: ~
+        - name: rclone
+          version: 1.64.0
+          variant: ~
+        - name: libtorrent
+          version: 2.0.9
+          variant: ~
 
     devtools:
         - name: cmake
