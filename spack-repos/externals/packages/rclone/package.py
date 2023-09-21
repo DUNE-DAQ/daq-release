@@ -87,8 +87,12 @@ class Rclone(Package):
         mkdirp(prefix.bin)
         install("rclone", prefix.bin)
 
-        mkdirp(prefix.lib64)
-        install("librclone.so", prefix.lib64)
+        mkdirp(prefix.lib.cmake.rclone)
+        install("librclone.so", prefix.lib)
+        copy("rcloneConfig.cmake", self.prefix + "/lib/cmake/rclone")
+        copy("rcloneConfigVersion.cmake", self.prefix + "/lib/cmake/rclone")
+        copy("rcloneTargets.cmake", self.prefix + "/lib/cmake/rclone")
 
         mkdirp(prefix.include)
         install("librclone.h", prefix.include)
+
