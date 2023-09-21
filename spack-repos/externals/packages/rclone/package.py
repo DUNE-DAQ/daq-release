@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import os
 from spack.package import *
 
 
@@ -89,9 +90,9 @@ class Rclone(Package):
 
         mkdirp(prefix.lib.cmake.rclone)
         install("librclone.so", prefix.lib)
-        copy("rcloneConfig.cmake", self.prefix + "/lib/cmake/rclone")
-        copy("rcloneConfigVersion.cmake", self.prefix + "/lib/cmake/rclone")
-        copy("rcloneTargets.cmake", self.prefix + "/lib/cmake/rclone")
+        copy(join_path(os.path.dirname(__file__),"rcloneConfig.cmake"), self.prefix + "/lib/cmake/rclone")
+        copy(join_path(os.path.dirname(__file__),"rcloneConfigVersion.cmake"), self.prefix + "/lib/cmake/rclone")
+        copy(join_path(os.path.dirname(__file__),"rcloneTargets.cmake"), self.prefix + "/lib/cmake/rclone")
 
         mkdirp(prefix.include)
         install("librclone.h", prefix.include)
