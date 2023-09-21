@@ -541,28 +541,28 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+        path: ${{ github.workspace }}/fddaq-release
 
     - name: download fddaq_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: fddaq_app_rte
-        path: ${{ github.workspace }}/fddaq_app_rte.sh
+        path: ${{ github.workspace }}/fddaq-rte
 
     - name: download nddaq-dbt-setup-release-env.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: nddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
+        path: ${{ github.workspace }}/nddaq-release
 
     - name: download nddaq_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: nddaq_app_rte
-        path: ${{ github.workspace }}/nddaq_app_rte.sh
+        path: ${{ github.workspace }}/nddaq-rte
 
     - name: start docker container, and then rsync... 
       if: steps.do_deployment.outcome == 'success'
@@ -584,11 +584,11 @@ jobs:
         klist -l
         
         fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
-        mv /scratch/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
-        mv /scratch/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
+        mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
         nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
-        mv /scratch/nddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
-        mv /scratch/nddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
+        mv /scratch/nddaq-rte/nddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/nddaq-release/nddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
         
         export CVMFS_SERVER="oasiscfs01.fnal.gov"
         export CVMFS_USER="cvmfsdunedaqdev"
@@ -610,4 +610,4 @@ jobs:
 
         docker pull $IMAGE
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
-        rm -f $GITHUB_WORKSPACE/publish.sh
+        rm -f $GITHUB_WORKSPACE/*
