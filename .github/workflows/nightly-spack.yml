@@ -610,4 +610,4 @@ jobs:
 
         docker pull $IMAGE
         docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
-        rm -f $GITHUB_WORKSPACE/*
+        rm -rf $GITHUB_WORKSPACE/*
