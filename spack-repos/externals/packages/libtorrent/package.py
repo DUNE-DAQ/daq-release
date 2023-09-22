@@ -23,3 +23,21 @@ class Libtorrent(CMakePackage):
     def cmake_args(self):
         args = ["-DCMAKE_CXX_STANDARD=17"]
         return args
+
+    def setup_run_environment(self, env):
+        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prune_duplicate_paths('LIBRARY_PATH')
+
+
+    def setup_build_environment(self, env):
+        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prune_duplicate_paths('LIBRARY_PATH')
+
+    def setup_dependent_run_environment(self, env, dependent_spec):
+        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prune_duplicate_paths('LIBRARY_PATH')
+
+
+    def setup_dependent_build_environment(self, env, dependent_spec):
+        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prune_duplicate_paths('LIBRARY_PATH')
