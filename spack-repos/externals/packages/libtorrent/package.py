@@ -18,6 +18,7 @@ class Libtorrent(CMakePackage):
     generator = 'Ninja'
     depends_on('ninja', type='build')
     depends_on('boost')
+    depends_on('openssl')
 
     def cmake_args(self):
         args = ["-DCMAKE_CXX_STANDARD=17"]
