@@ -1,0 +1,6 @@
+FROM ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1
+
+COPY uninstall_buildenv_packages.sh uninstall_buildenv_packages.sh
+
+RUN ./uninstall_buildenv_packages.sh
+
