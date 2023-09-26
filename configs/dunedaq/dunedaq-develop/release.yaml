@@ -74,7 +74,7 @@
           version: 2020.3
           variant: ~
         - name: dpdk
-          version: 22.03
+          version: 22.11
           variant: ~
         - name: fmt
           version: 8.1.1
