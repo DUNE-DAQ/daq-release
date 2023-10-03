@@ -14,9 +14,6 @@ class Externals(BundlePackage):
 
     version("XRELEASEX")
 
-    variant('dev', default=False, description='Load in tools used to develop DUNE DAQ packages')
-
     # Generate from release YAML file
-    depends_on("devtools@XRELEASEX", when="+dev")
-    depends_on("systems@XRELEASEX", when="~dev")
+    depends_on("devtools@XRELEASEX")
     # Additional dependencies defined in YAML file to be filled below

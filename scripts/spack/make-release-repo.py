@@ -187,8 +187,7 @@ class DAQRelease:
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "dunedaq":
-            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]}+dev build_type={{build_type}}", when=f"+dev build_type={{build_type}}")'
-            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]}~dev build_type={{build_type}}", when=f"~dev build_type={{build_type}}")'
+            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
