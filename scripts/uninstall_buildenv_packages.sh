@@ -15,6 +15,9 @@ python_packages_to_remove="py-pip py-wheel py-hatch-fancy-pypi-readme py-flit-co
 # Packages dbe depends on which aren't part of fddaq
 dbe_packages_to_remove="bdftopcf mkfontdir gperf which flex findutils nasm xkbcomp"
 
+# The go language is a build-only dependency of rclone. Not needed after rclone has been built.
+go_packages_to_remove="go go-bootstrap git libidn2 libunistring"
+
 # Other packages which are removed here are at least one of the following
 # (1) build-only dependencies (e.g. czmq)
 # (2) clearly used for development purposes only (e.g., autoconf)
@@ -23,6 +26,7 @@ dbe_packages_to_remove="bdftopcf mkfontdir gperf which flex findutils nasm xkbco
 for package in ca-certificates-mozilla texinfo meson autoconf-archive autoconf \
 	       automake gmake libtool docbook-xsl docbook-xml czmq yaml-cpp gawk \
 	       bison diffutils re2c \
+	       $go_packages_to_remove \
 	       $dbe_packages_to_remove \
 	       $python_packages_to_remove \
                $externals_to_remove ; do
