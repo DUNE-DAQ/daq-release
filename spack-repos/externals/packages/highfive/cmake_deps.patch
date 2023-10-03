@@ -1,0 +1,14 @@
+diff --git a/CMake/HighFiveTargetDeps.cmake b/CMake/HighFiveTargetDeps.cmake
+index 8fddf39..e741c91 100644
+--- a/CMake/HighFiveTargetDeps.cmake
++++ b/CMake/HighFiveTargetDeps.cmake
+@@ -25,6 +25,9 @@ if(NOT TARGET libdeps)
+
+   # HDF5
+   if(NOT DEFINED HDF5_C_LIBRARIES)
++    if(NOT DEFINED HDF5_NO_FIND_PACKAGE_CONFIG_FILE)
++      set(HDF5_NO_FIND_PACKAGE_CONFIG_FILE TRUE)
++    endif()
+     set(HDF5_PREFER_PARALLEL ${HIGHFIVE_PARALLEL_HDF5})
+     find_package(HDF5 REQUIRED)
+   endif()

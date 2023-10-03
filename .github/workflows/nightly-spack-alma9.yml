@@ -2,13 +2,19 @@ name: Alma9 Spack Nightly Workflow
 
 on:
   schedule:
-    - cron: "0 5 * * *"
+    - cron: "0 3 * * *"
 
   workflow_dispatch:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix'
         default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
 
 jobs:
   make_nightly_tag:
@@ -32,7 +38,7 @@ jobs:
       #runs-on: ubuntu-latest
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:latest
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
@@ -42,7 +48,7 @@ jobs:
       run: echo "Start the CI anyway ${{ github.event.inputs.name }}"
 
     - name: Checkout daq-release
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release
@@ -51,9 +57,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
@@ -71,9 +77,13 @@ jobs:
 
 
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
+          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
 
           cd $DAQ_RELEASE_DIR
+
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${FEATURE_BRANCH} \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -107,10 +117,11 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
@@ -128,9 +139,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
@@ -140,8 +151,8 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
-          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --reuse dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -161,9 +172,9 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=fd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
@@ -185,9 +196,12 @@ jobs:
 
 
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
+          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${FEATURE_BRANCH} \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -220,11 +234,12 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -259,9 +274,9 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=nd
-          export SPACK_VERSION=0.18.1
+          export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.0
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
@@ -283,9 +298,12 @@ jobs:
 
 
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
+          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
+          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
+          -b ${FEATURE_BRANCH} \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -318,11 +336,12 @@ jobs:
           spack compiler list
 
           \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-broadwell
+          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -355,7 +374,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: ubuntu-latest
+    runs-on: isc01
     strategy:
       matrix:
         include:
@@ -368,6 +387,11 @@ jobs:
       contents: read
 
     steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
       - name: Download spack nightly release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
@@ -392,7 +416,8 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            image_name="${{ matrix.image }}:latest"
+            export EXT_VERSION=v2.0
+            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd nightly
             dunedaq_tag="NAB${NIGHTLY_TAG}"
@@ -420,7 +445,7 @@ jobs:
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -428,15 +453,15 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev-split
+            type=raw,value=spack-dev-v2.0
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
@@ -449,7 +474,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-split"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
     defaults:
       run:
         shell: bash
@@ -499,3 +524,97 @@ jobs:
       with:
         name: nddaq_app_rte
         path: ${{ github.workspace }}/nddaq_app_rte.sh
+
+  publish_to_cvmfs:
+    name: publish to cvmfs
+    needs: generate_dbt_setup_release_env
+    runs-on: isc01
+
+    steps:
+    - name: check_cvmfs_deployment
+      id: do_deployment
+      run: |
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
+      continue-on-error: true
+
+    - name: download fddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-release
+
+    - name: download fddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq-rte
+
+    - name: download nddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: nddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/nddaq-release
+
+    - name: download nddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: nddaq_app_rte
+        path: ${{ github.workspace }}/nddaq-rte
+
+    - name: start docker container, and then rsync... 
+      if: steps.do_deployment.outcome == 'success'
+      run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+
+        cd $GITHUB_WORKSPACE
+        cat << EOT > publish.sh
+        #!/bin/bash
+        
+        
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
+        dbt-setup-release -n last_fddaq
+        
+        export KRB5CCNAME=$(mktemp)
+        /scratch-home/get-ticket.sh
+
+        klist -l
+        
+        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
+        mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
+        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
+        mv /scratch/nddaq-rte/nddaq_app_rte.sh \$nd_release_dir/daq_app_rte.sh
+        mv /scratch/nddaq-release/nddaq-dbt-setup-release-env.sh \$nd_release_dir/dbt-setup-release-env.sh
+        
+        export CVMFS_SERVER="oasiscfs01.fnal.gov"
+        export CVMFS_USER="cvmfsdunedaqdev"
+        export REPO=dunedaq-development.opensciencegrid.org
+        export DEST=/cvmfs/\$REPO/nightly
+        
+        spack clean -a
+        # Open transaction
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
+        # rsync
+        cd /cvmfs/\$REPO
+        #rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        #rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpvt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        # publish
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
+
+        rm -rf /scratch/*daq-*
+        EOT
+        chmod +x publish.sh
+
+        docker pull $IMAGE
+        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
+        rm -f $GITHUB_WORKSPACE/publish.sh

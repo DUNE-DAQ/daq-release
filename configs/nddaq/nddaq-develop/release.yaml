@@ -18,10 +18,13 @@
         - name: ndreadoutlibs
           version: "develop"
           commit: null
+        - name: nddaqconf
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
-          version: 22.0.4
+          version: 23.2.1
           source:  pypi
         - name: aniso8601
           version: 9.0.1
@@ -147,7 +150,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 1.8.1
+          version: 1.8.2
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
@@ -189,7 +192,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.0.4
+          version: 5.0.6
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
@@ -216,7 +219,7 @@
           version: 0.13.1
           source:  pypi
         - name: protobuf
-          version: 3.14.0
+          version: 4.22.4
           source:  pypi
         - name: psutil
           version: 5.9.0

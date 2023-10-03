@@ -4,7 +4,8 @@ source $SCRIPT_DIR/repo.sh
 
 function git_checkout_and_update_ci {
   prd_list_name=$1[@]
-  workflow_file=$2
+  src_workflow_file=$2
+  dest_workflow_file=$3
   prd_list=("${!prd_list_name}")
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
@@ -13,7 +14,8 @@ function git_checkout_and_update_ci {
     echo "********************* $prod_name *****************************"
     git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
-    cp $workflow_file .github/workflows
+    mkdir -p .github/workflows
+    cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
     old_message=`git log -1|grep -v "^commit"`
     git commit -am "syncing $(basename $workflow_file); previous commit: ${old_message}"
@@ -29,7 +31,9 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml
+git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
+
+git_checkout_and_update_ci dune_packages_with_ci_nd $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci-nd.yml dunedaq-develop-cpp-ci.yml
 
 popd
 

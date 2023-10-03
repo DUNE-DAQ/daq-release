@@ -2,133 +2,137 @@
 
 
 ## ccm
-* Maintainer(s): Pierre Lasorak ,Alex Tapper
-* Repositories with write access:
-  - appfwk
-  - cmdlib
-  - dal
-  - daq-systemtest
-  - daqconf
-  - dqm
-  - elisa_client_api
-  - ers
-  - erses
-  - erskafka
-  - flx-k8s-device-plugin
-  - grafana-dashboards
-  - influxopmon
-  - kafkaopmon
-  - logging
-  - minidaqapp
-  - nanorc
-  - oksconfig
-  - okssystem
-  - oks_utils
-  - opmonlib
-  - pocket
-  - rcif
-  - restcmd
+* **People to contact**: Pierre Lasorak, Alex Tapper
+* **Repositories with write access**:
+    * appfwk
+    * cmdlib
+    * connectivityserver
+    * coredal
+    * dal
+    * daq-systemtest
+    * daqconf
+    * dbe
+    * dqm
+    * drunc
+    * druncschema
+    * elisa_client_api
+    * ers
+    * erskafka
+    * flx-k8s-device-plugin
+    * genconfig
+    * grafana-dashboards
+    * kafkaopmon
+    * logging
+    * nanorc
+    * oks
+    * oksconfig
+    * oksdbinterfaces
+    * okssystem
+    * oksutils
+    * opmonlib
+    * pocket
+    * rcif
+    * restcmd
 
 ## core-sw
-* Maintainer(s): Kurt Biery ,Roland Sipos
-* Repositories with write access:
-  - appfwk
-  - ctbmodules
-  - daq-systemtest
-  - daqconf
-  - daqdataformats
-  - dataformats
-  - ddpdemo
-  - dfmessages
-  - dfmodules
-  - dpdklibs
-  - fdreadoutlibs
-  - hdf5libs
-  - hsilibs
-  - integrationtest
-  - iomanager
-  - ipm
-  - lbrulibs
-  - listrev
-  - minidaqapp
-  - ndreadoutlibs
-  - networkmanager
-  - nwqueueadapters
-  - performancetest
-  - readoutlibs
-  - readoutmodules
-  - serialization
-  - sspmodules
-  - trigemu
-  - utilities
+* **People to contact**: Kurt Biery, Roland Sipos
+* **Repositories with write access**:
+    * appfwk
+    * ctbmodules
+    * daq-systemtest
+    * daqconf
+    * daqdataformats
+    * dfmessages
+    * dfmodules
+    * dpdklibs
+    * fdreadoutlibs
+    * fdreadoutmodules
+    * hdf5libs
+    * hermesmodules
+    * hsilibs
+    * integrationtest
+    * iomanager
+    * ipm
+    * lbrulibs
+    * listrev
+    * ndreadoutlibs
+    * ndreadoutmodules
+    * performancetest
+    * rawdatautils
+    * readoutlibs
+    * readoutmodules
+    * serialization
+    * snbmodules
+    * sspmodules
+    * utilities
 
 ## datafmts
-* Maintainer(s): Alessandro Thea
-* Repositories with write access:
-  - daqdataformats
-  - detchannelmaps
-  - detdataformats
+* **People to contact**: Alessandro Thea, Kurt Biery
+* **Repositories with write access**:
+    * daqdataformats
+    * detchannelmaps
+    * detdataformats
+    * fddetdataformats
+    * nddetdataformats
+    * trgdataformats
 
 ## dqm
-* Maintainer(s): Pip Hamilton
-* Repositories with write access:
-  - daq-systemtest
-  - dqm
-  - dqm-backend
-  - dqmanalysis
-  - dqmplatform
-  - rawdatautils
+* **People to contact**: Wes Ketchum, Pip Hamilton
+* **Repositories with write access**:
+    * daq-systemtest
+    * dqm
+    * dqm-backend
+    * rawdatautils
 
 ## facility
-* Maintainer(s): Bonnie King ,Alec Habig
-* Repositories with write access:
-  - microservices
+* **People to contact**: Bonnie King, Alec Habig
+* **Repositories with write access**:
+    * daq-docker
+    * daq-kube
+    * microservices
 
 ## nd-udaq
-* Maintainer(s): Patrick Dunne
-* Repositories with write access:
-  - lbrulibs
-  - minidaqapp
+* **People to contact**: Julia Tena Vidal, Patrick Dunne
+* **Repositories with write access**:
+    * lbrulibs
+    * nddaqconf
 
 ## timing
-* Maintainer(s): Stoyan Trilov, David Cussans
-* Repositories with write access:
-  - timing
-  - timinglibs
+* **People to contact**: David Cussans, Stoyan Trilov
+* **Repositories with write access**:
+    * timing
+    * timinglibs
 
 ## trigger
-* Maintainer(s): Josh Klein
-* Repositories with write access:
-  - daq-systemtest
-  - datafilter
-  - minidaqapp
-  - trigger
-  - triggeralgs
-  - triggermodules
+* **People to contact**: Josh Klein, Michal Rigan
+* **Repositories with write access**:
+    * daq-systemtest
+    * datafilter
+    * trigger
+    * triggeralgs
+    * triggermodules
 
 ## udaq
-* Maintainer(s): Jim Brooke
-* Repositories with write access:
-  - daq-systemtest
-  - dtpcontrols
-  - dtpctrllibs
-  - dtpemulator
-  - dtpfeedbacktools
-  - flx-k8s-device-plugin
-  - flxlibs
-  - minidaqapp
-  - readout
-  - timing
-  - timinglibs
-  - uhallibs
+* **People to contact**: Jim Brooke
+* **Repositories with write access**:
+    * daq-systemtest
+    * dtpcontrols
+    * dtpctrllibs
+    * dtpemulator
+    * dtpfeedbacktools
+    * flx-k8s-device-plugin
+    * flxlibs
+    * timing
+    * timinglibs
+    * uhallibs
 
 ## wib
-* Maintainer(s): Alessandro Thea
-* Repositories with write access:
-  - dune-wib-firmware
-  - protodune-wib-firmware
-  - wibmod
+* **People to contact**: Alessandro Thea, Paul Keener
+* **Repositories with write access**:
+    * dune-wib-firmware
+    * protodune-wib-firmware
+    * wibmod
 
 
-Page was generated at: 30/01/2023 08:22:52
+Page was generated at: 18/08/2023 11:01:27
 

@@ -20,11 +20,14 @@
           version: dunedaq-v2.8.0
           variant: ~
         - name: highfive
-          version: 2.4.1
+          version: 2.7.1
           variant: "~mpi  ^hdf5@1.12.0~mpi+threadsafe"
         - name: hdf5
           version: 1.12.0
           variant: "~mpi +threadsafe"
+        - name: libarchive
+          version: 3.6.2
+          variant: ~
         - name: libzmq
           version: 4.3.4
           variant: ~
@@ -47,14 +50,17 @@
           version: 1.7.0
           variant: ~
         - name: protobuf
-          version: 3.14.0
+          version: 4.22.4
+          variant: ~
+        - name: grpc
+          version: 1.56.2
+          variant: ~
+        - name: felix-software
+          version: dunedaq-v4.2.0
           variant: ~
         - name: folly
           version: 2021.12.13.00
           variant: "cxxstd=2a"
-        - name: felix-software
-          version: dunedaq-v2.10.0
-          variant: ~
         - name: fftw
           version: 3.3.10
           variant: "~mpi"
@@ -68,7 +74,7 @@
           version: 2020.3
           variant: ~
         - name: dpdk
-          version: 22.03.1
+          version: 22.03
           variant: ~
         - name: fmt
           version: 8.1.1
@@ -85,13 +91,19 @@
         - name: py-fastjsonschema
           version: 2.14.5
           variant: ~
+        - name: rclone
+          version: 1.64.0
+          variant: ~
+        - name: libtorrent
+          version: 2.0.9
+          variant: ~
 
     devtools:
         - name: cmake
           version: 3.23.1
           variant: ~
         - name: gdb
-          version: 9.2
+          version: 13.1 
           variant: "~python"
         - name: ninja
           version: 1.10.0
@@ -110,7 +122,7 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.3.3"
+          version: "v2.3.4"
           commit: null
         - name: ers
           version: "develop"
@@ -221,6 +233,9 @@
           version: "develop"
           commit: null
         - name: dbe
+          version: "develop"
+          commit: null
+        - name: hsilibs
           version: "develop"
           commit: null
 

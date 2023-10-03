@@ -1,0 +1,68 @@
+name: Nightly Integration Test Workflow
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+
+  workflow_dispatch:
+
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y-%m-%d)
+          echo "nightly_tag=NAFD${date_tag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  minimal_system_integration_test:
+    name: minimal_system_integration_test
+    runs-on: daq
+    needs: make_nightly_tag
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Checkout daq-systemtest
+      uses: actions/checkout@v4
+      with:
+        repository: DUNE-DAQ/daq-systemtest
+        path: daq-systemtest
+    
+    - name: setup release and run test
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          DET=fd
+          mkdir -p $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -n $NIGHTLY_TAG
+          #dbt-setup-release -n last_${DET}daq
+          export PATH=$HOME/bin:$PATH
+          type get-ticket.sh && get-ticket.sh
+          rm -f $GITHUB_WORKSPACE/test-results.xml
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+          cd $GITHUB_WORKSPACE
+          rm -rf minimal_test_$NIGHTLY_TAG
+          rm -rf daq-systemtest
+
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+      with:
+        path: ${{ github.workspace }}/test-results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true

@@ -38,7 +38,7 @@ jobs:
         sudo chmod -R go-rwx /var/lib/cvmfs
 
     - name: Checkout pkg
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
         path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
@@ -55,7 +55,7 @@ jobs:
         dbt-create -n last_fddaq dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
         source env.sh || true
-        spack unload ${{ github.event.inputs.pkg-name }}
+        spack unload ${{ github.event.inputs.pkg-name }} || true
         mv /scratch/sourcecode/* sourcecode
         dbt-build
         dbt-workarea-env
@@ -83,6 +83,9 @@ jobs:
   build_single_pkg_on_ubuntu:
     name: build single pkg on ubuntu
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
     - uses: cvmfs-contrib/github-action-cvmfs@v3
@@ -90,6 +93,11 @@ jobs:
     - name: change dir permission
       run: |
         sudo chmod -R go+rwx /var/lib/cvmfs
+
+    - name: install build-essential
+      run: |
+        sudo apt update
+        sudo apt-get install -y build-essential gcc-multilib g++-multilib
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
@@ -105,7 +113,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v3
 
     - name: Checkout pkg
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
         path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
@@ -117,12 +125,16 @@ jobs:
         export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -n last_fddaq dev-ubuntu
+        dbt-create -i -n last_fddaq dev-ubuntu
         cd dev-ubuntu
         source env.sh || true
-        spack load daq-cmake
-        spack unload ${{ github.event.inputs.pkg-name }}
+        spack find --loaded -p
+        spack load daq-cmake || true
+        spack unload ${{ github.event.inputs.pkg-name }} || true
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
+        dbt-workarea-env
+        ls -a $PWD
+        deactivate || true
+        source .venv/bin/activate
         dbt-build
         dbt-workarea-env
-
