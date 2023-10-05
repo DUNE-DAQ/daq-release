@@ -102,10 +102,10 @@ jobs:
         cat << EOT > ubuntu-lib64.sh
         #!/bin/bash
         cd /usr/lib64
-        for i in $(ls /usr/lib/x86_64-linux-gnu/)
+        for i in \$(ls /usr/lib/x86_64-linux-gnu/)
         do
-            if [[ "$i" != "ld-linux"* ]]; then
-                ln -s /usr/lib/x86_64-linux-gnu/$i .
+            if [[ "\$i" != "ld-linux"* ]]; then
+                ln -s /usr/lib/x86_64-linux-gnu/\$i .
             fi
         done
         EOT
