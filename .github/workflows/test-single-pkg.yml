@@ -143,6 +143,7 @@ jobs:
         dbt-create -c -n last_fddaq dev-ubuntu
         cd dev-ubuntu
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
+        sed -i '7 i set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)' sourcecode/CMakeLists.txt
         source env.sh || true
         dbt-build
         dbt-workarea-env
