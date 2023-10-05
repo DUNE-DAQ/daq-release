@@ -112,6 +112,7 @@ jobs:
         chmod +x ubuntu-lib64.sh
 
         sudo $GITHUB_WORKSPACE/ubuntu-lib64.sh
+        ls -l /usr/lib64
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
@@ -139,16 +140,9 @@ jobs:
         export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -i -n last_fddaq dev-ubuntu
+        dbt-create -c -n last_fddaq dev-ubuntu
         cd dev-ubuntu
-        source env.sh || true
-        spack find --loaded -p
-        spack load daq-cmake || true
-        spack unload ${{ github.event.inputs.pkg-name }} || true
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
-        dbt-workarea-env
-        ls -a $PWD
-        deactivate || true
-        source .venv/bin/activate
+        source env.sh || true
         dbt-build
         dbt-workarea-env
