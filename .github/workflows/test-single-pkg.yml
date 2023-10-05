@@ -98,7 +98,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt-get install -y build-essential gcc-multilib g++-multilib
-        sudo cd /usr/lib64 && for i in $(ls /usr/lib/x86_64-linux-gnu/); do if [[ "$i" != "ld-linux"* ]]; then ln -s /usr/lib/x86_64-linux-gnu/$i .;  fi; done
+        sudo for i in $(ls /usr/lib/x86_64-linux-gnu/); do if [[ "$i" != "ld-linux"* ]]; then ln -s /usr/lib/x86_64-linux-gnu/$i /usr/lib64;  fi; done
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
