@@ -52,7 +52,7 @@ jobs:
         
         cd /scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -n q dev-${{ matrix.os_name }}
+        dbt-create -n last_fddaq dev-${{ matrix.os_name }}
         cd dev-${{ matrix.os_name }}
         source env.sh || true
         spack unload ${{ github.event.inputs.pkg-name }} || true
@@ -167,7 +167,7 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -c -n NFD23-10-05 dev-ubuntu
+        dbt-create -n NFD23-10-05 dev-ubuntu
         #dbt-create -c -n $NIGHTLY_TAG dev-ubuntu
         cd dev-ubuntu
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
