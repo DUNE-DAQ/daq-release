@@ -167,7 +167,8 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -c -n $NIGHTLY_TAG dev-ubuntu
+        dbt-create -c -n NFD23-10-05 dev-ubuntu
+        #dbt-create -c -n $NIGHTLY_TAG dev-ubuntu
         cd dev-ubuntu
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         sed -i '7 i set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)' sourcecode/CMakeLists.txt
