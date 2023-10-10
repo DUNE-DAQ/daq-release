@@ -57,7 +57,7 @@ jobs:
         source env.sh || true
         spack unload ${{ github.event.inputs.pkg-name }} || true
         mv /scratch/sourcecode/* sourcecode
-        dbt-build
+        dbt-build --lint
         dbt-workarea-env
         EOT
         chmod +x build_pkg.sh
