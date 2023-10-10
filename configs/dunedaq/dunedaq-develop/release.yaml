@@ -54,7 +54,7 @@
           variant: ~
         - name: grpc
           version: 1.56.2
-          variant: ~
+          variant: "cxxstd=17"
         - name: felix-software
           version: dunedaq-v4.2.0
           variant: ~

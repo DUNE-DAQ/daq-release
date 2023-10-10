@@ -80,9 +80,25 @@ jobs:
       run: |
         sudo chmod -R go+rwx /var/lib/cvmfs
 
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y-%m-%d)
+          echo "nightly_tag=NAFD${date_tag}"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
   build_single_pkg_on_ubuntu:
     name: build single pkg on ubuntu
     runs-on: ubuntu-latest
+    needs: make_nightly_tag
     defaults:
       run:
         shell: bash
@@ -112,7 +128,12 @@ jobs:
         chmod +x ubuntu-lib64.sh
 
         sudo $GITHUB_WORKSPACE/ubuntu-lib64.sh
-        ls -l /usr/lib64
+        #ls -l /usr/lib64
+        sudo apt-get install -y openssh-server
+        ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y >/dev/null 2>&1
+        cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+        chmod 600 ~/.ssh/authorized_keys
+        sudo systemctl status ssh
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
@@ -133,17 +154,37 @@ jobs:
         repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
         path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
 
+    - name: Checkout daq-systemtest
+      uses: actions/checkout@v4
+      with:
+        repository: DUNE-DAQ/daq-systemtest
+        ref: kbiery/small_footprint_quick_test 
+        path: daq-systemtest
+    
+
     - name: build pkg
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-        
-        LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH 
-        export LIBRARY_PATH
         cd $GITHUB_WORKSPACE/scratch
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-create -c -n last_fddaq dev-ubuntu
+        dbt-create -n NFD23-10-05 dev-ubuntu
+        #dbt-create -c -n $NIGHTLY_TAG dev-ubuntu
         cd dev-ubuntu
         mv $GITHUB_WORKSPACE/scratch/sourcecode/* sourcecode
         sed -i '7 i set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)' sourcecode/CMakeLists.txt
         source env.sh || true
         dbt-build
         dbt-workarea-env
+        rm -f $GITHUB_WORKSPACE/test-results.xml
+        pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/small_footprint_quick_test.py
+        #pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+      with:
+        path: ${{ github.workspace }}/test-results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true
