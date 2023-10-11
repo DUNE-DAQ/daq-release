@@ -9,7 +9,7 @@
     * connectivityserver
     * coredal
     * dal
-    * daq-systemtest
+    * daqsystemtest
     * daqconf
     * dbe
     * dqm
@@ -39,7 +39,7 @@
 * **Repositories with write access**:
     * appfwk
     * ctbmodules
-    * daq-systemtest
+    * daqsystemtest
     * daqconf
     * daqdataformats
     * dfmessages
@@ -79,7 +79,7 @@
 ## dqm
 * **People to contact**: Wes Ketchum, Pip Hamilton
 * **Repositories with write access**:
-    * daq-systemtest
+    * daqsystemtest
     * dqm
     * dqm-backend
     * rawdatautils
@@ -106,7 +106,7 @@
 ## trigger
 * **People to contact**: Josh Klein, Michal Rigan
 * **Repositories with write access**:
-    * daq-systemtest
+    * daqsystemtest
     * datafilter
     * trigger
     * triggeralgs
@@ -115,7 +115,7 @@
 ## udaq
 * **People to contact**: Jim Brooke
 * **Repositories with write access**:
-    * daq-systemtest
+    * daqsystemtest
     * dtpcontrols
     * dtpctrllibs
     * dtpemulator

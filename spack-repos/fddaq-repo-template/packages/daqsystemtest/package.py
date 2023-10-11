@@ -7,11 +7,11 @@
 from spack import *
 
 
-class DaqSystemtest(CMakePackage):
+class Daqsystemtest(CMakePackage):
     """This package contains configurations for system-level DAQ tests."""
 
-    homepage = "https://github.com/DUNE-DAQ/daq-systemtest"
-    git =      "https://github.com/DUNE-DAQ/daq-systemtest.git"
+    homepage = "https://github.com/DUNE-DAQ/daqsystemtest"
+    git =      "https://github.com/DUNE-DAQ/daqsystemtest.git"
 
     maintainers = ["jcfreeman2"]
 

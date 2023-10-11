@@ -118,5 +118,5 @@ dune_packages=(
  "dtpemulator"
  "datafilter"
  "hsilibs"
- "daq-systemtest"
+ "daqsystemtest"
 )
