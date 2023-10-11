@@ -158,7 +158,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daqsystemtest
-        ref: kbiery/small_footprint_quick_test 
         path: daqsystemtest
     
 
