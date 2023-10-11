@@ -154,12 +154,12 @@ jobs:
         repository: DUNE-DAQ/${{ github.event.inputs.pkg-name }}
         path: scratch/sourcecode/${{ github.event.inputs.pkg-name }}
 
-    - name: Checkout daq-systemtest
+    - name: Checkout daqsystemtest
       uses: actions/checkout@v4
       with:
-        repository: DUNE-DAQ/daq-systemtest
+        repository: DUNE-DAQ/daqsystemtest
         ref: kbiery/small_footprint_quick_test 
-        path: daq-systemtest
+        path: daqsystemtest
     
 
     - name: build pkg
@@ -177,8 +177,8 @@ jobs:
         dbt-build
         dbt-workarea-env
         rm -f $GITHUB_WORKSPACE/test-results.xml
-        pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/small_footprint_quick_test.py
-        #pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daq-systemtest/integtest/minimal_system_quick_test.py
+        pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
+        #pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
 
     - name: Surface failing tests
       if: always()

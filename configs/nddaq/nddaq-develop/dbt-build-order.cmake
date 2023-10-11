@@ -65,6 +65,7 @@ set(build_order "daq-cmake"
                 "ctbmodules"
                 "dpdklibs"
 		"snbmodules"
+		"daqsystemtest"
 		# ND packages
                 "nddetdataformats"
                 "ndreadoutlibs"

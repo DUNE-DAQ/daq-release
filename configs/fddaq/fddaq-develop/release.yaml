@@ -54,6 +54,9 @@
         - name: fddaqconf
           version: "develop"
           commit: null
+        - name: daqsystemtest
+          version: "develop"
+          commit: null
 
     pymodules:
         - name: pip
