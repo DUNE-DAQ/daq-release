@@ -122,7 +122,7 @@
 
     dunedaq:
         - name: daq-cmake
-          version: "v2.3.4"
+          version: "johnfreeman/daq_deliverables_issue122_install_integration_tests"
           commit: null
         - name: ers
           version: "develop"
