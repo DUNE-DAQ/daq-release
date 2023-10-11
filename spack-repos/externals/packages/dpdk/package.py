@@ -11,9 +11,11 @@ class Dpdk(MesonPackage):
     """Data Plane Development Kit: accelerate packet processing workloads"""
 
     homepage = "https://www.dpdk.org"
-    url      = "https://fast.dpdk.org/rel/dpdk-21.11.tar.xz"
+    url      = "https://fast.dpdk.org/rel/dpdk-22.11.tar.xz"
 
     maintainers = ['jcfreeman2']
+
+    version("22.11", sha256="8eefcc69afa87dccaf8d730d805ded70fb8b64905295d6396977c1322e59eadb")
 
     version('22.03',   sha256='b2de5f08bcd5733f90d4d7e6c032515908dad8fc8d267ac6a253442d9b83a7c5')
     version('21.11.1', sha256='e0d1c442087ead6759d129ce7d7e3b87b4a01cd71047c621ebc35bb637027658')
