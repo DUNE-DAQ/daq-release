@@ -21,10 +21,10 @@
           variant: ~
         - name: highfive
           version: 2.7.1
-          variant: "~mpi  ^hdf5@1.12.0~mpi+threadsafe"
+          variant: "+mpi"
         - name: hdf5
           version: 1.12.0
-          variant: "~mpi +threadsafe"
+          variant: "+mpi+threadsafe"
         - name: libarchive
           version: 3.6.2
           variant: ~
@@ -54,7 +54,7 @@
           variant: ~
         - name: grpc
           version: 1.56.2
-          variant: ~
+          variant: "cxxstd=17"
         - name: felix-software
           version: dunedaq-v4.2.0
           variant: ~

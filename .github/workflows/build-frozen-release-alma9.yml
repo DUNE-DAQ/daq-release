@@ -224,7 +224,10 @@ jobs:
 
           spack clean -a
 
-          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE_CONF}/dbt-build-order.cmake ${SPACK_RELEASE}/../
+          pushd ${SPACK_RELEASE_DIR}
+          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake .
+          tar zcf venv.tar.gz .venv/
+          popd
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}

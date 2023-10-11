@@ -43,7 +43,7 @@ class FelixSoftware(Package):
             hashes["packetformat"] = "a6933e36"
             hashes["flxcard_py"] = "61001bd6"
             hashes["ftools"] = "c326e788"
-            if arch.os == "almalinux9":
+            if self.spec.architecture.os == "almalinux9":
                 hashes["external-catch"] = "a9d9ad54"
             else:
                 hashes["external-catch"] = "6a9aa08a"
