@@ -21,10 +21,10 @@
           variant: ~
         - name: highfive
           version: 2.7.1
-          variant: "~mpi  ^hdf5@1.12.0~mpi+threadsafe"
+          variant: "+mpi"
         - name: hdf5
           version: 1.12.0
-          variant: "~mpi +threadsafe"
+          variant: "+mpi+threadsafe"
         - name: libarchive
           version: 3.6.2
           variant: ~

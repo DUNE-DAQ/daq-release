@@ -18,7 +18,7 @@ class Hdf5libs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("logging")
-    depends_on("highfive ~mpi")
+    depends_on("highfive +mpi")
     depends_on("daqdataformats")
     depends_on("detdataformats")
     depends_on("detchannelmaps")
