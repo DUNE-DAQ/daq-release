@@ -63,7 +63,7 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     commit_hash = output[0].decode('utf-8').strip()
     cmd = "cd /tmp; rm -rf daq_repo_*"
     output = check_output(cmd)
-    return commit_hash
+    return (tag_or_branch, commit_hash)
 
 
 class DAQRelease:
@@ -95,10 +95,11 @@ class DAQRelease:
                 else:
                     iver = ipkg["version"]
                 ihash = ipkg["commit"]
+                itag = iver
                 if not iname.startswith('py-'):
-                    ihash = get_commit_hash(iname, iver, ipkg["version"])
+                    (itag, ihash) = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
-                print(f"Info: {iname:<20} | {iver:<20} | {ihash}")
+                print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
                 outfile.write('---\n')
