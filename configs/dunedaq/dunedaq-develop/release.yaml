@@ -223,7 +223,7 @@
         - name: oksutils
           version: "develop"
           commit: null
-        - name: dal
+        - name: appdal
           version: "develop"
           commit: null
         - name: coredal

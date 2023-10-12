@@ -7,11 +7,11 @@
 from spack import *
 
 
-class Dal(CMakePackage):
+class Appdal(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/dal/"
-    git =      "https://github.com/DUNE-DAQ/dal.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/appdal/"
+    git =      "https://github.com/DUNE-DAQ/appdal.git"
 
     maintainers = ["jcfreeman2"]
 
@@ -23,6 +23,8 @@ class Dal(CMakePackage):
     depends_on("oksdbinterfaces")
     depends_on("genconfig")
     depends_on("okssystem")
+    depends_on("coredal")
+    depends_on("oks")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
