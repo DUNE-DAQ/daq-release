@@ -18,6 +18,7 @@ dune_packages_with_ci=(
   "oksutils"
   "dal"
   "coredal"
+  "appdal"
   "oksconfig"
   "dbe"
   "appfwk"
