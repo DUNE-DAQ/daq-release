@@ -9,9 +9,6 @@
         - name: rawdatautils
           version: "develop"
           commit: null
-        - name: dqm
-          version: "develop"
-          commit: null
         - name: fddetdataformats
           version: "develop"
           commit: null
