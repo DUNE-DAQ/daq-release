@@ -17,7 +17,9 @@ You'll need a few accounts to work with the DUNE DAQ consortium. These include:
 
 * Access to the np04 computing cluster based in CERN's EHN1 building. This is where the heart of DUNE DAQ development, running and testing takes place. You need to access the nodes in this cluster from...
 * ...[CERN's lxplus cluster](https://abpcomputing.web.cern.ch/computing_resources/lxplus/), where you'll first need to get an account
-* ...and to do that, you'll need to start with a [CERN user account](https://account.cern.ch/account/). You'll want a standard computing account, not the "Lightweight" one. Contact the DUNE collaboration coordinator, Maxine Hronek, at `maxine@fnal.gov` if you have questions. 
+* ...and to do that, you'll need to start with a [CERN user account](https://account.cern.ch/account/). You'll want a standard computing account, not the "Lightweight" one. Contact the DUNE collaboration coordinator, Maxine Hronek, at `maxine@fnal.gov` if you have questions.
+* See more about accessing the np04 computing cluster at https://twiki.cern.ch/twiki/bin/view/CENF/AccessRequirements
+
 
 ### For Communication
 
