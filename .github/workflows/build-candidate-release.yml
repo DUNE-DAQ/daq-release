@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     #runs-on: daq
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
@@ -32,7 +32,7 @@ jobs:
       run: |
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           # dunedaq-v4.1.0
@@ -93,7 +93,7 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
+          spack spec --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
           cd $SPACK_RELEASE_DIR/../
           tar zcf spack-${RC_RELEASE}.tar.gz ${RC_RELEASE}
@@ -111,7 +111,7 @@ jobs:
       run: |
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           # dunedaq-v4.1.0
@@ -124,8 +124,8 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
-          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
+          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -145,7 +145,7 @@ jobs:
           export DET=fd
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export RC_BASE_RELEASE=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
@@ -210,8 +210,8 @@ jobs:
 
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
-          spack spec --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
+          spack spec --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
+          spack install --reuse ${DET}daq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${RC_RELEASE}
@@ -250,7 +250,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/sl7-slim-externals"
+          - image: "ghcr.io/dune-daq/alma9-slim-externals"
             os_name: "c7"
           - image: "ghcr.io/dune-daq/c8-slim-externals"
             os_name: "c8"
@@ -277,7 +277,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidates
-            export EXT_VERSION=v1.1
+            export EXT_VERSION=v2.0
             image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd candidates
@@ -329,7 +329,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-rc-split"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-rc-split"
     defaults:
       run:
         shell: bash

@@ -80,7 +80,7 @@
           version: 8.1.1
           variant: "cxxstd=17 shared=True"
         - name: py-moo
-          version: 0.6.7
+          version: 0.6.3
           variant: ~
         - name: py-anyconfig
           version: 0.9.11
