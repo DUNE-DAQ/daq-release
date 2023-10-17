@@ -231,13 +231,13 @@
           version: 2.6.3
           source:  pypi
         - name: numpy
-          version: 1.23.0
+          version: 1.24.0
           source:  pypi
         - name: oauthlib
           version: 3.2.0
           source:  pypi
         - name: openpyxl
-          version: 3.0.5
+          version: 3.1.2
           source:  pypi
         - name: ordered-set
           version: 4.1.0
