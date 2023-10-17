@@ -10,7 +10,7 @@ class PyMoo(PythonPackage):
     """Model oriented objects, tools for code generation."""
 
     homepage = "https://brettviren.github.io/moo"
-    url      = "https://github.com/brettviren/moo/archive/0.6.3.tar.gz"
+    url      = "https://github.com/brettviren/moo/archive/0.6.7.tar.gz"
     git      = "https://github.com/brettviren/moo.git"
 
     maintainers = ['jcfreeman2']
@@ -20,7 +20,6 @@ class PyMoo(PythonPackage):
     version("0.6.4", sha256="e512bf088f62946fc9e75b82445c61169f976f230b0d3e918467052ea8982fb9")
     version("0.6.3", sha256="f8be51ed4e896bb66329d3d66185b4da375d0964f6a0e582d32565032eaad249")
     version("0.6.1", sha256="b100689a1469c7c1b0fa0d418e7391cb8a754fbe5706d0d7e455f5a1743e0ddf")
-
 
 
     depends_on('py-click', type=('build', 'run'))
