@@ -250,9 +250,7 @@ jobs:
       matrix:
         include:
           - image: "ghcr.io/dune-daq/alma9-slim-externals"
-            os_name: "c7"
-          - image: "ghcr.io/dune-daq/c8-slim-externals"
-            os_name: "c8"
+            os_name: "al9"
     needs: build_the_candidate_release_spack
     environment: dockerhub
     permissions:
