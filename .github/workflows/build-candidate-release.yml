@@ -13,7 +13,7 @@ on:
 jobs:
   build_the_candidate_release_spack:
     name: build_dev_release_spack
-    runs-on: ubuntu-latest
+    runs-on: isc01
     #runs-on: daq
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
@@ -260,6 +260,11 @@ jobs:
       contents: read
 
     steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+            
       - name: Download spack candidate release tarball artifact for dunedaq
         uses: actions/download-artifact@v3
         with:
