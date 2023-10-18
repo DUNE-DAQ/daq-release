@@ -124,8 +124,7 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-          spack install --reuse dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --reuse dunedaq@${RC_RELEASE}%gcc@12.1.0 dbe@${RC_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
