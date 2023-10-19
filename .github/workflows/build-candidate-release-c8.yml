@@ -1,4 +1,4 @@
-name: Build candidate release
+name: Build CentOS Stream 8 candidate release
 
 on:
   workflow_dispatch:
