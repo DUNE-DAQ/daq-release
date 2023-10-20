@@ -30,6 +30,7 @@ class PyMoo(PythonPackage):
     depends_on('py-numpy@1.23.0 ~blas ~lapack', type=('build', 'run'), when="@:0.6.4")
     depends_on('py-numpy@1.24.0 ~blas ~lapack', type=('build', 'run'), when="@0.6.7:")
     depends_on('py-openpyxl', type=('build', 'run'))
+    depends_on('py-gojsonnet', type=('build', 'run'), when='@0.6.7:')
 
     # DUNE-specific
     depends_on('py-jsonnet', type=('build', 'run'))

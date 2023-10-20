@@ -82,6 +82,9 @@
         - name: py-moo
           version: 0.6.7
           variant: ~
+        - name: py-gojsonnet
+          version: 0.20.0
+          variant: ~
         - name: py-anyconfig
           version: 0.9.11
           variant: ~
