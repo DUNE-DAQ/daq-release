@@ -219,7 +219,7 @@
           version: 0.1.2
           source:  pypi
         - name: moo
-          version: 0.6.3
+          version: 0.6.7
           source:  github_brettviren
         - name: nanoid
           version: 2.0.0
