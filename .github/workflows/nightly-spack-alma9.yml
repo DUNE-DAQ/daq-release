@@ -152,10 +152,10 @@ jobs:
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
           spack install --keep-stage --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 || true
-	  cd /tmp/root/spack-stage/          
+          cd /tmp/root/spack-stage/
           tar zcf ${DAQ_RELEASE}_build_stage.tar.gz *
           mkdir $GITHUB_WORKSPACE/spack-stage
-	  mv ${DAQ_RELEASE}_build_stage.tar.gz $GITHUB_WORKSPACE/spack-stage/ 
+          mv ${DAQ_RELEASE}_build_stage.tar.gz $GITHUB_WORKSPACE/spack-stage/
           cd ..
 
           spack clean -a
