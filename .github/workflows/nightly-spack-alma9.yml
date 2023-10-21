@@ -151,13 +151,7 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --keep-stage --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 || true
-          cd /tmp/root/spack-stage/
-          tar zcf ${DAQ_RELEASE}_build_stage.tar.gz *
-          mkdir $GITHUB_WORKSPACE/spack-stage
-          mv ${DAQ_RELEASE}_build_stage.tar.gz $GITHUB_WORKSPACE/spack-stage/
-          cd ..
-
+          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -171,12 +165,6 @@ jobs:
       with:
         name: nightly_dunedaq
         path: ${{ github.workspace }}/nightly-dunedaq
-
-    - name: upload spack stage for debug purposes
-      uses: actions/upload-artifact@v3
-      with:
-        name: spack_stage
-        path: ${{ github.workspace }}/spack-stage
 
     - name: setup directories and install spack for the fddaq release
       env:

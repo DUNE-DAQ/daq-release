@@ -85,6 +85,9 @@
         - name: py-gojsonnet
           version: 0.20.0
           variant: ~
+        - name: py-openpyxl
+          version: 3.1.2
+          variant: ~
         - name: py-anyconfig
           version: 0.9.11
           variant: ~
