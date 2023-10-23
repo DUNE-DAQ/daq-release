@@ -223,7 +223,7 @@
           source:  github_brettviren
         - name: gojsonnet
           version: 0.20.0
-          variant: ~
+          source:  pypi
         - name: nanoid
           version: 2.0.0
           source:  pypi
