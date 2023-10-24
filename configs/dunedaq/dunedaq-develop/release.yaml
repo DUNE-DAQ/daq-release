@@ -50,7 +50,7 @@
           version: 1.7.0
           variant: ~
         - name: protobuf
-          version: 4.22.4
+          version: 4.24.4
           variant: ~
         - name: grpc
           version: 1.56.2
