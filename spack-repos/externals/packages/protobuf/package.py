@@ -14,6 +14,7 @@ class Protobuf(CMakePackage):
     url = "https://github.com/protocolbuffers/protobuf/archive/v3.18.0.tar.gz"
     maintainers("hyoklee")
 
+    version("4.24.4", sha256="2a2c4d5f3a750e83ed5c3a99c12e7059f4fc66f8b0533f21b9f5ddc3cf8135e9")
     version("4.22.4", sha256="721b01f57e65c82247b6ca4572160368cbb2ba55344eb3633d42b43f9ca3775e")
     version("3.22.2", sha256="2118051b4fb3814d59d258533a4e35452934b1ddb41230261c9543384cbb4dfc")
     version("3.21.12", sha256="930c2c3b5ecc6c9c12615cf5ad93f1cd6e12d0aba862b572e076259970ac3a53")
@@ -83,6 +84,7 @@ class Protobuf(CMakePackage):
 
     # https://github.com/protocolbuffers/protobuf/issues/11828#issuecomment-1433557509
     depends_on("abseil-cpp@20230125: cxxstd=17", when="@3.22:")
+    depends_on("abseil-cpp@20230125.3: cxxstd=17", when="@4.24")
     depends_on("zlib")
 
     conflicts("%gcc@:4.6", when="@3.6.0:")  # Requires c++11
