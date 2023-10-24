@@ -255,7 +255,7 @@
           version: 0.13.1
           source:  pypi
         - name: protobuf
-          version: 4.22.4
+          version: 4.24.4
           source:  pypi
         - name: psutil
           version: 5.9.0
