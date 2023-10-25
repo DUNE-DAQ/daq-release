@@ -18,7 +18,7 @@ jobs:
     name: update_pypi_repo
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:latest
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
     defaults:
       run:
         shell: bash
