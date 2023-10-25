@@ -14,10 +14,9 @@ This is a repo containing DUNE DAQ release making tools, configuarion files, and
 
 ### For DAQ software developers and users:
 1. [DAQ software development workflow -- Gitflow](development_workflow_gitflow.md)
-2. [How to trigger a special nightly release build with feature branches](feature_branch_ci_build.md)
-3. [List of GitHub Teams and Repositories](team_repos.md)
-4. [How to build external software with spack in a local workarea](Build-external-packages-with-spack-in-a-work-area.md)
-5. [To-be-updated: Continous Integraion for DUNE DAQ software](ci_github_action.md)
+2. [List of GitHub Teams and Repositories](team_repos.md)
+3. [How to build external software with spack in a local workarea](Build-external-packages-with-spack-in-a-work-area.md)
+4. [To-be-updated: Continous Integraion for DUNE DAQ software](ci_github_action.md)
 
 ### For DAQ software coordiantion team:
 
