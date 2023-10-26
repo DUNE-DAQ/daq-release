@@ -24,7 +24,8 @@ class PyMoo(PythonPackage):
 
     depends_on('py-click', type=('build', 'run'))
     depends_on('py-jinja2', type=('build', 'run'))
-    depends_on('py-jsonschema', type=('build', 'run'))
+    depends_on('py-jsonschema@4.19.1', type=('build', 'run'), when="@0.6.7:")
+    depends_on('py-jsonschema', type=('build', 'run'), when="@:0.6.4")
     depends_on('py-fastjsonschema', type=('build', 'run'))
     depends_on('py-jsonpointer', type=('build', 'run'))
     depends_on('py-numpy@1.23.0 ~blas ~lapack', type=('build', 'run'), when="@:0.6.4")

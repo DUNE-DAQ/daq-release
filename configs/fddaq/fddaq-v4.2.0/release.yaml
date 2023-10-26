@@ -149,6 +149,9 @@
         - name: gevent
           version: 22.10.2
           source:  pypi
+        - name: gojsonnet
+          version: 0.20.0
+          source:  pypi
         - name: google-auth
           version: 2.6.6
           source:  pypi
@@ -201,7 +204,7 @@
           version: "2.0"
           source:  pypi
         - name: jsonschema
-          version: 3.2.0
+          version: 4.19.1
           source:  pypi
         - name: kafka-python
           version: 2.0.2
@@ -221,9 +224,6 @@
         - name: moo
           version: 0.6.7
           source:  github_brettviren
-        - name: gojsonnet
-          version: 0.20.0
-          source:  pypi
         - name: nanoid
           version: 2.0.0
           source:  pypi
