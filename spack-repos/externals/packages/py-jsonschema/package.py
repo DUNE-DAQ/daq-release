@@ -46,3 +46,6 @@ class PyJsonschema(PythonPackage):
     depends_on("py-six@1.11:", when="@3", type=("build", "run"))
 
     conflicts("^py-pyrsistent@0.17.0:0.17.2")
+
+    patch("jsonschema-remove-unrecognized-classifiers.patch", when="@4.19.1:")
+ 
