@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 835c2af..7cbfea7 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -34,7 +34,6 @@ classifiers = [
+   "Programming Language :: Python :: 3.12",
+   "Programming Language :: Python :: Implementation :: CPython",
+   "Programming Language :: Python :: Implementation :: PyPy",
+-  "Topic :: File Formats :: JSON :: JSON Schema",
+ ]
+ dynamic = ["version"]
+ dependencies = [
