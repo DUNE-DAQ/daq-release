@@ -28,6 +28,7 @@ class PyJsonschema(PythonPackage):
     depends_on("py-hatch-vcs", when="@4.10:", type="build")
     depends_on("py-hatch-fancy-pypi-readme", when="@4.11:", type="build")
 
+    depends_on("py-attrs@22.2.0:", when="@4.19.1:", type=("build", "run"))
     depends_on("py-attrs@17.4:", when="@3:", type=("build", "run"))
     depends_on("py-pyrsistent@0.14:", when="@3:", type=("build", "run"))
     depends_on("py-importlib-metadata", when="@3.1.1: ^python@:3.7", type=("build", "run"))
@@ -35,7 +36,9 @@ class PyJsonschema(PythonPackage):
     depends_on("py-importlib-resources@1.4:", when="@4.2.1: ^python@:3.8", type=("build", "run"))
     depends_on("py-importlib-resources", when="@4.2.0 ^python@:3.8", type=("build", "run"))
     depends_on("py-pkgutil-resolve-name@1.3.10:", when="@4.10.0: ^python@:3.8")
-    depends_on("py-jsonschema-specifications", when="@4.19.1:", type=("build", "run"))
+    depends_on("py-jsonschema-specifications@2023.03.6:", when="@4.19.1:", type=("build", "run"))
+    depends_on("py-referencing@0.28.4:", when="@4.19.1:", type=("build", "run"))
+    depends_on("py-rpds-py@0.7.1:", when="@4.19.1:", type=("build", "run"))
 
     # Historical dependencies
     depends_on("py-setuptools@40.6.0:", when="@4:4.4", type="build")
@@ -49,4 +52,3 @@ class PyJsonschema(PythonPackage):
     conflicts("^py-pyrsistent@0.17.0:0.17.2")
 
     patch("jsonschema-remove-unrecognized-classifiers.patch", when="@4.19.1:")
- 
