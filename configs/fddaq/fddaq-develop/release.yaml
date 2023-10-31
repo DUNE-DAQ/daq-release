@@ -117,7 +117,7 @@
           version: 1.1.0
           source:  github_DUNE-DAQ
         - name: drunc
-          version: 0.2.1
+          version: 0.2.2
           source:  github_DUNE-DAQ
         - name: druncschema
           version: 0.2.0
