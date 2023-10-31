@@ -16,7 +16,7 @@ jobs:
     runs-on: isc01
     #runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0U
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0T
     defaults:
       run:
         shell: bash
