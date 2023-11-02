@@ -33,7 +33,7 @@ jobs:
       run: |
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
@@ -111,7 +111,7 @@ jobs:
       run: |
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
@@ -142,7 +142,7 @@ jobs:
           export DET=fd
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
+          export EXT_VERSION=v2.0
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
