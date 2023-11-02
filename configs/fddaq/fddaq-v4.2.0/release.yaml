@@ -13,7 +13,7 @@
           version: v1.0.2
           commit: null
         - name: fdreadoutlibs
-          version: v1.7.5
+          version: v1.7.6
           commit: null
         - name: fdreadoutmodules
           version: v1.0.2
@@ -43,7 +43,7 @@
           version: v1.0.1
           commit: null
         - name: fddaqconf
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: daqsystemtest
           version: v2.1.1
@@ -228,7 +228,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.0.9
+          version: 5.0.10
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3

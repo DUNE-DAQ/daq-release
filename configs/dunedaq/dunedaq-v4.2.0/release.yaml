@@ -173,7 +173,7 @@
           version: v4.0.0
           commit: null
         - name: trgdataformats
-          version: v1.0.1
+          version: v1.0.2
           commit: null
         - name: detchannelmaps
           version: v1.6.0
@@ -197,13 +197,13 @@
           version: v3.0.0
           commit: null
         - name: daqconf
-          version: v7.0.0
+          version: v7.0.1
           commit: null
         - name: trigger
-          version: v1.6.0
+          version: v1.6.1
           commit: null
         - name: triggeralgs
-          version: v1.1.9
+          version: v1.1.10
           commit: null
         - name: hdf5libs
           version: v2.6.0
