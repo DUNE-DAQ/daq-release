@@ -238,7 +238,7 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: v2.2.2
           commit: null
         - name: daq-buildtools
           version: v7.4.0
@@ -246,11 +246,11 @@
         - name: daqsystemtest
           version: v2.1.1
           commit: null
-        - name: pocket
-          version: "develop"
-          commit: null
         - name: microservices
           version: v1.6.0
+          commit: null
+        - name: pocket
+          version: "develop"
           commit: null
         - name: dqm-backend
           version: "develop"
