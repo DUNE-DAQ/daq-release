@@ -35,7 +35,8 @@ jobs:
           export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
+          export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
+          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-sl7
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -54,7 +55,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
 
           python3 scripts/spack/make-release-repo.py -u \
-                -i configs/dunedaq/${DAQ_RELEASE}/release.yaml \
+                -i configs/dunedaq/${DAQ_RELEASE_CONF}/release.yaml \
           	-t spack-repos/dunedaq-repo-template \
           	-r ${DAQ_RELEASE} \
                 -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
@@ -112,7 +113,7 @@ jobs:
           export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}
+          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-sl7
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -143,9 +144,10 @@ jobs:
           export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}
+          export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-sl7
 
-          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}
+          export DAQ_RELEASE_CONF=${DET}daq-${{ github.event.inputs.release }}
+          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}-sl7
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -167,7 +169,7 @@ jobs:
 
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
-          -i configs/${DET}daq/${DAQ_RELEASE}/release.yaml \
+          -i configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
           --base-release ${DAQ_BASE_RELEASE} \
@@ -211,7 +213,7 @@ jobs:
           /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py \
           -o ${SPACK_RELEASE}/../ \
           --pyvenv-requirements \
-          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE}/release.yaml
+          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml
 
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
           source ${SPACK_RELEASE}/../.venv/bin/activate
@@ -274,11 +276,11 @@ jobs:
             image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd releases
-            dunedaq_tag=dunedaq-${{ github.event.inputs.release }}
+            dunedaq_tag=dunedaq-${{ github.event.inputs.release }}-sl7
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=fddaq-${{ github.event.inputs.release }}
+            fddaq_tag=fddaq-${{ github.event.inputs.release }}-sl7
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
 
@@ -332,7 +334,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
           DET=fd
-          daq_tag=${DET}daq-${{ github.event.inputs.release }}
+          daq_tag=${DET}daq-${{ github.event.inputs.release }}-sl7
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release ${daq_tag}
