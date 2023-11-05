@@ -2,6 +2,12 @@
 
 if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARCH || ! -n $DAQ_RELEASE || ! -n $DAQ_RELEASE_DIR ]]; then
     echo "Error: at least one of the environment variables needed by this script is unset. Exiting..." >&2
+    echo "EXT_VERSION=${EXT_VERSION}"
+    echo "SPACK_VERSION=${SPACK_VERSION}"
+    echo "GCC_VERSION=${GCC_VERSION}"
+    echo "ARCH=${ARCH}"
+    echo "DAQ_RELEASE=${DAQ_RELEASE}"
+    echo "DAQ_RELEASE_DIR=${DAQ_RELEASE_DIR}"
     exit 1
 fi
 
