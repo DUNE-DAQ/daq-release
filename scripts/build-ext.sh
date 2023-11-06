@@ -78,8 +78,8 @@ SSH_INSTALL_DIR=$(spack location -i openssh)
 
 ## Step 6 -- install llvm and qt
 
-spack install --reuse llvm@15.0.7~omp_as_runtime %gcc@${GCC_VERSION} build_type=MinSizeRel arch=${ARCH}
-spack install --reuse qt@5.15.9%gcc@${GCC_VERSION} arch=${ARCH}
+# spack install --reuse llvm@15.0.7~omp_as_runtime %gcc@${GCC_VERSION} build_type=MinSizeRel arch=${ARCH}
+# spack install --reuse qt@5.15.9%gcc@${GCC_VERSION} arch=${ARCH}
 
 ## Step 6 -- remove DAQ packages and umbrella packages
 
