@@ -36,7 +36,7 @@ jobs:
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-cs8
+          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-c8
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -113,7 +113,7 @@ jobs:
           export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-cs8
+          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-c8
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -144,10 +144,10 @@ jobs:
           export EXT_VERSION=v1.1
           export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
-          export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-cs8
+          export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-c8
 
           export DAQ_RELEASE_CONF=${DET}daq-${{ github.event.inputs.release }}
-          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}-cs8
+          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}-c8
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
           export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
@@ -276,11 +276,11 @@ jobs:
             image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd releases
-            dunedaq_tag=dunedaq-${{ github.event.inputs.release }}-cs8
+            dunedaq_tag=dunedaq-${{ github.event.inputs.release }}-c8
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=fddaq-${{ github.event.inputs.release }}-cs8
+            fddaq_tag=fddaq-${{ github.event.inputs.release }}-c8
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
 
@@ -334,7 +334,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
           DET=fd
-          daq_tag=${DET}daq-${{ github.event.inputs.release }}-cs8
+          daq_tag=${DET}daq-${{ github.event.inputs.release }}-c8
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release ${daq_tag}
