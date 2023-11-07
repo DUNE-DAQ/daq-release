@@ -84,7 +84,6 @@ jobs:
 
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
-          --overwrite-daq-cmake
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
