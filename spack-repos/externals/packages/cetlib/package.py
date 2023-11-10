@@ -37,10 +37,15 @@ class Cetlib(CMakePackage):
 
     version('3.13.04', tag='v3_13_04', git=git_base, get_full_repo=True)
     version('3.15.00', tag='v3_15_00', git=git_base, get_full_repo=True)
-   
+    version('3.18.01', tag='v3_18_01', git=git_base, get_full_repo=True)
+
+    variant('lite', default=True, when="@3.18.01:")
+    variant('lite', default=False, when="@:3.15.00")
+
     patch('cetlib-notests.patch', when='@develop')
     patch('cetlib-3.15.00.patch', when='@3.15.00')
-    #patch('cetlib_openssl_spack.patch')
+    patch('cetlib_openssl_spack.patch', when='@:3.15.00')
+    patch('cetlib_CMakeLists.txt.patch', when='@3.18.01:')
 
     variant('cxxstd',
             default='17',
@@ -51,34 +56,25 @@ class Cetlib(CMakePackage):
     depends_on('cmake', type='build')
     depends_on('cetmodules', type='build')
     depends_on('catch2', type=('build', 'link'))
-    depends_on('intel-tbb', type=('build', 'link'))
-    depends_on('sqlite', type=('build', 'link'))
-    depends_on('openssl')
-    depends_on('perl')  # Module skeletons, etc.  
+    depends_on('intel-tbb', when='~lite', type=('build', 'link'))
+    depends_on('sqlite', when='~lite', type=('build', 'link'))
+    depends_on('openssl', when='~lite')
+    depends_on('perl', when='~lite')  # Module skeletons, etc.  
 
     for build_type in ["Debug", "Release", "RelWithDebInfo"]:
         depends_on(f'cetlib-except build_type={build_type}', when=f'build_type={build_type}')
 
-        depends_on(f'hep-concurrency build_type={build_type}', when=f'build_type={build_type}')
+        depends_on(f'hep-concurrency build_type={build_type}', when=f'~lite build_type={build_type}')
 
         if build_type != "Debug":
-            depends_on('boost', when=f'build_type={build_type}') 
+           depends_on('boost', when=f'~lite build_type={build_type}') 
         else:
-            depends_on('boost+debug', when='build_type=Debug')
+           depends_on('boost+debug', when='~lite build_type=Debug')
 
     if 'SPACKDEV_GENERATOR' in os.environ:
         generator = os.environ['SPACKDEV_GENERATOR']
         if generator.endswith('Ninja'):
             depends_on('ninja', type='build')
-
-#    def url_for_version(self, version):
-#        url = 'https://cdcvs.fnal.gov/cgi-bin/git_archive.cgi/cvs/projects/{0}.v{1}.tbz2'
-#        return url.format(self.name, version.underscored)
-
-#    def cmake_args(self):
-#        args = ['-DCMAKE_CXX_STANDARD={0}'.
-#                format(self.spec.variants['cxxstd'].value)]
-#        return args
 
     def cmake_args(self):
         spec = self.spec
@@ -86,7 +82,8 @@ class Cetlib(CMakePackage):
             '-DCMAKE_INSTALL_PREFIX:PATH={0}'.format(spec.prefix),
             '-Dart_MODULE_PLUGINS=FALSE',
             '-DIGNORE_ABSOLUTE_TRANSITIVE_DEPENDENCIES=TRUE',
-            '-DCMAKE_CXX_STANDARD={0}'.format(self.spec.variants['cxxstd'].value)
+            '-DCMAKE_CXX_STANDARD={0}'.format(self.spec.variants['cxxstd'].value),
+            '-DCETLIB_LITE={0}'.format(self.define_from_variant("CETLIB_LITE", "lite"))
         ]
         return cmake_args
 
