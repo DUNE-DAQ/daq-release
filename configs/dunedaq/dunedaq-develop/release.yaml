@@ -9,7 +9,7 @@
           variant: "+context+container cxxstd=2a"
         - name: cetlib
           version: 3.18.01
-          variant: ~
+          variant: "+lite"
         - name: trace
           version: 3.17.09
           variant: ~

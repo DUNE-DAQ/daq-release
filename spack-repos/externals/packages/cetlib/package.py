@@ -39,8 +39,7 @@ class Cetlib(CMakePackage):
     version('3.15.00', tag='v3_15_00', git=git_base, get_full_repo=True)
     version('3.18.01', tag='v3_18_01', git=git_base, get_full_repo=True)
 
-    variant('lite', default=True, when="@3.18.01:")
-    variant('lite', default=False, when="@:3.15.00")
+    variant('lite', default=False, description="Remove a number of dependenciesnot needed starting with version 3.18.01")
 
     patch('cetlib-notests.patch', when='@develop')
     patch('cetlib-3.15.00.patch', when='@3.15.00')
