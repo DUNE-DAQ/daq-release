@@ -38,7 +38,7 @@ jobs:
       #runs-on: ubuntu-latest
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0T
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0U
     defaults:
       run:
         shell: bash
@@ -479,7 +479,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0T"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0U"
     defaults:
       run:
         shell: bash
@@ -578,7 +578,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0T"
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0U"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
