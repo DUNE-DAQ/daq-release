@@ -44,7 +44,7 @@ class Cetlib(CMakePackage):
     patch('cetlib-notests.patch', when='@develop')
     patch('cetlib-3.15.00.patch', when='@3.15.00')
     patch('cetlib_openssl_spack.patch', when='@:3.15.00')
-    patch('cetlib_CMakeLists.txt.patch', when='@3.18.01:')
+    patch('cetlib_lite.patch', when='@3.18.01:')
 
     variant('cxxstd',
             default='17',

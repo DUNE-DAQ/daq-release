@@ -96,3 +96,19 @@ index 73a35f4..76085de 100644
    add_subdirectory(test)
  endif()
 +endif()
+diff --git a/config/cetlib-augment-CETLIB.cmake b/config/cetlib-augment-CETLIB.cmake
+index 98cd34e..5f97c3d 100644
+--- a/config/cetlib-augment-CETLIB.cmake
++++ b/config/cetlib-augment-CETLIB.cmake
+@@ -1,10 +1,6 @@
+ if (CETLIB)
+-  list(PREPEND CETLIB
+-    cetlib::sqlite
+-  )
+   list(APPEND CETLIB
+     cetlib::container_algorithms
+-    cetlib::parsed_program_options
+     art_plugin_support::support_macros
+   )
+ endif()
+\ No newline at end of file
