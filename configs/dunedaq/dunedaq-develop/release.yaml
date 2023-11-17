@@ -8,8 +8,8 @@
           version: 1.77.0
           variant: "+context+container cxxstd=2a"
         - name: cetlib
-          version: 3.15.00
-          variant: ~
+          version: 3.18.01
+          variant: "+lite"
         - name: trace
           version: 3.17.09
           variant: ~
