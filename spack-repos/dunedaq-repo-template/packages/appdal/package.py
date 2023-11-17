@@ -10,7 +10,7 @@ from spack import *
 class Appdal(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/appdal/"
+    homepage = "https://github.com/DUNE-DAQ/appdal"
     git =      "https://github.com/DUNE-DAQ/appdal.git"
 
     maintainers = ["jcfreeman2"]
