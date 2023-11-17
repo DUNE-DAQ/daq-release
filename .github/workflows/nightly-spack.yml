@@ -246,6 +246,7 @@ jobs:
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
           source ${SPACK_RELEASE}/../.venv/bin/activate
 
+          spack load go
           python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
 
           spack clean -a
@@ -351,6 +352,7 @@ jobs:
           python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
           source ${SPACK_RELEASE}/../.venv/bin/activate
 
+          spack load go
           python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
 
           spack clean -a

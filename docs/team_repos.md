@@ -4,13 +4,14 @@
 ## ccm
 * **People to contact**: Pierre Lasorak, Alex Tapper
 * **Repositories with write access**:
+    * appdal
     * appfwk
     * cmdlib
     * connectivityserver
     * coredal
     * dal
-    * daqsystemtest
     * daqconf
+    * daqsystemtest
     * dbe
     * dqm
     * drunc
@@ -18,6 +19,7 @@
     * elisa_client_api
     * ers
     * erskafka
+    * fddaqconf
     * flx-k8s-device-plugin
     * genconfig
     * grafana-dashboards
@@ -39,12 +41,13 @@
 * **Repositories with write access**:
     * appfwk
     * ctbmodules
-    * daqsystemtest
     * daqconf
     * daqdataformats
+    * daqsystemtest
     * dfmessages
     * dfmodules
     * dpdklibs
+    * fddaqconf
     * fdreadoutlibs
     * fdreadoutmodules
     * hdf5libs
@@ -77,11 +80,12 @@
     * trgdataformats
 
 ## dqm
-* **People to contact**: Wes Ketchum, Pip Hamilton
+* **People to contact**: Wes Ketchum 
 * **Repositories with write access**:
     * daqsystemtest
     * dqm
     * dqm-backend
+    * dqmtools
     * rawdatautils
 
 ## facility
@@ -134,5 +138,5 @@
     * wibmod
 
 
-Page was generated at: 18/08/2023 11:01:27
+Page was generated at: 16/10/2023 14:28:53
 

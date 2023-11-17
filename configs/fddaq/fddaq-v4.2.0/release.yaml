@@ -1,25 +1,52 @@
 ---
-    release: nddaq-develop
+    release: fddaq-v4.2.0
 
-    type: nddaq
+    type: fddaq
 
-    base_release: dunedaq-develop
+    base_release: dunedaq-v4.2.0
 
-    nddaq:
-        - name: lbrulibs
-          version: "develop"
+    fddaq:
+        - name: rawdatautils
+          version: v1.5.0
           commit: null
-        - name: ndreadoutmodules
-          version: "develop"
+        - name: fddetdataformats
+          version: v1.0.2
           commit: null
-        - name: nddetdataformats
-          version: "develop"
+        - name: fdreadoutlibs
+          version: v1.7.6
           commit: null
-        - name: ndreadoutlibs
-          version: "develop"
+        - name: fdreadoutmodules
+          version: v1.0.2
           commit: null
-        - name: nddaqconf
-          version: "develop"
+        - name: dpdklibs
+          version: v1.1.5
+          commit: null
+        - name: hermesmodules
+          version: v1.0.2
+          commit: null
+        - name: sspmodules
+          version: v1.3.0
+          commit: null
+        - name: flxlibs
+          version: v1.8.3
+          commit: null
+        - name: uhallibs
+          version: v1.2.0
+          commit: null
+        - name: wibmod
+          version: v1.4.9
+          commit: null
+        - name: ctbmodules
+          version: v2.0.3
+          commit: null
+        - name: snbmodules
+          version: v1.0.1
+          commit: null
+        - name: fddaqconf
+          version: v1.0.1
+          commit: null
+        - name: daqsystemtest
+          version: v2.1.1
           commit: null
 
     pymodules:

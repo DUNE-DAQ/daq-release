@@ -1,0 +1,114 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 084f21e..2a82f7d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,6 +34,10 @@ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
+ 
+ add_subdirectory(${PROJECT_NAME})  # source code
+ add_subdirectory(config) # Files for use by other packages at build time.
++
++
++if (NOT DEFINED CETLIB_LITE)
+ add_subdirectory(perllib) # Modular plugin skeleton generator
++endif()
+ 
+ cet_cmake_config(CONFIG_POST_TARGET_VARS config/cetlib-augment-CETLIB.cmake)
+diff --git a/cetlib/CMakeLists.txt b/cetlib/CMakeLists.txt
+index 73a35f4..76085de 100644
+--- a/cetlib/CMakeLists.txt
++++ b/cetlib/CMakeLists.txt
+@@ -22,10 +22,17 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
+   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc @ONLY
+ )
+ 
++if (NOT DEFINED CETLIB_LITE)
++  set(OSSL_SOURCES MD5Digest.cc sha1.cc)
++endif()
++
++if (NOT DEFINED CETLIB_LITE)
++  set(SPLIT_PATH split_path.cc)
++endif()
++
+ cet_make_library(HEADERS_TARGET
+   SOURCE
+     ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
+-    MD5Digest.cc
+     BasicPluginFactory.cc
+     LibraryManager.cc
+     PluginFactory.cc
+@@ -50,10 +57,10 @@ cet_make_library(HEADERS_TARGET
+     replace_all.cc
+     rpad.cc
+     search_path.cc
+-    sha1.cc
+     simple_stats.cc
+-    split_path.cc
++    ${SPLIT_PATH}
+     split_by_regex.cc
++    ${OSSL_SOURCES}
+   LIBRARIES
+     PUBLIC
+       cetlib_except::cetlib_except
+@@ -62,6 +69,7 @@ cet_make_library(HEADERS_TARGET
+       ${CMAKE_DL_LIBS}
+ )
+ 
++if (NOT DEFINED CETLIB_LITE)
+ # find openSSL
+ # when building on macOS, use CommonCrypto
+ if(NOT APPLE)
+@@ -71,6 +79,7 @@ if(NOT APPLE)
+     target_compile_definitions(cetlib PUBLIC OPENSSL_API_COMPAT=0x10100000L)
+   endif()
+ endif()
++endif()
+ 
+ cet_make_library(LIBRARY_NAME compiler_macros INTERFACE
+   SOURCE compiler_macros.h)
+@@ -87,6 +96,7 @@ cet_make_library(LIBRARY_NAME support_macros INTERFACE
+     cetlib::compiler_macros
+ )
+ 
++if (NOT DEFINED CETLIB_LITE)
+ find_package(Boost COMPONENTS program_options REQUIRED EXPORT)
+ cet_make_library(LIBRARY_NAME cetlib_parsed_program_options
+   SOURCE parsed_program_options.cc
+@@ -94,6 +104,7 @@ cet_make_library(LIBRARY_NAME cetlib_parsed_program_options
+     PUBLIC Boost::program_options
+     PRIVATE cetlib_except::cetlib_except
+ )
++endif()
+ ####################################
+ 
+ # Executables.
+@@ -104,10 +115,14 @@ cet_make_exec(NAME get-accessible-paths LIBRARIES PRIVATE cetlib::cetlib)
+ install_headers(SUBDIRS detail)
+ install_source(SUBDIRS detail)
+ 
++if (NOT DEFINED CETLIB_LITE)
+ # SQLite functionality.
+ add_subdirectory(sqlite)
++endif()
+ 
++if (NOT DEFINED CETLIB_LITE)
+ # Tests
+ if (BUILD_TESTING)
+   add_subdirectory(test)
+ endif()
++endif()
+diff --git a/config/cetlib-augment-CETLIB.cmake b/config/cetlib-augment-CETLIB.cmake
+index 98cd34e..5f97c3d 100644
+--- a/config/cetlib-augment-CETLIB.cmake
++++ b/config/cetlib-augment-CETLIB.cmake
+@@ -1,10 +1,6 @@
+ if (CETLIB)
+-  list(PREPEND CETLIB
+-    cetlib::sqlite
+-  )
+   list(APPEND CETLIB
+     cetlib::container_algorithms
+-    cetlib::parsed_program_options
+     art_plugin_support::support_macros
+   )
+ endif()
+\ No newline at end of file
