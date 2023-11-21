@@ -96,7 +96,7 @@
           version: 0.3.0
           source:  github_DUNE-DAQ
         - name: elisa-client-api
-          version: 0.1.0
+          version: 0.2.0
           source:  github_DUNE-DAQ
         - name: et-xmlfile
           version: 1.0.1
