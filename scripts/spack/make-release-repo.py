@@ -68,10 +68,11 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
 
 class DAQRelease:
 
-    def __init__(self, yaml_file, overwrite_branch = ""):
+    def __init__(self, yaml_file, overwrite_branch = "", overwrite_daq_cmake = False):
         self.yaml = yaml_file
         self.rdict = parse_yaml_file(self.yaml)
         self.overwrite_branch = overwrite_branch
+        self.overwrite_daq_cmake = overwrite_daq_cmake
         self.rtype = self.rdict["type"]
 
     def set_release(self, release_name, base_release=""):
@@ -89,8 +90,8 @@ class DAQRelease:
             for i in range(len(pkgs)):
                 ipkg = pkgs[i]
                 iname = ipkg["name"]
-                # skip overwriting daq-cmake
-                if self.overwrite_branch != "" and iname != "daq-cmake":
+
+                if self.overwrite_branch != "" and (iname != "daq-cmake" or self.overwrite_daq_cmake):
                     iver = self.overwrite_branch
                 else:
                     iver = ipkg["version"]
@@ -274,6 +275,8 @@ if __name__ == "__main__":
     parser.add_argument('-b', '--overwrite-branch',
                         default="",
                         help='''feature branch to checkout;''')
+    parser.add_argument('-d', '--overwrite-daq-cmake',
+                         help="If --overwrite-branch is selected, also try to use daq-cmake branch (default is for this not to happen)", action='store_true')
     parser.add_argument('-i', '--input-manifest', required=True,
                         help="path to the release manifest file;")
     parser.add_argument('-r', '--release-name',
@@ -293,7 +296,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    daq_release = DAQRelease(args.input_manifest, args.overwrite_branch)
+    daq_release = DAQRelease(args.input_manifest, args.overwrite_branch, args.overwrite_daq_cmake)
     if args.pypi_manifest:
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
