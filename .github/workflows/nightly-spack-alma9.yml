@@ -34,7 +34,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: daq
+    runs-on: isc01
       #runs-on: ubuntu-latest
     needs: make_nightly_tag
     container:
@@ -84,6 +84,7 @@ jobs:
 
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -201,6 +202,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -306,6 +308,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -379,7 +382,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on: isc01
     strategy:
       matrix:
         include:
@@ -533,7 +536,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: isc01
 
     steps:
     - name: check_cvmfs_deployment
