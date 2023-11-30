@@ -84,6 +84,7 @@ jobs:
 
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -151,7 +152,7 @@ jobs:
           cd $SPACK_RELEASE
           source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --show-log-on-error --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
           spack clean -a
 
           cd $SPACK_RELEASE_DIR/../
@@ -201,6 +202,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -238,7 +240,7 @@ jobs:
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
           spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --show-log-on-error --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}
@@ -306,6 +308,7 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
+          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -343,7 +346,7 @@ jobs:
           sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 
           spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+          spack install --show-log-on-error --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
 
           # Generate pyvenv_requirements.txt
           spack load ${DET}daq@${DAQ_RELEASE}

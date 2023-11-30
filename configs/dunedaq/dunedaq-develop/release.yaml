@@ -226,6 +226,9 @@
         - name: coredal
           version: "develop"
           commit: null
+        - name: appdal
+          version: "develop"
+          commit: null
         - name: oksconfig
           version: "develop"
           commit: null
