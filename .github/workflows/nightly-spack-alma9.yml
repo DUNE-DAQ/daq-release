@@ -55,7 +55,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          source .github/workflows/wf-setup-tools.sh
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
           export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
