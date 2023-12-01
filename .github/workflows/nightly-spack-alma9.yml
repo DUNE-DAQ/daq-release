@@ -34,8 +34,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    #runs-on: isc01
-    runs-on: ubuntu-latest
+    runs-on: isc01
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
@@ -56,6 +55,7 @@ jobs:
       run: |
           pwd
           ls -ltr .
+          git config --global --add safe.directory /__w/daq-release/daq-release
           git branch || git log -1 || true
 #          false   # Directly end things
 
