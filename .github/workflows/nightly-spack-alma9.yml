@@ -82,7 +82,7 @@ jobs:
 
           cd $SPACK_RELEASE
 
-          daqify_spack_environment()
+          daqify_spack_environment
 
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
