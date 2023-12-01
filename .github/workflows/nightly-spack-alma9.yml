@@ -56,15 +56,16 @@ jobs:
       run: |
           pwd
           ls -ltr .
-          cd daq-release && git branch && git log -1 && true
+          git branch || git log -1 || true
 #          false   # Directly end things
 
     - name: setup directories and install spack for the dunedaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          ls -l daq-release/wf-setup-tools.sh || true
-          ls -l wf-setup-tools.sh || true
+          ls -l ./.github/workflows/wf-setup-tools.sh || true
+          source .github/workflows/wf-setup-tools.sh || true
+          echo "SPACK_VERSION == ${SPACK_VERSION}"
           false
           export SPACK_VERSION=0.20.0
           export GCC_VERSION=12.1.0
