@@ -82,7 +82,7 @@ jobs:
 
           cd $SPACK_RELEASE
 
-          daqify_spack_environment
+          daqify_spack_environment base
 
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
@@ -133,11 +133,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
           export DET=fd
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v2.0
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
@@ -151,10 +149,7 @@ jobs:
 
 
           cd ${SPACK_RELEASE}
-          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
-          tar xf v${SPACK_VERSION}.tar.gz
-          ln -s spack-${SPACK_VERSION} spack-installation
-          rm -f v${SPACK_VERSION}.tar.gz
+          get_spack
 
 
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
@@ -171,34 +166,8 @@ jobs:
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
-          repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
-          EOT
-
-          spack repo list
-
-          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
-          upstreams:
-            ${BASE_DAQ_RELEASE}:
-              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
-          EOT
-
-          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
-          spack compiler list
-
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
-
-          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+          daqify_spack_environment det
 
           spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
           spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
@@ -238,11 +207,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
           export DET=nd
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v2.0
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
           export BASE_DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_DAQ_RELEASE
@@ -256,11 +223,7 @@ jobs:
 
 
           cd ${SPACK_RELEASE}
-          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
-          tar xf v${SPACK_VERSION}.tar.gz
-          ln -s spack-${SPACK_VERSION} spack-installation
-          rm -f v${SPACK_VERSION}.tar.gz
-
+          get_spack
 
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
           INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
@@ -276,34 +239,8 @@ jobs:
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
-          repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
-          EOT
-
-          spack repo list
-
-          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
-          upstreams:
-            ${BASE_DAQ_RELEASE}:
-              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
-          EOT
-
-          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
-          spack compiler list
-
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
-
-          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+          daqify_spack_environment det
 
           spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
           spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64

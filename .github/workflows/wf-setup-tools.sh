@@ -27,6 +27,13 @@ function bad_function() {
 }
 
 function daqify_spack_environment() {
+  
+   release_type=$1
+
+   if [[ -z $release_type || ("$release_type" != "base" && "$release_type" != "det") ]]; then
+       echo "You need to pass daqify_spack_environment either \"base\" or \"det\" to specify whether to set up for a base release or a detector release" >&2
+      return 4 
+   fi
 
    if [[ -z $SPACK_VERSION || -z $SPACK_RELEASE || -z $SPACK_EXTERNALS ]]; then
        echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
@@ -49,6 +56,8 @@ function daqify_spack_environment() {
    echo "*********** spack arch ************ "
    spack arch
 
+   if [[ "$release_type" == "base" ]]; then
+
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
           repos:
             - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
@@ -56,13 +65,35 @@ function daqify_spack_environment() {
             - \$spack/var/spack/repos/builtin
 EOF
 
-   spack repo list
+
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
           upstreams:
             spack-externals:
               install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
+
+    elif [[ "$release_type" == "det" ]]; then
+
+   cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
+          repos:
+            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+            - \$spack/var/spack/repos/builtin
+EOF
+
+   cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
+          upstreams:
+            ${BASE_DAQ_RELEASE}:
+              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
+            spack-externals:
+              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+EOF
+
+    fi
+
+    spack repo list
 
     cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
       $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
