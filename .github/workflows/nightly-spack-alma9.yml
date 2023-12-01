@@ -64,7 +64,8 @@ jobs:
 
 
           cd ${SPACK_RELEASE}
-          unset SPACK_VERSION # deliberate sabotage of the following get_spack call
+          # deliberate sabotage of the following get_spack call
+          unset SPACK_VERSION 
           get_spack 
 
           echo "Check contents of GitHub Workspace"
