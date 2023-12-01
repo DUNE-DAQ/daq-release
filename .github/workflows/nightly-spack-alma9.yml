@@ -54,7 +54,6 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           source .github/workflows/wf-setup-tools.sh
-          # bad_function
 
           export DAQ_RELEASE="NAB${NIGHTLY_TAG}"
           export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
@@ -64,9 +63,7 @@ jobs:
 
 
           cd ${SPACK_RELEASE}
-          # deliberate sabotage of the following get_spack call
-          unset SPACK_VERSION
-          get_spack   # Stick a comment on the same line as a command
+          get_spack
 
           echo "Check contents of GitHub Workspace"
           ls -ltr $GITHUB_WORKSPACE
