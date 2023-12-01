@@ -49,11 +49,12 @@ jobs:
 
     - name: Checkout daq-release
       uses: actions/checkout@v4
-      with:
-        path: daq-release
+#      with:
+#        path: daq-release
 
     - name: Check the checkout
       run: |
+          pwd
           ls -ltr .
           cd daq-release && git branch && git log -1
           false   # Directly end things
