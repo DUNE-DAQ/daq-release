@@ -48,6 +48,8 @@ jobs:
 
     - name: Checkout daq-release
       uses: actions/checkout@v4
+      with:
+        path: daq-release
 
     - name: setup directories and install spack for the dunedaq release
       env:
@@ -65,8 +67,6 @@ jobs:
           cd ${SPACK_RELEASE}
           get_spack
 
-          echo "Check contents of GitHub Workspace"
-          ls -ltr $GITHUB_WORKSPACE
           export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
           INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
           export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
@@ -81,36 +81,8 @@ jobs:
           -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
 
           cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
-          echo "*********** spack arch ************ "
-          spack arch
-
-          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
-          repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
-          EOT
-
-          spack repo list
-
-          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
-          upstreams:
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
-          EOT
-
-
-          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
-          # verify the compilers have been added
-          spack compiler list
-
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
-
-          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
+          daqify_spack_environment()
 
           spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
 
