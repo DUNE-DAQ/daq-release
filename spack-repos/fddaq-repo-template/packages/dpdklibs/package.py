@@ -26,7 +26,7 @@ class Dpdklibs(CMakePackage):
     depends_on("readoutlibs")
     depends_on("fdreadoutlibs")
     depends_on("dpdk")
-    #depends_on("pkgconf")
+    depends_on("cli11")
 
     depends_on("py-moo", type='build')
 
