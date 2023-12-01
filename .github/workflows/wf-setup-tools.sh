@@ -28,11 +28,6 @@ function bad_function() {
 
 function daqify_spack_environment() {
 
-   if [[ -z $SPACK_ROOT ]]; then
-       echo "Spack doesn't appear to have been set up; returning..." >&2
-       return 1
-   fi
-
    if [[ -z $SPACK_VERSION || -z $SPACK_RELEASE || -z $SPACK_EXTERNALS ]]; then
        echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
        return 2
@@ -45,6 +40,11 @@ function daqify_spack_environment() {
    fi
 
    source spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
+   if [[ -z $SPACK_ROOT ]]; then
+       echo "Spack doesn't appear to have been set up; returning..." >&2
+       return 1
+   fi
 
    echo "*********** spack arch ************ "
    spack arch
