@@ -49,6 +49,7 @@ jobs:
 
     - name: Checkout daq-release
       uses: actions/checkout@v4
+        path: daq-release
 
     - name: Check the checkout
       run: |
