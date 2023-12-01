@@ -17,15 +17,6 @@ function get_spack() {
   rm -f v${SPACK_VERSION}.tar.gz
 }
 
-function bad_function() {
-
-  echo "About to do something that will cause an error" >& 2
-  perl -e 'print(5.0/0)'  
-   
-  echo "About to drop a false-bomb" >&2
-  false
-}
-
 function daqify_spack_environment() {
   
    release_type=$1
@@ -35,7 +26,12 @@ function daqify_spack_environment() {
       return 4 
    fi
 
-   if [[ -z $SPACK_VERSION || -z $SPACK_RELEASE || -z $SPACK_EXTERNALS ]]; then
+   if [[ -z $SPACK_VERSION || -z $SPACK_AREA || -z $SPACK_EXTERNALS ]]; then
+       echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
+       return 2
+   fi
+
+   if [[ "$release_type" == "det" && ( -z $BASE_RELEASE_TAG || -z $BASE_SPACK_AREA ) ]]; then
        echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
        return 2
    fi
@@ -60,7 +56,7 @@ function daqify_spack_environment() {
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
           repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
             - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
             - \$spack/var/spack/repos/builtin
 EOF
@@ -77,16 +73,16 @@ EOF
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
           repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
+            - ${SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+            - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
             - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
             - \$spack/var/spack/repos/builtin
 EOF
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
           upstreams:
-            ${BASE_DAQ_RELEASE}:
-              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
+            ${BASE_RELEASE_TAG}:
+              install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
             spack-externals:
               install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
@@ -96,12 +92,12 @@ EOF
     spack repo list
 
     cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-      $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+      $SPACK_AREA/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
   
     spack compiler list
 
-    \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-    \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
+    \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_AREA/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
+    \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_AREA/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
 
     sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 }
