@@ -49,9 +49,12 @@ jobs:
 
     - name: Checkout daq-release
       uses: actions/checkout@v4
-      with:
-        repository: DUNE-DAQ/daq-release
-        path: daq-release
+
+    - name: Check the checkout
+      run: |
+          ls -ltr .
+          cd daq-release && git branch && git log -1
+          false   # Directly end things
 
     - name: setup directories and install spack for the dunedaq release
       env:
@@ -84,7 +87,6 @@ jobs:
 
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
-          --overwrite-daq-cmake \
           -i configs/dunedaq/dunedaq-develop/release.yaml \
           -t spack-repos/dunedaq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -202,7 +204,6 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
-          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
@@ -308,7 +309,6 @@ jobs:
           cd $DAQ_RELEASE_DIR
           python3 scripts/spack/make-release-repo.py -u \
           -b ${FEATURE_BRANCH} \
-          --overwrite-daq-cmake \
           -i configs/${DET}daq/${DET}daq-develop/release.yaml \
           -t spack-repos/${DET}daq-repo-template \
           -r ${DAQ_RELEASE} \
