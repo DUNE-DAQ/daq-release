@@ -61,6 +61,8 @@ jobs:
           export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
           export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
+          tar_and_stage_release spack-${RELEASE_TAG}.tar.gz
+
           mkdir -p ${SPACK_AREA}
 
 
@@ -87,10 +89,12 @@ jobs:
           spack spec --reuse dunedaq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_AREA/spec_dunedaq_log.txt
 
           cd $RELEASE_DIR/../
-          tar zcf spack-${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
-          mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
-          rm -f $GITHUB_WORKSPACE/nightly-spack-dunedaq/*.tar.gz
-          mv spack-${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-spack-dunedaq
+          tar_and_stage_release spack-${RELEASE_TAG}.tar.gz
+
+          #tar zcf spack-${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+          #mkdir -p $GITHUB_WORKSPACE/nightly-spack-dunedaq
+          #rm -f $GITHUB_WORKSPACE/nightly-spack-dunedaq/*.tar.gz
+          #mv spack-${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-spack-dunedaq
 
     - name: upload empty spack tarball for dunedaq
       uses: actions/upload-artifact@v3
@@ -118,10 +122,12 @@ jobs:
           spack clean -a
 
           cd $RELEASE_DIR/../
-          tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
-          mkdir -p $GITHUB_WORKSPACE/nightly-dunedaq
-          rm -f $GITHUB_WORKSPACE/nightly-dunedaq/*.tar.gz
-          mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
+          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+
+          #tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+          #mkdir -p $GITHUB_WORKSPACE/nightly-dunedaq
+          #rm -f $GITHUB_WORKSPACE/nightly-dunedaq/*.tar.gz
+          #mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
 
     - name: upload spack nightly tarball for dunedaq
       uses: actions/upload-artifact@v3
@@ -192,10 +198,12 @@ jobs:
           popd
 
           cd $RELEASE_DIR/../
-          tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
-          mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
-          rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
-          mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
+          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+
+          #tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+          #mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          #rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
+          #mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
 
     - name: upload spack nightly tarball for fddaq
       uses: actions/upload-artifact@v3
@@ -265,10 +273,11 @@ jobs:
           popd
 
           cd $RELEASE_DIR/../
-          tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
-          mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
-          rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
-          mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
+          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          #tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+          #mkdir -p $GITHUB_WORKSPACE/nightly-${DET}daq
+          #rm -f $GITHUB_WORKSPACE/nightly-${DET}daq/*.tar.gz
+          #mv ${RELEASE_TAG}.tar.gz $GITHUB_WORKSPACE/nightly-${DET}daq
 
     - name: upload spack nightly tarball for nddaq
       uses: actions/upload-artifact@v3

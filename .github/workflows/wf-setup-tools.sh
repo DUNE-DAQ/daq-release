@@ -101,3 +101,13 @@ EOF
 
     sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
 }
+
+function tar_and_stage_release() {
+    
+    tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+
+    tardir=$GITHUB_WORKSPACE/${RELEASE_TAG}_tarball
+    mkdir -p $tardir
+    rm -f $tardir/*.tar.gz
+    mv ${RELEASE_TAG}.tar.gz $tardir/
+}
