@@ -106,8 +106,8 @@ function tar_and_stage_release() {
     
     tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
 
-    tardir=$GITHUB_WORKSPACE/${RELEASE_TAG}_tarball
+    tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     mkdir -p $tardir
-    rm -f $tardir/*.tar.gz
+    rm -f $tardir/${RELEASE_TAG}.tar.gz
     mv ${RELEASE_TAG}.tar.gz $tardir/
 }
