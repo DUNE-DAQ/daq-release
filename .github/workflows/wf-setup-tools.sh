@@ -123,7 +123,7 @@ function tar_and_stage_release() {
 
     echo "Info on tarball: "
     ls -l ${RELEASE_TAG}.tar.gz
-    tar ztvf | wc -l
+    tar ztvf ${RELEASE_TAG}.tar.gz | wc -l
 
     echo "And now about to move the tarball, mv ${RELEASE_TAG}.tar.gz $tardir/ "
     mv ${RELEASE_TAG}.tar.gz $tardir/
