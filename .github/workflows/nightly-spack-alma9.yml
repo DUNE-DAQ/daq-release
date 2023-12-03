@@ -88,16 +88,12 @@ jobs:
 
           cd $RELEASE_DIR/../
           tar_and_stage_release spack-${RELEASE_TAG}.tar.gz
-          echo $GITHUB_WORKSPACE/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
-          ls -l $GITHUB_WORKSPACE/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
-
-          echo ${{ github.workspace }}/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
 
     - name: upload empty spack tarball for dunedaq
       uses: actions/upload-artifact@v3
       with:
         name: nightly_spack_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/spack-NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: install spack for the dunedaq release
       env:
@@ -122,7 +118,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/${RELEASE_TAG}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
@@ -193,7 +189,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/${RELEASE_TAG}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the nddaq release
       env:
@@ -263,7 +259,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/${RELEASE_TAG}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
 
   update_image:
