@@ -97,7 +97,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_spack_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: install spack for the dunedaq release
       env:
