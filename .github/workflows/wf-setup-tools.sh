@@ -104,10 +104,18 @@ EOF
 
 function tar_and_stage_release() {
     
+    echo "Inside tar_and_stage_release. Directory is $PWD . Contents are: "
+    ls -ltr
+    echo "Now about to execute tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}"
     tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
+    retval=$?
+    echo "Return value was $retval"
 
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
+    echo "tardir is set to $tardir"
     mkdir -p $tardir
     rm -f $tardir/${RELEASE_TAG}.tar.gz
+    echo "Contents of directory: "
+    echo "And now about to move the tarball, mv ${RELEASE_TAG}.tar.gz $tardir/ "
     mv ${RELEASE_TAG}.tar.gz $tardir/
 }
