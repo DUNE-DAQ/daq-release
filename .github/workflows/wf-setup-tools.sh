@@ -110,12 +110,25 @@ function tar_and_stage_release() {
     tar zcf ${RELEASE_TAG}.tar.gz ${RELEASE_TAG}
     retval=$?
     echo "Return value was $retval"
+    echo "Info on tarball: "
+    ls -l ${RELEASE_TAG}.tar.gz
+    tar ztvf | wc -l
 
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     echo "tardir is set to $tardir"
     mkdir -p $tardir
     rm -f $tardir/${RELEASE_TAG}.tar.gz
     echo "Contents of directory: "
+    ls -ltr
+
+    echo "Info on tarball: "
+    ls -l ${RELEASE_TAG}.tar.gz
+    tar ztvf | wc -l
+
     echo "And now about to move the tarball, mv ${RELEASE_TAG}.tar.gz $tardir/ "
     mv ${RELEASE_TAG}.tar.gz $tardir/
+    retval=$?
+    echo "Return value was $retval"
+    echo "And the move gives us the following in $tardir: "
+    ls -l $tardir/*
 }
