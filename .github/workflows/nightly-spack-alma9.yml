@@ -88,6 +88,10 @@ jobs:
 
           cd $RELEASE_DIR/../
           tar_and_stage_release spack-${RELEASE_TAG}.tar.gz
+          echo $GITHUB_WORKSPACE/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
+          ls -l $GITHUB_WORKSPACE/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
+
+          echo ${{ github.workspace }}/tarballs_for_upload/spack-${RELEASE_TAG}.tar.gz
 
     - name: upload empty spack tarball for dunedaq
       uses: actions/upload-artifact@v3
