@@ -112,7 +112,7 @@ function tar_and_stage_release() {
     echo "Return value was $retval"
     echo "Info on tarball: "
     ls -l ${RELEASE_TAG}.tar.gz
-    tar ztvf | wc -l
+    tar ztvf ${RELEASE_TAG}.tar.gz | wc -l
 
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     echo "tardir is set to $tardir"
