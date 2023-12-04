@@ -432,14 +432,14 @@ jobs:
             fddaq_tag="NFD${NIGHTLY_TAG}"
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            ln -s ${fddaq_tag} last_fddaq_c8
-            cd last_fddaq_c8; ln -s spack-*-gcc-* default; cd ..
+            ln -s ${fddaq_tag} last_fddaq
+            cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
 
             nddaq_tag="NND${NIGHTLY_TAG}"
             tar xvf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
-            ln -s ${nddaq_tag} last_nddaq_c8
-            cd last_nddaq_c8; ln -s spack-*-gcc-* default; cd ..
+            ln -s ${nddaq_tag} last_nddaq
+            cd last_nddaq; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
@@ -584,17 +584,17 @@ jobs:
         
         
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-setup-release -n last_fddaq_c8
+        dbt-setup-release -n last_fddaq
         
         export KRB5CCNAME=$(mktemp)
         /scratch-home/get-ticket.sh
 
         klist -l
         
-        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq_c8
+        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
         mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
         mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
-        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq_c8
+        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
         mv /scratch/nddaq-rte/nddaq_app_rte.sh \$nd_release_dir/daq_app_rte.sh
         mv /scratch/nddaq-release/nddaq-dbt-setup-release-env.sh \$nd_release_dir/dbt-setup-release-env.sh
         
@@ -608,8 +608,8 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
         # rsync
         cd /cvmfs/\$REPO
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
