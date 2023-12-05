@@ -1,4 +1,4 @@
-name: Spack Nightly Workflow
+name: SL7 Spack Nightly Workflow
 
 on:
   schedule:
