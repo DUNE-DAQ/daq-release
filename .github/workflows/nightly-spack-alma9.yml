@@ -71,7 +71,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NFD${NIGHTLY_TAG}
+          export RELEASE_TAG=NAFD${NIGHTLY_TAG}
+          export BASE_RELEASE_TAG=NAB${NIGHTLY_TAG}
+
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -90,7 +92,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NFD${NIGHTLY_TAG}
+          export RELEASE_TAG=NAND${NIGHTLY_TAG}
+          export BASE_RELEASE_TAG=NAB${NIGHTLY_TAG}
+
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 

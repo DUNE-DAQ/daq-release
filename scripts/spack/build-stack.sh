@@ -30,8 +30,10 @@ elif [[ $OS == "scientific7" ]]; then
     export TAG_PREFIX="N"
 fi
 
+export BASE_RELEASE_TAG=${TAG_PREFIX}B${NIGHTLY_TAG}
+
 if [[ $DET == "dune" ]]; then
-    export RELEASE_TAG=${TAG_PREFIX}B${NIGHTLY_TAG}
+    export RELEASE_TAG=${BASE_RELEASE_TAG}
 elif [[ $DET == "fd" ]]; then
     export RELEASE_TAG=${TAG_PREFIX}FD${NIGHTLY_TAG}
 elif [[ $DET == "nd" ]]; then

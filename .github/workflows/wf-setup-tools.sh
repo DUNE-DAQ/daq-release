@@ -20,6 +20,10 @@ export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${
 export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
 export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
+if [[ -n $BASE_RELEASE_TAG ]]; then
+    export BASE_SPACK_AREA=$( echo $SPACK_AREA | sed -r 's/'$RELEASE_TAG'/'$BASE_RELEASE_TAG'/' )
+fi
+
 
 function get_spack() {
 
@@ -49,8 +53,8 @@ function daqify_spack_environment() {
    fi
 
    if [[ "$release_type" == "det" && ( -z $BASE_RELEASE_TAG || -z $BASE_SPACK_AREA ) ]]; then
-       echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
-       return 2
+       echo "At least one of the base-release environment variables you need for daqify_spack_environment isn't set; returning..." >&2
+       return 4
    fi
 
    if [[ ! -e spack-${SPACK_VERSION}/share/spack/setup-env.sh ]]; then
