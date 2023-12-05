@@ -26,11 +26,7 @@ elif [[ $DET == "nd" ]]; then
     export RELEASE_TAG=NAND${NIGHTLY_TAG}
 fi
 
-export DAQ_RELEASE_REPO=$(dirname "$0")/../..
-echo "DAQ_RELEASE_REPO == $DAQ_RELEASE_REPO"
-ls $DAQ_RELEASE_REPO 
-echo "Contents of $DAQ_RELEASE_REPO above"
-
+export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
 mkdir -p $SPACK_AREA
@@ -50,9 +46,8 @@ else
   exit 1
 fi
 
-echo "From $PWD will try to \"cd ${DAQ_RELEASE_REPO}\""
-cd $DAQ_RELEASE_REPO || exit 5
-pwd
+cd $DAQ_RELEASE_REPO
+
 python3 scripts/spack/make-release-repo.py -u \
   -b ${FEATURE_BRANCH} \
   -i configs/${DET}daq/${DET}daq-develop/release.yaml \
