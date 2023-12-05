@@ -1,8 +1,29 @@
 
+if [[ -z $RELEASE_TAG || -z $OS ]]; then
+    echo "You need to define the nightly's RELEASE_TAG and OS variables for this script to source correctly; returning..." >&2
+    return 1
+fi
+
+if [[ $OS == almalinux9 ]]; then
+    export EXT_VERSION=v2.0
+elif [[ $OS == scientific7 ]]; then
+    export EXT_VERSION=v1.1
+else
+    echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
+    return 5
+fi
+
 export SPACK_VERSION=0.20.0
 export GCC_VERSION=12.1.0
-export EXT_VERSION=v2.0
 export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
+export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+if [[ -n $BASE_RELEASE_TAG ]]; then
+    export BASE_SPACK_AREA=$( echo $SPACK_AREA | sed -r 's/'$RELEASE_TAG'/'$BASE_RELEASE_TAG'/' )
+fi
+
 
 function get_spack() {
 
@@ -32,8 +53,8 @@ function daqify_spack_environment() {
    fi
 
    if [[ "$release_type" == "det" && ( -z $BASE_RELEASE_TAG || -z $BASE_SPACK_AREA ) ]]; then
-       echo "At least one of the environment variables you need for daqify_spack_environment isn't set; returning..." >&2
-       return 2
+       echo "At least one of the base-release environment variables you need for daqify_spack_environment isn't set; returning..." >&2
+       return 4
    fi
 
    if [[ ! -e spack-${SPACK_VERSION}/share/spack/setup-env.sh ]]; then
@@ -112,3 +133,6 @@ function tar_and_stage_release() {
     rm -f $tardir/$tarfile
     mv $tarfile $tardir/
 }
+
+
+
