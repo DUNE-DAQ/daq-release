@@ -56,7 +56,7 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export RELEASE_TAG=NAB${NIGHTLY_TAG}
-          export OS=alma9
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG dune $OS
@@ -75,7 +75,7 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export RELEASE_TAG=NFD${NIGHTLY_TAG}
-          export OS=alma9
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG fd $OS
@@ -94,7 +94,7 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export RELEASE_TAG=NFD${NIGHTLY_TAG}
-          export OS=alma9
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG nd $OS

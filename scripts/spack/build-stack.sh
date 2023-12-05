@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if (( $# != 3 )); then
-    echo "Usage: $( basename $0 ) <nightly tag (YY-MM-DD)> <build type (fd, nd, or dune)> <OS (alma9 or scientific7)>" >&2
+    echo "Usage: $( basename $0 ) <nightly tag (YY-MM-DD)> <build type (fd, nd, or dune)> <OS (almalinux9 or scientific7)>" >&2
     exit 1
 fi
 
@@ -19,12 +19,12 @@ if [[ $DET != "dune" && $DET != "fd" && $DET != "nd" ]]; then
     exit 2
 fi
 
-if [[ $OS != "alma9" && $OS != "scientific7" ]]; then
-    echo "OS needs to be specified either as \"alma9\" or \"scientific7\"; exiting..." >&2
+if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
+    echo "OS needs to be specified either as \"almalinux9\" or \"scientific7\"; exiting..." >&2
     exit 3
 fi
 
-if [[ $OS == "alma9" ]]; then
+if [[ $OS == "almalinux9" ]]; then
     export TAG_PREFIX="NA"
 elif [[ $OS == "scientific7" ]]; then
     export TAG_PREFIX="N"

@@ -4,7 +4,7 @@ if [[ -z $RELEASE_TAG || -z $OS ]]; then
     return 1
 fi
 
-if [[ $OS == alma9 ]]; then
+if [[ $OS == almalinux9 ]]; then
     export EXT_VERSION=v2.0
 elif [[ $OS == scientific7 ]]; then
     export EXT_VERSION=v1.1
