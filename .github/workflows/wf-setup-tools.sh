@@ -1,8 +1,17 @@
 
+if [[ -z $RELEASE_TAG ]]; then
+    echo "You need to define the nightly's RELEASE_TAG variable for this script to source correctly; returning..." >&2
+    return 1
+fi
+
 export SPACK_VERSION=0.20.0
 export GCC_VERSION=12.1.0
 export EXT_VERSION=v2.0
 export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
+export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
+export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+
 
 function get_spack() {
 
@@ -112,3 +121,6 @@ function tar_and_stage_release() {
     rm -f $tardir/$tarfile
     mv $tarfile $tardir/
 }
+
+
+

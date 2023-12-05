@@ -99,17 +99,10 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          export RELEASE_TAG=NAB${NIGHTLY_TAG}
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          export RELEASE_TAG="NAB${NIGHTLY_TAG}"
-          export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
-          export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          cd $SPACK_AREA
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-          spack install --reuse dunedaq@${RELEASE_TAG}%gcc@12.1.0 dbe@${RELEASE_TAG}%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-          spack clean -a
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG dune
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
@@ -124,63 +117,10 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          export RELEASE_TAG=NFD${NIGHTLY_TAG}
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          export DET=fd
-
-          export BASE_RELEASE_TAG="NAB${NIGHTLY_TAG}"
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_RELEASE_TAG
-          export BASE_SPACK_AREA=$BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export RELEASE_TAG="NA${DET^^}${NIGHTLY_TAG}"
-          export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
-          export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          mkdir -p ${SPACK_AREA}
-
-
-          cd ${SPACK_AREA}
-          get_spack
-
-
-          export DAQ_RELEASE_REPO=$GITHUB_WORKSPACE/daq-release
-          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
-          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
-
-          cd $DAQ_RELEASE_REPO
-          python3 scripts/spack/make-release-repo.py -u \
-          -b ${FEATURE_BRANCH} \
-          -i configs/${DET}daq/${DET}daq-develop/release.yaml \
-          -t spack-repos/${DET}daq-repo-template \
-          -r ${RELEASE_TAG} \
-          --base-release ${BASE_RELEASE_TAG} \
-          -o ${SPACK_AREA}/spack-${SPACK_VERSION}
-
-          cd $SPACK_AREA
-
-          daqify_spack_environment det
-
-          spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-
-          # Generate pyvenv_requirements.txt
-          spack load ${DET}daq@${RELEASE_TAG}
-          /usr/bin/python3 $DAQ_RELEASE_REPO/scripts/spack/make-release-repo.py \
-          -o ${SPACK_AREA}/../ \
-          --pyvenv-requirements \
-          -i $DAQ_RELEASE_REPO/configs/${DET}daq/${DET}daq-develop/release.yaml
-
-          python -m venv --prompt dbt ${SPACK_AREA}/../.venv
-          source ${SPACK_AREA}/../.venv/bin/activate
-
-          python -m pip install -r ${SPACK_AREA}/../pyvenv_requirements.txt
-
-          spack clean -a
-
-          pushd ${RELEASE_DIR}
-          cp $DAQ_RELEASE_REPO/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake .
-          tar zcf venv.tar.gz .venv/
-          popd
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG fd
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
@@ -195,62 +135,10 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          export RELEASE_TAG=NFD${NIGHTLY_TAG}
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          export DET=nd
-
-          export BASE_RELEASE_TAG="NAB${NIGHTLY_TAG}"
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$BASE_RELEASE_TAG
-          export BASE_SPACK_AREA=$BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export RELEASE_TAG="NA${DET^^}${NIGHTLY_TAG}"
-          export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
-          export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          mkdir -p ${SPACK_AREA}
-
-
-          cd ${SPACK_AREA}
-          get_spack
-
-          export DAQ_RELEASE_REPO=$GITHUB_WORKSPACE/daq-release
-          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
-          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
-
-          cd $DAQ_RELEASE_REPO
-          python3 scripts/spack/make-release-repo.py -u \
-          -b ${FEATURE_BRANCH} \
-          -i configs/${DET}daq/${DET}daq-develop/release.yaml \
-          -t spack-repos/${DET}daq-repo-template \
-          -r ${RELEASE_TAG} \
-          --base-release ${BASE_RELEASE_TAG} \
-          -o ${SPACK_AREA}/spack-${SPACK_VERSION}
-
-          cd $SPACK_AREA
-
-          daqify_spack_environment det
-
-          spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-
-          # Generate pyvenv_requirements.txt
-          spack load ${DET}daq@${RELEASE_TAG}
-          /usr/bin/python3 $DAQ_RELEASE_REPO/scripts/spack/make-release-repo.py \
-          -o ${SPACK_AREA}/../ \
-          --pyvenv-requirements \
-          -i $DAQ_RELEASE_REPO/configs/${DET}daq/${DET}daq-develop/release.yaml
-
-          python -m venv --prompt dbt ${SPACK_AREA}/../.venv
-          source ${SPACK_AREA}/../.venv/bin/activate
-
-          python -m pip install -r ${SPACK_AREA}/../pyvenv_requirements.txt
-
-          spack clean -a
-
-          pushd ${RELEASE_DIR}
-          cp $DAQ_RELEASE_REPO/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake .
-          tar zcf venv.tar.gz .venv/
-          popd
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG nd
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
