@@ -51,46 +51,6 @@ jobs:
       with:
         path: daq-release
 
-    - name: setup directories and install spack for the dunedaq release
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          export RELEASE_TAG="NAB${NIGHTLY_TAG}"
-
-          source daq-release/.github/workflows/wf-setup-tools.sh
-
-          mkdir -p ${SPACK_AREA}
-          cd ${SPACK_AREA}
-          get_spack
-
-          export DAQ_RELEASE_REPO=$GITHUB_WORKSPACE/daq-release
-          INPUT_BRANCH=${{ github.event.inputs.feature-branch }}
-          export FEATURE_BRANCH=${INPUT_BRANCH:-"develop"}
-
-          cd $DAQ_RELEASE_REPO
-
-          python3 scripts/spack/make-release-repo.py -u \
-          -b ${FEATURE_BRANCH} \
-          -i configs/dunedaq/dunedaq-develop/release.yaml \
-          -t spack-repos/dunedaq-repo-template \
-          -r ${RELEASE_TAG} \
-          -o ${SPACK_AREA}/spack-${SPACK_VERSION}
-
-          cd $SPACK_AREA
-
-          daqify_spack_environment base
-
-          spack spec --reuse dunedaq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_AREA/spec_dunedaq_log.txt
-
-          cd $RELEASE_DIR/../
-          tar_and_stage_release spack-${RELEASE_TAG}.tar.gz
-
-    - name: upload empty spack tarball for dunedaq
-      uses: actions/upload-artifact@v3
-      with:
-        name: nightly_spack_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/spack-NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
-
     - name: install spack for the dunedaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}

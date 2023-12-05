@@ -1,12 +1,13 @@
 #!/bin/bash
 
 if (( $# != 2 )); then
-    echo "Usage: $( basename $0 ) <nightly tag (YY-MM-DD)> <type (fd, nd, or dune)>" >&2
+    echo "Usage: $( basename $0 ) <nightly tag (YY-MM-DD)> <build type (fd, nd, or dune)> <OS (alma9 or scientific7)>" >&2
     exit 1
 fi
 
 export NIGHTLY_TAG=$1
 export DET=$2
+export OS=$3
 
 if ! [[ "$NIGHTLY_TAG" =~ [0-9][0-9]-[0-9][0-9]-[0-9][0-9] ]]; then
     echo "Nightly tag needs to be of the format YY-MM-DD; exiting..." >&2
@@ -18,12 +19,23 @@ if [[ $DET != "dune" && $DET != "fd" && $DET != "nd" ]]; then
     exit 2
 fi
 
+if [[ $OS != "alma9" && $OS != "scientific7" ]]; then
+    echo "OS needs to be specified either as \"alma9\" or \"scientific7\"; exiting..." >&2
+    exit 3
+fi
+
+if [[ $OS == "alma9" ]]; then
+    export TAG_PREFIX="NA"
+elif [[ $OS == "scientific7" ]]; then
+    export TAG_PREFIX="N"
+fi
+
 if [[ $DET == "dune" ]]; then
-    export RELEASE_TAG=NAB${NIGHTLY_TAG}
+    export RELEASE_TAG=${TAG_PREFIX}B${NIGHTLY_TAG}
 elif [[ $DET == "fd" ]]; then
-    export RELEASE_TAG=NAFD${NIGHTLY_TAG}
+    export RELEASE_TAG=${TAG_PREFIX}FD${NIGHTLY_TAG}
 elif [[ $DET == "nd" ]]; then
-    export RELEASE_TAG=NAND${NIGHTLY_TAG}
+    export RELEASE_TAG=${TAG_PREFIX}ND${NIGHTLY_TAG}
 fi
 
 export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
@@ -47,7 +59,6 @@ else
 fi
 
 cd $DAQ_RELEASE_REPO
-
 python3 scripts/spack/make-release-repo.py -u \
   -b ${FEATURE_BRANCH} \
   -i configs/${DET}daq/${DET}daq-develop/release.yaml \
@@ -59,8 +70,8 @@ python3 scripts/spack/make-release-repo.py -u \
 
 cd $SPACK_AREA
 
-spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
+spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt

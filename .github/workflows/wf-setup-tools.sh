@@ -1,12 +1,20 @@
 
-if [[ -z $RELEASE_TAG ]]; then
-    echo "You need to define the nightly's RELEASE_TAG variable for this script to source correctly; returning..." >&2
+if [[ -z $RELEASE_TAG || -z $OS ]]; then
+    echo "You need to define the nightly's RELEASE_TAG and OS variables for this script to source correctly; returning..." >&2
     return 1
+fi
+
+if [[ $OS == alma9 ]]; then
+    export EXT_VERSION=v2.0
+elif [[ $OS == scientific7 ]]; then
+    export EXT_VERSION=v1.1
+else
+    echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
+    return 5
 fi
 
 export SPACK_VERSION=0.20.0
 export GCC_VERSION=12.1.0
-export EXT_VERSION=v2.0
 export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
 export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
