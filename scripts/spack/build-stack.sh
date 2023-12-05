@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if (( $# != 2 )); then
+if (( $# != 3 )); then
     echo "Usage: $( basename $0 ) <nightly tag (YY-MM-DD)> <build type (fd, nd, or dune)> <OS (alma9 or scientific7)>" >&2
     exit 1
 fi

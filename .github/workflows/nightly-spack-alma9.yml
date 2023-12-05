@@ -59,7 +59,7 @@ jobs:
           export OS=alma9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG dune
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG dune $OS
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
@@ -78,7 +78,7 @@ jobs:
           export OS=alma9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG fd
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG fd $OS
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
@@ -97,7 +97,7 @@ jobs:
           export OS=alma9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG nd
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG nd $OS
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
