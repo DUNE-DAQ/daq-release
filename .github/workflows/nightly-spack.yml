@@ -54,7 +54,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NB${NIGHTLY_TAG}
+          export RELEASE_TAG=NAB${NIGHTLY_TAG}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -62,37 +62,6 @@ jobs:
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
-
-    - name: upload empty spack tarball for dunedaq
-      uses: actions/upload-artifact@v3
-      with:
-        name: nightly_spack_dunedaq
-        path: ${{ github.workspace }}/nightly-spack-dunedaq
-
-    - name: install spack for the dunedaq release
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v1.1
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export DAQ_RELEASE="NB${NIGHTLY_TAG}"
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$DAQ_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-scientific7-x86_64
-          spack clean -a
-
-          cd $SPACK_RELEASE_DIR/../
-          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/nightly-dunedaq
-          rm -f $GITHUB_WORKSPACE/nightly-dunedaq/*.tar.gz
-          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/nightly-dunedaq
 
     - name: upload spack nightly tarball for dunedaq
       uses: actions/upload-artifact@v3
