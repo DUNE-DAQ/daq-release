@@ -55,15 +55,11 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          export RELEASE_TAG="NAB${NIGHTLY_TAG}"
+
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          export RELEASE_TAG="NAB${NIGHTLY_TAG}"
-          export RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
-          export SPACK_AREA=$RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
           mkdir -p ${SPACK_AREA}
-
-
           cd ${SPACK_AREA}
           get_spack
 
