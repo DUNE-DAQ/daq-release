@@ -28,7 +28,7 @@ fi
 
 export DAQ_RELEASE_REPO=$(dirname "$0")/../..
 
-. /file/does/not/exist.sh
+. /file/does/not/exist.sh || exit 10
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh
 
 mkdir -p $SPACK_AREA
