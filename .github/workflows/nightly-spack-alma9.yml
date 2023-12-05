@@ -48,7 +48,7 @@ jobs:
       with:
         path: daq-release
 
-    - name: install spack for the dunedaq release
+    - name: setup directories and install spack for the dunedaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
