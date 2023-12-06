@@ -54,7 +54,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NAB${NIGHTLY_TAG}
+          export RELEASE_TAG=NB${NIGHTLY_TAG}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
