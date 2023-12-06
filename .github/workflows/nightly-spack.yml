@@ -100,7 +100,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG fd $OS
+          daq-release/scripts/spack/build-stack.sh $NIGHTLY_TAG nd $OS
 
           cd $RELEASE_DIR/../
           tar_and_stage_release ${RELEASE_TAG}.tar.gz
