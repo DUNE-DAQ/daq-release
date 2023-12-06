@@ -88,7 +88,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
-	path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the nddaq release
       env:
