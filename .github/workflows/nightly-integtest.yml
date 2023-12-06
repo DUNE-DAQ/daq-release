@@ -25,7 +25,7 @@ jobs:
 
   minimal_system_integration_test:
     name: minimal_system_integration_test
-    runs-on: daq
+    runs-on: isc01
     needs: make_nightly_tag
     defaults:
       run:
