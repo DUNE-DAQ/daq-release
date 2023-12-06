@@ -34,7 +34,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: ubuntu-latest
+    runs-on: isc01
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
@@ -67,7 +67,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
-        path: ${{ github.workspace }}/nightly-dunedaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
@@ -88,7 +88,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/nightly-fddaq
+	path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the nddaq release
       env:
@@ -109,7 +109,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
-        path: ${{ github.workspace }}/nightly-nddaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
 
   update_image:
