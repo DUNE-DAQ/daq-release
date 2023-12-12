@@ -171,9 +171,10 @@ function get_release_yaml() {
 
 function tar_and_stage_release() {
 
-    tarfile=$1
+    subdir=$1
+    tarfile=${subdir}.tar.gz
 
-    tar zcf $tarfile ${RELEASE_TAG}
+    tar zcf $tarfile $subdir
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     mkdir -p $tardir
     rm -f $tardir/$tarfile
