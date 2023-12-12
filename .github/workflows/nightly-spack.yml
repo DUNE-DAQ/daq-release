@@ -61,7 +61,7 @@ jobs:
           daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG dune $OS
 
           cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          tar_and_stage_release ${RELEASE_TAG}
 
     - name: upload spack nightly tarball for dunedaq
       uses: actions/upload-artifact@v3
@@ -82,7 +82,7 @@ jobs:
           daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG fd $OS
 
           cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          tar_and_stage_release ${RELEASE_TAG}
 
     - name: upload spack nightly tarball for fddaq
       uses: actions/upload-artifact@v3
@@ -103,7 +103,7 @@ jobs:
           daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG nd $OS
 
           cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          tar_and_stage_release ${RELEASE_TAG}
 
     - name: upload spack nightly tarball for nddaq
       uses: actions/upload-artifact@v3
