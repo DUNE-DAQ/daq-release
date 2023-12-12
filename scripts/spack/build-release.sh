@@ -56,15 +56,6 @@ fi
 
 cd $DAQ_RELEASE_REPO
 
-echo "Developer aid, calling make-release-repo.py: "
-echo scripts/spack/make-release-repo.py -u \
-  -i ${release_yaml} \
-  -t spack-repos/${DET}daq-repo-template \
-  -r ${RELEASE_TAG} \
-  -o ${SPACK_AREA}/spack-${SPACK_VERSION} \
-  ${base_release_arg} \
-  ${branch_arg}
-
 python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t spack-repos/${DET}daq-repo-template \
@@ -82,7 +73,9 @@ spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebI
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
     spack load ${DET}daq@${RELEASE_TAG}
-    /usr/bin/python3 $DAQ_RELEASE_REPO/scripts/spack/make-release-repo.py \
+
+    cd $DAQ_RELEASE_REPO
+    /usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA}/../ \
         --pyvenv-requirements \
         -i ${release_yaml}
@@ -92,7 +85,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
 
     python -m pip install -r ${SPACK_AREA}/../pyvenv_requirements.txt
 
-    pushd ${RELEASE_DIR}
+    pushd ${DET_RELEASE_DIR}
     cp $( basedir $release_yaml )/dbt-build-order.cmake .
     tar zcf venv.tar.gz .venv/
     popd
