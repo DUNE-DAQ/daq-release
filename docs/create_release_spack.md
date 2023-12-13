@@ -40,7 +40,7 @@ Update the file with the new versions (and, if needed, new packages) in the rele
 
 It's worth to do several checks before starting any test builds. These checks include:
 
-* Check version tags with version numbers used in `CMakeLists.txt`; The script `script/checkout-daq-package.py` in this repo can help here. `python3 script/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers;
+* Check version tags with version numbers used in `CMakeLists.txt`; The script `scripts/checkout-daq-package.py` in this repo can help here. `python3 scripts/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers;
 * Check if dependencies in `CMakeLists.txt` matches those in `cmake/<pkgname>Config.cmake.in` files;
 * Update spack recipe files for DAQ packages with newly added dependencies.
 
