@@ -36,8 +36,8 @@ jobs:
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
 
-          cd $BASE_RELEASE_DIR/../
-          tar_and_stage_release ${BASE_RELEASE_TAG}
+          cd $BASE_RELEASE_DIR/..
+          tar_and_stage_release $BASE_RELEASE_TAG
 
     - name: upload spack candidate release tarball for dunedaq
       uses: actions/upload-artifact@v3
@@ -54,8 +54,8 @@ jobs:
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
 
-          cd DET_RELEASE_DIR/../
-          tar_and_stage_release ${DET_RELEASE_TAG}
+          cd $DET_RELEASE_DIR/..
+          tar_and_stage_release $DET_RELEASE_TAG
 
     - name: upload spack candidate release tarball for fddaq
       uses: actions/upload-artifact@v3
