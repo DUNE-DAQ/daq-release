@@ -47,21 +47,21 @@ jobs:
     - name: Checkout daq-release
       uses: actions/checkout@v3
       with:
-        repository: DUNE-DAQ/daq-release
         path: daq-release
 
     - name: setup directories and install spack for the dunedaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NB${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG dune $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
 
-          cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          cd $BASE_RELEASE_DIR/../
+          tar_and_stage_release ${BASE_RELEASE_TAG}
 
     - name: upload spack nightly tarball for dunedaq
       uses: actions/upload-artifact@v3
@@ -73,16 +73,15 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NFD${NIGHTLY_TAG}
-          export BASE_RELEASE_TAG=NB${NIGHTLY_TAG}
-
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG fd $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
 
-          cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          cd $DET_RELEASE_DIR/../
+          tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for fddaq
       uses: actions/upload-artifact@v3
@@ -94,16 +93,15 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export RELEASE_TAG=NND${NIGHTLY_TAG}
-          export BASE_RELEASE_TAG=NB${NIGHTLY_TAG}
-
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NND${NIGHTLY_TAG}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $NIGHTLY_TAG nd $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS
 
-          cd $RELEASE_DIR/../
-          tar_and_stage_release ${RELEASE_TAG}.tar.gz
+          cd $DET_RELEASE_DIR/../
+          tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for nddaq
       uses: actions/upload-artifact@v3
