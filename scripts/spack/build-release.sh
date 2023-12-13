@@ -86,7 +86,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     python -m pip install -r ${SPACK_AREA}/../pyvenv_requirements.txt
 
     pushd $DET_RELEASE_DIR
-    cp $( dirname $release_yaml )/dbt-build-order.cmake .
+    cp $DAQ_RELEASE_REPO/$( dirname $release_yaml )/dbt-build-order.cmake .
     tar zcf venv.tar.gz .venv/
     popd
 
