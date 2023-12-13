@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: candidates_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+        path: ${{ github.workspace }}/tarballs_for_upload/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       run: |
@@ -61,7 +61,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: candidates_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
+        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
