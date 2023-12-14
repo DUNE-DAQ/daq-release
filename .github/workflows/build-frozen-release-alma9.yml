@@ -13,9 +13,7 @@ on:
 jobs:
   build_the_frozen_release_spack:
     name: build_frozen_release_spack
-    #runs-on: ubuntu-latest
     runs-on: isc01
-    #runs-on: np04-build-alma9
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
@@ -26,219 +24,46 @@ jobs:
     - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
-        repository: DUNE-DAQ/daq-release
         path: daq-release
 
     - name: setup directories and install spack for the dunedaq release
       run: |
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v2.0
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export DAQ_RELEASE_CONF=dunedaq-${{ github.event.inputs.release }}
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-a9
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/fddaq-${{ github.event.inputs.release }}-a9
+          export OS=almalinux9
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
-          mkdir -p ${SPACK_RELEASE}
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
 
-
-          cd ${SPACK_RELEASE}
-          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
-          tar xf v${SPACK_VERSION}.tar.gz
-          ln -s spack-${SPACK_VERSION} spack-installation
-          rm -f v${SPACK_VERSION}.tar.gz
-
-          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
-
-          cd $DAQ_RELEASE_DIR
-
-          python3 scripts/spack/make-release-repo.py -u \
-                -i configs/dunedaq/${DAQ_RELEASE_CONF}/release.yaml \
-          	-t spack-repos/dunedaq-repo-template \
-          	-r ${DAQ_RELEASE} \
-                -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
-
-          cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-          echo "*********** spack arch ************ "
-          spack arch
-
-          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
-          repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
-          EOT
-
-          spack repo list
-
-          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
-          upstreams:
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
-          EOT
-
-
-          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
-          # verify the compilers have been added
-          spack compiler list
-
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
-
-          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
-
-          spack spec --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_dunedaq_log.txt
-
-          cd $SPACK_RELEASE_DIR/../
-          tar zcf spack-${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/frozen-spack-dunedaq
-          rm -rf $GITHUB_WORKSPACE/frozen-spack-dunedaq/*
-          mv spack-${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-spack-dunedaq
-
-    - name: upload empty spack tarball for dunedaq
-      uses: actions/upload-artifact@v3
-      with:
-        name: frozen_spack_dunedaq
-        path: ${{ github.workspace }}/frozen-spack-dunedaq
-
-    - name: install spack for the dunedaq release
-      run: |
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v2.0
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export DAQ_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
-          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
-
-          cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-          spack install --reuse dunedaq@${DAQ_RELEASE}%gcc@12.1.0 dbe@v1.0.1%gcc@12.1.0  build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-          spack clean -a
-
-          cd $SPACK_RELEASE_DIR/../
-          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/frozen-releases
-          rm -rf $GITHUB_WORKSPACE/frozen-releases/*
-          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozen-releases
+          cd $BASE_RELEASE_DIR/..
+          tar_and_stage_release $BASE_RELEASE_TAG
 
     - name: upload spack frozen release tarball for dunedaq
       uses: actions/upload-artifact@v3
       with:
         name: frozens_dunedaq
-        path: ${{ github.workspace }}/frozen-releases
+        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.release }}-a9.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       run: |
-          export DET=fd
-          export SPACK_VERSION=0.20.0
-          export GCC_VERSION=12.1.0
-          export EXT_VERSION=v2.0
-          export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-
-          export DAQ_BASE_RELEASE=dunedaq-${{ github.event.inputs.release }}-a9
-
-          export DAQ_RELEASE_CONF=${DET}daq-${{ github.event.inputs.release }}
-          export DAQ_RELEASE=${DET}daq-${{ github.event.inputs.release }}-a9
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-a9
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/fddaq-${{ github.event.inputs.release }}-a9
+          export OS=almalinux9
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
-          export SPACK_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_RELEASE
-          export SPACK_RELEASE=$SPACK_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
-          export SPACK_BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DAQ_BASE_RELEASE
-          export SPACK_BASE_RELEASE=$SPACK_BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION-b${BUILD_NUMBER}
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
 
+          cd $DET_RELEASE_DIR/..
+          tar_and_stage_release $DET_RELEASE_TAG
 
-          mkdir -p ${SPACK_RELEASE}
-
-          cd ${SPACK_RELEASE}
-          wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
-          tar xf v${SPACK_VERSION}.tar.gz
-          ln -s spack-${SPACK_VERSION} spack-installation
-          rm -f v${SPACK_VERSION}.tar.gz
-
-
-          export DAQ_RELEASE_DIR=$GITHUB_WORKSPACE/daq-release
-
-          cd $DAQ_RELEASE_DIR
-          python3 scripts/spack/make-release-repo.py -u \
-          -i configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml \
-          -t spack-repos/${DET}daq-repo-template \
-          -r ${DAQ_RELEASE} \
-          --base-release ${DAQ_BASE_RELEASE} \
-          -o ${SPACK_RELEASE}/spack-${SPACK_VERSION}
-
-          cd $SPACK_RELEASE
-          source spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-          cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
-          repos:
-            - ${SPACK_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
-          EOT
-
-          spack repo list
-
-          cat <<EOT >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml
-          upstreams:
-            ${DAQ_BASE_RELEASE}:
-              install_tree: ${SPACK_BASE_RELEASE}/spack-${SPACK_VERSION}/opt/spack
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
-          EOT
-
-          cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
-          $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
-          spack compiler list
-
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/config.yaml
-          \cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml  $SPACK_RELEASE/spack-${SPACK_VERSION}/etc/spack/defaults/modules.yaml
-
-          sed -i 's/host_compatible: true/host_compatible: false/g' $SPACK_ROOT/etc/spack/defaults/concretizer.yaml
-
-          spack spec --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64 |  tee $SPACK_RELEASE/spec_${DET}daq_log.txt
-          spack install --reuse ${DET}daq@${DAQ_RELEASE}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-almalinux9-x86_64
-
-          # Generate pyvenv_requirements.txt
-          spack load ${DET}daq@${DAQ_RELEASE}
-          /usr/bin/python3 $DAQ_RELEASE_DIR/scripts/spack/make-release-repo.py \
-          -o ${SPACK_RELEASE}/../ \
-          --pyvenv-requirements \
-          -i $DAQ_RELEASE_DIR/configs/${DET}daq/${DAQ_RELEASE_CONF}/release.yaml
-
-          python -m venv --prompt dbt ${SPACK_RELEASE}/../.venv
-          source ${SPACK_RELEASE}/../.venv/bin/activate
-
-          python -m pip install -r ${SPACK_RELEASE}/../pyvenv_requirements.txt
-
-          spack clean -a
-
-          pushd ${SPACK_RELEASE_DIR}
-          cp $DAQ_RELEASE_DIR/configs/${DET}daq/${DET}daq-develop/dbt-build-order.cmake .
-          tar zcf venv.tar.gz .venv/
-          popd
-
-          cd $SPACK_RELEASE_DIR/../
-          tar zcf ${DAQ_RELEASE}.tar.gz ${DAQ_RELEASE}
-          mkdir -p $GITHUB_WORKSPACE/frozens-${DET}daq
-          rm -rf $GITHUB_WORKSPACE/frozens-${DET}daq/*
-          mv ${DAQ_RELEASE}.tar.gz $GITHUB_WORKSPACE/frozens-${DET}daq
 
     - name: upload spack frozen release tarball for fddaq
       uses: actions/upload-artifact@v3
       with:
         name: frozens_fddaq
-        path: ${{ github.workspace }}/frozens-fddaq
+        path: ${{ github.workspace }}/tarballs_for_upload/fddaq-${{ github.event.inputs.release }}-a9.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -292,7 +117,7 @@ jobs:
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
-            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR ${fddaq_tag}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack/releases" >> Dockerfile
@@ -328,7 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-frozen-split"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-frozen-split-test"
     defaults:
       run:
         shell: bash

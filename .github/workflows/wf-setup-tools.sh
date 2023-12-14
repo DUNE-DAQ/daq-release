@@ -39,6 +39,17 @@ export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${
 export DET_SPACK_AREA=$DET_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 export BASE_SPACK_AREA=$BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
 
+if [[ $RELEASE_TYPE == "frozen" ]]; then
+
+    if [[ -z $BUILD_NUMBER ]]; then
+        echo "BUILD_NUMBER needs to be defined for a frozen release build" >&2
+        return 10   
+    fi
+
+    export DET_SPACK_AREA=${DET_SPACK_AREA}-b${BUILD_NUMBER}
+    export BASE_SPACK_AREA=${BASE_SPACK_AREA}-b${BUILD_NUMBER}
+fi
+
 function get_spack() {
 
   if [[ -z $SPACK_VERSION ]]; then

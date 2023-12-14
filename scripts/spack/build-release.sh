@@ -68,7 +68,12 @@ python3 scripts/spack/make-release-repo.py -u \
 cd $SPACK_AREA
 
 spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
+
+test $DET == "dune" && spack spec --reuse dbe@gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+
+test $DET == "dune" && spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
