@@ -69,7 +69,7 @@ cd $SPACK_AREA
 
 spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
 
-test $DET == "dune" && spack spec --reuse dbe@gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+test $DET == "dune" && spack spec --reuse dbe@gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 10
 
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
 
