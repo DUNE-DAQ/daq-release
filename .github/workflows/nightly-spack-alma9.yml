@@ -57,6 +57,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          export INPUT_BRANCH=eflumerf/TestSchema
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
 
           cd $BASE_RELEASE_DIR/../
@@ -77,6 +78,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          export INPUT_BRANCH=eflumerf/TestSchema
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
 
           cd $DET_RELEASE_DIR/../
@@ -97,6 +99,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          export INPUT_BRANCH=eflumerf/TestSchema
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS
 
           cd $DET_RELEASE_DIR/../

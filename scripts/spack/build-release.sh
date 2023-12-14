@@ -56,7 +56,9 @@ fi
 
 cd $DAQ_RELEASE_REPO
 
+echo "Using branch_arg==\"${branch_arg}\""
 python3 scripts/spack/make-release-repo.py -u \
+  --overwrite-daq-cmake \
   -i ${release_yaml} \
   -t spack-repos/${DET}daq-repo-template \
   -r ${RELEASE_TAG} \
