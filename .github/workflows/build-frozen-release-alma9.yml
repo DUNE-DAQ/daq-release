@@ -137,7 +137,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev-frozen-split
+            type=raw,value=spack-dev-frozen-split-test
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5

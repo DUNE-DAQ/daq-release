@@ -62,28 +62,30 @@ python3 scripts/spack/make-release-repo.py -u \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-${SPACK_VERSION} \
   ${base_release_arg} \
-  ${branch_arg}
+  ${branch_arg} \
+  || exit 5
 
 
 cd $SPACK_AREA
 
 spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
 
-test $DET == "dune" && spack spec --reuse dbe@gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 10
+test $DET == "dune" && spack spec --reuse dbe@gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 6
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
-test $DET == "dune" && spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+test $DET == "dune" && spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
-    spack load ${DET}daq@${RELEASE_TAG}
+    spack load ${DET}daq@${RELEASE_TAG} || exit 9
 
     cd $DAQ_RELEASE_REPO
     /usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA}/../ \
         --pyvenv-requirements \
-        -i ${release_yaml}
+        -i ${release_yaml} \
+        || exit 10
 
     python -m venv --prompt dbt ${SPACK_AREA}/../.venv
     source ${SPACK_AREA}/../.venv/bin/activate
