@@ -68,13 +68,31 @@ python3 scripts/spack/make-release-repo.py -u \
 
 cd $SPACK_AREA
 
-spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 |  tee $SPACK_AREA/spec_${DET}daq_log.txt
+spack spec --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+retval=$?
 
-test $DET == "dune" && spack spec --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 6
+cat $SPACK_AREA/spec_${DET}daq_log.txt 
+
+if [[ $retval != 0 ]]; then
+    exit 20
+fi
+
+if [[ $DET == "dune" ]]; then
+    spack spec --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+    retval=$?    
+
+    cat $SPACK_AREA/spec_dbe_log.txt
+
+    if [[ $retval != 0 ]]; then
+        exit 21	
+    fi
+fi
 
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
-test $DET == "dune" && spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+if [[ $DET == "dune" ]]; then
+    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
