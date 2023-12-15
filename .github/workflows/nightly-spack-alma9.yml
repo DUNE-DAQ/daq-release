@@ -195,7 +195,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev-v2.0
+            type=raw,value=spack-dev-v2.0-test
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -211,7 +211,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0-test"
     defaults:
       run:
         shell: bash
@@ -310,7 +310,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0-test"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
