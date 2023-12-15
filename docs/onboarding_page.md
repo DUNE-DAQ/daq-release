@@ -3,10 +3,6 @@
 
 **Who this page is for:** If you're brand new to the DUNE DAQ consortium, you're in the right place!
 
-## The Big Picture
-
-See Marco Roda's November 27, 2023 [General DAQ Introduction](https://indico.fnal.gov/event/61978/contributions/279480/attachments/173044/234062/DAQ%20Intro.pdf) for an overview of the DAQ project. 
-
 ## Accounts and Memberships 
 
 You'll need a few accounts to work with the DUNE DAQ consortium. These include:
