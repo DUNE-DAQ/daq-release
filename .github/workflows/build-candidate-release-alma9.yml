@@ -65,7 +65,7 @@ jobs:
     - name: upload spack candidate release tarball for detector release
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_${{ github.event.inputs.det }}
+        name: candidates_${{ github.event.inputs.det }}daq
         path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
