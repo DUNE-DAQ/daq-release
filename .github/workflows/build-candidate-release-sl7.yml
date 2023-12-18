@@ -1,4 +1,4 @@
-name: Build candidate release
+name: SL7 build candidate release
 
 on:
   workflow_dispatch:
@@ -16,22 +16,22 @@ jobs:
     runs-on: isc01
     #runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
     defaults:
       run:
         shell: bash
 
     steps:
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
         path: daq-release
 
     - name: setup directories and install spack for the dunedaq release
       run: |
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
-          export OS=almalinux9
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
@@ -48,8 +48,8 @@ jobs:
     - name: setup directories and install spack for the fddaq release
       run: |
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
-          export OS=almalinux9
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
@@ -61,7 +61,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: candidates_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -69,8 +69,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/alma9-slim-externals"
-            os_name: "al9"
+          - image: "ghcr.io/dune-daq/sl7-slim-externals"
+            os_name: "c7"
+          - image: "ghcr.io/dune-daq/c8-slim-externals"
+            os_name: "c8"
     needs: build_the_candidate_release_spack
     environment: dockerhub
     permissions:
@@ -99,7 +101,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p candidates
-            export EXT_VERSION=v2.0
+            export EXT_VERSION=v1.1
             image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd candidates
@@ -107,7 +109,7 @@ jobs:
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=fd-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
+            fddaq_tag=fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
 
@@ -151,7 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-rc-split"
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-rc-split"
     defaults:
       run:
         shell: bash
@@ -161,7 +163,7 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
           DET=fd
-          daq_tag=${DET}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
+          daq_tag=${DET}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -b candidate ${daq_tag}
