@@ -1,0 +1,185 @@
+name: SL7 build candidate release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'targeted release (e.g. v4.1.0)'
+        required: true 
+      build-number:
+        description: 'candidate release build number, e.g. 1'
+        required: true 
+
+jobs:
+  build_the_candidate_release_spack:
+    name: build_dev_release_spack
+    runs-on: isc01
+    #runs-on: daq
+    container:
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        path: daq-release
+
+    - name: setup directories and install spack for the dunedaq release
+      run: |
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export OS=scientific7
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
+
+          cd $BASE_RELEASE_DIR/..
+          tar_and_stage_release $BASE_RELEASE_TAG
+
+    - name: upload spack candidate release tarball for dunedaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: candidates_dunedaq
+        path: ${{ github.workspace }}/tarballs_for_upload/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}.tar.gz
+
+    - name: setup directories and install spack for the fddaq release
+      run: |
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export OS=scientific7
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
+
+          cd $DET_RELEASE_DIR/..
+          tar_and_stage_release $DET_RELEASE_TAG
+
+    - name: upload spack candidate release tarball for fddaq
+      uses: actions/upload-artifact@v3
+      with:
+        name: candidates_fddaq
+        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}.tar.gz
+
+  update_image:
+    name: update_spack_image_rc
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: "ghcr.io/dune-daq/sl7-slim-externals"
+            os_name: "c7"
+          - image: "ghcr.io/dune-daq/c8-slim-externals"
+            os_name: "c8"
+    needs: build_the_candidate_release_spack
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+            
+      - name: Download spack candidate release tarball artifact for dunedaq
+        uses: actions/download-artifact@v3
+        with:
+          name: candidates_dunedaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack candidate release tarball artifact for fddaq
+        uses: actions/download-artifact@v3
+        with:
+          name: candidates_fddaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-candidates
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p candidates
+            export EXT_VERSION=v1.1
+            image_name="${{ matrix.image }}:${EXT_VERSION}"
+
+            cd candidates
+            dunedaq_tag=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
+            tar xvf ../${dunedaq_tag}.tar.gz
+            rm -rf ../${dunedaq_tag}.tar.gz
+
+            fddaq_tag=fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+            tar xvf ../${fddaq_tag}.tar.gz
+            rm -rf ../${fddaq_tag}.tar.gz
+
+            cd ${fddaq_tag}; ln -s spack-*-gcc-* default; cd ..
+
+            cd ..
+            echo "FROM ${image_name}"> Dockerfile
+            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_FOR ${fddaq_tag}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ matrix.image }}
+          tags: |
+            type=raw,value=spack-dev-rc-split
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-rc-split"
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+      run: |
+          DET=fd
+          daq_tag=${DET}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -b candidate ${daq_tag}
+          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
+
+
+    - name: upload fddaq-dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+
+    - name: upload fddaq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq_app_rte.sh
