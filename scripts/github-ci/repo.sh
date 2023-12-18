@@ -16,7 +16,6 @@ dune_packages_with_ci=(
   "oks"
   "genconfig"
   "oksutils"
-  "dal"
   "coredal"
   "appdal"
   "oksconfig"
@@ -44,15 +43,14 @@ dune_packages_with_ci=(
   "fdreadoutlibs"
   "fdreadoutmodules"
   "flxlibs"
-  "dqm"
   "wibmod"
   "sspmodules"
   "uhallibs"
-  "dtpcontrols"
   "rawdatautils"
-  "dtpctrllibs"
   "ctbmodules"
   "dpdklibs"
+  "fddaqconf"
+  "nddaqconf"
 )
 
 dune_packages_with_ci_nd=(
@@ -60,6 +58,7 @@ dune_packages_with_ci_nd=(
   "ndreadoutlibs"
   "ndreadoutmodules"
   "lbrulibs"
+  "nddaqconf"
 )
 
 dune_packages=(
@@ -95,13 +94,10 @@ dune_packages=(
  "dfmodules"       
  "kafkaopmon"      
  "daqconf"         
- "dqm"             
  "lbrulibs"        
  "wibmod"          
  "sspmodules"      
  "uhallibs"
- "dtpcontrols"
- "dtpctrllibs"
  "rawdatautils"
  "daq-deliverables"
  "daq-docker"
@@ -120,4 +116,6 @@ dune_packages=(
  "datafilter"
  "hsilibs"
  "daqsystemtest"
+ "fddaqconf"
+ "nddaqconf"
 )
