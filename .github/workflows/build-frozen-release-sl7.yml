@@ -33,7 +33,7 @@ jobs:
       run: |
           export DET=${{ github.event.inputs.det }}
           export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DET-${{ github.event.inputs.release }}-c8
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8
           export OS=scientific7
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           source daq-release/.github/workflows/wf-setup-tools.sh
@@ -53,7 +53,7 @@ jobs:
       run: |
           export DET=${{ github.event.inputs.det }}
           export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/$DET-${{ github.event.inputs.release }}-c8
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8
           export OS=scientific7
           export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           source daq-release/.github/workflows/wf-setup-tools.sh
