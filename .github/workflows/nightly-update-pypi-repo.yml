@@ -134,7 +134,7 @@ jobs:
             rm -f pypi-repo.tar.gz
             nightly_tag="$(date +%y-%m-%d)"
             echo "FROM quay.io/centos/centos:stream8"> Dockerfile
-            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Dockerfile
             echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
