@@ -6,6 +6,9 @@ on:
       release:
         description: 'targeted release (e.g. v4.1.0)'
         required: true 
+      det:
+        description: 'detector type (nd or fd)'
+        required: true 
       build-number:
         description: 'candidate release build number, e.g. 1'
         required: true 
@@ -27,10 +30,11 @@ jobs:
       with:
         path: daq-release
 
-    - name: setup directories and install spack for the dunedaq release
+    - name: setup directories and install spack for the base release
       run: |
+          export DET=${{ github.event.inputs.det }}
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$DET-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -45,23 +49,24 @@ jobs:
         name: candidates_dunedaq
         path: ${{ github.workspace }}/tarballs_for_upload/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}.tar.gz
 
-    - name: setup directories and install spack for the fddaq release
+    - name: setup directories and install spack for the detector release
       run: |
+          export DET=${{ github.event.inputs.det }}
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/$DET-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS
 
           cd $DET_RELEASE_DIR/..
           tar_and_stage_release $DET_RELEASE_TAG
 
-    - name: upload spack candidate release tarball for fddaq
+    - name: upload spack candidate release tarball for detector release
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}.tar.gz
+        name: candidates_${{ github.event.inputs.det }}daq
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -85,16 +90,16 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
             
-      - name: Download spack candidate release tarball artifact for dunedaq
+      - name: Download spack candidate release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
           name: candidates_dunedaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack candidate release tarball artifact for fddaq
+      - name: Download spack candidate release tarball artifact for detector release
         uses: actions/download-artifact@v3
         with:
-          name: candidates_fddaq
+          name: candidates_${{ github.event.inputs.det }}daq
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-candidates
@@ -109,16 +114,16 @@ jobs:
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag=fd-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
-            tar xvf ../${fddaq_tag}.tar.gz
-            rm -rf ../${fddaq_tag}.tar.gz
+            det_tag=${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+            tar xvf ../${det_tag}.tar.gz
+            rm -rf ../${det_tag}.tar.gz
 
-            cd ${fddaq_tag}; ln -s spack-*-gcc-* default; cd ..
+            cd ${det_tag}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
-            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_FOR ${fddaq_tag}" >> Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_FOR ${det_tag}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -160,26 +165,26 @@ jobs:
 
     steps:
     
-    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for detector release
       run: |
-          DET=fd
-          daq_tag=${DET}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
+          DET=${{ github.event.inputs.det }}
+          
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
-          dbt-setup-release -b candidate ${daq_tag}
+          setup_dbt latest || true
+          dbt-setup-release -b candidate ${DET}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
 
-    - name: upload fddaq-dbt-setup-release-env.sh
+    - name: upload ${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
       with:
-        name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+        name: ${{ github.event.inputs.det }}daq-dbt_setup_release_env
+        path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
 
-    - name: upload fddaq_app_rte.sh
+    - name: upload ${{ github.event.inputs.det }}daq_app_rte.sh
       uses: actions/upload-artifact@v3
       with:
-        name: fddaq_app_rte
-        path: ${{ github.workspace }}/fddaq_app_rte.sh
+        name: ${{ github.event.inputs.det }}daq_app_rte
+        path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq_app_rte.sh
