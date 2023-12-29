@@ -2,7 +2,7 @@ name: Alma9 Spack Nightly Workflow
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "20 16 * * *"
 
   workflow_dispatch:
     inputs:
@@ -57,7 +57,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -77,7 +77,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
@@ -97,7 +97,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
