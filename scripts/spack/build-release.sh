@@ -1,10 +1,11 @@
 #!/bin/bash
 
-if (( $# != 4 )); then
+if (( $# < 4 || $# > 5 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or dune)> 
-                        <OS (almalinux9 or scientific7)>" >&2
+                        <OS (almalinux9 or scientific7)>
+                        <default repo branch (nightly only, default is develop)>" >&2
     exit 1
 fi
 
@@ -12,6 +13,11 @@ export BASE_RELEASE_DIR=$1
 export DET_RELEASE_DIR=$2
 export DET=$3
 export OS=$4
+
+export DEFAULT_BRANCH="develop"
+if [[ -n $5 ]]; then
+    export DEFAULT_BRANCH=$5
+fi
 
 if [[ $DET != "dune" && $DET != "fd" && $DET != "nd" ]]; then
     echo "Type of build needs to be specified as \"dune\" (common packages only), \"fd\" (far detector stack) or \"nd\" (near detector stack); exiting..." >&2
@@ -49,7 +55,7 @@ elif [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
 fi
 
 if [[ $RELEASE_TYPE == "nightly" ]]; then
-  branch_arg="-b "${INPUT_BRANCH:-"develop"}
+  branch_arg="-b "${DEFAULT_BRANCH}
 else
   branch_arg=""
 fi
