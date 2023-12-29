@@ -2,7 +2,7 @@ name: Alma9 Spack Nightly Workflow
 
 on:
   schedule:
-    - cron: "20 16 * * *"
+    - cron: "0 3 * * *"
 
   workflow_dispatch:
     inputs:
