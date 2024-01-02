@@ -1,4 +1,4 @@
-name: SL7 Build frozen release 
+name: SL7 build frozen release 
 
 on:
   workflow_dispatch:

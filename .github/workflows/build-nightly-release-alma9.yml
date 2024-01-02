@@ -1,4 +1,4 @@
-name: SL7 Spack Nightly Workflow
+name: Alma9 build nightly release
 
 on:
   schedule:
@@ -18,7 +18,7 @@ on:
 
 jobs:
   make_nightly_tag:
-    name: create nightly tag and decide if deploying to cvmfs
+    name: create nightly tag
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
@@ -34,18 +34,17 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: ubuntu-latest
+    runs-on: isc01
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
 
     steps:
-
     - name: Checkout daq-release
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: daq-release
 
@@ -53,9 +52,9 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
-          export OS=scientific7
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAFD${NIGHTLY_TAG}
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS ${{ github.event.inputs.feature-branch }}
@@ -67,15 +66,15 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
-          export OS=scientific7
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAFD${NIGHTLY_TAG}
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
@@ -87,15 +86,15 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the nddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NND${NIGHTLY_TAG}
-          export OS=scientific7
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAND${NIGHTLY_TAG}
+          export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS ${{ github.event.inputs.feature-branch }}
@@ -107,19 +106,17 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NAND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: ubuntu-latest
+    runs-on: isc01
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/sl7-slim-externals"
-            os_name: "c7"
-          - image: "ghcr.io/dune-daq/c8-slim-externals"
-            os_name: "c8"
+          - image: "ghcr.io/dune-daq/alma9-slim-externals"
+            os_name: "al9"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -156,30 +153,31 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            export EXT_VERSION=v1.1
+            export EXT_VERSION=v2.0
             image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd nightly
-            dunedaq_tag="NB${NIGHTLY_TAG}"
+            dunedaq_tag="NAB${NIGHTLY_TAG}"
             tar xvf ../${dunedaq_tag}.tar.gz
             rm -rf ../${dunedaq_tag}.tar.gz
 
-            fddaq_tag="NFD${NIGHTLY_TAG}"
+            fddaq_tag="NAFD${NIGHTLY_TAG}"
             tar xvf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            ln -s ${fddaq_tag} last_fddaq_c8
-            cd last_fddaq_c8; ln -s spack-*-gcc-* default; cd ..
+            ln -s ${fddaq_tag} last_fddaq
+            cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
 
-            nddaq_tag="NND${NIGHTLY_TAG}"
+            nddaq_tag="NAND${NIGHTLY_TAG}"
             tar xvf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
-            ln -s ${nddaq_tag} last_nddaq_c8
-            cd last_nddaq_c8; ln -s spack-*-gcc-* default; cd ..
+            ln -s ${nddaq_tag} last_nddaq
+            cd last_nddaq; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
@@ -197,7 +195,7 @@ jobs:
           images: |
             ${{ matrix.image }}
           tags: |
-            type=raw,value=spack-dev-v1.1
+            type=raw,value=spack-dev-v2.0
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -213,7 +211,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
+      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
     defaults:
       run:
         shell: bash
@@ -225,7 +223,7 @@ jobs:
           export DET=fd
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-setup-release -n last_${DET}daq_c8
+          dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -235,7 +233,7 @@ jobs:
           export DET=nd
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
-          dbt-setup-release -n last_${DET}daq_c8
+          dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -311,7 +309,8 @@ jobs:
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
-        IMAGE="ghcr.io/dune-daq/sl7-slim-externals:spack-dev-v1.1"
+
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
@@ -319,17 +318,17 @@ jobs:
         
         
         source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-setup-release -n last_fddaq_c8
+        dbt-setup-release -n last_fddaq
         
         export KRB5CCNAME=$(mktemp)
         /scratch-home/get-ticket.sh
 
         klist -l
         
-        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq_c8
+        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
         mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
         mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
-        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq_c8
+        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
         mv /scratch/nddaq-rte/nddaq_app_rte.sh \$nd_release_dir/daq_app_rte.sh
         mv /scratch/nddaq-release/nddaq-dbt-setup-release-env.sh \$nd_release_dir/dbt-setup-release-env.sh
         
@@ -343,8 +342,8 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
         # rsync
         cd /cvmfs/\$REPO
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"

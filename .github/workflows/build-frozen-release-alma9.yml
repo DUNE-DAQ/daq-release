@@ -1,4 +1,4 @@
-name: Alma9 Build frozen release 
+name: Alma9 build frozen release 
 
 on:
   workflow_dispatch:
