@@ -1,4 +1,4 @@
-name: Alma9 Spack Nightly Workflow
+name: Alma9 build nightly release
 
 on:
   schedule:
@@ -175,7 +175,7 @@ jobs:
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
-            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
@@ -193,9 +193,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ matrix.image }}
-          tags: |
-            type=raw,value=spack-dev-v2.0-test
+            ghcr.io/dune-daq/nightly-release-alma9
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -211,7 +209,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0-test"
+      image: "ghcr.io/dune-daq/nightly-release-alma9:latest"
     defaults:
       run:
         shell: bash
@@ -310,7 +308,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0-test"
+        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
@@ -342,8 +340,8 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
         # rsync
         cd /cvmfs/\$REPO
-        #rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        #rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
