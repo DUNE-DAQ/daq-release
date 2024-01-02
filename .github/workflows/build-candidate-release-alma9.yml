@@ -120,7 +120,7 @@ jobs:
 
             cd ..
             echo "FROM ${image_name}"> Dockerfile
-            echo 'MAINTAINER Pengfei Ding "dingpf@fnal.gov"' >> Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR ${det_tag}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
@@ -138,9 +138,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ matrix.image }}
+            ghcr.io/dune-daq/candidate-release-alma9
           tags: |
-            type=raw,value=spack-dev-rc-split-test
+            type=raw,value=${{ github.event.inputs.release }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -156,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-rc-split-test"
+      image: ghcr.io/dune-daq/candidate-release-alma9:${{ github.event.inputs.release }}
     defaults:
       run:
         shell: bash
@@ -168,7 +168,7 @@ jobs:
           DET=${{ github.event.inputs.det }}
           
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
+          setup_dbt latest || true
           dbt-setup-release -b candidate ${DET}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
