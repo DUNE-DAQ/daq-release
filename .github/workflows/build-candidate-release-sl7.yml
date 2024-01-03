@@ -159,7 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/sl7-slim-externals:spack-dev-rc-split"
+      image: ${{ matrix.output_image }}:${{ matrix.tag }}
     defaults:
       run:
         shell: bash
