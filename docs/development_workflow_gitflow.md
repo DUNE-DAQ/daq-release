@@ -15,8 +15,10 @@ A team is defined at the level of [the GitHub DUNE-DAQ organization](https://git
 
 We have four types of branch in our workflow:
 
-* **`develop`** The default branch of each repository. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs).  
-* **`Feature branches`** forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a Pull Request.  
+* **`develop` branch** 
+    * The default branch of each repository. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs).  
+* **Feature branches**
+    * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
     * These are only intended for use if changes need to be made after the initial tags are made for a particular frozen release's release cycle
     * Intended to be forked off the tag, _not_ the `develop` branch

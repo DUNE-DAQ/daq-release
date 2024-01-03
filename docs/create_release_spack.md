@@ -1,24 +1,24 @@
-# Making a new spack-based DAQ release
+# Making a new Spack-based DAQ release
 
 ## Overview
 
 Making a new DAQ release consists of:
 
 1. Preparations before testing the build:
-   * Create release configurations once all tags have been collected;
-   * Check version tags with version numbers used in `CMakeLists.txt`;
-   * Check if dependencies in `CMakeLists.txt` matches those in `cmake/<pkgname>Config.cmake.in` files;
-   * Update spack recipe files with new dependencies;
-2. Build/deploy candidate releases during the testing period of a release cycle;
+   * Create release configurations once all tags have been collected
+   * Check version tags with version numbers used in `CMakeLists.txt`
+   * Check if dependencies in `CMakeLists.txt` matches those in `cmake/<pkgname>Config.cmake.in` files
+   * Update Spack recipe files with new dependencies
+2. Build/deploy candidate releases during the testing period of a release cycle
 3. One last build of the release at the end of the testing period.
 
-Patch release is built in the same way as a regular release. It contains both phases of the candiadte then frozen releases.
+Patch release is built in the same way as a regular release. It contains both phases of the candidate then frozen releases.
 
 ## Prepare for the new release
 
 ### Create release configurations
 
-The release configuration lives under `daq-release/configs/<release-name>`. To prepare the release configuration for a new release, it is best to start from the configuration of the develop release under `daq-release/configs/dunedaq-develop`.
+The release configuration lives under `daq-release/configs/dunedaq-vX.Y.Z/release.yaml` (base release) and/or either `daq-release/configs/fddaq-vX.Y.Z/release.yaml` and `daq-release/configs/nddaq-vX.Y.Z/release.yaml` (detector release). To prepare the release configuration for a new release, it is best to start from the configuration of the develop release under `daq-release/configs/dunedaq-develop`.
 
 Only the following two files are needed for a new spack-based release.
 
@@ -34,7 +34,7 @@ The release YAML file `dunedaq-<vX.Y.Z>.yaml` contains the following sections:
 * field name: `dunedaq`, data type: list; description: each element is for one DAQ package, with its name, version/tag, and commit hash. Commit hash can be left as `null`. The commit hash will be captured at the time of building the release using the tag. 
 * field name: `pymodules`, data type: list; description: each element is for one python module, with information of module name, source site (`pypi.org` or on GitHub).
 
-Update the file with the new versions (and, if needed, new packages) in the release. Please note that if you need to update or add a Python package (i.e., an entry under `pymodules`) then you'll need to do a little preparation by updating `/cvmfs/dunedaq.opensciencegrid.org/pypi-repo`. How do to that is described [here](add_modules_to_pypi_repo.md). 
+Update the file with the new versions (and, if needed, new packages) in the release.
 
 ### Checks before doing test builds
 

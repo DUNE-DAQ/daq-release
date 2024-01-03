@@ -21,5 +21,4 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 
 1. [Creating a new DAQ release](create_release_spack.md)
 2. [How to publish files to cvmfs](publish_to_cvmfs.md)
-3. [How to add new modules to `pypi-repo`](add_modules_to_pypi_repo.md)
-4. [How to build a new stack of external software](Build-new-external-software-stack.md)
+3. [How to build a new stack of external software](Build-new-external-software-stack.md)
