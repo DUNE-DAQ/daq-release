@@ -194,6 +194,8 @@ jobs:
         with:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
+          tags: |
+            type=raw,value=latest
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -308,7 +310,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:latest"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
