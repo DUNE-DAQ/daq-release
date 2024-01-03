@@ -113,13 +113,13 @@ jobs:
 
             cd candidates
             base_tag=rc-${{ github.event.inputs.release }}-${{ github.event.inputs.build-number }}
-            tar xvf ../${base_tag}.tar.gz
+            tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
-            tar xvf ../${matrix.tag}.tar.gz
-            rm -rf ../${matrix.tag}.tar.gz
+            tar xf ../${{ matrix.tag }}.tar.gz
+            rm -rf ../${{ matrix.tag }}.tar.gz
 
-            cd ${matrix.tag}; ln -s spack-*-gcc-* default; cd ..
+            cd ${{ matrix.tag }}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
