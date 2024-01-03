@@ -116,15 +116,15 @@ jobs:
             tar xvf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
-            tar xvf ../${tag}.tar.gz
-            rm -rf ../${tag}.tar.gz
+            tar xvf ../${matrix.tag}.tar.gz
+            rm -rf ../${matrix.tag}.tar.gz
 
-            cd ${tag}; ln -s spack-*-gcc-* default; cd ..
+            cd ${matrix.tag}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_FOR ${tag}" >> Dockerfile
+            echo "ENV REFRESHED_FOR "${{ matrix.tag }} >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
