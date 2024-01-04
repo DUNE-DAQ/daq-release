@@ -75,11 +75,9 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
-            os_name: "sl7"
             output_image: "ghcr.io/dune-daq/candidate-release-sl7"
             tag: ${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
           - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
-            os_name: "c8"
             output_image: "ghcr.io/dune-daq/candidate-release-c8"
             tag: ${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-b${{ github.event.inputs.build-number }}
     needs: build_the_candidate_release_spack

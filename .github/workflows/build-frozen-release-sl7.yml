@@ -77,11 +77,9 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
-            os_name: "c7"
             output_image: "ghcr.io/dune-daq/frozen-release-sl7"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8
           - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
-            os_name: "c8"
             output_image: "ghcr.io/dune-daq/frozen-release-c8"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8
     needs: build_the_frozen_release_spack
@@ -124,7 +122,7 @@ jobs:
             cd ${{ matrix.tag }}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
-            echo "FROM "${image_name} > Dockerfile
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR "${{ matrix.tag }} >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile

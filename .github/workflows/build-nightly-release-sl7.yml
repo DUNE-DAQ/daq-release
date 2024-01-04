@@ -117,11 +117,9 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
-            os_name: "sl7"
             output_image: "ghcr.io/dune-daq/nightly-release-sl7"
             tag: "latest"
           - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
-            os_name: "c8"
             output_image: "ghcr.io/dune-daq/nightly-release-c8"
             tag: "latest"
     needs: [build_the_develop_release_spack, make_nightly_tag] 

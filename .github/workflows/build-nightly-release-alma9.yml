@@ -116,7 +116,6 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
-            os_name: "al9"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "latest"
     needs: [build_the_develop_release_spack, make_nightly_tag] 

@@ -77,7 +77,6 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
-            os_name: "al9"
             output_image: "ghcr.io/dune-daq/frozen-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-a9
     needs: build_the_frozen_release_spack

@@ -75,7 +75,6 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
-            os_name: "al9"
             output_image: "ghcr.io/dune-daq/candidate-release-alma9"
             tag: ${{ github.event.inputs.det }}-${{ github.event.inputs.release }}-c${{ github.event.inputs.build-number }}
     needs: build_the_candidate_release_spack
