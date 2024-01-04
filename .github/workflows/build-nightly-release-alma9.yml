@@ -207,11 +207,11 @@ jobs:
 
 
   generate_dbt_setup_release_env:
-    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    name: generate_dbt_setup_release_env
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ${{ matrix.output_image }}:${{ matrix.tag }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:latest
     defaults:
       run:
         shell: bash
