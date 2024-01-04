@@ -63,7 +63,7 @@ jobs:
           tar_and_stage_release ${BASE_RELEASE_TAG}
 
     - name: upload spack nightly tarball for base release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nightly_dunedaq
         path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
@@ -83,7 +83,7 @@ jobs:
           tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for far detector release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nightly_fddaq
         path: ${{ github.workspace }}/tarballs_for_upload/NAFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
@@ -103,7 +103,7 @@ jobs:
           tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for near detector release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nightly_nddaq
         path: ${{ github.workspace }}/tarballs_for_upload/NAND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
@@ -238,25 +238,25 @@ jobs:
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
     - name: upload fddaq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: upload fddaq_app_rte.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
     - name: upload nddaq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
 
     - name: upload nddaq_app_rte.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nddaq_app_rte
         path: ${{ github.workspace }}/nddaq_app_rte.sh

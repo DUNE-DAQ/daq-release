@@ -65,13 +65,13 @@ jobs:
         docker run --rm -v /cvmfs:/cvmfs:shared -v $GITHUB_WORKSPACE/scratch:/scratch ghcr.io/dune-daq/sl7-spack:latest /scratch/build_pkg.sh
 
     - name: upload build log file
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: spack_build_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/scratch/dev-${{ matrix.os_name }}/log/build*.log
 
     - name: upload linter output file
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: spack_linting_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/scratch/dev-${{ matrix.os_name }}/log/linting*
