@@ -62,7 +62,7 @@ jobs:
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for dunedaq
+    - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
@@ -82,7 +82,7 @@ jobs:
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for fddaq
+    - name: upload spack nightly tarball for far detector release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
@@ -102,7 +102,7 @@ jobs:
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for nddaq
+    - name: upload spack nightly tarball for near detector release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
@@ -115,8 +115,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/alma9-slim-externals"
-            os_name: "al9"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
+            output_image: "ghcr.io/dune-daq/nightly-release-alma9"
+            tag: "latest"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -129,19 +130,19 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack nightly release tarball artifact for dunedaq
+      - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
           name: nightly_dunedaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for fddaq
+      - name: Download spack nightly release tarball artifact for far detector release
         uses: actions/download-artifact@v3
         with:
           name: nightly_fddaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for nddaq
+      - name: Download spack nightly release tarball artifact for near detector release
         uses: actions/download-artifact@v3
         with:
           name: nightly_nddaq
@@ -153,28 +154,26 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
-            export EXT_VERSION=v2.0
-            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd nightly
-            dunedaq_tag="NAB${NIGHTLY_TAG}"
-            tar xvf ../${dunedaq_tag}.tar.gz
-            rm -rf ../${dunedaq_tag}.tar.gz
+            base_tag="NAB${NIGHTLY_TAG}"
+            tar xf ../${base_tag}.tar.gz
+            rm -rf ../${base_tag}.tar.gz
 
             fddaq_tag="NAFD${NIGHTLY_TAG}"
-            tar xvf ../${fddaq_tag}.tar.gz
+            tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq
             cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
 
             nddaq_tag="NAND${NIGHTLY_TAG}"
-            tar xvf ../${nddaq_tag}.tar.gz
+            tar xf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
             ln -s ${nddaq_tag} last_nddaq
             cd last_nddaq; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
-            echo "FROM ${image_name}"> Dockerfile
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
@@ -193,9 +192,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ matrix.image }}
+            ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=spack-dev-v2.0
+            type=raw,value=latest
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -207,11 +206,11 @@ jobs:
 
 
   generate_dbt_setup_release_env:
-    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    name: generate_dbt_setup_release_env
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+      image: ghcr.io/dune-daq/nightly-release-alma9:latest
     defaults:
       run:
         shell: bash
@@ -310,7 +309,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/alma9-slim-externals:spack-dev-v2.0"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:latest"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh

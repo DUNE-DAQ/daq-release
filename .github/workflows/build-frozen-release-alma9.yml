@@ -43,7 +43,7 @@ jobs:
           cd $BASE_RELEASE_DIR/..
           tar_and_stage_release $BASE_RELEASE_TAG
 
-    - name: upload spack frozen release tarball for dunedaq
+    - name: upload spack frozen release tarball for base release
       uses: actions/upload-artifact@v3
       with:
         name: frozens_dunedaq
@@ -76,8 +76,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/alma9-slim-externals"
-            os_name: "al9"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
+            output_image: "ghcr.io/dune-daq/frozen-release-alma9"
+            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-a9
     needs: build_the_frozen_release_spack
     environment: dockerhub
     permissions:
@@ -106,24 +107,21 @@ jobs:
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p releases
-            export EXT_VERSION=v2.0
-            image_name="${{ matrix.image }}:${EXT_VERSION}"
 
             cd releases
-            dunedaq_tag=dunedaq-${{ github.event.inputs.release }}-a9
-            tar xvf ../${dunedaq_tag}.tar.gz
-            rm -rf ../${dunedaq_tag}.tar.gz
+            base_tag=dunedaq-${{ github.event.inputs.release }}-a9
+            tar xf ../${base_tag}.tar.gz
+            rm -rf ../${base_tag}.tar.gz
 
-            det_tag=${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-a9
-            tar xvf ../${det_tag}.tar.gz
-            rm -rf ../${det_tag}.tar.gz
+            tar xf ../${{ matrix.tag }}.tar.gz
+            rm -rf ../${{ matrix.tag }}.tar.gz
 
-            cd ${det_tag}; ln -s spack-*-gcc-* default; cd ..
+            cd ${{ matrix.tag }}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
-            echo "FROM ${image_name}"> Dockerfile
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_FOR ${det_tag}" >> Dockerfile
+            echo "ENV REFRESHED_FOR "${{ matrix.tag }} >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack/releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -140,9 +138,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ matrix.image }}
+            ${{ matrix.output_image }}
           tags: |
-            type=raw,value=spack-dev-frozen-split
+            type=raw,value=${{ matrix.tag }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -154,11 +152,11 @@ jobs:
 
 
   generate_dbt_setup_release_env:
-    name: generate_dbt_setup_release_env_${{ matrix.os_name }}
+    name: generate_dbt_setup_release_env
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: "ghcr.io/dune-daq/alma9-slim-externals:spack-dev-frozen-split"
+      image: ghcr.io/dune-daq/frozen-release-alma9:${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-a9
     defaults:
       run:
         shell: bash
