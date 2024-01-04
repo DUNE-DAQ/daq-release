@@ -63,7 +63,7 @@ jobs:
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for dunedaq
+    - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
@@ -83,7 +83,7 @@ jobs:
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for fddaq
+    - name: upload spack nightly tarball for far detector release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
@@ -103,7 +103,7 @@ jobs:
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for nddaq
+    - name: upload spack nightly tarball for near detector release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
@@ -136,19 +136,19 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack nightly release tarball artifact for dunedaq
+      - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
           name: nightly_dunedaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for fddaq
+      - name: Download spack nightly release tarball artifact for far detector release
         uses: actions/download-artifact@v3
         with:
           name: nightly_fddaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for nddaq
+      - name: Download spack nightly release tarball artifact for near detector release
         uses: actions/download-artifact@v3
         with:
           name: nightly_nddaq

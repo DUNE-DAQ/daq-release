@@ -43,7 +43,7 @@ jobs:
           cd $BASE_RELEASE_DIR/..
           tar_and_stage_release $BASE_RELEASE_TAG
 
-    - name: upload spack candidate release tarball for dunedaq
+    - name: upload spack candidate release tarball for base release
       uses: actions/upload-artifact@v3
       with:
         name: candidates_dunedaq
