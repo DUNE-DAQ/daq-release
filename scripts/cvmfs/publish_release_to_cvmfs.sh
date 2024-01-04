@@ -32,15 +32,25 @@ fi
 REPO=
 SOURCE_DIR=
 DEST_DIR=
+BASE_WILDCARD=
+DET_WILDCARD=
 
 if [[ $build == "candidate" ]]; then
     REPO="dunedaq-development.opensciencegrid.org"
     SOURCE_DIR="candidates"
     DEST_DIR=/cvmfs/$REPO/candidates
+
+    BASE_WILDCARD='rc-v*'
+    DET_WILDCARD=$det'-v*'
+    
 elif [[ $build == "frozen" ]]; then
     REPO="dunedaq.opensciencegrid.org"
     SOURCE_DIR="releases"
     DEST_DIR=/cvmfs/$REPO/spack/releases
+
+    BASE_WILDCARD='dunedaq-v*'
+    DET_WILDCARD=$det'daq-v*'
+
 fi
 
 tmp_dir=$(mktemp --tmpdir=/dev/shm -d -t release_XXXXXXXXXX)
@@ -71,18 +81,18 @@ artifacts="${build}s_dunedaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env
 
 for artifact in $artifacts; do
     echo "Downloading $artifact..."
-    /home/cvmfsdunedaq/bin/gh -R DUNE-DAQ/daq-release run download $run_id -D $tmp_dir -n $artifact || exit 10
+    gh -R DUNE-DAQ/daq-release run download $run_id -D $tmp_dir -n $artifact || exit 10
 done
 
 mkdir $tmp_dir/$SOURCE_DIR || exit 44
 cd $tmp_dir/$SOURCE_DIR
 
 for tarfile in ../*.tar.gz ; do
-    tar xvf $tarfile 
+    tar xf $tarfile 
     rm -f $tarfile
 done
 
-cd ${det}daq-v* || exit 45
+cd ${det}*-v* || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
 ln -s spack-*-gcc-* default
@@ -96,9 +106,9 @@ cvmfs_server transaction $REPO
 
 echo >> $LOG
 echo -n Transaction $TAG: >>$LOG
-find releases/dunedaq-* -name .cvmfscatalog -delete
-rsync -rlpvt --delete-after --stats releases/dunedaq-* /cvmfs/$REPO/spack/releases
-rsync -rlpvt --delete-after --stats releases/${det}daq-* /cvmfs/$REPO/spack/releases
+find $SOURCE_DIR/dunedaq-* -name .cvmfscatalog -delete
+rsync -rlpvt --delete-after --stats $SOURCE_DIR/$BASE_WILDCARD $DEST_DIR
+rsync -rlpvt --delete-after --stats $SOURCE_DIR/$DET_WILDCARD $DEST_DIR
 
 RET=$?
 
