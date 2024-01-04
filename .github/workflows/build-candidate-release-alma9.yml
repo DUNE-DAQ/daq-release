@@ -90,13 +90,13 @@ jobs:
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
             
       - name: Download spack candidate release tarball artifact for base release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: candidates_dunedaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack candidate release tarball artifact for detector release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: candidates_${{ github.event.inputs.det }}daq
           path: ${{ github.workspace }}/docker-build
