@@ -33,8 +33,6 @@ git clone https://github.com/DUNE-DAQ/.github.git
 
 git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
 
-git_checkout_and_update_ci dune_packages_with_ci_nd $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci-nd.yml dunedaq-develop-cpp-ci.yml
-
 popd
 
 rm -rf $tmp_dir
