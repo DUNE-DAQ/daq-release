@@ -1,12 +1,15 @@
-# Nightly releases and Continous Integration for DUNE DAQ Software
+# Nightly releases and Continuous Integration for DUNE DAQ Software
 
+
+
+_JCF, Jan-6-2024: the CI dashboard below hasn't worked for some time. It would be good to reinstate a functioning dashboard showing each repo's build status_
 ## New Features
 
 🆕 Checkout the [CI Dashboard](https://tiny.one/dunedaq-ci-dashboard) to get an overview of recently CI build status for DAQ repositories in `DUNE-DAQ` organization.
 
 ## Introduction
 
-* Continous Integration:
+* [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) (CI):
     * developers integrate code into share repository frequently;
     * each integration will be verified by automated build and tests;
 * CI configuration is easy in the case of one or a few packages; however, things can become quickly complicated when number of packages grows:
@@ -18,70 +21,40 @@
     * releated PRs in multiple repos should be merged to develop on the same day.
 
 
-## Nightly build DAQ release
+## Nightly build DAQ releases
 
-- Contains the HEAD of develop branch across all DAQ repositories;
-- builds on GitHub cloud node at 2:00am (CDT);
-- build log and pre-built release (if the build succeeds) is saved for 90 days on GitHub;
-- the release name is in the form of `NYY-MM-DD`;
-- the release will be deployed to `/cvmfs/dunedaq-development.opensciencegrid.org`;
-- a soft link named `last_successful` will ponit to the lastest nightly release.
-- usage:
-  - Just as a typical frozen release, 
-  - use `-r` with the patth to the `nightly` directory in cvmfs
-```sh
-dbt-create.sh -r /cvmfs/dunedaq-development.opensciencegrid.org/nightly <NYY-MM-DD> workdir
-```
-  - or simply use `dbt-create.sh -n <NYY-MM-DD> workdir`
+- Built off the `HEAD` of the `develop` branches of the relevant DAQ repositories
+- Builds in GitHub Actions every night, scheduled not to interfere with American or European working hours
+- Published (deployed) to `/cvmfs/dunedaq-development.opensciencegrid.org`
 
 ### How the nightly releases are made
 
-- The nightly release is defined under `daq-release/configs/dunedaq-develop`, just as a frozen DAQ release:
-    - `release_manifest.sh` lists the external packages, DAQ packages and their versions;
-- A daily cronjob running on a server with cvmfs access will assemble a Docker image:
-    - based on `dunedaq/sl7-minimal:latest` image;
-    - a layer of disk mirror containing external packages from cvmfs;
-    - a layer of pre-built develop release;
-    - the image is tagged as `dunedaq/sl7-minimal:dev`;
-    - as well as a unique tag `dunedaq/sl7-minimal-nightly:NYY-MM-DD`.
-- A GitHub Action workflow in the `daq-release` repo:
-    - is configured to run one hour after the docker image was built, which will
-    - checkout the develop branch of `daq-release` and `daq-buildtools`;
-    - setup a working directory with only external packages from `dunedaq-develop` release;
-    - checkout develop branches of all DAQ packages and build the release;
-    - upload the pre-built release as ”artifacts” of the CI job.
+-The GitHub Workflows which perform the build-and-publish are defined in `.github/workflows/build-nightly-release-alma9.yml` and `build-nightly-release-sl7.yml`; note that they make use of `scripts/spack/build-release.sh` script to do so, which can also be run at the command line
+- Analogous to how frozen and candidate releases are made, the nightly release's packages are defined via `release.yaml` files in `configs/dunedaq/dunedaq-develop`,`configs/fddaq/fddaq-develop` and `configs/nddaq/nddaq-develop`
+-The Workflows will use the most recent versions of `daq-buildtools` and `daq-cmake` to build all the DUNE DAQ repos off of their `develop` branches, and upload the build as artifacts ([an example](https://github.com/DUNE-DAQ/daq-release/actions/runs/7435650740)).
+- The build is performed in an image which contains the externals packages and can be found in [the daq-docker repo](https://github.com/DUNE-DAQ/daq-docker); for the Alma9 build this image is `ghcr.io/dune-daq/alma9-slim-externals:v2.0` and for the SL7 build it's `ghcr.io/dune-daq/sl7-slim-externals:v1.1` 
+- The resulting builds are saved in the images `ghcr.io/dune-daq/nightly-release-alma9:latest` (Alna9 build on Alma9 OS), `ghcr.io/dune-daq/nightly-release-sl7:latest` (SL7 build on SL7 OS) and `ghcr.io/dune-daq/nightly-release-c8:latest` (SL7 build on Centos Stream 8 OS)
+-The workflow also publishes the builds automatically to `/cvmfs/dunedaq-development.opensciencegrid.org` 
 
----
-
-### Related Docker images
-
-- GitHub Repo: [daq-docker](https://github.com/DUNE-DAQ/daq-docker)
-    - `sl7-minimal` contains the `Dockerfile` for making `dunedaq/sl7-minimal:latest` image;
-    - any updates to the repo will trigger dockerhub to rebuild this image;
-    - `sl7-ci` contains the `Dockerfile` and scripts to make the `dunedaq/sl7-minimal:dev` image;
-    - it runs by a cronjob on a Fermilab server with access to cvmfs.
-- Dockerhub image: [dunedaq/sl7-minimal](https://hub.docker.com/repository/docker/dunedaq/sl7-minimal)
-- Dockerhub image: [dunedaq/sl7-minimal-nightly](https://hub.docker.com/repository/docker/dunedaq/sl7-minimal-nightly)
-
-
-### Nightly GitHub Action for `daq-release`
-
-- Workflow status page: [Nightly workflow](https://github.com/DUNE-DAQ/daq-release/actions)
-- [Workflow configuration file](https://github.com/DUNE-DAQ/daq-release/blob/develop/.github/workflows/nightly.yml)
-- [Latest workflow run](https://github.com/DUNE-DAQ/daq-release/actions/runs/762687473)
+_A snapshot of the [Actions page](https://github.com/DUNE-DAQ/daq-release/actions)_
 
 ![](https://i.imgur.com/gSITupq.png)
 
-## CI for DAQ packages
+## Per-repository CI
 
-- Runs inside `dunedaq/sl7-minimal:dev` docker container;
-- Use the latest develop/nightly release;
-- Only build individual DAQ package;
+- This is a build of the repository which runs inside `ghcr.io/dune-daq/nightly-release-alma9:latest`; i.e. the build is done against the latest nightly build
+
 - CI build is triggered by:
     - Push to develop;
     - Pull request to develop;
-    - Daily at 2:00am (CDT);
+    - Every night after the full nightly build is performed;
     - Manual trigger.
+
+- Defined in the [.github repository](https://github.com/DUNE-DAQ/.github/blob/develop/workflow-templates/dunedaq-develop-cpp-ci.yml)
+
+- Any change to this Workflow can be published to every individual repo using [this script](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/github-ci/sync-ci-workflow-to-template.sh)
+
+
 
 ### Instructions of setting CI workflow for a DAQ package
 
@@ -100,7 +73,6 @@ dbt-create.sh -r /cvmfs/dunedaq-development.opensciencegrid.org/nightly <NYY-MM-
 - the build log and pre-build package is saved for 90 days on GitHub;
 - You can add additional tests after the building step;
 - Almost all DAQ packages currently included in the release have CI workflow enabled.
-
 
 
 ![](https://i.imgur.com/9VUQhsy.png)
