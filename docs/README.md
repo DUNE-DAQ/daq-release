@@ -19,7 +19,7 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 
 ### For the Software Coordination team (expert only):
 
-1. [Nightly Releases and Continuous Integration](docs/ci_github_action.md)
+1. [Nightly Releases and Continuous Integration](ci_github_action.md)
 2. [Creating a new DAQ release](create_release_spack.md)
 3. [How to publish files to cvmfs](publish_to_cvmfs.md)
 4. [How to build a new stack of external software](Build-new-external-software-stack.md)
