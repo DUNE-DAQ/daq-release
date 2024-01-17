@@ -5,7 +5,7 @@ if (( $# < 4 || $# > 5 )); then
                         <desired detector release directory> 
                         <build type (fd, nd, or dune)> 
                         <OS (almalinux9 or scientific7)>
-                        <default repo branch (nightly only, default is develop)>" >&2
+                        (optional default repo branch (nightly only, default is develop) )" >&2
     exit 1
 fi
 

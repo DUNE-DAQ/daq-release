@@ -1,5 +1,5 @@
 ---
-    release: dunedaq-develop
+    release: dunedaq-v4.3.0
 
     type: dunedaq
 
@@ -8,8 +8,8 @@
           version: 1.77.0
           variant: "+context+container cxxstd=2a"
         - name: cetlib
-          version: 3.18.01
-          variant: "+lite"
+          version: 3.15.00
+          variant: ~
         - name: trace
           version: 3.17.09
           variant: ~
@@ -122,137 +122,134 @@
 
     dunedaq:
         - name: daq-cmake
-          version: v2.6.0
+          version: v2.4.0
           commit: null
         - name: ers
-          version: "develop"
+          version: v1.4.0
           commit: null
         - name: logging
-          version: "develop"
+          version: v1.0.8
           commit: null
         - name: cmdlib
-          version: "develop"
+          version: v1.1.7
           commit: null
         - name: restcmd
-          version: "develop"
+          version: v1.2.1
           commit: null
         - name: opmonlib
-          version: "develop"
+          version: v1.3.6
           commit: null
         - name: rcif
-          version: "develop"
+          version: v1.2.3
           commit: null
         - name: appfwk
-          version: "develop"
+          version: v2.9.0
           commit: null
         - name: listrev
-          version: "develop"
+          version: v3.3.0
           commit: null
         - name: utilities
-          version: "develop"
+          version: v2.4.0
           commit: null
         - name: erskafka
-          version: "develop"
+          version: v1.5.1
           commit: null
         - name: kafkaopmon
-          version: "develop"
+          version: v1.5.1
           commit: null
         - name: ipm
-          version: "develop"
+          version: v2.6.2
           commit: null
         - name: serialization
-          version: "develop"
+          version: v1.3.1
           commit: null
         - name: iomanager
-          version: "develop"
+          version: v1.4.0
           commit: null
         - name: dfmessages
-          version: "develop"
+          version: v2.7.0
           commit: null
         - name: detdataformats
-          version: "develop"
+          version: v4.0.0
           commit: null
         - name: trgdataformats
-          version: "develop"
+          version: v1.0.2
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: v1.6.0
           commit: null
         - name: daqdataformats
-          version: "develop"
+          version: v3.5.2
           commit: null
         - name: readoutlibs
-          version: "develop"
+          version: v1.5.3
           commit: null
         - name: readoutmodules
-          version: "develop"
+          version: v1.4.0
           commit: null
         - name: dfmodules
-          version: "develop"
+          version: v2.12.2
           commit: null
         - name: timing
-          version: "develop"
+          version: v7.5.0
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: v3.0.0
           commit: null
         - name: daqconf
-          version: "develop"
+          version: v7.1.0
           commit: null
         - name: trigger
-          version: "develop"
+          version: v1.6.1
           commit: null
         - name: triggeralgs
-          version: "develop"
+          version: v1.1.10
           commit: null
         - name: hdf5libs
-          version: "develop"
+          version: v2.6.0
           commit: null
         - name: okssystem
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: oksdbinterfaces
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: oks
-          version: "develop"
+          version: v1.0.1
           commit: null
         - name: genconfig
-          version: "develop"
+          version: v1.1.0
           commit: null
         - name: oksutils
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: coredal
-          version: "develop"
-          commit: null
-        - name: appdal
-          version: "develop"
+          version: v1.1.0
           commit: null
         - name: oksconfig
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: dbe
-          version: "develop"
+          version: v1.0.1
           commit: null
         - name: hsilibs
-          version: "develop"
+          version: v3.0.1
           commit: null
 
     others:
         - name: daq-release
-          version: "develop"
+          version: v2.3.0
           commit: null
         - name: daq-buildtools
-          version: "develop"
+          version: v7.4.0
           commit: null
         - name: daqsystemtest
-          version: "develop"
-          commit: null
-        - name: pocket
-          version: "develop"
+          version: v2.1.1
           commit: null
         - name: microservices
+          version: v1.6.0
+          commit: null
+        - name: pocket
           version: "develop"
           commit: null
         - name: dqm-backend

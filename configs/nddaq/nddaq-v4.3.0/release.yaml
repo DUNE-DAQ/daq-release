@@ -1,25 +1,25 @@
 ---
-    release: nddaq-develop
+    release: nddaq-v4.3.0
 
     type: nddaq
 
-    base_release: dunedaq-develop
+    base_release: dunedaq-v4.3.0
 
     nddaq:
         - name: lbrulibs
-          version: "develop"
+          version: v1.6.0
           commit: null
         - name: ndreadoutmodules
-          version: "develop"
+          version: v1.1.0
           commit: null
         - name: nddetdataformats
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: ndreadoutlibs
-          version: "develop"
+          version: v1.4.0
           commit: null
         - name: nddaqconf
-          version: "develop"
+          version: v1.1.0
           commit: null
 
     pymodules:

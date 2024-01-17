@@ -1,64 +1,63 @@
 # Development workflow
 
-We are following the [shared repository model](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-collaborative-development-models) and this [Git branching model](https://nvie.com/posts/a-successful-git-branching-model/) at the current stage of the DAQ software development. Under the `shared repository model`, developers are granted push access to a single shared repository. Topic branches are created when changes need to be made by following the `Git branching model`.
+Our workflow is based on the [shared repository model](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-collaborative-development-models) and this [Git branching model](https://nvie.com/posts/a-successful-git-branching-model/). Under the `shared repository model`, developers are granted push access to a single shared repository. Feature branches are created when specific changes need to be made, and merged into a shared `develop` branch when approved.
 
 ## Repository Access
 
-We use [two access roles](https://home.fnal.gov/~dingpf/repo_access_role.png) for each repo.
+There are two kinds of access role for each DUNE DAQ repo.
 
-* Maintain: one or two developers have the "Maintainer" role to each repository;
-* Write: a GitHub team of developers.
+* **Maintain**: one or two developers have the "Maintainer" role for the repo
+* **Write**: a GitHub team of developers has write access to the repo
 
-Teams are entities of the DUNE-DAQ project, thus they can be used across multiple repos.
-
-A team is usually managed by DAQ working group leaders. Developers obtain write access by being added into a team. Refer to the [List of teams and repositories](team_repos.md) page to find a list of teams and repositories each team has write access to.
+A team is defined at the level of [the GitHub DUNE-DAQ organization](https://github.com/DUNE-DAQ), thus being made a member of a team typically grants write access to a number of related repos. A team is usually managed by DAQ working group leaders. Developers obtain write access by being added into a team. Refer to the [List of teams and repositories](team_repos.md) page to find a list of teams and repositories each team has write access to.
 
 ## Branches of DAQ repositories
 
-* **Long-lived branches: `develop`** (default branch of each repository);
-* **Release preparation branches `prep-release/dunedaq-vX.Y.Z`** (i.e. `prep-release/dunedaq-v3.1.0`)
-    * branch off from the tag created on the `develop` branch at the time of tag collection during a release cycle;
-    * can be updated via PRs with at least one approval review before release cut-off time; 
-    * in general, should be merged to `develop` after release cut-off by the software coordination team;
-    * in case of partial merge (cherry-pick) to develop or no merge at all, developers should notify the software coordination team, and handle the partial merge by themselves. 
-* **Patch branches `patch/dunedaq-vX.Y.x`** (i.e. `patch/dunedaq-v3.0.x`)
-    * branch off from a tagged version used in the release where the fixes apply;
-    * if the fixes apply to develop branch and should be used by the future releases, merge the patch branch to `develop` after the patch release is made;
-    * in case of partial merge (cherry-pick) to develop or no merge at all, developers should notify the software coordination team, and handle the partial merge by themselves.
+We have four types of branch in our workflow:
 
-## Branch protection rules
-
-* **`develop`** branch: require pull requests. All commits must be made to a non-protected branch and submitted via a pull request before they can be merged.
-* **`patch/*` and `prep-release/*`** branches: in addition to requring pull requests for new commits, the pull request must have at least one approval review before they can be merged.
+* **`develop` branch** 
+    * The default branch of each repository. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs).  
+* **Feature branches**
+    * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
+* **Release preparation branches** 
+    * These are only intended for use if changes need to be made after the initial tags are made for a particular frozen release's release cycle
+    * Intended to be forked off the tag, _not_ the `develop` branch
+    * Can only be updated via PRs _with at least one approval review_ before release cut-off time 
+    * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
+    * Nomenclature: for a given release `vX.Y.Z`, `prep-release/dunedaq-vX.Y.Z` for changes to packages common to both ND and FD, `prep-release/fddaq-vX.Y.Z` for FD-related changes to any package, and `prep-release/nddaq-vX.Y.Z` for ND-related changes to any package
+* **Patch branches**  `patch/dunedaq-vX.Y.x`**
+    * Used for patch frozen releases; these are forked off of the final tags of the frozen releases we're patching
+    * Same rules for merging into `develop` branch apply here as apply to the prep-release branches
+    * Nomenclature is the same as for prep release branches, _except_ we leave the patch version a "variable". So, e.g., while a prep release branch for a FD-based `v4.4.0` release would be `prep-release/fddaq-v4.4.0`, if a `v4.4.1` patch released is based off it a patch release branch would be `patch/fddaq-v4.4.x`
 
 ## Tags of DAQ repositories
 
 We have two types of tags for DAQ repositories:
 
 * Version tags: 
-    * made by repo maintainers
-    * in the format of `vX.Y.Z` where `X`, `Y` and `Z` is a digit for `MAJOR, MINOR, PATCH` version respectively;
-    * at a minimum, if `X` is not advanced in a newer DAQ release, and a new tag is needed, the minor version `Y` should be advanced.
+    * Made by repo maintainers
+    * In the format of `vX.Y.Z` where `X`, `Y` and `Z` is a digit for `MAJOR, MINOR, PATCH` version respectively
+    * At a minimum, if `X` is not advanced in a newer DAQ release, and a new tag is needed, the minor version `Y` should be advanced.
 * DAQ release tags: 
-    * made by the software coordination team;
-    * alias to a version tag;
-    * in the format of `dunedaq-vX.X.X` where X is a digit.
+    * Made by the software coordination team;
+    * Aliased to a version tag;
+    * Nomenclature: `fddaq-vX.Y.Z` (FD packages), `nddaq-vX.Y.Z` (ND packages), `dunedaq-vX.Y.Z` (common packages) 
 
 ## Release cycle 
 
 We have adopted a three-phased release cycle:
-1. Phase-1, active development period;
-2. Phase-2, testing period;
-3. Phase-3, post release (patch release) period.
+1. Phase-1, active development period
+2. Phase-2, testing period
+3. Phase-3, post release (patch release) period
 
 ### Phase 1 - Active Development Period
  
-In this period, developers make frequent updates to the `develop` branch via pull requests. The workflow will be like the following:
+In this period, developers make frequent updates to the `develop` branch via pull requests. The workflow is as follows:
 
-1. Create a GitHub issue in the repo describe the code change. This is optional for small changes.
-2. Create a topic branch; (`git checkout develop; git checkout -b dingpf/issue_12_feature_dev_demo`)
-3. Make code development, commit, and push the topic branch to GitHub; (`git push -u origin dingpf/issue_12_feature_dev_demo`)
-4. Create a pull request to the `develop` branch and link the issue to the pull request if one was created in step 1;
+1. Create a GitHub Issue in the repo describing the code change. This is optional for small changes.
+2. Create a feature branch, preferably containing the GitHub user name of the creator and the Issue (if applicable). E.g. `git checkout develop; git checkout -b dingpf/issue_12_feature_dev_demo`
+3. Locally make commits to the feature branch and push it to GitHub; (`git push -u origin dingpf/issue_12_feature_dev_demo`)
+4. Create a pull request to the `develop` branch and link the issue to the pull request if applicable
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
 The active development period comes to an end when the develop branch is ready to be tagged. The procedure for this is described in the next section. It is _highly_ recommended that before this is done the package's codebase is checked for:
@@ -76,21 +75,18 @@ Details on the first two steps above can be found in the [daq-buildtools documen
 
 Developers need to bump the version of the package on the develop branch. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
 1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet is by convention linked to [from the top of the "Instructions for setting up a development area" page of the daqconf Wiki](https://github.com/DUNE-DAQ/daqconf/wiki/Instructions-for-setting-up-a-development-software-area)
-2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`, and go through a trivial PR if the `develop` branch hasn't yet had its protection rule removed by the software coordination team for the release process.
+2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`.
 3. With the `CMakeLists.txt` modification committed on `develop`, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
 4. Push your `develop` branch and your tag to the central repo: `git push origin develop; git push --tags`
 5. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
 #### During the testing period
 
-An initial candidate release will be built once the first round of tags are collected. That marks the start of the testing period. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible.
-1. Changes which do get made will be made to a `prep-release/dunedaq-v<X.Y.Z>` branch; if one doesn't exist, it should be created;
-2. This branch should be based on the initial tag for the release; 
-3. The fixes can be made to the `prep-release/dunedaq-v<X.Y.Z>` branch via pull requests with at lease one approval review.
+An initial candidate release will be built once the first round of tags are collected. That marks the start of the testing period. Any further changes made during the testing period should be agreed upon and significant - this is not a time for introducing minor new features, as we want to test as consistent a codebase as possible. Changes which do get made will be made to a prep release branch, as described earlier in this document. 
 
 ### Phase 3 - Post Release Period
 
-This is marked by the deployment of the release to cvmfs. No changes will be made to the deployed release, but critical bug fixes can be invited into an associated patch release. Once invited, developers should create a patch branch like `patch/dunedaq-vX.Y.x`, where `X` and `Y` denotes the MAJOR, MINOR release number, and lower-case letter `x` represents the PATCH. The patch branch should be based on the final tag used by the deployed frozen release. When the code on the patch branch is ready, the package maintainer should make a version tag for the patch release off the patch branch. 
+This is marked by the deployment of the release to cvmfs. No changes will be made to the deployed release, but critical bug fixes can be invited into an associated patch release. Changes which do get made will be made to a patch branch, as described earlier in this document. 
 
 
 
@@ -98,8 +94,8 @@ This is marked by the deployment of the release to cvmfs. No changes will be mad
 
 
 💡 If the targeted branch of a pull request has advanced, please do the following to bring the feature branch in sync before merging the PR:
-1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote;
-2. Switch back to the feature branch of the PR, merge the targeted branch into it, e.g. `git merge --no--ff <targeted branch name>`;
+1. Switch to the targeted branch, and do a `git pull` to make sure it stays in sync with the remote
+2. Switch back to the feature branch of the PR, merge the targeted branch into it, e.g. `git merge --no--ff <targeted branch name>`
 3. Push the merge to remote, and continue with the PR review/merge process.
 
 :red_circle: Please don't use `git rebase` or `git push --force`. It will likely bring unexpected consequences.

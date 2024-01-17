@@ -18,7 +18,7 @@ function git_checkout_and_update_ci {
     cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
     old_message=`git log -1|grep -v "^commit"`
-    git commit -am "syncing $(basename $workflow_file); previous commit: ${old_message}"
+    git commit -am "syncing $(basename $dest_workflow_file); previous commit: ${old_message}"
     git push --quiet
     popd
   done
@@ -32,8 +32,6 @@ pushd $tmp_dir
 git clone https://github.com/DUNE-DAQ/.github.git
 
 git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
-
-git_checkout_and_update_ci dune_packages_with_ci_nd $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci-nd.yml dunedaq-develop-cpp-ci.yml
 
 popd
 
