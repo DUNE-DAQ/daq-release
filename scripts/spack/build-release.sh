@@ -106,15 +106,15 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
 
     cd $DAQ_RELEASE_REPO
     /usr/bin/python3 scripts/spack/make-release-repo.py \
-        -o ${SPACK_AREA}/../ \
+        -o ${SPACK_AREA} \
         --pyvenv-requirements \
         -i ${release_yaml} \
         || exit 10
 
-    python -m venv --prompt dbt ${SPACK_AREA}/../.venv
-    source ${SPACK_AREA}/../.venv/bin/activate
+    python -m venv --prompt dbt ${SPACK_AREA}/.venv
+    source ${SPACK_AREA}/.venv/bin/activate
 
-    python -m pip install -r ${SPACK_AREA}/../pyvenv_requirements.txt
+    python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt
 
     pushd $DET_RELEASE_DIR
     cp $DAQ_RELEASE_REPO/$( dirname $release_yaml )/dbt-build-order.cmake .
