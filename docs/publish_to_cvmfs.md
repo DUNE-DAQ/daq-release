@@ -25,15 +25,15 @@ new version of daq-buildtools to cvmfs is an exception; this section
 also doubles as a concrete example of the commands in the previous
 section. Log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` and execute the following:
 
-1. cvmfs_server transaction dunedaq.opensciencegrid.org
-1. cd /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/
-1. git clone https://github.com/DUNE-DAQ/daq-buildtools
-1. rm -rf daq-buildtools/.git   # No need for git info on cvmfs
-1. mv daq-buildtools <version>
-1. rm latest
-1. ln -s <version> latest
-1. cd ~   # you can't run the next command from within /cvmfs
-1. cvmfs_server publish dunedaq.opensciencegrid.org
+1. `cvmfs_server transaction dunedaq.opensciencegrid.org`
+1. `cd /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`
+1. `git clone https://github.com/DUNE-DAQ/daq-buildtools`
+1. `rm -rf daq-buildtools/.git   # No need for git info on cvmfs`
+1. `mv daq-buildtools <version>`
+1. `rm latest`
+1. `ln -s <version> latest`
+1. `cd ~   # you can't run the next command from within /cvmfs`
+1. `cvmfs_server publish dunedaq.opensciencegrid.org`
 
 ## Updating releases on cvmfs
 
