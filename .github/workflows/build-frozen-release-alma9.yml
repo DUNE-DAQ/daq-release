@@ -116,7 +116,6 @@ jobs:
             tar xf ../${{ matrix.tag }}.tar.gz
             rm -rf ../${{ matrix.tag }}.tar.gz
 
-            cd ${{ matrix.tag }}; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile

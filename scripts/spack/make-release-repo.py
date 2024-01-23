@@ -242,7 +242,6 @@ class DAQRelease:
 
     def generate_pyvenv_requirements(self, output_file):
         with open(output_file, 'w') as f:
-            #f.write("--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple\n")
             for i in self.rdict['pymodules']:
                 iname = i["name"]
                 iversion = i["version"]

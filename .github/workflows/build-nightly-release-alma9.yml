@@ -164,13 +164,11 @@ jobs:
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq
-            cd last_fddaq; ln -s spack-*-gcc-* default; cd ..
 
             nddaq_tag="NAND${NIGHTLY_TAG}"
             tar xf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
             ln -s ${nddaq_tag} last_nddaq
-            cd last_nddaq; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
@@ -220,8 +218,9 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       run: |
           export DET=fd
+
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
+          setup_dbt latest || true
           dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
@@ -231,7 +230,7 @@ jobs:
       run: |
           export DET=nd
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
+          setup_dbt latest || true
           dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh

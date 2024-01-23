@@ -168,13 +168,11 @@ jobs:
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq_c8
-            cd last_fddaq_c8; ln -s spack-*-gcc-* default; cd ..
 
             nddaq_tag="NND${NIGHTLY_TAG}"
             tar xf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
             ln -s ${nddaq_tag} last_nddaq_c8
-            cd last_nddaq_c8; ln -s spack-*-gcc-* default; cd ..
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
