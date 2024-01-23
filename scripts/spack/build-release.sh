@@ -42,6 +42,10 @@ mkdir -p $SPACK_AREA
 cd $SPACK_AREA
 get_spack
 
+# This is for backwards compatibility, will fill this subdirectory with soft links later in this script
+OLD_SUBDIR=$SPACK_AREA/spack-0.20.0-gcc-12.1.0
+mkdir -p $OLD_SUBDIR
+
 if [[ "$DET" == "dune" ]]; then
   daqify_spack_environment base
   release_yaml=$( get_release_yaml "base" )
@@ -66,7 +70,7 @@ python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t spack-repos/${DET}daq-repo-template \
   -r ${RELEASE_TAG} \
-  -o ${SPACK_AREA}/spack-${SPACK_VERSION} \
+  -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
   ${branch_arg} \
   || exit 5
@@ -120,7 +124,20 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     cp $DAQ_RELEASE_REPO/$( dirname $release_yaml )/dbt-build-order.cmake .
     tar zcf venv.tar.gz .venv/
     popd
-
+    
 fi
+
+cd $OLD_SUBDIR
+ln -s ../spack-installation
+ln -s ../spack-0.20.0
+ln -s ../spec_*_log.txt
+cd ..
+ln -s $( basename $OLD_SUBDIR ) default
+
+echo "Files in $SPACK_AREA :"
+ls -ltr $SPACK_AREA
+
+echo "Files in $OLD_SUBDIR :"
+ls -ltr $OLD_SUBDIR
 
 spack clean -a

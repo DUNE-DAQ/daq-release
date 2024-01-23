@@ -95,7 +95,6 @@ done
 cd ${det}*-v* || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
-ln -s spack-*-gcc-* default
 
 cd $tmp_dir
 
