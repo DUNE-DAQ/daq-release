@@ -27,6 +27,9 @@
         - name: sspmodules
           version: "develop"
           commit: null
+        - name: tpgtools
+          version: "develop"
+          commit: null
         - name: flxlibs
           version: "develop"
           commit: null

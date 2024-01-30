@@ -56,6 +56,7 @@ dune_packages_with_ci=(
   "lbrulibs"
   "nddaqconf"
   "snbmodules"
+  "tpgtools"
 )
 
 dune_packages=(
