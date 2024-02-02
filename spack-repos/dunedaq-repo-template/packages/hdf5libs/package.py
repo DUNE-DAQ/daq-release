@@ -8,7 +8,7 @@ from spack import *
 
 
 class Hdf5libs(CMakePackage):
-    """FIXME: Put a proper description of your package here."""
+    """Classes that are used for interfacing between dunedaq data applications (writers and readers) and the HighFive library to read/write HDF5 files"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/hdf5libs/"
     git =      "https://github.com/DUNE-DAQ/hdf5libs.git"
@@ -22,6 +22,7 @@ class Hdf5libs(CMakePackage):
     depends_on("daqdataformats")
     depends_on("detdataformats")
     depends_on("detchannelmaps")
+    depends_on("trgdataformats")
     depends_on("cetlib")
     depends_on("ers")
     depends_on("daq-cmake")
