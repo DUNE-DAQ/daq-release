@@ -194,6 +194,9 @@
         - name: itsdangerous
           version: 2.0.1
           source:  pypi
+        - name: lxml
+          version: 5.1.0
+          source: pypi
         - name: jdcal
           version: 1.4.1
           source:  pypi
