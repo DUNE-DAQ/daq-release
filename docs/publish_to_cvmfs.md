@@ -27,7 +27,7 @@ section. Log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` and execute the follo
 
 1. `cvmfs_server transaction dunedaq.opensciencegrid.org`
 1. `cd /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`
-1. `git clone https://github.com/DUNE-DAQ/daq-buildtools`
+1. `git clone https://github.com/DUNE-DAQ/daq-buildtools.git -b <version>`
 1. `rm -rf daq-buildtools/.git   # No need for git info on cvmfs`
 1. `mv daq-buildtools <version>`
 1. `rm latest`
