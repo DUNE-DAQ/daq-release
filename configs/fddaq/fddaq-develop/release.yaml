@@ -6,7 +6,16 @@
     base_release: dunedaq-develop
 
     fddaq:
-        - name: rawdatautils
+        - name: ctbmodules
+          version: "develop"
+          commit: null
+        - name: daqsystemtest
+          version: "develop"
+          commit: null
+        - name: dpdklibs
+          version: "develop"
+          commit: null
+        - name: fddaqconf
           version: "develop"
           commit: null
         - name: fddetdataformats
@@ -18,10 +27,16 @@
         - name: fdreadoutmodules
           version: "develop"
           commit: null
-        - name: dpdklibs
+        - name: flxlibs
           version: "develop"
           commit: null
         - name: hermesmodules
+          version: "develop"
+          commit: null
+        - name: rawdatautils
+          version: "develop"
+          commit: null
+        - name: snbmodules
           version: "develop"
           commit: null
         - name: sspmodules
@@ -30,27 +45,13 @@
         - name: tpgtools
           version: "develop"
           commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
         - name: uhallibs
           version: "develop"
           commit: null
         - name: wibmod
           version: "develop"
           commit: null
-        - name: ctbmodules
-          version: "develop"
-          commit: null
-        - name: snbmodules
-          version: "develop"
-          commit: null
-        - name: fddaqconf
-          version: "develop"
-          commit: null
-        - name: daqsystemtest
-          version: "develop"
-          commit: null
+
 
     pymodules:
         - name: pip

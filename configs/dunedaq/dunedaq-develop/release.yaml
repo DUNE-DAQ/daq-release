@@ -190,6 +190,9 @@
         - name: dfmodules
           version: "develop"
           commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
         - name: timing
           version: "develop"
           commit: null
@@ -199,31 +202,34 @@
         - name: daqconf
           version: "develop"
           commit: null
-        - name: trgtools
-          version: "develop"
-          commit: null
         - name: trigger
           version: "develop"
           commit: null
         - name: triggeralgs
           version: "develop"
           commit: null
+        - name: trgtools
+          version: "develop"
+          commit: null
         - name: hdf5libs
-          version: "develop"
-          commit: null
-        - name: okssystem
-          version: "develop"
-          commit: null
-        - name: oksdbinterfaces
           version: "develop"
           commit: null
         - name: oks
           version: "develop"
           commit: null
-        - name: genconfig
+        - name: okssystem
           version: "develop"
           commit: null
         - name: oksutils
+          version: "develop"
+          commit: null
+        - name: oksconfig
+          version: "develop"
+          commit: null
+        - name: oksdbinterfaces
+          version: "develop"
+          commit: null
+        - name: genconfig
           version: "develop"
           commit: null
         - name: coredal
@@ -232,13 +238,7 @@
         - name: appdal
           version: "develop"
           commit: null
-        - name: oksconfig
-          version: "develop"
-          commit: null
         - name: dbe
-          version: "develop"
-          commit: null
-        - name: hsilibs
           version: "develop"
           commit: null
 
