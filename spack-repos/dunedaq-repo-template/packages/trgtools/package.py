@@ -7,28 +7,24 @@
 from spack import *
 
 
-class Tpgtools(CMakePackage):
-    """A collection of utility tools and applications to emulate, plot, parse and test Trigger Primitive Generation algorithms"""
+class Trgtools(CMakePackage):
+    """Trigger emulation and analysis tools"""
 
-    homepage = "https://github.com/DUNE-DAQ/tpgtools"
-    git      = "https://github.com/DUNE-DAQ/tpgtools.git"
+    homepage = "https://github.com/DUNE-DAQ/trgtools"
+    git      = "https://github.com/DUNE-DAQ/trgtools.git"
 
     maintainers = ['jcfreeman2']
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("logging")
-    depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("daqdataformats")
-    depends_on("detchannelmaps")
-    depends_on("detdataformats")
-    depends_on("fddetdataformats")
-    depends_on("trigger")
-    depends_on("hdf5libs")
+    depends_on("cli11")
+    depends_on("fmt")
+    depends_on("nlohmann-json")
 
-    depends_on("boost")
+    depends_on("hdf5libs")
+    depends_on("trgdataformats")
+    depends_on("triggeralgs")
+    depends_on("detchannelmaps")
 
     depends_on("daq-cmake")
 

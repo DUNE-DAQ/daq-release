@@ -199,6 +199,9 @@
         - name: daqconf
           version: "develop"
           commit: null
+        - name: trgtools
+          version: "develop"
+          commit: null
         - name: trigger
           version: "develop"
           commit: null
