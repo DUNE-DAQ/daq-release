@@ -43,7 +43,7 @@
           version: v1.3.0
           commit: null
         - name: tpgtools
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: uhallibs
           version: v1.2.0
