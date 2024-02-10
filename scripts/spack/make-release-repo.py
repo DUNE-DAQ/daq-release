@@ -7,25 +7,12 @@ import shutil
 import subprocess
 import tempfile
 
+from dr_tools import parse_yaml_file
 
 class MyDumper(yaml.Dumper):
 
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
-
-
-def parse_yaml_file(fname):
-    if not os.path.exists(fname):
-        print("Error: -- YAML file {} does not exist".format(fname))
-        exit(20)
-    fman = ""
-    with open(fname, 'r') as stream:
-        try:
-            fman = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-    return fman
-
 
 def check_output(cmd):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -266,7 +253,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='make-release-repo.py',
         description="Parse DUNE DAQ release manifest files.",
-        epilog="Questions and comments to dingpf@fnal.gov",
+        epilog="Questions and comments to jcfree@fnal.gov",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-t', '--template-path',
                         default="../../spack-repos/packages",

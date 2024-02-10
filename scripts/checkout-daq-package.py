@@ -6,18 +6,7 @@ import argparse
 import subprocess
 import re
 
-def parse_yaml_file(fname):
-    if not os.path.exists(fname):
-        print("Error: -- YAML file {} does not exist".format(fname))
-        exit(20)
-    fman = ""
-    with open(fname, 'r') as stream:
-        try:
-            fman = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-    return fman
-
+from spack.dr_tools import parse_yaml_file
 
 def check_output(cmd, is_success_required = True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
