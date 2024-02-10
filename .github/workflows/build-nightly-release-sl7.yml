@@ -343,7 +343,7 @@ jobs:
         cd /cvmfs/\$REPO
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*-??-?? \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*_DEV_* \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
 
