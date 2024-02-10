@@ -29,7 +29,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y-%m-%d)
-          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}${date_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
@@ -52,8 +52,8 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAFD${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -66,14 +66,14 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NAB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAFD${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -86,14 +86,14 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NAFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the nddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NAND${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NND${NIGHTLY_TAG}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -106,7 +106,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nightly_nddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NAND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
 
   update_image:
@@ -156,16 +156,16 @@ jobs:
             mkdir -p nightly
 
             cd nightly
-            base_tag="NAB${NIGHTLY_TAG}"
+            base_tag="NB${NIGHTLY_TAG}"
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
-            fddaq_tag="NAFD${NIGHTLY_TAG}"
+            fddaq_tag="NFD${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq
 
-            nddaq_tag="NAND${NIGHTLY_TAG}"
+            nddaq_tag="NND${NIGHTLY_TAG}"
             tar xf ../${nddaq_tag}.tar.gz
             rm -rf ../${nddaq_tag}.tar.gz
             ln -s ${nddaq_tag} last_nddaq
