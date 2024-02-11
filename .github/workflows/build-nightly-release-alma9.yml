@@ -28,7 +28,7 @@ jobs:
     steps:
       - id: create_nightly_tag
         run: |
-          date_tag=$(date +%y-%m-%d)
+          date_tag=$(date +%y%m%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
