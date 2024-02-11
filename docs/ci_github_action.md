@@ -23,15 +23,16 @@ _JCF, Jan-6-2024: the CI dashboard below hasn't worked for some time. It would b
 
 ## Nightly build DAQ releases
 
-- Built off the `HEAD` of the `develop` branches of the relevant DAQ repositories
+- As of Feb-11-2024, there are nightly builds both for the longer-term `v5`-focused development and for shorter-term `v4`-focused development used for data taking at `np04`
+- Built off the `HEAD` of the `develop` or `production/v4` branches of the relevant DAQ repositories
 - Builds in GitHub Actions every night, scheduled not to interfere with American or European working hours
 - Published (deployed) to `/cvmfs/dunedaq-development.opensciencegrid.org`
 
 ### How the nightly releases are made
 
 - The GitHub Workflows which perform the build-and-publish are defined in `.github/workflows/build-nightly-release-alma9.yml` and `build-nightly-release-sl7.yml`; note that they make use of `scripts/spack/build-release.sh` script to do so, which can also be run at the command line
-- Analogous to how frozen and candidate releases are made, the nightly release's packages are defined via `release.yaml` files in `configs/dunedaq/dunedaq-develop`,`configs/fddaq/fddaq-develop` and `configs/nddaq/nddaq-develop`
-- The Workflows will use the most recent versions of `daq-buildtools` and `daq-cmake` to build all the DUNE DAQ repos off of their `develop` branches, and upload the build as artifacts ([an example](https://github.com/DUNE-DAQ/daq-release/actions/runs/7435650740)).
+- Analogous to how frozen and candidate releases are made, the nightly release's packages are defined via `release.yaml` files in `configs/dunedaq/dunedaq-develop`,`configs/fddaq/fddaq-develop` and `configs/nddaq/nddaq-develop` OR `configs/dunedaq/dunedaq-production_v4` and `configs/fddaq/fddaq-production_v4`
+- The Workflows will use the most recent versions of `daq-buildtools` and `daq-cmake` to build all the DUNE DAQ repos off of their `develop` or `production/v4` branches, and upload the build as artifacts ([an example](https://github.com/DUNE-DAQ/daq-release/actions/runs/7435650740)).
 - The build is performed in an image which contains the externals packages and can be found in [the daq-docker repo](https://github.com/DUNE-DAQ/daq-docker); for the Alma9 build this image is `ghcr.io/dune-daq/alma9-slim-externals:v2.0` and for the SL7 build it's `ghcr.io/dune-daq/sl7-slim-externals:v1.1` 
 - The resulting builds are saved in the images `ghcr.io/dune-daq/nightly-release-alma9:latest` (Alma9 build on Alma9 OS), `ghcr.io/dune-daq/nightly-release-sl7:latest` (SL7 build on SL7 OS) and `ghcr.io/dune-daq/nightly-release-c8:latest` (SL7 build on Centos Stream 8 OS)
 - The workflow also publishes the builds automatically to `/cvmfs/dunedaq-development.opensciencegrid.org` 
