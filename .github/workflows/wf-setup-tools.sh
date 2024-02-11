@@ -4,8 +4,10 @@ if [[ -z $BASE_RELEASE_DIR || -z $DET_RELEASE_DIR || -z $OS ]]; then
     return 1
 fi
 
-if [[ $BASE_RELEASE_DIR =~ "/nightly" ]]; then
+if [[ $BASE_RELEASE_DIR =~ "_DEV_" ]]; then
     export RELEASE_TYPE="nightly"
+elif [[ $BASE_RELEASE_DIR =~ "_PROD_" ]]; then
+    export RELEASE_TYPE="production_v4"
 elif [[ $BASE_RELEASE_DIR =~ "/candidate" ]]; then
     export RELEASE_TYPE="candidate"
 elif [[ $BASE_RELEASE_DIR =~ "/release" ]]; then
@@ -37,17 +39,6 @@ export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${
 
 export DET_SPACK_AREA=$DET_RELEASE_DIR
 export BASE_SPACK_AREA=$BASE_RELEASE_DIR
-
-if [[ $RELEASE_TYPE == "frozen" ]]; then
-
-    if [[ -z $BUILD_NUMBER ]]; then
-        echo "BUILD_NUMBER needs to be defined for a frozen release build" >&2
-        return 10   
-    fi
-
-    export DET_SPACK_AREA=${DET_SPACK_AREA}/b${BUILD_NUMBER}
-    export BASE_SPACK_AREA=${BASE_SPACK_AREA}/b${BUILD_NUMBER}
-fi
 
 function get_spack() {
 
@@ -165,6 +156,8 @@ function get_release_yaml() {
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
             echo -n "configs/dunedaq/dunedaq-develop/release.yaml"
+        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
+            echo -n "configs/dunedaq/dunedaq-production_v4/release.yaml"
 	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
             echo -n "configs/dunedaq/dunedaq-${version}/release.yaml"
         fi
@@ -173,6 +166,8 @@ function get_release_yaml() {
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-develop/release.yaml"
+        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
+            echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
         elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-${version}/release.yaml"
         fi
