@@ -58,13 +58,23 @@ elif [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
   export RELEASE_TAG=$DET_RELEASE_TAG
 fi
 
-if [[ $RELEASE_TYPE == "nightly" ]]; then
+if [[ $RELEASE_TYPE == "nightly" || RELEASE_TYPE == "production_v4" ]]; then
   branch_arg="-b "${DEFAULT_BRANCH}
 else
   branch_arg=""
 fi
 
 cd $DAQ_RELEASE_REPO
+
+echo python3 scripts/spack/make-release-repo.py -u \
+  -i ${release_yaml} \
+  -t spack-repos/${DET}daq-repo-template \
+  -r ${RELEASE_TAG} \
+  -o ${SPACK_AREA}/spack-installation \
+  ${base_release_arg} \
+  ${branch_arg} \
+  || exit 5
+
 
 python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \

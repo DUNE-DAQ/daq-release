@@ -6,7 +6,7 @@ fi
 
 if [[ $BASE_RELEASE_DIR =~ "_DEV_" ]]; then
     export RELEASE_TYPE="nightly"
-elif [[ $BASE_RELEASE_DIR =~ "_PROD_" ]]; then
+elif [[ $BASE_RELEASE_DIR =~ "_PROD4_" ]]; then
     export RELEASE_TYPE="production_v4"
 elif [[ $BASE_RELEASE_DIR =~ "/candidate" ]]; then
     export RELEASE_TYPE="candidate"
