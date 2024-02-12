@@ -58,7 +58,7 @@ elif [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
   export RELEASE_TAG=$DET_RELEASE_TAG
 fi
 
-if [[ $RELEASE_TYPE == "nightly" || RELEASE_TYPE == "production_v4" ]]; then
+if [[ $RELEASE_TYPE == "nightly" || $RELEASE_TYPE == "production_v4" ]]; then
   branch_arg="-b "${DEFAULT_BRANCH}
 else
   branch_arg=""
