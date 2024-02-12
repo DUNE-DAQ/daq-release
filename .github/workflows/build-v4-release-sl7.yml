@@ -1,0 +1,281 @@
+name: SL7 build v4.3.0 production nightly release
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'nightly tag prefix'
+        default: ''
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag and decide if deploying to cvmfs
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_PROD4_${date_tag}_C8"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  build_the_develop_release_spack:
+    name: build_dev_release_spack
+    runs-on: ubuntu-latest
+    needs: make_nightly_tag
+    container:
+      image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Checkout daq-release
+      uses: actions/checkout@v3
+      with:
+        path: daq-release
+
+    - name: setup directories and install spack for the dunedaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+          export OS=scientific7
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS production/v4
+
+          cd $BASE_RELEASE_DIR/../
+          tar_and_stage_release ${BASE_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for base release
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_dunedaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
+    - name: setup directories and install spack for the fddaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+          export OS=scientific7
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS production/v4
+
+          cd $DET_RELEASE_DIR/../
+          tar_and_stage_release ${DET_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for far detector release
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_fddaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
+  update_image:
+    name: update_spack_image_nightly
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
+            output_image: "ghcr.io/dune-daq/nightly-release-sl7"
+            tag: "latest"
+          - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
+            output_image: "ghcr.io/dune-daq/nightly-release-c8"
+            tag: "latest"
+    needs: [build_the_develop_release_spack, make_nightly_tag] 
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
+      - name: Download spack nightly release tarball artifact for base release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_dunedaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for far detector release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_fddaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p nightly
+
+            cd nightly
+            base_tag="NB${NIGHTLY_TAG}"
+            tar xf ../${base_tag}.tar.gz
+            rm -rf ../${base_tag}.tar.gz
+
+            fddaq_tag="NFD${NIGHTLY_TAG}"
+            tar xf ../${fddaq_tag}.tar.gz
+            rm -rf ../${fddaq_tag}.tar.gz
+            ln -s ${fddaq_tag} last_fddaq_c8
+
+            cd ..
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ matrix.output_image }}
+          tags: |
+            type=raw,value=${{ matrix.tag }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env
+    runs-on: ubuntu-latest
+    needs: update_image
+    container:
+      image: ghcr.io/dune-daq/nightly-release-sl7:latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+      run: |
+          export DET=fd
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -n last_${DET}daq_c8
+          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
+
+    - name: upload fddaq-dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+
+    - name: upload fddaq_app_rte.sh
+      uses: actions/upload-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq_app_rte.sh
+
+  publish_to_cvmfs:
+    name: publish to cvmfs
+    needs: generate_dbt_setup_release_env
+    runs-on: isc01
+
+    steps:
+    - name: check_cvmfs_deployment
+      id: do_deployment
+      run: |
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
+      continue-on-error: true
+
+    - name: download fddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddaq-release
+
+    - name: download fddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v3
+      with:
+        name: fddaq_app_rte
+        path: ${{ github.workspace }}/fddaq-rte
+
+    - name: start docker container, and then rsync... 
+      if: steps.do_deployment.outcome == 'success'
+      run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+        IMAGE="ghcr.io/dune-daq/nightly-release-sl7:latest"
+
+        cd $GITHUB_WORKSPACE
+        cat << EOT > publish.sh
+        #!/bin/bash
+        
+        
+        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
+        dbt-setup-release -n last_fddaq_c8
+        
+        export KRB5CCNAME=$(mktemp)
+        /scratch-home/get-ticket.sh
+
+        klist -l
+        
+        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq_c8
+        mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
+        mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
+        
+        export CVMFS_SERVER="oasiscfs01.fnal.gov"
+        export CVMFS_USER="cvmfsdunedaqdev"
+        export REPO=dunedaq-development.opensciencegrid.org
+        export DEST=/cvmfs/\$REPO/nightly
+        
+        spack clean -a
+        # Open transaction
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
+        # rsync
+        cd /cvmfs/\$REPO
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq_c8 \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*_PROD4_* \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
+        # publish
+        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
+
+        rm -rf /scratch/*daq-*
+        EOT
+        chmod +x publish.sh
+
+        docker pull $IMAGE
+        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
+        rm -f $GITHUB_WORKSPACE/publish.sh
