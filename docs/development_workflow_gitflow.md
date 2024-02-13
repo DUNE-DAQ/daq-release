@@ -24,7 +24,7 @@ We have four types of branch in our workflow:
     * Intended to be forked off the tag, _not_ the `<common branch>`
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time 
     * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `<common branch>`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
-    * Nomenclature: for a given release `vX.Y.Z`, `prep-release/dunedaq-vX.Y.Z` for changes to packages common to both ND and FD, `prep-release/fddaq-vX.Y.Z` for FD-related changes to any package, and `prep-release/nddaq-vX.Y.Z` for ND-related changes to any package
+    * Nomenclature: for a given release `fddaq-vX.Y.Z` use `prep-release/fddaq-vX.Y.Z` and similarly `prep-release/nddaq-vX.Y.Z` for `nddaq-vX.Y.Z`
 * **Patch branches**  `patch/dunedaq-vX.Y.x`**
     * Used for patch frozen releases; these are forked off of the final tags of the frozen releases we're patching
     * Same rules for merging into `<common branch>` apply here as apply to the prep-release branches
