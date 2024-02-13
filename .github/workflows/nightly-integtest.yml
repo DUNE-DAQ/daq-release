@@ -53,8 +53,15 @@ jobs:
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-minimal.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
           pytest --junit-xml=$GITHUB_WORKSPACE/test-results-fake-data.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-readout-scan.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/readout_type_scan.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-3ru-1df.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/3ru_1df_multirun_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-3ru-3df.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/3ru_3df_multirun_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-long-readout.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-readout-type.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/readout_type_scan.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-small-footprint.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-tpstream-writing.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/tpstream_writing_test.py
           cd $GITHUB_WORKSPACE
           rm -rf minimal_test_$NIGHTLY_TAG
           rm -rf daqsystemtest
