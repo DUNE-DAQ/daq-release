@@ -54,6 +54,7 @@ jobs:
           type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/test-results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/test-results-fake-data.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
           cd $GITHUB_WORKSPACE
           rm -rf minimal_test_$NIGHTLY_TAG
           rm -rf daqsystemtest
