@@ -81,36 +81,36 @@ function daqify_spack_environment() {
    if [[ "$release_level" == "base" ]]; then
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
-          repos:
-            - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
+repos:
+  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+  - \$spack/var/spack/repos/builtin
 EOF
 
 
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
-          upstreams:
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+upstreams:
+  spack-externals:
+    install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
 
     elif [[ "$release_level" == "det" ]]; then
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
-          repos:
-            - ${DET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
+repos:
+  - ${DET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+  - \$spack/var/spack/repos/builtin
 EOF
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
-          upstreams:
-            ${BASE_RELEASE_TAG}:
-              install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+upstreams:
+  ${BASE_RELEASE_TAG}:
+    install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
+  spack-externals:
+    install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
 
     fi
