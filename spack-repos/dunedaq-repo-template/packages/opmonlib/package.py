@@ -23,6 +23,7 @@ class Opmonlib(CMakePackage):
     depends_on('ers')
     depends_on('logging')
     depends_on('nlohmann-json')
+    depends_on('abseil-cpp')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
