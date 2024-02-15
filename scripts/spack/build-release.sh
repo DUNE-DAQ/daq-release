@@ -104,7 +104,7 @@ if [[ $DET == "dune" ]]; then
     cat $SPACK_AREA/spec_dbe_log.txt
 
     if [[ $retval != 0 ]]; then
-        exit 21	
+        echo "Building dbe does not appear to be possible. As this is not (necessarily) an error, will continue..."
     fi
 fi
 
