@@ -1,4 +1,4 @@
-name: Nightly Integration Test
+name: Nightly integration tests
 
 on:
   schedule:
@@ -23,8 +23,8 @@ jobs:
           echo "nightly_tag=NFD_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
-  integration_test:
-    name: integration_test
+  integration_tests:
+    name: integration_tests
     runs-on: isc01
     needs: make_nightly_tag
     defaults:
@@ -44,8 +44,8 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           DET=fd
-          mkdir -p $GITHUB_WORKSPACE/integration_test_$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/integration_test_$NIGHTLY_TAG
+          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n $NIGHTLY_TAG
@@ -58,7 +58,7 @@ jobs:
           pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
           pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
           cd $GITHUB_WORKSPACE
-          rm -rf integration_test_$NIGHTLY_TAG
+          rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
 
     - name: Surface failing tests
