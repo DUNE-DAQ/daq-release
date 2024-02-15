@@ -1,4 +1,4 @@
-name: Nightly Integration Test Workflow
+name: Nightly integration tests
 
 on:
   schedule:
@@ -23,8 +23,8 @@ jobs:
           echo "nightly_tag=NFD_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
-  minimal_system_integration_test:
-    name: minimal_system_integration_test
+  integration_tests:
+    name: integration_tests
     runs-on: isc01
     needs: make_nightly_tag
     defaults:
@@ -44,8 +44,8 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           DET=fd
-          mkdir -p $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/minimal_test_$NIGHTLY_TAG
+          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n $NIGHTLY_TAG
@@ -53,16 +53,20 @@ jobs:
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/minimal-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/fake-data-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
           cd $GITHUB_WORKSPACE
-          rm -rf minimal_test_$NIGHTLY_TAG
+          rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
 
     - name: Surface failing tests
       if: always()
-      uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+      #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+      uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
       with:
-        path: ${{ github.workspace }}/test-results.xml
+        path: ${{ github.workspace }}/*-test-results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
