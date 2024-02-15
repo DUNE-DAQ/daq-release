@@ -64,7 +64,7 @@ jobs:
     - name: Surface failing tests
       if: always()
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
-      uses: andrewmogan/pytest-results-action@aa56e43eecc41ee1d096c34b2bda26851e1fbece
+      uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
       with:
         path: ${{ github.workspace }}/*-test-results.xml
         summary: true
