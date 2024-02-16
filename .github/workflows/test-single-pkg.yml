@@ -27,7 +27,7 @@ jobs:
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: /var/lib/cvmfs/shared
         key: cachecvmfs
@@ -137,7 +137,7 @@ jobs:
 
     - name: Cache cvmfs cache
       id: cvmfs_cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: /var/lib/cvmfs/shared
         key: cachecvmfs
