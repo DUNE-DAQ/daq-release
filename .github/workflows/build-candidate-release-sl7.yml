@@ -113,7 +113,7 @@ jobs:
             mkdir -p candidates
 
             cd candidates
-            base_tag=rc-${{ github.event.inputs.base-release }}-${{ github.event.inputs.build-number }}
+            base_tag=${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-c8
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
