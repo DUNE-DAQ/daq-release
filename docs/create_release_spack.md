@@ -56,7 +56,7 @@ It's worth to do several checks before starting any test builds. These checks in
     * Set up a work area based on the candidate release
     * If it's a far detector release, clone and build `daqsystemtest` used in this release and run `minimal_system_quick_test.py` in its `integtest` sub-directory
     * The above tests should be run on at least one NP04 DAQ server, and one Fermilab server
-* Repeat all the above steps with "SL7" replacing "Alma9". _This will count as a new candidate build, so make sure the GitHub Action is given a different build number than the Alma9 build_.
+* Repeat all the above steps with "SL7" replacing "Alma9". 
 
 ## Building the frozen release
 
