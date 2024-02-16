@@ -200,7 +200,7 @@
           version: v3.1.0
           commit: null
         - name: daqconf
-          version: v7.2.0
+          version: v7.2.1
           commit: null
         - name: trigger
           version: v1.7.0
@@ -209,7 +209,7 @@
           version: v1.2.0
           commit: null
         - name: trgtools
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: hdf5libs
           version: v2.7.0
