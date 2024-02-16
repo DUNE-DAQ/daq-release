@@ -32,26 +32,21 @@ fi
 REPO=
 SOURCE_DIR=
 DEST_DIR=
-BASE_WILDCARD=
-DET_WILDCARD=
 
 if [[ $build == "candidate" ]]; then
     REPO="dunedaq-development.opensciencegrid.org"
     SOURCE_DIR="candidates"
     DEST_DIR=/cvmfs/$REPO/candidates
 
-    BASE_WILDCARD='rc-v*'
-    DET_WILDCARD=$det'-v*'
-    
 elif [[ $build == "frozen" ]]; then
     REPO="dunedaq.opensciencegrid.org"
     SOURCE_DIR="releases"
     DEST_DIR=/cvmfs/$REPO/spack/releases
 
-    BASE_WILDCARD='dunedaq-v*'
-    DET_WILDCARD=$det'daq-v*'
-
 fi
+
+BASE_WILDCARD='dunedaq-v*'
+DET_WILDCARD=$det'daq-v*'
 
 tmp_dir=$(mktemp --tmpdir=/dev/shm -d -t release_XXXXXXXXXX)
 
