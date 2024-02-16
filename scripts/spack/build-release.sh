@@ -97,20 +97,24 @@ if [[ $retval != 0 ]]; then
     exit 20
 fi
 
+build_dbe=false
 if [[ $DET == "dune" ]]; then
     spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
     cat $SPACK_AREA/spec_dbe_log.txt
 
-    if [[ $retval != 0 ]]; then
+    if [[ $retval == 0 ]]; then
+	build_dbe=true
+    else
+	build_dbe=false
         echo "Building dbe does not appear to be possible. As this is not (necessarily) an error, will continue..."
     fi
 fi
 
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
-if [[ $DET == "dune" ]]; then
+if $build_dbe; then
     spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
 fi
 
