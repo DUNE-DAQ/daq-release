@@ -119,6 +119,11 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     spack load ${DET}daq@${RELEASE_TAG} || exit 9
 
     cd $DAQ_RELEASE_REPO
+    echo /usr/bin/python3 scripts/spack/make-release-repo.py \
+        -o ${SPACK_AREA} \
+        --pyvenv-requirements \
+        -i ${release_yaml}
+
     /usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA} \
         --pyvenv-requirements \
