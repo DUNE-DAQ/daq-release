@@ -50,7 +50,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: candidates_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/rc-${{ github.event.inputs.base-release }}-${{ github.event.inputs.build-number }}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
