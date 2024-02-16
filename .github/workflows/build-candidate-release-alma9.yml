@@ -110,7 +110,7 @@ jobs:
             mkdir -p candidates
 
             cd candidates
-            base_tag=dunedaq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
+            base_tag=dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
