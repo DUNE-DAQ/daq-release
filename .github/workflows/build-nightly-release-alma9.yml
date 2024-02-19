@@ -117,7 +117,7 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "latest"
+            tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -192,7 +192,7 @@ jobs:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=latest
+            type=raw,value=development_v5
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -208,7 +208,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:latest
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
       run:
         shell: bash
@@ -308,7 +308,7 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:latest"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh

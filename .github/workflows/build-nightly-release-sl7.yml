@@ -118,10 +118,10 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
             output_image: "ghcr.io/dune-daq/nightly-release-sl7"
-            tag: "latest"
+            tag: "development_v5"
           - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
             output_image: "ghcr.io/dune-daq/nightly-release-c8"
-            tag: "latest"
+            tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -211,7 +211,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/nightly-release-sl7:latest
+      image: ghcr.io/dune-daq/nightly-release-sl7:development_v5
     defaults:
       run:
         shell: bash
@@ -309,7 +309,7 @@ jobs:
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
-        IMAGE="ghcr.io/dune-daq/nightly-release-sl7:latest"
+        IMAGE="ghcr.io/dune-daq/nightly-release-sl7:development_v5"
 
         cd $GITHUB_WORKSPACE
         cat << EOT > publish.sh
