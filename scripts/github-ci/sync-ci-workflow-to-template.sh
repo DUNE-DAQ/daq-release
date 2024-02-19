@@ -17,8 +17,7 @@ function git_checkout_and_update_ci {
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
-    old_message=`git log -1|grep -v "^commit"`
-    git commit -am "syncing $(basename $dest_workflow_file); previous commit: ${old_message}"
+    git commit -am "Syncing .github/workflows/$(basename $dest_workflow_file)"
     git push --quiet
     popd
   done
