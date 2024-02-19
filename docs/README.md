@@ -7,7 +7,6 @@
 
 [![Spack Nightly Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml)
 
-
 This is a repo containing DUNE DAQ release making tools, configuration files, and build scripts for both DUNE-DAQ and external packages. 
 
 ## Table of contents
@@ -23,3 +22,113 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 2. [Creating a new DAQ release](create_release_spack.md)
 3. [How to publish files to cvmfs](publish_to_cvmfs.md)
 4. [How to build a new stack of external software](Build-new-external-software-stack.md)
+
+# Single-Repo CI Build Status
+
+Feb-19-2024: CI build failures do to container issues, not code issues. John’s working on it.
+
+appdal: [![appdal](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+appfwk: [![appfwk](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+coredal: [![coredal](https://github.com/DUNE-DAQ/coredal/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/coredal/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+daq-cmake: [![daq-cmake](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+daqconf: [![daqconf](https://github.com/DUNE-DAQ/daqconf/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daqconf/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+daqdataformats: [![daqdataformats](https://github.com/DUNE-DAQ/daqdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daqdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+dbe: [![dbe](https://github.com/DUNE-DAQ/dbe/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/dbe/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+detchannelmaps: [![detchannelmaps](https://github.com/DUNE-DAQ/detchannelmaps/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/detchannelmaps/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+detdataformats: [![detdataformats](https://github.com/DUNE-DAQ/detdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/detdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+dfmessages: [![dfmessages](https://github.com/DUNE-DAQ/dfmessages/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/dfmessages/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+dfmodules: [![dfmodules](https://github.com/DUNE-DAQ/dfmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/dfmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+dpdklibs: [![dpdklibs](https://github.com/DUNE-DAQ/dpdklibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/dpdklibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+ers: [![ers](https://github.com/DUNE-DAQ/ers/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ers/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+erskafka: [![erskafka](https://github.com/DUNE-DAQ/erskafka/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/erskafka/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+fddaqconf: [![fddaqconf](https://github.com/DUNE-DAQ/fddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/fddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+fddetdataformats: [![fddetdataformats](https://github.com/DUNE-DAQ/fddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/fddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+fdreadoutlibs: [![fdreadoutlibs](https://github.com/DUNE-DAQ/fdreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/fdreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+fdreadoutmodules: [![fdreadoutmodules](https://github.com/DUNE-DAQ/fdreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/fdreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+flxlibs: [![flxlibs](https://github.com/DUNE-DAQ/flxlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/flxlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+genconfig: [![genconfig](https://github.com/DUNE-DAQ/genconfig/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/genconfig/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+hdf5libs: [![hdf5libs](https://github.com/DUNE-DAQ/hdf5libs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/hdf5libs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+hermesmodules: [![hermesmodules](https://github.com/DUNE-DAQ/hermesmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/hermesmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+hsilibs: [![hsilibs](https://github.com/DUNE-DAQ/hsilibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/hsilibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+iomanager: [![iomanager](https://github.com/DUNE-DAQ/iomanager/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/iomanager/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+ipm: [![ipm](https://github.com/DUNE-DAQ/ipm/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ipm/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+kafkaopmon: [![kafkaopmon](https://github.com/DUNE-DAQ/kafkaopmon/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/kafkaopmon/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+lbrulibs: [![lbrulibs](https://github.com/DUNE-DAQ/lbrulibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/lbrulibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+listrev: [![listrev](https://github.com/DUNE-DAQ/listrev/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/listrev/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+logging: [![logging](https://github.com/DUNE-DAQ/logging/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/logging/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+nddaqconf: [![nddaqconf](https://github.com/DUNE-DAQ/nddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/nddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+nddetdataformats: [![nddetdataformats](https://github.com/DUNE-DAQ/nddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/nddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+ndreadoutlibs: [![ndreadoutlibs](https://github.com/DUNE-DAQ/ndreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ndreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+ndreadoutmodules: [![ndreadoutmodules](https://github.com/DUNE-DAQ/ndreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ndreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+oks: [![oks](https://github.com/DUNE-DAQ/oks/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/oks/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+opmonlib: [![opmonlib](https://github.com/DUNE-DAQ/opmonlib/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/opmonlib/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+rawdatautils: [![rawdatautils](https://github.com/DUNE-DAQ/rawdatautils/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/rawdatautils/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+rcif: [![rcif](https://github.com/DUNE-DAQ/rcif/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/rcif/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+readoutlibs: [![readoutlibs](https://github.com/DUNE-DAQ/readoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/readoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+readoutmodules: [![readoutmodules](https://github.com/DUNE-DAQ/readoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/readoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+restcmd: [![restcmd](https://github.com/DUNE-DAQ/restcmd/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/restcmd/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+serialization: [![serialization](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+sspmodules: [![sspmodules](https://github.com/DUNE-DAQ/sspmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/sspmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+timing: [![timing](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+timinglibs: [![timinglibs](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+tpgtools: [![tpgtools](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+trgdataformats: [![trgdataformats](https://github.com/DUNE-DAQ/trgdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/trgdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+trigger: [![trigger](https://github.com/DUNE-DAQ/trigger/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/trigger/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+triggeralgs: [![triggeralgs](https://github.com/DUNE-DAQ/triggeralgs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/triggeralgs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+uhallibs: [![uhallibs](https://github.com/DUNE-DAQ/uhallibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/uhallibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+utilities: [![utilities](https://github.com/DUNE-DAQ/utilities/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/utilities/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+wibmod: [![wibmod](https://github.com/DUNE-DAQ/wibmod/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/wibmod/actions/workflows/dunedaq-develop-cpp-ci.yml)
