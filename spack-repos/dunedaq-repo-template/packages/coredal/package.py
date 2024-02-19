@@ -23,6 +23,7 @@ class Coredal(CMakePackage):
     depends_on("oksdbinterfaces")
     depends_on("genconfig")
     depends_on("okssystem")
+    depends_on('nlohmann-json')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
