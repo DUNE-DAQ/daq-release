@@ -25,8 +25,6 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 
 # Single-Repo CI Build Status
 
-Feb-19-2024: CI build failures do to container issues, not code issues. John’s working on it.
-
 appdal: [![appdal](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 appfwk: [![appfwk](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-v4-cpp-ci.yml)
