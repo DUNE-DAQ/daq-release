@@ -88,11 +88,30 @@ class DAQRelease:
                     (itag, ihash) = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
                 print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
+
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
                 outfile.write('---\n')
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
+
+    def get_cmake_dependencies(package_name):
+        cmakelists_path = f"https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/develop/CMakeLists.txt"
+        # Use curl (or python equivalent) to get CMakeLists.txt for package_name
+        if not cmakelists_path:
+            print(f"No CMakeLists.txt found at {} for package {}; returning empty list")
+            return []
+
+        print(f"Opening {cmakelists_path}")
+        with open(cmakelists_path, 'r') as file:
+            lines = file.readlines()
+            # cmake dependencies are enclosed in "find_package()"
+            cmake_dependency_list = [line.replace('find_package("', '').rstrip('")\n').strip() 
+                                     for line in f if "find_package" in line]
+            print(f"Found dependencies for {package_name}: {cmake_dependencies}")
+
+        return cmake_dependency_list
+
 
     def generate_repo_file(self, repo_path):
         repo_dir = os.path.join(repo_path, "spack-repo")
@@ -107,6 +126,8 @@ class DAQRelease:
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         for ipkg in self.rdict[self.rtype]:
+
+
             itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
@@ -116,11 +137,27 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
-                # Forzen release
+                # Frozen release
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
+
+                # 'XDEPENDSX' here
+                # curl CMakeLists
+                # Figure out packages from find_package
+                # Use re instead of rstrip etc., maybe
+
+                # Spack dependencies are enclosed in "depends_on()"
+                spack_dependency_list = [line.replace('depends_on("', '').rstrip('")\n').strip() 
+                    for line in f if "depends_on" in line]
+
+            dependencies_to_add = [dep for dep in cmake_dependency_list if dep not in spack_dependency_list]
+            if dependencies_to_add:
+                for dep in dependencies_to_add:
+
+
+
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
@@ -132,6 +169,7 @@ class DAQRelease:
     def generate_external_umbrella_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
+
         for ipkg in ['devtools', 'externals', 'systems']:
             itemp = os.path.join(template_dir, ipkg, 'package.py')
             if not os.path.exists(itemp):
