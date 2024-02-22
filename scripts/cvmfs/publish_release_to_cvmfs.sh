@@ -91,17 +91,6 @@ cd ${det}*-v* || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
 
-cd $tmp_dir/$SOURCE_DIR
-
-res=$( ls | grep "${det}.*-v.*" | wc -l )
-
-if (( res != 1 )); then
-    echo "There's a problem with the logic in this script; exiting..." >&2
-    exit 1
-fi
-
-softlink_name=$( ls | grep "${det}.*-v.*" | sed -r 's/(.*)-[0-9]/\1/' )
-ln -s ${det}*-v* $softlink_name
 cd $tmp_dir
 
 TAG=release_build_$( date +%Y%m%d_%H%M%S )

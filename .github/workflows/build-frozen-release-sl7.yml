@@ -32,10 +32,9 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
           export OS=scientific7
-          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS
@@ -47,15 +46,14 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: frozens_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.release }}-c8.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
           export OS=scientific7
-          export BUILD_NUMBER=${{ github.event.inputs.build-number }}
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS
@@ -68,7 +66,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: frozens_${{ github.event.inputs.det }}daq
-        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -113,11 +111,12 @@ jobs:
 
             cd releases
             base_tag=dunedaq-${{ github.event.inputs.release }}-c8
-            tar xf ../${base_tag}.tar.gz
-            rm -rf ../${base_tag}.tar.gz
+            tar xf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
+            rm -rf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
 
-            tar xf ../${{ matrix.tag }}.tar.gz
-            rm -rf ../${{ matrix.tag }}.tar.gz
+            tar xf ../${{ matrix.tag }}-${{ github.event.inputs.build-number }}.tar.gz
+            rm -rf ../${{ matrix.tag }}-${{ github.event.inputs.build-number }}.tar.gz
+	    ln -s ${{ matrix.tag }}-${{ github.event.inputs.build-number }} ${{ matrix.tag }}
 
 
             cd ..
