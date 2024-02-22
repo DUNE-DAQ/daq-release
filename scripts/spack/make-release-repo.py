@@ -6,6 +6,8 @@ import argparse
 import shutil
 import subprocess
 import tempfile
+import re
+import requests
 
 from dr_tools import parse_yaml_file
 
@@ -95,22 +97,20 @@ class DAQRelease:
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def get_cmake_dependencies(package_name):
+    def get_cmake_dependencies(self, package_name):
         cmakelists_path = f"https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/develop/CMakeLists.txt"
-        # Use curl (or python equivalent) to get CMakeLists.txt for package_name
-        if not cmakelists_path:
-            print(f"No CMakeLists.txt found at {} for package {}; returning empty list")
+        response = requests.get(cmakelists_path)
+        if response.status_code != 200: 
+            print(f"Failed to download CMakeLists.txt. Status code: {response.status_code}")`
             return []
 
-        print(f"Opening {cmakelists_path}")
-        with open(cmakelists_path, 'r') as file:
-            lines = file.readlines()
-            # cmake dependencies are enclosed in "find_package()"
-            cmake_dependency_list = [line.replace('find_package("', '').rstrip('")\n').strip() 
-                                     for line in f if "find_package" in line]
-            print(f"Found dependencies for {package_name}: {cmake_dependencies}")
+        cmake_lists_content = response.text
+        # Get package names from find_package calls, excluding "REQUIRED", 
+        # "COMPONENTS", and everything listed after COMPONENTS
+        find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)', re.MULTILINE)
+        cmake_dependencies_list = find_package_pattern.findall(cmake_lists_content)
 
-        return cmake_dependency_list
+        return cmake_dependencies_list
 
 
     def generate_repo_file(self, repo_path):
@@ -126,8 +126,6 @@ class DAQRelease:
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         for ipkg in self.rdict[self.rtype]:
-
-
             itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
@@ -142,22 +140,12 @@ class DAQRelease:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
-
-                # 'XDEPENDSX' here
-                # curl CMakeLists
-                # Figure out packages from find_package
-                # Use re instead of rstrip etc., maybe
-
-                # Spack dependencies are enclosed in "depends_on()"
-                spack_dependency_list = [line.replace('depends_on("', '').rstrip('")\n').strip() 
-                    for line in f if "depends_on" in line]
-
-            dependencies_to_add = [dep for dep in cmake_dependency_list if dep not in spack_dependency_list]
-            if dependencies_to_add:
-                for dep in dependencies_to_add:
-
-
-
+                cmake_package_list = get_cmake_dependencies(ipkg["name"])
+                depends_on_list = ""
+                for package in cmake_package_list:
+                    depends_on_list += f"\n   depends_on({package})"
+                    lines += f'\n    depends_on("{iname}@{iver}")'
+                lines = lines.replace("XDEPENDSX", depends_on_list)
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
