@@ -163,7 +163,7 @@ jobs:
         shell: bash
 
     steps:
-    
+
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for detector release
       run: |
           DET=${{ github.event.inputs.det }}
