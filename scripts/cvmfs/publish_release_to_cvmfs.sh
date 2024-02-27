@@ -87,6 +87,10 @@ for tarfile in ../*.tar.gz ; do
     rm -f $tarfile
 done
 
+full_det_release_name=$( ls | grep "${det}.*-v.*" )
+shorthand_det_release_name=$( echo $full_det_release_name | sed -r 's/(.*)-[0-9]+$/\1/' )
+ln -s $full_det_release_name $shorthand_det_release_name
+
 cd ${det}*-v* || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
