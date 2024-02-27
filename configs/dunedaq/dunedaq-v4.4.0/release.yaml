@@ -217,7 +217,7 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: v2.4.0
           commit: null
         - name: daq-buildtools
           version: "develop"
