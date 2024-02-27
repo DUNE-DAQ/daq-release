@@ -1,17 +1,21 @@
 name: SL7 build frozen release 
 
+
 on:
   workflow_dispatch:
     inputs:
-      release:
-        description: 'targeted release (e.g. v4.1.0)'
-        required: true 
+      base-release:
+        description: 'targeted base release (e.g. v4.4.0)'
+        required: true
+      det-release:
+        description: 'targeted detector release (e.g. v4.3.0)'
+        required: true
       det:
         description: 'detector type (nd or fd)'
-        required: true 
+        required: true
       build-number:
         description: 'frozen release build number, e.g. 1'
-        required: true 
+        required: true
 
 jobs:
   build_the_frozen_release_spack:
@@ -32,8 +36,8 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-c8-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-c8-${{ github.event.inputs.build-number }}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -46,13 +50,13 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: frozens_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-c8-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-c8-${{ github.event.inputs.build-number }}
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
@@ -66,7 +70,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: frozens_${{ github.event.inputs.det }}daq
-        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-c8-${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -76,10 +80,10 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/sl7-slim-externals:v1.1"
             output_image: "ghcr.io/dune-daq/frozen-release-sl7"
-            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8
+            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-c8
           - input_image: "ghcr.io/dune-daq/c8-slim-externals:v1.1"
             output_image: "ghcr.io/dune-daq/frozen-release-c8"
-            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8
+            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-c8
     needs: build_the_frozen_release_spack
     environment: dockerhub
     permissions:
@@ -110,7 +114,7 @@ jobs:
             mkdir -p releases
 
             cd releases
-            base_tag=dunedaq-${{ github.event.inputs.release }}-c8
+            base_tag=dunedaq-${{ github.event.inputs.base-release }}-c8
             tar xf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
             rm -rf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
 
@@ -157,7 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/frozen-release-sl7:${{ github.event.inputs.det }}daq-${{ github.event.inputs.release }}-c8
+      image: ghcr.io/dune-daq/frozen-release-sl7:${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-c8
     defaults:
       run:
         shell: bash
@@ -170,7 +174,7 @@ jobs:
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest || true
-          dbt-setup-release ${DET}daq-${{ github.event.inputs.release }}-c8
+          dbt-setup-release ${DET}daq-${{ github.event.inputs.det-release }}-c8
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
