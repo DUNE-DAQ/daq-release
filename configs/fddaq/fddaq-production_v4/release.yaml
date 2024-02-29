@@ -189,9 +189,6 @@
         - name: itsdangerous
           version: 2.0.1
           source:  pypi
-        - name: justintime
-          version: 1.2.1
-          source:  pypi
         - name: lxml
           version: 5.1.0
           source: pypi
