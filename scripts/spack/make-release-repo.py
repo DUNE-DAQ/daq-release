@@ -101,30 +101,32 @@ class DAQRelease:
         cmakelists_path = f"https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/develop/CMakeLists.txt"
         response = requests.get(cmakelists_path)
         if response.status_code != 200: 
-            print(f"Failed to download CMakeLists.txt. Status code: {response.status_code}")
+            print(f"Failed to download CMakeLists.txt for package {package_name}. 
+                    Status code: {response.status_code}")
             return []
         cmake_lists_content = response.text
-        # Get package names from find_package calls, excluding "REQUIRED", 
-        # "COMPONENTS", and everything listed after COMPONENTS
+        # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
+        # and everything listed after COMPONENTS
         find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)', re.MULTILINE)
         cmake_dependencies_list = find_package_pattern.findall(cmake_lists_content)
+        # py-moo is not listed in CMakeLists, but is used by daq_codegen
+        find_daq_codegen = re.search("daq_codegen\(", cmake_lists_content)
+        if find_daq_codegen:
+            cmake_dependencies_list.append('py-moo')
+        cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
         return cmake_dependencies_list
 
-    def build_depends_on_list(cmake_package_list):
+    def generate_depends_on_list(self, cmake_package_list):
         depends_on_list = ""
-        for package in cmake_package_list:
-            if package not in self.rdict[self.rtype]:
-                print(f"Warning: inferred cmake dependency {package} is not in the release yaml {self.yaml}; skipping")
-                continue
-            iname = self.rdict[self.rtype[package]["name"]]
-            iver = self.rdict[self.rtype[package]["version"]]
-            ivar = self.rdict[self.rtype[package]["variant"]]
-            # Externals, system/devtools etc, variant is used instead of
-            # version
-            if ivar == None:
-                depends_on_list += f'\n    depends_on("{iname}@{iver}")'
-            else:
-                depends_on_list += f'\n    depends_on("{iname}@{iver} {ivar}")'
+        for idep in cmake_package_list:
+            # Special cases where necessary information is not in the CMakeLists
+            if idep == 'py-moo':
+                idep += '\", type=\"build'
+            elif idep == 'folly':
+                idep += ' cxxstd=2a'
+            elif idep == 'LibtorrentRasterbar':
+                idep = 'libtorrent'
+            depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
     def generate_repo_file(self, repo_path):
@@ -155,25 +157,7 @@ class DAQRelease:
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
                 cmake_package_list = self.get_cmake_dependencies(ipkg["name"])
-                #depends_on_list = ""
-                depends_on_list = build_depends_on_list(cmake_package_list)
-                #for package in cmake_package_list:
-                #    if package not in self.rdict[self.rtype]:
-                #        print(f"Warning: inferred cmake dependency {package} is not in the release yaml {self.yaml}; skipping")
-                #        continue
-                #    iname = self.rdict[self.rtype[package]["name"]]
-                #    iver = self.rdict[self.rtype[package]["version"]]
-                #    ivar = self.rdict[self.rtype[package]["variant"]]
-                #    # Externals, system/devtools etc, variant is used instead of
-                #    # version
-                #    if ivar == None:
-                #        depends_on_list += f'\n    depends_on("{iname}@{iver}")'
-                #    else:
-                #        depends_on_list += f'\n    depends_on("{iname}@{iver} {ivar}")'
-
-                    #depends_on_list += f'\n    depends_on("{package}")'
-                    #lines += f'\n    depends_on("{iname}@{iver}")'
-
+                depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
