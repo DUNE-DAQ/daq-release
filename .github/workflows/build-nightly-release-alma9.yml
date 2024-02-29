@@ -88,27 +88,6 @@ jobs:
         name: nightly_fddaq
         path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
-    - name: setup directories and install spack for the nddaq release
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NND${NIGHTLY_TAG}
-          export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
-
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS ${{ github.event.inputs.feature-branch }}
-
-          cd $DET_RELEASE_DIR/../
-          tar_and_stage_release ${DET_RELEASE_TAG}
-
-    - name: upload spack nightly tarball for near detector release
-      uses: actions/upload-artifact@v3
-      with:
-        name: nightly_nddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
-
-
   update_image:
     name: update_spack_image_nightly
     runs-on: isc01
@@ -142,12 +121,6 @@ jobs:
           name: nightly_fddaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for near detector release
-        uses: actions/download-artifact@v3
-        with:
-          name: nightly_nddaq
-          path: ${{ github.workspace }}/docker-build
-
       - name: prepare cvmfs mirror spack-nightly
         env:
           NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
@@ -164,11 +137,6 @@ jobs:
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             ln -s ${fddaq_tag} last_fddaq
-
-            nddaq_tag="NND${NIGHTLY_TAG}"
-            tar xf ../${nddaq_tag}.tar.gz
-            rm -rf ../${nddaq_tag}.tar.gz
-            ln -s ${nddaq_tag} last_nddaq
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
@@ -226,16 +194,6 @@ jobs:
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
-    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for nddaq
-      run: |
-          export DET=nd
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
-          dbt-setup-release -n last_${DET}daq
-          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
-          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
-
     - name: upload fddaq-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v3
       with:
@@ -247,18 +205,6 @@ jobs:
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
-
-    - name: upload nddaq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
-      with:
-        name: nddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
-
-    - name: upload nddaq_app_rte.sh
-      uses: actions/upload-artifact@v3
-      with:
-        name: nddaq_app_rte
-        path: ${{ github.workspace }}/nddaq_app_rte.sh
 
   publish_to_cvmfs:
     name: publish to cvmfs
@@ -289,20 +235,6 @@ jobs:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq-rte
 
-    - name: download nddaq-dbt-setup-release-env.sh
-      if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v3
-      with:
-        name: nddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/nddaq-release
-
-    - name: download nddaq_app_rte.sh
-      if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v3
-      with:
-        name: nddaq_app_rte
-        path: ${{ github.workspace }}/nddaq-rte
-
     - name: start docker container, and then rsync... 
       if: steps.do_deployment.outcome == 'success'
       run: |
@@ -326,9 +258,6 @@ jobs:
         fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
         mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
         mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
-        nd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_nddaq
-        mv /scratch/nddaq-rte/nddaq_app_rte.sh \$nd_release_dir/daq_app_rte.sh
-        mv /scratch/nddaq-release/nddaq-dbt-setup-release-env.sh \$nd_release_dir/dbt-setup-release-env.sh
         
         export CVMFS_SERVER="oasiscfs01.fnal.gov"
         export CVMFS_USER="cvmfsdunedaqdev"
@@ -341,7 +270,6 @@ jobs:
         # rsync
         cd /cvmfs/\$REPO
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_nddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*_DEV_* \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
         # publish
         ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
