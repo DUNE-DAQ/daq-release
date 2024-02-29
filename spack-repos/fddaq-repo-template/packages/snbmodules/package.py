@@ -17,25 +17,11 @@ class Snbmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on('daq-cmake')
 
-    depends_on("ers")
-    depends_on("trace")
-    depends_on("boost")
-    depends_on("iomanager")
-    depends_on("appfwk")
-    depends_on("rclone")
-    depends_on("libtorrent")
-    depends_on("logging")
-    depends_on("hdf5libs")
-    depends_on("nlohmann-json")
-    depends_on("highfive")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("readoutlibs")
 
-    depends_on('py-moo', type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

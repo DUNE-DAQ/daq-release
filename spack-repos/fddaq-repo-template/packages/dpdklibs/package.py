@@ -17,18 +17,9 @@ class Dpdklibs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("fddetdataformats")
-    depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("dpdk")
-    depends_on("cli11")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

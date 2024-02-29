@@ -17,18 +17,11 @@ class Hermesmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on('daq-cmake')
 
-    depends_on('fmt')
-    depends_on('uhal')
-    depends_on('ers')
-    depends_on('appfwk')
-    depends_on('opmonlib')
 
-    depends_on('py-moo', type='build')
-    depends_on('py-pybind11')
-    depends_on('boost' )
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
