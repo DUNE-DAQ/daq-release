@@ -6,16 +6,7 @@
     base_release: dunedaq-develop
 
     fddaq:
-        - name: ctbmodules
-          version: "develop"
-          commit: null
-        - name: daqsystemtest
-          version: "develop"
-          commit: null
         - name: dpdklibs
-          version: "develop"
-          commit: null
-        - name: fddaqconf
           version: "develop"
           commit: null
         - name: fddetdataformats
@@ -36,19 +27,10 @@
         - name: rawdatautils
           version: "develop"
           commit: null
-        - name: snbmodules
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
-          commit: null
         - name: tpgtools
           version: "develop"
           commit: null
         - name: uhallibs
-          version: "develop"
-          commit: null
-        - name: wibmod
           version: "develop"
           commit: null
 
