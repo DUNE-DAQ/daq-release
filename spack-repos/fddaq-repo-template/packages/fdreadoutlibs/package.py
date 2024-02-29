@@ -19,8 +19,6 @@ class Fdreadoutlibs(CMakePackage):
 
     XDEPENDSX
 
-    XDEPENDSX
-
 
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
