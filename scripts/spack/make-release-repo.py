@@ -7,7 +7,6 @@ import shutil
 import subprocess
 import tempfile
 import re
-import requests
 
 from dr_tools import parse_yaml_file
 
@@ -97,21 +96,27 @@ class DAQRelease:
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def get_cmake_dependencies(self, package_name):
-        cmakelists_path = f"https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/develop/CMakeLists.txt"
-        response = requests.get(cmakelists_path)
-        if response.status_code != 200: 
-            print(f"Failed to download CMakeLists.txt for package {package_name}. Status code: {response.status_code}")
-            return []
-        cmake_lists_content = response.text
-        # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
-        # and everything listed after COMPONENTS
-        find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)', re.MULTILINE)
-        cmake_dependencies_list = find_package_pattern.findall(cmake_lists_content)
-        # py-moo is not listed in CMakeLists, but is used by daq_codegen
-        find_daq_codegen = re.search("daq_codegen\(", cmake_lists_content)
-        if find_daq_codegen:
-            cmake_dependencies_list.append('py-moo')
+    def get_cmake_dependencies(self, package_name, branch_name='develop'):
+        file_name = "CMakeLists.txt"
+        cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
+        command = f'curl -o {file_name} {cmakelists_path}'
+        args = command.split()
+        subprocess.run(args)
+
+        cmake_dependencies_list = []
+        with open(file_name, 'r') as infile:
+            lines = infile.read()
+            if '404: Not Found' in lines:
+                print(f'WARNING: Failed to curl CMakeLists.txt at path {cmakelists_path}; skipping')
+                return []
+            # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
+            # and everything listed after COMPONENTS
+            find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)')
+            cmake_dependencies_list = find_package_pattern.findall(lines)
+            # py-moo is not listed in CMakeLists, but is used by daq_codegen
+            find_daq_codegen = re.search("daq_codegen\(", lines)
+            if find_daq_codegen:
+                cmake_dependencies_list.append('py-moo')
         cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
         return cmake_dependencies_list
 
