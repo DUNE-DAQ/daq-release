@@ -101,8 +101,7 @@ class DAQRelease:
         cmakelists_path = f"https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/develop/CMakeLists.txt"
         response = requests.get(cmakelists_path)
         if response.status_code != 200: 
-            print(f"Failed to download CMakeLists.txt for package {package_name}. 
-                    Status code: {response.status_code}")
+            print(f"Failed to download CMakeLists.txt for package {package_name}. Status code: {response.status_code}")
             return []
         cmake_lists_content = response.text
         # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
