@@ -43,6 +43,9 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
+	  uname -a
+	  pwd
+	  ls -ltr
           build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
           cd $build_dir
           refresh_date=$(date +%y-%m-%d)
