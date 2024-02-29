@@ -130,6 +130,8 @@ class DAQRelease:
                 idep += ' cxxstd=2a'
             elif idep == 'LibtorrentRasterbar':
                 idep = 'libtorrent'
+            elif idep == 'felix':
+                idep = 'felix-software'
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
