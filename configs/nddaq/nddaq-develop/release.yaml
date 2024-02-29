@@ -6,21 +6,6 @@
     base_release: dunedaq-develop
 
     nddaq:
-        - name: lbrulibs
-          version: "develop"
-          commit: null
-        - name: ndreadoutmodules
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
-        - name: ndreadoutlibs
-          version: "develop"
-          commit: null
-        - name: nddaqconf
-          version: "develop"
-          commit: null
 
     pymodules:
         - name: pip

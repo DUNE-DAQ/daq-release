@@ -217,23 +217,20 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: v2.4.0
           commit: null
         - name: daq-buildtools
-          version: "develop"
-          commit: null
-        - name: daqsystemtest
-          version: "develop"
-          commit: null
-        - name: pocket
-          version: "develop"
+          version: v7.6.0
           commit: null
         - name: microservices
-          version: "develop"
-          commit: null
-        - name: dqm-backend
-          version: "develop"
+          version: v1.7.1
           commit: null
         - name: grafana-dashboards
+          version: v1.10.0
+          commit: null
+        - name: justintime
+          version: v1.2.1
+          commit: null
+        - name: pocket
           version: "develop"
           commit: null

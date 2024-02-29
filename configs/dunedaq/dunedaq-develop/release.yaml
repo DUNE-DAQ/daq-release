@@ -190,18 +190,6 @@
         - name: dfmodules
           version: "develop"
           commit: null
-        - name: hsilibs
-          version: "develop"
-          commit: null
-        - name: timing
-          version: "develop"
-          commit: null
-        - name: timinglibs
-          version: "develop"
-          commit: null
-        - name: daqconf
-          version: "develop"
-          commit: null
         - name: trigger
           version: "develop"
           commit: null
@@ -247,9 +235,6 @@
           version: "develop"
           commit: null
         - name: daq-buildtools
-          version: "develop"
-          commit: null
-        - name: daqsystemtest
           version: "develop"
           commit: null
         - name: pocket
