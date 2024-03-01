@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if (( $# < 4 || $# > 5 )); then
+if (( $# < 5 || $# > 6 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or dune)> 
@@ -81,7 +81,7 @@ fi
 
 echo python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
-  -t spack-repos/${DET}daq-repo-template \
+  -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
@@ -91,7 +91,7 @@ echo python3 scripts/spack/make-release-repo.py -u \
 
 python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
-  -t spack-repos/${DET}daq-repo-template \
+  -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
