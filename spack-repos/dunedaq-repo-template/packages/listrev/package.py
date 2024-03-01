@@ -18,6 +18,7 @@ class Listrev(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    depends_on("appdal")
     depends_on("appfwk")
     depends_on("daq-cmake")
     depends_on("coredal")
