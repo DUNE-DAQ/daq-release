@@ -5,6 +5,7 @@ if (( $# < 4 || $# > 5 )); then
                         <desired detector release directory> 
                         <build type (fd, nd, or dune)> 
                         <OS (almalinux9 or scientific7)>
+                        <developer line (production_v4 or development_v5)>
                         (optional default repo branch (nightly only, default is develop) )" >&2
     exit 1
 fi
@@ -13,10 +14,11 @@ export BASE_RELEASE_DIR=$1
 export DET_RELEASE_DIR=$2
 export DET=$3
 export OS=$4
+export DEVLINE=$5
 
 export DEFAULT_BRANCH="develop"
-if [[ -n $5 ]]; then
-    export DEFAULT_BRANCH=$5
+if [[ -n $6 ]]; then
+    export DEFAULT_BRANCH=$6
 fi
 
 if [[ $DET != "dune" && $DET != "fd" && $DET != "nd" ]]; then
@@ -27,6 +29,11 @@ fi
 if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
     echo "OS needs to be specified either as \"almalinux9\" or \"scientific7\"; exiting..." >&2
     exit 3
+fi
+
+if [[ $DEVLINE != "production_v4" && $DEVLINE != "development_v5" ]]; then
+    echo "Developer line needs to be specified either as \"production_v4\" or \"development_v5\"; exiting..." >&2
+    exit 4
 fi
 
 export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
@@ -65,6 +72,12 @@ else
 fi
 
 cd $DAQ_RELEASE_REPO
+
+if [[ $DEVLINE == "production_v4" ]]; then
+    spack_template_dir=spack-repos/${DET}daq-repo-template_v4
+else
+    spack_template_dir=spack-repos/${DET}daq-repo-template
+fi
 
 echo python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
