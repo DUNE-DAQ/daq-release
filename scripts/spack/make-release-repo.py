@@ -134,6 +134,8 @@ class DAQRelease:
                 idep = 'felix-software'
             elif idep == 'nlohmann_json':
                 idep = 'nlohmann-json'
+            elif idep == 'absl':
+                idep = 'abseil-cpp'
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
