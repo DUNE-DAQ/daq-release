@@ -26,6 +26,10 @@ class Appfwk(CMakePackage):
     depends_on('rcif')
     depends_on('iomanager')
     depends_on('opmonlib')
+    depends_on('okssystem')
+    depends_on('oksdbinterfaces')
+    depends_on('coredal')
+    depends_on('appdal')
 
     depends_on('nlohmann-json')
     depends_on("pistache@dunedaq-v2.8.0")
