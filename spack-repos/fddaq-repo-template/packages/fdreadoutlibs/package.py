@@ -19,6 +19,7 @@ class Fdreadoutlibs(CMakePackage):
 
     depends_on("ers")
     depends_on("iomanager")
+    depends_on("appdal")
     depends_on("appfwk")
     depends_on("logging")
     depends_on("opmonlib")
@@ -27,8 +28,11 @@ class Fdreadoutlibs(CMakePackage):
     depends_on("detchannelmaps")
     depends_on("detdataformats")
     depends_on("fddetdataformats")
+    depends_on("hdf5libs")
+    depends_on("trgdataformats")
     depends_on("trigger")
     depends_on("triggeralgs")
+
     depends_on('folly cxxstd=2a')
     depends_on("boost")
     depends_on("cli11")

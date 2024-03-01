@@ -23,8 +23,11 @@ class Hermesmodules(CMakePackage):
     depends_on('fmt')
     depends_on('uhal')
     depends_on('ers')
+    depends_on('appdal')
     depends_on('appfwk')
+    depends_on('coredal')
     depends_on('opmonlib')
+
 
     depends_on('py-moo', type='build')
     depends_on('py-pybind11')

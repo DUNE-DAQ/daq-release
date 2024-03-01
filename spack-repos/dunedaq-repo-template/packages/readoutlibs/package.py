@@ -18,7 +18,9 @@ class Readoutlibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     depends_on("ers")
+    depends_on("appdal")
     depends_on("appfwk")
+    depends_on("coredal")
     depends_on("logging")
     depends_on("iomanager")
     depends_on("opmonlib")

@@ -20,6 +20,8 @@ class Listrev(CMakePackage):
 
     depends_on("appfwk")
     depends_on("daq-cmake")
+    depends_on("coredal")
+    depends_on("genconfig")
     depends_on("rcif")
     depends_on("opmonlib")
     depends_on("logging")
