@@ -128,7 +128,7 @@ class DAQRelease:
                 idep += '\", type=\"build'
             elif idep == 'folly':
                 idep += ' cxxstd=2a'
-            elif idep == 'LibtorrentRasterbar':
+            elif idep == 'libtorrentrasterbar':
                 idep = 'libtorrent'
             elif idep == 'felix':
                 idep = 'felix-software'
