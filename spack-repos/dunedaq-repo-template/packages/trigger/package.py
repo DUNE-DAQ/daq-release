@@ -24,7 +24,6 @@ class Trigger(CMakePackage):
     depends_on("appfwk")
     depends_on("triggeralgs")
     depends_on("dfmessages")
-    depends_on("timinglibs")
     depends_on("utilities")
     depends_on("iomanager")
     depends_on("daqdataformats")
