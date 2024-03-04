@@ -111,7 +111,8 @@ class DAQRelease:
                 return []
             # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
             # and everything listed after COMPONENTS
-            find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)')
+            #find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)')
+            find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
             # py-moo is not listed in CMakeLists, but is used by daq_codegen
             find_daq_codegen = re.search("daq_codegen\(", lines)
