@@ -111,7 +111,6 @@ class DAQRelease:
                 return []
             # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
             # and everything listed after COMPONENTS
-            #find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)\s*(?:REQUIRED)?(?:\s*COMPONENTS\s*[^)\s]+)?\s*\)')
             find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
             # py-moo is not listed in CMakeLists, but is used by daq_codegen
@@ -124,7 +123,7 @@ class DAQRelease:
     def generate_depends_on_list(self, cmake_package_list):
         depends_on_list = ""
         for idep in cmake_package_list:
-            # Special cases where necessary information is not in the CMakeLists
+            # Special cases where find_package call in CMakeLists is not sufficient
             if idep == 'py-moo':
                 idep += '\", type=\"build'
             elif idep == 'folly':
@@ -167,6 +166,7 @@ class DAQRelease:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
+                # Infer dependencies from CMakeLists.txt
                 cmake_package_list = self.get_cmake_dependencies(ipkg["name"])
                 depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
