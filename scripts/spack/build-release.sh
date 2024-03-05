@@ -113,7 +113,7 @@ fi
 build_dbe=false
 if [[ $DET == "dune" ]]; then
     
-    dbe_w_rules="dbe%gcc@12.1.0 ^cmake@3.26.3 build_type=RelWithDebInfo arch=linux-${OS}-x86_64"
+    dbe_w_rules="dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ^cmake@3.26.3 build_type=Release"
     spack spec -l --reuse $dbe_w_rules > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
