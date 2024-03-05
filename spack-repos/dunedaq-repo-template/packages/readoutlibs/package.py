@@ -17,22 +17,9 @@ class Readoutlibs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("appdal")
-    depends_on("appfwk")
-    depends_on("coredal")
-    depends_on("logging")
-    depends_on("iomanager")
-    depends_on("opmonlib")
-    depends_on("daqdataformats")
-    depends_on("dfmessages")
-    depends_on('folly cxxstd=2a')
-    depends_on("boost")
-    depends_on("numactl")
-    depends_on("cli11")
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

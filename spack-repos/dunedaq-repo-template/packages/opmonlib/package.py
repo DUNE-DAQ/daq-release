@@ -17,13 +17,9 @@ class Opmonlib(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on('daq-cmake')
-    depends_on('cetlib')
-    depends_on('ers')
-    depends_on('logging')
-    depends_on('nlohmann-json')
-    depends_on('abseil-cpp')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

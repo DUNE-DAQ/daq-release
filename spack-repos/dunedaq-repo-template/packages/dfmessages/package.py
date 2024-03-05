@@ -17,11 +17,9 @@ class Dfmessages(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("serialization")
-    depends_on("daqdataformats")
+    XDEPENDSX
 
-    depends_on('boost' )
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

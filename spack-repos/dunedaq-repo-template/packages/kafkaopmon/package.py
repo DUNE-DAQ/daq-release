@@ -17,17 +17,8 @@ class Kafkaopmon(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("opmonlib")
-    depends_on("cpr")
-    depends_on("curl")
-    depends_on("cyrus-sasl")
-    depends_on("librdkafka")
-    depends_on("ers")
-    depends_on("openssl")
-    depends_on("krb5")
-    depends_on("boost")
-    depends_on('py-moo', type='build')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

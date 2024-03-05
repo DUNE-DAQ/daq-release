@@ -17,16 +17,10 @@ class Timing(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on('daq-cmake')
-    depends_on('logging')
-    depends_on('ers')
-    depends_on('opmonlib')
 
-    depends_on('nlohmann-json')
-    depends_on('uhal')
-    depends_on("py-pybind11")
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

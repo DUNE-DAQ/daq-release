@@ -17,11 +17,8 @@ class Oksconfig(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("oks")
-    depends_on("oksutils")
-    depends_on("oksdbinterfaces")
-    depends_on("logging")
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

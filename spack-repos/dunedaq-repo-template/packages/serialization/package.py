@@ -17,15 +17,10 @@ class Serialization(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("logging")
-    depends_on("ers")
-    depends_on("boost")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
 
-    depends_on("msgpack-c")
-    depends_on("nlohmann-json")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

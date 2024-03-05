@@ -17,19 +17,8 @@ class Hdf5libs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("logging")
-    depends_on("highfive +mpi")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("detchannelmaps")
-    depends_on("trgdataformats")
-    depends_on("cetlib")
-    depends_on("ers")
-    depends_on("daq-cmake")
-    depends_on('py-moo', type='build')
-    depends_on("boost")
-    depends_on("nlohmann-json")
-    depends_on('py-pybind11' )
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

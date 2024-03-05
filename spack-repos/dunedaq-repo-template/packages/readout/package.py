@@ -17,23 +17,10 @@ class Readout(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("trigger")
-    depends_on("timinglibs")
-    depends_on("triggeralgs")
-    depends_on("dfmessages")
-    depends_on("appfwk")
-    depends_on('folly cxxstd=2a')
-    depends_on("dataformats", when="@1.4.2")
-    depends_on("daqdataformats", when="@1.4.5:")
-    depends_on("detdataformats", when="@1.4.5:")
-    depends_on("ers", when="@1.45:")
-    depends_on("opmonlib")
-    depends_on("logging")
 
-    depends_on('boost')
-    depends_on("py-moo", type='build')
+
 
 
 

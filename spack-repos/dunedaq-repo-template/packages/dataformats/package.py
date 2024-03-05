@@ -17,11 +17,9 @@ class Dataformats(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("ers")
-    depends_on('boost' )
-    depends_on("logging")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

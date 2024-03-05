@@ -17,17 +17,11 @@ class Ipm(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("logging")
-    depends_on("utilities")
-    depends_on("cetlib")
-    depends_on("ers")
-    depends_on("boost")
-    depends_on("opmonlib")
+    XDEPENDSX
 
-    depends_on("cppzmq")
-    depends_on('py-moo', type='build')
-    depends_on("nlohmann-json")
+    XDEPENDSX
+
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
