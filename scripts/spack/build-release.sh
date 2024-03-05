@@ -112,7 +112,9 @@ fi
 
 build_dbe=false
 if [[ $DET == "dune" ]]; then
-    spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+    
+    dbe_w_rules="dbe%gcc@12.1.0 ^cmake@3.26.3 build_type=RelWithDebInfo arch=linux-${OS}-x86_64"
+    spack spec -l --reuse $dbe_w_rules > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
     cat $SPACK_AREA/spec_dbe_log.txt
@@ -128,7 +130,7 @@ fi
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
 if $build_dbe; then
-    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+    spack install --reuse $dbe_w_rules || exit 8
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
