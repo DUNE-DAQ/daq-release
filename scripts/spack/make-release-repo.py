@@ -99,20 +99,21 @@ class DAQRelease:
     def get_cmake_dependencies(self, package_name, branch_name='develop'):
         file_name = "CMakeLists.txt"
         cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
-        command = f'curl -o {file_name} {cmakelists_path}'
+        command = f'curl -o {file_name} --fail {cmakelists_path}'
+        check_output(command)
         args = command.split()
         subprocess.run(args)
 
         cmake_dependencies_list = []
         with open(file_name, 'r') as infile:
             lines = infile.read()
-            if '404: Not Found' in lines:
-                print(f'WARNING: Failed to curl CMakeLists.txt at path {cmakelists_path}; skipping')
-                return []
             # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
             # and everything listed after COMPONENTS
             find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
+            if not cmake_dependencies_list:
+                print(f'ERROR: No dependencies parsed from CMakeLists.txt for package {package_name}')
+                exit(30)
             # py-moo is not listed in CMakeLists, but is used by daq_codegen
             find_daq_codegen = re.search("daq_codegen\(", lines)
             if find_daq_codegen:
