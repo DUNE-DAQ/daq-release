@@ -134,6 +134,8 @@ class DAQRelease:
                 idep = 'nlohmann-json'
             elif idep == 'absl':
                 idep = 'abseil-cpp'
+            elif idep == 'msgpack':
+                idep = 'msgpack-c'
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
