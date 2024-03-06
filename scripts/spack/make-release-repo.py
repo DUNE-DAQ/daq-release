@@ -136,6 +136,8 @@ class DAQRelease:
                 idep = 'abseil-cpp'
             elif idep == 'msgpack':
                 idep = 'msgpack-c'
+            elif idep == 'rdkafka':
+                idep = 'librdkafka'
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
