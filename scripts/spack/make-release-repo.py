@@ -111,13 +111,16 @@ class DAQRelease:
             # and everything listed after COMPONENTS
             find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
-            # py-moo is not listed in CMakeLists, but is used by daq_codegen
+            # Special cases where the dependency has no explicit find_package call
             find_daq_codegen = re.search("daq_codegen\(", lines)
             if find_daq_codegen:
                 cmake_dependencies_list.append('py-moo')
             find_pybind = re.search("daq_add_python_bindings\(", lines)
             if find_pybind:
                 cmake_dependencies_list.append('py-pybind11')
+            find_numa = re.search("pkg_check_modules\(numa", lines)
+            if find_numa:
+                cmake_dependencies_list.append('numactl')
         cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
         return cmake_dependencies_list
 
