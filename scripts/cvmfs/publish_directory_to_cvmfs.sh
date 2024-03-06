@@ -21,17 +21,10 @@ else
     exit 3
 fi
 
-HUMAN_USER=$( klist | sed -r -n 's/Default principal.* +(.*)@FNAL.GOV/\1/p' )
-
-if [[ $HUMAN_USER != "jcfree" ]]; then
-    echo "User with Kerberos default principal of \"$HUMAN_USER\" not authorized to use this script; exiting..." >&2
-    exit 4
-fi
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 DIR_TO_SYNC=`dirname ${PATH_TO_SYNC}`
-SRCPATH=$HUMAN_USER@mwts.fnal.gov:/home/$HUMAN_USER/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
+SRCPATH=dunedaq@isc01.fnal.gov:/home/dunedaq/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
 DESTPATH=/cvmfs/$REPO/$DIR_TO_SYNC
 
 if [ ! -r $DESTPATH ]; then
