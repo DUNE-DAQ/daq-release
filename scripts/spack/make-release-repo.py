@@ -53,6 +53,14 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     output = check_output(cmd)
     return (tag_or_branch, commit_hash)
 
+def check_branch_exists(repo, branch):
+    command = f'git ls-remote --exit-code https://github.com/DUNE-DAQ/{repo}.git --heads origin {branch}'
+    args = command.split()
+    subproc = subprocess.run(args)
+    if subproc.returncode == 0:
+        return True
+    print(f'WARNING: No branch {branch} exists for package {repo}; defaulting to develop')
+    return False
 
 class DAQRelease:
 
@@ -97,6 +105,9 @@ class DAQRelease:
         return
 
     def get_cmake_dependencies(self, package_name, branch_name='develop'):
+        if self.overwrite_branch != '':
+            if check_branch_exists(package_name, self.overwrite_branch):
+                branch = self.overwrite_branch
         file_name = "CMakeLists.txt"
         cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
         command = f'curl -o {file_name} --fail {cmakelists_path}'
@@ -107,8 +118,9 @@ class DAQRelease:
         cmake_dependencies_list = []
         with open(file_name, 'r') as infile:
             lines = infile.read()
-            # Get package names from find_package calls, excluding "REQUIRED", "COMPONENTS", 
-            # and everything listed after COMPONENTS
+            # Parse package names from find_package calls. Everything up to the first
+            # white space character will be taken as the package name (i.e., no "REQUIRED"
+            # or "COMPONENTS"
             find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
             # Special cases where the dependency has no explicit find_package call
