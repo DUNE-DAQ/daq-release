@@ -208,7 +208,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: isc01
+    runs-on: daq
 
     steps:
     - name: check_cvmfs_deployment

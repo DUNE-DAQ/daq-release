@@ -31,7 +31,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: isc01
+    runs-on: daq
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
@@ -87,7 +87,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: isc01
+    runs-on: daq
     strategy:
       matrix:
         include:
@@ -206,7 +206,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: isc01
+    runs-on: daq
 
     steps:
     - name: check_cvmfs_deployment
