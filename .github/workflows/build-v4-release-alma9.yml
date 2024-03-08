@@ -203,9 +203,10 @@ jobs:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
+
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: generate_dbt_setup_release_env
+    needs: [generate_dbt_setup_release_env, make_nightly_tag]
     runs-on: daq
 
     steps:
@@ -232,49 +233,33 @@ jobs:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq-rte
 
-    - name: start docker container, and then rsync... 
+    - name: start docker container, and then rsync...
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
+        #files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} NND${NIGHTLY_TAG} last_fddaq last_nddaq"
+        files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq "
+
         IMAGE="ghcr.io/dune-daq/nightly-release-alma9:production_v4"
-
-        cd $GITHUB_WORKSPACE
-        cat << EOT > publish.sh
-        #!/bin/bash
-        
-        
-        source /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/latest/env.sh
-        dbt-setup-release -n last_fddaq
-        
-        export KRB5CCNAME=$(mktemp)
-        /scratch-home/get-ticket.sh
-
-        klist -l
-        
-        fd_release_dir=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_fddaq
-        mv /scratch/fddaq-rte/fddaq_app_rte.sh \$fd_release_dir/daq_app_rte.sh
-        mv /scratch/fddaq-release/fddaq-dbt-setup-release-env.sh \$fd_release_dir/dbt-setup-release-env.sh
-        
-        export CVMFS_SERVER="oasiscfs01.fnal.gov"
-        export CVMFS_USER="cvmfsdunedaqdev"
-        export REPO=dunedaq-development.opensciencegrid.org
-        export DEST=/cvmfs/\$REPO/nightly
-        
-        spack clean -a
-        # Open transaction
-        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server transaction \${REPO}"
-        # rsync
-        cd /cvmfs/\$REPO
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats nightly/last_fddaq \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats --delete-after nightly/N*_PROD4_* \${CVMFS_USER}@\${CVMFS_SERVER}:\$DEST
-        # publish
-        ssh -o StrictHostKeyChecking=no -l \${CVMFS_USER} \${CVMFS_SERVER} "cvmfs_server publish \${REPO}"
-
-        rm -rf /scratch/*daq-*
-        EOT
-        chmod +x publish.sh
+        unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
-        docker run --rm -v $GITHUB_WORKSPACE:/scratch -v $HOME:/scratch-home $IMAGE /scratch/publish.sh
-        rm -f $GITHUB_WORKSPACE/publish.sh
+        docker run --name $unique_name $IMAGE
+        mkdir $unique_name
+
+        for file in $files_to_copy; do
+             docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
+        done
+
+        export KRB5CCNAME=/tmp/krb5cc_daq_fnal_gov
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+
+        docker rm $unique_name
+        rm -rf $unique_name
