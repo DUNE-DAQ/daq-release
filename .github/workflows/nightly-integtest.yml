@@ -27,6 +27,8 @@ jobs:
     name: integration_tests
     runs-on: daq
     needs: make_nightly_tag
+    if: always()
+    continue-on-error: true
     defaults:
       run:
         shell: bash
@@ -41,8 +43,6 @@ jobs:
         ref: 'amogan/break_fake_data_test'
     
     - name: setup release and run test
-      if: always()
-          #continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
