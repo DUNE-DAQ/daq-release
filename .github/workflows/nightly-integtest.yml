@@ -59,7 +59,7 @@ jobs:
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/*-test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
