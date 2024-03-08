@@ -26,7 +26,7 @@ jobs:
   integration_tests:
     name: integration_tests
     runs-on: daq
-    needs: make_nightly_tag
+        #needs: make_nightly_tag
     strategy:
         fail-fast: false
         matrix:
@@ -50,6 +50,7 @@ jobs:
           #NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         NIGHTLY_TAG: NFD_PROD4_240304_A9
       run: |
+          echo "NIGHTLY_TAG: $NIGHTLY_TAG"
           DET=fd
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
