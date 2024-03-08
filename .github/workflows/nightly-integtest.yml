@@ -42,7 +42,6 @@ jobs:
     
     - name: setup release and run minimal-system-quick test
       if: always()
-      continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
@@ -66,7 +65,6 @@ jobs:
 
     - name: setup release and run fake-data-producer test
       if: always()
-      continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
