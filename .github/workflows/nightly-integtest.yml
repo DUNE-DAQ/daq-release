@@ -30,7 +30,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["minimal_system_quick", "fake_data_producer"]
+            test_name: ["minimal_system_quick", "fake_data_producer", "long_readout_window", "small_footprint_quick"]
     defaults:
       run:
         shell: bash
@@ -42,7 +42,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
-        ref: 'amogan/break_fake_data_test'
     
     - name: setup release and run tests
       env:
@@ -57,67 +56,8 @@ jobs:
           #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
-          # Clean up junit xml files. Note that this should only be done for the first integration test
           rm -f $GITHUB_WORKSPACE/*-test-results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
-          cd $GITHUB_WORKSPACE
-          rm -rf integration_tests_$NIGHTLY_TAG
-          rm -rf daqsystemtest
-
-    - name: setup release and run fake-data-producer test
-      if: always()
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          DET=fd
-          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
-          dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
-          #rm -f $GITHUB_WORKSPACE/*-test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/fake-data-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
-          cd $GITHUB_WORKSPACE
-          rm -rf integration_tests_$NIGHTLY_TAG
-          rm -rf daqsystemtest
-
-    - name: setup release and run long-readout-window test
-      if: always()
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          DET=fd
-          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
-          dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
-          pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
-          cd $GITHUB_WORKSPACE
-          rm -rf integration_tests_$NIGHTLY_TAG
-          rm -rf daqsystemtest
-
-    - name: setup release and run small-footprint-quick test
-      if: always()
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          DET=fd
-          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
-          dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
-          pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
