@@ -41,6 +41,7 @@ jobs:
         ref: 'amogan/break_fake_data_test'
     
     - name: setup release and run test
+      if: always()
       continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
