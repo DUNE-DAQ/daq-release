@@ -190,6 +190,12 @@
         - name: dfmodules
           version: "develop"
           commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
+        - name: timinglibs
+          version: "develop"
+          commit: null
         - name: trigger
           version: "develop"
           commit: null
