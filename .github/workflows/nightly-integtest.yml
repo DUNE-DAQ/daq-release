@@ -42,6 +42,7 @@ jobs:
       with:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
+        refs: 'amogan/break_fake_data_test'
     
     - name: setup release and run tests
       continue-on-error: true
