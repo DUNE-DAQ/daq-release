@@ -224,14 +224,14 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}
+        path: ${{ github.workspace }}/fddaq-release
 
     - name: download fddaq_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: fddaq_app_rte
-        path: ${{ github.workspace }}
+        path: ${{ github.workspace }}/fddaq-rte
 
     - name: start docker container, and then rsync...
       env:
@@ -256,8 +256,8 @@ jobs:
              docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
         done
 
-        cp fddaq-dbt-setup-release-env.sh     $unique_name/dbt-setup-release-env.sh
-        cp fddaq_app_rte.sh                   $unique_name/daq_app_rte.sh
+        cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $unique_name/dbt-setup-release-env.sh
+        cp ./fddaq-rte/fddaq_app_rte.sh                   $unique_name/daq_app_rte.sh
 
         export KRB5CCNAME=$HOME/krb5cc_daq_fnal_gov
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
