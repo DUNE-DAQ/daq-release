@@ -27,7 +27,6 @@ jobs:
     name: integration_tests
     runs-on: daq
     needs: make_nightly_tag
-    continue-on-error: true
     strategy:
         fail-fast: false
         matrix:
@@ -45,6 +44,7 @@ jobs:
         path: daqsystemtest
     
     - name: setup release and run tests
+      continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
