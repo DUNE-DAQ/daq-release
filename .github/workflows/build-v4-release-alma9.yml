@@ -224,14 +224,14 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/fddaq-release
+        path: ${{ github.workspace }}
 
     - name: download fddaq_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v3
       with:
         name: fddaq_app_rte
-        path: ${{ github.workspace }}/fddaq-rte
+        path: ${{ github.workspace }}
 
     - name: start docker container, and then rsync...
       env:
@@ -240,7 +240,9 @@ jobs:
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        #files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} NND${NIGHTLY_TAG} last_fddaq last_nddaq"
+        cd $GITHUB_WORKSPACE
+
+        #files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq NND${NIGHTLY_TAG} last_nddaq"
         files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq "
 
         IMAGE="ghcr.io/dune-daq/nightly-release-alma9:production_v4"
@@ -254,7 +256,10 @@ jobs:
              docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
         done
 
-        export KRB5CCNAME=/tmp/krb5cc_daq_fnal_gov
+        cp fddaq-dbt-setup-release-env.sh     $unique_name/dbt-setup-release-env.sh
+        cp fddaq_app_rte.sh                   $unique_name/daq_app_rte.sh
+
+        export KRB5CCNAME=$HOME/krb5cc_daq_fnal_gov
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
