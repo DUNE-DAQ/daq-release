@@ -42,7 +42,7 @@ jobs:
     
     - name: setup release and run test
       if: always()
-      continue-on-error: true
+          #continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
