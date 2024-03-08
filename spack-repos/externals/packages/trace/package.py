@@ -9,7 +9,7 @@ import os
 from spack.util.environment import EnvironmentModifications
 
 class Trace(CMakePackage):
-    """FIXME: Put a proper description of your package here."""
+    """A utility providing extremely fast print statements to memory (as well as stdout/stderr) developed by Ron Rechenmacher"""
 
     homepage = "https://github.com/art-daq/trace"
     git      = "https://github.com/art-daq/trace.git"
@@ -19,6 +19,7 @@ class Trace(CMakePackage):
     version('3.17.04', commit='526de4f948c7dbd32622b924c11d93836484e5d5')   # DPF, May-12-2022: v3_17_04
     version('3.17.06', commit='6245d834f68e57338cedd8af66dfb1b53582b7ad')   # DPF, Dec-16-2022: v3_17_06
     version('3.17.09', commit='d93a64f45e57bec87c0b890b9bbaaf94eb0b2e69')   # DPF, Mar-14-2023: v3_17_00
+    version('3.17.11', commit='23f21ee9c53af5bd0e1b695038cda457517028fe')   # JCF, Mar-4-2024: v3_17_11
 
     patch('disable_cetmodules.diff', sha256='640816dfe077382bdb5345c8b5568c92e1ccb36274887e57241d826522ba5686', when='@3.16.02')
     patch('install-exec.diff', sha256='882deacf74407e1c83fb88ae8b2d16286751a49096682e441dc53175268ddcd9', when='@3.16.02')

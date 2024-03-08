@@ -25,7 +25,7 @@ jobs:
 
   integration_tests:
     name: integration_tests
-    runs-on: isc01
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
