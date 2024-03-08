@@ -24,8 +24,6 @@ jobs:
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
-    if: always()
-    continue-on-error: true
     name: integration_tests
     runs-on: daq
     needs: make_nightly_tag
@@ -42,7 +40,9 @@ jobs:
         path: daqsystemtest
         ref: 'amogan/break_fake_data_test'
     
-    - name: setup release and run test
+    - name: setup release and run minimal-system-quick test
+      if: always()
+      continue-on-error: true
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
@@ -55,11 +55,35 @@ jobs:
           #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
-          rm -f $GITHUB_WORKSPACE/test-results.xml
+          rm -f $GITHUB_WORKSPACE/*-test-results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/minimal-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
+          #pytest --junit-xml=$GITHUB_WORKSPACE/fake-data-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
+          #pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
+          #pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
+          cd $GITHUB_WORKSPACE
+          rm -rf integration_tests_$NIGHTLY_TAG
+          rm -rf daqsystemtest
+
+    - name: setup release and run fake-data-producer test
+      if: always()
+      continue-on-error: true
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          DET=fd
+          mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+          cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest|| true
+          dbt-setup-release -n $NIGHTLY_TAG
+          #dbt-setup-release -n last_${DET}daq
+          export PATH=$HOME/bin:$PATH
+          type get-ticket.sh && get-ticket.sh
+          #rm -f $GITHUB_WORKSPACE/*-test-results.xml
+          #pytest --junit-xml=$GITHUB_WORKSPACE/minimal-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
           pytest --junit-xml=$GITHUB_WORKSPACE/fake-data-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
-          pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
-          pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
+          #pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
+          #pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
