@@ -46,7 +46,8 @@ jobs:
     - name: setup release and run tests
       continue-on-error: true
       env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+          #NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+        NIGHTLY_TAG: NFD_PROD4_240304_A9
       run: |
           DET=fd
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
