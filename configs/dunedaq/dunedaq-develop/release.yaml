@@ -193,6 +193,9 @@
         - name: hsilibs
           version: "develop"
           commit: null
+        - name: timing
+          version: "develop"
+          commit: null
         - name: timinglibs
           version: "develop"
           commit: null
