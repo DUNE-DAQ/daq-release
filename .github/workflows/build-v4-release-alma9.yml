@@ -206,7 +206,7 @@ jobs:
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: [generate_dbt_setup_release_env, make_nightly_tag]
+    needs: generate_dbt_setup_release_env
     runs-on: daq
 
     steps:
@@ -234,8 +234,6 @@ jobs:
         path: ${{ github.workspace }}/fddaq-rte
 
     - name: start docker container, and then rsync...
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
@@ -254,9 +252,10 @@ jobs:
         for file in $files_to_copy; do
              docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
         done
+        docker rm $unique_name
 
-        cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $unique_name/dbt-setup-release-env.sh
-        cp ./fddaq-rte/fddaq_app_rte.sh                   $unique_name/daq_app_rte.sh
+        cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $( find $unique_name -name "NFD*" )/dbt-setup-release-env.sh
+        cp ./fddaq-rte/fddaq_app_rte.sh                       $( find $unique_name -name "NFD*" )/daq_app_rte.sh
 
         kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
@@ -266,5 +265,4 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
-        docker rm $unique_name
         rm -rf $unique_name
