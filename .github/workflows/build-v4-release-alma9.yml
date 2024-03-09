@@ -242,13 +242,12 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        #files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq NND${NIGHTLY_TAG} last_nddaq"
-        files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq "
-
         IMAGE="ghcr.io/dune-daq/nightly-release-alma9:production_v4"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
+        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+
         docker run --name $unique_name $IMAGE
         mkdir $unique_name
 
@@ -259,7 +258,8 @@ jobs:
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $unique_name/dbt-setup-release-env.sh
         cp ./fddaq-rte/fddaq_app_rte.sh                   $unique_name/daq_app_rte.sh
 
-        export KRB5CCNAME=$HOME/krb5cc_daq_fnal_gov
+        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
