@@ -9,6 +9,7 @@ import tempfile
 import re
 
 from dr_tools import parse_yaml_file
+from mappings import cmake_to_spack
 
 class MyDumper(yaml.Dumper):
 
@@ -140,24 +141,8 @@ class DAQRelease:
         depends_on_list = ""
         for idep in cmake_package_list:
             # Special cases where find_package call in CMakeLists is not sufficient
-            if idep == 'py-moo':
-                idep += '\", type=\"build'
-            elif idep == 'folly':
-                idep += ' cxxstd=2a'
-            elif idep == 'libtorrentrasterbar':
-                idep = 'libtorrent'
-            elif idep == 'felix':
-                idep = 'felix-software'
-            elif idep == 'nlohmann_json':
-                idep = 'nlohmann-json'
-            elif idep == 'absl':
-                idep = 'abseil-cpp'
-            elif idep == 'msgpack':
-                idep = 'msgpack-c'
-            elif idep == 'rdkafka':
-                idep = 'librdkafka'
-            elif idep == 'qt5':
-                idep = 'qt'
+            if idep in cmake_to_spack:
+                idep = cmake_to_spack[idep]
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
