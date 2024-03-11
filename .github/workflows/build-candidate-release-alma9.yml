@@ -19,8 +19,7 @@ on:
 jobs:
   build_the_candidate_release_spack:
     name: build_dev_release_spack
-    runs-on: isc01
-    #runs-on: daq
+    runs-on: daq
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
