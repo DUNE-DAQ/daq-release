@@ -121,7 +121,7 @@ class DAQRelease:
             # Parse package names from find_package calls. Everything up to the first
             # white space character will be taken as the package name (i.e., no "REQUIRED"
             # or "COMPONENTS"
-            find_package_pattern = re.compile(r'find_package\(\s*([^)\s]+)')
+            find_package_pattern  = re.compile(r'[^#]find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
             # Special cases where the dependency has no explicit find_package call
             find_daq_codegen = re.search("daq_codegen\(", lines)
