@@ -18,6 +18,7 @@ class DaqCmake(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     XDEPENDSX
+    depends_on("py-pybind11")
 
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

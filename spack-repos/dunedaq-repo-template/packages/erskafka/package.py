@@ -18,6 +18,8 @@ class Erskafka(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     XDEPENDSX
+    depends_on("cyrus-sasl")
+    depends_on("openssl")
 
 
 
