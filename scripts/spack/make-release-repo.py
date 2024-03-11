@@ -128,6 +128,9 @@ class DAQRelease:
             find_daq_codegen = re.search("daq_codegen\(", lines)
             if find_daq_codegen:
                 cmake_dependencies_list.append('py-moo')
+            find_pybind = re.search("daq_add_python_bindings\(", lines)
+            if find_pybind:                                                           
+                cmake_dependencies_list.append('pybind11')
             find_numa = re.search("pkg_check_modules\(numa", lines)
             if find_numa:
                 cmake_dependencies_list.append('numactl')
