@@ -15,4 +15,5 @@ class Devtools(BundlePackage):
     version("XRELEASEX")
 
     # Generate from release YAML file
+    depends_on("systems@XRELEASEX")
     # Additional dependencies defined in YAML file to be filled below
