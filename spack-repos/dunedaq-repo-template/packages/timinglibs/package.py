@@ -20,8 +20,6 @@ class Timinglibs(CMakePackage):
     XDEPENDSX
 
 
-
-
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
         if str(self.spec.variants['build_type']) == "build_type=Debug":

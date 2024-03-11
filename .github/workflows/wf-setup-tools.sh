@@ -179,6 +179,14 @@ function tar_and_stage_release() {
     subdir=$1
     tarfile=${subdir}.tar.gz
 
+    echo "About to run tar zcf $tarfile $subdir in $PWD"
+    df
+    echo "######################################################################"
+    du . -s
+    echo "######################################################################"
+    du $subdir -s
+    echo
+    
     tar zcf $tarfile $subdir
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     mkdir -p $tardir

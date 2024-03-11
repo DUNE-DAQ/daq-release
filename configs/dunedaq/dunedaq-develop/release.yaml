@@ -11,7 +11,7 @@
           version: 3.18.01
           variant: "+lite"
         - name: trace
-          version: 3.17.09
+          version: 3.17.11
           variant: ~
         - name: nlohmann-json
           version: 3.9.0
@@ -188,6 +188,15 @@
           version: "develop"
           commit: null
         - name: dfmodules
+          version: "develop"
+          commit: null
+        - name: hsilibs
+          version: "develop"
+          commit: null
+        - name: timing
+          version: "develop"
+          commit: null
+        - name: timinglibs
           version: "develop"
           commit: null
         - name: trigger
