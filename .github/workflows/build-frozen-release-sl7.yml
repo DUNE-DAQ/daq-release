@@ -20,7 +20,7 @@ on:
 jobs:
   build_the_frozen_release_spack:
     name: build_frozen_release_spack
-    runs-on: isc01
+    runs-on: daq
     container:
       image: ghcr.io/dune-daq/sl7-slim-externals:v1.1
     defaults:
