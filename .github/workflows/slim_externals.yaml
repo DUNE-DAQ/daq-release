@@ -22,7 +22,7 @@ jobs:
       - name: Intro
         run: |
           echo "Will create a ghcr.io/dune-daq/sl7-slim-externals:v1.1${{ github.event.inputs.tag-suffix }} image"
-          echo "Image contents will include $HOSTNAME:/home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v1.1"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v1.1"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -43,7 +43,7 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
-          build_dir="/home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
+          build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
           cd $build_dir
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/sl7-spack:latest" > Dockerfile
@@ -59,7 +59,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
         with:
-          context: /home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
+          context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -68,7 +68,7 @@ jobs:
         if: always()
         run: |
 
-            rm -f /home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
+            rm -f /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
             docker image prune -f
             docker container prune -f
             docker network prune -f
@@ -178,7 +178,7 @@ jobs:
       - name: Intro
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }} image"
-          echo "Image contents will include $HOSTNAME:/home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.0"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.0"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -199,7 +199,7 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
-          build_dir="/home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
+          build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
           cd $build_dir
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
@@ -215,7 +215,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
         with:
-          context: /home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
+          context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -224,7 +224,7 @@ jobs:
         if: always()
         run: |
 
-            rm -f /home/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
+            rm -f /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
             docker image prune -f
             docker container prune -f
             docker network prune -f
