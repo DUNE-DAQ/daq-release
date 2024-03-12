@@ -7,8 +7,8 @@ on:
         description: 'optional suffix for test-only externals image (e.g., T would mean alma9-slim-externals:v2.0T)'
         default: ''
       account-to-copy:
-        description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default jcfree)'
-        default: 'jcfree'
+        description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default dunedaq)'
+        default: 'dunedaq'
 
 jobs:
 
