@@ -154,20 +154,16 @@ function get_release_yaml() {
 
     if [[ $release_level == "base" ]]; then
 
-        if [[ $RELEASE_TYPE == "nightly" ]]; then
+        if [[ $RELEASE_TYPE == "nightly" || $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/dunedaq/dunedaq-develop/release.yaml"
-        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
-            echo -n "configs/dunedaq/dunedaq-production_v4/release.yaml"
 	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
             echo -n "configs/dunedaq/dunedaq-${version}/release.yaml"
         fi
 
     else
 
-        if [[ $RELEASE_TYPE == "nightly" ]]; then
+        if [[ $RELEASE_TYPE == "nightly" || $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-develop/release.yaml"
-        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
-            echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
         elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-${version}/release.yaml"
         fi
