@@ -19,9 +19,6 @@ class Ipm(CMakePackage):
 
     XDEPENDSX
 
-    XDEPENDSX
-
-
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
