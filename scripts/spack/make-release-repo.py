@@ -174,7 +174,7 @@ class DAQRelease:
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
                 # Infer dependencies from CMakeLists.txt
-                cmake_package_list = self.get_cmake_dependencies(ipkg["name"])
+                cmake_package_list = self.get_cmake_dependencies(ipkg["name"], ipkg["commit"])
                 depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
