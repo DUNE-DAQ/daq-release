@@ -17,13 +17,9 @@ class Triggeralgs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on("nlohmann-json")
-    depends_on("trace")
-    depends_on("detdataformats")
-    depends_on("trgdataformats")
-    depends_on("cetlib")
-    depends_on("detchannelmaps")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

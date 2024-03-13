@@ -17,24 +17,10 @@ class Appfwk(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on('daq-cmake')
-    depends_on('logging')
-    depends_on('cetlib')
-    depends_on('ers')
-    depends_on('cmdlib')
-    depends_on('rcif')
-    depends_on('iomanager')
-    depends_on('opmonlib')
-    depends_on('okssystem')
-    depends_on('oksdbinterfaces')
-    depends_on('coredal')
-    depends_on('appdal')
 
-    depends_on('nlohmann-json')
-    depends_on("pistache@dunedaq-v2.8.0")
-    depends_on('py-moo', type='build')
-    depends_on('boost' )
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

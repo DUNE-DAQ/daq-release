@@ -17,14 +17,11 @@ class Erskafka(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("ers")
-    depends_on("librdkafka")
-    depends_on('boost' )
-
-    depends_on("openssl")
+    XDEPENDSX
     depends_on("cyrus-sasl")
-    depends_on("nlohmann-json")
+    depends_on("openssl")
+
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

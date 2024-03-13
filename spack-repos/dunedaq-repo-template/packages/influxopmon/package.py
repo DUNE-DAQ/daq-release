@@ -17,15 +17,10 @@ class Influxopmon(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
 
-    depends_on("daq-cmake")
-    depends_on("opmonlib")
-    depends_on("cpr")
-    depends_on("curl")
-    depends_on("ers")
-    depends_on("nlohmann-json")
-    depends_on("logging")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

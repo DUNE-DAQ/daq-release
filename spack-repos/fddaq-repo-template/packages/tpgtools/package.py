@@ -17,20 +17,10 @@ class Tpgtools(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("logging")
-    depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("daqdataformats")
-    depends_on("detchannelmaps")
-    depends_on("detdataformats")
-    depends_on("fddetdataformats")
-    depends_on("trigger")
-    depends_on("hdf5libs")
+    XDEPENDSX
 
-    depends_on("boost")
 
-    depends_on("daq-cmake")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

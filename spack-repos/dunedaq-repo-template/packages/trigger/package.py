@@ -17,29 +17,11 @@ class Trigger(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-
-    depends_on("ers")
-    depends_on("serialization")
-    depends_on("logging")
-    depends_on("appdal")
-    depends_on("appfwk")
-    depends_on("triggeralgs")
-    depends_on("dfmessages")
-    depends_on("utilities")
-    depends_on("iomanager")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("trgdataformats")
-    depends_on("detchannelmaps")
-    depends_on("readoutmodules")
-    depends_on("readoutlibs")
-    depends_on("hdf5libs")
-    depends_on("cli11")
+    XDEPENDSX
 
 
-    depends_on('boost' )
-    depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+
+
 
 
 

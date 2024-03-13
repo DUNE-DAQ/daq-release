@@ -7,20 +7,18 @@
 from spack import *
 
 
-class Ers(CMakePackage):
-    """A fork of the ATLAS Error Reporting System"""
+class Fddaqconf(CMakePackage):
+    """Application to read out Felix data and store it in HDF5 files on disk"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/ers/"
-    git =      "https://github.com/DUNE-DAQ/ers.git"
+    homepage = "https://github.com/DUNE-DAQ/fddaqconf"
+    git =      "https://github.com/DUNE-DAQ/fddaqconf.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on('daq-cmake')
-    depends_on('boost')
-    depends_on('protobuf')
-    depends_on('py-pybind11')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
@@ -31,7 +29,6 @@ class Ers(CMakePackage):
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
-        env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
-        env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
-        env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
+        env.prepend_path('DUNEDAQ_SHARE_PATH', self.prefix + "/share")
+        env.prepend_path('PYTHONPATH', self.prefix.lib + "64/python")
 

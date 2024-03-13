@@ -17,15 +17,9 @@ class Rawdatautils(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("fddetdataformats")
-    depends_on("fmt")
+    XDEPENDSX
 
-    depends_on("boost")
-    depends_on('py-pybind11' )
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -7,20 +7,18 @@
 from spack import *
 
 
-class Logging(CMakePackage):
-    """Contains the functions DUNE DAQ packages use to output text"""
+class Daqconf(CMakePackage):
+    """Application to read out Felix data and store it in HDF5 files on disk"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/logging/"
-    git =      "https://github.com/DUNE-DAQ/logging.git"
+    homepage = "https://github.com/DUNE-DAQ/daqconf"
+    git =      "https://github.com/DUNE-DAQ/daqconf.git"
 
     maintainers = ["jcfreeman2"]
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on('daq-cmake')
-    depends_on('trace')
-    depends_on('ers')
-
+    XDEPENDSX
+    
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
         if str(self.spec.variants['build_type']) == "build_type=Debug":
@@ -30,7 +28,6 @@ class Logging(CMakePackage):
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
-        env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
-        env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
-        env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
+        env.prepend_path('DUNEDAQ_SHARE_PATH', self.prefix + "/share")
+        env.prepend_path('PYTHONPATH', self.prefix.lib + "64/python")
 

@@ -17,16 +17,9 @@ class Networkmanager(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ipm")
-    depends_on("logging")
-    depends_on("utilities")
-    depends_on("opmonlib")
-    depends_on("ers")
-    depends_on("nlohmann-json")
-    depends_on("boost")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
-    depends_on("daq-cmake")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

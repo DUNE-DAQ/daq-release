@@ -18,17 +18,9 @@ class Listrev(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("appdal")
-    depends_on("appfwk")
-    depends_on("daq-cmake")
-    depends_on("coredal")
-    depends_on("genconfig")
-    depends_on("rcif")
-    depends_on("opmonlib")
-    depends_on("logging")
-    depends_on("ers")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

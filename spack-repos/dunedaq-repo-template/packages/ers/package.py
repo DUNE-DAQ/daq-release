@@ -17,10 +17,8 @@ class Ers(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on('daq-cmake')
-    depends_on('boost')
-    depends_on('protobuf')
-    depends_on('py-pybind11')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

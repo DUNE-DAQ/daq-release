@@ -17,15 +17,9 @@ class Ctbmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("rcif")
-    depends_on("appfwk")
-    depends_on("opmonlib")
-    depends_on("logging")
-    depends_on("ers")
-    depends_on("hsilibs")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
