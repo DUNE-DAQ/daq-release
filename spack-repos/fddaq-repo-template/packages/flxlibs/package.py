@@ -27,7 +27,7 @@ class Flxlibs(CMakePackage):
     depends_on("felix-software")
     depends_on("opmonlib")
     depends_on("daqconf")
-    depends_on("py-moo", type='build')
+    # depends_on("py-moo", type='build')
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
