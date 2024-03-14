@@ -241,7 +241,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5"
+        IMAGE="ghcr.io/dune-daq/nightly-release-sl7:development_v5"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
