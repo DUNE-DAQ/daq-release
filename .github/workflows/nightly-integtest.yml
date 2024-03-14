@@ -41,7 +41,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daqsystemtest
-        ref: amogan/break_fake_data_test
         path: daqsystemtest
     
     - name: setup release and run tests
