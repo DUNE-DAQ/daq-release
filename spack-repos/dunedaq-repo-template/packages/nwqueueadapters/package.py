@@ -17,19 +17,9 @@ class Nwqueueadapters(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("appfwk")
-    depends_on("utilities")
-    depends_on("networkmanager")
-    depends_on("logging")
-    depends_on("ipm")
-    depends_on("serialization")
-    depends_on("opmonlib")
-    depends_on("ers")
-    depends_on("boost")
-    depends_on("py-moo", type='build')
+    XDEPENDSX
 
-    depends_on("nlohmann-json")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -17,14 +17,11 @@ class Erses(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("ers")
-    depends_on("cpr")
 
-    depends_on("nlohmann-json")
 
-    depends_on('py-moo', type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

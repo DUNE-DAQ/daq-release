@@ -17,9 +17,8 @@ class Logging(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on('daq-cmake')
-    depends_on('trace')
-    depends_on('ers')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

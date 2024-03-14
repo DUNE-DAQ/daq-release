@@ -17,15 +17,9 @@ class Iomanager(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ipm")
-    depends_on("opmonlib")
-    depends_on('folly cxxstd=2a')
-    depends_on("serialization")
-    depends_on("utilities")
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("boost")
-    depends_on('py-moo', type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

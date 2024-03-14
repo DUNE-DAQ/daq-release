@@ -17,13 +17,8 @@ class Coredal(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("ers")
-    depends_on("logging")
-    depends_on("oksdbinterfaces")
-    depends_on("genconfig")
-    depends_on("okssystem")
-    depends_on('nlohmann-json')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

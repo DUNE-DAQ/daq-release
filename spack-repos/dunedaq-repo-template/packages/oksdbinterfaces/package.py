@@ -17,11 +17,8 @@ class Oksdbinterfaces(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("boost")
-    depends_on("ers")
-    depends_on("logging")
-    depends_on("python")
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

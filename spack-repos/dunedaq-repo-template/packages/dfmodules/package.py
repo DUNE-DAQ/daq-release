@@ -17,25 +17,11 @@ class Dfmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("ers")
-    depends_on("hdf5libs")
-    depends_on("dfmessages")
-    depends_on("opmonlib")
-    depends_on("iomanager")
-    depends_on("detdataformats")
-    depends_on("triggeralgs")
-    depends_on("trigger")
-    depends_on("serialization")
-    depends_on("readoutlibs")
-    depends_on("detchannelmaps")
 
-    depends_on("py-moo", type='build')
 
-    depends_on("boost")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -17,16 +17,10 @@ class Trgtools(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("cli11")
-    depends_on("fmt")
-    depends_on("nlohmann-json")
+    XDEPENDSX
 
-    depends_on("hdf5libs")
-    depends_on("trgdataformats")
-    depends_on("triggeralgs")
-    depends_on("detchannelmaps")
 
-    depends_on("daq-cmake")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

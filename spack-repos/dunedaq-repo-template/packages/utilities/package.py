@@ -17,13 +17,9 @@ class Utilities(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("nlohmann-json")
-    depends_on("logging")
-    depends_on("boost")
-    depends_on("ers")
+    XDEPENDSX
 
-    depends_on("py-moo", type='build')
-    depends_on("daq-cmake")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

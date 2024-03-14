@@ -17,14 +17,9 @@ class Restcmd(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("cetlib")
-    depends_on("logging")
-    depends_on("cmdlib")
-    depends_on("ers")
+    XDEPENDSX
 
-    depends_on("nlohmann-json")
-    depends_on("pistache@dunedaq-v2.8.0")
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

@@ -24,7 +24,7 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 DIR_TO_SYNC=`dirname ${PATH_TO_SYNC}`
-SRCPATH=dunedaq@isc01.fnal.gov:/home/dunedaq/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
+SRCPATH=dunedaq@daq.fnal.gov:/home/dunedaq/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
 DESTPATH=/cvmfs/$REPO/$DIR_TO_SYNC
 
 if [ ! -r $DESTPATH ]; then

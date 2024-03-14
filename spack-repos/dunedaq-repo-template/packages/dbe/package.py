@@ -17,12 +17,8 @@ class Dbe(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("qt")
-    depends_on("boost")
-    depends_on("oks")
-    depends_on("logging")
-    depends_on("oksdbinterfaces")
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

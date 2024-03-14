@@ -206,9 +206,10 @@ jobs:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
+
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: [generate_dbt_setup_release_env, make_nightly_tag]
+    needs: generate_dbt_setup_release_env
     runs-on: daq
 
     steps:
@@ -236,32 +237,36 @@ jobs:
         path: ${{ github.workspace }}/fddaq-rte
 
     - name: start docker container, and then rsync...
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        #files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} NND${NIGHTLY_TAG} last_fddaq last_nddaq"
-        files_to_copy="NB${NIGHTLY_TAG} NFD${NIGHTLY_TAG} last_fddaq "
+        cd $GITHUB_WORKSPACE
 
         IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
+        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+
         docker run --name $unique_name $IMAGE
         mkdir $unique_name
 
         for file in $files_to_copy; do
              docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
         done
+        docker rm $unique_name
 
-        export KRB5CCNAME=/tmp/krb5cc_daq_fnal_gov
+        dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
+        cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
+        cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
+
+        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
         rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
 
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
-        docker rm $unique_name
         rm -rf $unique_name

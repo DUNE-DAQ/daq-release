@@ -17,19 +17,7 @@ class Flxlibs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-
-    depends_on("daq-cmake")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("ers")
-    depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("felix-software")
-    depends_on("opmonlib")
-    depends_on("py-moo", type='build')
-    depends_on('coredal')
-    depends_on('appdal')
-
+    XDEPENDSX
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
