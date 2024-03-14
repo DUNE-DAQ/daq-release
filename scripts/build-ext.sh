@@ -38,7 +38,8 @@ python3 scripts/spack/make-release-repo.py -u \
 -o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}
 popd
 
-mv  ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
+rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
+mv ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
 
 ### Step 2.3 -- change spack repos.yaml to include the two repos created above
 
