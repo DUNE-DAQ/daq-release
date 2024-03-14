@@ -64,10 +64,10 @@ jobs:
 
   parse_results:
     runs-on: daq
+    if: always()
     needs: integration_tests
     steps:
     - name: Surface failing tests
-      if: always()
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
       uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
       with:
