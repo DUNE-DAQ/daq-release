@@ -18,7 +18,7 @@ class Dpdklibs(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     XDEPENDSX
-
+    depends_on("dpdk")
 
 
     # DBT_DEBUG is used by daq-cmake to set compiler options

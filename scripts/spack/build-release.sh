@@ -73,11 +73,7 @@ fi
 
 cd $DAQ_RELEASE_REPO
 
-if [[ $DEVLINE == "production_v4" ]]; then
-    spack_template_dir=spack-repos/${DET}daq-repo-template_v4
-else
-    spack_template_dir=spack-repos/${DET}daq-repo-template
-fi
+spack_template_dir=spack-repos/${DET}daq-repo-template
 
 echo python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
