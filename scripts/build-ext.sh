@@ -134,6 +134,6 @@ spack install --reuse $llvm_spec |& tee /log/spack_install_llvm.txt || exit 14
 
 ## Step 6 -- remove DAQ packages and umbrella packages
 
-spack uninstall -y --all --dependents daq-cmake externals devtools systems llvm 
+spack uninstall -y --all --dependents daq-cmake externals devtools systems
 
 spack find -l | sort |& tee /log/externals_list.txt
