@@ -1,4 +1,4 @@
-name: Alma9 build v4.3.0 production nightly release
+name: Alma9 build v4 production nightly release
 
 on:
   schedule:

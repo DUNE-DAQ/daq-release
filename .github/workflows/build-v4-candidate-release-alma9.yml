@@ -1,4 +1,4 @@
-name: Alma9 build candidate release
+name: Alma9 build v4 production candidate release
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
     name: build_dev_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
@@ -40,7 +40,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS development_v5 develop
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS production_v4 production/v4
 
           cd $BASE_RELEASE_DIR/..
           tar_and_stage_release $BASE_RELEASE_TAG
@@ -59,7 +59,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS development_v5 develop
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS production_v4 production/v4
 
           cd $DET_RELEASE_DIR/..
           tar_and_stage_release $DET_RELEASE_TAG
@@ -76,7 +76,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
             output_image: "ghcr.io/dune-daq/candidate-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
     needs: build_the_candidate_release_spack

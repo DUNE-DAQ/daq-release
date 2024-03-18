@@ -1,27 +1,27 @@
-name: Alma9 build candidate release
+name: Alma9 build v4 production frozen release 
 
 on:
   workflow_dispatch:
     inputs:
       base-release:
         description: 'targeted base release (e.g. v4.4.0)'
-        required: true 
+        required: true
       det-release:
         description: 'targeted detector release (e.g. v4.3.0)'
-        required: true 
+        required: true
       det:
         description: 'detector type (nd or fd)'
-        required: true 
+        required: true
       build-number:
-        description: 'candidate release build number, e.g. 1'
-        required: true 
+        description: 'frozen release build number, e.g. 1'
+        required: true
 
 jobs:
-  build_the_candidate_release_spack:
-    name: build_dev_release_spack
+  build_the_frozen_release_spack:
+    name: build_frozen_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.0
     defaults:
       run:
         shell: bash
@@ -35,40 +35,41 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/${DET}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS development_v5 develop
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS production_v4 production/v4
 
           cd $BASE_RELEASE_DIR/..
           tar_and_stage_release $BASE_RELEASE_TAG
 
-    - name: upload spack candidate release tarball for base release
+    - name: upload spack frozen release tarball for base release
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9.tar.gz
+        name: frozens_dunedaq
+        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/${DET}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS development_v5 develop
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS production_v4 production/v4
 
           cd $DET_RELEASE_DIR/..
           tar_and_stage_release $DET_RELEASE_TAG
 
-    - name: upload spack candidate release tarball for detector release
+
+    - name: upload spack frozen release tarball for detector release
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_${{ github.event.inputs.det }}daq
-        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9.tar.gz
+        name: frozens_${{ github.event.inputs.det }}daq
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
     name: update_spack_image_rc
@@ -76,10 +77,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
-            output_image: "ghcr.io/dune-daq/candidate-release-alma9"
-            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
-    needs: build_the_candidate_release_spack
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.0"
+            output_image: "ghcr.io/dune-daq/frozen-release-alma9"
+            tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
+    needs: build_the_frozen_release_spack
     environment: dockerhub
     permissions:
       packages: write
@@ -90,39 +91,39 @@ jobs:
         run: |
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
-            
-      - name: Download spack candidate release tarball artifact for base release
+
+      - name: Download spack frozen release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
-          name: candidates_dunedaq
+          name: frozens_dunedaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack candidate release tarball artifact for detector release
+      - name: Download spack frozen release tarball artifact for detector release
         uses: actions/download-artifact@v3
         with:
-          name: candidates_${{ github.event.inputs.det }}daq
+          name: frozens_${{ github.event.inputs.det }}daq
           path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-candidates
+      - name: prepare cvmfs mirror spack-frozens
         run: |
             cd ${{ github.workspace }}/docker-build
-            mkdir -p candidates
+            mkdir -p releases
 
-            cd candidates
-            base_tag=dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9
-            tar xf ../${base_tag}.tar.gz
-            rm -rf ../${base_tag}.tar.gz
+            cd releases
+            base_tag=dunedaq-${{ github.event.inputs.base-release }}-a9
+            tar xf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
+            rm -rf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
 
-            tar xf ../${{ matrix.tag }}.tar.gz
-            rm -rf ../${{ matrix.tag }}.tar.gz
-
+            tar xf ../${{ matrix.tag }}-${{ github.event.inputs.build-number }}.tar.gz
+            rm -rf ../${{ matrix.tag }}-${{ github.event.inputs.build-number }}.tar.gz
+            ln -s ${{ matrix.tag }}-${{ github.event.inputs.build-number }} ${{ matrix.tag }}
 
             cd ..
-            echo "FROM "${{ matrix.input_image }}  > Dockerfile
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_FOR "${{ matrix.tag }} >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD candidates /cvmfs/dunedaq-development.opensciencegrid.org/candidates" >> Dockerfile
+            echo "ADD releases /cvmfs/dunedaq.opensciencegrid.org/spack/releases" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Log in to the Container registry
@@ -155,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/candidate-release-alma9:${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
+      image: ghcr.io/dune-daq/frozen-release-alma9:${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
     defaults:
       run:
         shell: bash
@@ -165,10 +166,10 @@ jobs:
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for detector release
       run: |
           DET=${{ github.event.inputs.det }}
-          
+
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest || true
-          dbt-setup-release -b candidate ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
+          dbt-setup-release ${DET}daq-${{ github.event.inputs.det-release }}-a9
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
