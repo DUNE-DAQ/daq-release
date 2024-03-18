@@ -25,7 +25,9 @@ echo "Assuming base release tag is $BASE_RELEASE_TAG (i.e. the same name as the 
 export DET_RELEASE_TAG=$( basename $DET_RELEASE_DIR )
 echo "Assuming detector release tag is $DET_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${DET_RELEASE_DIR})"
 
-if [[ $OS == almalinux9 ]]; then
+if [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then
+    export EXT_VERSION=v2.1
+elif [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then
     export EXT_VERSION=v2.0
 elif [[ $OS == scientific7 ]]; then
     export EXT_VERSION=v1.1
@@ -33,6 +35,8 @@ else
     echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
     return 5
 fi
+
+echo "Using externals version $EXT_VERSION"
 
 export SPACK_VERSION=0.20.0
 export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}
