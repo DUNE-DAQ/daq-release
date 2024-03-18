@@ -15,7 +15,7 @@ fi
 if [[ $( whoami ) == "cvmfsdunedaq" ]]; then
     REPO="dunedaq.opensciencegrid.org"
 elif [[ $( whoami ) == "cvmfsdunedaqdev" ]]; then
-    REPO="dunedaqdev.opensciencegrid.org"
+    REPO="dunedaq-development.opensciencegrid.org"
 else
     echo "You need to be either cvmfsdunedaq or cvmfsdunedaqdev to sync to cvmfs; exiting..." >&2
     exit 3
