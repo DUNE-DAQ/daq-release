@@ -187,9 +187,6 @@
         - name: readoutmodules
           version: v1.4.0
           commit: null
-        - name: dfmodules
-          version: v2.13.0
-          commit: null
         - name: hsilibs
           version: v3.0.2
           commit: null
@@ -201,15 +198,6 @@
           commit: null
         - name: daqconf
           version: v7.2.1
-          commit: null
-        - name: trigger
-          version: v1.7.0
-          commit: null
-        - name: triggeralgs
-          version: v1.2.0
-          commit: null
-        - name: trgtools
-          version: v1.0.1
           commit: null
         - name: hdf5libs
           version: v2.7.0
