@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if (( $# < 5 || $# > 6 )); then
+if (( $# < 4 || $# > 5 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or dune)> 
