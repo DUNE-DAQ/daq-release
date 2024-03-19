@@ -27,6 +27,10 @@ jobs:
     name: integration_tests
     runs-on: daq
     needs: make_nightly_tag
+    strategy:
+        fail-fast: false
+        matrix:
+            test_name: ["minimal_system_quick", "fake_data_producer", "long_window_readout", "small_footprint_quick"]
     defaults:
       run:
         shell: bash
@@ -39,7 +43,7 @@ jobs:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
     
-    - name: setup release and run test
+    - name: setup release and run tests
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
@@ -52,21 +56,22 @@ jobs:
           #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
-          rm -f $GITHUB_WORKSPACE/test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/minimal-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/minimal_system_quick_test.py
-          pytest --junit-xml=$GITHUB_WORKSPACE/fake-data-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/fake_data_producer_test.py
-          pytest --junit-xml=$GITHUB_WORKSPACE/long-readout-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/long_window_readout_test.py
-          pytest --junit-xml=$GITHUB_WORKSPACE/small-footprint-test-results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/small_footprint_quick_test.py
+          rm -f $GITHUB_WORKSPACE/*-test-results.xml
+          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
 
+  parse_results:
+    runs-on: daq
+    if: always()
+    needs: integration_tests
+    steps:
     - name: Surface failing tests
-      if: always()
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
       uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
       with:
-        path: ${{ github.workspace }}/*-test-results.xml
+        path: ${{ github.workspace }}/*_test_results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true

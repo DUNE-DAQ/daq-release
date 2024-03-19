@@ -15,7 +15,7 @@ fi
 if [[ $( whoami ) == "cvmfsdunedaq" ]]; then
     REPO="dunedaq.opensciencegrid.org"
 elif [[ $( whoami ) == "cvmfsdunedaqdev" ]]; then
-    REPO="dunedaqdev.opensciencegrid.org"
+    REPO="dunedaq-development.opensciencegrid.org"
 else
     echo "You need to be either cvmfsdunedaq or cvmfsdunedaqdev to sync to cvmfs; exiting..." >&2
     exit 3
@@ -24,7 +24,7 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 DIR_TO_SYNC=`dirname ${PATH_TO_SYNC}`
-SRCPATH=dunedaq@daq.fnal.gov:/home/dunedaq/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
+SRCPATH=dunedaq@daq.fnal.gov:/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq/$PATH_TO_SYNC
 DESTPATH=/cvmfs/$REPO/$DIR_TO_SYNC
 
 if [ ! -r $DESTPATH ]; then
