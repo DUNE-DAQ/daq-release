@@ -1,4 +1,4 @@
-name: SL7 build nightly release
+name: SL7 build v5 nightly release
 
 on:
   schedule:

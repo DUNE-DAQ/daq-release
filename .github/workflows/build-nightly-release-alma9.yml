@@ -1,4 +1,4 @@
-name: Alma9 build nightly release
+name: Alma9 build v5 nightly release
 
 on:
   schedule:
