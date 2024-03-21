@@ -96,7 +96,28 @@ spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_instal
 
 spack load gcc@${GCC_VERSION}
 spack compiler find
+SPACK_COMPILERS_FILE=$HOME/.spack/linux/compilers.yaml
+echo "SPACK_COMPILERS_FILE: $SPACK_COMPILERS_FILE"
+spack_compilers_file_permissions=(ls -l $SPACK_COMPILERS_FILE | awk {'print $1'})
+echo "SPACK_COMPILERS_FILE permissions: $spack_compilers_file_permissions"
+if [ -r $SPACK_COMPILERS_FILE ]; then
+    echo "$SPACK_COMPILERS_FILE does not have read permission for others; fixing..."
+    chmod o+r $SPACK_COMPILERS_FILE
+    spack_compilers_file_permissions=(ls -l $SPACK_COMPILERS_FILE | awk {'print $1'})
+    echo "Permissions for $SPACK_COMPILERS_FILE are now $spack_compilers_file_permissions"
+fi
+
 mv $HOME/.spack/linux/compilers.yaml  $SPACK_EXTERNALS/spack-installation/etc/spack/defaults/linux/
+echo "compilers.yaml has been moved from $HOME/.spack/linux/compilers.yaml to $SPACK_EXTERNALS/spack-installation/etc/spack/defaults/linux/ "
+SPACK_COMPILERS_FILE=$SPACK_EXTERNALS/spack-installation/etc/spack/defaults/linux/compilers.yaml
+moved_permissions=$(ls -l $SPACK_COMPILERS_FILE | awk {'print $1'})
+echo "compilers.yaml permissions in its new home are $moved_permissions"
+if [ -r $SPACK_COMPILERS_FILE ]; then
+    echo "$SPACK_COMPILERS_FILE does not have read permission for others in its new home; fixing..."
+    chmod o+r $SPACK_COMPILERS_FILE
+    spack_compilers_file_permissions=(ls -l $SPACK_COMPILERS_FILE | awk {'print $1'})
+    echo "Permissions for $SPACK_COMPILERS_FILE are now $spack_compilers_file_permissions"
+fi
 spack compiler list
 
 spack clean -a
