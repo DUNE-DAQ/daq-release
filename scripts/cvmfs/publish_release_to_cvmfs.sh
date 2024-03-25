@@ -32,9 +32,9 @@ fi
 
 if [[ $oslabel == "SL7" ]]; then
     workflow_name="${oslabel} build v4 or v5 ${build} release"
-elif [[ $dev_or_prod == "production" && $oslabel == "alma9" ]]; then
+elif [[ $dev_or_prod == "production" && $oslabel == "Alma9" ]]; then
     workflow_name="${oslabel} build v4 production ${build} release"
-elif [[ $dev_or_prod == "develop" && $oslabel == "alma9" ]]; then
+elif [[ $dev_or_prod == "develop" && $oslabel == "Alma9" ]]; then
     workflow_name="${oslabel} build v5 ${build} release"
 else
     echo "Build line needs to be \"production\" (for v4) or \"develop\" (for v5); exiting..." >&2
