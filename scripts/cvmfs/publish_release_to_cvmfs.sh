@@ -1,13 +1,15 @@
 #!/bin/bash
 
-if (( $# != 3 )); then
-    echo "Usage: "$( basename $0 )" [build type (candidate or frozen)] [detector type (nd or fd)] [OS for build (sl7 or alma9)] " >&2
+if (( $# != 4 )); then
+    echo "Usage: "$( basename $0 )" [build type (candidate or frozen)] [detector type (nd or fd)] \
+[OS for build (sl7 or alma9)] [Build line (develop or production)]" >&2
     exit 1
 fi
 
 build=$1
 det=$2
 os=$3
+dev_or_prod=$4
 
 if [[ $build != "candidate" && $build != "frozen" ]]; then
     echo "Build type needs to be \"candidate\" or \"frozen\"; exiting..." >&2
@@ -27,6 +29,16 @@ else
     echo "OS of build needs to be \"sl7\" or \"alma9\"; exiting..." >&2
     exit 3
 fi
+
+if [[ $dev_or_prod == "production" ]]; then
+    workflow_name="${oslabel} build v4 production ${build} release"
+elif [[ $dev_or_prod == "develop" ]]; then
+    workflow_name="${oslabel} build v5 ${build} release"
+else
+    echo "Build line needs to be \"production\" (for v4) or \"develop\" (for v5); exiting..." >&2
+    exit 31
+fi
+
 
 
 REPO=
@@ -61,7 +73,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 # Note that among other things you need to have successfully run "gh auth login" for this to work
-run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${oslabel} build ${build} release" | grep completed |head -n 1 | egrep -o '[[:digit:]]{10}' )
+run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{10}' )
 
 if [[ -z $run_id || ! $run_id =~ [0-9]+ ]]; then
      echo "Unable to obtain a relevant GitHub Action run ID; exiting..." >&2
