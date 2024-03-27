@@ -246,6 +246,9 @@
         - name: daq-buildtools
           version: v7.7.0
           commit: null
+        - name: daqsystemtest
+          version: v3.0.0
+          commit: null
         - name: pocket
           version: "develop"
           commit: null

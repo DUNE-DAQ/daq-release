@@ -6,6 +6,9 @@
     base_release: dunedaq-develop
 
     fddaq:
+        - name: daqsystemtest
+          version: "develop"
+          commit: null
         - name: dpdklibs
           version: "develop"
           commit: null
