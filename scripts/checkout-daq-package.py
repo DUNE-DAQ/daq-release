@@ -26,7 +26,7 @@ please check!\n'.format(cmd))
     else:
         print("Checkout successful")
 
-def checkout_commit(repo, commit, outdir, is_success_required):
+def checkout_commit(repo, commit, outdir, is_success_required = True):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; 
 git fetch --tags;
 git clone https://github.com/DUNE-DAQ/{repo}.git; 
