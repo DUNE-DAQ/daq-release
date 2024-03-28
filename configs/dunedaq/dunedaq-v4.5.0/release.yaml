@@ -170,7 +170,7 @@
           version: v2.7.0
           commit: null
         - name: detdataformats
-          version: v4.4.0
+          version: v4.0.0
           commit: null
         - name: trgdataformats
           version: v1.2.0
