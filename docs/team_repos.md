@@ -27,6 +27,7 @@
     * logging
     * nanorc
     * oks
+    * oksconfgen
     * oksconfig
     * oksdbinterfaces
     * okssystem
@@ -66,8 +67,19 @@
     * readoutmodules
     * serialization
     * snbmodules
-    * sspmodules
+    * tpgtools
     * utilities
+
+## crt
+* **People to contact**: Wes Ketchum, Matt Murphy
+* **Repositories with write access**:
+    * crtmodules
+
+## daphne
+* **People to contact**: Marco Roda, John Freeman
+* **Repositories with write access**:
+    * daphnemodules
+    * sspmodules
 
 ## datafmts
 * **People to contact**: Alessandro Thea, Kurt Biery
@@ -80,12 +92,13 @@
     * trgdataformats
 
 ## dqm
-* **People to contact**: Wes Ketchum 
+* **People to contact**: Wes Ketchum
 * **Repositories with write access**:
     * daqsystemtest
     * dqm
     * dqm-backend
     * dqmtools
+    * justintime
     * rawdatautils
 
 ## facility
@@ -112,6 +125,7 @@
 * **Repositories with write access**:
     * daqsystemtest
     * datafilter
+    * trgtools
     * trigger
     * triggeralgs
     * triggermodules
@@ -138,5 +152,5 @@
     * wibmod
 
 
-Page was generated at: 16/10/2023 14:28:53
+Page was generated at: 03/29/2024 13:09:41
 
