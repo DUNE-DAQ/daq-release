@@ -76,7 +76,7 @@
     * crtmodules
 
 ## daphne
-* **People to contact**: Marco Roda, John Freeman
+* **People to contact**: Marco Roda, Manuel Arroyave
 * **Repositories with write access**:
     * daphnemodules
     * sspmodules
@@ -114,6 +114,12 @@
     * lbrulibs
     * nddaqconf
 
+## readout
+* **People to contact**: Roland Sipos, Alessandro Thea
+* **Repositories with write access**:
+    * flxlibs
+    * hermesmodules
+
 ## timing
 * **People to contact**: David Cussans, Stoyan Trilov
 * **Repositories with write access**:
@@ -130,27 +136,13 @@
     * triggeralgs
     * triggermodules
 
-## udaq
-* **People to contact**: Jim Brooke
-* **Repositories with write access**:
-    * daqsystemtest
-    * dtpcontrols
-    * dtpctrllibs
-    * dtpemulator
-    * dtpfeedbacktools
-    * flx-k8s-device-plugin
-    * flxlibs
-    * timing
-    * timinglibs
-    * uhallibs
-
 ## wib
-* **People to contact**: Alessandro Thea, Paul Keener
+* **People to contact**: Paul Keener, Alessandro Thea
 * **Repositories with write access**:
     * dune-wib-firmware
     * protodune-wib-firmware
     * wibmod
 
 
-Page was generated at: 03/29/2024 13:09:41
+Page was generated at: 2024/03/30 06:57:59
 
