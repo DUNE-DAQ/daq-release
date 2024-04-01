@@ -139,7 +139,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate
 
-    python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt
+    python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || exit 11
 
     pushd $DET_RELEASE_DIR
     cp $DAQ_RELEASE_REPO/$( dirname $release_yaml )/dbt-build-order.cmake .
