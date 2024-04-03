@@ -174,8 +174,9 @@ jobs:
     permissions:
       packages: write
       contents: read
-    matrix:
-      extversion: [2.0, 2.1]
+    strategy:
+      matrix:
+        extversion: [2.0, 2.1]
     steps:
       - name: Intro
         run: |
@@ -239,8 +240,9 @@ jobs:
     permissions:
       packages: write
       contents: read
-    matrix:
-      extversion: [2.0, 2.1]
+    strategy:
+      matrix:
+        extversion: [2.0, 2.1]
     steps:    
       - name: Log in to the Container registry
         uses: docker/login-action@v2
