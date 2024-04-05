@@ -44,13 +44,13 @@ It's worth to do several checks before starting any test builds. These checks in
 
 ## Building candidate releases
 
-* Once the release configuration is ready, one can start the CI build for candidate releases. Go to the "Actions" tab of `daq-release` repo on GitHub, and select "Alma9 build candidate release" in the list of workflows in the workflows tab, then click the "run workflow" button. A drop-down menu will show up. Put in the version of the base release in the `vX.Y.Z` format, the version of the detector release, the detector type for the release (`fd` or `nd`) and the candidate release number (start with 1, count up with later candidate releases). Click "Run workflow" to start the build. 
+* Once the release configuration is ready, one can start the CI build for candidate releases. Go to the "Actions" tab of `daq-release` repo on GitHub. From the list of workflows on the left, select either "Alma9 build v5 candidate release" (for a develop release) or "Alma9 build v4 production candidate release" (for a production release), then click the "run workflow" button. A drop-down menu will show up. Put in the version of the base release in the `vX.Y.Z` format, the version of the detector release, the detector type for the release (`fd` or `nd`) and the candidate release number (start with 1, count up with later candidate releases). Click "Run workflow" to start the build. 
 * Once the build is completed successfully, verify if the same version tags shown in the GitHub Action log match those in the tag collector spreadsheet
 * To publish the candidate release to cvmfs:
     * Log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaqdev`
     * Get the [`publish_release_to_cvmfs.sh` script](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/cvmfs/publish_release_to_cvmfs.sh) (`git clone` this repo or use `curl`, e.g.)
     * Run the script without arguments for instructions; in a nutshell, it will publish the most recent release of a given specification (e.g., the most recent Alma9 near detector candidate build)
-    * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate nd alma9`)
+    * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate nd alma9 develop`)
     * After running the script, the release will take ~20 minutes before it appears on cvmfs
 * After the candidate release is deployed and available on cvmfs, do the following simple tests:
     * Set up a work area based on the candidate release
