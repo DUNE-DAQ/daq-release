@@ -33,7 +33,7 @@ if [ ! -r $DESTPATH ]; then
 fi
 
 
-ROPTS="-rvplt --stats"
+ROPTS="-rvplt --stats --delete-after"
 DRYRUN_ROPTS="$ROPTS -n"
 MYDATE=`date +%Y%m%d_%H%M%S`
 TAG=${DIR_TO_SYNC//\//_}-$MYDATE
