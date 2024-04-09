@@ -190,6 +190,24 @@ class DAQRelease:
         template_dir = os.path.join(template_dir, "packages")
 
         for ipkg in ['devtools', 'externals', 'systems']:
+
+            # JCF, Apr-9-2024: the following special treatment for the externals
+            # umbrella package is solely to be used during the development
+            # process for Issue #361
+            
+            if ipkg == "externals":
+                this_dir=os.path.dirname(os.path.abspath(__file__))
+
+                ipkg_dir = os.path.join(repo_dir, ipkg)
+                os.makedirs(ipkg_dir)
+                ipkgpy = os.path.join(ipkg_dir, "package.py")
+                srcpkgpy = f"{this_dir}/../../issue361_dev_files/package_externals.py"
+                print(f"srcpkgpy is {srcpkgpy}")
+                assert(os.path.exists(srcpkgpy))
+
+                shutil.copyfile(srcpkgpy, ipkgpy)
+                continue
+                
             itemp = os.path.join(template_dir, ipkg, 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
@@ -222,6 +240,20 @@ class DAQRelease:
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         ipkg = self.rtype
+
+        this_dir=os.path.dirname(os.path.abspath(__file__))
+
+        ipkg_dir = os.path.join(repo_dir, ipkg)
+        os.makedirs(ipkg_dir)
+        ipkgpy = os.path.join(ipkg_dir, "package.py")
+
+        srcpkgpy = f"{this_dir}/../../issue361_dev_files/package_{ipkg}.py"
+        print(f"srcpkgpy is {srcpkgpy}")
+        assert(os.path.exists(srcpkgpy))
+
+        shutil.copyfile(srcpkgpy, ipkgpy)
+        return
+
         itemp = os.path.join(template_dir, ipkg, 'package.py')
         if not os.path.exists(itemp):
             print(f"Error: template file {itemp} is not found!")
