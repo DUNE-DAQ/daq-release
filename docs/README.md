@@ -41,7 +41,7 @@ coredal: [![coredal](https://github.com/DUNE-DAQ/coredal/actions/workflows/duned
 
 ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
-ctbmodules: [![cibmodules](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-v4-cpp-ci.yml)
+cibmodules: [![cibmodules](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
 daq-cmake: [![daq-cmake](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
