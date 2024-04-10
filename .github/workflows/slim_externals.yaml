@@ -42,7 +42,7 @@ jobs:
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
-	  echo "RUN pwd"
+          echo "RUN pwd"
           echo "ADD spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Dockerfile
           echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
