@@ -25,7 +25,7 @@ We have four types of branch in our workflow:
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time 
     * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `<common branch>`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
     * Nomenclature: for a given release `fddaq-vX.Y.Z` use `prep-release/fddaq-vX.Y.Z` and similarly `prep-release/nddaq-vX.Y.Z` for `nddaq-vX.Y.Z`
-* **Patch branches**  `patch/dunedaq-vX.Y.x`**
+* **Patch branches**  `patch/fddaq-vX.Y.x`/`patch/nddaq-vX.Y.x`**
     * Used for patch frozen releases; these are forked off of the final tags of the frozen releases we're patching
     * Same rules for merging into `<common branch>` apply here as apply to the prep-release branches
     * Nomenclature is the same as for prep release branches, _except_ we leave the patch version a "variable". So, e.g., while a prep release branch for a FD-based `v4.4.0` release would be `prep-release/fddaq-v4.4.0`, if a `v4.4.1` patch released is based off it a patch release branch would be `patch/fddaq-v4.4.x`
@@ -41,7 +41,7 @@ We have two types of tags for DAQ repositories:
 * DAQ release tags: 
     * Made by the software coordination team;
     * Aliased to a version tag;
-    * Nomenclature: `fddaq-vX.Y.Z` (FD packages), `nddaq-vX.Y.Z` (ND packages), `dunedaq-vX.Y.Z` (common packages) 
+    * Nomenclature: `fddaq-vX.Y.Z` (FD packages), `nddaq-vX.Y.Z` (ND packages), `coredaq-vX.Y.Z` (common packages) 
 
 ## Release cycle 
 

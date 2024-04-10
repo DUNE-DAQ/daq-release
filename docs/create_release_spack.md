@@ -14,9 +14,9 @@ A patch release is built in the same way as a non-patch release, except it doesn
 
 ### Create release configurations
 
-The release configuration package versions are defined by `configs/dunedaq-vX.Y.Z/release.yaml` (base release) and either `configs/fddaq-vX.Y.Z/release.yaml` or `configs/nddaq-vX.Y.Z/release.yaml` (detector release). To prepare the release configuration for a new release, it is best to start from (copy) the configuration of the develop release (`configs/dunedaq/dunedaq-develop/release.yaml` and `configs/fddaq/fddaq-develop/release.yaml` or `configs/nddaq/nddaq-develop/release.yaml`).
+The release configuration package versions are defined by `configs/coredaq/coredaq-vX.Y.Z/release.yaml` (core release) and either `configs/fddaq/fddaq-vX.Y.Z/release.yaml` or `configs/nddaq/nddaq-vX.Y.Z/release.yaml` (detector release). To prepare the release configuration for a new release, it is best to start from (copy) the configuration of the develop release (`configs/coredaq/coredaq-develop/release.yaml` and `configs/fddaq/fddaq-develop/release.yaml` or `configs/nddaq/nddaq-develop/release.yaml`).
 
-The release YAML file `dunedaq-<vX.Y.Z>.yaml` contain sections meant to define the versions of packages. In general, the `externals`, `devtools`, `systems` and `pymodules` sections will already have versions defined since you copied the YAML files from the develop release. While the develop release builds DUNE DAQ packages from the head of their `develop` branches, it uses versioned non-DUNE DAQ packages (e.g., Boost). However, you'll want to add the correct versions for the DUNE DAQ packages, e.g. edit
+The release YAML file contains sections meant to define the versions of packages. In general, the `externals`, `devtools`, `systems` and `pymodules` sections will already have versions defined since you copied the YAML files from the develop release. While the develop release builds DUNE DAQ packages from the head of their `develop` branches, it uses versioned non-DUNE DAQ packages (e.g., Boost). However, you'll want to add the correct versions for the DUNE DAQ packages, e.g. edit
 ```
         - name: fddetdataformats
           version: "develop"
