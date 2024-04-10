@@ -1,7 +1,7 @@
 ---
-    release: dunedaq-develop
+    release: coredaq-develop
 
-    type: dunedaq
+    type: coredaq
 
     externals:
         - name: boost
@@ -120,9 +120,9 @@
           version: 8.7p1
           variant: ~
 
-    dunedaq:
+    coredaq:
         - name: daq-cmake
-          version: v2.7.0
+          version: v2.7.1
           commit: null
         - name: ers
           version: "develop"
@@ -199,6 +199,9 @@
         - name: timinglibs
           version: "develop"
           commit: null
+        - name: daqconf
+          version: "develop"
+          commit: null
         - name: trigger
           version: "develop"
           commit: null
@@ -209,36 +212,6 @@
           version: "develop"
           commit: null
         - name: hdf5libs
-          version: "develop"
-          commit: null
-        - name: oks
-          version: "develop"
-          commit: null
-        - name: okssystem
-          version: "develop"
-          commit: null
-        - name: oksutils
-          version: "develop"
-          commit: null
-        - name: oksconfig
-          version: "develop"
-          commit: null
-        - name: oksdbinterfaces
-          version: "develop"
-          commit: null
-        - name: genconfig
-          version: "develop"
-          commit: null
-        - name: coredal
-          version: "develop"
-          commit: null
-        - name: appdal
-          version: "develop"
-          commit: null
-        - name: dbe
-          version: "develop"
-          commit: null
-        - name: oksconfgen
           version: "develop"
           commit: null
 

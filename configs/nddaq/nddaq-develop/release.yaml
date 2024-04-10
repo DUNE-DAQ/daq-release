@@ -3,7 +3,7 @@
 
     type: nddaq
 
-    base_release: dunedaq-develop
+    base_release: coredaq-develop
 
     nddaq:
 

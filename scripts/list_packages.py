@@ -6,7 +6,7 @@ import sys
 from spack.dr_tools import get_packages
 
 if len(sys.argv) < 3:
-    print("Usage: {} <name of release type (develop or version)> <name of build group (dunedaq, fddaq, nddaq>".format(sys.argv[0].split("/")[-1]))
+    print("Usage: {} <name of release type (develop or version)> <name of build group (coredaq, fddaq, nddaq>".format(sys.argv[0].split("/")[-1]))
     sys.exit(1)
 
 reltype=sys.argv[1]

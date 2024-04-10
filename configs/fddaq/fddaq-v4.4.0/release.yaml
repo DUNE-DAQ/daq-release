@@ -3,7 +3,7 @@
 
     type: fddaq
 
-    base_release: dunedaq-v4.5.0
+    base_release: coredaq-v4.5.0
 
     fddaq:
         - name: ctbmodules

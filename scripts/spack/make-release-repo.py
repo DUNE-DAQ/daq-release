@@ -232,8 +232,8 @@ class DAQRelease:
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
-        if self.rtype != "dunedaq":
-            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        if self.rtype != "coredaq":
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -258,7 +258,7 @@ class DAQRelease:
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):
-        if self.rtype == "dunedaq":
+        if self.rtype == "coredaq":
             self.generate_external_umbrella_package(repo_path, template_dir)
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return

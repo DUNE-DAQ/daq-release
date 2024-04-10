@@ -1,6 +1,6 @@
 
 buildtype="develop"
-packages_with_ci_single_string=$( ../list_packages.py $buildtype dunedaq )" "$( ../list_packages.py $buildtype fddaq )" "$( ../list_packages.py $buildtype nddaq )
+packages_with_ci_single_string=$( ../list_packages.py $buildtype coredaq )" "$( ../list_packages.py $buildtype fddaq )" "$( ../list_packages.py $buildtype nddaq )
 
 read -r -a dune_packages_with_ci <<< $packages_with_ci_single_string
 

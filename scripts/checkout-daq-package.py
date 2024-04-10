@@ -77,8 +77,8 @@ if __name__ == "__main__":
     pkgs = []
     if args.input_manifest is not None:
         yaml_dict = parse_yaml_file(args.input_manifest)
-        if "dunedaq" in yaml_dict:
-            pkgs = parse_yaml_file(args.input_manifest)["dunedaq"]
+        if "coredaq" in yaml_dict:
+            pkgs = parse_yaml_file(args.input_manifest)["coredaq"]
         if "fddaq" in yaml_dict:
             pkgs = parse_yaml_file(args.input_manifest)["fddaq"]
         if "nddaq" in yaml_dict:

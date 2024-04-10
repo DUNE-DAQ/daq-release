@@ -1,7 +1,7 @@
 ---
-    release: dunedaq-v5.0.0
+    release: coredaq-v4.5.0
 
-    type: dunedaq
+    type: coredaq
 
     externals:
         - name: boost
@@ -120,9 +120,9 @@
           version: 8.7p1
           variant: ~
 
-    dunedaq:
+    coredaq:
         - name: daq-cmake
-          version: v2.7.0
+          version: v2.7.1
           commit: null
         - name: ers
           version: v1.5.1
@@ -140,13 +140,13 @@
           version: v1.3.6
           commit: null
         - name: rcif
-          version: v1.2.3
+          version: v1.3.0
           commit: null
         - name: appfwk
-          version: v3.0.0
+          version: v2.10.0
           commit: null
         - name: listrev
-          version: v4.0.1
+          version: v3.4.0
           commit: null
         - name: utilities
           version: v2.4.0
@@ -164,7 +164,7 @@
           version: v1.3.1
           commit: null
         - name: iomanager
-          version: v1.6.0
+          version: v1.5.0
           commit: null
         - name: dfmessages
           version: v2.7.0
@@ -173,84 +173,57 @@
           version: v4.0.0
           commit: null
         - name: trgdataformats
-          version: v1.1.0
+          version: v1.2.0
           commit: null
         - name: detchannelmaps
-          version: v1.7.0
+          version: v1.6.2
           commit: null
         - name: daqdataformats
-          version: v3.6.0
+          version: v3.7.0
           commit: null
         - name: readoutlibs
-          version: v2.0.1
+          version: v1.7.0
           commit: null
         - name: readoutmodules
-          version: v2.0.0
+          version: v1.4.0
           commit: null
         - name: dfmodules
-          version: v3.0.0
+          version: v2.14.0
           commit: null
         - name: hsilibs
-          version: v4.0.0
+          version: v3.1.0
           commit: null
         - name: timing
-          version: v7.6.0
+          version: v7.7.0
           commit: null
         - name: timinglibs
-          version: v4.0.1
+          version: v3.2.0
+          commit: null
+        - name: daqconf
+          version: v7.3.0
           commit: null
         - name: trigger
-          version: v2.0.0
+          version: v1.8.0
           commit: null
         - name: triggeralgs
-          version: v1.2.0
+          version: v1.3.0
           commit: null
         - name: trgtools
-          version: v1.0.1
+          version: v1.1.0
           commit: null
         - name: hdf5libs
-          version: v2.7.0
-          commit: null
-        - name: oks
-          version: v1.1.0
-          commit: null
-        - name: okssystem
-          version: v1.0.0
-          commit: null
-        - name: oksutils
-          version: v1.0.0
-          commit: null
-        - name: oksconfig
-          version: v1.0.0
-          commit: null
-        - name: oksdbinterfaces
-          version: v1.0.1
-          commit: null
-        - name: genconfig
-          version: v1.1.0
-          commit: null
-        - name: coredal
-          version: v1.2.0
-          commit: null
-        - name: appdal
-          version: v1.0.0
-          commit: null
-        - name: dbe
-          version: v1.1.0
-          commit: null
-        - name: oksconfgen
-          version: v1.0.0
+          version: v2.8.0
           commit: null
 
     others:
         - name: daq-release
-          version: v2.4.0
+          version: "develop"
           commit: null
         - name: daq-buildtools
-          version: v7.7.0
+          version: "develop"
           commit: null
         - name: daqsystemtest
-          version: v3.0.0
+          version: "develop"
           commit: null
         - name: pocket
           version: "develop"
@@ -258,9 +231,9 @@
         - name: microservices
           version: "develop"
           commit: null
-        - name: dqmtools
-          version: v0.2.0
+        - name: dqm-backend
+          version: "develop"
           commit: null
         - name: grafana-dashboards
-          version: v2.0.0
+          version: "develop"
           commit: null
