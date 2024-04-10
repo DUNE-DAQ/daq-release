@@ -35,7 +35,7 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
           export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
@@ -48,13 +48,13 @@ jobs:
     - name: upload spack frozen release tarball for base release
       uses: actions/upload-artifact@v3
       with:
-        name: frozens_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
+        name: frozens_coredaq
+        path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/dunedaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
           export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
@@ -95,7 +95,7 @@ jobs:
       - name: Download spack frozen release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
-          name: frozens_dunedaq
+          name: frozens_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack frozen release tarball artifact for detector release
@@ -110,7 +110,7 @@ jobs:
             mkdir -p releases
 
             cd releases
-            base_tag=dunedaq-${{ github.event.inputs.base-release }}-a9
+            base_tag=coredaq-${{ github.event.inputs.base-release }}-a9
             tar xf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
             rm -rf ../${base_tag}-${{ github.event.inputs.build-number }}.tar.gz
 

@@ -35,7 +35,7 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/${DET}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-c8
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
@@ -48,13 +48,13 @@ jobs:
     - name: upload spack candidate release tarball for base release
       uses: actions/upload-artifact@v3
       with:
-        name: candidates_dunedaq
-        path: ${{ github.workspace }}/tarballs_for_upload/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8.tar.gz
+        name: candidates_coredaq
+        path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8.tar.gz
 
     - name: setup directories and install spack for the detector release
       run: |
           export DET=${{ github.event.inputs.det }}
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/${DET}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-c8
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
@@ -97,7 +97,7 @@ jobs:
       - name: Download spack candidate release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
-          name: candidates_dunedaq
+          name: candidates_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack candidate release tarball artifact for detector release
@@ -112,7 +112,7 @@ jobs:
             mkdir -p candidates
 
             cd candidates
-            base_tag=dunedaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
+            base_tag=coredaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-c8
             ls ..
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz

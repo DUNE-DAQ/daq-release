@@ -49,7 +49,7 @@ jobs:
       with:
         path: daq-release
 
-    - name: setup directories and install spack for the dunedaq release
+    - name: setup directories and install spack for the coredaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
@@ -66,7 +66,7 @@ jobs:
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v3
       with:
-        name: nightly_dunedaq
+        name: nightly_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
@@ -113,7 +113,7 @@ jobs:
       - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
-          name: nightly_dunedaq
+          name: nightly_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack nightly release tarball artifact for far detector release
