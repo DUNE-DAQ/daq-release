@@ -58,7 +58,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR dune $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}

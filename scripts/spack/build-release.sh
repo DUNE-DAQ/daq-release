@@ -3,7 +3,7 @@
 if (( $# < 4 || $# > 5 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
-                        <build type (fd, nd, or dune)> 
+                        <build type (fd, nd, or core)> 
                         <OS (almalinux9 or scientific7)>
                         (optional default repo branch (nightly only, default is develop) )" >&2
     exit 1
@@ -19,8 +19,8 @@ if [[ -n $5 ]]; then
     export DEFAULT_BRANCH=$5
 fi
 
-if [[ $DET != "dune" && $DET != "fd" && $DET != "nd" ]]; then
-    echo "Type of build needs to be specified as \"dune\" (common packages only), \"fd\" (far detector stack) or \"nd\" (near detector stack); exiting..." >&2
+if [[ $DET != "core" && $DET != "fd" && $DET != "nd" ]]; then
+    echo "Type of build needs to be specified as \"core\" (common packages only), \"fd\" (far detector stack) or \"nd\" (near detector stack); exiting..." >&2
     exit 2
 fi
 
@@ -32,7 +32,7 @@ fi
 export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
-if [[ $DET == "dune" ]]; then
+if [[ $DET == "core" ]]; then
     export SPACK_AREA=$BASE_SPACK_AREA
 elif [[ $DET == "nd" || $DET == "fd" ]]; then
     export SPACK_AREA=$DET_SPACK_AREA
@@ -46,7 +46,7 @@ get_spack
 OLD_SUBDIR=$SPACK_AREA/spack-0.20.0-gcc-12.1.0
 mkdir -p $OLD_SUBDIR
 
-if [[ "$DET" == "dune" ]]; then
+if [[ "$DET" == "core" ]]; then
   daqify_spack_environment base
   release_yaml=$( get_release_yaml "base" )
   base_release_arg=""
@@ -100,7 +100,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 build_dbe=false
-if [[ $DET == "dune" ]]; then
+if [[ $DET == "core" ]]; then
     spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
