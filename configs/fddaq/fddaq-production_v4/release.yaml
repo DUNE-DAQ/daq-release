@@ -9,6 +9,9 @@
         - name: ctbmodules
           version: "develop"
           commit: null
+        - name: cibmodules
+          version: "develop"
+          commit: null
         - name: daphnemodules
           version: "develop"
           commit: null
