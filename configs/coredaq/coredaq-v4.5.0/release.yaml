@@ -128,7 +128,7 @@
           version: v1.5.1
           commit: null
         - name: logging
-          version: v1.0.8
+          version: v1.1.3
           commit: null
         - name: cmdlib
           version: v1.1.7
@@ -173,7 +173,7 @@
           version: v4.0.0
           commit: null
         - name: trgdataformats
-          version: v1.2.0
+          version: v1.2.1
           commit: null
         - name: detchannelmaps
           version: v1.6.2
@@ -194,25 +194,25 @@
           version: v3.1.0
           commit: null
         - name: timing
-          version: v7.7.0
+          version: v7.7.2
           commit: null
         - name: timinglibs
           version: v3.2.0
           commit: null
         - name: daqconf
-          version: v7.3.0
+          version: v7.3.1
           commit: null
         - name: trigger
-          version: v1.8.0
+          version: v1.8.1
           commit: null
         - name: triggeralgs
-          version: v1.3.0
+          version: v1.3.1
           commit: null
         - name: trgtools
-          version: v1.1.0
+          version: v1.1.1
           commit: null
         - name: hdf5libs
-          version: v2.8.0
+          version: v2.8.1
           commit: null
 
     others:

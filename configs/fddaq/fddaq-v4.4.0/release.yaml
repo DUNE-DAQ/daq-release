@@ -6,6 +6,9 @@
     base_release: coredaq-v4.5.0
 
     fddaq:
+        - name: cibmodules
+          version: v1.0.0
+          commit: null
         - name: ctbmodules
           version: v2.2.0
           commit: null
@@ -13,13 +16,13 @@
           version: v2.3.0
           commit: null
         - name: daphnemodules
-          version: v1.0.0
+          version: v1.1.0
           commit: null
         - name: dpdklibs
           version: v1.3.0
           commit: null
         - name: fddaqconf
-          version: v1.2.0
+          version: v1.2.1
           commit: null
         - name: fddetdataformats
           version: v1.1.0
@@ -37,7 +40,7 @@
           version: v1.1.0
           commit: null
         - name: rawdatautils
-          version: v1.5.3
+          version: v1.5.4
           commit: null
         - name: snbmodules
           version: v1.0.1
@@ -232,7 +235,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.2.2
+          version: 5.2.4
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
