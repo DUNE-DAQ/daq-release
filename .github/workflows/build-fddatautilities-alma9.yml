@@ -1,0 +1,167 @@
+name: Alma9 fddatautilities build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'fddatautilities tag prefix'
+        default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  build_the_develop_release_spack:
+    name: build_dev_release_spack
+    runs-on: daq
+    needs: make_nightly_tag
+    container:
+      image: ghcr.io/dune-daq/alma9-slim-externals:fddatautilities
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release
+
+    - name: setup directories and install spack for the dunedaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export FULL_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDDU${NIGHTLY_TAG}
+          export OS=almalinux9
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FULL_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+
+          cd $CORE_RELEASE_DIR/../
+          tar_and_stage_release ${CORE_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for base release
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_dunedaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
+    - name: setup directories and install spack for the fddu release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export FULL_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDDU${NIGHTLY_TAG}
+          export OS=almalinux9
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FULL_RELEASE_DIR fddatautilities $OS ${{ github.event.inputs.feature-branch }}
+
+          cd $FULL_RELEASE_DIR/../
+          tar_and_stage_release ${FULL_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for far detector release
+      uses: actions/upload-artifact@v3
+      with:
+        name: nightly_fddatautilities
+        path: ${{ github.workspace }}/tarballs_for_upload/NFDDU${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
+  update_image:
+    name: update_spack_image_nightly
+    runs-on: daq
+    strategy:
+      matrix:
+        include:
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:fddatautilities"
+            output_image: "ghcr.io/dune-daq/nightly-release-alma9"
+            tag: "fddatautilities"
+    needs: [build_the_develop_release_spack, make_nightly_tag] 
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
+      - name: Download spack nightly release tarball artifact for base release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_dunedaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for far detector release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_fddatautilities
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p nightly
+
+            cd nightly
+            base_tag="NB${NIGHTLY_TAG}"
+            tar xf ../${base_tag}.tar.gz
+            rm -rf ../${base_tag}.tar.gz
+
+            fddatautilities_tag="NFDDU${NIGHTLY_TAG}"
+            tar xf ../${fddatautilities_tag}.tar.gz
+            rm -rf ../${fddatautilities_tag}.tar.gz
+
+            cd ..
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/dune-daq/nightly-release-alma9
+          tags: |
+            type=raw,value=fddatautilities
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
