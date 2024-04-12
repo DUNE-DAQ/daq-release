@@ -105,10 +105,10 @@ class DAQRelease:
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def get_cmake_dependencies(self, package_name, branch_name='develop'):
+    def get_cmake_dependencies(self, package_name, branch_name):
         if self.overwrite_branch != '':
             if check_branch_exists(package_name, self.overwrite_branch):
-                branch = self.overwrite_branch
+                branch_name = self.overwrite_branch
         file_name = "CMakeLists.txt"
         cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
         command = f'curl -o {file_name} --fail {cmakelists_path}'
