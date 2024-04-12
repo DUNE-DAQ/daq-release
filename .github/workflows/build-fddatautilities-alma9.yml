@@ -1,0 +1,30 @@
+name: Alma9 fddatautilities build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'fddatautilities tag prefix'
+        default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
