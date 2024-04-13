@@ -12,7 +12,7 @@ function git_checkout_and_update_ci {
     prod_name=${iprd_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $prod_name *****************************"
-    git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b production/v4
+    git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
     pushd ${prod_name}
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
@@ -30,7 +30,7 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-v4-cpp-ci.yml dunedaq-v4-cpp-ci.yml 
+git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
 
 popd
 
