@@ -1,5 +1,9 @@
 name: hello-podman
-on: push
+on: 
+  push:
+    branches:
+      - 'amogan/podman_workflow'
+
 
 jobs:
   build_alma9:
@@ -30,3 +34,4 @@ jobs:
           base-image: ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}
           image: my-new-image
           tags: v0.1
+
