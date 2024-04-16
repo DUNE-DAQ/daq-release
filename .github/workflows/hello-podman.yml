@@ -30,4 +30,3 @@ jobs:
           base-image: ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}
           image: my-new-image
           tags: v0.1
-
