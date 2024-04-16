@@ -20,6 +20,10 @@ jobs:
       - name: Print disk space
         run: |
             df -h
+      - name: Print podman debug
+        run: podman info --debug
+      - name: Print registry auth file 
+        run: echo "$REGISTRY_AUTH_FILE"
       - name: Podman Login
         uses: redhat-actions/podman-login@v1
         with:
