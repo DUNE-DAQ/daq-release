@@ -1,0 +1,33 @@
+name: hello-podman
+on: push
+
+jobs:
+  build_alma9:
+    name: Build alma9 slim externals with Buildah
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    env:
+        IMAGE_NAME: alma9-slim-externals:v2.0
+        USERNAME: dune-daq
+        REGISTRY: ghcr.io
+    steps:
+      - name: Print disk space
+        run: |
+            df -h
+      - name: Podman Login
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          #username: ${{ github.actor }}
+          username: ${{ env.USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          base-image: ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}
+          image: my-new-image
+          tags: v0.1
+
