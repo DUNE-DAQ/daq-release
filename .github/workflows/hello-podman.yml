@@ -31,6 +31,7 @@ jobs:
           #username: ${{ github.actor }}
           username: ${{ env.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          auth_file_path: '$HOME/.docker/config.json'
 
       - name: Build Image
         uses: redhat-actions/buildah-build@v2
