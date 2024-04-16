@@ -4,12 +4,12 @@ on: push
 jobs:
   build_alma9:
     name: Build alma9 slim externals with Buildah
-    runs-on: ubuntu-latest
+    runs-on: daq
     permissions:
       packages: write
       contents: read
     env:
-        IMAGE_NAME: alma9-slim-externals:v2.0
+        IMAGE_NAME: alma9-slim-externals:v2.1
         USERNAME: dune-daq
         REGISTRY: ghcr.io
     steps:
