@@ -22,8 +22,8 @@ jobs:
             df -h
       - name: Print podman debug
         run: podman info --debug
-      - name: Print registry auth file 
-        run: echo "$REGISTRY_AUTH_FILE"
+      - name: Print Docker env
+        run: env | grep DOCKER
       - name: Podman Login
         uses: redhat-actions/podman-login@v1
         with:
