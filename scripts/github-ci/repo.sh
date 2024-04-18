@@ -11,7 +11,7 @@ if [[ "$DEVLINE" != "develop" && "$DEVLINE" != "production_v4" ]]; then
     return 2
 fi
 
-packages_with_ci_single_string=$( ../list_packages.py $DEVLINE coredaq )" "$( ../list_packages.py $$DEVLINE fddaq )  #" "$( ../list_packages.py $$DEVLINE nddaq )
+packages_with_ci_single_string=$( ../list_packages.py $DEVLINE coredaq )" "$( ../list_packages.py $DEVLINE fddaq )  #" "$( ../list_packages.py $DEVLINE nddaq )
 
 read -r -a dune_packages_with_ci <<< $packages_with_ci_single_string
 
