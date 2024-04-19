@@ -35,10 +35,9 @@ In addition to the `release.yaml` file, there also needs to be a `dbt-build-orde
 
 ### Checks before doing test builds
 
-It's worth to do several checks before starting any test builds. These checks include:
+It's worth doing a couple of checks before starting any test builds. These checks include:
 
-* Check version tags match with the version numbers listed in `CMakeLists.txt`; The script `scripts/checkout-daq-package.py` in this repo can help here. `python3 scripts/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers
-* Update Spack recipe files for DAQ packages with newly added dependencies; note that in general this will have happened already given that the nightly forms the basis of the candidate release
+* Check version tags match with the version numbers listed in `CMakeLists.txt`; The script `scripts/checkout-daq-package.py` in this repo can help here. `python3 scripts/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o $( mktemp -d )` will checkout all the DAQ packages used in the release into a randomly-named directory and verify if the version tags match waht's in `CMakeLists.txt`
 * (Optional) Check if developers got their dependencies in `CMakeLists.txt` to match those in `cmake/<pkgname>Config.cmake.in` files; see [this section](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/#installing-your-project-as-a-local-package) of the daq-cmake instructions for more
 
 
