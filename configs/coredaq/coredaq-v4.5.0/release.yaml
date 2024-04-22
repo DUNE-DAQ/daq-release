@@ -217,13 +217,13 @@
 
     others:
         - name: daq-release
-          version: v2.5.0
+          version: v2.5.1
           commit: null
         - name: daq-buildtools
           version: v8.0.0
           commit: null
         - name: daqsystemtest
-          version: "develop"
+          version: v2.3.1
           commit: null
         - name: pocket
           version: "develop"
