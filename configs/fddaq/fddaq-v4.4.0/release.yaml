@@ -13,7 +13,7 @@
           version: v2.2.0
           commit: null
         - name: daqsystemtest
-          version: v2.3.0
+          version: v2.3.1
           commit: null
         - name: daphnemodules
           version: v1.1.0
