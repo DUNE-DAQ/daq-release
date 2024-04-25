@@ -24,6 +24,6 @@ class Fddatautilities(BundlePackage):
 
 
     for build_type in ["Debug", "RelWithDebInfo", "Release"]:
-        depends_on(f"dunedaq@NB_DEV_240408_A9 subset=datautilities build_type={build_type}", when=f"build_type={build_type}")
+        depends_on(f"coredaq@NB_DEV_240408_A9 subset=datautilities build_type={build_type}", when=f"build_type={build_type}")
         depends_on(f"rawdatautils@NFDDU_DEV_240408_A9 build_type={build_type}", when=f"build_type={build_type}")
         depends_on(f"fddetdataformats@NFDDU_DEV_240408_A9 build_type={build_type}", when=f"build_type={build_type}")

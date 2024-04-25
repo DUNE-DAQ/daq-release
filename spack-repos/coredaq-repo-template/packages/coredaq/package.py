@@ -19,6 +19,8 @@ class Coredaq(BundlePackage):
             values=('Debug', 'Release', 'RelWithDebInfo'),
             multi=True)
 
+    variant('subset', values=('all', 'datautilities'), default='all', description='Select subset of total available dunedaq packages')
+
     depends_on("externals@XRELEASEX", when="@XRELEASEX")
 
     def setup_run_environment(self, env):

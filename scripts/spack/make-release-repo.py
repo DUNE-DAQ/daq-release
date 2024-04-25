@@ -268,7 +268,7 @@ class DAQRelease:
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "coredaq":
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} subset=all build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -281,7 +281,7 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     iver = self.rdict["release"]
-                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"subset=all build_type={{build_type}}")'
         lines += '\n'
 
         ipkg_dir = os.path.join(repo_dir, ipkg)
