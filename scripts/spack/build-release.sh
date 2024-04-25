@@ -60,27 +60,36 @@ cd $DAQ_RELEASE_REPO
 if [[ "$TARGET" != "core" ]]; then
     spack_template_dir=spack-repos/${TARGET}-repo-template
 else
-    spack_template_dir=spack-repos/dunedaq-repo-template
+    spack_template_dir=spack-repos/coredaq-repo-template
 fi
 
-echo python3 scripts/spack/make-release-repo.py -u \
+is_fddatautilities=false
+
+if [[ "$FULL_RELEASE_DIR" =~ "FDDU" ]]; then
+    is_fddatautilities=true
+fi
+
+if $is_fddatautilities; then
+    cmd="python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
   ${branch_arg} \
-  || exit 5
-
-
-python3 scripts/spack/make-release-repo.py -u \
+  --fddatautilities"
+else
+    cmd="python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
-  ${branch_arg} \
-  || exit 5
+  ${branch_arg}"
+fi
+
+echo $cmd
+$cmd || exit 5
 
 
 cd $SPACK_AREA
@@ -90,10 +99,15 @@ if [[ "$TARGET" != "core" ]]; then
     retval=$?
     cat $SPACK_AREA/spec_${TARGET}_log.txt 
 else
-    echo "FOR ISSUE #361 TESTING PURPOSES, FORCE subset=datautilities"
-    spack spec -l --reuse dunedaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dunedaq_log.txt 2>&1
+
+    if $is_fddatautilities ; then
+	spack spec -l --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_coredaq_log.txt 2>&1
+    else
+	spack spec -l --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=all build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_coredaq_log.txt 2>&1
+    fi
+	   
     retval=$?
-    cat $SPACK_AREA/spec_dunedaq_log.txt 
+    cat $SPACK_AREA/spec_coredaq_log.txt 
 fi
 
 if [[ $retval != 0 ]]; then
@@ -102,9 +116,7 @@ fi
 
 build_dbe=false
 
-echo "FOR ISSUE #361 TESTING PURPOSES, IGNORE dbe"
-#if [[ $TARGET == "core" ]]; then
-if false; then
+if [[ $TARGET == "core" ]] && ! $is_fddatautilities ; then
     spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
@@ -121,8 +133,11 @@ fi
 if [[ "$TARGET" != "core" ]]; then
     spack install --reuse ${TARGET}@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 else
-    echo "FOR ISSUE #361 TESTING PURPOSES, FORCE subset=datautilities"
-    spack install --reuse dunedaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+    if $is_fddatautilities ; then
+	spack install --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+    else
+	spack install --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=all build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+    fi
 fi
 
 if $build_dbe; then
@@ -134,23 +149,23 @@ if [[ "$TARGET" != "core" ]]; then
     spack load ${TARGET}@${RELEASE_TAG} || exit 9
 
     cd $DAQ_RELEASE_REPO
-    echo /usr/bin/python3 scripts/spack/make-release-repo.py \
+    cmd="echo /usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA} \
         --pyvenv-requirements \
-        -i ${release_yaml}
+        -i ${release_yaml}"
 
-    /usr/bin/python3 scripts/spack/make-release-repo.py \
-        -o ${SPACK_AREA} \
-        --pyvenv-requirements \
-        -i ${release_yaml} \
-        || exit 10
+    echo $cmd
+    $cmd || exit 10
 
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate
 
-    echo "FOR ISSUE #361 TESTING PURPOSES, DISREGARD ANY PIP INSTALLATION ERRORS"
-    python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt
-    #python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || exit 11
+    if $is_fddatautilities ; then
+	echo "FOR ISSUE #361 TESTING PURPOSES, DISREGARD ANY PIP INSTALLATION ERRORS"
+	python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || true
+    else
+	python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || exit 11
+    fi
     
     pushd $FULL_RELEASE_DIR
     cp $DAQ_RELEASE_REPO/$( dirname $release_yaml )/dbt-build-order.cmake .
