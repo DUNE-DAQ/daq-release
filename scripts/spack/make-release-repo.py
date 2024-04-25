@@ -369,7 +369,7 @@ if __name__ == "__main__":
                         help="whether to generate file containing bash array for python modules;")
     parser.add_argument('--pyvenv-requirements', action='store_true',
                         help="whether to generate requirements file for pyvenv;")
-    parser.add_argument('--fddatautilities', action='store_false',
+    parser.add_argument('--fddatautilities', action='store_true',
                         help="whether this is for the fddatautilities package (TEMPORARY)")
     parser.add_argument('--base-release',
                         help="base release name")
