@@ -3,10 +3,13 @@
 
     type: fddaq
 
-    base_release: dunedaq-develop
+    base_release: coredaq-develop
 
     fddaq:
         - name: ctbmodules
+          version: "develop"
+          commit: null
+        - name: cibmodules
           version: "develop"
           commit: null
         - name: daphnemodules
@@ -232,7 +235,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.2.2
+          version: 5.2.4
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3

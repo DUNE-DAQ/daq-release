@@ -61,8 +61,8 @@ pushd $DAQ_RELEASE_DIR
 
 cmd="python3 scripts/spack/make-release-repo.py -u \
 -b develop \
--i configs/dunedaq/dunedaq-develop/release.yaml \
--t spack-repos/dunedaq-repo-template \
+-i configs/coredaq/coredaq-develop/release.yaml \
+-t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
 -o ${SPACK_EXTERNALS}/spack-installation"
 
@@ -103,7 +103,7 @@ spack clean -a
 
 # JCF, Mar-16-2024
 
-# Quite hacky, but the situation is that we're building dunedaq,
+# Quite hacky, but the situation is that we're building coredaq,
 # etc. solely so we're guaranteed that all non-DUNE-DAQ packages on
 # which DUNE DAQ packages depend get installed and are compatible with
 # one another. So we want the traditional CMake, and not the latest
@@ -113,17 +113,17 @@ sed -i 's/cmake@3.26.3/cmake@3.23.1/' $(spack location -p devtools)/package.py
 
 ## Step 5 -- check all specs, then install
 
-dunedaq_spec="dunedaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH}"
+coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH}"
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH}"
 
 llvm_spec="llvm@15.0.7~omp_as_runtime %gcc@${GCC_VERSION} build_type=MinSizeRel arch=${ARCH}"
 
-spack spec -l --reuse $dunedaq_spec |& tee /log/spack_spec_dunedaq.txt || exit 9
+spack spec -l --reuse $coredaq_spec |& tee /log/spack_spec_coredaq.txt || exit 9
 spack spec -l --reuse $dbe_spec     |& tee /log/spack_spec_dbe.txt || exit 10
 spack spec -l --reuse $llvm_spec    |& tee /log/spack_spec_llvm.txt || exit 11
 
-spack install --reuse $dunedaq_spec |& tee /log/spack_install_dunedaq.txt || exit 12
+spack install --reuse $coredaq_spec |& tee /log/spack_install_coredaq.txt || exit 12
 
 # overwrite ssh config - in the future, this part should be done in daq-release/spack-repos/externals/packages/openssh/package.py 
 SSH_INSTALL_DIR=$(spack location -i openssh)

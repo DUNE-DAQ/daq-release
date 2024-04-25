@@ -59,7 +59,7 @@ elif [[ $build == "frozen" ]]; then
 
 fi
 
-BASE_WILDCARD='dunedaq-v*'
+BASE_WILDCARD='coredaq-v*'
 DET_WILDCARD=$det'daq-v*'
 
 tmp_dir=$(mktemp --tmpdir=/dev/shm -d -t release_XXXXXXXXXX)
@@ -86,7 +86,7 @@ read -p "Will publish the results of the GitHub Action https://github.com/DUNE-D
 
 test "$answer" != "y" && exit 0
 
-artifacts="${build}s_dunedaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env ${det}daq_app_rte"
+artifacts="${build}s_coredaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env ${det}daq_app_rte"
 
 for artifact in $artifacts; do
     echo "Downloading $artifact..."

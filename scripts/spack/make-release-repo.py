@@ -105,10 +105,10 @@ class DAQRelease:
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def get_cmake_dependencies(self, package_name, branch_name='develop'):
+    def get_cmake_dependencies(self, package_name, branch_name):
         if self.overwrite_branch != '':
             if check_branch_exists(package_name, self.overwrite_branch):
-                branch = self.overwrite_branch
+                branch_name = self.overwrite_branch
         file_name = "CMakeLists.txt"
         cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
         command = f'curl -o {file_name} --fail {cmakelists_path}'
@@ -264,8 +264,8 @@ class DAQRelease:
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
-        if self.rtype != "dunedaq":
-            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        if self.rtype != "coredaq":
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -290,7 +290,7 @@ class DAQRelease:
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):
-        if self.rtype == "dunedaq":
+        if self.rtype == "coredaq":
             self.generate_external_umbrella_package(repo_path, template_dir)
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return

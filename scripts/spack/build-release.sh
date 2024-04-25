@@ -101,6 +101,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 build_dbe=false
+
 echo "FOR ISSUE #361 TESTING PURPOSES, IGNORE dbe"
 #if [[ $TARGET == "core" ]]; then
 if false; then

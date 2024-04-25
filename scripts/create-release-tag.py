@@ -129,7 +129,7 @@ if __name__ == "__main__":
     pkgs = []
     if args.input_manifest is not None:
         fman = parse_yaml_file(args.input_manifest)
-        keyname = "dunedaq"
+        keyname = "coredaq"
         if "fddaq" in fman:
             keyname = "fddaq"
         if "nddaq" in fman:
