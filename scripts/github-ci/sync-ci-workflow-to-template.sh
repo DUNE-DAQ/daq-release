@@ -1,6 +1,11 @@
 #!/bin/bash
 
-export DEVLINE=production_v4
+if (( $# != 1 )); then
+    echo "Usage: $( basename $0 ) <production_v4 or develop)>" >&2
+    exit 1
+fi
+
+export DEVLINE=$1
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
@@ -32,7 +37,6 @@ function git_checkout_and_update_ci {
     popd
   done
 }
-
 
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 
