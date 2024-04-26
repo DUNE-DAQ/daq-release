@@ -8,7 +8,7 @@ from spack import *
 
 
 class Coredaq(BundlePackage):
-    """A dummy package meant to pull in all the packages in the DUNE DAQ suite"""
+    """A dummy package meant to pull in all packages in the DUNE DAQ suite shared by various target packages (fddaq, nddaq, etc.)"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
@@ -19,9 +19,9 @@ class Coredaq(BundlePackage):
             values=('Debug', 'Release', 'RelWithDebInfo'),
             multi=True)
 
-    variant('subset', values=('all', 'datautilities'), default='all', description='Select subset of total available dunedaq packages')
+    variant('subset', values=('fddaq', 'nddaq', 'fddatautilities'), description='Select subset of total available coredaq packages')
 
-    depends_on("externals@XRELEASEX", when="@XRELEASEX")
+    depends_on("externals@XRELEASEX subset=XTARGETX", when="@XRELEASEX subset=XTARGETX")
 
     def setup_run_environment(self, env):
         env.set('DUNE_DAQ_BASE_RELEASE', "XRELEASEX")

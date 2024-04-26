@@ -72,6 +72,11 @@ class DAQRelease:
         self.overwrite_daq_cmake = overwrite_daq_cmake
         self.rtype = self.rdict["type"]
 
+        # Figure out what the full umbrella package is by parsing the yaml file path
+        # e.g., from config/coredaq/fddaq-develop/release.yaml we extract "fddaq"
+        subdir = os.path.basename(os.path.dirname(yaml_file))
+        self.full_umbrella = subdir.split("-")[0]
+
     def set_release(self, release_name, base_release=""):
         if base_release != "":
                 self.rdict["base_release"] = base_release
@@ -191,7 +196,7 @@ class DAQRelease:
 
         for ipkg in ['devtools', 'externals', 'systems']:
 
-            if fddatautilities:
+            if fddatautilities and False:
 
                 # JCF, Apr-9-2024: the following special treatment for the externals
                 # umbrella package is solely to be used during the development
@@ -217,6 +222,7 @@ class DAQRelease:
             with open(itemp, 'r') as f:
                 lines = f.read()
                 lines = lines.replace("XRELEASEX", self.rdict["release"])
+                lines = lines.replace("XTARGETX", self.full_umbrella)
 
             # now add additional deps:
             for idep in self.rdict[ipkg]:
@@ -226,9 +232,9 @@ class DAQRelease:
                 # version
                 ivar = idep["variant"]
                 if ivar == None:
-                    lines += f'\n    depends_on("{iname}@{iver}")'
+                    lines += f'\n    depends_on("{iname}@{iver}", when="subset={self.full_umbrella}")'
                 else:
-                    lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
+                    lines += f'\n    depends_on("{iname}@{iver} {ivar}", when="subset={self.full_umbrella}")'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
             os.makedirs(ipkg_dir)
@@ -239,11 +245,12 @@ class DAQRelease:
         return
 
     def generate_daq_umbrella_package(self, repo_path, template_dir, fddatautilities):
+
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         ipkg = self.rtype
 
-        if fddatautilities:
+        if fddatautilities and False:
             this_dir=os.path.dirname(os.path.abspath(__file__))
 
             ipkg_dir = os.path.join(repo_dir, ipkg)
@@ -264,11 +271,12 @@ class DAQRelease:
         with open(itemp, 'r') as f:
             lines = f.read()
             lines = lines.replace("XRELEASEX", self.rdict["release"])
+            lines = lines.replace("XTARGETX", self.full_umbrella)
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "coredaq":
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} subset=all build_type={{build_type}}", when=f"build_type={{build_type}}")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} subset={self.full_umbrella} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -281,7 +289,7 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     iver = self.rdict["release"]
-                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"subset=all build_type={{build_type}}")'
+                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"subset={self.full_umbrella} build_type={{build_type}}")'
         lines += '\n'
 
         ipkg_dir = os.path.join(repo_dir, ipkg)
