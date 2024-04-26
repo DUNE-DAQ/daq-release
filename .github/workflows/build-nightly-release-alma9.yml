@@ -77,7 +77,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
-          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FULL_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FULL_RELEASE_DIR fddaq $OS ${{ github.event.inputs.feature-branch }}
 
           cd $FULL_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
