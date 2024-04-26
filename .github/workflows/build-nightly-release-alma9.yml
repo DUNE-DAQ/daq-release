@@ -60,9 +60,9 @@ jobs:
           daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FULL_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $CORE_RELEASE_DIR/../
-          tar_and_stage_release ${BASE_RELEASE_TAG}
+          tar_and_stage_release ${CORE_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for base release
+    - name: upload spack nightly tarball for core release
       uses: actions/upload-artifact@v3
       with:
         name: nightly_coredaq
@@ -109,7 +109,7 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack nightly release tarball artifact for base release
+      - name: Download spack nightly release tarball artifact for core release
         uses: actions/download-artifact@v3
         with:
           name: nightly_coredaq
@@ -129,9 +129,9 @@ jobs:
             mkdir -p nightly
 
             cd nightly
-            base_tag="NB${NIGHTLY_TAG}"
-            tar xf ../${base_tag}.tar.gz
-            rm -rf ../${base_tag}.tar.gz
+            core_tag="NB${NIGHTLY_TAG}"
+            tar xf ../${core_tag}.tar.gz
+            rm -rf ../${core_tag}.tar.gz
 
             fddaq_tag="NFD${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
