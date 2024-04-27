@@ -14,7 +14,7 @@ class Externals(BundlePackage):
 
     version("XRELEASEX")
 
-    variant('subset', values=('fddaq', 'nddaq', 'fddatautilities'), description='Select subset of total available external packages')
+    variant('subset', values=('fddaq', 'nddaq', 'fddatautilities'), default='fddaq', description='Select subset of total available external packages')
 
     # Generate from release YAML file
     depends_on("devtools@XRELEASEX")

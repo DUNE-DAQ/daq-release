@@ -224,6 +224,10 @@ class DAQRelease:
                 lines = lines.replace("XRELEASEX", self.rdict["release"])
                 lines = lines.replace("XTARGETX", self.full_umbrella)
 
+            possible_subset_qualifier=""
+            if ipkg == 'externals':
+                possible_subset_qualifier=f', when="subset={self.full_umbrella}"'
+
             # now add additional deps:
             for idep in self.rdict[ipkg]:
                 iname = idep["name"]
@@ -232,9 +236,9 @@ class DAQRelease:
                 # version
                 ivar = idep["variant"]
                 if ivar == None:
-                    lines += f'\n    depends_on("{iname}@{iver}", when="subset={self.full_umbrella}")'
+                    lines += f'\n    depends_on("{iname}@{iver}"{possible_subset_qualifier})'
                 else:
-                    lines += f'\n    depends_on("{iname}@{iver} {ivar}", when="subset={self.full_umbrella}")'
+                    lines += f'\n    depends_on("{iname}@{iver} {ivar}"{possible_subset_qualifier})'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
             os.makedirs(ipkg_dir)
@@ -289,7 +293,7 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     iver = self.rdict["release"]
-                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"subset={self.full_umbrella} build_type={{build_type}}")'
+                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         lines += '\n'
 
         ipkg_dir = os.path.join(repo_dir, ipkg)

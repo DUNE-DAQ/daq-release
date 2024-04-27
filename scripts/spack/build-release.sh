@@ -63,30 +63,13 @@ else
     spack_template_dir=spack-repos/coredaq-repo-template
 fi
 
-is_fddatautilities=false
-
-if [[ "$FULL_RELEASE_DIR" =~ "FDDU" ]]; then
-    is_fddatautilities=true
-fi
-
-if $is_fddatautilities; then
-    cmd="python3 scripts/spack/make-release-repo.py -u \
-  -i ${release_yaml} \
-  -t $spack_template_dir \
-  -r ${RELEASE_TAG} \
-  -o ${SPACK_AREA}/spack-installation \
-  ${base_release_arg} \
-  ${branch_arg} \
-  --fddatautilities"
-else
-    cmd="python3 scripts/spack/make-release-repo.py -u \
+cmd="python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
   ${branch_arg}"
-fi
 
 echo $cmd
 $cmd || exit 5
@@ -99,15 +82,10 @@ if [[ "$TARGET" != "core" ]]; then
     retval=$?
     cat $SPACK_AREA/spec_${TARGET}_log.txt 
 else
-
-    if $is_fddatautilities ; then
-	spack spec -l --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_coredaq_log.txt 2>&1
-    else
-	spack spec -l --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=all build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_coredaq_log.txt 2>&1
-    fi
+    spack spec -l --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=$FULL_UMBRELLA build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_coredaq_${FULL_UMBRELLA}_log.txt 2>&1
 	   
     retval=$?
-    cat $SPACK_AREA/spec_coredaq_log.txt 
+    cat $SPACK_AREA/spec_coredaq_${FULL_UMBRELLA}_log.txt 
 fi
 
 if [[ $retval != 0 ]]; then
@@ -116,7 +94,7 @@ fi
 
 build_dbe=false
 
-if [[ $TARGET == "core" ]] && ! $is_fddatautilities ; then
+if [[ $TARGET == "core" && $FULL_UMBRELLA == "fddaq" ]] ; then
     spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
@@ -133,11 +111,7 @@ fi
 if [[ "$TARGET" != "core" ]]; then
     spack install --reuse ${TARGET}@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 else
-    if $is_fddatautilities ; then
-	spack install --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=datautilities build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
-    else
-	spack install --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=all build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
-    fi
+    spack install --reuse coredaq@${RELEASE_TAG}%gcc@12.1.0 subset=$FULL_UMBRELLA build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 fi
 
 if $build_dbe; then
@@ -160,9 +134,9 @@ if [[ "$TARGET" != "core" ]]; then
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate
 
-    if $is_fddatautilities ; then
+    if [[ "$FULL_UMBRELLA" != "fddaq" && "$FULL_UMBRELLA" != "nddaq" ]] ; then
 	echo "FOR ISSUE #361 TESTING PURPOSES, DISREGARD ANY PIP INSTALLATION ERRORS"
-	python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || true
+	python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt
     else
 	python -m pip install -r ${SPACK_AREA}/pyvenv_requirements.txt || exit 11
     fi

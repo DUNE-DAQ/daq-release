@@ -4,6 +4,42 @@ if [[ -z $CORE_RELEASE_DIR || -z $FULL_RELEASE_DIR || -z $OS ]]; then
     return 1
 fi
 
+
+# Deduce what the full umbrella package is based on the name of its repo
+# E.g. /cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD_DEV_240426_A9 => fddaq
+
+# The name of the full umbrella package will match both the needed
+# value of the "subset" variant for the coredaq and externals
+# packages, as well as the path to the relevant release.yaml files
+
+# E.g., if FULL_UMBRELLA gets set to fddaq, that means the
+# release.yaml for the relevant variant of the coredaq umbrella
+# package is in
+#
+# ./configs/coredaq/fddaq-develop/
+#
+# that the full umbrella package is "fddaq", and it depends on
+# "coredaq subset=fddaq", which in turn depends on "externals subset=fddaq"
+
+export FULL_UMBRELLA=
+export FULL_UMBRELLA_ABBREV=$( echo $FULL_RELEASE_DIR | sed -r 's!.*/N([^_]+)_.*!\1!' )
+
+if [[ -z $FULL_UMBRELLA_ABBREV ]]; then
+    echo "Unable to get abbreviation of full umbrella package from repo path name ${FULL_RELEASE_DIR}; exiting..." >&2
+    exit 4
+fi
+
+if [[ "$FULL_UMBRELLA_ABBREV" == "FD" ]]; then
+    export FULL_UMBRELLA="fddaq"
+elif [[ "$FULL_UMBRELLA_ABBREV" == "ND" ]]; then
+    export FULL_UMBRELLA="nddaq"
+elif [[ "$FULL_UMBRELLA_ABBREV" == "FDDU" ]]; then
+    export FULL_UMBRELLA="fddatautilities"
+else
+    echo "Unknown full umbrella package abbreviation \"$FULL_UMBRELLA_ABBREV\"; exiting..." >&2
+    exit 5
+fi
+
 if [[ $CORE_RELEASE_DIR =~ "/release" ]]; then
     export RELEASE_TYPE="frozen"
 elif [[ $CORE_RELEASE_DIR =~ "/candidate" ]]; then
@@ -14,13 +50,14 @@ else
     export RELEASE_TYPE="nightly"
 fi
 
-echo "Deduced release type \"${RELEASE_TYPE}\" from the name of the core release directory"
+echo "Deduced full umbrella package as \"${FULL_UMBRELLA}\"" 
+echo "Deduced release type \"${RELEASE_TYPE}\"" # From the name of the core release directory
 
 export CORE_RELEASE_TAG=$( basename $CORE_RELEASE_DIR )
-echo "Assuming core release tag is $CORE_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${CORE_RELEASE_DIR})"
+echo "Assuming core release tag is $CORE_RELEASE_TAG" # (i.e. the same name as the lowest-level directory in the path ${CORE_RELEASE_DIR})
 
 export FULL_RELEASE_TAG=$( basename $FULL_RELEASE_DIR )
-echo "Assuming full release tag is $FULL_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${FULL_RELEASE_DIR})"
+echo "Assuming full release tag is $FULL_RELEASE_TAG" # (i.e. the same name as the lowest-level directory in the path ${FULL_RELEASE_DIR})
 
 if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 production nightly, externals v2.0
     export EXT_VERSION=v2.0
@@ -44,6 +81,7 @@ export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${
 
 export FULL_SPACK_AREA=$FULL_RELEASE_DIR
 export CORE_SPACK_AREA=$CORE_RELEASE_DIR
+
 
 function get_spack() {
 
@@ -159,11 +197,11 @@ function get_release_yaml() {
     if [[ $release_info == "core" ]]; then
         
 	if [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
-            echo -n "configs/coredaq/coredaq-${version}/release.yaml"
+            echo -n "configs/coredaq/${FULL_UMBRELLA}-${version}/release.yaml"
 	elif [[ $RELEASE_TYPE == "production_v4" ]]; then
-            echo -n "configs/coredaq/coredaq-production_v4/release.yaml"
+            echo -n "configs/coredaq/${FULL_UMBRELLA}-production_v4/release.yaml"
 	else
-	    echo -n "configs/coredaq/coredaq-develop/release.yaml"
+	    echo -n "configs/coredaq/${FULL_UMBRELLA}-develop/release.yaml"
         fi
 
     else
