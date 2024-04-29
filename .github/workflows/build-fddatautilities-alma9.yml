@@ -165,3 +165,50 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+
+  publish_to_cvmfs:
+    name: publish to cvmfs
+    needs: update_image
+    runs-on: daq
+
+    steps:
+    - name: check_cvmfs_deployment
+      id: do_deployment
+      run: |
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
+      continue-on-error: true
+
+    - name: start docker container, and then rsync...
+      if: steps.do_deployment.outcome == 'success'
+      run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+
+        cd $GITHUB_WORKSPACE
+
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:fddatautilities"
+        unique_name=$( date | tr " :" _ )
+
+        docker pull $IMAGE
+        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+
+        docker run --name $unique_name $IMAGE
+        mkdir $unique_name
+
+        for file in $files_to_copy; do
+             docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
+        done
+        docker rm $unique_name
+
+        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+
+        rm -rf $unique_name
