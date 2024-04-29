@@ -123,7 +123,7 @@ if [[ "$TARGET" != "core" ]]; then
     spack load ${TARGET}@${RELEASE_TAG} || exit 9
 
     cd $DAQ_RELEASE_REPO
-    cmd="echo /usr/bin/python3 scripts/spack/make-release-repo.py \
+    cmd="/usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA} \
         --pyvenv-requirements \
         -i ${release_yaml}"
