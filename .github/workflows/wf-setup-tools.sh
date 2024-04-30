@@ -29,11 +29,11 @@ if [[ -z $FULL_UMBRELLA_ABBREV ]]; then
     exit 4
 fi
 
-if [[ "$FULL_UMBRELLA_ABBREV" == "FD" ]]; then
+if [[ "$FULL_UMBRELLA_ABBREV" =~ ^FD.{0,1}$ ]]; then
     export FULL_UMBRELLA="fddaq"
-elif [[ "$FULL_UMBRELLA_ABBREV" == "ND" ]]; then
+elif [[ "$FULL_UMBRELLA_ABBREV" =~ ^ND.{0,1}$ ]]; then
     export FULL_UMBRELLA="nddaq"
-elif [[ "$FULL_UMBRELLA_ABBREV" == "FDDU" ]]; then
+elif [[ "$FULL_UMBRELLA_ABBREV" =~ ^FDDU.{0,1}$ ]]; then
     export FULL_UMBRELLA="fddatautilities"
 else
     echo "Unknown full umbrella package abbreviation \"$FULL_UMBRELLA_ABBREV\"; exiting..." >&2
