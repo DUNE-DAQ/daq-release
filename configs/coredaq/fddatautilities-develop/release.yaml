@@ -8,7 +8,7 @@
           version: 1.77.0
           variant: "+context+container cxxstd=2a"
         - name: trace
-          version: 3.17.12
+          version: 3.17.13
           variant: ~
         - name: nlohmann-json
           version: 3.9.0
