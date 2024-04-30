@@ -73,6 +73,9 @@
         - name: daqdataformats
           version: "develop"
           commit: null
+        - name: detchannelmaps
+          version: "develop"
+          commit: null
         - name: detdataformats
           version: "develop"
           commit: null
