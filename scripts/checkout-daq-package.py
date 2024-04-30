@@ -42,7 +42,7 @@ def checkout_tag(repo, commit, outdir):
 git clone https://github.com/DUNE-DAQ/{repo}.git; \
 cd {repo}; \
 if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then \
-  echo "{tag_or_branch} does not exist for package {repo}. Exiting..."; \
+  echo "{commit} does not exist for package {repo}. Exiting..."; \
   exit 1; \
 fi; \
 git checkout {commit}; \
