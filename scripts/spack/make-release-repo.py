@@ -44,6 +44,13 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
             fi"""
         output = check_output(cmd)
         tag_or_branch = output[0].decode('utf-8').strip()
+    else: # Check if tag exists
+        cmd = f"""cd {tmp_dir}/{repo}; \
+            if ! git show-ref --tags --verify --quiet "refs/tags/{tag_or_branch}"; then \
+              echo "{tag_or_branch} does not exist for package {repo}. Exiting..."; \
+              exit 1; \
+            fi;""" 
+        output = check_output(cmd)
     cmd = f"""cd {tmp_dir}/{repo}; \
         git checkout --quiet {tag_or_branch}; \
         git rev-parse --short HEAD"""
