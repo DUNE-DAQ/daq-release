@@ -79,6 +79,9 @@
         - name: ers
           version: "develop"
           commit: null
+        - name: hdf5libs
+          version: "develop"
+          commit: null
         - name: logging
           version: "develop"
           commit: null
