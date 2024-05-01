@@ -66,6 +66,64 @@ jobs:
             docker network prune -f
             docker volume prune -f
 
+  build_alma9_externals_run:
+    name: build_al9_initial_run
+    runs-on: daq
+    permissions:
+      packages: write
+      contents: read
+    steps:
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/alma9-slim-externals
+          tags: |
+            type=raw,value=fddatautilities_runonly-initial
+
+      - name: prepare build dir
+        id: prep_build_dir
+        run: |
+          build_dir="/home/nfs/dunedaq/jcfree/externals_fddatautilities_runonly/"
+          cd $build_dir
+          refresh_date=$(date +%y-%m-%d)
+          echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
+          echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+          echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
+          echo "ADD spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Dockerfile
+          echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
+          echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+          echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: /home/nfs/dunedaq/jcfree/externals_fddatautilities_runonly
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Clean up
+        if: always()
+        run: |
+
+            rm -f /home/nfs/dunedaq/jcfree/externals_fddatautilities_runonly/Dockerfile
+            docker image prune -f
+            docker container prune -f
+            docker network prune -f
+            docker volume prune -f
+
+
   build_alma9_slim_externals:
     name: build_alma9
     runs-on: daq
