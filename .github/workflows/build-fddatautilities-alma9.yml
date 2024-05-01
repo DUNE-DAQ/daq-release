@@ -210,7 +210,7 @@ jobs:
             rm -rf ../${fddatautilities_tag}.tar.gz
 
             cd ..
-            echo "FROM ghcr.io/dune-daq/alma9-spack:latest > Dockerfile
+            echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
