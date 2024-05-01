@@ -85,8 +85,8 @@ jobs:
         name: nightly_fddatautilities
         path: ${{ github.workspace }}/tarballs_for_upload/NFDDU${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
-  update_image:
-    name: update_spack_image_nightly
+  update_build_image:
+    name: update_spack_build_image_nightly
     runs-on: daq
     strategy:
       matrix:
@@ -166,10 +166,86 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  update_run_image:
+    name: update_spack_run_image_nightly
+    needs: update_build_image
+    runs-on: daq
+    permissions:
+      packages: write
+      contents: read
+    environment: dockerhub
+
+    steps:
+      - name: clean docker-build
+        run: |
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
+      - name: Download spack nightly release tarball artifact for core release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_dunedaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for far detector release
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly_fddatautilities
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p nightly
+
+            cd nightly
+            core_tag="NB${NIGHTLY_TAG}"
+            tar xf ../${core_tag}.tar.gz
+            rm -rf ../${core_tag}.tar.gz
+
+            fddatautilities_tag="NFDDU${NIGHTLY_TAG}"
+            tar xf ../${fddatautilities_tag}.tar.gz
+            rm -rf ../${fddatautilities_tag}.tar.gz
+
+            cd ..
+            echo "FROM ghcr.io/dune-daq/alma9-spack:latest > Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "COPY /home/nfs/dunedaq/jcfree/externals_fddatautilities_runonly /cvmfs/dunedaq.opensciencegrid.org" >> Dockerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/dune-daq/nightly-release-alma9
+          tags: |
+            type=raw,value=fddatautilities_runonly
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: update_image
+    needs: update_build_image
     runs-on: daq
 
     steps:
