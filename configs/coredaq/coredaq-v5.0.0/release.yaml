@@ -239,7 +239,7 @@
           version: v1.2.0
           commit: null
         - name: oksconfgen
-          version: v1.2.0
+          version: v1.2.1
           commit: null
 
     others:
