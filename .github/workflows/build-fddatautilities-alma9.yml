@@ -85,90 +85,90 @@ jobs:
         name: nightly_fddatautilities
         path: ${{ github.workspace }}/tarballs_for_upload/NFDDU${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
-  update_build_image:
-    name: update_spack_build_image_nightly
-    runs-on: daq
-    strategy:
-      matrix:
-        include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:fddatautilities"
-            output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "fddatautilities"
-    needs: [build_the_develop_release_spack, make_nightly_tag] 
-    environment: dockerhub
-    permissions:
-      packages: write
-      contents: read
+  # update_build_image:
+  #   name: update_spack_build_image_nightly
+  #   runs-on: daq
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - input_image: "ghcr.io/dune-daq/alma9-slim-externals:fddatautilities"
+  #           output_image: "ghcr.io/dune-daq/nightly-release-alma9"
+  #           tag: "fddatautilities"
+  #   needs: [build_the_develop_release_spack, make_nightly_tag] 
+  #   environment: dockerhub
+  #   permissions:
+  #     packages: write
+  #     contents: read
 
-    steps:
-      - name: clean docker-build
-        run: |
-            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
-            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+  #   steps:
+  #     - name: clean docker-build
+  #       run: |
+  #           mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+  #           rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack nightly release tarball artifact for core release
-        uses: actions/download-artifact@v3
-        with:
-          name: nightly_dunedaq
-          path: ${{ github.workspace }}/docker-build
+  #     - name: Download spack nightly release tarball artifact for core release
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: nightly_dunedaq
+  #         path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for far detector release
-        uses: actions/download-artifact@v3
-        with:
-          name: nightly_fddatautilities
-          path: ${{ github.workspace }}/docker-build
+  #     - name: Download spack nightly release tarball artifact for far detector release
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: nightly_fddatautilities
+  #         path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-nightly
-        env:
-          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-        run: |
-            cd ${{ github.workspace }}/docker-build
-            mkdir -p nightly
+  #     - name: prepare cvmfs mirror spack-nightly
+  #       env:
+  #         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+  #       run: |
+  #           cd ${{ github.workspace }}/docker-build
+  #           mkdir -p nightly
 
-            cd nightly
-            core_tag="NB${NIGHTLY_TAG}"
-            tar xf ../${core_tag}.tar.gz
-            rm -rf ../${core_tag}.tar.gz
+  #           cd nightly
+  #           core_tag="NB${NIGHTLY_TAG}"
+  #           tar xf ../${core_tag}.tar.gz
+  #           rm -rf ../${core_tag}.tar.gz
 
-            fddatautilities_tag="NFDDU${NIGHTLY_TAG}"
-            tar xf ../${fddatautilities_tag}.tar.gz
-            rm -rf ../${fddatautilities_tag}.tar.gz
+  #           fddatautilities_tag="NFDDU${NIGHTLY_TAG}"
+  #           tar xf ../${fddatautilities_tag}.tar.gz
+  #           rm -rf ../${fddatautilities_tag}.tar.gz
 
-            cd ..
-            echo "FROM "${{ matrix.input_image }} > Dockerfile
-            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
-            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
-            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+  #           cd ..
+  #           echo "FROM "${{ matrix.input_image }} > Dockerfile
+  #           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+  #           echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+  #           echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+  #           echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+  #           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ghcr.io/dune-daq/nightly-release-alma9
-          tags: |
-            type=raw,value=fddatautilities
+  #     - name: Extract metadata (tags, labels) for Docker
+  #       id: meta
+  #       uses: docker/metadata-action@v5
+  #       with:
+  #         images: |
+  #           ghcr.io/dune-daq/nightly-release-alma9
+  #         tags: |
+  #           type=raw,value=fddatautilities
 
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v5
-        with:
-          context: ${{ github.workspace }}/docker-build
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+  #     - name: Build and push Docker images
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ${{ github.workspace }}/docker-build
+  #         push: true
+  #         tags: ${{ steps.meta.outputs.tags }}
+  #         labels: ${{ steps.meta.outputs.labels }}
 
   update_run_image:
     name: update_spack_run_image_nightly
-    needs: update_build_image
+    needs: [build_the_develop_release_spack, make_nightly_tag] 
     runs-on: daq
     permissions:
       packages: write
@@ -243,48 +243,48 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
 
-  publish_to_cvmfs:
-    name: publish to cvmfs
-    needs: update_build_image
-    runs-on: daq
+  # publish_to_cvmfs:
+  #   name: publish to cvmfs
+  #   needs: update_build_image
+  #   runs-on: daq
 
-    steps:
-    - name: check_cvmfs_deployment
-      id: do_deployment
-      run: |
-        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
-        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
-        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
-        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
-      continue-on-error: true
+  #   steps:
+  #   - name: check_cvmfs_deployment
+  #     id: do_deployment
+  #     run: |
+  #       cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+  #       cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+  #       echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+  #       [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
+  #     continue-on-error: true
 
-    - name: start docker container, and then rsync...
-      if: steps.do_deployment.outcome == 'success'
-      run: |
-        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+  #   - name: start docker container, and then rsync...
+  #     if: steps.do_deployment.outcome == 'success'
+  #     run: |
+  #       [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
-        cd $GITHUB_WORKSPACE
+  #       cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:fddatautilities"
-        unique_name=$( date | tr " :" _ )
+  #       IMAGE="ghcr.io/dune-daq/nightly-release-alma9:fddatautilities"
+  #       unique_name=$( date | tr " :" _ )
 
-        docker pull $IMAGE
-        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+  #       docker pull $IMAGE
+  #       files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
 
-        docker run --name $unique_name $IMAGE
-        mkdir $unique_name
+  #       docker run --name $unique_name $IMAGE
+  #       mkdir $unique_name
 
-        for file in $files_to_copy; do
-             docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
-        done
-        docker rm $unique_name
+  #       for file in $files_to_copy; do
+  #            docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
+  #       done
+  #       docker rm $unique_name
 
-        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+  #       kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+  #       ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+  #       rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+  #       ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
-        rm -rf $unique_name
+  #       rm -rf $unique_name
