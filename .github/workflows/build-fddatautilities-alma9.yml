@@ -213,7 +213,6 @@ jobs:
             echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
             echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
-            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "COPY /home/nfs/dunedaq/jcfree/externals_fddatautilities_runonly /cvmfs/dunedaq.opensciencegrid.org" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
