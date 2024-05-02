@@ -53,6 +53,8 @@ jobs:
           #build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
           #cd $build_dir
           cd ${{ env.BUILD_DIR }}
+          echo "BUILD_DIR: ${{ env.BUILD_DIR }}"
+          echo "pwd: $(pwd)"
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
@@ -63,6 +65,8 @@ jobs:
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
+          echo "Containerfile path: $(readlink -f Containerfile)"
+          echo "Containerfile contents: $(cat Containerfile)"
 
       - name: Build Image
         id: build_image
@@ -73,6 +77,8 @@ jobs:
           tags: test
           containerfiles: |
             ./Containerfile
+        run: |
+          echo "hi"
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
