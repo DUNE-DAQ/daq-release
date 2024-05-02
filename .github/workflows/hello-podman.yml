@@ -1,6 +1,6 @@
 name: hello-podman
 on: 
-  push:
+  workflow_dispatch:
     branches:
       - 'amogan/podman_workflow'
 
