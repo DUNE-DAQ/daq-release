@@ -190,30 +190,11 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_external_umbrella_package(self, repo_path, template_dir, fddatautilities):
+    def generate_external_umbrella_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
 
         for ipkg in ['devtools', 'externals', 'systems']:
-
-            if fddatautilities and False:
-
-                # JCF, Apr-9-2024: the following special treatment for the externals
-                # umbrella package is solely to be used during the development
-                # process for Issue #361
-
-                if ipkg == "externals":
-                    this_dir=os.path.dirname(os.path.abspath(__file__))
-
-                    ipkg_dir = os.path.join(repo_dir, ipkg)
-                    os.makedirs(ipkg_dir)
-                    ipkgpy = os.path.join(ipkg_dir, "package.py")
-                    srcpkgpy = f"{this_dir}/../../issue361_dev_files/package_externals.py"
-                    print(f"srcpkgpy is {srcpkgpy}")
-                    assert(os.path.exists(srcpkgpy))
-
-                    shutil.copyfile(srcpkgpy, ipkgpy)
-                    continue
 
             itemp = os.path.join(template_dir, ipkg, 'package.py')
             if not os.path.exists(itemp):
@@ -248,25 +229,11 @@ class DAQRelease:
                 print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_daq_umbrella_package(self, repo_path, template_dir, fddatautilities):
+    def generate_daq_umbrella_package(self, repo_path, template_dir):
 
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
         ipkg = self.rtype
-
-        if fddatautilities and False:
-            this_dir=os.path.dirname(os.path.abspath(__file__))
-
-            ipkg_dir = os.path.join(repo_dir, ipkg)
-            os.makedirs(ipkg_dir)
-            ipkgpy = os.path.join(ipkg_dir, "package.py")
-
-            srcpkgpy = f"{this_dir}/../../issue361_dev_files/package_{ipkg}.py"
-            print(f"srcpkgpy is {srcpkgpy}")
-            assert(os.path.exists(srcpkgpy))
-
-            shutil.copyfile(srcpkgpy, ipkgpy)
-            return
 
         itemp = os.path.join(template_dir, ipkg, 'package.py')
         if not os.path.exists(itemp):
@@ -304,19 +271,19 @@ class DAQRelease:
             print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_umbrella_package(self, repo_path, template_dir, fddatautilities):
+    def generate_umbrella_package(self, repo_path, template_dir):
         if self.rtype == "coredaq":
-            self.generate_external_umbrella_package(repo_path, template_dir, fddatautilities)
-        self.generate_daq_umbrella_package(repo_path, template_dir, fddatautilities)
+            self.generate_external_umbrella_package(repo_path, template_dir)
+        self.generate_daq_umbrella_package(repo_path, template_dir)
         return
 
-    def generate_repo(self, outdir, tempdir, update_hash, release_name, base_release, fddatautilities):
+    def generate_repo(self, outdir, tempdir, update_hash, release_name, base_release):
         if release_name is not None:
             self.set_release(release_name, base_release)
         self.copy_release_yaml(outdir, update_hash)
         self.generate_repo_file(outdir)
         self.generate_daq_package(outdir, tempdir)
-        self.generate_umbrella_package(outdir, tempdir, fddatautilities)
+        self.generate_umbrella_package(outdir, tempdir)
         return
 
     def generate_pypi_manifest(self, output_file):
@@ -381,8 +348,6 @@ if __name__ == "__main__":
                         help="whether to generate file containing bash array for python modules;")
     parser.add_argument('--pyvenv-requirements', action='store_true',
                         help="whether to generate requirements file for pyvenv;")
-    parser.add_argument('--fddatautilities', action='store_true',
-                        help="whether this is for the fddatautilities package (TEMPORARY)")
     parser.add_argument('--base-release',
                         help="base release name")
 
@@ -404,4 +369,4 @@ if __name__ == "__main__":
     else:
         daq_release.generate_repo(args.output_path, args.template_path,
                                   args.update_hash, args.release_name,
-                                  args.base_release, args.fddatautilities)
+                                  args.base_release)
