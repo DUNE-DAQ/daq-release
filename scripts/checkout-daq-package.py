@@ -41,6 +41,10 @@ def checkout_tag(repo, commit, outdir):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; \
 git clone https://github.com/DUNE-DAQ/{repo}.git; \
 cd {repo}; \
+if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then \
+  echo "{commit} does not exist for package {repo}. Exiting..."; \
+  exit 1; \
+fi; \
 git checkout {commit}; \
 cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
 tag=v"$cmake_version"; \

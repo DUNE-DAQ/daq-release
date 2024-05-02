@@ -35,10 +35,13 @@ In addition to the `release.yaml` file, there also needs to be a `dbt-build-orde
 
 ### Checks before doing test builds
 
-It's worth to do several checks before starting any test builds. These checks include:
+It's worth doing a couple of checks before starting any test builds. These checks include:
 
-* Check version tags match with the version numbers listed in `CMakeLists.txt`; The script `scripts/checkout-daq-package.py` in this repo can help here. `python3 scripts/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o /tmp` will checkout all the DAQ packages used in the release into `/tmp` and verify if the version tags match cmake version numbers
-* Update Spack recipe files for DAQ packages with newly added dependencies; note that in general this will have happened already given that the nightly forms the basis of the candidate release
+* Check version tags match with the version numbers listed in `CMakeLists.txt`; The script `scripts/checkout-daq-package.py` in this repo can help here.
+
+```python3 scripts/checkout-daq-package.py -i <path-to-release-config-yaml> -a -c -o $( mktemp -d )```
+
+will checkout all the DAQ packages used in the release into a randomly-named directory and verify if the version tags match what's in `CMakeLists.txt`
 * (Optional) Check if developers got their dependencies in `CMakeLists.txt` to match those in `cmake/<pkgname>Config.cmake.in` files; see [this section](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/#installing-your-project-as-a-local-package) of the daq-cmake instructions for more
 
 
@@ -63,12 +66,12 @@ It's worth to do several checks before starting any test builds. These checks in
 * The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `configs` and the number (starts from 1, increment it if second deployment to cvmfs is needed).
 * Deploying the frozen release to cvmfs is the same as for a candidate release  _except_ you want to log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` instead of `cvmfsdunedaqdev` and of course you'll want to pass `frozen` rather than `candidate` to the publishing script
 * Do similar tests as shown in the section above for candidate releases
-* If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient. How to do this is described in the [documentation on cvmfs](publish_to_cvmfs.md).
+* If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient, e.g. that `setup_dbt fddaq-vX.Y.Z` would give you the daq-buildtools used during the release period of `fddaq-vX.Y.Z`. How to do this is described in the [documentation on cvmfs](publish_to_cvmfs.md).
 * After the frozen release is rolled out, there will be remaining prep release and patch branches used in the production of the release. The software coordination team and the release coordinator should get in touch to establish if anything should be kept out of the merge to `develop`. The software coordination team will do the merge across all relevant repositories. Developers should handle any partial merge (cherry-pick).
+* Also make sure that if the version of daq-cmake and/or any Python packages was bumped for the release, that these version increments make it into the nightly for the relevant development line. 
 * The last step of making a frozen release is to create release tags for all packages used by the release. To do so, use the script `scripts/create-release-tag.py`:
     * make sure `daq-release` is tagged for the new release, and the version is updated in the release YAML file. It will be tagged by the `create-release-tag.py` script;
+    *  Make sure you're able to push changes to repos without needing to enter your password; `gh auth login` should set you up to be able to do this if you have a GitHub Personal Access Token with the appropriate permissions
     * `scripts/create-release-tag.py -h` to show the usage of the script;
-    * `scripts/create-release-tag.py -a -t <release-tag> -i <release YAML file>` to tag all packages used by the release;
-    * `scripts/create-release-tag.py -p <package> -r <ref_tag_or_branch_or_commit>` to tag a single package using specified ref;
-    * `scripts/create-release-tag.py -p <package> -i <release YAML file>` to tag a single package using ref found in in release YAML file;
+    * `scripts/create-release-tag.py -a -t <release-tag> -i <release YAML file>` to tag all packages used by the release; **do this both for the core release and the detector release, using the correct release tag for each of the two categories**
     * `-d` to delete release tags if found, `-f` to recreate release tags.

@@ -13,7 +13,7 @@
           version: v2.2.0
           commit: null
         - name: daqsystemtest
-          version: v2.3.0
+          version: v2.3.1
           commit: null
         - name: daphnemodules
           version: v1.1.0
@@ -25,10 +25,10 @@
           version: v1.2.1
           commit: null
         - name: fddetdataformats
-          version: v1.1.0
+          version: v1.2.0
           commit: null
         - name: fdreadoutlibs
-          version: v1.9.0
+          version: v1.9.1
           commit: null
         - name: fdreadoutmodules
           version: v1.0.2
@@ -40,13 +40,13 @@
           version: v1.1.0
           commit: null
         - name: rawdatautils
-          version: v1.5.4
+          version: v1.5.5
           commit: null
         - name: snbmodules
           version: v1.0.1
           commit: null
         - name: sspmodules
-          version: v1.3.0
+          version: v1.3.1
           commit: null
         - name: tpgtools
           version: v1.1.0
