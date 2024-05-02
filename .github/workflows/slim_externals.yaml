@@ -76,7 +76,9 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           containerfiles: |
-            ${{ env.BUILD_DIR }}/Containerfile
+            ./Containerfile
+          extra-args:
+            --file ${{ env.BUILD_DIR }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
