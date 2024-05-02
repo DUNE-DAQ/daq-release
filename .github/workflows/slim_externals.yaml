@@ -23,8 +23,7 @@ jobs:
         IMAGE_TAG: v2.1
         USERNAME: dune-daq
         REGISTRY: ghcr.io
-            #BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
-        BUILD_DIR: ./
+        BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
         #BUILD_DIR: ./ # /tmp
     steps:
       - name: Intro
@@ -76,8 +75,8 @@ jobs:
           context: ${{ env.BUILD_DIR }}
           image: ${{ env.IMAGE_NAME }}
           tags: test
-              #containerfiles: |
-              #./Containerfile
+          containerfiles: |
+            ${{ env.BUILD_DIR }}./Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
