@@ -30,6 +30,8 @@ jobs:
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
           echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1"
+          echo "Who am I? $(whoami)"
+          echo "Where am I? $(pwd) on $(hostname)"
 
       - name: Log in to the Container registry
         uses: redhat-actions/podman-login@v1
