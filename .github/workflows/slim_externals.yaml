@@ -7,8 +7,8 @@ on:
         description: 'optional suffix for test-only externals image (e.g., T would mean alma9-slim-externals:v2.1T)'
         default: ''
       account-to-copy:
-        description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default dunedaq)'
-        default: 'dunedaq'
+        description: 'the user account whose /cvmfs_dunedaq area you want to copy (default github)'
+        default: 'github'
 
 jobs:
 
@@ -23,15 +23,13 @@ jobs:
         IMAGE_TAG: v2.1
         USERNAME: dune-daq
         REGISTRY: ghcr.io
-        BUILD_DIR: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
+        BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
         #BUILD_DIR: ./ # /tmp
     steps:
       - name: Intro
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
-          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1"
-          echo "Who am I? $(whoami)"
-          echo "Where am I? $(pwd) on $(hostname)"
+          echo "Image contents will include $HOSTNAME:/home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq/spack/externals/ext-v2.1"
 
       - name: Log in to the Container registry
         uses: redhat-actions/podman-login@v1
@@ -88,7 +86,7 @@ jobs:
         if: always()
         run: |
 
-            rm -f /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Containerfile
+            rm -f /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq/Containerfile
             podman image prune -f
             podman container prune -f
             podman network prune -f
