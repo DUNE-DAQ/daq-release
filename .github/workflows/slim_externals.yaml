@@ -77,8 +77,6 @@ jobs:
           tags: test
           containerfiles: |
             ./Containerfile
-        run: |
-          echo "hi"
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
