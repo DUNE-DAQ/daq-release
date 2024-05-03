@@ -23,6 +23,7 @@ jobs:
         IMAGE_TAG: v2.1
         USERNAME: dune-daq
         REGISTRY: ghcr.io
+        ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
         #BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
         #WORK_DIR: /home/github/github-runner/dune-github/_work/
         #BUILD_DIR: ./ # /tmp
@@ -51,8 +52,9 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
-          cd ${{ runner.temp }}
-          echo "Using dir: ${{ runner.temp }}"
+          mkdir -p ${{ github.workspace }}/${{ env.ACTION_ID }}
+          cd ${{ github.workspace }}/${{ env.ACTION_ID }}
+          echo "Using dir: ${{ runner.temp }}/${{ env.ACTION_ID }}"
           echo "pwd: $(pwd)"
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
@@ -64,20 +66,21 @@ jobs:
           #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
-          #mv Containerfile ${{ runner.temp }}
-          cp -r /home/github/cvmfs_dunedaq/*  ${{ runner.temp }}
+          cp -r /home/github/cvmfs_dunedaq/*  ${{ github.workspace }}/${{ env.ACTION_ID }}
+          echo '---------------'
+          ls -l
+          echo '---------------'
+          ls -l ${{ github.workspace }}/${{ env.ACTION_ID }}
 
       - name: Build Image
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ${{ runner.temp }}
+          context: ${{ github.workspace }}/${{ env.ACTION_ID }}
           image: ${{ env.IMAGE_NAME }}
           tags: test
-          extra-args: |
-            --layers=true
-          containerfiles: |
-            ${{ runner.temp }}/Containerfile
+          layer: true
+          containerfiles: ${{ github.workspace }}/${{ env.ACTION_ID }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
@@ -87,7 +90,12 @@ jobs:
           tags: ${{ steps.build_image.outputs.tags }}
           registry: ${{ env.REGISTRY }}/${{ env.USERNAME }}
 
-      - name: Clean up Podman cache
+      - name: Clean up ${{ github.workspace }}/${{ env.ACTION_ID }}
+        if: always()
+        run: |
+            rm -rf ${{ github.workspace }}/${{ env.ACTION_ID }}
+
+      - name: Clean up Podman orphan objections
         if: always()
         run: |
             podman image prune -f
