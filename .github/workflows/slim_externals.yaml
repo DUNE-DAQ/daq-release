@@ -71,6 +71,7 @@ jobs:
 
       - name: Build Image
         id: build_image
+        working-directory: /home/github
         uses: redhat-actions/buildah-build@v2
         with:
           context: ../../
