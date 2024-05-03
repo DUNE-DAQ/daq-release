@@ -23,8 +23,8 @@ jobs:
         IMAGE_TAG: v2.1
         USERNAME: dune-daq
         REGISTRY: ghcr.io
-        BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
-        WORK_DIR: /home/github/github-runner/dune-github/_work/
+        #BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
+        #WORK_DIR: /home/github/github-runner/dune-github/_work/
         #BUILD_DIR: ./ # /tmp
     steps:
       - name: Intro
@@ -51,8 +51,8 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
-          cd ${{ env.BUILD_DIR }}
-          echo "BUILD_DIR: ${{ env.BUILD_DIR }}"
+          cd ${{ runner.temp }}
+          echo "Using dir: ${{ runner.tmp }}"
           echo "pwd: $(pwd)"
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
@@ -64,7 +64,8 @@ jobs:
           #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
-          mv Containerfile ${{ env.WORK_DIR }}
+          mv Containerfile ${{ runner.tmp }}
+          cp -r /home/github/cvmfs_dunedaq/*  ${{ runner.tmp }}
 
       - name: Build Image
         id: build_image
@@ -76,7 +77,7 @@ jobs:
           extra-args: |
             --layers=true
           containerfiles: |
-            ../../Containerfile
+            ${{ runner.tmp }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
@@ -86,11 +87,9 @@ jobs:
           tags: ${{ steps.build_image.outputs.tags }}
           registry: ${{ env.REGISTRY }}/${{ env.USERNAME }}
 
-      - name: Clean up
+      - name: Clean up Podman cache
         if: always()
         run: |
-
-            rm -f ${{ env.WORK_DIR }}/Containerfile
             podman image prune -f
             podman container prune -f
             podman network prune -f
