@@ -65,16 +65,17 @@ jobs:
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
           mv Containerfile ${{ env.WORK_DIR }}
+          echo "$HOME:" ~ 
 
       - name: Build Image
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ../../
+          context: ~
           image: ${{ env.IMAGE_NAME }}
           tags: test
           containerfiles: |
-            Containerfile
+            ../../Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
