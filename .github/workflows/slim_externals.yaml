@@ -74,6 +74,8 @@ jobs:
           context: ../../
           image: ${{ env.IMAGE_NAME }}
           tags: test
+          extra-args: 
+            layers: true
           containerfiles: |
             Containerfile
 
