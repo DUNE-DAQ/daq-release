@@ -24,6 +24,7 @@ jobs:
         USERNAME: dune-daq
         REGISTRY: ghcr.io
         BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
+        WORK_DIR: /home/github/github-runner/dune-github/_work/
         #BUILD_DIR: ./ # /tmp
     steps:
       - name: Intro
@@ -65,6 +66,7 @@ jobs:
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
+          mv CONTAINERFILE ${{ env.WORK_DIR }}
 
       - name: Build Image
         id: build_image
@@ -74,9 +76,10 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           containerfiles: |
-            ${{ env.BUILD_DIR }}/Containerfile
-          extra-args:
-            --file ${{ env.BUILD_DIR }}/Containerfile
+            #${{ env.BUILD_DIR }}/Containerfile
+            Containerfile
+          #extra-args:
+            #--file ${{ env.BUILD_DIR }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
