@@ -60,10 +60,10 @@ jobs:
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
           echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Containerfile
-          #echo "ADD /home/github/github-runner/dune-github/_work/cvmfs_dunedaq/spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Containerfile
-          #echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Containerfile
-          #echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Containerfile
-          #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
+          echo "ADD spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Containerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Containerfile
+          echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Containerfile
+          echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
           echo '---------------'
