@@ -71,10 +71,10 @@ jobs:
 
       - name: Build Image
         id: build_image
-        working-directory: /home/github
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ../../
+          working-directory: /home/github
+          context: .
           image: ${{ env.IMAGE_NAME }}
           tags: test
           extra-args: |
