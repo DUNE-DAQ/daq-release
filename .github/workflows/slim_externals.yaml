@@ -55,7 +55,8 @@ jobs:
           mkdir -p ${{ github.workspace }}/${{ env.ACTION_ID }}
           cd ${{ github.workspace }}/${{ env.ACTION_ID }}
           echo "Using dir: ${{ runner.temp }}/${{ env.ACTION_ID }}"
-          echo "pwd: $(pwd)"
+          echo '---------------'
+          echo 'Creating Containerfile'
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
@@ -66,11 +67,9 @@ jobs:
           #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
+          echo '---------------'
+          echo 'Cloning /home/github/cvmfs_dunedaq/'
           cp -r /home/github/cvmfs_dunedaq/*  ${{ github.workspace }}/${{ env.ACTION_ID }}
-          echo '---------------'
-          ls -l
-          echo '---------------'
-          ls -l ${{ github.workspace }}/${{ env.ACTION_ID }}
 
       - name: Build Image
         id: build_image
@@ -80,7 +79,7 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           layers: true
-          containerfiles: ${{ github.workspace }}/${{ env.ACTION_ID }}/Containerfile
+          containerfiles: Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
