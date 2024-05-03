@@ -54,13 +54,12 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/${{ env.ACTION_ID }}
           cd ${{ github.workspace }}/${{ env.ACTION_ID }}
-          echo "Using dir: ${{ runner.temp }}/${{ env.ACTION_ID }}"
+          echo "Using dir: ${{ github.workspace }}/${{ env.ACTION_ID }}"
           echo '---------------'
-          echo 'Creating Containerfile'
-          refresh_date=$(date +%y-%m-%d)
+          echo 'Creating ${{ github.workspace }}/${{ env.ACTION_ID }}/Containerfile'
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
-          echo "ENV REFRESHED_AT $refresh_date" >> Containerfile
+          echo "ENV REFRESHED_AT $(date +%y-%m-%d)" >> Containerfile
           #echo "ADD /home/github/github-runner/dune-github/_work/cvmfs_dunedaq/spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Containerfile
           #echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Containerfile
           #echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Containerfile
@@ -68,7 +67,7 @@ jobs:
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
           echo '---------------'
-          echo 'Cloning /home/github/cvmfs_dunedaq/'
+          echo 'Cloning /home/github/cvmfs_dunedaq/ into ${{ github.workspace }}/${{ env.ACTION_ID }}'
           cp -r /home/github/cvmfs_dunedaq/*  ${{ github.workspace }}/${{ env.ACTION_ID }}
 
       - name: Build Image
@@ -78,7 +77,7 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           layers: true
-          containerfiles: ${{ github.workspace }}/${{ env.ACTION_ID }}/Containerfile
+          containerfiles: ${{ env.ACTION_ID }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
