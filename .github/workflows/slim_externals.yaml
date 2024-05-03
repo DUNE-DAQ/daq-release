@@ -52,7 +52,7 @@ jobs:
         id: prep_build_dir
         run: |
           cd ${{ runner.temp }}
-          echo "Using dir: ${{ runner.tmp }}"
+          echo "Using dir: ${{ runner.temp }}"
           echo "pwd: $(pwd)"
           refresh_date=$(date +%y-%m-%d)
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
@@ -64,8 +64,8 @@ jobs:
           #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
-          mv Containerfile ${{ runner.tmp }}
-          cp -r /home/github/cvmfs_dunedaq/*  ${{ runner.tmp }}
+          mv Containerfile ${{ runner.temp }}
+          cp -r /home/github/cvmfs_dunedaq/*  ${{ runner.temp }}
 
       - name: Build Image
         id: build_image
@@ -77,7 +77,7 @@ jobs:
           extra-args: |
             --layers=true
           containerfiles: |
-            ${{ runner.tmp }}/Containerfile
+            ${{ runner.temp }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
