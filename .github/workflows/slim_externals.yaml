@@ -71,11 +71,11 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ~
+          context: ../../
           image: ${{ env.IMAGE_NAME }}
           tags: test
           containerfiles: |
-            ../../Containerfile
+            Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
