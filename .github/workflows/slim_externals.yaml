@@ -64,7 +64,7 @@ jobs:
           #echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
-          mv Containerfile ${{ runner.temp }}
+          #mv Containerfile ${{ runner.temp }}
           cp -r /home/github/cvmfs_dunedaq/*  ${{ runner.temp }}
 
       - name: Build Image
