@@ -26,6 +26,9 @@ jobs:
         BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
         WORK_DIR: /home/github/github-runner/dune-github/_work/
         #BUILD_DIR: ./ # /tmp
+    defaults:
+      run:
+        working-directory: /home/github
     steps:
       - name: Intro
         run: |
@@ -65,7 +68,6 @@ jobs:
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
           mv Containerfile ${{ env.WORK_DIR }}
-          echo "$HOME:" ~ 
 
       - name: Build Image
         id: build_image
