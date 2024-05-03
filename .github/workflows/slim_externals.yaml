@@ -75,11 +75,10 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ${{ github.workspace }}/${{ env.ACTION_ID }}
           image: ${{ env.IMAGE_NAME }}
           tags: test
           layers: true
-          containerfiles: Containerfile
+          containerfiles: ${{ github.workspace }}/${{ env.ACTION_ID }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
