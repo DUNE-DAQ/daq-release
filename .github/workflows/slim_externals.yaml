@@ -71,7 +71,7 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: .
+          context: ${{ runner.temp }}
           image: ${{ env.IMAGE_NAME }}
           tags: test
           extra-args: |
