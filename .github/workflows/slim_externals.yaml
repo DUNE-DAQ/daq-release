@@ -51,8 +51,6 @@ jobs:
       - name: prepare build dir
         id: prep_build_dir
         run: |
-          #build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
-          #cd $build_dir
           cd ${{ env.BUILD_DIR }}
           echo "BUILD_DIR: ${{ env.BUILD_DIR }}"
           echo "pwd: $(pwd)"
@@ -74,12 +72,8 @@ jobs:
         with:
           image: ${{ env.IMAGE_NAME }}
           tags: test
-          #context: ${{ env.BUILD_DIR }}
           containerfiles: |
             Containerfile
-            #${{ env.BUILD_DIR }}/Containerfile
-          #extra-args:
-            #--file ${{ env.BUILD_DIR }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
