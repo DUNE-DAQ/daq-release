@@ -77,6 +77,7 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           layers: true
+          context: ${{ env.ACTION_ID }}
           containerfiles: ${{ env.ACTION_ID }}/Containerfile
 
       - name: Push to GitHub Container Repository
