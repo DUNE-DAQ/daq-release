@@ -72,12 +72,12 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          #context: ${{ env.BUILD_DIR }}
           image: ${{ env.IMAGE_NAME }}
           tags: test
+          #context: ${{ env.BUILD_DIR }}
           containerfiles: |
-            #${{ env.BUILD_DIR }}/Containerfile
             Containerfile
+            #${{ env.BUILD_DIR }}/Containerfile
           #extra-args:
             #--file ${{ env.BUILD_DIR }}/Containerfile
 
