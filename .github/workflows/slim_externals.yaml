@@ -58,7 +58,7 @@ jobs:
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Containerfile
-          echo "ADD cvmfs_dunedaq/spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Containerfile
+          echo "ADD /cvmfs_dunedaq/spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Containerfile
           echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Containerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Containerfile
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Containerfile
@@ -70,6 +70,7 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
+          context: ../../
           image: ${{ env.IMAGE_NAME }}
           tags: test
           containerfiles: |
@@ -87,7 +88,7 @@ jobs:
         if: always()
         run: |
 
-            rm -f /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq/Containerfile
+            rm -f ${{ env.WORK_DIR }}/Containerfile
             podman image prune -f
             podman container prune -f
             podman network prune -f
