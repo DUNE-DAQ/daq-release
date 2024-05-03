@@ -75,7 +75,7 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: test
           extra-args: |
-            --layers true
+            --layers=true
           containerfiles: |
             Containerfile
 
