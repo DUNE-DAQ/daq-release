@@ -154,7 +154,9 @@ jobs:
         with:
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.description: Alma9 externals image for DUNE DAQ nightly builds
           layers: true
           context: ${{ env.ACTION_ID }}
           containerfiles: ${{ env.ACTION_ID }}/Containerfile
