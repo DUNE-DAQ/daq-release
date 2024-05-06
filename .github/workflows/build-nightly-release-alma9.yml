@@ -1,8 +1,8 @@
 name: Alma9 build v5 nightly release
 
-on:
-  schedule:
-    - cron: "0 3 * * *"
+    #on:
+    #schedule:
+    # - cron: "0 3 * * *"
 
   workflow_dispatch:
     inputs:
@@ -25,6 +25,12 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+        IMAGE_NAME: alma9-slim-externals
+        IMAGE_TAG: v2.1
+        USERNAME: dune-daq
+        REGISTRY: ghcr.io
+        #ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - id: create_nightly_tag
         run: |
@@ -37,7 +43,7 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1pt
     defaults:
       run:
         shell: bash
@@ -94,9 +100,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1pt"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "development_v5"
+            tag: "development_v5_podman_test"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -104,28 +110,28 @@ jobs:
       contents: read
 
     steps:
-      - name: clean docker-build
+      - name: clean podman-build
         run: |
-            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
-            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+            mkdir -p ${GITHUB_WORKSPACE}/podman-build 
+            rm -rf ${GITHUB_WORKSPACE}/podman-build/*
 
       - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v3
         with:
           name: nightly_coredaq
-          path: ${{ github.workspace }}/docker-build
+          path: ${{ github.workspace }}/podman-build
 
       - name: Download spack nightly release tarball artifact for far detector release
         uses: actions/download-artifact@v3
         with:
           name: nightly_fddaq
-          path: ${{ github.workspace }}/docker-build
+          path: ${{ github.workspace }}/podman-build
 
       - name: prepare cvmfs mirror spack-nightly
         env:
           NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         run: |
-            cd ${{ github.workspace }}/docker-build
+            cd ${{ github.workspace }}/podman-build
             mkdir -p nightly
 
             cd nightly
@@ -139,18 +145,18 @@ jobs:
             ln -s ${fddaq_tag} last_fddaq
 
             cd ..
-            echo "FROM "${{ matrix.input_image }} > Dockerfile
-            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
-            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
-            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
-            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+            echo "FROM "${{ matrix.input_image }} > Containerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
+            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Containerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Containerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: redhat-actions/podman-login@v1
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
@@ -162,13 +168,25 @@ jobs:
           tags: |
             type=raw,value=development_v5
 
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v5
+      - name: Build Image
+        id: build_image
+        uses: redhat-actions/buildah-build@v2
         with:
-          context: ${{ github.workspace }}/docker-build
-          push: true
+          image: ${{ matrix.output_image }}
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+          layers: true
+          context: ${{ github.workspace }}/podman-build
+          containerfiles: Containerfile
+
+      - name: Push to GitHub Container Repository
+        id: push_to_ghcr
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build_image.outputs.image }}
+          tags: ${{ steps.build_image.outputs.tags }}
+          registry: ${{ env.REGISTRY }}/${{ env.USERNAME}}
 
 
   generate_dbt_setup_release_env:
@@ -176,7 +194,7 @@ jobs:
     runs-on: daq
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5_podman_test
     defaults:
       run:
         shell: bash
@@ -236,26 +254,26 @@ jobs:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq-rte
 
-    - name: start docker container, and then rsync...
+    - name: start podman container, and then rsync...
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5_podman_test"
         unique_name=$( date | tr " :" _ )
 
-        docker pull $IMAGE
-        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+        podman pull $IMAGE
+        files_to_copy=$( podman run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
 
-        docker run --name $unique_name $IMAGE
+        podman run --name $unique_name $IMAGE
         mkdir $unique_name
 
         for file in $files_to_copy; do
-             docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
+             podman cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
         done
-        docker rm $unique_name
+        podman rm $unique_name
 
         dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
