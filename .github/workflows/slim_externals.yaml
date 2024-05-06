@@ -129,7 +129,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME}}
           tags: |
-            type=raw,value=${{ env.IMAGE_TAG }}${{ github.event.inputs.tag-suffix }}-initial
+            type=raw,value=${{ env.IMAGE_TAG }}${{ github.event.inputs.tag-suffix }}
 
       - name: prepare build dir
         run: |
