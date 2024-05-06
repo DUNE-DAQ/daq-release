@@ -1,9 +1,6 @@
 name: Alma9 build v5 nightly release
 
 on:
-    #schedule:
-    # - cron: "0 3 * * *"
-
   workflow_dispatch:
     inputs:
       tag-prefix:
