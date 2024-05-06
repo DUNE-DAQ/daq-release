@@ -98,8 +98,8 @@ jobs:
       - name: Clean up Podman orphan objections
         if: always()
         run: |
-            podman image prune -f
             podman container prune -f
+            podman image prune -f
             podman network prune -f
             podman volume prune -f
 
