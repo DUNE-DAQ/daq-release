@@ -1,6 +1,6 @@
 name: Alma9 build v5 nightly release
 
-    #on:
+on:
     #schedule:
     # - cron: "0 3 * * *"
 
