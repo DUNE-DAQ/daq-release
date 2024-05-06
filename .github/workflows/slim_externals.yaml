@@ -24,9 +24,6 @@ jobs:
         USERNAME: dune-daq
         REGISTRY: ghcr.io
         ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
-        #BUILD_DIR: /home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq
-        #WORK_DIR: /home/github/github-runner/dune-github/_work/
-        #BUILD_DIR: ./ # /tmp
     steps:
       - name: Intro
         run: |
@@ -110,6 +107,12 @@ jobs:
     permissions:
       packages: write
       contents: read
+    env:
+        IMAGE_NAME: alma9-slim-externals
+        IMAGE_TAG: v2.1
+        USERNAME: dune-daq
+        REGISTRY: ghcr.io
+        ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
     steps:    
       - name: Log in to the Container registry
         uses: redhat-actions/podman-login@v1
@@ -133,6 +136,8 @@ jobs:
           mkdir -p $build_dir
           cd $build_dir
           refresh_date=$(date +%y-%m-%d)
+          mkdir -p ${{ github.workspace }}/${{ env.ACTION_ID }}
+          cd ${{ github.workspace }}/${{ env.ACTION_ID }}
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Containerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Containerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Containerfile
@@ -146,11 +151,11 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
-          context: $build_dir
-          image: alma9-slim-externals
+          image: ${{ env.IMAGE_NAME }}
           tags: test
-          containerfiles: |
-            ./Containerfile
+          layers: true
+          context: ${{ env.ACTION_ID }}
+          containerfiles: ${{ env.ACTION_ID }}/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
