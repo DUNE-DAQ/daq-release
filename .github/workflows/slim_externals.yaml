@@ -32,6 +32,8 @@ jobs:
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
           echo "Image contents will include $HOSTNAME:/home/${{ github.event.inputs.account-to-copy }}/cvmfs_dunedaq/spack/externals/ext-v2.1"
+          echo "This run ID is $RUN_ID and the attempt is $RUN_ATTEMPT"
+          echo "Action ID is ${{ env.ACTION_ID }}"
 
       - name: Log in to the Container registry
         uses: redhat-actions/podman-login@v1
