@@ -74,7 +74,8 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: ${{ env.IMAGE_NAME }}
-          tags: test
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           layers: true
           context: ${{ env.ACTION_ID }}
           containerfiles: ${{ env.ACTION_ID }}/Containerfile
@@ -152,7 +153,8 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: ${{ env.IMAGE_NAME }}
-          tags: test
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           layers: true
           context: ${{ env.ACTION_ID }}
           containerfiles: ${{ env.ACTION_ID }}/Containerfile
