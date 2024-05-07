@@ -12,6 +12,12 @@ on:
       cvmfs-deployment:
         description: 'whether to deploy the release to cvmfs'
         default: 'no'
+env:
+    EXTERNALS_IMAGE: alma9-slim-externals:v2.1pt
+    EXTERNALS_TAG: v2.1pt
+    USERNAME: dune-daq
+    REGISTRY: ghcr.io
+    #ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   make_nightly_tag:
@@ -22,12 +28,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-        IMAGE_NAME: alma9-slim-externals
-        IMAGE_TAG: v2.1
-        USERNAME: dune-daq
-        REGISTRY: ghcr.io
-        #ACTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - id: create_nightly_tag
         run: |
