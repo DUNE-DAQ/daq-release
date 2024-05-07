@@ -190,7 +190,7 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: dune-github
     needs: update_image
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5_podman_test
