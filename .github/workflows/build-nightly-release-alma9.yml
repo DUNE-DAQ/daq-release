@@ -178,6 +178,7 @@ jobs:
           layers: true
           context: podman-build
           containerfiles: podman-build/Containerfile
+          oci: true
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
