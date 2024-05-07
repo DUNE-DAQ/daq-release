@@ -130,6 +130,7 @@ jobs:
         run: |
             cd ${{ github.workspace }}/podman-build
             mkdir -p nightly
+            echo "Setting up build directory $(pwd)"
 
             cd nightly
             base_tag="NB${NIGHTLY_TAG}"
@@ -148,6 +149,7 @@ jobs:
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Containerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Containerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Containerfile
+            echo "Containerfile path: $(readlink -f Containerfile)"
 
       - name: Log in to the Container registry
         uses: redhat-actions/podman-login@v1
@@ -174,8 +176,8 @@ jobs:
           labels: |
             ${{ steps.meta.outputs.labels }}
           layers: true
-          context: ${{ github.workspace }}/podman-build
-          containerfiles: Containerfile
+          context: podman-build
+          containerfiles: podman-build/Containerfile
 
       - name: Push to GitHub Container Repository
         id: push_to_ghcr
