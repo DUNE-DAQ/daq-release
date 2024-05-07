@@ -93,7 +93,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on: dune-github
     strategy:
       matrix:
         include:
@@ -225,7 +225,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: dune-github
 
     steps:
     - name: check_cvmfs_deployment
