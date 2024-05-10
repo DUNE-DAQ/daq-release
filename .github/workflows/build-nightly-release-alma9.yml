@@ -231,6 +231,14 @@ jobs:
     runs-on: dune-github
 
     steps:
+
+    - name: Log in to the Container registry
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ env.USERNAME }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: check_cvmfs_deployment
       id: do_deployment
       run: |
