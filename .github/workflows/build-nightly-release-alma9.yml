@@ -287,7 +287,7 @@ jobs:
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
         cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
 
-        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+        #kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
