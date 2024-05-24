@@ -38,7 +38,7 @@ jobs:
         ls
         cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
-        checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+        ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
 
     - name: Doxygen Action
