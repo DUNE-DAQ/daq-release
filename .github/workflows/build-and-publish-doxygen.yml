@@ -33,18 +33,18 @@ jobs:
     - name: Checkout packages and generate Doxyfile
       run: |
         echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
-        cd $DBT_AREA_ROOT
+        cd $GITHUB_WORKSPACE
         echo "Am currently in $(pwd)"
         ls
         cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
-        checkout-daq-package.py -i ddaq_release.yaml -a -o ../sourcecode
+        checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
 
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
-        doxyfile-path: "dunedaqdoxy/Doxyfile"
+        doxyfile-path: "./Doxyfile"
         working-directory: .
 
     - name: Deploy
