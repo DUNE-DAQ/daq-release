@@ -1,0 +1,45 @@
+name: Build Doxygen and publish to GitHub pages
+
+on:
+  workflow_dispatch
+
+jobs:
+  build-doxygen:
+    name: build_doxygen
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout dunedaqdoxy
+      uses: actions/checkout@v2
+      with:
+        repository: andrewmogan/dunedaqdoxy
+        path: dunedaqdoxy
+
+    - name: Checkout packages and generate Doxyfile
+      run: |
+        #cd $GITHUB_WORKSPACE
+        echo "Am currently in $(pwd)"
+        echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
+        mkdir -p sourcecode
+        ./checkout-daq-package.py -i ddaq_release.yaml -a -o ./sourcecode
+        ./doxygen_gen.py
+
+    - name: Doxygen Action
+      uses: mattnotmitt/doxygen-action@v1.1.0
+      with:
+        doxyfile-path: "./Doxyfile"
+        working-directory: .
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html
+        enable_jekyll: false
+        allow_empty_commit: false
+        force_orphan: true
+        publish_branch: gh-pages
+
