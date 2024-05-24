@@ -42,10 +42,6 @@ mkdir -p $SPACK_AREA
 cd $SPACK_AREA
 get_spack
 
-# This is for backwards compatibility, will fill this subdirectory with soft links later in this script
-OLD_SUBDIR=$SPACK_AREA/spack-0.20.0-gcc-12.1.0
-mkdir -p $OLD_SUBDIR
-
 if [[ "$DET" == "core" ]]; then
   daqify_spack_environment base
   release_yaml=$( get_release_yaml "base" )
@@ -148,11 +144,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     
 fi
 
-cd $OLD_SUBDIR
-ln -s ../spack-installation
-ln -s ../spack-0.20.0
-ln -s ../spec_*_log.txt
-cd ..
+
 ln -s $( basename $OLD_SUBDIR ) default
 
 echo "Files in $SPACK_AREA :"
