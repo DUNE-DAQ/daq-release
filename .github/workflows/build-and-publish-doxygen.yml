@@ -33,7 +33,8 @@ jobs:
       run: |
         cd $DBT_AREA_ROOT || exit 1
         echo "Am currently in $(pwd)"
-        cd dunedaqdoxy
+        ls
+        cd $DBT_AREA_ROOT/dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
         checkout-daq-package.py -i ddaq_release.yaml -a -o ../sourcecode
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
