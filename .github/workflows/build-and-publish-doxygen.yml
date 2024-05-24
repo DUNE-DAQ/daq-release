@@ -23,6 +23,7 @@ jobs:
         . env.sh
         echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
         echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
+        if [ -d $GITHUB_WORKSPACE/dunedaqdoxy ]; then rm -rf $GITHUB_WORKSPACE/dunedaqdoxy; fi;
 
     - name: Checkout dunedaqdoxy
       uses: actions/checkout@v2
@@ -62,4 +63,6 @@ jobs:
       run: |
         echo "Removing contents of $DBT_AREA_ROOT"
         rm -rf $DBT_AREA_ROOT
+        echo "Removing $GITHUB_WORKSPACE/dunedaqdoxy"
+        rm -rf $GITHUB_WORKSPACE/dunedaqdoxy
 
