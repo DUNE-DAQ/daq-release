@@ -15,7 +15,8 @@ jobs:
     - name: Create dbt area
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest
+        setup_dbt latest_v5
+        if [ -d test_doxygen ]; then rm -rf test_doxygen; fi;
         dbt-create -n -q NFD_DEV_240524_A9 test_doxygen
         cd test_doxygen
         . env.sh
@@ -40,8 +41,8 @@ jobs:
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
-        doxyfile-path: "$DBT_AREA_ROOT/dunedaqdoxy/Doxyfile"
-        working-directory: $DBT_AREA_ROOT
+        doxyfile-path: "dunedaqdoxy/Doxyfile"
+        working-directory: .
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
@@ -52,4 +53,10 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
+
+    - name: Clean up dbt area
+      if: always()
+      run: |
+        echo "Removing contents of $DBT_AREA_ROOT"
+        rm -rf $DBT_AREA_ROOT
 
