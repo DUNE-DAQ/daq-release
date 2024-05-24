@@ -16,6 +16,7 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
+        cd $GITHUB_WORKSPACE
         if [ -d test_doxygen ]; then rm -rf test_doxygen; fi;
         dbt-create -n -q NFD_DEV_240524_A9 test_doxygen
         cd test_doxygen
@@ -31,10 +32,11 @@ jobs:
 
     - name: Checkout packages and generate Doxyfile
       run: |
-        cd $DBT_AREA_ROOT || exit 1
+        echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
+        cd $DBT_AREA_ROOT
         echo "Am currently in $(pwd)"
         ls
-        cd $DBT_AREA_ROOT/dunedaqdoxy
+        cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
         checkout-daq-package.py -i ddaq_release.yaml -a -o ../sourcecode
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
