@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: andrewmogan/dunedaqdoxy
-        path: $DBT_AREA_ROOT/dunedaqdoxy
+        path: dunedaqdoxy
 
     - name: Checkout packages and generate Doxyfile
       run: |
