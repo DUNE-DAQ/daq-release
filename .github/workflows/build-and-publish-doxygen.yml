@@ -14,8 +14,15 @@ jobs:
         shell: bash
 
     steps:
-    - name: Create dbt area
+    - name: Checkout dunedaqdoxy
+      uses: actions/checkout@v2
+      with:
+        repository: andrewmogan/dunedaqdoxy
+        path: dunedaqdoxy
+
+    - name: Create dbt area, checkout packages, and generate Doxyfile
       run: |
+        echo "=======CREATE DBT AREA========="
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         release_name="last_fddaq"
@@ -26,27 +33,21 @@ jobs:
         . env.sh
         echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
         echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
-        if [ -d $GITHUB_WORKSPACE/dunedaqdoxy ]; then rm -rf $GITHUB_WORKSPACE/dunedaqdoxy; fi;
 
-    - name: Checkout dunedaqdoxy
-      uses: actions/checkout@v2
-      with:
-        repository: andrewmogan/dunedaqdoxy
-        path: dunedaqdoxy
-
-    - name: Checkout packages and generate Doxyfile
-      run: |
+        echo "=======CHECKOUT PACKAGES========="
         echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
         cd $GITHUB_WORKSPACE
         echo "Am currently in $(pwd)"
-        ls
         cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
         ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+
         echo "========DBT-BUILD========="
         cd $DBT_AREA_ROOT
-        . env.sh
+        dbt-workarea-env
         dbt-build --codegen-only
+
+        echo "========GENERATE DOXYFILE========"
         cd $GITHUB_WORKSPACE/dunedaqdoxy
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
         echo "ls of package oksutils in checkout step: $(ls $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksutils)"
