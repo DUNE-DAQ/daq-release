@@ -17,15 +17,13 @@ jobs:
     - name: Create dbt area
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest
+        setup_dbt latest_v5
         release_name="last_fddaq"
         cd $GITHUB_WORKSPACE
         if [ -d test_doxygen ]; then rm -rf test_doxygen; fi;
         dbt-create -n $release_name test_doxygen
         cd test_doxygen
         . env.sh
-        echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
-        echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
         echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
         echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
         if [ -d $GITHUB_WORKSPACE/dunedaqdoxy ]; then rm -rf $GITHUB_WORKSPACE/dunedaqdoxy; fi;
@@ -45,9 +43,13 @@ jobs:
         cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
         ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+        echo "========DBT-BUILD========="
+        cd $DBT_AREA_ROOT
+        dbt-build --codegen-only
+        cd $GITHUB_WORKSPACE/dunedaqdoxy
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
         echo "ls of package oksutils in checkout step: $(ls $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksutils)"
-        echo "ls of dunedaqdoxy: $(ls $GITHUB_WORKSPACE/dunedaqdoxy)"
+        echo "ls of dunedaqdoxy: $(ls -l $GITHUB_WORKSPACE/dunedaqdoxy)"
         echo "Contents of Doxyfile INPUT:"
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
 
