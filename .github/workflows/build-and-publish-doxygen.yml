@@ -17,7 +17,10 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - name: Set up cvmfs
       run: |
-        ls /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/opt/spack/linux-almalinux9-x86_64/gcc-12.1.0/gcc-12.1.0-r5tmamjhdsrukrhvq6bkdxbixgewzvll/bin/gcc --version || exit 1
+        ldd /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/opt/spack/linux-almalinux9-x86_64/gcc-12.1.0/gcc-12.1.0-r5tmamjhdsrukrhvq6bkdxbixgewzvll/bin/gcc || exit 1
+        export PATH=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/opt/spack/linux-almalinux9-x86_64/gcc-12.1.0/gcc-12.1.0-r5tmamjhdsrukrhvq6bkdxbixgewzvll/bin:$PATH || exit 1
+        export LD_LIBRARY_PATH=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/opt/spack/linux-almalinux9-x86_64/gcc-12.1.0/gcc-12.1.0-r5tmamjhdsrukrhvq6bkdxbixgewzvll/lib64:$LD_LIBRARY_PATH || exit 1
         echo "CVMFS Success!"
 
     - name: Checkout dunedaqdoxy
