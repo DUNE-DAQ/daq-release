@@ -45,7 +45,7 @@ jobs:
         echo "========DBT-BUILD========="
         cd $DBT_AREA_ROOT
         dbt-workarea-env
-        dbt-build --codegen-only
+        dbt-build #--codegen-only
 
         echo "========GENERATE DOXYFILE========"
         cd $GITHUB_WORKSPACE/dunedaqdoxy
