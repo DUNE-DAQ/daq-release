@@ -45,6 +45,7 @@ jobs:
         ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
         echo "========DBT-BUILD========="
         cd $DBT_AREA_ROOT
+        . env.sh
         dbt-build --codegen-only
         cd $GITHUB_WORKSPACE/dunedaqdoxy
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
