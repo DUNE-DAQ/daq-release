@@ -14,6 +14,16 @@ jobs:
         shell: bash
 
     steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libc6-dev
+
+    - name: Verify crt1.o and crti.o existence
+      run: |
+        find /usr -name crt1.o || exit 1
+        find /usr -name crti.o || exit 1
+
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - name: Set up cvmfs
       run: |
