@@ -46,12 +46,17 @@ jobs:
         echo "Now in $(pwd) after cd dunedaqdoxy"
         ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
+        echo "ls of package oksutils in checkout step: $(ls $GITHUB_WORKSPACE/test_doxygen/oksutils)"
 
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
         working-directory: 'dunedaqdoxy'
         doxyfile-path: 'Doxyfile'
+
+    - name: Print debug
+      run: |
+        echo "ls of package oksutils in debug step: $(ls $GITHUB_WORKSPACE/test_doxygen/oksutils)"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
