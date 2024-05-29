@@ -66,13 +66,19 @@ jobs:
         echo "Contents of Doxyfile INPUT:"
         #cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
         #cd $GITHUB_WORKSPACE/dunedaqdoxy
-        doxygen
+        echo "ls -l of source_dir: $(ls -l $DBT_AREA_ROOT/sourcecode)"
+        echo "ls -l of build_dir: $(ls -l $DBT_AREA_ROOT/build)"
+        echo "Full path of source_dir: $(readlink -f $DBT_AREA_ROOT/sourcecode)"
+        echo "Full path of build_dir: $(readlink -f $DBT_AREA_ROOT/build)"
+        echo "=========CHANGE FILE PERMISSIONS=========="
+        chown -hR root $DBT_AREA_ROOT/sourcecode
+        chown -hR root $DBT_AREA_ROOT/build
 
-    #- name: Doxygen Action
-    #  uses: mattnotmitt/doxygen-action@v1.1.0
-    #  with:
-    #    working-directory: 'dunedaqdoxy'
-    #    doxyfile-path: 'Doxyfile'
+    - name: Doxygen Action
+      uses: mattnotmitt/doxygen-action@v1.1.0
+      with:
+        working-directory: 'dunedaqdoxy'
+        doxyfile-path: 'Doxyfile'
 
     - name: Print debug
       run: |
