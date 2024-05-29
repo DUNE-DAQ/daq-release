@@ -77,12 +77,14 @@ jobs:
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
-        working-directory: 'dunedaqdoxy'
-        doxyfile-path: 'Doxyfile'
+        #working-directory: 'dunedaqdoxy'
+        working-directory: ${{ github.workspace }}
+        doxyfile-path: 'dunedaqdoxy/Doxyfile'
 
     - name: Print debug
       run: |
-        echo "ls of package oksutils in debug step: $(ls $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksutils)"
+        echo "ls of package appfwk in debug step: $(ls -l $GITHUB_WORKSPACE/test_doxygen/sourcecode/appfwk)"
+        echo "ls of package oksconfgen in debug step: $(ls -l $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksconfgen)"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
