@@ -11,7 +11,7 @@ class Oksdalgen(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksdalgen/"
-    git =      "https://github.com/DUNE-DAQ/genconfig.git"
+    git =      "https://github.com/DUNE-DAQ/oksdalgen.git"
 
     maintainers = ["jcfreeman2"]
 

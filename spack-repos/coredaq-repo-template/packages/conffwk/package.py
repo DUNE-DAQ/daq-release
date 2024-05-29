@@ -11,7 +11,7 @@ class Conffwk(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/conffwk/"
-    git =      "https://github.com/DUNE-DAQ/config.git"
+    git =      "https://github.com/DUNE-DAQ/conffwk.git"
 
     maintainers = ["jcfreeman2"]
 

@@ -11,7 +11,7 @@ class Oksconflibs(CMakePackage):
     """Run Control related"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksconflibs/"
-    git =      "https://github.com/DUNE-DAQ/oksconfig.git"
+    git =      "https://github.com/DUNE-DAQ/oksconflibs.git"
 
     maintainers = ["jcfreeman2"]
 
