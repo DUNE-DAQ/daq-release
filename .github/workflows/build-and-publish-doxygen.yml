@@ -62,7 +62,8 @@ jobs:
         cd $GITHUB_WORKSPACE/dunedaqdoxy
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
         # Fix paths in Doxyfile so they can be seen by the Doxygen action container, which uses /github/workspace
-        sed -i "s|${DBT_AREA_ROOT}|/github/workspace|g" Doxyfile
+        export DEV_AREA_NAME=${{ env.DEV_AREA_NAME }}
+        sed -i "s|${DBT_AREA_ROOT}|/github/workspace/${DEV_AREA_NAME}|g" Doxyfile
         echo "Contents of Doxyfile INPUT:"
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
 
