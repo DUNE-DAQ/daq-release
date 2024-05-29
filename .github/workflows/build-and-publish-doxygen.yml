@@ -64,8 +64,8 @@ jobs:
         echo "ls of package oksutils in checkout step: $(ls $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksutils)"
         echo "ls of dunedaqdoxy: $(ls -l $GITHUB_WORKSPACE/dunedaqdoxy)"
         echo "Contents of Doxyfile INPUT:"
-        cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
-        cd $GITHUB_WORKSPACE/dunedaqdoxy
+        #cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
+        #cd $GITHUB_WORKSPACE/dunedaqdoxy
         doxygen
 
     #- name: Doxygen Action
