@@ -37,23 +37,26 @@ jobs:
         dbt-create -n $release_name test_doxygen
         cd test_doxygen
         . env.sh
+        cd sourcecode
+        git clone https://github.com/DUNE-DAQ/appfwk.git
+        git clone https://github.com/DUNE-DAQ/oksconfgen.git
         echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
         echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
 
-        echo "=======CHECKOUT PACKAGES========="
-        echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
-        cd $GITHUB_WORKSPACE
-        echo "Am currently in $(pwd)"
-        cd dunedaqdoxy
-        echo "Now in $(pwd) after cd dunedaqdoxy"
-        ./checkout-daq-package.py -i $GITHUB_WORKSPACE/daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+        #echo "=======CHECKOUT PACKAGES========="
+        #echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
+        #cd $GITHUB_WORKSPACE
+        #echo "Am currently in $(pwd)"
+        #cd dunedaqdoxy
+        #echo "Now in $(pwd) after cd dunedaqdoxy"
+        # ./checkout-daq-package.py -i $GITHUB_WORKSPACE/daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DBT_AREA_ROOT/sourcecode
 
         echo "========DBT-BUILD========="
         cd $DBT_AREA_ROOT
         dbt-workarea-env
         spack load dbe || true
         spack unload dbe || true
-        dbt-build 
+        dbt-build --codegen-only
 
         echo "========GENERATE DOXYFILE========"
         cd $GITHUB_WORKSPACE/dunedaqdoxy
@@ -62,12 +65,14 @@ jobs:
         echo "ls of dunedaqdoxy: $(ls -l $GITHUB_WORKSPACE/dunedaqdoxy)"
         echo "Contents of Doxyfile INPUT:"
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
+        cd $GITHUB_WORKSPACE/dunedaqdoxy
+        doxygen
 
-    - name: Doxygen Action
-      uses: mattnotmitt/doxygen-action@v1.1.0
-      with:
-        working-directory: 'dunedaqdoxy'
-        doxyfile-path: 'Doxyfile'
+    #- name: Doxygen Action
+    #  uses: mattnotmitt/doxygen-action@v1.1.0
+    #  with:
+    #    working-directory: 'dunedaqdoxy'
+    #    doxyfile-path: 'Doxyfile'
 
     - name: Print debug
       run: |
