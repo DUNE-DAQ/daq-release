@@ -7,11 +7,11 @@
 from spack import *
 
 
-class Oksdbinterfaces(CMakePackage):
+class Oksconflibs(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksdbinterfaces/"
-    git =      "https://github.com/DUNE-DAQ/config.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/oksconflibs/"
+    git =      "https://github.com/DUNE-DAQ/oksconfig.git"
 
     maintainers = ["jcfreeman2"]
 

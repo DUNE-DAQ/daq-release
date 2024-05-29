@@ -7,11 +7,11 @@
 from spack import *
 
 
-class Genconfig(CMakePackage):
+class Conffwk(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/genconfig/"
-    git =      "https://github.com/DUNE-DAQ/genconfig.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/conffwk/"
+    git =      "https://github.com/DUNE-DAQ/config.git"
 
     maintainers = ["jcfreeman2"]
 
@@ -30,5 +30,6 @@ class Genconfig(CMakePackage):
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
         env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
+        env.prepend_path("DUNEDAQ_DB_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")

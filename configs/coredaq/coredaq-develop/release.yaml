@@ -220,13 +220,13 @@
         - name: oksutils
           version: "develop"
           commit: null
-        - name: oksconfig
+        - name: oksconflibs
           version: "develop"
           commit: null
-        - name: oksdbinterfaces
+        - name: conffwk
           version: "develop"
           commit: null
-        - name: genconfig
+        - name: oksdalgen
           version: "develop"
           commit: null
         - name: coredal
