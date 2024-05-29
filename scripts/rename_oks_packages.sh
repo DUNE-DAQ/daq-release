@@ -6,9 +6,16 @@
 # once the renaming is complete and the Issue closed this script can be
 # deleted from this repo
 
+scriptdir=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+
+
+for pkg in oksdbinterfaces oksconfig genconfig ; do
+    git clone https://github.com/DUNE-DAQ/$pkg -b develop
+done
+
 ##################### oksdbinterfaces -> conffwk #######################
 
-cd oksdbinterfaces || return "No oksdbinterfaces repo found"
+cd oksdbinterfaces 
 
 git mv ./include/oksdbinterfaces ./include/conffwk
 git mv ./python/oksdbinterfaces ./python/conffwk
@@ -30,7 +37,7 @@ mv oksdbinterfaces conffwk
 
 ##################### oksconfig -> oksconflibs #############################
 
-cd oksconfig || return "No oksconfig repo found"
+cd oksconfig
 
 git mv ./include/oksconfig ./include/oksconflibs
 git mv ./cmake/oksconfigConfig.cmake.in ./cmake/oksconflibsConfig.cmake.in
@@ -52,7 +59,7 @@ mv oksconfig oksconflibs
 
 ##################### genconfig -> oksdalgen #############################
 
-cd genconfig || return "No genconfig repo found"
+cd genconfig 
 
 git mv ./cmake/genconfigConfig.cmake.in ./cmake/oksdalgenConfig.cmake.in
 
@@ -65,11 +72,50 @@ find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
 find . -type f | xargs -i sed -r -i 's/genconfig/oksdalgen/g' {}
 find . -type f | xargs -i sed -r -i 's/GENCONFIG/OKSDALGEN/g' {}
 
-# For the time being retain the name of the executable despite the package name changing
-sed -r -i 's/oksdalgen oksdalgen.cxx/genconfig genconfig.cxx/' CMakeLists.txt
+git mv apps/genconfig.cxx apps/oksdalgen.cxx
 
 mv $git_stashing_area/.git .
 rm -rf $git_stashing_area
 
 cd ..
 mv genconfig oksdalgen
+
+###########################Change dependencies with other packages#############################
+
+# Add docs (official documentation) and dal (useful standalone
+# tutorial package) to the regular list of v5 packages to modify
+
+for pkg in docs dal $( $scriptdir/list_packages.py develop coredaq ) $( $scriptdir/list_packages.py develop fddaq ) ; do
+    
+    if [[ $pkg == "oksdbinterfaces" || $pkg == "genconfig" || $pkg == "oksconfig" ]]; then
+	continue
+    fi
+	
+    git clone http://github.com/DUNE-DAQ/$pkg -b develop
+
+    cd $pkg || return "Couldn't clone $pkg"
+
+    git_stashing_area=$(mktemp -d)
+    mv .git $git_stashing_area
+
+    find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
+    find . -type f | xargs -i sed -r -i 's/genconfig/oksdalgen/g' {}
+    find . -type f | xargs -i sed -r -i 's/oksconfig/oksconflibs/g' {}
+    find . -type f | xargs -i sed -r -i 's/GENCONFIG/OKSDALGEN/g' {}  # Needed for daq-cmake
+    
+    mv $git_stashing_area/.git .
+    rm -rf $git_stashing_area
+
+    echo $pkg
+    git diff HEAD --name-status
+	
+    if [[ -z $( git diff HEAD --name-status ) ]]; then
+	cd ..
+	rm -rf $pkg
+    else
+	cd ..
+    fi
+    
+done
+
+
