@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5"
+    env: 
+      DEV_AREA_NAME: 'dev_area'
     defaults:
       run:
         shell: bash
@@ -23,7 +25,6 @@ jobs:
     - name: Checkout daq-release
       uses: actions/checkout@v2
       with:
-        repository: DUNE-DAQ/daq-release
         path: daq-release
 
     - name: Create dbt area, checkout packages, and generate Doxyfile
@@ -33,9 +34,8 @@ jobs:
         setup_dbt latest_v5
         release_name="last_fddaq"
         cd $GITHUB_WORKSPACE
-        if [ -d test_doxygen ]; then rm -rf test_doxygen; fi;
-        dbt-create -n $release_name test_doxygen
-        cd test_doxygen
+        dbt-create -n $release_name ${{ env.DEV_AREA_NAME }}
+        cd ${{ env.DEV_AREA_NAME }}
         . env.sh
         cd sourcecode
         git clone https://github.com/DUNE-DAQ/appfwk.git
@@ -61,30 +61,17 @@ jobs:
         echo "========GENERATE DOXYFILE========"
         cd $GITHUB_WORKSPACE/dunedaqdoxy
         ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
-        echo "ls of package oksutils in checkout step: $(ls $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksutils)"
-        echo "ls of dunedaqdoxy: $(ls -l $GITHUB_WORKSPACE/dunedaqdoxy)"
+        # Fix paths in Doxyfile so they can be seen by the Doxygen action container, which uses /github/workspace
+        sed -i "s|${DBT_AREA_ROOT}|/github/workspace|g" Doxyfile
         echo "Contents of Doxyfile INPUT:"
-        #cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 20 INPUT
-        #cd $GITHUB_WORKSPACE/dunedaqdoxy
-        echo "ls -l of source_dir: $(ls -l $DBT_AREA_ROOT/sourcecode)"
-        echo "ls -l of build_dir: $(ls -l $DBT_AREA_ROOT/build)"
-        echo "Full path of source_dir: $(readlink -f $DBT_AREA_ROOT/sourcecode)"
-        echo "Full path of build_dir: $(readlink -f $DBT_AREA_ROOT/build)"
-        echo "=========CHANGE FILE PERMISSIONS=========="
-        chown -hR root $DBT_AREA_ROOT/sourcecode
-        chown -hR root $DBT_AREA_ROOT/build
+        cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
 
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
         #working-directory: 'dunedaqdoxy'
-        working-directory: ${{ github.workspace }}
+        working-directory: /github/workspace
         doxyfile-path: 'dunedaqdoxy/Doxyfile'
-
-    - name: Print debug
-      run: |
-        echo "ls of package appfwk in debug step: $(ls -l $GITHUB_WORKSPACE/test_doxygen/sourcecode/appfwk)"
-        echo "ls of package oksconfgen in debug step: $(ls -l $GITHUB_WORKSPACE/test_doxygen/sourcecode/oksconfgen)"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
