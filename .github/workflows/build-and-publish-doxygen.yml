@@ -8,7 +8,7 @@ jobs:
     name: build_doxygen
     runs-on: ubuntu-latest
     container:
-      image: "ghcr.io/dune-daq/nightly-release-alma9:development_v4"
+      image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5"
     defaults:
       run:
         shell: bash
