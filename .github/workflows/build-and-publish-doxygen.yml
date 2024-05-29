@@ -20,6 +20,12 @@ jobs:
         repository: andrewmogan/dunedaqdoxy
         path: dunedaqdoxy
 
+    - name: Checkout daq-release
+      uses: actions/checkout@v2
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+
     - name: Create dbt area, checkout packages, and generate Doxyfile
       run: |
         echo "=======CREATE DBT AREA========="
@@ -40,11 +46,13 @@ jobs:
         echo "Am currently in $(pwd)"
         cd dunedaqdoxy
         echo "Now in $(pwd) after cd dunedaqdoxy"
-        ./checkout-daq-package.py -i ddaq_release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+        ./checkout-daq-package.py -i $GITHUB_WORKSPACE/daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DBT_AREA_ROOT/sourcecode
 
         echo "========DBT-BUILD========="
         cd $DBT_AREA_ROOT
         dbt-workarea-env
+        spack load dbe || true
+        spack unload dbe || true
         dbt-build 
 
         echo "========GENERATE DOXYFILE========"
