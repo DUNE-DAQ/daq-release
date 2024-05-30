@@ -66,6 +66,11 @@ jobs:
         echo "Contents of Doxyfile INPUT:"
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
 
+    - name: Run Doxygen manually for debugging
+      run: |
+        doxygen --version
+        cd $GITHUB_WORKSPACE/dunedaqdoxy
+        doxygen
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.1.0
       with:
@@ -77,7 +82,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/html
+        publish_dir: $GITHUB_WORKSPACE/dunedaqdoxy/docs/html
         enable_jekyll: false
         allow_empty_commit: false
         force_orphan: true
