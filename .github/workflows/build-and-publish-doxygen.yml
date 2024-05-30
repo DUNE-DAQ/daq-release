@@ -27,9 +27,8 @@ jobs:
       with:
         path: daq-release
 
-    - name: Create dbt area, checkout packages, and generate Doxyfile
+    - name: Create dbt area
       run: |
-        echo "=======CREATE DBT AREA========="
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         release_name="last_fddaq"
@@ -37,33 +36,32 @@ jobs:
         dbt-create -n $release_name ${{ env.DEV_AREA_NAME }}
         cd ${{ env.DEV_AREA_NAME }}
         . env.sh
-        cd sourcecode
-        git clone https://github.com/DUNE-DAQ/appfwk.git
-        git clone https://github.com/DUNE-DAQ/oksconfgen.git
         echo "DBT_AREA_ROOT=$(echo $DBT_AREA_ROOT)" >> $GITHUB_ENV
         echo "DBT_AREA_ROOT is $DBT_AREA_ROOT"
 
-        #echo "=======CHECKOUT PACKAGES========="
-        #echo GITHUB_WORKSPACE is $GITHUB_WORKSPACE
-        #cd $GITHUB_WORKSPACE
-        #echo "Am currently in $(pwd)"
-        #cd dunedaqdoxy
-        #echo "Now in $(pwd) after cd dunedaqdoxy"
-        # ./checkout-daq-package.py -i $GITHUB_WORKSPACE/daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+    - name: Checkout packages
+      run: |
+        cd $GITHUB_WORKSPACE/dunedaqdoxy
+        ./checkout-daq-package.py -i $GITHUB_WORKSPACE/daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DBT_AREA_ROOT/sourcecode
+        # triggeralgs doesn't currently work with --codegen-only build; remove for now
+        rm -rf $DBT_AREA_ROOT/sourcecode/triggeralgs
 
-        echo "========DBT-BUILD========="
+    - name: Build dbt area
+      run: |
         cd $DBT_AREA_ROOT
-        dbt-workarea-env
+        . env.sh
         spack load dbe || true
         spack unload dbe || true
         dbt-build --codegen-only
 
-        echo "========GENERATE DOXYFILE========"
+    - name: Generate Doxyfile
+      run: |
         cd $GITHUB_WORKSPACE/dunedaqdoxy
-        ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
-        # Fix paths in Doxyfile so they can be seen by the Doxygen action container, which uses /github/workspace
+        # ./doxygen_gen.py --source_dir $DBT_AREA_ROOT/sourcecode --build_dir $DBT_AREA_ROOT/build
+        ./doxygen_gen.py
+        # Edit paths in Doxyfile so they can be seen by the Doxygen action container, which uses /github/workspace
         export DEV_AREA_NAME=${{ env.DEV_AREA_NAME }}
-        sed -i "s|${DBT_AREA_ROOT}|/github/workspace/${DEV_AREA_NAME}|g" Doxyfile
+        sed -i "s|${DBT_AREA_ROOT}|/github/workspace/${{ env.DEV_AREA_NAME }}|g" Doxyfile
         echo "Contents of Doxyfile INPUT:"
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
 
