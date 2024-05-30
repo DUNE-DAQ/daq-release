@@ -56,9 +56,14 @@ function get_spack() {
   fi
 
   wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz || return 2
-  tar xf v${SPACK_VERSION}.tar.gz 
-  ln -s spack-${SPACK_VERSION} spack-installation
+  tar xf v${SPACK_VERSION}.tar.gz
   rm -f v${SPACK_VERSION}.tar.gz
+  
+  ln -s spack-${SPACK_VERSION} spack-installation
+  mkdir spack-${SPACK_VERSION}/default
+  pushd spack-${SPACK_VERSION}/default
+  ln -s ../spack-installation
+  popd
 }
 
 function daqify_spack_environment() {
