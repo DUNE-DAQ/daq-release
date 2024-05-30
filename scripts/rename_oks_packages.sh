@@ -29,6 +29,9 @@ find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
 # OKSDB_INTERFACE is not a typo
 find . -type f | xargs -i sed -r -i 's/OKSDB_INTERFACE/CONFFWK/g' {}
 
+# JCF: closing the barn door after the cows have been let out (https://github.com/DUNE-DAQ/conffwk/pull/12)
+find . -type f | xargs -i sed -r -i 's/oksconfig/oksconflibs/g' {}
+
 mv $git_stashing_area/.git .
 rm -rf $git_stashing_area
 
@@ -85,7 +88,9 @@ mv genconfig oksdalgen
 # Add docs (official documentation) and dal (useful standalone
 # tutorial package) to the regular list of v5 packages to modify
 
-for pkg in docs dal $( $scriptdir/list_packages.py develop coredaq ) $( $scriptdir/list_packages.py develop fddaq ) ; do
+# JCF, May-30-2024: Also add drunc and integrationtest
+
+for pkg in drunc integrationtest docs dal $( $scriptdir/list_packages.py develop coredaq ) $( $scriptdir/list_packages.py develop fddaq ) ; do
     
     if [[ $pkg == "oksdbinterfaces" || $pkg == "genconfig" || $pkg == "oksconfig" ]]; then
 	continue
