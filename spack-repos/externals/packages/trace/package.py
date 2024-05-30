@@ -31,4 +31,7 @@ class Trace(CMakePackage):
 
     def setup_run_environment(self, env):
         env.prepend_path('PYTHONPATH', self.prefix.python)
-        file_to_source = self.prefix.join("bin/trace_functions.sh")  # Line taken from https://github.com/art-daq/artdaq-spack/blob/develop/packages/trace/package.py
+
+        # Next two lines taken from https://github.com/art-daq/artdaq-spack/blob/develop/packages/trace/package.py
+        file_to_source = self.prefix.join("bin/trace_functions.sh")  
+        print(f'source {file_to_source}')
