@@ -122,7 +122,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: v2.8.1
+          version: v2.8.2
           commit: null
         - name: ers
           version: "develop"
@@ -220,13 +220,13 @@
         - name: oksutils
           version: "develop"
           commit: null
-        - name: oksconfig
+        - name: oksconflibs
           version: "develop"
           commit: null
-        - name: oksdbinterfaces
+        - name: conffwk
           version: "develop"
           commit: null
-        - name: genconfig
+        - name: oksdalgen
           version: "develop"
           commit: null
         - name: coredal

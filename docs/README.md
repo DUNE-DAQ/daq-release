@@ -75,7 +75,7 @@ fdreadoutmodules: [![fdreadoutmodules](https://github.com/DUNE-DAQ/fdreadoutmodu
 
 flxlibs: [![flxlibs](https://github.com/DUNE-DAQ/flxlibs/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/flxlibs/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
-genconfig: [![genconfig](https://github.com/DUNE-DAQ/genconfig/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/genconfig/actions/workflows/dunedaq-develop-cpp-ci.yml)
+oksdalgen: [![oksdalgen](https://github.com/DUNE-DAQ/oksdalgen/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/oksdalgen/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 hdf5libs: [![hdf5libs](https://github.com/DUNE-DAQ/hdf5libs/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/hdf5libs/actions/workflows/dunedaq-v4-cpp-ci.yml)
 

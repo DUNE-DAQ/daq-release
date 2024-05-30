@@ -21,15 +21,15 @@
     * erskafka
     * fddaqconf
     * flx-k8s-device-plugin
-    * genconfig
+    * oksdalgen
     * grafana-dashboards
     * kafkaopmon
     * logging
     * nanorc
     * oks
     * oksconfgen
-    * oksconfig
-    * oksdbinterfaces
+    * oksconflibs
+    * conffwk
     * okssystem
     * oksutils
     * opmonlib
