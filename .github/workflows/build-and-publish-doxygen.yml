@@ -67,7 +67,7 @@ jobs:
         cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
 
     - name: Doxygen Action
-      uses: mattnotmitt/doxygen-action@v1.1.0
+      uses: mattnotmitt/doxygen-action@v1.9.8
       with:
         #working-directory: 'dunedaqdoxy'
         working-directory: /github/workspace/dunedaqdoxy
