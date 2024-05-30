@@ -31,7 +31,8 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        release_name="last_fddaq"
+        date_tag=$(date +%y%m%d)
+        release_name=NFD_DEV_${date_tag}_A9
         cd $GITHUB_WORKSPACE
         dbt-create -n $release_name ${{ env.DEV_AREA_NAME }}
         cd ${{ env.DEV_AREA_NAME }}
