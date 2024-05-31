@@ -58,7 +58,7 @@ jobs:
         export DEV_AREA_NAME=${{ env.DEV_AREA_NAME }}
         sed -i "s|${DBT_AREA_ROOT}|/github/workspace/${{ env.DEV_AREA_NAME }}|g" Doxyfile
         echo "Contents of Doxyfile INPUT:"
-        cat $GITHUB_WORKSPACE/dunedaqdoxy/Doxyfile | grep -A 10 "INPUT   "
+        cat $GITHUB_WORKSPACE/daq-release/docs/Doxyfile | grep -A 10 "INPUT   "
 
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.9.8
