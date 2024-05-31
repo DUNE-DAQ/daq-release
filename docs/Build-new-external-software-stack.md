@@ -1,3 +1,6 @@
+
+_JCF, May-31-2024: these instructions haven't been maintained. Please contact me if you wish to build externals_
+
 The steps below has been tested `isc01.fnal.gov` (running `Almalinux9` with `docker-ce` installed) as user `dunedaq`.
 
 
