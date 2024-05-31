@@ -1,0 +1,13 @@
+<map id="dunedaq::readoutlibs::DefaultSkipListRequestHandler&lt; T &gt;" name="dunedaq::readoutlibs::DefaultSkipListRequestHandler&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="725,138,965,179"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1DefaultRequestHandlerModel.html" title=" " alt="" coords="432,123,676,194"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="691,156,725,156,725,161,691,161"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1readoutlibs_1_1RequestHandlerConcept.html" title=" " alt="" coords="5,5,240,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="252,63,408,107,451,120,449,125,407,112,250,68"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1readoutlibs_1_1BufferedFileWriter.html" title=" " alt="" coords="53,85,192,141"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="208,119,408,140,431,142,431,148,407,145,207,124"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1readoutlibs_1_1ReusableThread.html" title=" " alt="" coords="53,184,192,224"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="208,210,304,213,356,211,407,205,461,192,462,197,408,210,357,217,304,219,208,215"/>
+<area shape="rect" id="Node000006" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="39,249,206,290"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="221,265,313,256,360,247,407,235,454,216,497,192,500,197,456,221,409,240,362,252,313,261,222,270"/>
+</map>

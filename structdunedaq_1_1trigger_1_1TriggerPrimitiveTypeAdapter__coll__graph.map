@@ -1,0 +1,5 @@
+<map id="dunedaq::trigger::TriggerPrimitiveTypeAdapter" name="dunedaq::trigger::TriggerPrimitiveTypeAdapter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="6,109,165,150"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1trgdataformats_1_1TriggerPrimitive.html" title="A single energy deposition on a TPC or PDS channel." alt="" coords="5,5,166,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,62,88,109,83,109,83,62"/>
+</map>

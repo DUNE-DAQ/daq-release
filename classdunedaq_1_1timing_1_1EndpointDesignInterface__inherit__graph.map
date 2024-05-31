@@ -1,0 +1,33 @@
+<map id="dunedaq::timing::EndpointDesignInterface" name="dunedaq::timing::EndpointDesignInterface">
+<area shape="rect" id="Node000001" title="Base class for timing endpoint design nodes." alt="" coords="598,235,766,275"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1timing_1_1CRTDesignInterface.html" title="Base class for timing hsi design nodes." alt="" coords="821,5,1004,46"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="695,219,714,182,740,138,773,95,812,57,833,44,835,49,815,61,777,98,744,141,719,184,700,222"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1timing_1_1EndpointDesign.html" title="Base class for timing endpoint design nodes." alt="" coords="829,71,996,111"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="706,220,752,170,781,143,812,121,834,109,837,114,815,125,784,148,756,173,710,224"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1timing_1_1FanoutDesign.html" title="Class for timing fanout designs." alt="" coords="814,136,1011,161"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="721,223,764,195,813,170,843,159,845,164,815,175,767,200,724,228"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1timing_1_1GaiaDesign.html" title="Class for timing fanout designs." alt="" coords="820,185,1005,211"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="780,228,857,209,858,214,782,233"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1timing_1_1HSIDesignInterface.html" title="Base class for timing hsi design nodes." alt="" coords="822,235,1003,275"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="781,252,822,252,822,258,781,258"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1timing_1_1KerberosDesign.html" title="Class for timing fanout designs." alt="" coords="828,300,997,341"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="771,277,839,297,837,302,770,283"/>
+<area shape="rect" id="Node000014" href="$classdunedaq_1_1timing_1_1OuroborosDesign.html" title="Class for PDI timing master design (known as overlord)." alt="" coords="824,365,1001,406"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="719,283,764,318,815,350,842,362,840,367,812,355,761,322,716,288"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1timing_1_1OuroborosMuxDesign.html" title="Class for PDI ouroboros timing master design." alt="" coords="824,431,1001,471"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="704,287,750,352,781,386,815,415,837,428,834,432,812,420,777,390,746,356,700,290"/>
+<area shape="rect" id="Node000016" href="$classdunedaq_1_1timing_1_1OverlordDesign.html" title="Class for PDI timing master design (known as overlord)." alt="" coords="829,496,996,537"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="697,289,714,333,739,384,773,436,815,481,834,493,831,498,812,485,769,440,735,387,709,335,692,291"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="371,235,550,275"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="566,252,598,252,598,258,566,258"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="136,242,323,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,252,370,252,370,258,338,258"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,242,88,268"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,252,135,252,135,258,103,258"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1CRTDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="1067,13,1250,39"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1020,23,1066,23,1066,28,1020,28"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1timing_1_1BoreasDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="1059,214,1257,240"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1018,240,1058,236,1059,241,1018,246"/>
+<area shape="rect" id="Node000012" href="$classdunedaq_1_1timing_1_1ChronosDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="1076,264,1241,305"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1018,265,1075,272,1075,277,1018,270"/>
+</map>

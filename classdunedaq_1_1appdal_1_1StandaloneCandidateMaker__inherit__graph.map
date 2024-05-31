@@ -1,0 +1,15 @@
+<map id="dunedaq::appdal::StandaloneCandidateMaker" name="dunedaq::appdal::StandaloneCandidateMaker">
+<area shape="rect" id="Node000001" title=" " alt="" coords="475,39,660,79"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1appdal_1_1CustomTriggerCandidateMaker.html" title=" " alt="" coords="710,5,915,46"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="676,51,722,44,723,49,677,56"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="673,33,709,28,710,33,674,38"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1appdal_1_1RandomTriggerCandidateMaker.html" title=" " alt="" coords="708,71,917,111"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="676,79,708,84,708,89,676,85"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="676,62,719,67,719,73,675,67"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1DaqModule.html" title=" " alt="" coords="238,46,427,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="443,65,475,65,475,70,443,71"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="443,47,475,48,475,53,443,53"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="5,46,190,72"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="205,65,237,65,237,71,205,71"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="205,47,237,47,237,53,205,53"/>
+</map>

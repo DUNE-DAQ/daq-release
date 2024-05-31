@@ -1,0 +1,17 @@
+<map id="/github/workspace/dev_area/sourcecode/ers/include/ers/IssueFactory.hpp" name="/github/workspace/dev_area/sourcecode/ers/include/ers/IssueFactory.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="103,5,294,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,109,66,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,64,73,104,71,99,146,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="81,183,134,208"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,63,148,85,131,110,120,139,113,168,108,167,115,138,126,108,144,82,165,60"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="295,183,352,208"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="284,59,315,80,339,108,345,123,346,139,339,169,333,168,340,138,340,124,335,110,311,84,281,64"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="279,109,325,135"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="232,59,278,97,274,101,229,63"/>
+<area shape="rect" id="Node000006" href="$Severity_8hpp.html" title=" " alt="" coords="141,109,255,135"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="201,61,201,93,196,93,196,61"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="184,137,136,175,133,171,181,133"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="221,133,290,172,288,177,218,138"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="163,183,234,208"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="201,135,201,167,196,167,196,135"/>
+</map>

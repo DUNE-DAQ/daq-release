@@ -1,0 +1,11 @@
+<map id="conffwk.Configuration.Configuration" name="conffwk.Configuration.Configuration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="16,168,238,193"/>
+<area shape="rect" id="Node000002" href="$classconffwk_1_1Configuration_1_1__ConfigurationProxy.html" title=" " alt="" coords="53,79,201,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,135,130,167,124,167,124,135"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,62,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="61,39,106,77,102,81,58,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="86,5,168,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="130,46,130,79,124,79,124,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="192,5,350,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="237,41,164,81,161,76,235,36"/>
+</map>

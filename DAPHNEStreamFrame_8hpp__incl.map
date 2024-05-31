@@ -1,0 +1,20 @@
+<map id="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEStreamFrame.hpp" name="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEStreamFrame.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="272,5,541,76"/>
+<area shape="rect" id="Node000002" href="$DAQHeader_8hpp.html" title=" " alt="" coords="46,124,252,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="312,79,197,121,195,116,310,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,198,66,223"/>
+<area shape="poly" id="edge9_Node000001_Node000003" title=" " alt="" coords="271,57,199,67,129,82,72,102,51,113,36,126,29,138,27,153,30,183,24,183,21,152,24,137,32,122,47,109,69,97,128,77,198,62,271,52"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="276,124,350,150"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="374,78,338,114,334,111,370,74"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="374,124,438,150"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="409,76,409,108,404,108,404,76"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="462,124,518,150"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="439,75,471,110,467,114,435,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="542,124,601,150"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="469,74,539,114,536,118,466,79"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="625,124,702,150"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="502,74,617,116,615,121,500,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="131,152,69,191,66,187,128,148"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="115,198,183,223"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="152,150,152,182,146,182,146,150"/>
+</map>

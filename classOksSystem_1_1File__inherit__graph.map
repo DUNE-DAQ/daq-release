@@ -1,0 +1,9 @@
+<map id="OksSystem::File" name="OksSystem::File">
+<area shape="rect" id="Node000001" title="Wrapper for file operations." alt="" coords="225,5,341,31"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1Executable.html" title="Wrapper for executable file manipulation." alt="" coords="5,79,164,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,39,119,81,117,76,234,34"/>
+<area shape="rect" id="Node000003" href="$classOksSystem_1_1FIFOConnection.html" title=" " alt="" coords="188,79,378,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="286,46,286,79,281,79,281,46"/>
+<area shape="rect" id="Node000004" href="$classOksSystem_1_1MapFile.html" title="Wrapper for memory map operations." alt="" coords="402,79,543,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,34,441,76,439,81,328,39"/>
+</map>

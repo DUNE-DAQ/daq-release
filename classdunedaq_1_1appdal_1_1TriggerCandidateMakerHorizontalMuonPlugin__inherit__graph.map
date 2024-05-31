@@ -1,0 +1,12 @@
+<map id="dunedaq::appdal::TriggerCandidateMakerHorizontalMuonPlugin" name="dunedaq::appdal::TriggerCandidateMakerHorizontalMuonPlugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,226,211,282"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1appdal_1_1TCAlgorithm.html" title=" " alt="" coords="12,153,204,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,194,102,226,97,226,97,194"/>
+<area shape="poly" id="edge6_Node000001_Node000002" title=" " alt="" coords="119,194,119,226,114,226,114,194"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1Jsonable.html" title=" " alt="" coords="20,79,196,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,120,104,152,98,152,97,120"/>
+<area shape="poly" id="edge5_Node000002_Node000003" title=" " alt="" coords="119,120,118,152,112,152,114,120"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="16,5,200,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="102,46,104,78,98,79,97,46"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="119,46,118,79,112,78,114,46"/>
+</map>

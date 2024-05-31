@@ -1,0 +1,9 @@
+<map id="dunedaq::readoutlibs::FixedRateQueueModel&lt; T &gt;" name="dunedaq::readoutlibs::FixedRateQueueModel&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="15,271,203,312"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1BinarySearchQueueModel.html" title=" " alt="" coords="5,183,213,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,239,112,271,106,271,106,239"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1readoutlibs_1_1IterableQueueModel.html" title=" " alt="" coords="22,94,196,135"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,150,112,182,106,182,106,150"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1readoutlibs_1_1LatencyBufferConcept.html" title=" " alt="" coords="16,5,202,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,62,112,94,106,94,106,62"/>
+</map>

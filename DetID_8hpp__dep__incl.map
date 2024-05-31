@@ -1,0 +1,33 @@
+<map id="/github/workspace/dev_area/sourcecode/detdataformats/include/detdataformats/DetID.hpp" name="/github/workspace/dev_area/sourcecode/detdataformats/include/detdataformats/DetID.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="910,5,1128,61"/>
+<area shape="rect" id="Node000002" href="$detid_8cpp.html" title=" " alt="" coords="153,109,368,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="895,48,655,73,379,112,369,114,368,108,379,106,655,68,894,43"/>
+<area shape="rect" id="Node000003" href="$TPBundleHandler_8cpp.html" title=" " alt="" coords="392,109,580,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="895,56,749,81,592,112,581,114,580,109,590,106,748,76,894,51"/>
+<area shape="rect" id="Node000004" href="$HDF5SourceIDHandler_8hpp.html" title=" " alt="" coords="604,109,880,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="931,69,817,111,815,106,929,64"/>
+<area shape="rect" id="Node000012" href="$WIBtoTDE_8hpp.html" title=" " alt="" coords="904,109,1134,165"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1022,77,1022,108,1016,108,1016,77"/>
+<area shape="rect" id="Node000014" href="$HSISourceModel_8hpp.html" title=" " alt="" coords="1158,109,1368,165"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1099,65,1198,106,1196,111,1097,70"/>
+<area shape="rect" id="Node000015" href="$TPSetSourceModel_8hpp.html" title=" " alt="" coords="1392,109,1617,165"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1144,57,1381,106,1393,109,1392,114,1380,112,1143,63"/>
+<area shape="rect" id="Node000016" href="$TriggerSourceModel_8hpp.html" title=" " alt="" coords="1640,109,1867,165"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1144,44,1370,69,1629,106,1640,108,1639,114,1628,112,1369,75,1143,49"/>
+<area shape="rect" id="Node000005" href="$HDF5RawDataFile_8hpp.html" title=" " alt="" coords="389,213,641,268"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="668,174,577,214,575,210,666,169"/>
+<area shape="rect" id="Node000011" href="$HDF5SourceIDHandler_8cpp.html" title=" " alt="" coords="665,213,869,268"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="755,179,763,211,758,213,750,181"/>
+<area shape="rect" id="Node000006" href="$hdf5rawdatafile_8cpp.html" title=" " alt="" coords="5,316,201,372"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="390,275,202,321,200,316,389,270"/>
+<area shape="rect" id="Node000007" href="$HDF5RawDataFile_8cpp.html" title=" " alt="" coords="225,316,405,372"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="449,278,370,318,368,313,447,273"/>
+<area shape="rect" id="Node000008" href="$copy__tpstream_8cxx.html" title=" " alt="" coords="429,316,601,372"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="518,284,518,316,512,316,512,284"/>
+<area shape="rect" id="Node000009" href="$process__tpstream_8cxx.html" title=" " alt="" coords="625,316,808,372"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="584,273,663,313,661,318,581,278"/>
+<area shape="rect" id="Node000010" href="$tapipe_8cxx.html" title=" " alt="" coords="832,316,1003,372"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="645,270,821,314,832,317,831,322,820,319,643,275"/>
+<area shape="rect" id="Node000013" href="$file__conversion_8cpp.html" title=" " alt="" coords="920,213,1118,268"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1022,180,1022,212,1016,212,1016,180"/>
+</map>

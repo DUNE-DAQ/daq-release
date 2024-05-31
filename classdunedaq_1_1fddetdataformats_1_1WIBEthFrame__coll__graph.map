@@ -1,0 +1,7 @@
+<map id="dunedaq::fddetdataformats::WIBEthFrame" name="dunedaq::fddetdataformats::WIBEthFrame">
+<area shape="rect" id="Node000001" title="Class for accessing raw WIB eth frames, as used in ProtoDUNE&#45;II." alt="" coords="324,39,498,79"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1detdataformats_1_1DAQEthHeader.html" title="DAQEthHeader is a versioned and unified structure for every FE electronics." alt="" coords="24,5,187,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,34,323,47,323,52,202,39"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1fddetdataformats_1_1WIBEthFrame_1_1WIBEthHeader.html" title=" " alt="" coords="5,71,206,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,76,323,65,324,71,221,82"/>
+</map>

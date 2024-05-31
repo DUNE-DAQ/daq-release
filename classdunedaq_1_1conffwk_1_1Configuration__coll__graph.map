@@ -1,0 +1,26 @@
+<map id="dunedaq::conffwk::Configuration" name="dunedaq::conffwk::Configuration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="662,187,865,213"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1conffwk_1_1ConfigurationImpl.html" title="Provides pure virtual interface used by the Configuration class." alt="" coords="1012,142,1239,168"/>
+<area shape="poly" id="edge12_Node000010_Node000001" title=" " alt="" coords="879,183,1017,166,1018,171,880,188"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="281,115,480,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="496,143,634,163,719,184,718,189,633,168,495,148"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="40,78,184,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,112,281,121,280,127,200,118"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="302,180,458,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="474,198,662,198,662,203,474,203"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="36,157,188,228"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="203,192,302,195,301,201,203,198"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="299,248,461,334"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="476,266,705,211,707,216,477,271"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,252,219,338"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="234,290,298,289,299,295,234,296"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="268,368,492,409"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="451,359,491,343,563,311,632,276,740,211,743,216,635,280,565,316,493,348,453,364"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="41,361,183,447"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="198,396,267,392,268,398,198,402"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1079,176,1035,191,988,202,926,208,865,209,865,204,926,203,987,197,1034,186,1077,171"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1conffwk_1_1pmap.html" title=" " alt="" coords="657,29,870,100"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="885,92,1071,139,1070,144,884,97"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="290,5,470,91"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="486,50,657,57,657,62,486,55"/>
+</map>

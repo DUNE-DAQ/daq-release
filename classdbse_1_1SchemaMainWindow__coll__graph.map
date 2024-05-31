@@ -1,0 +1,12 @@
+<map id="dbse::SchemaMainWindow" name="dbse::SchemaMainWindow">
+<area shape="rect" id="Node000001" title=" " alt="" coords="124,169,301,195"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,111,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,111,192,166,190,171,91,116"/>
+<area shape="rect" id="Node000003" href="$classdbse_1_1CustomFileModel.html" title=" " alt="" coords="135,80,291,106"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,122,215,169,210,169,210,122"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="231,5,378,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="279,43,229,82,226,78,276,39"/>
+<area shape="rect" id="Node000005" href="$classdbse_1_1CustomTableModel.html" title=" " alt="" coords="314,80,482,106"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="333,38,385,78,381,82,330,43"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="360,115,240,171,238,166,357,110"/>
+</map>

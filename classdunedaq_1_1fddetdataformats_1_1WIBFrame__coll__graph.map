@@ -1,0 +1,11 @@
+<map id="dunedaq::fddetdataformats::WIBFrame" name="dunedaq::fddetdataformats::WIBFrame">
+<area shape="rect" id="Node000001" title="FELIX frame." alt="" coords="569,37,743,78"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1fddetdataformats_1_1WIBHeader.html" title="WIB header struct." alt="" coords="288,5,462,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="478,35,569,45,568,50,477,40"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1fddetdataformats_1_1ColdataBlock.html" title="COLDATA block struct." alt="" coords="288,71,462,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="477,76,568,65,569,71,478,82"/>
+<area shape="rect" id="Node000004" href="$structdunedaq_1_1fddetdataformats_1_1ColdataHeader.html" title="COLDATA header struct." alt="" coords="5,37,180,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,67,287,78,287,83,195,72"/>
+<area shape="rect" id="Node000005" href="$structdunedaq_1_1fddetdataformats_1_1ColdataSegment.html" title="COLDATA segment struct." alt="" coords="5,103,180,143"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="195,109,287,98,287,104,195,114"/>
+</map>

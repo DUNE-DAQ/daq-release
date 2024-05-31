@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::PDIEchoMonitorNode" name="dunedaq::timing::PDIEchoMonitorNode">
+<area shape="rect" id="Node000001" title="Class for master global node." alt="" coords="31,226,200,267"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1EchoMonitorNode.html" title="Class for master global node." alt="" coords="5,153,226,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,194,118,226,113,226,113,194"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="22,79,209,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,120,118,152,113,152,113,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="74,5,157,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="118,46,118,79,113,79,113,46"/>
+</map>

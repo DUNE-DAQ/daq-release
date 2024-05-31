@@ -1,0 +1,31 @@
+<map id="dbe::actions::state" name="dbe::actions::state">
+<area shape="rect" id="Node000001" title=" " alt="" coords="175,113,300,139"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1actions_1_1file_1_1add.html" title=" " alt="" coords="351,23,490,48"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="270,102,347,58,376,46,378,51,349,63,272,107"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1actions_1_1file_1_1remove.html" title=" " alt="" coords="365,73,477,113"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="315,109,364,100,364,106,316,115"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1actions_1_1object_1_1create.html" title=" " alt="" coords="355,138,486,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,137,355,144,354,149,315,142"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1actions_1_1onobject.html" title=" " alt="" coords="348,203,493,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="273,145,349,188,378,200,376,205,347,193,271,150"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,113,127,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,124,175,124,175,129,142,129"/>
+<area shape="rect" id="Node000007" href="$classdbe_1_1actions_1_1ChangeAttribute.html" title=" " alt="" coords="541,5,761,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="488,192,491,188,505,170,511,152,514,115,516,77,524,58,540,40,555,29,558,34,543,44,529,61,522,79,519,115,517,153,509,173,495,192,491,196"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1actions_1_1ChangeClass.html" title=" " alt="" coords="549,55,753,80"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="486,192,491,188,502,176,508,164,514,139,520,114,528,101,540,89,557,79,560,83,543,94,532,105,525,116,519,141,513,166,506,179,495,192,490,197"/>
+<area shape="rect" id="Node000009" href="$classdbe_1_1actions_1_1ChangeDate.html" title=" " alt="" coords="552,104,750,130"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="482,194,492,188,506,176,515,163,524,151,540,139,565,128,567,133,543,143,528,154,519,166,510,179,495,192,485,198"/>
+<area shape="rect" id="Node000010" href="$classdbe_1_1actions_1_1ChangeEnum.html" title=" " alt="" coords="549,153,753,179"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="498,196,587,177,588,182,499,201"/>
+<area shape="rect" id="Node000011" href="$classdbe_1_1actions_1_1ChangeTime.html" title=" " alt="" coords="551,203,751,228"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="509,213,551,213,551,218,509,218"/>
+<area shape="rect" id="Node000012" href="$classdbe_1_1actions_1_1object_1_1changerefs.html" title=" " alt="" coords="585,253,717,293"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="491,230,586,254,584,259,489,235"/>
+<area shape="rect" id="Node000013" href="$classdbe_1_1actions_1_1object_1_1move.html" title=" " alt="" coords="585,318,717,359"/>
+<area shape="poly" id="edge12_Node000006_Node000013" title=" " alt="" coords="449,237,492,271,543,302,586,320,584,325,540,307,489,275,446,241"/>
+<area shape="rect" id="Node000014" href="$classdbe_1_1actions_1_1object_1_1remove.html" title=" " alt="" coords="585,383,717,424"/>
+<area shape="poly" id="edge13_Node000006_Node000014" title=" " alt="" coords="438,241,479,305,509,339,543,368,586,388,584,393,540,372,505,343,475,308,433,243"/>
+<area shape="rect" id="Node000015" href="$classdbe_1_1actions_1_1object_1_1rename.html" title=" " alt="" coords="585,449,717,489"/>
+<area shape="poly" id="edge14_Node000006_Node000015" title=" " alt="" coords="432,242,446,284,469,336,501,389,521,412,543,433,563,446,586,455,584,460,561,451,540,438,517,416,497,392,465,339,441,286,427,244"/>
+</map>

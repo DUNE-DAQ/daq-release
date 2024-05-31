@@ -1,0 +1,28 @@
+<map id="/github/workspace/dev_area/sourcecode/dbe/include/dbe/subtreeproxy.hpp" name="/github/workspace/dev_area/sourcecode/dbe/include/dbe/subtreeproxy.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="806,5,999,61"/>
+<area shape="rect" id="Node000002" href="$MainWindow_8hpp.html" title=" " alt="" coords="690,109,883,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="862,73,819,110,816,106,858,69"/>
+<area shape="rect" id="Node000006" href="$MainWindow_8cpp.html" title=" " alt="" coords="5,213,197,268"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="792,65,197,217,196,212,791,60"/>
+<area shape="rect" id="Node000012" href="$CustomTreeView_8cpp.html" title=" " alt="" coords="907,109,1133,165"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="947,69,990,106,986,110,944,74"/>
+<area shape="rect" id="Node000013" href="$subtreeproxy_8cpp.html" title=" " alt="" coords="1157,109,1357,165"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="1013,63,1162,106,1161,111,1011,68"/>
+<area shape="rect" id="Node000003" href="$Main_8cpp.html" title=" " alt="" coords="221,213,373,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="675,158,536,183,386,215,374,218,373,213,384,210,535,178,674,153"/>
+<area shape="rect" id="Node000004" href="$TableTab_8cpp.html" title=" " alt="" coords="397,213,549,268"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="689,172,550,217,549,212,687,167"/>
+<area shape="rect" id="Node000005" href="$GraphView_8cpp.html" title=" " alt="" coords="573,213,765,268"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="745,177,702,214,699,210,742,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="675,152,458,177,209,215,197,218,196,212,209,210,458,171,674,146"/>
+<area shape="rect" id="Node000007" href="$CustomTableView_8cpp.html" title=" " alt="" coords="789,213,1021,268"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="832,173,875,210,871,214,828,177"/>
+<area shape="rect" id="Node000008" href="$FileModel_8cpp.html" title=" " alt="" coords="1046,213,1228,268"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="896,167,1046,210,1044,215,894,172"/>
+<area shape="rect" id="Node000009" href="$BatchChangeWidget_8cpp.html" title=" " alt="" coords="1253,213,1491,268"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="899,163,995,178,1070,187,1145,196,1240,210,1252,212,1251,217,1239,215,1145,201,1070,193,994,184,898,168"/>
+<area shape="rect" id="Node000010" href="$IncludeFileWidget_8cpp.html" title=" " alt="" coords="1515,213,1738,268"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="899,162,990,175,1068,182,1202,187,1334,192,1503,210,1515,212,1514,217,1502,215,1334,198,1201,193,1068,187,990,180,898,168"/>
+<area shape="rect" id="Node000011" href="$ObjectEditor_8cpp.html" title=" " alt="" coords="1763,213,1954,268"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="898,162,1027,178,1137,185,1326,186,1513,187,1623,194,1751,210,1763,212,1762,217,1750,215,1622,200,1513,192,1326,191,1137,190,1027,183,898,168"/>
+</map>

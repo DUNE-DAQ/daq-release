@@ -1,0 +1,9 @@
+<map id="dunedaq::appdal::IpbusDevice" name="dunedaq::appdal::IpbusDevice">
+<area shape="rect" id="Node000001" title=" " alt="" coords="20,79,212,105"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1appdal_1_1HermesController.html" title=" " alt="" coords="5,153,227,178"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="110,120,112,152,106,152,105,120"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="127,120,126,152,120,152,122,120"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="24,5,208,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,46,112,78,106,79,105,46"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="127,46,126,79,120,78,122,46"/>
+</map>

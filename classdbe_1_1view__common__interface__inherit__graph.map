@@ -1,0 +1,7 @@
+<map id="dbe::view_common_interface" name="dbe::view_common_interface">
+<area shape="rect" id="Node000001" title=" " alt="" coords="76,5,265,31"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1CustomTableView.html" title=" " alt="" coords="5,79,160,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,43,99,81,96,77,142,39"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1CustomTreeView.html" title=" " alt="" coords="184,79,333,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,39,245,77,242,81,196,43"/>
+</map>

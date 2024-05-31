@@ -1,0 +1,15 @@
+<map id="dunedaq::coredal::HostComponent" name="dunedaq::coredal::HostComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="238,78,456,104"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1NetworkDevice.html" title=" " alt="" coords="512,5,685,46"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="446,71,545,44,547,49,448,76"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="390,70,511,37,512,42,392,75"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1coredal_1_1ProcessingResource.html" title=" " alt="" coords="504,71,693,111"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="472,97,504,97,504,102,472,103"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="472,79,504,80,504,85,472,85"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1coredal_1_1StorageDevice.html" title=" " alt="" coords="514,136,683,177"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="392,107,514,140,513,146,390,112"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="448,106,547,133,545,138,446,111"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="5,78,190,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,97,237,97,237,103,206,103"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="206,79,237,79,237,85,206,85"/>
+</map>

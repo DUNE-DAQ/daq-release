@@ -1,0 +1,15 @@
+<map id="/github/workspace/dev_area/build/timinglibs/codegen/include/timinglibs/timingmastercontroller/Structs.hpp" name="/github/workspace/dev_area/build/timinglibs/codegen/include/timinglibs/timingmastercontroller/Structs.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,5,289,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,213,66,238"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,78,96,126,70,164,50,200,46,198,66,161,92,122,136,75"/>
+<area shape="rect" id="Node000003" href="$timinglibs_2codegen_2include_2timinglibs_2timingcmd_2Structs_8hpp.html" title=" " alt="" coords="107,124,247,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,76,180,108,174,108,174,76"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="325,213,378,238"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="214,74,261,122,333,199,329,203,258,126,210,78"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="143,168,72,207,69,202,140,163"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="90,213,219,238"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="174,166,164,198,159,197,169,164"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="243,213,300,238"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="202,163,247,201,244,205,199,167"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="222,163,312,204,310,208,219,168"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="dbe::actions::object::create" name="dbe::actions::object::create">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,137,193"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1actions_1_1state.html" title=" " alt="" coords="8,79,134,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,120,74,152,68,152,68,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="10,5,132,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="74,46,74,79,68,79,68,46"/>
+</map>

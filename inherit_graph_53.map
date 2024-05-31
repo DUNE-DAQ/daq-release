@@ -1,0 +1,73 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="480,578,670,619"/>
+<area shape="rect" id="Node000001" href="$classdbe_1_1models_1_1subtree__proxy.html" title=" " alt="" coords="747,697,886,737"/>
+<area shape="poly" id="edge17_Node000000_Node000001" title=" " alt="" coords="660,622,676,629,737,662,787,694,784,698,734,666,674,634,658,627"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="484,382,665,423"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1models_1_1table.html" title=" " alt="" coords="754,345,879,371"/>
+<area shape="poly" id="edge18_Node000006_Node000005" title=" " alt="" coords="680,380,753,367,754,372,681,386"/>
+<area shape="rect" id="Node000020" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="480,447,670,488"/>
+<area shape="rect" id="Node000019" href="$classdbe_1_1models_1_1tableselection.html" title=" " alt="" coords="728,520,905,546"/>
+<area shape="poly" id="edge19_Node000020_Node000019" title=" " alt="" coords="668,490,767,517,765,522,666,495"/>
+<area shape="rect" id="Node000027" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="484,987,665,1028"/>
+<area shape="rect" id="Node000026" href="$classdbe_1_1models_1_1tree.html" title=" " alt="" coords="757,1027,876,1052"/>
+<area shape="poly" id="edge20_Node000027_Node000026" title=" " alt="" coords="681,1019,757,1029,756,1034,681,1024"/>
+<area shape="rect" id="Node000023" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="483,922,667,963"/>
+<area shape="rect" id="Node000022" href="$classdbe_1_1models_1_1treeselection.html" title=" " alt="" coords="731,844,902,870"/>
+<area shape="poly" id="edge21_Node000023_Node000022" title=" " alt="" coords="656,914,674,908,781,868,782,873,676,913,658,919"/>
+<area shape="rect" id="Node000031" href="$structdbe_1_1model__common__data__access__interface.html" title=" " alt="" coords="7,615,179,656"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1model__common__interface.html" title=" " alt="" coords="229,680,426,706"/>
+<area shape="poly" id="edge22_Node000031_Node000003" title=" " alt="" coords="194,657,272,677,271,682,193,663"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,643,660,684"/>
+<area shape="poly" id="edge23_Node000003_Node000002" title=" " alt="" coords="441,677,488,671,489,676,442,682"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,317,660,357"/>
+<area shape="poly" id="edge25_Node000003_Node000004" title=" " alt="" coords="331,664,345,603,372,524,390,482,413,441,440,402,472,368,490,356,493,360,476,372,444,406,418,444,395,484,377,526,350,605,336,665"/>
+<area shape="rect" id="Node000018" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,513,660,553"/>
+<area shape="poly" id="edge27_Node000003_Node000018" title=" " alt="" coords="349,667,402,615,436,588,473,564,499,551,501,556,475,568,439,592,406,619,353,670"/>
+<area shape="rect" id="Node000028" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,1053,660,1093"/>
+<area shape="poly" id="edge29_Node000003_Node000028" title=" " alt="" coords="335,721,348,785,374,870,392,916,415,960,443,1001,476,1038,493,1050,490,1054,472,1041,439,1004,410,963,387,918,369,872,343,787,330,722"/>
+<area shape="rect" id="Node000024" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,807,660,848"/>
+<area shape="poly" id="edge31_Node000003_Node000024" title=" " alt="" coords="357,714,410,754,475,793,501,804,499,809,473,798,407,758,354,718"/>
+<area shape="rect" id="Node000030" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="474,708,675,734"/>
+<area shape="poly" id="edge33_Node000003_Node000030" title=" " alt="" coords="442,703,474,707,473,712,441,708"/>
+<area shape="poly" id="edge24_Node000002_Node000001" title=" " alt="" coords="677,683,747,699,746,704,675,688"/>
+<area shape="poly" id="edge26_Node000004_Node000005" title=" " alt="" coords="676,343,754,350,754,355,676,348"/>
+<area shape="poly" id="edge28_Node000018_Node000019" title=" " alt="" coords="676,530,728,530,728,536,676,536"/>
+<area shape="poly" id="edge30_Node000028_Node000026" title=" " alt="" coords="676,1056,756,1045,757,1050,676,1062"/>
+<area shape="poly" id="edge32_Node000024_Node000022" title=" " alt="" coords="676,837,731,844,731,849,676,842"/>
+<area shape="rect" id="Node000032" href="$classdbe_1_1model__common__slots.html" title=" " alt="" coords="5,680,181,706"/>
+<area shape="poly" id="edge34_Node000032_Node000003" title=" " alt="" coords="196,690,228,690,228,696,196,696"/>
+<area shape="rect" id="Node000033" href="$classdbe_1_1model__initiate__actions__interface.html" title=" " alt="" coords="29,730,157,771"/>
+<area shape="poly" id="edge35_Node000033_Node000003" title=" " alt="" coords="172,728,271,704,272,709,173,733"/>
+<area shape="rect" id="Node000029" title=" " alt="" coords="504,1117,645,1143"/>
+<area shape="poly" id="edge36_Node000029_Node000026" title=" " alt="" coords="650,1110,674,1102,737,1076,789,1050,792,1055,739,1081,676,1107,652,1115"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="501,247,648,272"/>
+<area shape="poly" id="edge38_Node000007_Node000005" title=" " alt="" coords="623,276,677,303,700,318,724,332,755,342,753,347,722,337,698,323,674,307,620,281"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1FileModel.html" title=" " alt="" coords="764,247,869,272"/>
+<area shape="poly" id="edge37_Node000007_Node000008" title=" " alt="" coords="664,257,764,257,764,262,664,262"/>
+<area shape="rect" id="Node000009" href="$classdbse_1_1CustomFileModel.html" title=" " alt="" coords="738,296,895,322"/>
+<area shape="poly" id="edge39_Node000007_Node000009" title=" " alt="" coords="657,273,750,293,749,298,655,279"/>
+<area shape="rect" id="Node000010" href="$classdbse_1_1CustomModelInterface.html" title=" " alt="" coords="723,148,910,174"/>
+<area shape="poly" id="edge40_Node000007_Node000010" title=" " alt="" coords="611,236,663,209,722,182,755,172,757,177,724,187,665,214,613,241"/>
+<area shape="rect" id="Node000017" href="$classdbse_1_1CustomTableModel.html" title=" " alt="" coords="733,197,900,223"/>
+<area shape="poly" id="edge47_Node000007_Node000017" title=" " alt="" coords="655,240,749,221,750,226,657,246"/>
+<area shape="rect" id="Node000011" href="$classdbse_1_1CustomAttributeModel.html" title=" " alt="" coords="982,5,1166,31"/>
+<area shape="poly" id="edge41_Node000010_Node000011" title=" " alt="" coords="838,134,889,87,921,62,957,41,988,29,990,34,959,46,924,66,892,91,842,138"/>
+<area shape="rect" id="Node000012" href="$classdbse_1_1CustomMethodImplementationModel.html" title=" " alt="" coords="958,55,1190,96"/>
+<area shape="poly" id="edge42_Node000010_Node000012" title=" " alt="" coords="864,139,957,105,993,94,995,99,959,110,865,144"/>
+<area shape="rect" id="Node000013" href="$classdbse_1_1CustomMethodModel.html" title=" " alt="" coords="985,120,1163,146"/>
+<area shape="poly" id="edge43_Node000010_Node000013" title=" " alt="" coords="925,146,984,140,985,145,925,152"/>
+<area shape="rect" id="Node000014" href="$classdbse_1_1CustomRelationshipModel.html" title=" " alt="" coords="988,170,1160,211"/>
+<area shape="poly" id="edge44_Node000010_Node000014" title=" " alt="" coords="925,171,988,178,987,183,925,176"/>
+<area shape="rect" id="Node000015" href="$classdbse_1_1CustomSubClassModel.html" title=" " alt="" coords="978,235,1170,260"/>
+<area shape="poly" id="edge45_Node000010_Node000015" title=" " alt="" coords="898,177,911,182,926,192,935,202,945,211,959,220,991,231,989,237,956,225,942,215,932,206,922,196,908,187,896,182"/>
+<area shape="rect" id="Node000016" href="$classdbse_1_1CustomSuperClassModel.html" title=" " alt="" coords="973,284,1175,310"/>
+<area shape="poly" id="edge46_Node000010_Node000016" title=" " alt="" coords="906,179,912,183,929,205,936,228,942,250,959,271,978,281,975,286,956,275,938,253,931,230,925,208,908,187,903,184"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="499,757,650,783"/>
+<area shape="poly" id="edge48_Node000021_Node000001" title=" " alt="" coords="650,751,746,730,747,735,652,756"/>
+<area shape="poly" id="edge49_Node000021_Node000019" title=" " alt="" coords="663,750,674,744,698,714,737,656,805,544,810,547,741,659,703,717,677,748,666,755"/>
+<area shape="poly" id="edge50_Node000021_Node000022" title=" " alt="" coords="651,785,676,793,738,817,789,841,787,846,736,822,674,798,649,790"/>
+<area shape="rect" id="Node000025" href="$classdbe_1_1TreeModelInterface.html" title=" " alt="" coords="495,872,655,898"/>
+<area shape="poly" id="edge51_Node000025_Node000001" title=" " alt="" coords="661,863,674,857,713,830,748,797,799,736,803,740,752,800,716,834,677,862,664,868"/>
+<area shape="poly" id="edge52_Node000025_Node000026" title=" " alt="" coords="662,901,677,908,718,935,755,968,807,1024,803,1028,751,972,715,940,674,912,660,906"/>
+<area shape="poly" id="edge53_Node000025_Node000022" title=" " alt="" coords="670,871,731,864,731,869,670,876"/>
+</map>

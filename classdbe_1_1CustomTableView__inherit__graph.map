@@ -1,0 +1,7 @@
+<map id="dbe::CustomTableView" name="dbe::CustomTableView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="57,79,211,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,98,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,39,122,77,119,81,75,44"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1view__common__interface.html" title=" " alt="" coords="122,5,312,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,44,150,81,146,77,189,39"/>
+</map>

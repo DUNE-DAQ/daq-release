@@ -1,0 +1,7 @@
+<map id="ers::LocalContext" name="ers::LocalContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,94,187,120"/>
+<area shape="rect" id="Node000002" href="$classers_1_1Context.html" title="An abstract interface to access an Issue context." alt="" coords="5,5,95,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,41,118,92,114,95,69,45"/>
+<area shape="rect" id="Node000003" href="$structers_1_1LocalProcessContext.html" title=" " alt="" coords="119,5,288,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="184,45,139,95,135,92,180,41"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="dunedaq::coredal::ReadoutGroup" name="dunedaq::coredal::ReadoutGroup">
+<area shape="rect" id="Node000001" title=" " alt="" coords="24,389,196,429"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1ResourceSetAND.html" title=" " alt="" coords="20,300,200,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,356,105,388,100,388,98,356"/>
+<area shape="poly" id="edge10_Node000001_Node000002" title=" " alt="" coords="122,356,120,388,115,388,116,356"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1ResourceSet.html" title=" " alt="" coords="10,226,210,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,267,105,300,99,300,99,268"/>
+<area shape="poly" id="edge9_Node000002_Node000003" title=" " alt="" coords="121,268,121,300,115,300,116,267"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1coredal_1_1ResourceBase.html" title=" " alt="" coords="5,153,215,178"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,193,106,226,100,226,99,194"/>
+<area shape="poly" id="edge8_Node000003_Node000004" title=" " alt="" coords="121,194,120,226,114,226,116,193"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1coredal_1_1Component.html" title=" " alt="" coords="15,79,205,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="104,120,106,152,100,152,99,120"/>
+<area shape="poly" id="edge7_Node000004_Node000005" title=" " alt="" coords="121,120,120,152,114,152,116,120"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="18,5,202,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="104,46,106,78,100,79,99,46"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="121,46,120,79,114,78,116,46"/>
+</map>

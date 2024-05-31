@@ -1,0 +1,15 @@
+<map id="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk" name="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk">
+<area shape="rect" id="node2" href="dir_cab7b7aa2984822d92f6e8219d92d1de.html" title="app" alt="" coords="195,63,237,89"/>
+<area shape="rect" id="node5" href="dir_57cac67e669d1d13a3a45431f72a4a7b.html" title="cmdlib" alt="" coords="61,137,120,162"/>
+<area shape="poly" id="edge1" href="dir_000002_000037.html" alt="" coords="208,91,184,112,136,136,134,131,181,108,204,87"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000002_000037.html" title="2" alt="" coords="137,133,144,148"/>
+<area shape="rect" id="node6" href="dir_dc8d4d1c627995c3e2c2d9ac22465a8f.html" title="iomanager" alt="" coords="175,137,257,162"/>
+<area shape="poly" id="edge2" href="dir_000002_000291.html" alt="" coords="219,89,219,121,213,121,213,89"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000002_000291.html" title="2" alt="" coords="221,111,228,126"/>
+<area shape="rect" id="node3" href="dir_395795991701e7a1d0433663970d4310.html" title="appinfo" alt="" coords="107,63,170,89"/>
+<area shape="rect" id="node4" href="dir_ef1f67605eba182b429a92affd55e4d3.html" title="cmd" alt="" coords="37,63,83,89"/>
+<area shape="poly" id="edge3" href="dir_000034_000037.html" alt="" coords="68,88,82,121,77,123,63,90"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000034_000037.html" title="2" alt="" coords="83,109,90,124"/>
+<area shape="rect" id="clust2" href="dir_5c5895193a88503483f9a72ebc57088f.html" alt="" coords="27,52,336,99"/>
+<area shape="rect" id="clust1" href="dir_522c6d5d91ff5dc0e03063377fe73b1c.html" title="include" alt="" coords="16,16,347,110"/>
+</map>

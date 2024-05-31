@@ -1,0 +1,16 @@
+<map id="/github/workspace/dev_area/sourcecode/dpdklibs/src/udp" name="/github/workspace/dev_area/sourcecode/dpdklibs/src/udp">
+<area shape="rect" id="node1" href="dir_91fe2284d6fa677d7d47a38c8d6f47fc.html" title="udp" alt="" coords="173,52,215,78"/>
+<area shape="rect" id="node2" href="dir_0c14d3c21552daff8762af3e6485ee53.html" title="include" alt="" coords="5,126,68,152"/>
+<area shape="poly" id="edge1" href="dir_000518_000260.html" alt="" coords="174,79,78,122,76,117,172,74"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000518_000260.html" title="4" alt="" coords="80,118,87,133"/>
+<area shape="rect" id="node3" href="dir_25574c5e008893c4c2436587c1675f55.html" title="readoutlibs" alt="" coords="92,126,176,152"/>
+<area shape="poly" id="edge2" href="dir_000518_000390.html" alt="" coords="186,80,156,116,152,112,182,77"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000518_000390.html" title="1" alt="" coords="159,110,166,125"/>
+<area shape="rect" id="node4" href="dir_49997343c4c8eab520bf1e45b9cad06f.html" title="detdataformats" alt="" coords="200,126,308,152"/>
+<area shape="poly" id="edge3" href="dir_000518_000112.html" alt="" coords="206,77,236,112,232,116,202,80"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000518_000112.html" title="2" alt="" coords="235,99,242,114"/>
+<area shape="rect" id="node5" href="dir_f74a706a7efda297e6d8fb2c03527fc2.html" title="logging" alt="" coords="332,126,394,152"/>
+<area shape="poly" id="edge4" href="dir_000518_000308.html" alt="" coords="217,73,322,117,320,122,215,78"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000518_000308.html" title="1" alt="" coords="318,103,325,118"/>
+<area shape="rect" id="clust1" href="dir_c9fe6a355ebd70584763590830f11603.html" title="src" alt="" coords="162,16,226,89"/>
+</map>

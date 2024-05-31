@@ -1,0 +1,17 @@
+<map id="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEStreamFrame.hpp" name="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEStreamFrame.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="295,5,564,76"/>
+<area shape="rect" id="Node000002" href="$daphne_8cpp.html" title=" " alt="" coords="5,132,232,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="323,84,192,133,190,128,322,79"/>
+<area shape="rect" id="Node000003" href="$DAPHNEStreamSuperChunkTypeAdapter_8hpp.html" title=" " alt="" coords="307,124,552,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="432,91,432,124,427,124,427,91"/>
+<area shape="rect" id="Node000004" href="$DAPHNEStreamFrameProcessor_8hpp.html" title=" " alt="" coords="125,243,368,313"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="340,87,317,105,297,126,279,154,267,185,253,243,248,242,262,183,274,151,292,122,313,101,337,82"/>
+<area shape="rect" id="Node000005" href="$DAPHNEStreamFrameProcessor_8cpp.html" title=" " alt="" coords="262,361,572,417"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="530,83,550,101,566,123,590,174,598,219,591,265,566,315,541,343,509,363,506,359,538,339,562,312,586,263,593,219,585,175,562,125,546,104,526,87"/>
+<area shape="rect" id="Node000007" href="$DAPHNEUnpacker_8cpp.html" title=" " alt="" coords="626,132,846,187"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="536,80,665,128,663,133,534,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="363,206,302,244,299,240,361,201"/>
+<area shape="rect" id="Node000006" href="$CreateElink_8hpp.html" title=" " alt="" coords="392,250,552,306"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="449,208,464,249,459,251,444,210"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="315,320,376,358,373,363,312,324"/>
+</map>

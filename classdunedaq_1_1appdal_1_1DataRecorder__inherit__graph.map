@@ -1,0 +1,9 @@
+<map id="dunedaq::appdal::DataRecorder" name="dunedaq::appdal::DataRecorder">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,205,178"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1DaqModule.html" title=" " alt="" coords="10,79,200,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,120,101,152,95,152,94,120"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="116,120,115,152,109,152,111,120"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="13,5,197,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,101,78,95,79,94,46"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="116,46,115,79,109,78,111,46"/>
+</map>

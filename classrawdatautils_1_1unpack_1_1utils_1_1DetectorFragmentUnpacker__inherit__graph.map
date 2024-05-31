@@ -1,0 +1,13 @@
+<map id="rawdatautils.unpack.utils.DetectorFragmentUnpacker" name="rawdatautils.unpack.utils.DetectorFragmentUnpacker">
+<area shape="rect" id="Node000001" title=" " alt="" coords="434,71,615,111"/>
+<area shape="rect" id="Node000004" href="$classrawdatautils_1_1unpack_1_1utils_1_1DAPHNEStreamUnpacker.html" title=" " alt="" coords="663,5,838,46"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="611,63,677,44,678,49,613,68"/>
+<area shape="rect" id="Node000005" href="$classrawdatautils_1_1unpack_1_1utils_1_1DAPHNEUnpacker.html" title=" " alt="" coords="667,71,834,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="631,88,667,88,667,94,631,94"/>
+<area shape="rect" id="Node000006" href="$classrawdatautils_1_1unpack_1_1utils_1_1WIBEthUnpacker.html" title=" " alt="" coords="667,136,834,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="613,114,678,133,677,138,611,119"/>
+<area shape="rect" id="Node000002" href="$classrawdatautils_1_1unpack_1_1utils_1_1FragmentUnpacker.html" title=" " alt="" coords="220,71,386,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,88,434,88,434,94,401,94"/>
+<area shape="rect" id="Node000003" href="$classrawdatautils_1_1unpack_1_1utils_1_1Unpacker.html" title=" " alt="" coords="5,71,172,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="187,88,219,88,219,94,187,94"/>
+</map>

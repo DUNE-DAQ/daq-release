@@ -1,0 +1,12 @@
+<map id="dunedaq::ersschema::SimpleIssue" name="dunedaq::ersschema::SimpleIssue">
+<area shape="rect" id="Node000001" title=" " alt="" coords="42,316,183,357"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,177,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,54,114,316,108,316,90,54"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1ersschema_1_1Context.html" title=" " alt="" coords="129,109,269,150"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="116,47,180,106,176,110,113,51"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1ersschema_1_1SimpleIssue_1_1Impl__.html" title=" " alt="" coords="129,213,269,253"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,267,131,318,127,314,171,263"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,165,202,212,196,212,196,165"/>
+<area shape="rect" id="Node000005" href="$structdunedaq_1_1ersschema_1_1Context_1_1Impl__.html" title=" " alt="" coords="201,5,341,46"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="251,60,215,110,211,107,246,57"/>
+</map>

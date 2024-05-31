@@ -1,0 +1,9 @@
+<map id="/github/workspace/dev_area/sourcecode/ers/include/ers/internal/NullStream.hpp" name="/github/workspace/dev_area/sourcecode/ers/include/ers/internal/NullStream.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="184,5,336,76"/>
+<area shape="rect" id="Node000002" href="$OutputStream_8cpp.html" title=" " alt="" coords="5,124,158,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,87,127,126,125,121,189,82"/>
+<area shape="rect" id="Node000003" href="$StreamFactory_8cpp.html" title=" " alt="" coords="182,124,338,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,92,263,124,258,124,258,92"/>
+<area shape="rect" id="Node000004" href="$StreamManager_8cpp.html" title=" " alt="" coords="363,124,526,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="333,82,400,121,397,126,330,87"/>
+</map>

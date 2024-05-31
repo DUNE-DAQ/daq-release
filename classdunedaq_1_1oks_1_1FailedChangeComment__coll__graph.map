@@ -1,0 +1,7 @@
+<map id="dunedaq::oks::FailedChangeComment" name="dunedaq::oks::FailedChangeComment">
+<area shape="rect" id="Node000001" title="Cannot change comment. Such exception is thrown when OKS cannot change comment." alt="" coords="5,153,188,193"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1oks_1_1exception.html" title=" " alt="" coords="17,79,176,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,120,99,152,94,152,94,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="46,5,147,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,99,79,94,79,94,46"/>
+</map>

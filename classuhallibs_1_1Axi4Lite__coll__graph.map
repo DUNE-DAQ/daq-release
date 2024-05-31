@@ -1,0 +1,11 @@
+<map id="uhallibs::Axi4Lite" name="uhallibs::Axi4Lite">
+<area shape="rect" id="Node000001" title="Transport protocol to transfer an IPbus buffer over Axi4Lite mapped in a 32b address space." alt="" coords="551,63,669,88"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="276,5,404,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="420,31,528,53,556,59,555,65,526,58,419,36"/>
+<area shape="rect" id="Node000003" href="$classuhallibs_1_1Axi4Lite_1_1MappedFile.html" title=" " alt="" coords="281,55,399,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="414,73,550,73,550,78,414,78"/>
+<area shape="rect" id="Node000004" href="$classuhallibs_1_1ipc_1_1SharedMemObject.html" title=" " alt="" coords="258,120,422,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="436,119,558,86,560,92,438,124"/>
+<area shape="rect" id="Node000005" href="$classuhallibs_1_1ipc_1_1RobustMutex.html" title=" " alt="" coords="5,135,176,160"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="191,145,257,145,257,150,191,150"/>
+</map>

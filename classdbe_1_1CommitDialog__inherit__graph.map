@@ -1,0 +1,7 @@
+<map id="dbe::CommitDialog" name="dbe::CommitDialog">
+<area shape="rect" id="Node000001" title=" " alt="" coords="33,79,162,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,73,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,41,90,77,86,80,56,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,5,218,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="140,44,110,80,106,77,136,41"/>
+</map>

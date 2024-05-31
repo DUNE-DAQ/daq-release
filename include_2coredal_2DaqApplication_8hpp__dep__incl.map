@@ -1,0 +1,21 @@
+<map id="/github/workspace/dev_area/build/coredal/codegen/include/coredal/DaqApplication.hpp" name="/github/workspace/dev_area/build/coredal/codegen/include/coredal/DaqApplication.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="878,5,1105,61"/>
+<area shape="rect" id="Node000002" href="$DaqApplication_8cpp.html" title=" " alt="" coords="5,109,189,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="863,43,560,66,380,85,201,112,190,114,189,109,201,106,379,80,559,60,862,38"/>
+<area shape="rect" id="Node000003" href="$dump__dunedaq____coredal_8cpp.html" title=" " alt="" coords="213,109,429,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="863,52,664,77,441,112,429,114,428,109,441,106,663,72,862,46"/>
+<area shape="rect" id="Node000004" href="$get__apps__arguments_8cxx.html" title=" " alt="" coords="453,109,653,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="863,66,666,112,654,114,653,109,664,106,862,61"/>
+<area shape="rect" id="Node000005" href="$ConfigurationManager_8cpp.html" title=" " alt="" coords="678,109,874,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="921,70,835,111,833,106,919,66"/>
+<area shape="rect" id="Node000006" href="$ModuleConfiguration_8cpp.html" title=" " alt="" coords="898,109,1086,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="994,77,994,108,989,108,989,77"/>
+<area shape="rect" id="Node000007" href="$list__apps_8cxx.html" title=" " alt="" coords="1111,109,1281,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1061,66,1142,106,1140,111,1059,71"/>
+<area shape="rect" id="Node000008" href="$coredal_2pybindsrc_2dal__methods_8cpp.html" title=" " alt="" coords="1305,109,1487,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1118,63,1294,106,1305,109,1303,114,1292,112,1117,68"/>
+<area shape="rect" id="Node000009" href="$coredal_2pybindsrc_2module_8cpp.html" title=" " alt="" coords="1511,109,1681,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1121,46,1301,71,1499,106,1511,109,1510,114,1498,112,1300,76,1120,52"/>
+<area shape="rect" id="Node000010" href="$dalMethods_8cpp.html" title=" " alt="" coords="1705,109,1876,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1121,39,1386,63,1540,82,1693,106,1705,109,1704,114,1693,112,1540,87,1385,68,1120,45"/>
+</map>

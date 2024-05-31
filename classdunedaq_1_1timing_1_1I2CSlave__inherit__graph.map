@@ -1,0 +1,15 @@
+<map id="dunedaq::timing::I2CSlave" name="dunedaq::timing::I2CSlave">
+<area shape="rect" id="Node000001" title=" " alt="" coords="185,55,355,80"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1DACSlave.html" title="Class for dac node." alt="" coords="413,5,590,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="348,48,437,29,438,34,349,53"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1timing_1_1I2CSFPSlave.html" title="I2C slave class to control SFP transceivers." alt="" coords="403,55,599,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="371,65,403,65,403,70,371,70"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1timing_1_1SIChipSlave.html" title="Utility class to interface to SI chips." alt="" coords="407,104,596,130"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="349,82,438,101,437,106,348,87"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,55,137,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,65,184,65,184,70,152,70"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1DACNode.html" title="uhal::Node implementing single I2C Master Slave connection to control SFP expander chips." alt="" coords="657,5,832,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="606,16,656,16,656,21,606,21"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1I2CSFPNode.html" title=" " alt="" coords="647,55,842,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="615,65,647,65,647,70,615,70"/>
+</map>

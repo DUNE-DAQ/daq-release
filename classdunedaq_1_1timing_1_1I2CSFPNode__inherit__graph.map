@@ -1,0 +1,13 @@
+<map id="dunedaq::timing::I2CSFPNode" name="dunedaq::timing::I2CSFPNode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="126,226,320,252"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1I2CMasterNode.html" title=" " alt="" coords="5,153,214,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,185,205,223,202,228,140,189"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="68,79,151,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,120,112,152,107,152,107,120"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1I2CSFPSlave.html" title="I2C slave class to control SFP transceivers." alt="" coords="238,153,434,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="306,189,244,228,241,223,303,185"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1timing_1_1I2CSlave.html" title=" " alt="" coords="251,79,421,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="339,120,339,152,334,152,334,120"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="271,5,402,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="339,46,339,79,334,79,334,46"/>
+</map>

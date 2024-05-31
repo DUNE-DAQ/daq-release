@@ -1,0 +1,13 @@
+<map id="/github/workspace/dev_area/sourcecode/iomanager/include/iomanager/detail" name="/github/workspace/dev_area/sourcecode/iomanager/include/iomanager/detail">
+<area shape="rect" id="node1" href="dir_901a047d3d57286d40458fdda26d0e7e.html" title="queue" alt="" coords="27,126,83,152"/>
+<area shape="rect" id="node2" href="dir_be9cd5a03a32e0b6550a26f039acc1b9.html" title="network" alt="" coords="106,126,174,152"/>
+<area shape="rect" id="node3" href="dir_89a198a420b4fef0eeb7fa332151e7f7.html" title="detail" alt="" coords="114,52,166,78"/>
+<area shape="poly" id="edge1" href="dir_000098_000376.html" alt="" coords="127,81,82,118,79,114,124,76"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000098_000376.html" title="3" alt="" coords="85,113,92,128"/>
+<area shape="poly" id="edge3" href="dir_000098_000312.html" alt="" coords="143,78,143,110,137,110,137,78"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000098_000312.html" title="4" alt="" coords="145,100,152,115"/>
+<area shape="rect" id="node4" href="dir_bbc7c2c1f127b379ce39be24c4bd3dbe.html" title="build" alt="" coords="197,126,246,152"/>
+<area shape="poly" id="edge2" href="dir_000098_000030.html" alt="" coords="156,77,198,114,195,118,152,81"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000098_000030.html" title="1" alt="" coords="196,100,203,115"/>
+<area shape="rect" id="clust1" href="dir_e09e17ccc4bc2b4edf2b17bf8a69f297.html" title="iomanager" alt="" coords="16,16,184,162"/>
+</map>

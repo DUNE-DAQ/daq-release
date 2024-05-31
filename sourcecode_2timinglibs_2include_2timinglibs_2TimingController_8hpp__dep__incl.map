@@ -1,0 +1,9 @@
+<map id="/github/workspace/dev_area/sourcecode/timinglibs/include/timinglibs/TimingController.hpp" name="/github/workspace/dev_area/sourcecode/timinglibs/include/timinglibs/TimingController.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="83,5,330,61"/>
+<area shape="rect" id="Node000002" href="$sourcecode_2timinglibs_2src_2TimingController_8cpp.html" title=" " alt="" coords="5,109,189,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,74,128,110,125,106,164,70"/>
+<area shape="rect" id="Node000003" href="$sourcecode_2timinglibs_2src_2TimingMasterController_8hpp.html" title=" " alt="" coords="213,109,418,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,70,288,106,284,110,245,74"/>
+<area shape="rect" id="Node000004" href="$sourcecode_2timinglibs_2src_2TimingMasterController_8cpp.html" title=" " alt="" coords="213,213,418,268"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="318,180,318,212,313,212,313,180"/>
+</map>

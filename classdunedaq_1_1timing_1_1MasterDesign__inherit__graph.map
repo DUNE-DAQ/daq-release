@@ -1,0 +1,30 @@
+<map id="dunedaq::timing::MasterDesign" name="dunedaq::timing::MasterDesign">
+<area shape="rect" id="Node000001" title="Base class for timing master designs." alt="" coords="844,116,1041,142"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1timing_1_1BoreasDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="1089,25,1287,51"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="982,106,1088,61,1128,49,1129,54,1090,66,985,111"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1timing_1_1MasterMuxDesign.html" title="Class for PDI timing master design on mux board." alt="" coords="1098,75,1279,116"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1056,111,1097,105,1097,110,1057,116"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1timing_1_1OuroborosDesign.html" title="Class for PDI timing master design (known as overlord)." alt="" coords="1100,141,1277,181"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="1057,141,1099,147,1099,152,1056,146"/>
+<area shape="rect" id="Node000014" href="$classdunedaq_1_1timing_1_1OverlordDesign.html" title="Class for PDI timing master design (known as overlord)." alt="" coords="1105,206,1271,247"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="987,146,1090,190,1124,203,1122,208,1088,195,985,151"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1TopDesign.html" title="Base class for timing top design nodes with IO class." alt="" coords="607,87,787,112"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="803,109,843,114,843,120,802,115"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="371,109,550,149"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="565,113,606,108,607,113,566,119"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1MasterDesignInterface.html" title="Base class for timing master designs." alt="" coords="598,137,796,177"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="566,139,598,142,598,148,565,144"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="136,116,323,142"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="338,126,370,126,370,132,338,132"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,116,88,142"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="103,126,135,126,135,132,103,132"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="811,141,843,137,843,143,811,146"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1timing_1_1FanoutDesign.html" title="Class for timing fanout designs." alt="" coords="1335,5,1533,31"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1270,67,1286,61,1334,40,1370,29,1372,34,1336,45,1288,66,1272,72"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1timing_1_1GaiaDesign.html" title="Class for timing fanout designs." alt="" coords="1342,55,1526,80"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="1294,81,1341,75,1342,81,1295,86"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1timing_1_1KerberosDesign.html" title="Class for timing fanout designs." alt="" coords="1349,105,1519,145"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="1295,106,1349,112,1349,117,1294,111"/>
+<area shape="rect" id="Node000012" href="$classdunedaq_1_1timing_1_1OuroborosMuxDesign.html" title="Class for PDI ouroboros timing master design." alt="" coords="1345,170,1523,211"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="1272,119,1289,126,1337,154,1367,167,1365,172,1334,159,1286,131,1270,124"/>
+</map>

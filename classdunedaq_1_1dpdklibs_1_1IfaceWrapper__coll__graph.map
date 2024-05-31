@@ -1,0 +1,7 @@
+<map id="dunedaq::dpdklibs::IfaceWrapper" name="dunedaq::dpdklibs::IfaceWrapper">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,213,136,253"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1dpdklibs_1_1IfaceXstats.html" title=" " alt="" coords="5,109,136,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,165,73,212,68,212,68,165"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="43,5,98,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="73,47,73,109,68,109,68,47"/>
+</map>

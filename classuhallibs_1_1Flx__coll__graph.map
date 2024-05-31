@@ -1,0 +1,11 @@
+<map id="uhallibs::Flx" name="uhallibs::Flx">
+<area shape="rect" id="Node000001" title="Transport protocol to transfer an IPbus buffer via device file, using mmap." alt="" coords="545,55,633,80"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="276,5,404,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="420,26,522,45,547,51,545,57,520,50,419,31"/>
+<area shape="rect" id="Node000003" href="$classuhallibs_1_1Flx_1_1Card.html" title=" " alt="" coords="279,55,401,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="416,65,545,65,545,70,416,70"/>
+<area shape="rect" id="Node000004" href="$classuhallibs_1_1ipc_1_1SharedMemObject.html" title=" " alt="" coords="258,105,422,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="437,107,520,85,544,78,546,84,522,90,438,112"/>
+<area shape="rect" id="Node000005" href="$classuhallibs_1_1ipc_1_1RobustMutex.html" title=" " alt="" coords="5,120,176,146"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="191,130,257,130,257,136,191,136"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="dbe::models::table" name="dbe::models::table">
+<area shape="rect" id="Node000001" title=" " alt="" coords="799,112,923,137"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="494,21,641,47"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="638,48,776,88,829,108,827,113,774,94,637,53"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="482,71,653,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="669,100,799,115,798,120,668,105"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1model__common__interface.html" title=" " alt="" coords="230,78,427,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="443,88,481,88,481,94,443,94"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1model__initiate__actions__interface.html" title=" " alt="" coords="29,5,157,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="172,45,280,75,279,80,171,50"/>
+<area shape="rect" id="Node000006" href="$structdbe_1_1model__common__data__access__interface.html" title=" " alt="" coords="7,71,179,111"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="195,88,230,88,230,94,195,94"/>
+<area shape="rect" id="Node000007" href="$classdbe_1_1model__common__slots.html" title=" " alt="" coords="5,136,181,161"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="163,129,272,102,273,107,164,134"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="477,136,658,177"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="673,142,798,128,799,134,674,147"/>
+<area shape="rect" id="Node000009" href="$structdunedaq_1_1conffwk_1_1class__t.html" title=" " alt="" coords="483,201,652,227"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="656,194,715,180,774,162,834,135,836,140,776,167,716,185,657,200"/>
+</map>

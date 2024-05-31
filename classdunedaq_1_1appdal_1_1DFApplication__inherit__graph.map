@@ -1,0 +1,12 @@
+<map id="dunedaq::appdal::DFApplication" name="dunedaq::appdal::DFApplication">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,241,207,267"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1appdal_1_1SmartDaqApplication.html" title=" " alt="" coords="17,153,195,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,209,102,241,97,241,94,209"/>
+<area shape="poly" id="edge6_Node000001_Node000002" title=" " alt="" coords="118,209,115,241,110,241,112,209"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1Application.html" title=" " alt="" coords="12,79,200,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,120,101,152,95,152,95,120"/>
+<area shape="poly" id="edge5_Node000002_Node000003" title=" " alt="" coords="117,120,117,152,111,152,112,120"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="14,5,198,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,46,102,78,96,79,95,46"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="117,46,116,79,110,78,112,46"/>
+</map>

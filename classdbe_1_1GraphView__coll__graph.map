@@ -1,0 +1,15 @@
+<map id="dbe::GraphView" name="dbe::GraphView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="156,183,268,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,94,77,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,125,189,180,186,184,77,129"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,94,205,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,131,206,181,201,184,167,134"/>
+<area shape="rect" id="Node000004" href="$structdbe_1_1Window.html" title=" " alt="" coords="230,94,324,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="261,134,223,184,219,181,257,130"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1GraphicalObject.html" title=" " alt="" coords="354,94,496,120"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="410,134,397,148,380,161,353,174,324,183,269,193,268,188,323,178,351,169,377,156,393,144,407,130"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="288,5,410,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="372,41,417,92,413,95,368,45"/>
+<area shape="rect" id="Node000007" href="$structdbe_1_1GraphicalClass.html" title=" " alt="" coords="434,5,571,31"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="483,45,438,95,434,92,479,41"/>
+</map>

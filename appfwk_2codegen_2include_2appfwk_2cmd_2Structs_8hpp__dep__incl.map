@@ -1,0 +1,19 @@
+<map id="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk/cmd/Structs.hpp" name="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk/cmd/Structs.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="541,5,752,61"/>
+<area shape="rect" id="Node000002" href="$appfwk_2codegen_2include_2appfwk_2cmd_2Nljs_8hpp.html" title=" " alt="" coords="372,109,564,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="587,71,517,111,515,106,584,67"/>
+<area shape="rect" id="Node000004" href="$sourcecode_2appfwk_2src_2Application_8hpp.html" title=" " alt="" coords="211,420,381,476"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="702,69,751,109,794,160,809,187,817,215,816,243,803,270,762,316,713,354,658,384,600,407,541,424,483,435,382,447,381,442,483,430,540,418,598,402,656,379,710,350,759,312,799,267,811,241,812,215,804,189,790,163,747,113,698,73"/>
+<area shape="rect" id="Node000003" href="$Application_8hxx.html" title=" " alt="" coords="5,316,176,372"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="357,151,286,161,215,174,156,192,133,203,118,215,102,237,94,264,90,316,85,316,89,263,98,235,114,211,131,198,154,187,214,169,285,156,356,146"/>
+<area shape="rect" id="Node000005" href="$DAQModuleManager_8hxx.html" title=" " alt="" coords="128,213,352,268"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="394,174,302,214,300,210,392,169"/>
+<area shape="rect" id="Node000007" href="$sourcecode_2timinglibs_2src_2TimingController_8cpp.html" title=" " alt="" coords="376,213,560,268"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="471,180,471,212,465,212,465,180"/>
+<area shape="rect" id="Node000008" href="$sourcecode_2timinglibs_2src_2TimingMasterController_8cpp.html" title=" " alt="" coords="584,213,789,268"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="541,169,629,210,627,214,539,174"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="160,377,242,417,239,422,158,382"/>
+<area shape="rect" id="Node000006" href="$DAQModuleManager_8hpp.html" title=" " alt="" coords="200,316,392,372"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="265,281,283,314,278,317,260,283"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="299,388,299,419,293,419,293,388"/>
+</map>

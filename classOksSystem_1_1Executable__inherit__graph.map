@@ -1,0 +1,5 @@
+<map id="OksSystem::Executable" name="OksSystem::Executable">
+<area shape="rect" id="Node000001" title="Wrapper for executable file manipulation." alt="" coords="5,79,164,105"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1File.html" title="Wrapper for file operations." alt="" coords="26,5,143,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,46,87,79,82,79,82,46"/>
+</map>

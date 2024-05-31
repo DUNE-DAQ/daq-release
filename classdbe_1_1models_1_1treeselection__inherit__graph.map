@@ -1,0 +1,19 @@
+<map id="dbe::models::treeselection" name="dbe::models::treeselection">
+<area shape="rect" id="Node000001" title=" " alt="" coords="706,84,877,110"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="491,5,642,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="638,33,659,40,762,81,760,86,657,45,637,38"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1TreeModelInterface.html" title=" " alt="" coords="486,55,646,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="662,77,706,83,706,88,661,83"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="481,105,652,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="667,110,706,105,706,110,668,115"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1model__common__interface.html" title=" " alt="" coords="229,112,426,138"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="442,122,480,122,480,128,442,128"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1model__initiate__actions__interface.html" title=" " alt="" coords="29,39,157,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="173,79,279,109,277,114,172,84"/>
+<area shape="rect" id="Node000007" href="$structdbe_1_1model__common__data__access__interface.html" title=" " alt="" coords="7,105,179,145"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="194,122,228,122,228,128,194,128"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1model__common__slots.html" title=" " alt="" coords="5,169,181,195"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="163,162,271,136,272,141,164,168"/>
+<area shape="rect" id="Node000009" href="$classdbe_1_1model__common__async__operations.html" title=" " alt="" coords="474,170,658,211"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="640,161,657,154,761,108,763,113,659,159,641,166"/>
+</map>

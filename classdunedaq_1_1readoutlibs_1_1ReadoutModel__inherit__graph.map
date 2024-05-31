@@ -1,0 +1,5 @@
+<map id="dunedaq::readoutlibs::ReadoutModel&lt; ReadoutType, RequestHandlerType, LatencyBufferType, RawDataProcessorType &gt;" name="dunedaq::readoutlibs::ReadoutModel&lt; ReadoutType, RequestHandlerType, LatencyBufferType, RawDataProcessorType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,94,238,165"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1ReadoutConcept.html" title=" " alt="" coords="52,5,191,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,62,124,93,119,93,119,62"/>
+</map>

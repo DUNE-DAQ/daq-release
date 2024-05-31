@@ -1,0 +1,11 @@
+<map id="dunedaq::readoutlibs::SourceConcept" name="dunedaq::readoutlibs::SourceConcept">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,134,145,174"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1DataSubscriberModel.html" title=" " alt="" coords="215,5,370,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,123,191,86,215,74,217,79,194,91,126,128"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1trigger_1_1HSISourceModel.html" title=" " alt="" coords="201,100,384,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,138,200,132,201,137,160,144"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1trigger_1_1TPSetSourceModel.html" title=" " alt="" coords="194,166,391,206"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,164,194,169,193,174,159,169"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1trigger_1_1TriggerSourceModel.html" title=" " alt="" coords="193,230,392,286"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="126,180,194,216,220,227,218,232,191,220,124,185"/>
+</map>

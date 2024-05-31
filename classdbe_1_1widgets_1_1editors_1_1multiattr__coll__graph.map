@@ -1,0 +1,8 @@
+<map id="dbe::widgets::editors::multiattr" name="dbe::widgets::editors::multiattr">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,184,144,225"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1widgets_1_1editors_1_1base.html" title=" " alt="" coords="5,80,144,121"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,137,74,145,76,184,70,184,69,145,70,136"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="77,137,77,184,72,184,72,137"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="39,5,110,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,47,77,80,72,80,72,47"/>
+</map>

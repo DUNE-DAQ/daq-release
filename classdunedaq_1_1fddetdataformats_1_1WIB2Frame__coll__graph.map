@@ -1,0 +1,7 @@
+<map id="dunedaq::fddetdataformats::WIB2Frame" name="dunedaq::fddetdataformats::WIB2Frame">
+<area shape="rect" id="Node000001" title="Class for accessing raw WIB v2 frames, as used in ProtoDUNE&#45;SP&#45;II." alt="" coords="270,39,444,79"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1fddetdataformats_1_1WIB2Frame_1_1Header.html" title=" " alt="" coords="5,5,180,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,36,270,45,269,51,195,41"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1fddetdataformats_1_1WIB2Frame_1_1Trailer.html" title=" " alt="" coords="5,71,180,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,76,269,67,270,72,196,81"/>
+</map>

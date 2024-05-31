@@ -1,0 +1,9 @@
+<map id="/github/workspace/dev_area/build/coredal/codegen/include/coredal/NetworkDevice.hpp" name="/github/workspace/dev_area/build/coredal/codegen/include/coredal/NetworkDevice.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="186,5,415,61"/>
+<area shape="rect" id="Node000002" href="$RoHwConfig_8cpp.html" title=" " alt="" coords="5,109,185,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,71,151,111,149,106,231,66"/>
+<area shape="rect" id="Node000003" href="$NetworkDevice_8cpp.html" title=" " alt="" coords="209,109,392,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="303,77,303,108,298,108,298,77"/>
+<area shape="rect" id="Node000004" href="$dump__dunedaq____coredal_8cpp.html" title=" " alt="" coords="417,109,632,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="375,65,465,106,463,111,373,70"/>
+</map>

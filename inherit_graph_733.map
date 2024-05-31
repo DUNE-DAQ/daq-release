@@ -1,0 +1,15 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,147,31"/>
+<area shape="rect" id="Node000001" href="$classdaq_1_1QTUtils_1_1QDebugStream.html" title=" " alt="" coords="195,5,383,31"/>
+<area shape="poly" id="edge481_Node000000_Node000001" title=" " alt="" coords="162,16,194,16,194,21,162,21"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,104,111,130"/>
+<area shape="poly" id="edge482_Node000002_Node000001" title=" " alt="" coords="105,92,146,65,194,40,224,29,226,34,196,45,149,70,108,97"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1confaccessor.html" title=" " alt="" coords="226,55,352,80"/>
+<area shape="poly" id="edge483_Node000002_Node000003" title=" " alt="" coords="125,103,229,78,231,84,127,108"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1datahandler.html" title=" " alt="" coords="231,104,347,130"/>
+<area shape="poly" id="edge484_Node000002_Node000004" title=" " alt="" coords="126,114,231,114,231,120,126,120"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1interface_1_1messenger__proxy.html" title=" " alt="" coords="205,154,373,195"/>
+<area shape="poly" id="edge485_Node000002_Node000005" title=" " alt="" coords="127,128,211,151,210,156,125,133"/>
+<area shape="rect" id="Node000006" href="$classdbse_1_1KernelWrapper.html" title=" " alt="" coords="219,219,359,244"/>
+<area shape="poly" id="edge486_Node000002_Node000006" title=" " alt="" coords="104,138,145,172,196,204,226,216,224,221,193,209,142,176,100,142"/>
+</map>

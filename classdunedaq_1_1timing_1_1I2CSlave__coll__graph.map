@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::I2CSlave" name="dunedaq::timing::I2CSlave">
+<area shape="rect" id="Node000001" title=" " alt="" coords="45,169,215,195"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,137,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,117,124,167,119,170,85,120"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1I2CMasterNode.html" title=" " alt="" coords="160,80,369,106"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,117,150,171,147,166,232,112"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="223,5,306,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="267,46,267,80,262,80,262,46"/>
+</map>

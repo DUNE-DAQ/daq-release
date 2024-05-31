@@ -1,0 +1,13 @@
+<map id="dbe::config_object_aggregates&lt; S &gt;" name="dbe::config_object_aggregates&lt; S &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="56,393,180,433"/>
+<area shape="rect" id="Node000002" href="$structdbe_1_1config__object__representation.html" title=" " alt="" coords="48,303,189,343"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,359,121,392,116,392,116,359"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1config__object__description.html" title=" " alt="" coords="33,199,203,240"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,255,121,302,116,302,116,255"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1config__object__key.html" title=" " alt="" coords="5,95,130,136"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="86,149,111,197,106,200,82,151"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1inner_1_1configobject_1_1tref.html" title=" " alt="" coords="153,95,305,136"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="198,148,141,201,138,197,195,144"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1inner_1_1configobject_1_1ref__interface.html" title=" " alt="" coords="153,5,305,46"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="232,62,232,95,226,95,226,62"/>
+</map>

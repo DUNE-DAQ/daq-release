@@ -1,0 +1,24 @@
+<map id="/github/workspace/dev_area/sourcecode/okssystem/include/okssystem/FIFOConnection.hpp" name="/github/workspace/dev_area/sourcecode/okssystem/include/okssystem/FIFOConnection.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="231,5,488,61"/>
+<area shape="rect" id="Node000002" href="$File_8hpp.html" title=" " alt="" coords="205,109,338,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="334,63,297,100,293,96,330,59"/>
+<area shape="rect" id="Node000009" href="$Descriptor_8hpp.html" title=" " alt="" coords="373,109,544,135"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="392,59,435,96,431,100,388,63"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="290,256,344,282"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="278,134,293,182,311,241,306,242,288,183,273,136"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="222,183,279,208"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="271,136,261,168,256,167,265,134"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="140,256,227,282"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="257,137,233,157,211,184,198,213,190,242,185,240,193,211,207,181,229,154,253,133"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="354,183,432,208"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="293,133,360,172,358,177,291,138"/>
+<area shape="rect" id="Node000007" href="$User_8hpp.html" title=" " alt="" coords="5,183,146,208"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="239,138,124,180,122,174,237,133"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="117,206,276,253,274,258,116,211"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="95,207,154,245,151,250,92,211"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="42,256,109,282"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="78,209,78,241,73,241,73,209"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="471,134,492,169,496,190,490,210,462,236,428,254,392,264,359,269,358,264,391,259,426,249,459,232,485,207,491,190,487,171,466,137"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="463,135,462,171,457,192,445,210,417,223,365,236,243,261,242,255,364,231,415,218,442,206,452,190,457,171,457,135"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="449,137,416,173,412,169,445,133"/>
+</map>

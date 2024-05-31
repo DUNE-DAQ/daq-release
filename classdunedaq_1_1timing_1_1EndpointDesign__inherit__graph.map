@@ -1,0 +1,14 @@
+<map id="dunedaq::timing::EndpointDesign" name="dunedaq::timing::EndpointDesign">
+<area shape="rect" id="Node000001" title="Base class for timing endpoint design nodes." alt="" coords="110,330,277,371"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1TopDesign.html" title="Base class for timing top design nodes with IO class." alt="" coords="5,249,185,275"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,283,173,328,170,332,119,287"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="104,153,283,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="162,206,110,251,107,247,158,201"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1EndpointDesignInterface.html" title="Base class for timing endpoint design nodes." alt="" coords="209,241,376,282"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="229,202,272,239,268,243,226,206"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="100,79,287,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="196,120,196,152,191,152,191,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="153,5,235,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="196,46,196,79,191,79,191,46"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="260,294,218,332,214,328,257,290"/>
+</map>

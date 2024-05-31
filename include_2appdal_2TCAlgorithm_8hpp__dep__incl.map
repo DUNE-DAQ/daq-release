@@ -1,0 +1,32 @@
+<map id="/github/workspace/dev_area/build/appdal/codegen/include/appdal/TCAlgorithm.hpp" name="/github/workspace/dev_area/build/appdal/codegen/include/appdal/TCAlgorithm.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="908,5,1117,61"/>
+<area shape="rect" id="Node000002" href="$include_2appdal_2TCCustom_8hpp.html" title=" " alt="" coords="80,117,278,172"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="893,43,619,65,457,85,297,112,267,118,266,113,296,106,456,80,618,60,892,38"/>
+<area shape="rect" id="Node000004" href="$dump__dunedaq____appdal_8cpp.html" title=" " alt="" coords="209,235,421,291"/>
+<area shape="poly" id="edge15_Node000001_Node000004" title=" " alt="" coords="893,43,735,52,563,67,418,87,369,98,342,111,323,138,314,171,312,205,313,234,308,235,306,205,309,170,318,136,339,107,367,93,417,81,563,62,735,47,892,37"/>
+<area shape="rect" id="Node000005" href="$include_2appdal_2TriggerCandidateMakerHorizontalMuonPlugin_8hpp.html" title=" " alt="" coords="353,109,563,180"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="893,54,741,78,576,112,564,114,562,109,574,106,740,73,892,48"/>
+<area shape="rect" id="Node000007" href="$include_2appdal_2TriggerCandidateMakerPrescalePlugin_8hpp.html" title=" " alt="" coords="587,109,798,180"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="919,69,795,111,793,106,917,64"/>
+<area shape="rect" id="Node000009" href="$TADataProcessor_8cpp.html" title=" " alt="" coords="821,117,1001,172"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="979,74,938,118,934,114,975,71"/>
+<area shape="rect" id="Node000010" href="$TCAlgorithm_8cpp.html" title=" " alt="" coords="1025,117,1205,172"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1050,71,1091,114,1088,118,1046,74"/>
+<area shape="rect" id="Node000011" href="$src_2TCCustom_8hpp.html" title=" " alt="" coords="1229,117,1409,172"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1104,64,1243,113,1241,118,1102,69"/>
+<area shape="rect" id="Node000012" href="$src_2TriggerCandidateMakerHorizontalMuonPlugin_8hpp.html" title=" " alt="" coords="1433,109,1672,180"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="1132,51,1271,76,1421,106,1433,109,1432,114,1420,112,1270,81,1132,57"/>
+<area shape="rect" id="Node000013" href="$src_2TriggerCandidateMakerPrescalePlugin_8hpp.html" title=" " alt="" coords="1696,109,1929,180"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1132,40,1387,63,1537,82,1685,106,1696,109,1695,114,1684,112,1536,88,1387,69,1132,45"/>
+<area shape="rect" id="Node000014" href="$TAProcessor_8cpp.html" title=" " alt="" coords="1953,117,2117,172"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="1132,31,1294,35,1496,46,1719,69,1831,86,1941,106,1967,113,1966,119,1940,112,1831,91,1718,74,1496,52,1293,40,1132,37"/>
+<area shape="rect" id="Node000003" href="$TCCustom_8cpp.html" title=" " alt="" coords="5,235,185,291"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="153,186,117,236,113,233,149,183"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="224,180,285,232,281,237,220,184"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="406,192,350,237,346,233,402,187"/>
+<area shape="rect" id="Node000006" href="$TriggerCandidateMakerHorizontalMuonPlugin_8cpp.html" title=" " alt="" coords="445,228,684,298"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="501,189,535,226,531,229,497,193"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="573,185,404,237,403,232,571,180"/>
+<area shape="rect" id="Node000008" href="$TriggerCandidateMakerPrescalePlugin_8cpp.html" title=" " alt="" coords="708,228,941,298"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="745,188,787,225,783,229,741,192"/>
+</map>

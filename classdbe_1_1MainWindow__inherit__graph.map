@@ -1,0 +1,7 @@
+<map id="dbe::MainWindow" name="dbe::MainWindow">
+<area shape="rect" id="Node000001" title=" " alt="" coords="70,79,193,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,111,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,40,121,77,117,80,79,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="135,5,277,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="184,44,146,81,142,77,181,40"/>
+</map>

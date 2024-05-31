@@ -1,0 +1,9 @@
+<map id="dunedaq::fdreadoutlibs::DAPHNEFrameProcessor" name="dunedaq::fdreadoutlibs::DAPHNEFrameProcessor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="639,49,818,90"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1TaskRawDataProcessorModel.html" title=" " alt="" coords="311,41,590,97"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="606,67,639,67,639,72,606,72"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1readoutlibs_1_1RawDataProcessorConcept.html" title=" " alt="" coords="5,5,193,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="209,42,311,52,310,58,208,47"/>
+<area shape="rect" id="Node000004" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="16,85,182,126"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="197,92,310,81,310,86,198,98"/>
+</map>

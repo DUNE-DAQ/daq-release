@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::TLUIONode" name="dunedaq::timing::TLUIONode">
+<area shape="rect" id="Node000001" title="Class for the TLU board." alt="" coords="5,226,194,252"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1IONode.html" title="Base class for timing IO nodes." alt="" coords="18,153,181,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,194,102,226,97,226,97,194"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="6,79,193,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,120,102,152,97,152,97,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="58,5,141,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="102,46,102,79,97,79,97,46"/>
+</map>

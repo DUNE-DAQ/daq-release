@@ -1,0 +1,19 @@
+<map id="/github/workspace/dev_area/sourcecode/timing/include/timing/PartitionNode.hpp" name="/github/workspace/dev_area/sourcecode/timing/include/timing/PartitionNode.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="578,5,791,61"/>
+<area shape="rect" id="Node000002" href="$PDIMasterNode_8hpp.html" title=" " alt="" coords="162,109,388,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="564,67,386,111,384,106,562,62"/>
+<area shape="rect" id="Node000006" href="$definitions_8cpp.html" title=" " alt="" coords="412,109,578,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="621,71,547,111,545,106,619,66"/>
+<area shape="rect" id="Node000007" href="$partition_8cpp.html" title=" " alt="" coords="603,109,766,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="687,77,687,108,682,108,682,77"/>
+<area shape="rect" id="Node000008" href="$PDIEndpointNode_8cpp.html" title=" " alt="" coords="791,109,965,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="751,66,827,106,824,111,748,71"/>
+<area shape="rect" id="Node000009" href="$PartitionNode_8cpp.html" title=" " alt="" coords="989,109,1153,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="806,62,977,106,990,110,988,115,976,112,805,67"/>
+<area shape="rect" id="Node000003" href="$master_8cpp.html" title=" " alt="" coords="5,213,169,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="212,175,139,214,136,210,210,170"/>
+<area shape="rect" id="Node000004" href="$OverlordDesign_8cpp.html" title=" " alt="" coords="193,213,357,268"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="278,180,278,212,272,212,272,180"/>
+<area shape="rect" id="Node000005" href="$PDIMasterNode_8cpp.html" title=" " alt="" coords="381,213,545,268"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="340,170,414,210,411,214,338,175"/>
+</map>

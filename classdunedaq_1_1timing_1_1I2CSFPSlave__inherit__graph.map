@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::I2CSFPSlave" name="dunedaq::timing::I2CSFPSlave">
+<area shape="rect" id="Node000001" title="I2C slave class to control SFP transceivers." alt="" coords="5,153,202,178"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1I2CSFPNode.html" title=" " alt="" coords="6,226,201,252"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="106,194,106,226,101,226,101,194"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1I2CSlave.html" title=" " alt="" coords="18,79,189,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,120,106,152,101,152,101,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="38,5,169,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="106,46,106,79,101,79,101,46"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="dunedaq::fddetdataformats::DAPHNEStreamFrame" name="dunedaq::fddetdataformats::DAPHNEStreamFrame">
+<area shape="rect" id="Node000001" title=" " alt="" coords="333,71,507,111"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1detdataformats_1_1DAQHeader.html" title="DAQHeader is a versioned and unified structure for every FE electronics." alt="" coords="28,5,192,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,43,333,70,332,75,206,49"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1fddetdataformats_1_1DAPHNEStreamFrame_1_1Header.html" title=" " alt="" coords="5,71,215,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,88,332,88,332,94,230,94"/>
+<area shape="rect" id="Node000004" href="$structdunedaq_1_1fddetdataformats_1_1DAPHNEStreamFrame_1_1Trailer.html" title=" " alt="" coords="8,136,212,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,130,332,107,333,112,225,135"/>
+</map>

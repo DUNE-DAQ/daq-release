@@ -1,0 +1,19 @@
+<map id="/github/workspace/dev_area/sourcecode/readoutlibs/include/readoutlibs/models/detail/SkipListLatencyBufferModel.hxx" name="/github/workspace/dev_area/sourcecode/readoutlibs/include/readoutlibs/models/detail/SkipListLatencyBufferModel.hxx">
+<area shape="rect" id="Node000001" title=" " alt="" coords="517,5,763,76"/>
+<area shape="rect" id="Node000002" href="$SkipListLatencyBufferModel_8hpp.html" title=" " alt="" coords="534,124,746,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="643,91,643,124,637,124,637,91"/>
+<area shape="rect" id="Node000003" href="$DAPHNEListRequestHandler_8hpp.html" title=" " alt="" coords="266,243,486,313"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="548,204,455,245,453,240,546,199"/>
+<area shape="rect" id="Node000006" href="$DefaultSkipListRequestHandler_8hpp.html" title=" " alt="" coords="524,243,756,313"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="643,210,643,242,637,242,637,210"/>
+<area shape="rect" id="Node000009" href="$Readoutlibs_8cpp.html" title=" " alt="" coords="780,250,972,306"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="725,199,822,247,820,252,722,204"/>
+<area shape="rect" id="Node000004" href="$FDReadoutlibs_8cpp.html" title=" " alt="" coords="5,361,208,417"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="277,322,175,363,173,358,275,317"/>
+<area shape="rect" id="Node000005" href="$DAPHNEListRequestHandler_8cpp.html" title=" " alt="" coords="232,361,520,417"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="379,329,379,361,373,361,373,329"/>
+<area shape="rect" id="Node000007" href="$TPRequestHandler_8hpp.html" title=" " alt="" coords="544,361,765,417"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="649,328,654,361,648,361,644,329"/>
+<area shape="rect" id="Node000008" href="$TPRequestHandler_8cpp.html" title=" " alt="" coords="564,465,745,521"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="657,433,657,464,652,464,652,433"/>
+</map>

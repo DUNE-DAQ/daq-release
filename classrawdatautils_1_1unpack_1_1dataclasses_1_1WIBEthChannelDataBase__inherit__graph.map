@@ -1,0 +1,11 @@
+<map id="rawdatautils.unpack.dataclasses.WIBEthChannelDataBase" name="rawdatautils.unpack.dataclasses.WIBEthChannelDataBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="526,39,738,79"/>
+<area shape="rect" id="Node000004" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthAnalysisData.html" title=" " alt="" coords="786,5,999,46"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="753,41,786,37,786,42,754,46"/>
+<area shape="rect" id="Node000005" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthWaveformData.html" title=" " alt="" coords="786,71,999,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="754,71,786,75,786,81,753,77"/>
+<area shape="rect" id="Node000002" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1FragmentDataBase.html" title=" " alt="" coords="266,39,478,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="493,56,526,56,526,62,493,62"/>
+<area shape="rect" id="Node000003" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1RecordDataBase.html" title=" " alt="" coords="5,39,218,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="233,56,265,56,265,62,233,62"/>
+</map>

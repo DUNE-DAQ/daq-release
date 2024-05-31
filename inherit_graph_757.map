@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,31,91,56"/>
+<area shape="rect" id="Node000001" href="$classuhallibs_1_1Axi4Lite.html" title="Transport protocol to transfer an IPbus buffer over Axi4Lite mapped in a 32b address space." alt="" coords="139,5,257,31"/>
+<area shape="poly" id="edge555_Node000000_Node000001" title=" " alt="" coords="106,31,138,26,139,31,107,36"/>
+<area shape="rect" id="Node000002" href="$classuhallibs_1_1Flx.html" title="Transport protocol to transfer an IPbus buffer via device file, using mmap." alt="" coords="154,55,242,80"/>
+<area shape="poly" id="edge556_Node000000_Node000002" title=" " alt="" coords="107,50,154,58,153,63,106,55"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="dunedaq::timing::PC059IONode" name="dunedaq::timing::PC059IONode">
+<area shape="rect" id="Node000001" title="Class for the PC059 board." alt="" coords="6,300,207,326"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1FanoutIONode.html" title="Base class for the fanout boards." alt="" coords="5,226,208,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,267,109,300,104,300,104,267"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1IONode.html" title="Base class for timing IO nodes." alt="" coords="25,153,188,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,194,109,226,104,226,104,194"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="13,79,200,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,120,109,152,104,152,104,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="65,5,148,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="109,46,109,79,104,79,104,46"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="dunedaq::utilities::TimestampEstimatorBase" name="dunedaq::utilities::TimestampEstimatorBase">
+<area shape="rect" id="Node000001" title="TimestampEstimatorBase is the base class for timestamp&#45;based logic in test systems where the current ..." alt="" coords="5,39,183,79"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1utilities_1_1TimestampEstimator.html" title="TimestampEstimator is an implementation of TimestampEstimatorBase that uses TimeSync messages from an..." alt="" coords="253,5,400,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,42,252,34,253,39,198,47"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1utilities_1_1TimestampEstimatorSystem.html" title="TimestampEstimatorSystem is an implementation of TimestampEstimatorBase that uses the system clock to..." alt="" coords="231,71,422,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,71,230,75,230,80,197,76"/>
+</map>

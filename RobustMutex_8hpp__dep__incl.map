@@ -1,0 +1,13 @@
+<map id="/github/workspace/dev_area/sourcecode/uhallibs/include/uhallibs/ipc/RobustMutex.hpp" name="/github/workspace/dev_area/sourcecode/uhallibs/include/uhallibs/ipc/RobustMutex.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="251,5,490,61"/>
+<area shape="rect" id="Node000002" href="$ProtocolAxi4Lite_8hpp.html" title=" " alt="" coords="5,109,243,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="292,70,191,111,189,106,289,65"/>
+<area shape="rect" id="Node000004" href="$ProtocolFlx_8hpp.html" title=" " alt="" coords="267,109,474,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="373,77,373,108,368,108,368,77"/>
+<area shape="rect" id="Node000006" href="$RobustMutex_8cpp.html" title=" " alt="" coords="498,109,670,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="443,66,528,106,526,111,440,70"/>
+<area shape="rect" id="Node000003" href="$ProtocolAxi4Lite_8cpp.html" title=" " alt="" coords="38,213,210,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,180,127,212,121,212,121,180"/>
+<area shape="rect" id="Node000005" href="$ProtocolFlx_8cpp.html" title=" " alt="" coords="285,213,457,268"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="373,180,373,212,368,212,368,180"/>
+</map>

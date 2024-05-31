@@ -1,0 +1,11 @@
+<map id="/github/workspace/dev_area/sourcecode/uhallibs/include/uhallibs/ipc/SharedMemObject.hpp" name="/github/workspace/dev_area/sourcecode/uhallibs/include/uhallibs/ipc/SharedMemObject.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="142,5,351,76"/>
+<area shape="rect" id="Node000002" href="$ProtocolAxi4Lite_8hpp.html" title=" " alt="" coords="5,124,243,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,88,156,125,153,121,195,84"/>
+<area shape="rect" id="Node000004" href="$ProtocolFlx_8hpp.html" title=" " alt="" coords="267,124,474,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="299,84,341,121,338,125,296,88"/>
+<area shape="rect" id="Node000003" href="$ProtocolAxi4Lite_8cpp.html" title=" " alt="" coords="38,228,210,283"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,195,127,227,121,227,121,195"/>
+<area shape="rect" id="Node000005" href="$ProtocolFlx_8cpp.html" title=" " alt="" coords="285,228,457,283"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="373,195,373,227,368,227,368,195"/>
+</map>

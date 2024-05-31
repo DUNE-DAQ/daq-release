@@ -1,0 +1,13 @@
+<map id="dunedaq::oks::OksQueryExpression" name="dunedaq::oks::OksQueryExpression">
+<area shape="rect" id="Node000001" title="OKS query expression class." alt="" coords="5,104,230,130"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1oks_1_1OksAndExpression.html" title="OKS query logical AND expression class." alt="" coords="278,5,491,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,94,212,66,277,40,314,29,315,34,279,45,214,71,157,99"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1oks_1_1OksComparator.html" title="OKS query expression comparator class." alt="" coords="287,55,482,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,98,310,78,311,84,206,103"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1oks_1_1OksNotExpression.html" title="OKS query logical NOT expression class." alt="" coords="279,104,490,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="245,114,278,114,278,120,245,120"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1oks_1_1OksOrExpression.html" title="OKS query logical OR expression class." alt="" coords="282,153,487,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="206,130,311,150,310,155,205,136"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1oks_1_1OksRelationshipExpression.html" title="OKS query relationship expression class." alt="" coords="285,203,484,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="159,135,279,189,310,200,309,205,277,194,157,139"/>
+</map>

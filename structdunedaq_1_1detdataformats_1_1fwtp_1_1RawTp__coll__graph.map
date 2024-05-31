@@ -1,0 +1,7 @@
+<map id="dunedaq::detdataformats::fwtp::RawTp" name="dunedaq::detdataformats::fwtp::RawTp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="99,109,262,150"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1detdataformats_1_1fwtp_1_1TpHeader.html" title=" " alt="" coords="5,5,169,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,56,164,107,160,110,113,59"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1detdataformats_1_1fwtp_1_1TpData.html" title=" " alt="" coords="193,5,357,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,59,200,110,197,107,245,55"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="dunedaq::timinglibs::TimingHardwareManager" name="dunedaq::timinglibs::TimingHardwareManager">
+<area shape="rect" id="Node000001" title="TimingHardwareManager creates vectors of ints and writes them to the configured output queues." alt="" coords="120,94,293,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,200,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,47,185,91,181,96,127,51"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timinglibs_1_1TimingHardwareInterface.html" title="TimingHardwareInterface sets up IPBus UHAL interface." alt="" coords="224,5,397,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="277,58,232,96,228,92,274,54"/>
+</map>

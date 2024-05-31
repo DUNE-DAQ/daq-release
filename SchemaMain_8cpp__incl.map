@@ -1,0 +1,35 @@
+<map id="/github/workspace/dev_area/sourcecode/dbe/apps/SchemaMain.cpp" name="/github/workspace/dev_area/sourcecode/dbe/apps/SchemaMain.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="628,5,786,61"/>
+<area shape="rect" id="Node000002" href="$SchemaMainWindow_8hpp.html" title=" " alt="" coords="283,109,475,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="629,58,440,107,439,102,627,53"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="499,109,595,135"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="658,64,584,104,581,99,656,59"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="618,109,796,135"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="710,61,710,93,704,93,704,61"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="819,109,891,135"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="755,59,823,99,820,103,752,64"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="915,109,968,135"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="782,59,902,103,900,108,780,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,183,73,208"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="315,138,88,185,87,179,314,133"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,183,202,208"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="341,138,204,180,202,175,339,133"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="226,183,324,208"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="363,137,307,176,304,171,360,133"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="347,183,411,208"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="382,135,382,167,376,167,376,135"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="435,183,587,208"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="403,133,477,173,474,177,400,138"/>
+<area shape="rect" id="Node000008" href="$SchemaCustomFileModel_8hpp.html" title=" " alt="" coords="611,183,830,208"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="438,133,648,176,647,182,437,138"/>
+<area shape="rect" id="Node000011" href="$SchemaCustomTableModel_8hpp.html" title=" " alt="" coords="855,183,1085,208"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="476,132,854,178,853,183,475,137"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="788,256,935,282"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="746,206,825,247,823,251,743,211"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="677,256,764,282"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="723,209,723,241,718,241,718,209"/>
+<area shape="poly" id="edge11_Node000011_Node000009" title=" " alt="" coords="953,211,894,250,891,245,950,207"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="928,211,778,254,776,249,927,206"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="959,256,1050,282"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="978,207,994,241,989,243,973,210"/>
+</map>

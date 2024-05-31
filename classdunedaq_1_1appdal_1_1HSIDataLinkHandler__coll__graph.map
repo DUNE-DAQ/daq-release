@@ -1,0 +1,66 @@
+<map id="dunedaq::appdal::HSIDataLinkHandler" name="dunedaq::appdal::HSIDataLinkHandler">
+<area shape="rect" id="Node000001" title=" " alt="" coords="3437,35,3608,76"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1appdal_1_1ReadoutModule.html" title=" " alt="" coords="3220,35,3388,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="3403,62,3437,62,3437,67,3403,67"/>
+<area shape="poly" id="edge40_Node000001_Node000002" title=" " alt="" coords="3403,44,3437,44,3437,50,3403,49"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1DaqModule.html" title=" " alt="" coords="2318,11,2507,37"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="2523,31,2878,47,3220,56,3219,61,2878,52,2523,37"/>
+<area shape="poly" id="edge21_Node000002_Node000003" title=" " alt="" coords="2523,19,2878,29,3220,45,3219,50,2878,34,2523,24"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="1834,211,2018,237"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1944,196,1992,131,2026,98,2066,71,2128,47,2194,32,2259,26,2317,24,2317,29,2259,31,2195,38,2130,52,2069,75,2030,102,1996,135,1948,199"/>
+<area shape="poly" id="edge20_Node000003_Node000004" title=" " alt="" coords="1935,195,1955,159,1984,118,2021,78,2066,47,2103,31,2142,19,2222,6,2298,3,2360,8,2359,13,2297,9,2223,11,2144,24,2105,36,2069,51,2025,82,1988,121,1960,162,1940,198"/>
+<area shape="rect" id="Node000019" href="$classdunedaq_1_1coredal_1_1GeoId.html" title=" " alt="" coords="2101,74,2260,99"/>
+<area shape="poly" id="edge23_Node000019_Node000004" title=" " alt="" coords="1955,198,1993,162,2041,129,2093,109,2143,97,2144,102,2095,114,2043,134,1996,166,1958,202"/>
+<area shape="poly" id="edge24_Node000019_Node000004" title=" " alt="" coords="1939,196,1982,149,2010,125,2041,105,2069,93,2099,84,2101,90,2071,98,2043,110,2013,130,1985,153,1943,200"/>
+<area shape="rect" id="Node000020" href="$classdunedaq_1_1appdal_1_1ReadoutModuleConf.html" title=" " alt="" coords="2860,158,3029,199"/>
+<area shape="poly" id="edge26_Node000020_Node000004" title=" " alt="" coords="2028,205,2042,202,2145,190,2232,183,2382,181,2531,187,2723,189,2860,187,2860,192,2723,194,2531,192,2382,187,2233,188,2145,195,2042,208,2029,210"/>
+<area shape="poly" id="edge27_Node000020_Node000004" title=" " alt="" coords="1955,202,1996,188,2042,178,2145,166,2232,159,2382,157,2531,163,2723,165,2860,165,2860,171,2723,170,2531,168,2382,163,2233,164,2145,171,2042,184,1997,193,1957,207"/>
+<area shape="rect" id="Node000021" href="$classdunedaq_1_1appdal_1_1RequestHandler.html" title=" " alt="" coords="2531,203,2699,244"/>
+<area shape="poly" id="edge29_Node000021_Node000004" title=" " alt="" coords="2033,228,2286,230,2530,227,2530,233,2286,235,2033,233"/>
+<area shape="poly" id="edge30_Node000021_Node000004" title=" " alt="" coords="2033,214,2286,212,2530,215,2530,220,2286,217,2033,220"/>
+<area shape="rect" id="Node000022" href="$classdunedaq_1_1appdal_1_1DataRecorderConf.html" title=" " alt="" coords="2067,274,2294,299"/>
+<area shape="poly" id="edge32_Node000022_Node000004" title=" " alt="" coords="1972,239,2091,270,2090,276,1970,244"/>
+<area shape="poly" id="edge33_Node000022_Node000004" title=" " alt="" coords="2031,238,2150,270,2149,276,2030,243"/>
+<area shape="rect" id="Node000023" href="$classdunedaq_1_1appdal_1_1LatencyBuffer.html" title=" " alt="" coords="2097,323,2264,364"/>
+<area shape="poly" id="edge35_Node000023_Node000004" title=" " alt="" coords="1949,245,2002,284,2068,321,2098,333,2096,338,2066,326,1999,289,1946,249"/>
+<area shape="poly" id="edge36_Node000023_Node000004" title=" " alt="" coords="1972,243,2018,271,2068,297,2134,320,2133,325,2066,302,2015,275,1969,248"/>
+<area shape="rect" id="Node000024" href="$classdunedaq_1_1appdal_1_1DataProcessor.html" title=" " alt="" coords="2077,388,2284,414"/>
+<area shape="poly" id="edge38_Node000024_Node000004" title=" " alt="" coords="1941,249,1962,281,1991,319,2027,355,2069,386,2078,390,2076,395,2066,390,2024,359,1987,322,1958,284,1937,252"/>
+<area shape="poly" id="edge39_Node000024_Node000004" title=" " alt="" coords="1951,247,2001,306,2033,336,2069,361,2105,376,2141,385,2140,390,2103,381,2066,366,2029,340,1997,309,1947,251"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1conffwk_1_1Configuration.html" title=" " alt="" coords="662,211,865,237"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="880,231,998,239,1124,242,1671,242,1754,239,1833,233,1833,238,1755,245,1671,248,1124,248,998,244,880,237"/>
+<area shape="rect" id="Node000014" href="$classdunedaq_1_1conffwk_1_1ConfigurationImpl.html" title="Provides pure virtual interface used by the Configuration class." alt="" coords="1012,147,1239,173"/>
+<area shape="poly" id="edge16_Node000014_Node000005" title=" " alt="" coords="817,203,893,182,1011,165,1012,171,894,188,818,208"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="281,138,480,179"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="496,166,634,186,719,208,718,213,633,192,495,171"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="40,101,184,157"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="200,136,281,145,280,150,200,141"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="302,203,458,244"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="474,221,662,221,662,226,474,226"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="36,180,188,251"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="203,216,302,219,301,224,203,221"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="299,272,461,357"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="476,289,705,235,707,240,477,294"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,276,219,361"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="234,314,298,313,299,318,234,319"/>
+<area shape="rect" id="Node000012" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="268,391,492,432"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="451,383,491,367,563,335,632,299,740,235,743,239,635,304,565,340,493,372,453,388"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="41,385,183,471"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="198,420,267,416,268,421,198,425"/>
+<area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="1072,180,988,203,866,220,865,214,987,197,1071,175"/>
+<area shape="rect" id="Node000018" href="$classdunedaq_1_1conffwk_1_1ConfigObjectImpl.html" title="Implements database objects." alt="" coords="1332,150,1495,191"/>
+<area shape="poly" id="edge19_Node000018_Node000014" title=" " alt="" coords="1255,162,1332,165,1331,170,1255,167"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1conffwk_1_1pmap.html" title=" " alt="" coords="657,47,870,118"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="886,106,1062,144,1061,149,884,111"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="290,29,470,115"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="486,72,657,77,657,82,486,77"/>
+<area shape="rect" id="Node000017" href="$classdunedaq_1_1conffwk_1_1ConfigObject.html" title="Represents database objects." alt="" coords="1588,166,1752,207"/>
+<area shape="poly" id="edge17_Node000004_Node000017" title=" " alt="" coords="1767,198,1833,208,1833,213,1767,203"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="1511,174,1588,179,1588,184,1511,179"/>
+<area shape="poly" id="edge22_Node000002_Node000019" title=" " alt="" coords="2275,81,3219,55,3219,61,2276,87"/>
+<area shape="poly" id="edge25_Node000002_Node000020" title=" " alt="" coords="3043,160,3118,143,3195,118,3236,97,3272,74,3275,79,3239,102,3197,123,3120,148,3044,166"/>
+<area shape="poly" id="edge28_Node000020_Node000021" title=" " alt="" coords="2714,209,2836,192,2859,189,2860,194,2837,197,2715,214"/>
+<area shape="poly" id="edge31_Node000021_Node000022" title=" " alt="" coords="2309,287,2407,282,2506,267,2541,256,2573,242,2575,247,2543,261,2508,272,2407,288,2309,293"/>
+<area shape="poly" id="edge34_Node000020_Node000023" title=" " alt="" coords="2279,334,2474,311,2587,293,2699,268,2806,234,2896,197,2898,202,2808,239,2700,273,2588,298,2475,317,2279,339"/>
+<area shape="poly" id="edge37_Node000020_Node000024" title=" " alt="" coords="2299,398,2418,390,2556,369,2629,352,2700,329,2770,301,2835,267,2882,232,2921,197,2924,201,2886,236,2838,271,2772,306,2702,334,2630,357,2557,374,2418,395,2300,404"/>
+</map>

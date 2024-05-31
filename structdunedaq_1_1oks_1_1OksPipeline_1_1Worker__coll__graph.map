@@ -1,0 +1,7 @@
+<map id="dunedaq::oks::OksPipeline::Worker" name="dunedaq::oks::OksPipeline::Worker">
+<area shape="rect" id="Node000001" title=" " alt="" coords="97,94,271,135"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1oks_1_1OksPipeline.html" title=" " alt="" coords="5,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,40,167,92,163,95,112,44"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1oks_1_1OksJob.html" title=" " alt="" coords="203,5,352,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,44,205,95,202,92,253,40"/>
+</map>

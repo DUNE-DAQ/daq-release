@@ -1,0 +1,19 @@
+<map id="dunedaq::timing::MasterMuxDesign" name="dunedaq::timing::MasterMuxDesign">
+<area shape="rect" id="Node000001" title="Class for PDI timing master design on mux board." alt="" coords="1089,35,1270,75"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1MuxDesignInterface.html" title="Class for timing fanout designs." alt="" coords="852,5,1033,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1049,36,1089,41,1088,46,1048,41"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="371,56,550,97"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="565,53,598,48,731,35,851,27,851,32,731,40,599,54,566,58"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1timing_1_1TopDesign.html" title="Base class for timing top design nodes with IO class." alt="" coords="607,64,787,89"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="566,74,607,74,607,79,566,79"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1timing_1_1MasterDesignInterface.html" title="Base class for timing master designs." alt="" coords="598,113,796,154"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="562,98,611,110,610,115,561,103"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="136,64,323,89"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="338,74,370,74,370,79,338,79"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,64,88,89"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="103,74,135,74,135,79,103,79"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1MasterDesign.html" title="Base class for timing master designs." alt="" coords="844,70,1041,96"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1056,67,1088,63,1089,68,1057,72"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="802,77,843,78,843,83,802,82"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="810,108,876,94,877,99,811,113"/>
+</map>

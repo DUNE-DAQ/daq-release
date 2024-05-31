@@ -1,0 +1,9 @@
+<map id="dunedaq::readoutlibs::DefaultRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;::RequestElement" name="dunedaq::readoutlibs::DefaultRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;::RequestElement">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,316,229,387"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1dfmessages_1_1DataRequest.html" title="This message represents a request for data sent to a single component of the DAQ." alt="" coords="43,213,191,253"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,268,120,316,114,316,114,268"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1daqdataformats_1_1ComponentRequest.html" title="A request sent to a Component, including the SourceID of the component and the window offset and widt..." alt="" coords="34,109,200,150"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,165,120,212,114,212,114,165"/>
+<area shape="rect" id="Node000004" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="34,5,200,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="120,62,120,109,114,109,114,62"/>
+</map>

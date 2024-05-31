@@ -1,0 +1,5 @@
+<map id="dunedaq::conffwk::CacheBase" name="dunedaq::conffwk::CacheBase">
+<area shape="rect" id="Node000001" title="Defines base class for cache of template objects." alt="" coords="9,5,204,31"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1Configuration_1_1Cache.html" title="Cache of template object of given type." alt="" coords="5,79,208,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,46,109,79,104,79,104,46"/>
+</map>

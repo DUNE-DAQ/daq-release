@@ -1,0 +1,7 @@
+<map id="dunedaq::fdreadoutlibs::DAPHNEFrameProcessor" name="dunedaq::fdreadoutlibs::DAPHNEFrameProcessor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="568,13,746,54"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1TaskRawDataProcessorModel.html" title=" " alt="" coords="241,5,520,61"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="535,31,568,31,568,36,535,36"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1readoutlibs_1_1RawDataProcessorConcept.html" title=" " alt="" coords="5,5,193,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="208,31,240,31,240,36,208,36"/>
+</map>

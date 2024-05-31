@@ -1,0 +1,34 @@
+<map id="/github/workspace/dev_area/sourcecode/daqdataformats/include/daqdataformats/TriggerRecordHeader.hpp" name="/github/workspace/dev_area/sourcecode/daqdataformats/include/daqdataformats/TriggerRecordHeader.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="552,5,797,76"/>
+<area shape="rect" id="Node000002" href="$TriggerRecord_8hpp.html" title=" " alt="" coords="626,132,896,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="711,86,743,129,739,133,707,90"/>
+<area shape="rect" id="Node000003" href="$trigger__record_8cpp.html" title=" " alt="" coords="480,250,698,306"/>
+<area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="637,90,617,125,606,157,599,191,592,250,587,249,593,190,601,156,612,123,632,88"/>
+<area shape="rect" id="Node000012" href="$TriggerRecordHeader__serialization_8hpp.html" title=" " alt="" coords="229,124,456,195"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="562,84,442,126,440,121,560,79"/>
+<area shape="rect" id="Node000014" href="$HDF5FileLayout_8hpp.html" title=" " alt="" coords="969,132,1206,187"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="813,78,992,128,991,134,811,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="710,198,631,252,628,247,707,194"/>
+<area shape="rect" id="Node000004" href="$TriggerRecord__serialization_8hpp.html" title=" " alt="" coords="229,243,456,313"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="650,194,457,248,455,243,648,189"/>
+<area shape="rect" id="Node000005" href="$DataStore_8hpp.html" title=" " alt="" coords="722,250,939,306"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="787,199,816,248,812,251,783,202"/>
+<area shape="rect" id="Node000006" href="$HDF5RawDataFile_8hpp.html" title=" " alt="" coords="962,250,1213,306"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="852,190,1012,247,1010,252,850,195"/>
+<area shape="rect" id="Node000007" href="$hdf5rawdatafile_8cpp.html" title=" " alt="" coords="578,361,773,417"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="971,313,774,365,773,359,969,308"/>
+<area shape="rect" id="Node000008" href="$HDF5RawDataFile_8cpp.html" title=" " alt="" coords="798,361,977,417"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="1026,316,939,363,936,358,1023,311"/>
+<area shape="rect" id="Node000009" href="$copy__tpstream_8cxx.html" title=" " alt="" coords="1002,361,1173,417"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="1090,321,1090,361,1085,361,1085,321"/>
+<area shape="rect" id="Node000010" href="$process__tpstream_8cxx.html" title=" " alt="" coords="1197,361,1381,417"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="1153,311,1240,358,1237,363,1150,316"/>
+<area shape="rect" id="Node000011" href="$tapipe_8cxx.html" title=" " alt="" coords="1405,361,1576,417"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="1204,308,1394,359,1405,362,1404,367,1392,364,1203,313"/>
+<area shape="poly" id="edge13_Node000012_Node000004" title=" " alt="" coords="345,210,345,242,340,242,340,210"/>
+<area shape="rect" id="Node000013" href="$Serialization_8cpp.html" title=" " alt="" coords="5,250,205,306"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="259,204,161,252,159,247,257,199"/>
+<area shape="poly" id="edge16_Node000014_Node000006" title=" " alt="" coords="1090,202,1090,250,1085,250,1085,202"/>
+<area shape="rect" id="Node000015" href="$HDF5FileLayout_8cpp.html" title=" " alt="" coords="1237,250,1410,306"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="1157,192,1270,247,1267,252,1155,197"/>
+</map>

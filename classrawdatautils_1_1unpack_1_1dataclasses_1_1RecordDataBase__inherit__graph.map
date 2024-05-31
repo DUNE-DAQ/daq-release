@@ -1,0 +1,37 @@
+<map id="rawdatautils.unpack.dataclasses.RecordDataBase" name="rawdatautils.unpack.dataclasses.RecordDataBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,397,218,438"/>
+<area shape="rect" id="Node000002" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1FragmentDataBase.html" title=" " alt="" coords="266,332,478,373"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,390,287,371,289,376,211,396"/>
+<area shape="rect" id="Node000017" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1SourceIDData.html" title=" " alt="" coords="266,397,478,438"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="233,415,265,415,265,420,233,420"/>
+<area shape="rect" id="Node000018" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1TriggerRecordData.html" title=" " alt="" coords="266,463,478,503"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="211,440,289,459,287,465,210,445"/>
+<area shape="rect" id="Node000003" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEChannelDataBase.html" title=" " alt="" coords="526,103,738,143"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="388,318,411,280,442,236,480,192,524,154,547,142,550,146,528,159,484,196,446,239,416,283,393,320"/>
+<area shape="rect" id="Node000008" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEStreamHeaderData.html" title=" " alt="" coords="526,168,738,209"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="401,319,455,268,489,242,525,219,552,207,554,212,527,224,492,246,459,272,404,323"/>
+<area shape="rect" id="Node000009" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAQHeaderData.html" title=" " alt="" coords="526,233,738,274"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="432,323,525,285,561,272,563,277,527,289,434,328"/>
+<area shape="rect" id="Node000010" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1FragmentHeaderData.html" title=" " alt="" coords="526,299,738,339"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="493,334,525,330,526,335,494,339"/>
+<area shape="rect" id="Node000011" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1TriggerHeaderData.html" title=" " alt="" coords="526,364,738,405"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="494,365,526,369,525,374,493,370"/>
+<area shape="rect" id="Node000012" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1TriggerPrimitiveData.html" title=" " alt="" coords="526,429,738,470"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="463,376,479,383,503,399,527,414,558,426,556,431,525,419,501,403,477,388,460,381"/>
+<area shape="rect" id="Node000013" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthChannelDataBase.html" title=" " alt="" coords="526,495,738,535"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="474,379,480,384,498,408,505,433,511,457,528,480,546,492,543,496,524,484,506,459,499,434,493,411,476,388,470,383"/>
+<area shape="rect" id="Node000016" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthHeaderData.html" title=" " alt="" coords="526,560,738,601"/>
+<area shape="poly" id="edge15_Node000002_Node000016" title=" " alt="" coords="476,380,480,384,495,404,503,425,505,466,506,506,513,526,528,545,543,557,540,561,524,549,509,528,501,507,499,466,498,426,491,407,476,387,473,384"/>
+<area shape="rect" id="Node000004" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEAnalysisData.html" title=" " alt="" coords="786,5,999,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="694,94,785,57,822,44,824,49,787,61,696,98"/>
+<area shape="rect" id="Node000005" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEStreamAnalysisData.html" title=" " alt="" coords="786,71,999,111"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="753,105,786,101,786,107,754,111"/>
+<area shape="rect" id="Node000006" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEStreamWaveformData.html" title=" " alt="" coords="786,136,999,177"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="754,136,786,140,786,145,753,141"/>
+<area shape="rect" id="Node000007" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1DAPHNEWaveformData.html" title=" " alt="" coords="786,201,999,242"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="724,147,740,154,764,170,788,186,817,198,815,203,785,191,761,175,737,159,722,152"/>
+<area shape="rect" id="Node000014" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthAnalysisData.html" title=" " alt="" coords="786,461,999,502"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="753,497,786,493,786,498,754,502"/>
+<area shape="rect" id="Node000015" href="$classrawdatautils_1_1unpack_1_1dataclasses_1_1WIBEthWaveformData.html" title=" " alt="" coords="786,527,999,567"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="754,527,786,531,786,537,753,533"/>
+</map>

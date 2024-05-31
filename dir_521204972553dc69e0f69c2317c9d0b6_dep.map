@@ -1,0 +1,13 @@
+<map id="/github/workspace/dev_area/sourcecode/appfwk/apps" name="/github/workspace/dev_area/sourcecode/appfwk/apps">
+<area shape="rect" id="node1" href="dir_500a8336c6100e43238d443ff89f9def.html" title="src" alt="" coords="27,126,66,152"/>
+<area shape="rect" id="node2" href="dir_61d3bfdf2b3462a82123f77d2390bca2.html" title="include" alt="" coords="90,126,153,152"/>
+<area shape="rect" id="node3" href="dir_521204972553dc69e0f69c2317c9d0b6.html" title="apps" alt="" coords="97,52,146,78"/>
+<area shape="poly" id="edge1" href="dir_000016_000429.html" alt="" coords="111,80,72,117,68,113,107,77"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000016_000429.html" title="1" alt="" coords="75,112,82,127"/>
+<area shape="poly" id="edge2" href="dir_000016_000250.html" alt="" coords="124,78,124,110,119,110,119,78"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000016_000250.html" title="1" alt="" coords="126,100,133,115"/>
+<area shape="rect" id="node4" href="dir_f74a706a7efda297e6d8fb2c03527fc2.html" title="logging" alt="" coords="177,126,239,152"/>
+<area shape="poly" id="edge3" href="dir_000016_000308.html" alt="" coords="138,76,184,114,180,118,134,81"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000016_000308.html" title="1" alt="" coords="181,100,188,115"/>
+<area shape="rect" id="clust1" href="dir_eaab8e706d9785a8277b333b3fa3c104.html" title="appfwk" alt="" coords="16,16,163,162"/>
+</map>

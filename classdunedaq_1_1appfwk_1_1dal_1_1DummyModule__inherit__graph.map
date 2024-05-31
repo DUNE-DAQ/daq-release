@@ -1,0 +1,9 @@
+<map id="dunedaq::appfwk::dal::DummyModule" name="dunedaq::appfwk::dal::DummyModule">
+<area shape="rect" id="Node000001" title=" " alt="" coords="29,153,171,193"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1DaqModule.html" title=" " alt="" coords="5,79,195,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,120,95,152,89,152,89,120"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="111,120,111,152,105,152,106,120"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="8,5,192,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,46,96,78,90,79,89,46"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="111,46,110,79,104,78,106,46"/>
+</map>

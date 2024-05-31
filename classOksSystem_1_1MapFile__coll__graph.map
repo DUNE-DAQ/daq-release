@@ -1,0 +1,7 @@
+<map id="OksSystem::MapFile" name="OksSystem::MapFile">
+<area shape="rect" id="Node000001" title="Wrapper for memory map operations." alt="" coords="73,94,214,120"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1File.html" title="Wrapper for file operations." alt="" coords="5,5,122,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,41,134,92,131,95,83,44"/>
+<area shape="rect" id="Node000003" href="$classOksSystem_1_1Descriptor.html" title="File descriptor / Socket wrapper." alt="" coords="146,5,301,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,44,156,95,153,92,200,41"/>
+</map>

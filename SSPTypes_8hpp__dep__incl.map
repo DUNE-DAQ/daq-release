@@ -1,0 +1,12 @@
+<map id="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/SSPTypes.hpp" name="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/SSPTypes.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="247,5,505,61"/>
+<area shape="rect" id="Node000002" href="$ssp_8cpp.html" title=" " alt="" coords="5,117,232,172"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,70,184,118,182,113,297,65"/>
+<area shape="rect" id="Node000003" href="$SSPFrameTypeAdapter_8hpp.html" title=" " alt="" coords="256,109,496,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="379,76,379,109,373,109,373,76"/>
+<area shape="rect" id="Node000004" href="$SSPFrameProcessor_8hpp.html" title=" " alt="" coords="353,228,556,298"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="469,67,492,85,510,108,517,123,519,139,515,171,502,202,485,229,480,226,497,199,509,170,514,139,511,124,506,110,488,89,466,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="410,191,433,226,429,229,405,194"/>
+<area shape="rect" id="Node000005" href="$FDReadoutlibs_8cpp.html" title=" " alt="" coords="353,346,556,402"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="457,314,457,346,452,346,452,314"/>
+</map>

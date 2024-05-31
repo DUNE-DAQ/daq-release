@@ -1,0 +1,12 @@
+<map id="dunedaq::coredal::DROStreamConf" name="dunedaq::coredal::DROStreamConf">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,226,227,252"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1ResourceBase.html" title=" " alt="" coords="11,153,221,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,193,112,226,106,226,105,194"/>
+<area shape="poly" id="edge6_Node000001_Node000002" title=" " alt="" coords="127,194,126,226,120,226,122,193"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1coredal_1_1Component.html" title=" " alt="" coords="21,79,211,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,120,112,152,106,152,105,120"/>
+<area shape="poly" id="edge5_Node000002_Node000003" title=" " alt="" coords="127,120,126,152,120,152,122,120"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="24,5,208,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,46,112,78,106,79,105,46"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="127,46,126,79,120,78,122,46"/>
+</map>

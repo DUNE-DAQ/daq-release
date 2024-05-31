@@ -1,0 +1,6 @@
+<map id="dunedaq::appdal::QueueConnectionRule" name="dunedaq::appdal::QueueConnectionRule">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,255,105"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="38,5,222,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,46,126,78,120,79,119,46"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="141,46,140,79,134,78,136,46"/>
+</map>

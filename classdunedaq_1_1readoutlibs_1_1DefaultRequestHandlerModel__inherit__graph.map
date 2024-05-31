@@ -1,0 +1,13 @@
+<map id="dunedaq::readoutlibs::DefaultRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;" name="dunedaq::readoutlibs::DefaultRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="288,85,522,141"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1readoutlibs_1_1DefaultSkipListRequestHandler.html" title=" " alt="" coords="600,5,809,61"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="526,78,599,59,600,64,527,83"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1readoutlibs_1_1EmptyFragmentRequestHandlerModel.html" title=" " alt="" coords="570,85,839,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="537,111,569,111,569,116,537,116"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1readoutlibs_1_1ZeroCopyRecordingRequestHandlerModel.html" title=" " alt="" coords="570,165,839,221"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="527,143,598,162,597,167,526,148"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1RequestHandlerConcept.html" title=" " alt="" coords="5,85,240,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,111,287,111,287,116,255,116"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1trigger_1_1TPRequestHandler.html" title=" " alt="" coords="887,13,1071,54"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="825,31,887,31,887,36,825,36"/>
+</map>

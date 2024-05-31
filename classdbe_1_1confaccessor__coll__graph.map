@@ -1,0 +1,13 @@
+<map id="dbe::confaccessor" name="dbe::confaccessor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="72,183,198,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="46,45,53,81,68,118,94,154,121,180,118,184,90,157,63,121,48,83,40,47"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1datahandler.html" title=" " alt="" coords="77,94,192,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="66,39,123,92,120,96,62,43"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,135,137,182,132,182,132,135"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1treenode.html" title=" " alt="" coords="99,5,197,31"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="146,47,139,94,134,93,141,46"/>
+<area shape="poly" id="edge5_Node000004_Node000004" title=" " alt="" coords="214,10,224,18,216,26,198,29,197,24,213,22,219,18,211,14"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1ui_1_1config_1_1info.html" title=" " alt="" coords="216,94,341,120"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="249,130,200,161,158,185,155,180,197,156,247,126"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="dbse::CustomModelInterface" name="dbse::CustomModelInterface">
+<area shape="rect" id="Node000001" title=" " alt="" coords="201,149,387,175"/>
+<area shape="rect" id="Node000003" href="$classdbse_1_1CustomAttributeModel.html" title=" " alt="" coords="459,5,643,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,136,366,87,399,62,434,41,465,29,467,34,436,46,402,66,370,91,319,139"/>
+<area shape="rect" id="Node000004" href="$classdbse_1_1CustomMethodImplementationModel.html" title=" " alt="" coords="435,55,667,96"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="340,141,434,105,470,94,471,99,436,110,342,146"/>
+<area shape="rect" id="Node000005" href="$classdbse_1_1CustomMethodModel.html" title=" " alt="" coords="462,120,640,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="402,147,461,140,462,146,403,152"/>
+<area shape="rect" id="Node000006" href="$classdbse_1_1CustomRelationshipModel.html" title=" " alt="" coords="466,170,637,211"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="403,171,465,178,465,183,402,177"/>
+<area shape="rect" id="Node000007" href="$classdbse_1_1CustomSubClassModel.html" title=" " alt="" coords="456,235,647,260"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="337,180,436,220,480,231,478,237,434,225,335,184"/>
+<area shape="rect" id="Node000008" href="$classdbse_1_1CustomSuperClassModel.html" title=" " alt="" coords="450,284,652,310"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="320,184,371,229,402,251,436,270,465,281,463,286,434,275,399,256,367,233,316,188"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,149,153,175"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,160,200,160,200,165,168,165"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="dunedaq::oks::OksJob" name="dunedaq::oks::OksJob">
+<area shape="rect" id="Node000001" title=" " alt="" coords="84,5,232,31"/>
+<area shape="rect" id="Node000002" href="$structOksValidateJob.html" title=" " alt="" coords="5,79,119,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,43,80,81,76,76,128,38"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1oks_1_1OksLoadObjectsJob.html" title=" " alt="" coords="143,79,365,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,38,240,76,236,81,185,43"/>
+</map>

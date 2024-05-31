@@ -1,0 +1,30 @@
+<map id="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk/app/Structs.hpp" name="/github/workspace/dev_area/build/appfwk/codegen/include/appfwk/app/Structs.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="605,5,813,61"/>
+<area shape="rect" id="Node000002" href="$appfwk_2codegen_2include_2appfwk_2app_2Nljs_8hpp.html" title=" " alt="" coords="550,109,738,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="685,76,663,110,659,107,681,73"/>
+<area shape="rect" id="Node000004" href="$DAQModuleManager_8hpp.html" title=" " alt="" coords="5,316,197,372"/>
+<area shape="poly" id="edge13_Node000001_Node000004" title=" " alt="" coords="590,52,443,76,282,111,206,133,140,157,88,184,54,214,47,226,45,238,49,265,62,291,79,315,75,318,58,294,44,266,40,238,42,224,50,211,85,180,138,152,204,128,280,106,442,71,589,47"/>
+<area shape="rect" id="Node000007" href="$sourcecode_2timinglibs_2include_2timinglibs_2TimingController_8hpp.html" title=" " alt="" coords="745,213,993,268"/>
+<area shape="poly" id="edge14_Node000001_Node000007" title=" " alt="" coords="741,71,850,211,846,214,737,75"/>
+<area shape="rect" id="Node000012" href="$sourcecode_2timinglibs_2src_2TimingHardwareManager_8hpp.html" title=" " alt="" coords="1017,213,1233,268"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="779,66,1071,210,1069,215,776,71"/>
+<area shape="rect" id="Node000003" href="$DAQModuleManager_8hxx.html" title=" " alt="" coords="64,213,288,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="535,164,289,217,288,212,533,159"/>
+<area shape="rect" id="Node000006" href="$sourcecode_2hsilibs_2src_2HSIEventSender_8cpp.html" title=" " alt="" coords="312,213,480,268"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="564,173,463,214,461,210,562,169"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="719,169,810,210,807,214,717,174"/>
+<area shape="rect" id="Node000011" href="$sourcecode_2timinglibs_2src_2TimingHardwareInterface_8cpp.html" title=" " alt="" coords="504,213,722,268"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="634,180,624,213,619,211,629,179"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="754,158,1006,210,1017,213,1016,218,1004,215,753,163"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="149,283,123,317,119,314,145,279"/>
+<area shape="rect" id="Node000005" href="$sourcecode_2appfwk_2src_2Application_8hpp.html" title=" " alt="" coords="16,420,186,476"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="104,388,104,419,98,419,98,388"/>
+<area shape="rect" id="Node000008" href="$sourcecode_2timinglibs_2src_2TimingController_8cpp.html" title=" " alt="" coords="569,316,753,372"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="801,278,718,318,716,313,798,273"/>
+<area shape="rect" id="Node000009" href="$sourcecode_2timinglibs_2src_2TimingMasterController_8hpp.html" title=" " alt="" coords="777,316,982,372"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="876,284,879,315,874,316,871,284"/>
+<area shape="rect" id="Node000010" href="$sourcecode_2timinglibs_2src_2TimingMasterController_8cpp.html" title=" " alt="" coords="777,420,982,476"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="882,388,882,419,877,419,877,388"/>
+<area shape="rect" id="Node000013" href="$sourcecode_2timinglibs_2src_2TimingHardwareManager_8cpp.html" title=" " alt="" coords="1017,316,1233,372"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1128,284,1128,316,1122,316,1122,284"/>
+</map>

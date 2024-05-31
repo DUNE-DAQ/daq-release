@@ -1,0 +1,97 @@
+<map id="dunedaq::oks::exception" name="dunedaq::oks::exception">
+<area shape="rect" id="Node000001" title=" " alt="" coords="154,1276,312,1302"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1oks_1_1AddRcrError.html" title=" " alt="" coords="386,5,559,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,1260,243,1009,266,621,283,423,303,248,328,115,342,70,358,42,384,24,387,28,362,45,347,72,333,116,309,249,288,424,271,621,248,1009,238,1261"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1oks_1_1AttributeConversionFailed.html" title=" " alt="" coords="364,55,581,96"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,1260,245,1021,269,655,286,468,307,303,330,177,344,134,358,107,372,94,376,98,362,110,349,136,336,178,312,304,292,469,275,655,250,1022,238,1261"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1oks_1_1AttributeRangeError.html" title=" " alt="" coords="378,121,567,161"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="233,1260,246,1033,271,688,288,512,309,357,332,238,344,198,358,172,376,157,380,161,362,176,349,200,337,239,314,357,294,513,276,688,251,1034,238,1261"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1oks_1_1AttributeReadError.html" title=" " alt="" coords="382,186,564,227"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="233,1260,247,1045,273,720,291,555,311,410,333,299,345,261,358,238,379,221,383,225,362,241,350,264,338,301,316,411,296,556,278,720,252,1045,238,1260"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1oks_1_1AuthenticationFailure.html" title="Failed to authenticate user." alt="" coords="380,251,566,292"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="231,1260,232,1070,237,933,246,783,261,633,284,495,298,434,315,380,335,336,358,302,377,286,381,290,362,305,340,338,320,382,303,435,289,496,266,634,251,783,242,933,238,1070,236,1260"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1oks_1_1BadFileData.html" title=" " alt="" coords="386,316,560,342"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="231,1261,233,1079,237,948,246,805,262,663,284,532,299,475,316,424,335,383,358,351,384,334,387,338,362,355,340,385,321,426,304,476,289,533,267,663,252,805,242,948,238,1079,236,1261"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1oks_1_1BadReqExp.html" title=" " alt="" coords="388,365,558,391"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="231,1261,234,1087,240,963,249,828,265,694,287,571,301,517,318,469,337,430,358,400,385,382,388,387,362,404,341,433,323,471,306,518,292,572,270,695,255,829,245,963,239,1087,237,1261"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1oks_1_1CanNotBackupFile.html" title="Failed backup file." alt="" coords="367,415,579,440"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="232,1260,236,1094,242,977,252,851,268,725,290,609,320,514,338,478,358,450,372,439,375,443,362,453,342,480,325,516,295,611,273,726,258,851,247,978,241,1095,237,1260"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1oks_1_1CanNotCreateFile.html" title="Cannot create file." alt="" coords="370,464,576,490"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="232,1261,238,1104,256,876,272,758,293,650,322,561,339,527,358,500,374,488,377,492,362,504,343,529,327,563,299,651,277,759,261,876,243,1105,237,1261"/>
+<area shape="rect" id="Node000012" href="$classdunedaq_1_1oks_1_1CanNotCreateRepositoryDir.html" title="Cannot create file." alt="" coords="380,514,565,555"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="233,1260,241,1116,261,907,278,800,299,701,325,620,341,589,358,564,378,549,381,553,362,568,345,591,330,622,304,703,283,801,267,908,246,1116,238,1261"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1oks_1_1CanNotOpenFile.html" title="Cannot open file." alt="" coords="373,579,572,604"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="233,1260,242,1123,263,929,279,830,300,739,326,664,341,636,358,614,372,603,375,607,362,617,346,638,331,667,305,740,284,831,268,930,247,1124,238,1260"/>
+<area shape="rect" id="Node000014" href="$classdunedaq_1_1oks_1_1CanNotSetActiveFile.html" title="Failed to set active file." alt="" coords="360,628,585,654"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="233,1261,244,1133,266,954,282,862,303,778,328,710,342,683,358,663,372,652,376,656,362,667,347,686,333,712,308,780,288,863,271,954,249,1134,239,1261"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1oks_1_1CanNotSetFile.html" title="Failed move item to file." alt="" coords="379,677,567,703"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="234,1260,246,1142,270,978,286,894,306,818,330,756,344,732,358,714,377,700,380,705,362,717,348,735,335,758,311,820,291,896,275,979,251,1143,239,1261"/>
+<area shape="rect" id="Node000016" href="$classdunedaq_1_1oks_1_1CanNotWriteToFile.html" title="Failed write to file." alt="" coords="384,727,561,768"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="235,1260,249,1154,275,1010,292,937,311,870,333,815,358,778,382,761,385,765,362,781,338,818,316,872,297,938,280,1011,255,1155,240,1261"/>
+<area shape="rect" id="Node000017" href="$classdunedaq_1_1oks_1_1CannotAddClass.html" title="Failed add new class." alt="" coords="373,792,573,818"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="235,1260,251,1163,277,1034,294,969,313,909,335,861,358,828,375,816,378,820,362,832,339,864,318,911,299,970,283,1035,256,1164,241,1261"/>
+<area shape="rect" id="Node000018" href="$classdunedaq_1_1oks_1_1CannotDestroyClass.html" title=" " alt="" coords="379,842,567,883"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="232,1260,238,1187,257,1089,273,1036,294,984,322,936,358,894,376,880,380,884,362,897,327,939,299,987,278,1038,262,1090,243,1188,237,1260"/>
+<area shape="rect" id="Node000019" href="$classdunedaq_1_1oks_1_1CannotFindSuperClass.html" title=" " alt="" coords="388,907,557,948"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="234,1260,244,1198,265,1117,281,1074,302,1033,327,993,358,959,386,941,389,945,362,963,331,997,306,1035,286,1077,270,1119,249,1199,239,1261"/>
+<area shape="rect" id="Node000020" href="$classdunedaq_1_1oks_1_1CannotRegisterClass.html" title=" " alt="" coords="377,973,569,1013"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="237,1260,250,1209,274,1145,309,1079,332,1049,358,1023,375,1011,378,1016,362,1027,336,1053,313,1082,279,1147,255,1211,242,1261"/>
+<area shape="rect" id="Node000021" href="$classdunedaq_1_1oks_1_1CannotResolvePath.html" title="Failed resolve path." alt="" coords="364,1037,582,1063"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="240,1260,255,1218,280,1167,314,1115,335,1092,358,1072,377,1061,380,1066,362,1076,339,1096,318,1119,284,1170,260,1220,245,1262"/>
+<area shape="rect" id="Node000022" href="$classdunedaq_1_1oks_1_1EndOfXmlStream.html" title=" " alt="" coords="371,1087,575,1112"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="245,1261,263,1228,288,1190,320,1153,359,1121,380,1110,383,1115,361,1126,324,1156,292,1193,267,1231,249,1263"/>
+<area shape="rect" id="Node000023" href="$classdunedaq_1_1oks_1_1FailedAddComment.html" title="Cannot add comment. Such exception is thrown when OKS cannot add new comment." alt="" coords="364,1136,581,1162"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="252,1262,297,1215,327,1191,359,1170,385,1160,387,1165,361,1175,330,1195,301,1219,256,1266"/>
+<area shape="rect" id="Node000024" href="$classdunedaq_1_1oks_1_1FailedAddInclude.html" title="Cannot add include file. Such exception is thrown when OKS cannot add include file." alt="" coords="371,1185,574,1211"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="267,1266,310,1242,359,1221,399,1209,401,1214,361,1226,313,1247,270,1270"/>
+<area shape="rect" id="Node000025" href="$classdunedaq_1_1oks_1_1FailedChangeComment.html" title="Cannot change comment. Such exception is thrown when OKS cannot change comment." alt="" coords="382,1235,564,1276"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="327,1273,381,1266,382,1271,328,1278"/>
+<area shape="rect" id="Node000026" href="$classdunedaq_1_1oks_1_1FailedCreateObject.html" title=" " alt="" coords="385,1301,561,1341"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="328,1299,384,1306,384,1312,327,1304"/>
+<area shape="rect" id="Node000027" href="$classdunedaq_1_1oks_1_1FailedDestoyObject.html" title=" " alt="" coords="384,1366,562,1407"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="272,1307,361,1350,396,1363,394,1368,359,1355,269,1312"/>
+<area shape="rect" id="Node000028" href="$classdunedaq_1_1oks_1_1FailedLoadFile.html" title="Cannot load file." alt="" coords="379,1431,567,1456"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="254,1313,299,1366,328,1393,361,1416,389,1428,387,1433,359,1421,325,1397,295,1370,250,1316"/>
+<area shape="rect" id="Node000029" href="$classdunedaq_1_1oks_1_1FailedRead.html" title=" " alt="" coords="389,1480,557,1506"/>
+<area shape="poly" id="edge28_Node000001_Node000029" title=" " alt="" coords="248,1315,265,1350,290,1392,322,1433,361,1467,389,1480,387,1485,359,1471,318,1436,286,1395,261,1353,243,1317"/>
+<area shape="rect" id="Node000030" href="$classdunedaq_1_1oks_1_1FailedReadObject.html" title=" " alt="" coords="389,1530,557,1571"/>
+<area shape="poly" id="edge29_Node000001_Node000030" title=" " alt="" coords="244,1315,259,1360,283,1414,317,1469,338,1494,362,1516,389,1532,387,1537,358,1520,334,1498,313,1472,279,1416,254,1362,239,1317"/>
+<area shape="rect" id="Node000031" href="$classdunedaq_1_1oks_1_1FailedReloadFile.html" title="Cannot re&#45;load files." alt="" coords="373,1595,572,1620"/>
+<area shape="poly" id="edge30_Node000001_Node000031" title=" " alt="" coords="240,1316,251,1373,273,1444,289,1482,309,1518,333,1551,362,1580,381,1592,378,1596,358,1584,329,1555,304,1521,284,1484,268,1446,246,1374,235,1317"/>
+<area shape="rect" id="Node000032" href="$classdunedaq_1_1oks_1_1FailedRemoveComment.html" title="Cannot remove comment. Such exception is thrown when OKS cannot remove comment." alt="" coords="380,1645,566,1685"/>
+<area shape="poly" id="edge31_Node000001_Node000032" title=" " alt="" coords="239,1317,247,1381,268,1466,284,1511,304,1555,330,1595,362,1631,381,1644,378,1649,358,1635,326,1598,300,1557,279,1513,263,1468,242,1382,233,1317"/>
+<area shape="rect" id="Node000033" href="$classdunedaq_1_1oks_1_1FailedRemoveInclude.html" title="Cannot remove include file. Such exception is thrown when OKS cannot remove include file." alt="" coords="380,1710,566,1751"/>
+<area shape="poly" id="edge32_Node000001_Node000033" title=" " alt="" coords="237,1317,242,1392,260,1494,276,1548,297,1601,326,1651,362,1695,381,1709,377,1713,358,1699,321,1654,292,1604,271,1550,255,1495,237,1393,232,1317"/>
+<area shape="rect" id="Node000034" href="$classdunedaq_1_1oks_1_1FailedRenameInclude.html" title="Cannot rename include file. Such exception is thrown when OKS cannot rename include file." alt="" coords="380,1775,566,1816"/>
+<area shape="poly" id="edge33_Node000001_Node000034" title=" " alt="" coords="241,1316,256,1415,283,1549,299,1616,318,1677,339,1727,362,1760,381,1775,378,1779,358,1764,335,1729,313,1679,294,1617,277,1550,251,1416,235,1317"/>
+<area shape="rect" id="Node000035" href="$classdunedaq_1_1oks_1_1FailedRenameObject.html" title=" " alt="" coords="380,1841,566,1881"/>
+<area shape="poly" id="edge34_Node000001_Node000035" title=" " alt="" coords="240,1316,253,1427,278,1580,295,1658,315,1729,337,1787,362,1826,381,1840,377,1844,358,1829,332,1789,310,1730,290,1659,273,1581,248,1428,234,1317"/>
+<area shape="rect" id="Node000036" href="$classdunedaq_1_1oks_1_1FailedSave.html" title=" " alt="" coords="389,1905,557,1931"/>
+<area shape="poly" id="edge35_Node000001_Node000036" title=" " alt="" coords="239,1316,250,1440,273,1613,289,1701,310,1782,334,1847,347,1872,362,1891,389,1908,386,1913,358,1895,343,1875,329,1849,304,1783,284,1703,267,1614,245,1440,233,1317"/>
+<area shape="rect" id="Node000037" href="$classdunedaq_1_1oks_1_1FailedSaveObject.html" title=" " alt="" coords="389,1955,557,1996"/>
+<area shape="poly" id="edge36_Node000001_Node000037" title=" " alt="" coords="238,1317,249,1449,271,1637,287,1733,308,1821,333,1893,347,1921,362,1942,390,1961,387,1965,358,1945,342,1924,328,1895,303,1822,282,1734,265,1638,243,1450,233,1317"/>
+<area shape="rect" id="Node000038" href="$classdunedaq_1_1oks_1_1FileChangeError.html" title=" " alt="" coords="389,2021,557,2061"/>
+<area shape="poly" id="edge37_Node000001_Node000038" title=" " alt="" coords="238,1317,246,1460,267,1667,283,1774,304,1871,330,1951,346,1982,362,2006,389,2025,386,2029,358,2009,341,1985,325,1953,299,1873,278,1775,262,1668,241,1461,233,1317"/>
+<area shape="rect" id="Node000039" href="$classdunedaq_1_1oks_1_1FileCompareError.html" title=" " alt="" coords="385,2086,561,2127"/>
+<area shape="poly" id="edge38_Node000001_Node000039" title=" " alt="" coords="237,1317,244,1472,263,1699,279,1816,301,1923,328,2011,344,2045,362,2071,386,2089,382,2093,358,2075,340,2048,323,2013,295,1924,274,1817,258,1699,239,1472,232,1317"/>
+<area shape="rect" id="Node000040" href="$classdunedaq_1_1oks_1_1FileLockError.html" title="Cannot add include file. Such exception is thrown when OKS cannot add include file." alt="" coords="383,2151,563,2176"/>
+<area shape="poly" id="edge39_Node000001_Node000040" title=" " alt="" coords="237,1317,241,1484,247,1603,257,1731,273,1859,295,1976,309,2027,324,2072,342,2109,362,2136,384,2152,380,2156,358,2140,337,2111,319,2074,304,2029,290,1977,268,1860,252,1732,242,1603,236,1484,232,1317"/>
+<area shape="rect" id="Node000041" href="$classdunedaq_1_1oks_1_1ObjectBindError.html" title=" " alt="" coords="389,2201,556,2241"/>
+<area shape="poly" id="edge40_Node000001_Node000041" title=" " alt="" coords="237,1317,240,1492,246,1617,256,1754,271,1890,294,2014,308,2069,323,2117,342,2157,362,2187,375,2198,390,2207,388,2211,372,2203,358,2191,337,2160,319,2119,302,2071,288,2016,266,1890,251,1754,241,1618,235,1492,231,1317"/>
+<area shape="rect" id="Node000042" href="$classdunedaq_1_1oks_1_1ObjectGetError.html" title=" " alt="" coords="378,2265,567,2291"/>
+<area shape="poly" id="edge41_Node000001_Node000042" title=" " alt="" coords="236,1317,237,1504,241,1639,250,1786,265,1932,288,2067,303,2125,320,2177,340,2219,362,2251,379,2264,376,2269,358,2255,335,2222,315,2179,298,2127,283,2068,260,1933,245,1786,236,1639,232,1504,231,1317"/>
+<area shape="rect" id="Node000043" href="$classdunedaq_1_1oks_1_1ObjectInitError.html" title=" " alt="" coords="393,2315,552,2356"/>
+<area shape="poly" id="edge42_Node000001_Node000043" title=" " alt="" coords="236,1317,237,1512,241,1654,249,1808,264,1963,287,2105,302,2167,319,2222,339,2267,362,2302,376,2314,394,2323,391,2328,373,2319,358,2305,335,2270,314,2224,297,2169,282,2106,259,1963,244,1808,235,1654,231,1512,231,1317"/>
+<area shape="rect" id="Node000044" href="$classdunedaq_1_1oks_1_1ObjectOperationFailed.html" title=" " alt="" coords="374,2381,571,2421"/>
+<area shape="poly" id="edge43_Node000001_Node000044" title=" " alt="" coords="238,1317,252,1538,278,1872,295,2041,315,2191,338,2304,350,2343,362,2366,376,2378,372,2382,358,2369,345,2345,332,2306,310,2192,290,2042,272,1872,246,1538,233,1317"/>
+<area shape="rect" id="Node000045" href="$classdunedaq_1_1oks_1_1ObjectSetError.html" title=" " alt="" coords="379,2445,567,2471"/>
+<area shape="poly" id="edge44_Node000001_Node000045" title=" " alt="" coords="238,1317,250,1550,274,1906,291,2086,312,2245,335,2366,348,2407,362,2431,380,2445,376,2449,358,2435,344,2409,330,2368,307,2246,286,2087,269,1906,244,1551,233,1317"/>
+<area shape="rect" id="Node000046" href="$classdunedaq_1_1oks_1_1QueryFailed.html" title=" " alt="" coords="387,2495,559,2520"/>
+<area shape="poly" id="edge45_Node000001_Node000046" title=" " alt="" coords="238,1317,249,1560,272,1932,289,2121,310,2287,334,2414,348,2456,362,2482,388,2499,385,2503,358,2485,343,2459,329,2415,305,2288,284,2121,267,1932,243,1560,233,1318"/>
+<area shape="rect" id="Node000047" href="$classdunedaq_1_1oks_1_1RepositoryOperationFailed.html" title="Cannot commit, checkout or release files." alt="" coords="391,2545,555,2585"/>
+<area shape="poly" id="edge46_Node000001_Node000047" title=" " alt="" coords="238,1317,249,1567,272,1954,289,2152,310,2326,334,2459,348,2504,362,2531,375,2543,391,2552,389,2556,372,2547,358,2534,343,2506,329,2461,305,2327,284,2152,267,1955,243,1568,232,1317"/>
+<area shape="rect" id="Node000048" href="$classdunedaq_1_1oks_1_1SetOperationFailed.html" title=" " alt="" coords="383,2610,562,2651"/>
+<area shape="poly" id="edge47_Node000001_Node000048" title=" " alt="" coords="238,1317,248,1579,271,1987,288,2195,308,2379,333,2519,347,2567,362,2595,384,2613,381,2617,358,2599,342,2569,328,2521,303,2380,282,2195,265,1987,242,1580,232,1317"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,1276,106,1302"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,1286,153,1286,153,1292,121,1292"/>
+</map>

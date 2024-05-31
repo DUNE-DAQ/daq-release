@@ -1,0 +1,6 @@
+<map id="dunedaq::appdal::TimingTriggerOffsetMap" name="dunedaq::appdal::TimingTriggerOffsetMap">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,205,120"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="13,5,197,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,46,100,79,94,79,94,47"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="116,47,116,79,110,79,111,46"/>
+</map>

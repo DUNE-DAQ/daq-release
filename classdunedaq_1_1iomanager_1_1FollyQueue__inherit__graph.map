@@ -1,0 +1,11 @@
+<map id="dunedaq::iomanager::FollyQueue&lt; T, FollyQueueType &gt;" name="dunedaq::iomanager::FollyQueue&lt; T, FollyQueueType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,360,189,416"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1iomanager_1_1Queue.html" title="Implementations of the Queue class are responsible for relaying data between DAQModules within a DAQ ..." alt="" coords="29,271,165,312"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,327,100,359,94,359,94,327"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1iomanager_1_1QueueBase.html" title="The QueueBase class allows to address generic behavior of any Queue implementation." alt="" coords="29,183,165,223"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,239,100,271,94,271,94,239"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1utilities_1_1NamedObject.html" title="Implements the Named interface." alt="" coords="38,94,156,135"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,150,100,182,94,182,94,150"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1utilities_1_1Named.html" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="38,5,156,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,62,100,94,94,94,94,62"/>
+</map>

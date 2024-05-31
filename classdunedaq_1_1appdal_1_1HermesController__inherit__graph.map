@@ -1,0 +1,14 @@
+<map id="dunedaq::appdal::HermesController" name="dunedaq::appdal::HermesController">
+<area shape="rect" id="Node000001" title=" " alt="" coords="96,153,317,178"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1coredal_1_1DaqModule.html" title=" " alt="" coords="5,79,195,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,112,183,150,180,154,122,116"/>
+<area shape="poly" id="edge7_Node000001_Node000002" title=" " alt="" coords="139,111,197,150,194,155,136,115"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="115,5,299,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,41,112,81,109,76,167,37"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="185,43,127,81,124,76,182,38"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1appdal_1_1IpbusDevice.html" title=" " alt="" coords="219,79,411,105"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="232,38,291,76,288,81,229,43"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="246,37,305,76,302,81,243,41"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="278,115,219,155,216,150,275,111"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="293,116,233,154,231,150,290,112"/>
+</map>

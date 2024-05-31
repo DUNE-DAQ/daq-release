@@ -1,0 +1,27 @@
+<map id="dunedaq::coredal::Jsonable" name="dunedaq::coredal::Jsonable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="238,140,414,165"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1appdal_1_1TAAlgorithm.html" title=" " alt="" coords="462,78,654,104"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="424,133,529,102,530,107,425,138"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="368,132,473,102,475,107,369,137"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1appdal_1_1TCAlgorithm.html" title=" " alt="" coords="462,168,654,193"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="391,166,462,175,461,180,390,171"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="430,153,509,164,508,170,429,159"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="5,140,190,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,159,237,158,237,164,205,164"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="205,141,237,141,237,146,205,146"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1appdal_1_1TriggerActivityMakerHorizontalMuonPlugin.html" title=" " alt="" coords="702,5,929,46"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="659,71,761,44,762,49,661,77"/>
+<area shape="poly" id="edge5_Node000003_Node000004" title=" " alt="" coords="603,70,701,43,702,48,604,75"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1appdal_1_1TriggerActivityMakerPrescalePlugin.html" title=" " alt="" coords="722,71,909,111"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="670,97,721,97,721,102,670,103"/>
+<area shape="poly" id="edge7_Node000003_Node000005" title=" " alt="" coords="670,79,721,80,721,85,670,85"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1appdal_1_1TCCustom.html" title=" " alt="" coords="724,136,907,161"/>
+<area shape="poly" id="edge10_Node000006_Node000007" title=" " alt="" coords="669,173,764,159,765,164,670,178"/>
+<area shape="poly" id="edge11_Node000006_Node000007" title=" " alt="" coords="623,162,724,148,724,154,624,167"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1appdal_1_1TriggerCandidateMakerHorizontalMuonPlugin.html" title=" " alt="" coords="713,186,918,242"/>
+<area shape="poly" id="edge12_Node000006_Node000008" title=" " alt="" coords="623,194,713,207,712,212,622,199"/>
+<area shape="poly" id="edge13_Node000006_Node000008" title=" " alt="" coords="670,183,713,189,712,194,669,188"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1appdal_1_1TriggerCandidateMakerPrescalePlugin.html" title=" " alt="" coords="714,265,917,306"/>
+<area shape="poly" id="edge14_Node000006_Node000009" title=" " alt="" coords="584,200,638,233,703,263,715,268,713,272,701,268,635,237,581,205"/>
+<area shape="poly" id="edge15_Node000006_Node000009" title=" " alt="" coords="614,198,703,239,772,262,771,267,701,244,612,203"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="/github/workspace/dev_area/build/dfmodules/codegen/include/dfmodules/hdf5datastore/Structs.hpp" name="/github/workspace/dev_area/build/dfmodules/codegen/include/dfmodules/hdf5datastore/Structs.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="99,5,283,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="73,213,133,238"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,64,52,88,31,105,15,125,8,144,15,163,35,187,60,204,57,209,31,191,10,166,3,144,10,123,28,101,49,84,98,60"/>
+<area shape="rect" id="Node000003" href="$hdf5libs_2codegen_2include_2hdf5libs_2hdf5filelayout_2Structs_8hpp.html" title=" " alt="" coords="206,124,352,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,74,254,110,250,114,219,78"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="295,213,348,238"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="284,61,330,85,350,102,367,123,373,143,369,165,359,185,346,203,341,200,354,183,364,163,368,144,362,125,346,106,327,90,282,66"/>
+<area shape="rect" id="Node000006" href="$hdf5libs_2codegen_2include_2hdf5libs_2hdf5rawdatafile_2Structs_8hpp.html" title=" " alt="" coords="24,124,182,165"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="163,78,132,114,128,110,159,74"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="236,168,145,208,143,204,234,163"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="206,213,264,238"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="270,166,251,200,247,198,266,164"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="292,164,310,197,305,200,287,166"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="106,165,106,197,100,197,100,165"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="137,163,203,202,200,207,135,168"/>
+</map>

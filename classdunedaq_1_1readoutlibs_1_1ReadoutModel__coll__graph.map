@@ -1,0 +1,9 @@
+<map id="dunedaq::readoutlibs::ReadoutModel&lt; ReadoutType, RequestHandlerType, LatencyBufferType, RawDataProcessorType &gt;" name="dunedaq::readoutlibs::ReadoutModel&lt; ReadoutType, RequestHandlerType, LatencyBufferType, RawDataProcessorType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="341,56,573,126"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1ReadoutConcept.html" title=" " alt="" coords="19,5,158,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,38,341,68,340,73,173,43"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="5,71,172,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,88,340,88,340,94,187,94"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1readoutlibs_1_1ReusableThread.html" title=" " alt="" coords="19,136,158,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="173,145,316,124,340,119,341,124,317,129,174,150"/>
+</map>

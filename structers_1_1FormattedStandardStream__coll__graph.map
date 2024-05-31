@@ -1,0 +1,11 @@
+<map id="ers::FormattedStandardStream&lt; Device &gt;" name="ers::FormattedStandardStream&lt; Device &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="87,199,285,240"/>
+<area shape="rect" id="Node000002" href="$classers_1_1OutputStream.html" title="ERS abstract output stream interface." alt="" coords="5,103,132,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,137,165,196,161,200,92,141"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="155,103,217,129"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,144,189,198,183,198,183,144"/>
+<area shape="rect" id="Node000004" href="$structers_1_1FormattedStandardStream_1_1Fields.html" title=" " alt="" coords="240,95,438,136"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="299,147,217,201,214,196,296,142"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="269,5,410,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="342,62,342,95,337,95,337,62"/>
+</map>

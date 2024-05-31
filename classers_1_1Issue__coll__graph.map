@@ -1,0 +1,7 @@
+<map id="ers::Issue" name="ers::Issue">
+<area shape="rect" id="Node000001" title="Base class for any user define issue." alt="" coords="77,94,154,120"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,106,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,42,109,92,105,95,70,45"/>
+<area shape="rect" id="Node000003" href="$structers_1_1Severity.html" title=" " alt="" coords="129,5,222,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,45,126,95,122,92,156,42"/>
+</map>

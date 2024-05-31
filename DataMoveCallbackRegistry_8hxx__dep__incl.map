@@ -1,0 +1,16 @@
+<map id="/github/workspace/dev_area/sourcecode/readoutlibs/include/readoutlibs/detail/DataMoveCallbackRegistry.hxx" name="/github/workspace/dev_area/sourcecode/readoutlibs/include/readoutlibs/detail/DataMoveCallbackRegistry.hxx">
+<area shape="rect" id="Node000001" title=" " alt="" coords="267,5,470,76"/>
+<area shape="rect" id="Node000002" href="$DataMoveCallbackRegistry_8hpp.html" title=" " alt="" coords="245,124,491,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="371,91,371,124,366,124,366,91"/>
+<area shape="rect" id="Node000003" href="$SourceModel_8hpp.html" title=" " alt="" coords="5,250,182,306"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="273,204,159,252,157,247,271,199"/>
+<area shape="rect" id="Node000005" href="$ReadoutModel_8hpp.html" title=" " alt="" coords="206,243,397,313"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="343,209,324,244,319,241,339,207"/>
+<area shape="rect" id="Node000006" href="$Readoutlibs_8cpp.html" title=" " alt="" coords="273,361,464,417"/>
+<area shape="poly" id="edge7_Node000002_Node000006" title=" " alt="" coords="400,208,412,242,418,278,412,314,402,340,390,362,385,360,398,337,407,313,413,278,407,243,395,210"/>
+<area shape="rect" id="Node000007" href="$DataMoveCallbackRegistry_8cpp.html" title=" " alt="" coords="472,250,699,306"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="447,200,536,247,534,252,445,205"/>
+<area shape="rect" id="Node000004" href="$CreateSource_8hpp.html" title=" " alt="" coords="5,361,182,417"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="96,321,96,361,91,361,91,321"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="333,325,354,360,349,362,328,328"/>
+</map>

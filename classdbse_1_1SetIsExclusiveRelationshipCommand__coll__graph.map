@@ -1,0 +1,40 @@
+<map id="dbse::SetIsExclusiveRelationshipCommand" name="dbse::SetIsExclusiveRelationshipCommand">
+<area shape="rect" id="Node000001" title=" " alt="" coords="89,406,301,447"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="228,310,349,336"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,352,281,368,272,384,243,408,240,404,268,381,276,366,282,350"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1oks_1_1OksRelationship.html" title=" " alt="" coords="5,310,204,336"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,347,150,381,174,404,170,408,146,384,119,350"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1oks_1_1OksClass.html" title="The OKS class." alt="" coords="338,184,498,210"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="355,217,293,236,201,276,128,312,126,307,199,271,292,231,353,212"/>
+<area shape="rect" id="Node000012" href="$uniondunedaq_1_1oks_1_1OksData_1_1Data.html" title=" " alt="" coords="815,303,970,343"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="480,211,818,299,817,305,478,217"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1oks_1_1OksFile.html" title="Provides interface to the OKS XML schema and data files." alt="" coords="546,762,695,788"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="530,773,480,763,433,745,414,732,398,716,388,696,385,673,385,322,387,289,394,258,410,209,415,211,399,259,393,290,390,322,390,673,393,695,403,713,417,728,436,740,481,758,531,767"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="712,766,721,775,713,784,695,787,694,782,711,779,716,775,708,771"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1oks_1_1OksKernel.html" title="Provides interface to the OKS kernel." alt="" coords="538,659,703,684"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="628,747,630,738,630,709,623,685,628,684,635,708,635,739,633,748"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1oks_1_1OksObject.html" title="OksObject describes instance of OksClass." alt="" coords="867,510,1033,536"/>
+<area shape="poly" id="edge19_Node000009_Node000005" title=" " alt="" coords="709,757,767,740,827,715,883,680,908,658,929,633,941,609,947,582,948,536,954,536,952,582,946,610,933,636,912,662,887,684,830,720,769,745,711,762"/>
+<area shape="poly" id="edge20_Node000004_Node000006" title=" " alt="" coords="570,655,529,635,489,606,472,589,458,570,449,548,446,524,446,322,443,290,436,259,420,211,425,209,442,258,448,289,451,322,451,524,454,547,463,567,476,586,492,602,532,630,572,650"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="592,696,583,709,579,723,583,737,591,750,603,760,599,764,587,753,578,739,574,723,578,707,587,693"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1oks_1_1OksProfiler.html" title=" " alt="" coords="486,510,654,536"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="578,550,588,590,603,634,615,657,610,659,598,636,583,591,573,551"/>
+<area shape="rect" id="Node000008" href="$structdunedaq_1_1oks_1_1LoadErrors.html" title=" " alt="" coords="677,510,844,536"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="699,544,675,562,662,579,656,595,652,614,644,636,630,660,626,657,639,634,647,612,651,594,657,576,671,558,696,540"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="852,540,812,550,786,562,774,579,771,597,769,617,756,637,731,653,704,663,702,658,729,648,752,633,764,615,766,597,769,577,782,558,810,545,851,535"/>
+<area shape="poly" id="edge15_Node000012_Node000009" title=" " alt="" coords="962,495,977,453,979,430,974,407,964,389,951,373,920,346,924,342,954,369,968,386,979,405,984,429,982,454,967,497"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="768,184,822,210"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="789,225,779,271,773,328,778,389,786,419,800,445,819,467,843,484,895,507,893,512,840,489,816,471,796,449,781,421,772,390,767,328,774,270,784,224"/>
+<area shape="poly" id="edge18_Node000012_Node000010" title=" " alt="" coords="838,211,865,232,884,267,893,301,888,303,879,269,861,235,835,215"/>
+<area shape="rect" id="Node000011" href="$structdunedaq_1_1oks_1_1OksData.html" title="the structure to pass common parameters to various read() methods of OksData and OksObject class" alt="" coords="810,414,964,440"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="906,451,944,508,940,511,901,454"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="893,359,890,414,885,413,888,359"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1oks_1_1OksString.html" title="Class OKS string." alt="" coords="873,184,1035,210"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="949,225,927,280,911,304,907,301,922,277,944,223"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="915,95,993,121"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="957,137,957,184,951,184,951,137"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="327,95,509,121"/>
+<area shape="poly" id="edge21_Node000004_Node000015" title=" " alt="" coords="421,137,421,184,415,184,415,137"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="351,5,485,46"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="421,61,421,95,415,95,415,61"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ers::Context" name="ers::Context">
+<area shape="rect" id="Node000001" title="An abstract interface to access an Issue context." alt="" coords="97,5,187,31"/>
+<area shape="rect" id="Node000002" href="$classers_1_1LocalContext.html" title=" " alt="" coords="5,79,127,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,44,81,81,77,77,116,40"/>
+<area shape="rect" id="Node000003" href="$classers_1_1RemoteContext.html" title=" " alt="" coords="151,79,285,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,40,207,77,203,81,164,44"/>
+</map>

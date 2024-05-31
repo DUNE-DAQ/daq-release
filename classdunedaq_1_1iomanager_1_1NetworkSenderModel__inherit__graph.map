@@ -1,0 +1,11 @@
+<map id="dunedaq::iomanager::NetworkSenderModel&lt; Datatype &gt;" name="dunedaq::iomanager::NetworkSenderModel&lt; Datatype &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="24,360,176,416"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1iomanager_1_1SenderConcept.html" title=" " alt="" coords="5,271,195,312"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,327,103,359,97,359,97,327"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1iomanager_1_1Sender.html" title=" " alt="" coords="32,183,168,223"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,239,103,271,97,271,97,239"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1utilities_1_1NamedObject.html" title="Implements the Named interface." alt="" coords="41,94,159,135"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,150,103,182,97,182,97,150"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1utilities_1_1Named.html" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="41,5,159,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="103,62,103,94,97,94,97,62"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::MIBV2IONode" name="dunedaq::timing::MIBV2IONode">
+<area shape="rect" id="Node000001" title="Class for the timing FMC board." alt="" coords="5,226,208,252"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1IONode.html" title="Base class for timing IO nodes." alt="" coords="25,153,188,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,194,109,226,104,226,104,194"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="13,79,200,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,120,109,152,104,152,104,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="65,5,148,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,46,109,79,104,79,104,46"/>
+</map>

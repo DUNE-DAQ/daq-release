@@ -1,0 +1,6 @@
+<map id="dunedaq::appdal::RoHwConfig" name="dunedaq::appdal::RoHwConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,198,105"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="9,5,194,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,46,97,78,92,79,90,46"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="113,46,111,79,106,78,108,46"/>
+</map>

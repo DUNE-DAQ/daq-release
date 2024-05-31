@@ -1,0 +1,7 @@
+<map id="dunedaq::fddetdataformats::ColdataBlock" name="dunedaq::fddetdataformats::ColdataBlock">
+<area shape="rect" id="Node000001" title="COLDATA block struct." alt="" coords="288,39,462,79"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1fddetdataformats_1_1ColdataHeader.html" title="COLDATA header struct." alt="" coords="5,5,180,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,35,287,46,287,51,195,40"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1fddetdataformats_1_1ColdataSegment.html" title="COLDATA segment struct." alt="" coords="5,71,180,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,77,287,66,287,72,195,82"/>
+</map>

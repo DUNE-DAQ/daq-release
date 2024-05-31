@@ -1,0 +1,9 @@
+<map id="dbe::widgets::editors::relation" name="dbe::widgets::editors::relation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="93,168,232,208"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1widgets_1_1editors_1_1base.html" title=" " alt="" coords="5,79,144,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,129,144,165,141,169,103,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="39,5,110,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,46,77,79,72,79,72,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="168,87,336,112"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="230,125,185,169,181,165,227,121"/>
+</map>

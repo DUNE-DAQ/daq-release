@@ -1,0 +1,30 @@
+<map id="/github/workspace/dev_area/sourcecode/hdf5libs" name="/github/workspace/dev_area/sourcecode/hdf5libs">
+<area shape="rect" id="node1" href="dir_d6186462c2ecf8bc2243dcff615e0cdf.html" title="daqdataformats" alt="" coords="82,210,193,236"/>
+<area shape="rect" id="node2" href="dir_f74a706a7efda297e6d8fb2c03527fc2.html" title="logging" alt="" coords="349,210,411,236"/>
+<area shape="rect" id="node3" href="dir_49997343c4c8eab520bf1e45b9cad06f.html" title="detdataformats" alt="" coords="217,210,325,236"/>
+<area shape="rect" id="node5" href="dir_4eb24901713f4232a23d7d084aabca32.html" title="docs" alt="" coords="369,63,418,89"/>
+<area shape="rect" id="node6" href="dir_0acd3222a357691c0ea87aa635a13eaa.html" title="include" alt="" coords="253,137,315,162"/>
+<area shape="poly" id="edge3" href="dir_000266_000082.html" alt="" coords="260,165,177,205,175,201,258,160"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000266_000082.html" title="9" alt="" coords="179,202,186,217"/>
+<area shape="poly" id="edge4" href="dir_000266_000308.html" alt="" coords="302,161,354,199,350,203,299,165"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000266_000308.html" title="1" alt="" coords="351,185,358,200"/>
+<area shape="poly" id="edge1" href="dir_000266_000112.html" alt="" coords="284,163,278,195,273,194,279,162"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000266_000112.html" title="1" alt="" coords="281,186,288,201"/>
+<area shape="rect" id="node11" href="dir_bbc7c2c1f127b379ce39be24c4bd3dbe.html" title="build" alt="" coords="540,210,588,236"/>
+<area shape="poly" id="edge2" href="dir_000266_000030.html" alt="" coords="316,154,408,174,526,205,524,210,407,179,315,159"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000266_000030.html" title="4" alt="" coords="521,191,528,206"/>
+<area shape="rect" id="node7" href="dir_ddbf71203e6dd14acf1dc9815672b0c0.html" title="pybindsrc" alt="" coords="38,63,114,89"/>
+<area shape="poly" id="edge5" href="dir_000343_000266.html" alt="" coords="112,87,239,130,237,135,110,92"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000343_000266.html" title="1" alt="" coords="234,116,241,131"/>
+<area shape="rect" id="node8" href="dir_d88bff1a3288d012d5704a5f57c32b28.html" title="python" alt="" coords="222,63,282,89"/>
+<area shape="rect" id="node9" href="dir_08bb4e34c9117609c2904693275889ba.html" title="scripts" alt="" coords="138,63,198,89"/>
+<area shape="rect" id="node10" href="dir_d893bb7a09fcaad9ce8d10a0cf0d3e29.html" title="src" alt="" coords="306,63,345,89"/>
+<area shape="poly" id="edge8" href="dir_000442_000308.html" alt="" coords="332,88,373,195,368,197,327,90"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000442_000308.html" title="2" alt="" coords="373,182,380,197"/>
+<area shape="poly" id="edge6" href="dir_000442_000266.html" alt="" coords="321,90,301,125,296,122,316,88"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000442_000266.html" title="3" alt="" coords="304,117,311,132"/>
+<area shape="poly" id="edge7" href="dir_000442_000030.html" alt="" coords="346,82,488,134,522,164,549,196,545,199,519,168,485,139,344,87"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000442_000030.html" title="3" alt="" coords="549,183,556,198"/>
+<area shape="rect" id="clust2" href="dir_d24e48c8882d994109a98cb136e7ee99.html" alt="" coords="27,52,519,173"/>
+<area shape="rect" id="clust1" href="dir_e594a494f7a60e5bf534551500b27d35.html" title="sourcecode" alt="" coords="16,16,529,247"/>
+</map>

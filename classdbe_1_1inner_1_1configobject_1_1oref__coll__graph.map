@@ -1,0 +1,34 @@
+<map id="dbe::inner::configobject::oref" name="dbe::inner::configobject::oref">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1725,384,1876,424"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1inner_1_1configobject_1_1wref.html" title=" " alt="" coords="1507,384,1659,424"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1674,401,1724,401,1724,407,1674,407"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1conffwk_1_1ConfigObject.html" title="Represents database objects." alt="" coords="1278,384,1441,424"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1457,401,1507,401,1507,407,1457,407"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1conffwk_1_1ConfigObjectImpl.html" title="Implements database objects." alt="" coords="1002,384,1166,424"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1181,401,1278,401,1278,407,1181,407"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1conffwk_1_1ConfigurationImpl.html" title="Provides pure virtual interface used by the Configuration class." alt="" coords="590,384,818,410"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="833,400,842,400,1002,402,1002,407,842,405,833,405"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1conffwk_1_1Configuration.html" title=" " alt="" coords="983,232,1185,258"/>
+<area shape="poly" id="edge16_Node000008_Node000005" title=" " alt="" coords="754,376,817,351,841,340,874,331,900,326,926,321,958,311,1015,284,1061,256,1064,261,1017,288,960,316,927,326,901,331,875,336,843,345,819,356,756,381"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1conffwk_1_1pmap.html" title=" " alt="" coords="236,399,448,470"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="463,419,590,406,591,411,464,425"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,392,186,477"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="201,432,235,432,235,437,201,437"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="1065,272,1020,318,991,341,960,360,900,376,818,389,818,383,899,371,958,355,988,337,1017,314,1061,268"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="604,26,804,67"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="803,69,881,97,960,135,994,158,1026,184,1072,230,1069,234,1022,188,991,162,957,139,879,102,801,74"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="270,5,414,61"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="430,34,604,40,604,45,429,39"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="626,108,782,148"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="788,151,1040,229,1038,234,786,156"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="266,85,417,155"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="433,119,625,123,625,129,433,125"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1conffwk_1_1map.html" title=" " alt="" coords="623,180,785,265"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="801,226,982,236,982,242,801,231"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="235,180,448,265"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="464,220,623,220,623,225,464,225"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1conffwk_1_1fmap.html" title=" " alt="" coords="592,301,816,342"/>
+<area shape="poly" id="edge14_Node000008_Node000015" title=" " alt="" coords="824,295,1015,256,1016,261,825,300"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="271,289,412,375"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="427,327,591,322,591,327,428,332"/>
+</map>

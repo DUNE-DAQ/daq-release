@@ -1,0 +1,17 @@
+<map id="dbe::actions::object::rename" name="dbe::actions::object::rename">
+<area shape="rect" id="Node000001" title=" " alt="" coords="76,378,207,418"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1actions_1_1onobject.html" title=" " alt="" coords="69,303,214,328"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,344,144,378,139,378,139,344"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1actions_1_1state.html" title=" " alt="" coords="5,207,131,232"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,243,134,300,130,304,85,246"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="7,103,129,129"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="71,144,71,206,65,206,65,144"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1config__object__description.html" title=" " alt="" coords="155,199,280,240"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="194,253,153,304,149,301,190,250"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1config__object__key.html" title=" " alt="" coords="154,95,278,136"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="219,152,220,199,214,199,214,152"/>
+<area shape="rect" id="Node000007" href="$classdbe_1_1inner_1_1configobject_1_1tref.html" title=" " alt="" coords="302,95,453,136"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="335,147,250,201,247,196,332,142"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1inner_1_1configobject_1_1ref__interface.html" title=" " alt="" coords="302,5,453,46"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="380,62,380,95,375,95,375,62"/>
+</map>

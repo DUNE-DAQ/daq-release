@@ -1,0 +1,44 @@
+<map id="/github/workspace/dev_area/build/coredal/codegen/include/coredal/HostComponent.hpp" name="/github/workspace/dev_area/build/coredal/codegen/include/coredal/HostComponent.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1409,5,1644,61"/>
+<area shape="rect" id="Node000002" href="$include_2coredal_2NetworkDevice_8hpp.html" title=" " alt="" coords="465,109,694,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1394,45,1082,69,898,88,713,112,695,114,694,109,713,106,897,83,1082,64,1393,40"/>
+<area shape="rect" id="Node000005" href="$dump__dunedaq____coredal_8cpp.html" title=" " alt="" coords="632,213,847,268"/>
+<area shape="poly" id="edge21_Node000001_Node000005" title=" " alt="" coords="1394,41,1213,49,1014,63,847,83,790,96,759,111,744,133,737,160,735,187,737,212,732,213,730,188,731,159,739,131,755,107,788,91,846,78,1014,58,1212,44,1393,36"/>
+<area shape="rect" id="Node000006" href="$include_2coredal_2ProcessingResource_8hpp.html" title=" " alt="" coords="180,109,441,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1394,41,974,63,714,84,453,112,441,113,440,108,453,106,714,78,974,58,1394,36"/>
+<area shape="rect" id="Node000008" href="$include_2coredal_2StorageDevice_8hpp.html" title=" " alt="" coords="770,109,995,165"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1394,54,1210,79,1007,112,996,114,995,108,1006,106,1209,74,1393,48"/>
+<area shape="rect" id="Node000011" href="$DaqModule_8cpp.html" title=" " alt="" coords="1019,109,1202,165"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1397,68,1215,112,1203,115,1202,109,1214,106,1396,63"/>
+<area shape="rect" id="Node000012" href="$HostComponent_8cpp.html" title=" " alt="" coords="1227,109,1410,165"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1458,71,1375,111,1373,106,1456,66"/>
+<area shape="rect" id="Node000013" href="$src_2NetworkDevice_8hpp.html" title=" " alt="" coords="1435,109,1618,165"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1529,77,1529,108,1524,108,1524,77"/>
+<area shape="rect" id="Node000014" href="$PhysicalHost_8cpp.html" title=" " alt="" coords="1643,109,1826,165"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="1597,66,1680,106,1677,111,1595,71"/>
+<area shape="rect" id="Node000015" href="$src_2ProcessingResource_8hpp.html" title=" " alt="" coords="1851,109,2042,165"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="1656,63,1839,106,1851,109,1850,115,1838,112,1655,68"/>
+<area shape="rect" id="Node000016" href="$src_2StorageDevice_8hpp.html" title=" " alt="" coords="2067,109,2250,165"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="1659,46,1847,71,2055,106,2067,109,2065,114,2054,112,1846,77,1658,52"/>
+<area shape="rect" id="Node000017" href="$VirtualHost_8cpp.html" title=" " alt="" coords="2275,109,2458,165"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="1659,39,1938,63,2101,82,2263,106,2275,109,2274,114,2262,112,2100,87,1937,68,1658,45"/>
+<area shape="rect" id="Node000018" href="$coredal_2pybindsrc_2dal__methods_8cpp.html" title=" " alt="" coords="2482,109,2664,165"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="1659,35,1823,42,2026,55,2249,76,2471,106,2482,108,2481,114,2470,112,2248,81,2026,60,1823,47,1659,40"/>
+<area shape="rect" id="Node000019" href="$coredal_2pybindsrc_2module_8cpp.html" title=" " alt="" coords="2688,109,2858,165"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="1659,32,1857,36,2111,47,2394,69,2536,86,2676,106,2688,109,2687,114,2675,112,2536,91,2393,75,2111,52,1857,41,1659,37"/>
+<area shape="rect" id="Node000003" href="$RoHwConfig_8cpp.html" title=" " alt="" coords="221,213,400,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="495,173,384,215,382,210,493,168"/>
+<area shape="rect" id="Node000004" href="$NetworkDevice_8cpp.html" title=" " alt="" coords="424,213,607,268"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="557,180,535,213,531,211,552,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="637,171,698,210,695,214,634,176"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="313,180,313,212,308,212,308,180"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="441,166,632,211,631,216,440,171"/>
+<area shape="rect" id="Node000007" href="$ProcessingResource_8cpp.html" title=" " alt="" coords="5,213,197,268"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="242,174,158,214,156,210,239,169"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="755,160,412,215,401,218,400,213,411,210,754,155"/>
+<area shape="poly" id="edge13_Node000008_Node000005" title=" " alt="" coords="833,176,780,214,776,210,830,172"/>
+<area shape="rect" id="Node000009" href="$DFHWConf_8cpp.html" title=" " alt="" coords="871,213,1051,268"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="915,175,942,210,938,214,910,179"/>
+<area shape="rect" id="Node000010" href="$StorageDevice_8cpp.html" title=" " alt="" coords="1075,213,1258,268"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="974,168,1091,210,1089,215,972,173"/>
+</map>

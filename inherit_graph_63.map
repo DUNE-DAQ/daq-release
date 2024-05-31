@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdbe_1_1treenode.html" title=" " alt="" coords="5,80,104,106"/>
+<area shape="rect" id="Node000001" href="$classdbe_1_1AttributeNode.html" title=" " alt="" coords="163,5,291,31"/>
+<area shape="poly" id="edge56_Node000000_Node000001" title=" " alt="" coords="91,70,151,40,179,29,181,34,153,45,93,74"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1ClassNode.html" title=" " alt="" coords="171,55,283,80"/>
+<area shape="poly" id="edge57_Node000000_Node000002" title=" " alt="" coords="119,81,170,73,170,78,119,86"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1ObjectNode.html" title=" " alt="" coords="168,104,286,130"/>
+<area shape="poly" id="edge58_Node000000_Node000003" title=" " alt="" coords="119,99,168,106,167,111,119,104"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1RelationshipNode.html" title=" " alt="" coords="152,153,302,179"/>
+<area shape="poly" id="edge59_Node000000_Node000004" title=" " alt="" coords="94,111,153,140,181,150,179,155,151,145,91,116"/>
+</map>

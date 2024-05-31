@@ -1,0 +1,27 @@
+<map id="dbe::model_common_slots" name="dbe::model_common_slots">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,177,181,203"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1model__common__interface.html" title=" " alt="" coords="229,177,426,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,187,228,187,228,192,196,192"/>
+<area shape="rect" id="Node000003" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,5,660,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="348,163,402,110,436,82,473,57,499,44,501,49,475,61,439,86,405,114,352,167"/>
+<area shape="rect" id="Node000005" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,71,660,111"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="369,167,473,122,507,109,509,114,475,127,371,172"/>
+<area shape="rect" id="Node000007" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,136,660,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="441,172,488,165,489,171,442,177"/>
+<area shape="rect" id="Node000009" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,201,660,242"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="442,202,489,208,488,213,441,207"/>
+<area shape="rect" id="Node000011" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="489,267,660,307"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="371,207,475,251,509,264,507,269,473,256,369,212"/>
+<area shape="rect" id="Node000013" href="$classdbe_1_1model__common__impl.html" title=" " alt="" coords="474,332,675,357"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="351,212,404,265,438,293,475,317,504,328,502,333,473,321,435,298,401,269,348,216"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1models_1_1subtree__proxy.html" title=" " alt="" coords="742,5,881,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="676,23,742,23,742,28,676,28"/>
+<area shape="rect" id="Node000006" href="$classdbe_1_1models_1_1table.html" title=" " alt="" coords="749,78,874,104"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="676,88,749,88,749,94,676,94"/>
+<area shape="rect" id="Node000008" href="$classdbe_1_1models_1_1tableselection.html" title=" " alt="" coords="723,144,900,169"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="676,154,723,154,723,159,676,159"/>
+<area shape="rect" id="Node000010" href="$classdbe_1_1models_1_1tree.html" title=" " alt="" coords="752,209,871,235"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="676,219,752,219,752,224,676,224"/>
+<area shape="rect" id="Node000012" href="$classdbe_1_1models_1_1treeselection.html" title=" " alt="" coords="726,274,897,300"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="676,284,726,284,726,290,676,290"/>
+</map>

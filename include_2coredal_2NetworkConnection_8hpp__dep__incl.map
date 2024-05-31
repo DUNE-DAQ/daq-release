@@ -1,0 +1,27 @@
+<map id="/github/workspace/dev_area/build/coredal/codegen/include/coredal/NetworkConnection.hpp" name="/github/workspace/dev_area/build/coredal/codegen/include/coredal/NetworkConnection.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1131,5,1385,61"/>
+<area shape="rect" id="Node000002" href="$NetworkConnection_8cpp.html" title=" " alt="" coords="5,109,191,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1116,39,932,45,704,58,453,79,202,112,191,114,190,108,202,106,452,74,704,52,932,40,1115,34"/>
+<area shape="rect" id="Node000003" href="$dump__dunedaq____coredal_8cpp.html" title=" " alt="" coords="214,109,430,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1115,45,805,68,623,87,442,112,430,114,429,108,442,106,623,82,805,63,1115,39"/>
+<area shape="rect" id="Node000004" href="$sourcecode_2appdal_2src_2DFApplication_8cpp.html" title=" " alt="" coords="454,109,620,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1115,48,888,72,760,90,633,112,621,114,620,109,632,106,759,84,887,67,1115,43"/>
+<area shape="rect" id="Node000005" href="$sourcecode_2appdal_2src_2DFOApplication_8cpp.html" title=" " alt="" coords="644,109,811,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1116,58,974,81,823,112,811,114,810,109,821,106,973,76,1115,52"/>
+<area shape="rect" id="Node000006" href="$sourcecode_2appdal_2src_2FakeDataApplication_8cpp.html" title=" " alt="" coords="834,109,1026,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1156,69,1019,111,1017,106,1155,64"/>
+<area shape="rect" id="Node000007" href="$sourcecode_2appdal_2src_2FakeHSIApplication_8cpp.html" title=" " alt="" coords="1050,109,1237,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1218,73,1176,110,1172,106,1214,69"/>
+<area shape="rect" id="Node000008" href="$sourcecode_2appdal_2src_2HSIEventToTCApplication_8cpp.html" title=" " alt="" coords="1261,109,1484,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1302,69,1344,106,1340,110,1298,73"/>
+<area shape="rect" id="Node000009" href="$sourcecode_2appdal_2src_2MLTApplication_8cpp.html" title=" " alt="" coords="1508,109,1675,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1362,63,1509,108,1507,113,1361,68"/>
+<area shape="rect" id="Node000010" href="$sourcecode_2appdal_2src_2ReadoutApplication_8cpp.html" title=" " alt="" coords="1698,109,1882,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1401,54,1539,78,1687,106,1699,109,1698,114,1685,112,1538,83,1400,59"/>
+<area shape="rect" id="Node000011" href="$TPWriterApplication_8cpp.html" title=" " alt="" coords="1906,109,2093,165"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1401,43,1633,68,1764,85,1894,106,1906,109,1905,114,1894,112,1764,90,1632,73,1400,49"/>
+<area shape="rect" id="Node000012" href="$sourcecode_2appdal_2src_2TriggerApplication_8cpp.html" title=" " alt="" coords="2117,109,2292,165"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1401,37,1548,45,1724,58,1915,78,2105,106,2117,109,2116,114,2104,112,1915,84,1724,64,1547,50,1401,42"/>
+<area shape="rect" id="Node000013" href="$ModuleConfiguration_8cpp.html" title=" " alt="" coords="2316,109,2504,165"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1401,34,1582,40,1808,53,2057,74,2305,106,2316,108,2315,113,2304,112,2056,79,1808,58,1582,46,1400,39"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="dunedaq::iomanager::QueueBase" name="dunedaq::iomanager::QueueBase">
+<area shape="rect" id="Node000001" title="The QueueBase class allows to address generic behavior of any Queue implementation." alt="" coords="336,49,472,90"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1iomanager_1_1Queue.html" title="Implementations of the Queue class are responsible for relaying data between DAQModules within a DAQ ..." alt="" coords="520,49,657,90"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="488,67,520,67,520,72,488,72"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1utilities_1_1NamedObject.html" title="Implements the Named interface." alt="" coords="171,49,288,90"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="304,67,335,67,335,72,304,72"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1utilities_1_1Named.html" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="5,49,123,90"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,67,170,67,170,72,138,72"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1iomanager_1_1FollyQueue.html" title=" " alt="" coords="705,5,888,61"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="671,52,704,46,705,52,672,57"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1iomanager_1_1StdDeQueue.html" title="A Queue Implementation that uses a std::deque as its backend." alt="" coords="728,85,865,126"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="672,81,728,91,727,96,671,86"/>
+</map>

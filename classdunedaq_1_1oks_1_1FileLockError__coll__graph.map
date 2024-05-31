@@ -1,0 +1,7 @@
+<map id="dunedaq::oks::FileLockError" name="dunedaq::oks::FileLockError">
+<area shape="rect" id="Node000001" title="Cannot add include file. Such exception is thrown when OKS cannot add include file." alt="" coords="5,153,186,178"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1oks_1_1exception.html" title=" " alt="" coords="16,79,175,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,120,98,152,93,152,93,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="45,5,146,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,46,98,79,93,79,93,46"/>
+</map>

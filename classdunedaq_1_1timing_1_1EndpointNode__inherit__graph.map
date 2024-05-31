@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::EndpointNode" name="dunedaq::timing::EndpointNode">
+<area shape="rect" id="Node000001" title="Base class for timing IO nodes." alt="" coords="5,241,204,267"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1EndpointNodeInterface.html" title="Base class for timing IO nodes." alt="" coords="21,153,188,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,209,107,241,102,241,102,209"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="11,79,198,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,120,107,152,102,152,102,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="63,5,146,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="107,46,107,79,102,79,102,46"/>
+</map>

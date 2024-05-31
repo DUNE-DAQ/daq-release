@@ -1,0 +1,33 @@
+<map id="dunedaq::utilities::Named" name="dunedaq::utilities::Named">
+<area shape="rect" id="Node000001" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="5,136,123,177"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1utilities_1_1NamedObject.html" title="Implements the Named interface." alt="" coords="171,136,288,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,154,170,154,170,159,138,159"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1dfmodules_1_1DataStore.html" title="comment" alt="" coords="336,5,472,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,123,293,89,334,57,355,44,358,49,338,61,297,93,262,127"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1dfmodules_1_1TriggerInhibitAgent.html" title=" " alt="" coords="336,71,472,111"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="299,128,347,109,349,114,301,133"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1iomanager_1_1QueueBase.html" title="The QueueBase class allows to address generic behavior of any Queue implementation." alt="" coords="336,136,472,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="304,154,335,154,335,159,304,159"/>
+<area shape="rect" id="Node000009" href="$classdunedaq_1_1iomanager_1_1Receiver.html" title=" " alt="" coords="336,201,472,242"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="301,180,349,198,347,203,299,185"/>
+<area shape="rect" id="Node000013" href="$classdunedaq_1_1iomanager_1_1Sender.html" title=" " alt="" coords="336,273,472,314"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="263,186,298,219,338,252,366,271,363,275,334,256,294,223,259,189"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1iomanager_1_1Queue.html" title="Implementations of the Queue class are responsible for relaying data between DAQModules within a DAQ ..." alt="" coords="552,89,688,130"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="487,136,551,122,552,127,489,141"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1iomanager_1_1FollyQueue.html" title=" " alt="" coords="768,10,951,66"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="702,82,766,63,768,68,703,87"/>
+<area shape="rect" id="Node000008" href="$classdunedaq_1_1iomanager_1_1StdDeQueue.html" title="A Queue Implementation that uses a std::deque as its backend." alt="" coords="791,89,928,130"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="704,107,791,107,791,112,704,112"/>
+<area shape="rect" id="Node000010" href="$classdunedaq_1_1iomanager_1_1ReceiverConcept.html" title=" " alt="" coords="520,201,720,242"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="488,219,520,219,520,224,488,224"/>
+<area shape="rect" id="Node000011" href="$classdunedaq_1_1iomanager_1_1NetworkReceiverModel.html" title=" " alt="" coords="778,154,941,210"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="735,200,777,193,778,198,736,205"/>
+<area shape="rect" id="Node000012" href="$classdunedaq_1_1iomanager_1_1QueueReceiverModel.html" title=" " alt="" coords="784,234,935,290"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="736,238,784,246,783,252,735,244"/>
+<area shape="rect" id="Node000014" href="$classdunedaq_1_1iomanager_1_1SenderConcept.html" title=" " alt="" coords="525,321,715,362"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="488,310,526,318,525,323,487,315"/>
+<area shape="rect" id="Node000015" href="$classdunedaq_1_1iomanager_1_1NetworkSenderModel.html" title=" " alt="" coords="783,314,936,370"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="730,339,783,339,783,344,730,344"/>
+<area shape="rect" id="Node000016" href="$classdunedaq_1_1iomanager_1_1QueueSenderModel.html" title=" " alt="" coords="785,394,934,450"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="698,365,785,394,783,399,696,370"/>
+</map>

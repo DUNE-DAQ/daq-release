@@ -1,0 +1,7 @@
+<map id="dunedaq::dfmodules::DataStore" name="dunedaq::dfmodules::DataStore">
+<area shape="rect" id="Node000001" title="comment" alt="" coords="5,183,142,223"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1utilities_1_1NamedObject.html" title="Implements the Named interface." alt="" coords="15,94,132,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,150,76,182,71,182,71,150"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1utilities_1_1Named.html" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="15,5,132,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,62,76,94,71,94,71,62"/>
+</map>

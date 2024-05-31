@@ -1,0 +1,6 @@
+<map id="dunedaq::appdal::NICInterfaceConfiguration" name="dunedaq::appdal::NICInterfaceConfiguration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,200,120"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1DalObject.html" title="The base class for any generated DAL object." alt="" coords="10,5,195,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,46,97,79,92,79,91,47"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="114,47,113,79,108,79,108,46"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="dunedaq::utilities::NamedObject" name="dunedaq::utilities::NamedObject">
+<area shape="rect" id="Node000001" title="Implements the Named interface." alt="" coords="5,94,123,135"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1utilities_1_1Named.html" title="A Named is a DAQ object (Queue or DAQModule) which has an instance name." alt="" coords="5,5,123,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,62,67,94,61,94,61,62"/>
+</map>

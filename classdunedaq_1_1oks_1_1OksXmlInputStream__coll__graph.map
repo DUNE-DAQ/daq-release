@@ -1,0 +1,7 @@
+<map id="dunedaq::oks::OksXmlInputStream" name="dunedaq::oks::OksXmlInputStream">
+<area shape="rect" id="Node000001" title=" " alt="" coords="134,139,313,180"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1oks_1_1OksXmlTokenPool.html" title=" " alt="" coords="5,5,218,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,41,210,137,206,140,128,45"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1oks_1_1OksXmlToken.html" title=" " alt="" coords="242,5,429,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="326,47,307,81,281,117,255,140,251,137,278,113,303,78,321,44"/>
+</map>

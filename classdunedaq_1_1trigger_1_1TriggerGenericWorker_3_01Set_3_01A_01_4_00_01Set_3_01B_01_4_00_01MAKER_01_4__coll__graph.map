@@ -1,0 +1,12 @@
+<map id="dunedaq::trigger::TriggerGenericWorker&lt; Set&lt; A &gt;, Set&lt; B &gt;, MAKER &gt;" name="dunedaq::trigger::TriggerGenericWorker&lt; Set&lt; A &gt;, Set&lt; B &gt;, MAKER &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="634,5,803,61"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1trigger_1_1TriggerGenericMaker.html" title=" " alt="" coords="337,43,521,114"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="536,59,633,44,633,49,537,64"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1trigger_1_1TriggerGenericWorker.html" title=" " alt="" coords="626,86,810,157"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="537,92,626,105,625,110,536,97"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,40,200,66"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="215,59,336,69,336,74,215,65"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="80,90,125,115"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="140,97,336,83,336,88,141,102"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="611,131,545,125,512,117,513,112,545,120,611,126"/>
+</map>

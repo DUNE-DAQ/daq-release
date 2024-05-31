@@ -1,0 +1,5 @@
+<map id="OksSystem::MapFile" name="OksSystem::MapFile">
+<area shape="rect" id="Node000001" title="Wrapper for memory map operations." alt="" coords="5,79,147,105"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1File.html" title="Wrapper for file operations." alt="" coords="18,5,134,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,46,79,79,73,79,73,46"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::MasterDesignInterface" name="dunedaq::timing::MasterDesignInterface">
+<area shape="rect" id="Node000001" title="Base class for timing master designs." alt="" coords="5,241,203,282"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="14,153,194,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,209,107,241,101,241,101,209"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="10,79,198,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,120,107,152,101,152,101,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="63,5,145,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="107,46,107,79,101,79,101,46"/>
+</map>

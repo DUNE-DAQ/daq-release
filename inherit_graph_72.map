@@ -1,0 +1,38 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="64,70,125,96"/>
+<area shape="rect" id="Node000001" href="$structers_1_1FormattedStandardStream.html" title=" " alt="" coords="232,71,430,111"/>
+<area shape="poly" id="edge89_Node000000_Node000001" title=" " alt="" coords="141,82,231,85,231,90,141,87"/>
+<area shape="rect" id="Node000010" href="$structers_1_1StandardStream.html" title="Single line, human readable format stream." alt="" coords="261,5,401,46"/>
+<area shape="poly" id="edge90_Node000000_Node000010" title=" " alt="" coords="139,70,260,40,261,45,141,75"/>
+<area shape="rect" id="Node000002" href="$classers_1_1OutputStream.html" title="ERS abstract output stream interface." alt="" coords="31,382,158,408"/>
+<area shape="poly" id="edge94_Node000002_Node000001" title=" " alt="" coords="99,367,115,315,140,249,178,180,202,149,230,121,246,110,249,114,233,125,206,152,183,183,145,251,120,316,105,368"/>
+<area shape="poly" id="edge99_Node000002_Node000010" title=" " alt="" coords="97,366,109,303,132,220,150,176,171,133,198,93,230,57,259,38,262,43,233,61,202,96,176,136,154,178,137,222,114,304,102,367"/>
+<area shape="rect" id="Node000003" href="$structers_1_1AbortStream.html" title="Aborts the current application." alt="" coords="272,432,390,457"/>
+<area shape="poly" id="edge91_Node000002_Node000003" title=" " alt="" coords="173,409,272,429,271,435,172,414"/>
+<area shape="rect" id="Node000004" href="$structers_1_1ExitStream.html" title="Terminates the current application." alt="" coords="277,481,385,507"/>
+<area shape="poly" id="edge92_Node000002_Node000004" title=" " alt="" coords="130,414,178,442,233,467,277,481,276,486,231,472,175,446,128,419"/>
+<area shape="rect" id="Node000005" href="$classers_1_1FilterStream.html" title="Filtering stream implementation." alt="" coords="273,530,389,556"/>
+<area shape="poly" id="edge93_Node000002_Node000005" title=" " alt="" coords="118,418,167,469,199,495,233,517,273,532,271,537,230,521,195,499,163,472,114,422"/>
+<area shape="rect" id="Node000006" href="$structers_1_1GlobalLockStream.html" title="Lock for ERS streams." alt="" coords="254,580,408,605"/>
+<area shape="poly" id="edge95_Node000002_Node000006" title=" " alt="" coords="112,420,131,454,159,494,193,533,233,566,255,577,252,582,230,571,189,537,155,497,127,457,107,423"/>
+<area shape="rect" id="Node000007" href="$structers_1_1LockStream.html" title="Lock implementation for an ERS stream." alt="" coords="273,629,389,655"/>
+<area shape="poly" id="edge96_Node000002_Node000007" title=" " alt="" coords="107,421,124,464,151,517,187,571,209,595,233,615,252,626,273,633,272,638,250,631,230,620,205,599,183,574,146,520,119,466,102,423"/>
+<area shape="rect" id="Node000008" href="$structers_1_1NullStream.html" title="Null stream." alt="" coords="276,678,386,704"/>
+<area shape="poly" id="edge97_Node000002_Node000008" title=" " alt="" coords="104,422,119,475,144,541,181,608,206,639,233,665,254,677,276,684,275,689,251,682,230,669,202,642,177,611,139,543,114,477,99,424"/>
+<area shape="rect" id="Node000009" href="$classers_1_1RFilterStream.html" title="Filtering stream implementation." alt="" coords="268,728,394,753"/>
+<area shape="poly" id="edge98_Node000002_Node000009" title=" " alt="" coords="102,423,114,484,137,563,154,605,176,645,202,682,233,714,250,725,269,732,267,737,248,730,230,718,198,686,171,648,149,607,132,565,108,485,97,424"/>
+<area shape="rect" id="Node000012" href="$classers_1_1StreamInitializer.html" title=" " alt="" coords="262,136,400,161"/>
+<area shape="poly" id="edge100_Node000002_Node000012" title=" " alt="" coords="102,367,119,324,146,270,183,216,205,191,230,170,260,155,262,160,233,175,209,195,187,219,151,273,124,326,107,369"/>
+<area shape="rect" id="Node000013" href="$classers_1_1ThrottleStream.html" title="Throws issues as exceptions." alt="" coords="265,185,397,211"/>
+<area shape="poly" id="edge101_Node000002_Node000013" title=" " alt="" coords="107,367,127,333,155,293,189,253,230,219,264,205,266,209,233,224,193,257,159,296,131,336,112,370"/>
+<area shape="rect" id="Node000014" href="$structers_1_1ThrowStream.html" title="Throws issues as exceptions." alt="" coords="269,234,393,260"/>
+<area shape="poly" id="edge102_Node000002_Node000014" title=" " alt="" coords="114,368,163,318,195,291,230,269,268,254,270,259,233,273,199,295,167,321,118,372"/>
+<area shape="rect" id="Node000015" href="$structers_1_1erstraceStream.html" title=" " alt="" coords="264,284,398,309"/>
+<area shape="poly" id="edge103_Node000002_Node000015" title=" " alt="" coords="128,371,175,344,231,318,264,307,265,312,233,323,178,348,130,376"/>
+<area shape="rect" id="Node000016" href="$classerskafka_1_1KafkaStream.html" title="ES stream implementation." alt="" coords="254,333,408,359"/>
+<area shape="poly" id="edge104_Node000002_Node000016" title=" " alt="" coords="172,376,265,357,266,362,173,381"/>
+<area shape="rect" id="Node000017" href="$classerskafka_1_1ProtoBufStream.html" title="ERS stream implementation." alt="" coords="246,382,416,408"/>
+<area shape="poly" id="edge105_Node000002_Node000017" title=" " alt="" coords="173,392,245,392,245,398,173,398"/>
+<area shape="rect" id="Node000011" href="$structers_1_1StandardStreamOutput.html" title=" " alt="" coords="5,13,184,39"/>
+<area shape="poly" id="edge106_Node000011_Node000010" title=" " alt="" coords="199,23,261,23,261,28,199,28"/>
+</map>

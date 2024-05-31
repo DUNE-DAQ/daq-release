@@ -1,0 +1,7 @@
+<map id="dunedaq::iomanager::QueueRegistry::QueueEntry" name="dunedaq::iomanager::QueueRegistry::QueueEntry">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,213,191,253"/>
+<area shape="rect" id="Node000002" href="$structdunedaq_1_1iomanager_1_1connection_1_1QueueConfig.html" title=" " alt="" coords="13,109,183,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,165,101,212,95,212,95,165"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1iomanager_1_1connection_1_1ConnectionId.html" title=" " alt="" coords="12,5,184,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,62,101,109,95,109,95,62"/>
+</map>

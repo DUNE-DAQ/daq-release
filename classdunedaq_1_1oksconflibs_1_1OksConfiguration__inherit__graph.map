@@ -1,0 +1,5 @@
+<map id="dunedaq::oksconflibs::OksConfiguration" name="dunedaq::oksconflibs::OksConfiguration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="48,79,190,120"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1conffwk_1_1ConfigurationImpl.html" title="Provides pure virtual interface used by the Configuration class." alt="" coords="5,5,233,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,46,122,79,116,79,116,46"/>
+</map>

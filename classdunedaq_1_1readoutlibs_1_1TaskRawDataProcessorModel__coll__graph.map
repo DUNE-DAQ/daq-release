@@ -1,0 +1,7 @@
+<map id="dunedaq::readoutlibs::TaskRawDataProcessorModel&lt; ReadoutType &gt;" name="dunedaq::readoutlibs::TaskRawDataProcessorModel&lt; ReadoutType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="311,41,514,97"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1RawDataProcessorConcept.html" title=" " alt="" coords="5,5,193,61"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,43,310,55,310,60,208,48"/>
+<area shape="rect" id="Node000003" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="16,85,182,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,91,310,78,311,83,198,97"/>
+</map>

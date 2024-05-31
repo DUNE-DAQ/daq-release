@@ -1,0 +1,13 @@
+<map id="dunedaq::readoutlibs::EmptyFragmentRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;" name="dunedaq::readoutlibs::EmptyFragmentRequestHandlerModel&lt; ReadoutType, LatencyBufferType &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="715,131,985,186"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1readoutlibs_1_1DefaultRequestHandlerModel.html" title=" " alt="" coords="432,131,666,186"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="681,156,715,156,715,161,681,161"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1readoutlibs_1_1RequestHandlerConcept.html" title=" " alt="" coords="5,5,240,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="256,62,408,105,474,128,472,133,407,110,254,68"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1readoutlibs_1_1BufferedFileWriter.html" title=" " alt="" coords="53,85,192,141"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="208,119,408,140,431,142,431,148,407,145,207,124"/>
+<area shape="rect" id="Node000005" href="$classdunedaq_1_1readoutlibs_1_1ReusableThread.html" title=" " alt="" coords="53,184,192,224"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="208,210,304,214,356,211,407,205,481,184,482,190,408,210,357,217,304,219,208,216"/>
+<area shape="rect" id="Node000006" href="$structdunedaq_1_1daqdataformats_1_1SourceID.html" title="SourceID is a generalized representation of the source of a piece of data in the DAQ...." alt="" coords="39,249,206,290"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="221,265,312,256,360,247,407,235,460,212,507,184,509,189,462,217,409,240,362,253,313,262,221,271"/>
+</map>

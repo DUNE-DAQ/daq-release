@@ -1,0 +1,9 @@
+<map id="dbe::model_common_interface" name="dbe::model_common_interface">
+<area shape="rect" id="Node000001" title=" " alt="" coords="229,78,426,104"/>
+<area shape="rect" id="Node000002" href="$classdbe_1_1model__initiate__actions__interface.html" title=" " alt="" coords="29,5,157,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,45,279,75,277,80,172,50"/>
+<area shape="rect" id="Node000003" href="$structdbe_1_1model__common__data__access__interface.html" title=" " alt="" coords="7,71,179,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,88,228,88,228,94,194,94"/>
+<area shape="rect" id="Node000004" href="$classdbe_1_1model__common__slots.html" title=" " alt="" coords="5,136,181,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,129,271,102,272,107,164,134"/>
+</map>

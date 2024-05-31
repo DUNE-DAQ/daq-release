@@ -1,0 +1,28 @@
+<map id="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEFrame.hpp" name="/github/workspace/dev_area/sourcecode/fddetdataformats/include/fddetdataformats/DAPHNEFrame.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="578,5,867,61"/>
+<area shape="rect" id="Node000002" href="$daphne_8cpp.html" title=" " alt="" coords="5,117,232,172"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="563,58,411,82,251,112,220,118,219,113,250,106,410,77,562,53"/>
+<area shape="rect" id="Node000003" href="$DAPHNESuperChunkTypeAdapter_8hpp.html" title=" " alt="" coords="489,109,764,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="691,74,659,110,655,107,687,71"/>
+<area shape="rect" id="Node000004" href="$DAPHNEFrameProcessor_8hpp.html" title=" " alt="" coords="307,228,509,298"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="565,64,519,84,479,111,456,137,438,168,417,228,412,227,433,166,451,134,475,107,517,79,562,59"/>
+<area shape="rect" id="Node000006" href="$DAPHNEFrameProcessor_8cpp.html" title=" " alt="" coords="208,346,477,402"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="564,62,494,83,428,111,382,135,348,157,321,186,297,229,290,247,289,262,297,298,308,322,322,344,317,347,303,325,292,299,284,263,285,246,292,227,317,182,345,153,380,131,425,107,492,78,562,57"/>
+<area shape="rect" id="Node000007" href="$DAPHNEListRequestHandler_8hpp.html" title=" " alt="" coords="717,228,936,298"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="756,72,778,108,804,170,821,226,816,228,799,172,773,110,752,75"/>
+<area shape="rect" id="Node000008" href="$DAPHNEListRequestHandler_8cpp.html" title=" " alt="" coords="748,346,1036,402"/>
+<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="790,67,833,96,878,132,919,176,950,226,957,246,959,263,950,299,938,325,921,348,917,344,933,322,945,297,954,262,952,247,945,229,915,179,874,136,830,100,787,72"/>
+<area shape="rect" id="Node000010" href="$DAPHNEUnpacker_8cpp.html" title=" " alt="" coords="1010,117,1230,172"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="837,63,1021,113,1020,118,836,68"/>
+<area shape="rect" id="Node000011" href="$unpack_8cpp.html" title=" " alt="" coords="1254,117,1452,172"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="883,48,1056,72,1242,106,1270,113,1268,119,1241,112,1055,77,882,54"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="549,190,474,229,472,225,547,185"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="700,185,768,225,766,229,698,190"/>
+<area shape="rect" id="Node000009" href="$CreateElink_8hpp.html" title=" " alt="" coords="533,235,693,291"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="623,195,619,235,614,234,618,195"/>
+<area shape="rect" id="Node000005" href="$FDReadoutlibs_8cpp.html" title=" " alt="" coords="515,346,717,402"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="489,304,565,343,563,348,487,308"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="382,313,361,347,356,345,377,310"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="747,308,670,348,667,343,745,303"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="857,310,878,345,873,347,853,313"/>
+</map>

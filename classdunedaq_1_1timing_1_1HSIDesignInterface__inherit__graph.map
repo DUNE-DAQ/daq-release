@@ -1,0 +1,15 @@
+<map id="dunedaq::timing::HSIDesignInterface" name="dunedaq::timing::HSIDesignInterface">
+<area shape="rect" id="Node000001" title="Base class for timing hsi design nodes." alt="" coords="117,330,297,371"/>
+<area shape="rect" id="Node000006" href="$classdunedaq_1_1timing_1_1BoreasDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="5,426,204,452"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="174,383,120,428,117,424,171,379"/>
+<area shape="rect" id="Node000007" href="$classdunedaq_1_1timing_1_1ChronosDesign.html" title="Class for timing master with integrated HSI designs." alt="" coords="227,419,393,459"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="244,379,288,416,285,420,240,383"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1EndpointDesignInterface.html" title="Base class for timing endpoint design nodes." alt="" coords="124,241,291,282"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,298,210,330,205,330,205,298"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TopDesignInterface.html" title="Base class for timing top design nodes." alt="" coords="118,153,297,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,209,210,241,205,241,205,209"/>
+<area shape="rect" id="Node000004" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="114,79,301,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="210,120,210,152,205,152,205,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="166,5,248,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="210,46,210,79,205,79,205,46"/>
+</map>

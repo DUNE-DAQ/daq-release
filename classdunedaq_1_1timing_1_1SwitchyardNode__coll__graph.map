@@ -1,0 +1,7 @@
+<map id="dunedaq::timing::SwitchyardNode" name="dunedaq::timing::SwitchyardNode">
+<area shape="rect" id="Node000001" title="Class for master global node." alt="" coords="5,153,218,178"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="18,79,205,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,120,114,152,109,152,109,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,5,153,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,46,114,79,109,79,109,46"/>
+</map>

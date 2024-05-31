@@ -1,0 +1,6 @@
+<map id="OksSystem::LocalHost" name="OksSystem::LocalHost">
+<area shape="rect" id="Node000001" title="Network host &#45; localhost." alt="" coords="5,80,161,106"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="177,86,187,93,179,100,161,102,161,97,177,95,182,93,175,91"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1Host.html" title="Network host." alt="" coords="21,5,145,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,46,86,80,80,80,80,46"/>
+</map>

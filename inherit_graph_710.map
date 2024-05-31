@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classOksSystem_1_1File.html" title="Wrapper for file operations." alt="" coords="5,55,122,80"/>
+<area shape="rect" id="Node000001" href="$classOksSystem_1_1Executable.html" title="Wrapper for executable file manipulation." alt="" coords="186,5,344,31"/>
+<area shape="poly" id="edge379_Node000000_Node000001" title=" " alt="" coords="133,48,209,29,210,34,134,53"/>
+<area shape="rect" id="Node000002" href="$classOksSystem_1_1FIFOConnection.html" title=" " alt="" coords="170,55,360,80"/>
+<area shape="poly" id="edge380_Node000000_Node000002" title=" " alt="" coords="138,65,169,65,169,70,138,70"/>
+<area shape="rect" id="Node000003" href="$classOksSystem_1_1MapFile.html" title="Wrapper for memory map operations." alt="" coords="194,104,336,130"/>
+<area shape="poly" id="edge381_Node000000_Node000003" title=" " alt="" coords="134,82,210,101,209,106,133,87"/>
+</map>

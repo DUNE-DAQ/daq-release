@@ -1,0 +1,9 @@
+<map id="dunedaq::timing::PDIMasterNode" name="dunedaq::timing::PDIMasterNode">
+<area shape="rect" id="Node000001" title="Class for PD&#45;I master timing nodes." alt="" coords="5,241,216,267"/>
+<area shape="rect" id="Node000002" href="$classdunedaq_1_1timing_1_1MasterNodeInterface.html" title="Base class for timing IO nodes." alt="" coords="16,153,205,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,209,113,241,108,241,108,209"/>
+<area shape="rect" id="Node000003" href="$classdunedaq_1_1timing_1_1TimingNode.html" title="Base class for timing nodes." alt="" coords="17,79,204,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,120,113,152,108,152,108,120"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="69,5,152,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="113,46,113,79,108,79,108,46"/>
+</map>
