@@ -29,15 +29,13 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 
 # Single-Repo CI Build Status
 
-_JCF, Mar-3-2024: since near detector packages have been dropped from nightlies of both the production/v4 and v5 lines of development, their builds against the nightly are not guaranteed to work_
-
-appdal: [![appdal](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appdal/actions/workflows/dunedaq-develop-cpp-ci.yml)
+appmodel: [![appmodel](https://github.com/DUNE-DAQ/appmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 appfwk: [![appfwk](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
 cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
-coredal: [![coredal](https://github.com/DUNE-DAQ/coredal/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/coredal/actions/workflows/dunedaq-develop-cpp-ci.yml)
+confmodel: [![confmodel](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
@@ -89,19 +87,9 @@ ipm: [![ipm](https://github.com/DUNE-DAQ/ipm/actions/workflows/dunedaq-v4-cpp-ci
 
 kafkaopmon: [![kafkaopmon](https://github.com/DUNE-DAQ/kafkaopmon/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/kafkaopmon/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
-lbrulibs: [![lbrulibs](https://github.com/DUNE-DAQ/lbrulibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/lbrulibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
 listrev: [![listrev](https://github.com/DUNE-DAQ/listrev/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/listrev/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
 logging: [![logging](https://github.com/DUNE-DAQ/logging/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/logging/actions/workflows/dunedaq-v4-cpp-ci.yml)
-
-nddaqconf: [![nddaqconf](https://github.com/DUNE-DAQ/nddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/nddaqconf/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-nddetdataformats: [![nddetdataformats](https://github.com/DUNE-DAQ/nddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/nddetdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-ndreadoutlibs: [![ndreadoutlibs](https://github.com/DUNE-DAQ/ndreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ndreadoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-ndreadoutmodules: [![ndreadoutmodules](https://github.com/DUNE-DAQ/ndreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ndreadoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 oks: [![oks](https://github.com/DUNE-DAQ/oks/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/oks/actions/workflows/dunedaq-develop-cpp-ci.yml)
 

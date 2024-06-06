@@ -7,11 +7,11 @@
 from spack import *
 
 
-class Coredal(CMakePackage):
+class Appmodel(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/coredal/"
-    git =      "https://github.com/DUNE-DAQ/coredal.git"
+    homepage = "https://github.com/DUNE-DAQ/appmodel"
+    git =      "https://github.com/DUNE-DAQ/appmodel.git"
 
     maintainers = ["jcfreeman2"]
 
