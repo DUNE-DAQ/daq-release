@@ -1,0 +1,239 @@
+---
+    release: coredaq-v4.5.0
+
+    type: coredaq
+
+    externals:
+        - name: boost
+          version: 1.77.0
+          variant: "+context+container cxxstd=2a"
+        - name: cetlib
+          version: 3.18.01
+          variant: "+lite"
+        - name: trace
+          version: 3.17.11
+          variant: ~
+        - name: nlohmann-json
+          version: 3.9.0
+          variant: ~
+        - name: pistache
+          version: dunedaq-v2.8.0
+          variant: ~
+        - name: highfive
+          version: 2.7.1
+          variant: "+mpi"
+        - name: hdf5
+          version: 1.12.0
+          variant: "+mpi+threadsafe"
+        - name: libarchive
+          version: 3.6.2
+          variant: ~
+        - name: libzmq
+          version: 4.3.4
+          variant: ~
+        - name: cppzmq
+          version: 4.8.1
+          variant: ~
+        - name: msgpack-c
+          version: 3.3.0
+          variant: ~
+        - name: py-pybind11
+          version: 2.6.2
+          variant: ~
+        - name: uhal
+          version: 2.8.1
+          variant: ~
+        - name: cpr
+          version: 1.5.2
+          variant: ~
+        - name: librdkafka
+          version: 1.7.0
+          variant: ~
+        - name: protobuf
+          version: 4.24.4
+          variant: ~
+        - name: grpc
+          version: 1.56.2
+          variant: "cxxstd=17"
+        - name: felix-software
+          version: dunedaq-v4.2.0
+          variant: ~
+        - name: folly
+          version: 2021.12.13.00
+          variant: "cxxstd=2a"
+        - name: fftw
+          version: 3.3.10
+          variant: "~mpi"
+        - name: cli11
+          version: 2.1.2
+          variant: ~
+        - name: krb5
+          version: 1.19.2
+          variant: ~
+        - name: intel-tbb
+          version: 2020.3
+          variant: ~
+        - name: dpdk
+          version: 22.11
+          variant: ~
+        - name: fmt
+          version: 8.1.1
+          variant: "cxxstd=17 shared=True"
+        - name: py-moo
+          version: 0.6.7
+          variant: ~
+        - name: py-anyconfig
+          version: 0.9.11
+          variant: ~
+        - name: py-jsonnet
+          version: 0.16.0
+          variant: ~
+        - name: py-fastjsonschema
+          version: 2.14.5
+          variant: ~
+        - name: rclone
+          version: 1.64.0
+          variant: ~
+        - name: libtorrent
+          version: 2.0.9
+          variant: ~
+
+    devtools:
+        - name: cmake
+          version: 3.26.3
+          variant: ~
+        - name: gdb
+          version: 13.1 
+          variant: "~python"
+        - name: ninja
+          version: 1.10.0
+          variant: ~
+
+    systems:
+        - name: python
+          version: 3.10.4
+          variant: ~
+        - name: gcc
+          version: 12.1.0
+          variant: "+binutils"
+        - name: openssh
+          version: 8.7p1
+          variant: ~
+
+    coredaq:
+        - name: daq-cmake
+          version: v2.7.1
+          commit: null
+        - name: ers
+          version: v1.5.1
+          commit: null
+        - name: logging
+          version: v1.1.3
+          commit: null
+        - name: cmdlib
+          version: v1.1.7
+          commit: null
+        - name: restcmd
+          version: v1.2.1
+          commit: null
+        - name: opmonlib
+          version: v1.3.6
+          commit: null
+        - name: rcif
+          version: v1.3.0
+          commit: null
+        - name: appfwk
+          version: v2.10.0
+          commit: null
+        - name: listrev
+          version: v3.4.0
+          commit: null
+        - name: utilities
+          version: v2.4.1
+          commit: null
+        - name: erskafka
+          version: v2.0.0
+          commit: null
+        - name: kafkaopmon
+          version: v1.5.1
+          commit: null
+        - name: ipm
+          version: v2.7.0
+          commit: null
+        - name: serialization
+          version: v1.3.1
+          commit: null
+        - name: iomanager
+          version: v1.5.0
+          commit: null
+        - name: dfmessages
+          version: v2.7.0
+          commit: null
+        - name: detdataformats
+          version: v4.0.0
+          commit: null
+        - name: trgdataformats
+          version: v1.2.2
+          commit: null
+        - name: detchannelmaps
+          version: v1.6.2
+          commit: null
+        - name: daqdataformats
+          version: v3.7.0
+          commit: null
+        - name: readoutlibs
+          version: v1.7.2
+          commit: null
+        - name: readoutmodules
+          version: v1.4.0
+          commit: null
+        - name: dfmodules
+          version: v2.14.2
+          commit: null
+        - name: hsilibs
+          version: v3.1.0
+          commit: null
+        - name: timing
+          version: v7.7.3
+          commit: null
+        - name: timinglibs
+          version: v4.0.3
+          commit: null
+        - name: daqconf
+          version: v7.3.3
+          commit: null
+        - name: trigger
+          version: v1.8.3
+          commit: null
+        - name: triggeralgs
+          version: v1.3.1
+          commit: null
+        - name: trgtools
+          version: v1.1.2
+          commit: null
+        - name: hdf5libs
+          version: v2.8.2
+          commit: null
+
+    others:
+        - name: daq-release
+          version: v2.5.2
+          commit: null
+        - name: daq-buildtools
+          version: v8.0.0
+          commit: null
+        - name: daqsystemtest
+          version: v2.3.1
+          commit: null
+        - name: pocket
+          version: "develop"
+          commit: null
+        - name: microservices
+          version: "develop"
+          commit: null
+        - name: dqm-backend
+          version: "develop"
+          commit: null
+        - name: grafana-dashboards
+          version: "develop"
+          commit: null
