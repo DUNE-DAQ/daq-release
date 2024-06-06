@@ -6,82 +6,65 @@
 # once the renaming is complete and the Issue closed this script can be
 # deleted from this repo
 
+# JCF, Jun-6-2024
+
+# Overhaul this script to handle daq-release Issue 373, concerning
+# further renaming
+
 scriptdir=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 
 
-for pkg in oksdbinterfaces oksconfig genconfig ; do
+for pkg in coredal appdal ; do
     git clone https://github.com/DUNE-DAQ/$pkg -b develop
 done
 
-##################### oksdbinterfaces -> conffwk #######################
+##################### coredal -> confmodel #######################
 
-cd oksdbinterfaces 
+cd coredal
 
-git mv ./include/oksdbinterfaces ./include/conffwk
-git mv ./python/oksdbinterfaces ./python/conffwk
-git mv ./cmake/oksdbinterfacesConfig.cmake.in ./cmake/conffwkConfig.cmake.in
+git mv ./include/coredal ./include/confmodel
+git mv ./python/coredal ./python/confmodel
+git mv ./schema/coredal ./schema/confmodel
+git mv ./cmake/coredalConfig.cmake.in ./cmake/confmodelConfig.cmake.in
 
 git_stashing_area=$(mktemp -d)
 mv .git $git_stashing_area
 
-find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
-
-# OKSDB_INTERFACE is not a typo
-find . -type f | xargs -i sed -r -i 's/OKSDB_INTERFACE/CONFFWK/g' {}
-
-# JCF: closing the barn door after the cows have been let out (https://github.com/DUNE-DAQ/conffwk/pull/12)
-find . -type f | xargs -i sed -r -i 's/oksconfig/oksconflibs/g' {}
+find . -type f | xargs -i sed -r -i 's/coredal/confmodel/g' {}
 
 mv $git_stashing_area/.git .
 rm -rf $git_stashing_area
 
 cd ..
-mv oksdbinterfaces conffwk
+mv coredal confmodel
 
-##################### oksconfig -> oksconflibs #############################
+##################### appdal -> appmodel #############################
 
-cd oksconfig
+cd appdal
 
-git mv ./include/oksconfig ./include/oksconflibs
-git mv ./cmake/oksconfigConfig.cmake.in ./cmake/oksconflibsConfig.cmake.in
+git mv ./config/appdal ./config/appmodel
+git mv ./include/appdal ./include/appmodel
+git mv ./python/appdal ./python/appmodel
+git mv ./schema/appdal ./schema/appmodel
+
+git mv ./cmake/appdalConfig.cmake.in ./cmake/appmodelConfig.cmake.in
+git mv ./include/appmodel/appdalIssues.hpp ./include/appmodel/appmodelIssues.hpp
 
 git_stashing_area=$(mktemp -d)
 mv .git $git_stashing_area
 
-# Note that oksconflibs depends on conffwk, so we need to account for the update
-find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
+# Note that appmodel depends on confmodel, so we need to account for the update
+find . -type f | xargs -i sed -r -i 's/coredal/confmodel/g' {}
 
-find . -type f | xargs -i sed -r -i 's/oksconfig/oksconflibs/g' {}
-find . -type f | xargs -i sed -r -i 's/OKSCONFIG/OKSCONFLIBS/g' {}
+find . -type f | xargs -i sed -r -i 's/appdal/appmodel/g' {}
+find . -type f | xargs -i sed -r -i 's/APPDAL/APPMODEL/g' {}
+find . -type f | xargs -i sed -r -i 's/Appdal/Appmodel/g' {}
 
 mv $git_stashing_area/.git .
 rm -rf $git_stashing_area
 
 cd ..
-mv oksconfig oksconflibs
-
-##################### genconfig -> oksdalgen #############################
-
-cd genconfig 
-
-git mv ./cmake/genconfigConfig.cmake.in ./cmake/oksdalgenConfig.cmake.in
-
-git_stashing_area=$(mktemp -d)
-mv .git $git_stashing_area
-
-# Note that oksdalgen depends on conffwk, so we need to account for the update   
-find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
-
-find . -type f | xargs -i sed -r -i 's/genconfig/oksdalgen/g' {}
-find . -type f | xargs -i sed -r -i 's/GENCONFIG/OKSDALGEN/g' {}
-
-git mv apps/genconfig.cxx apps/oksdalgen.cxx
-
-mv $git_stashing_area/.git .
-rm -rf $git_stashing_area
-
-cd ..
-mv genconfig oksdalgen
+mv appdal appmodel
 
 ###########################Change dependencies with other packages#############################
 
@@ -92,7 +75,7 @@ mv genconfig oksdalgen
 
 for pkg in drunc integrationtest docs dal $( $scriptdir/list_packages.py develop coredaq ) $( $scriptdir/list_packages.py develop fddaq ) ; do
     
-    if [[ $pkg == "oksdbinterfaces" || $pkg == "genconfig" || $pkg == "oksconfig" ]]; then
+    if [[ $pkg == "coredal" || $pkg == "appdal" ]]; then
 	continue
     fi
 	
@@ -103,10 +86,8 @@ for pkg in drunc integrationtest docs dal $( $scriptdir/list_packages.py develop
     git_stashing_area=$(mktemp -d)
     mv .git $git_stashing_area
 
-    find . -type f | xargs -i sed -r -i 's/oksdbinterfaces/conffwk/g' {}
-    find . -type f | xargs -i sed -r -i 's/genconfig/oksdalgen/g' {}
-    find . -type f | xargs -i sed -r -i 's/oksconfig/oksconflibs/g' {}
-    find . -type f | xargs -i sed -r -i 's/GENCONFIG/OKSDALGEN/g' {}  # Needed for daq-cmake
+    find . -type f | xargs -i sed -r -i 's/coredal/confmodel/g' {}
+    find . -type f | xargs -i sed -r -i 's/appdal/appmodel/g' {}
     
     mv $git_stashing_area/.git .
     rm -rf $git_stashing_area
