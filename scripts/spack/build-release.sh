@@ -144,13 +144,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     
 fi
 
-
-ln -s $( basename $OLD_SUBDIR ) default
-
 echo "Files in $SPACK_AREA :"
 ls -ltr $SPACK_AREA
-
-echo "Files in $OLD_SUBDIR :"
-ls -ltr $OLD_SUBDIR
 
 spack clean -a
