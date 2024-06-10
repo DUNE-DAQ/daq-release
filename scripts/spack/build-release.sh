@@ -96,12 +96,14 @@ if [[ $retval != 0 ]]; then
 fi
 
 build_dbe=false
-if [[ $DET == "core" ]]; then
+if [[ $DET == "fddaq" ]]; then
 
-    mkdir -p $SPACK_AREA/spack-installation/spack-repo/packages/coredaqumbrella
-    cp $DAQ_RELEASE_REPO/$spack_template_dir/packages/coredaqumbrella/package.py $SPACK_AREA/spack-installation/spack-repo/packages/coredaqumbrella
+    mkdir -p $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
+    cp $DAQ_RELEASE_REPO/$spack_template_dir/packages/umbrella/package.py $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
 
-    spack spec -l --reuse coredaqumbrella ^dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+    umbrella_spec="umbrella ^dbe build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ^qt@5.15.9:"
+
+    spack spec -l --reuse $umbrella_spec > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
     cat $SPACK_AREA/spec_dbe_log.txt
@@ -111,15 +113,15 @@ if [[ $DET == "core" ]]; then
     else
 	build_dbe=false
         echo "Building dbe does not appear to be possible. As this is not (necessarily) an error, will continue..."
-	rm -rf $SPACK_AREA/spack-installation/spack-repo/packages/coredaqumbrella
+	rm -rf $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
     fi
 fi
 
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
 if $build_dbe; then
-    spack install --reuse coredaqumbrella ^dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
-    spack uninstall coredaqumbrella  # coredaqumbrella only used to avoid package reinstallation
+    spack install $umbrella_spec || exit 8
+    spack uninstall umbrella  # umbrella only used to avoid installation of alread-installed OKS packages
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
