@@ -7,12 +7,12 @@
 from spack import *
 
 
-class Coredaqumbrella(BundlePackage):
+class Umbrella(BundlePackage):
     """A dummy package to ensure that dbe uses the same packages as coredaq"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
     version("uninstallme")
 
-    depends_on("coredaq")
+    depends_on("fddaq")
     depends_on("dbe")
