@@ -101,7 +101,7 @@ if [[ $DET == "fd" ]]; then
     mkdir -p $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
     cp $DAQ_RELEASE_REPO/$spack_template_dir/packages/umbrella/package.py $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
 
-    umbrella_spec="umbrella ^dbe build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ^qt@5.15.9:"
+    umbrella_spec="umbrella ^${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ^dbe build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ^qt@5.15.9:"
 
     spack spec -l --reuse $umbrella_spec > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
@@ -109,6 +109,7 @@ if [[ $DET == "fd" ]]; then
     cat $SPACK_AREA/spec_dbe_log.txt
 
     if [[ $retval == 0 ]]; then
+	echo "Will build dbe in addition to ${DET}daq"
 	build_dbe=true
     else
 	build_dbe=false
@@ -117,11 +118,13 @@ if [[ $DET == "fd" ]]; then
     fi
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+
 
 if $build_dbe; then
     spack install $umbrella_spec || exit 8
-    spack uninstall umbrella  # umbrella only used to avoid installation of alread-installed OKS packages
+    spack uninstall -y umbrella  # umbrella only used to avoid installation of alread-installed OKS packages
+else
+    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
