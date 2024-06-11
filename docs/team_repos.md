@@ -4,11 +4,11 @@
 ## ccm
 * **People to contact**: Pierre Lasorak, Alex Tapper
 * **Repositories with write access**:
-    * appdal
+    * appmodel
     * appfwk
     * cmdlib
     * connectivityserver
-    * coredal
+    * confmodel
     * dal
     * daqconf
     * daqsystemtest

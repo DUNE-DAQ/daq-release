@@ -7,11 +7,11 @@
 from spack import *
 
 
-class Appdal(CMakePackage):
+class Confmodel(CMakePackage):
     """Run Control related"""
 
-    homepage = "https://github.com/DUNE-DAQ/appdal"
-    git =      "https://github.com/DUNE-DAQ/appdal.git"
+    homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/confmodel/"
+    git =      "https://github.com/DUNE-DAQ/confmodel.git"
 
     maintainers = ["jcfreeman2"]
 
