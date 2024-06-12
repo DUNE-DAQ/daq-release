@@ -1,8 +1,8 @@
-name: Nightly integration tests
+name: Nightly v5 integration tests
 
 on:
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "15 9 * * *"
 
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y%m%d)
-          echo "nightly_tag=NFD_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
@@ -41,6 +41,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daqsystemtest
+        ref: develop
         path: daqsystemtest
     
     - name: setup release and run tests
@@ -51,7 +52,7 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
+          setup_dbt latest_v5 || true
           dbt-setup-release -n $NIGHTLY_TAG
           #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
