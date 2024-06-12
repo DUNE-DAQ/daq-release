@@ -14,5 +14,5 @@ class Umbrella(BundlePackage):
 
     version("uninstallme")
 
-    depends_on("fddaq")
+    depends_on("coredaq")
     depends_on("dbe")

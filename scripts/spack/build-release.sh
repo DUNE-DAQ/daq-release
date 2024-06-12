@@ -96,7 +96,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 build_dbe=false
-if [[ $DET == "fd" ]]; then
+if [[ $DET == "core" ]]; then
 
     mkdir -p $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
     cp $DAQ_RELEASE_REPO/$spack_template_dir/packages/umbrella/package.py $SPACK_AREA/spack-installation/spack-repo/packages/umbrella
