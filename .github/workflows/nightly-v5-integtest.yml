@@ -30,17 +30,17 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["minimal_system_quick", "fake_data_producer", "long_window_readout", "small_footprint_quick"]
+            test_name: ["listrev"]
     defaults:
       run:
         shell: bash
 
     steps:
 
-    - name: Checkout daqsystemtest
+    - name: Checkout listrev
       uses: actions/checkout@v4
       with:
-        repository: DUNE-DAQ/daqsystemtest
+        repository: DUNE-DAQ/listrev
         ref: develop
         path: daqsystemtest
     
