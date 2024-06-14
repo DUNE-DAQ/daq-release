@@ -196,3 +196,42 @@ cd trigger
 git mv plugins/RandomTriggerCandidateMaker.hpp plugins/RandomTCMakerModule.hpp
 git mv plugins/RandomTriggerCandidateMaker.cpp plugins/RandomTCMakerModule.cpp
 cd ..
+
+fully_replace_token StandaloneCandidateMakerConf StandaloneTCMakerConf "appmodel"
+fully_replace_token StandaloneCandidateMaker StandaloneTCMakerModule   "appmodel"
+
+fully_replace_token TCCustom TCCustomAlgorithm "appmodel"
+
+fully_replace_token TriggerActivityMakerHorizontalMuonPlugin TAMakerHorizontalMuonAlgorithm "trigger triggeralgs trgtools appmodel"
+fully_replace_token TriggerActivityMakerHorizontalMuon TAMakerHorizontalMuonAlgorithm       "trigger triggeralgs trgtools appmodel"
+cd triggeralgs
+git mv include/triggeralgs/HorizontalMuon/TriggerActivityMakerHorizontalMuon.hpp include/triggeralgs/HorizontalMuon/TAMakerHorizontalMuonAlgorithm.hpp 
+git mv src/TriggerActivityMakerHorizontalMuon.cpp src/TAMakerHorizontalMuonAlgorithm.cpp
+cd ..
+
+fully_replace_token TriggerActivityMakerPrescalePlugin TAMakerPrescaleAlgorithm "dfmodules trigger triggeralgs appmodel daqsystemtest"
+fully_replace_token TriggerActivityMakerPrescale TAMakerPrescaleAlgorithm       "dfmodules trigger triggeralgs appmodel daqsystemtest"
+cd triggeralgs
+git mv include/triggeralgs/Prescale/TriggerActivityMakerPrescale.hpp include/triggeralgs/Prescale/TAMakerPrescaleAlgorithm.hpp
+git mv src/TriggerActivityMakerPrescale.cpp src/TAMakerPrescaleAlgorithm.cpp
+cd ..
+
+fully_replace_token TriggerCandidateMakerHorizontalMuonPlugin TCMakerHorizontalMuonAlgorithm "trigger triggeralgs appmodel"
+fully_replace_token TriggerCandidateMakerHorizontalMuon TCMakerHorizontalMuonAlgorithm       "trigger triggeralgs appmodel"
+cd triggeralgs
+git mv include/triggeralgs/HorizontalMuon/TriggerCandidateMakerHorizontalMuon.hpp include/triggeralgs/HorizontalMuon/TCMakerHorizontalMuonAlgorithm.hpp
+git mv src/TriggerCandidateMakerHorizontalMuon.cpp src/TCMakerHorizontalMuonAlgorithm.cpp
+cd ..
+
+fully_replace_token TriggerCandidateMakerPrescalePlugin TCMakerPrescaleAlgorithm "dfmodules trigger triggeralgs appmodel daqsystemtest integrationtest"
+fully_replace_token TriggerCandidateMakerPrescale TCMakerPrescaleAlgorithm       "dfmodules trigger triggeralgs appmodel daqsystemtest integrationtest"
+cd triggeralgs
+git mv include/triggeralgs/Prescale/TriggerCandidateMakerPrescale.hpp include/triggeralgs/Prescale/TCMakerPrescaleAlgorithm.hpp
+git mv src/TriggerCandidateMakerPrescale.cpp src/TCMakerPrescaleAlgorithm.cpp
+cd ..
+
+fully_replace_token TriggerDataHandler TriggerDataHandlerModule "trigger appmodel oksconfgen integrationtest"
+cd trigger
+git mv plugins/TriggerDataHandler.hpp plugins/TriggerDataHandlerModule.hpp
+git mv plugins/TriggerDataHandler.cpp plugins/TriggerDataHandlerModule.cpp
+cd ..
