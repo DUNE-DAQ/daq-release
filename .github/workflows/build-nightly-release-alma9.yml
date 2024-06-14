@@ -31,6 +31,16 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+    
+  find_rootless_podman_socket:
+    name: find socket
+    runs-on: iceberg01
+    steps:
+      - id: find_socket
+        run: |
+          echo "XDG_RUNTIME_DIR=podman info --format '{{.Host.RemoteSocket.Path}}'" >> "GITHUB_OUTPUT"
+          echo "Got XDG_RUNTIME_DIR $XDG_RUNTIME_DIR"
+          cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
@@ -39,7 +49,7 @@ jobs:
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
       env:
-        DOCKER_HOST: unix:///run/podman/podman.sock
+        DOCKER_HOST: unix://${XDG_RUNTIME_DIR}/podman.sock
     defaults:
       run:
         shell: bash
