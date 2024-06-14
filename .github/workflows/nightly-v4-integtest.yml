@@ -1,4 +1,4 @@
-name: Nightly integration tests
+name: Nightly v4 integration tests
 
 on:
   schedule:
