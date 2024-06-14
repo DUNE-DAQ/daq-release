@@ -92,3 +92,33 @@ cd dfmodules
 git mv plugins/DataWriter.hpp plugins/DataWriterModule.hpp
 git mv plugins/DataWriter.cpp plugins/DataWriterModule.cpp
 cd ..
+
+fully_replace_token FakeDataProd FakeDataProdModule "dfmodules timinglibs appmodel daqsystemtest"
+fully_replace_token FakeDataProdModuleConf FakeDataProdConf "dfmodules timinglibs appmodel daqsystemtest"
+
+cd dfmodules
+git mv plugins/FakeDataProd.hpp plugins/FakeDataProdModule.hpp
+git mv plugins/FakeDataProd.cpp plugins/FakeDataProdModule.cpp
+cd ..
+
+fully_replace_token FakeHSIEventGenerator FakeHSIEventGeneratorModule "hsilibs timinglibs appmodel integrationtest"
+fully_replace_token FakeHSIEventGeneratorModuleConf FakeHSIEventGeneratorConf "hsilibs timinglibs appmodel integrationtest"
+
+cd hsilibs
+git mv plugins/FakeHSIEventGenerator.hpp plugins/FakeHSIEventGeneratorModule.hpp
+git mv plugins/FakeHSIEventGenerator.cpp plugins/FakeHSIEventGeneratorModule.cpp
+cd ..
+
+fully_replace_token FragmentAggregator FragmentAggregatorModule "dfmodules appmodel oksconfgen"
+
+cd dfmodules
+git mv plugins/FragmentAggregator.hpp plugins/FragmentAggregatorModule.hpp
+git mv plugins/FragmentAggregator.cpp plugins/FragmentAggregatorModule.cpp
+cd ..
+
+fully_replace_token HSIDataLinkHandler HSIDataHandlerModule "hsilibs appmodel integrationtest"
+cd hsilibs
+git mv plugins/HSIDataLinkHandler.hpp plugins/HSIDataHandlerModule.hpp
+git mv plugins/HSIDataLinkHandler.cpp plugins/HSIDataHandlerModule.cpp
+cd ..
+
