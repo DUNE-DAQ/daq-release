@@ -2,6 +2,8 @@
 
 # JCF, Jun-13-2024
 
+# This script is meant to address Issue #376
+
 # Execute the name changes recommended in
 # https://docs.google.com/spreadsheets/d/1k3ScIDQJTLHPjsMgsIPm8tGYSZa6HEm5f1xvsl8M5vU/edit?gid=0#gid=0
 
@@ -49,86 +51,44 @@ function replace_token() {
 
 }
 
-# QueueWithId -> QueueWithSourceId
+function fully_replace_token() {
+    local old=$1
+    local new=$2
+    local affected_repos=$3
 
-affected_repos="readoutmodules dfmodules confmodel appmodel dpdklibs flxlibs"
+    gitclone $affected_repos
 
-gitclone $affected_repos
+    for repo in $affected_repos; do
+	cd $repo
+	replace_token $old $new
+	cd ..
+    done
+}
 
-for repo in $affected_repos; do
-    cd $repo
-    replace_token QueueWithId QueueWithSourceId 
-    cd ..
-done
+fully_replace_token QueueWithId QueueWithSourceId "readoutmodules dfmodules confmodel appmodel dpdklibs flxlibs"
 
-# DataFlowOrchestrator -> DFOModule
+fully_replace_token DataFlowOrchestrator DFOModule "dfmodules appmodel"
 
-affected_repos="dfmodules appmodel"
+cd dfmodules
+git mv plugins/DataFlowOrchestrator.hpp plugins/DFOModule.hpp                                             
+git mv plugins/DataFlowOrchestrator.cpp plugins/DFOModule.cpp                                             
+git mv unittest/DataFlowOrchestrator_test.cxx unittest/DFOModule_test.cxx
+cd ..
 
-gitclone $affected_repos
+fully_replace_token DataReaderConf DataReceiverConf "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
+fully_replace_token DataReader DataReceiverModule "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
 
-for repo in $affected_repos; do                                                                             
-    cd $repo                                                                                                
-    replace_token DataFlowOrchestrator DFOModule
 
-    if [[ $repo == dfmodules ]]; then
-	git mv plugins/DataFlowOrchestrator.hpp plugins/DFOModule.hpp
-	git mv plugins/DataFlowOrchestrator.cpp plugins/DFOModule.cpp
-	git mv unittest/DataFlowOrchestrator_test.cxx unittest/DFOModule_test.cxx
-    fi
-    
-    cd ..                                                                                                   
-done  
+fully_replace_token DataRecorder DataRecorderModule "readoutlibs readoutmodules appmodel fdreadoutmodules"
+fully_replace_token DataRecorderModuleConf DataRecorderConf "readoutlibs readoutmodules appmodel fdreadoutmodules" 
+cd fdreadoutmodules
+git mv plugins/DataRecorder.hpp plugins/DataRecorderModule.hpp
+git mv plugins/DataRecorder.cpp plugins/DataRecorderModule.cpp
+cd ..
 
-# DataReader -> DataReceiverModule, DataReaderConf -> DataReceiverConf
-
-affected_repos="readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
-
-gitclone $affected_repos
-
-for repo in $affected_repos; do
-    cd $repo
-    replace_token DataReaderConf DataReceiverConf
-    replace_token DataReader DataReceiverModule
-    cd ..
-done
-
-# DataRecorder -> DataRecorderModule, DataRecorderConf is unchanged
-
-affected_repos="readoutlibs readoutmodules appmodel fdreadoutmodules"
-
-gitclone $affected_repos
-
-for repo in $affected_repos; do
-    cd $repo
-    replace_token DataRecorder DataRecorderModule
-    replace_token DataRecorderModuleConf DataRecorderConf  # partial reversion
-
-    if [[ $repo == fdreadoutmodules ]]; then
-	git mv plugins/DataRecorder.hpp plugins/DataRecorderModule.hpp
-	git mv plugins/DataRecorder.cpp plugins/DataRecorderModule.cpp
-    fi
-    
-    cd ..
-done
-
-# DataWriter -> DataWriterModule, DataWriteConf unchanged
-
-affected_repos="appfwk dfmodules hdf5libs appmodel fdreadoutmodules integrationtest"
-
-gitclone $affected_repos
-
-for repo in $affected_repos; do
-    cd $repo
-    replace_token DataWriter DataWriterModule
-    replace_token DataWriterModuleConf DataWriterConf # partial reversion
-
-    if [[ $repo == dfmodules ]]; then
-	git mv plugins/DataWriter.hpp plugins/DataWriterModule.hpp
-	git mv plugins/DataWriter.cpp plugins/DataWriterModule.cpp
-    fi
-
-    cd ..
-done
-    
-    
+fully_replace_token DataWriter DataWriterModule "appfwk dfmodules hdf5libs appmodel fdreadoutmodules integrationtest"
+fully_replace_token DataWriterModuleConf DataWriterConf "appfwk dfmodules hdf5libs appmodel fdreadoutmodules integrationtest"
+cd dfmodules
+git mv plugins/DataWriter.hpp plugins/DataWriterModule.hpp
+git mv plugins/DataWriter.cpp plugins/DataWriterModule.cpp
+cd ..
