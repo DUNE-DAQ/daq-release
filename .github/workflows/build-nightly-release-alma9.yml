@@ -38,9 +38,7 @@ jobs:
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
-      volumes:
-        - /run/podman/podman.sock:/var/run/docker.sock
-    env:
+      env:
         DOCKER_HOST: unix:///run/podman/podman.sock
     defaults:
       run:
