@@ -48,10 +48,6 @@ jobs:
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
-      env:
-        DOCKER_HOST: unix://${XDG_RUNTIME_DIR}/podman.sock
-      options: 
-        --host /run/user/52279/podman/podman.sock
     defaults:
       run:
         shell: bash
