@@ -27,7 +27,8 @@ function gitclone {
 	    fi
 
 	    cd $pkg
-	    git checkout -b johnfreeman/daq-release_issue376_renames_for_v5_pt2
+	    local branch_name=johnfreeman/daq-release_issue376_renames_for_v5_pt2
+	    git checkout $branch_name || git checkout -b $branch_name
 	    cd ..
 	fi
     done
@@ -65,23 +66,31 @@ function fully_replace_token() {
     done
 }
 
-
-
-fully_replace_token DataReceiverConf DataReaderConf      "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
-fully_replace_token DataReceiverModule DataReaderModule  "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
-
-fully_replace_token FDFakeCardReader FDFakeCardReaderModule "appmodel oksconfgen fdreadoutmodules"
+fully_replace_token FDFakeCardReaderModule FDFakeReaderModule "appmodel oksconfgen fdreadoutmodules"
 cd fdreadoutmodules
-git mv plugins/FDFakeCardReader.hpp plugins/FDFakeCardReaderModule.hpp
-git mv plugins/FDFakeCardReader.cpp plugins/FDFakeCardReaderModule.cpp
-cd ..
-
-# Just an automated double check, basically
-fully_replace_token DPDKReader DPDKReaderModule             "appmodel oksconfgen dpdklibs"
-fully_replace_token DPDKReaderModuleConf DPDKReaderConf     "appmodel oksconfgen dpdklibs"
-fully_replace_token DPDKReaderModuleModule DPDKReaderModule "appmodel oksconfgen dpdklibs"
+git mv plugins/FDFakeCardReaderModule.hpp plugins/FDFakeReaderModule.hpp
+git mv plugins/FDFakeCardReaderModule.cpp plugins/FDFakeReaderModule.cpp
+cd .. 
 
 ########### EVERYTHING BELOW THIS LINE IS FOR THE HISTORICAL RECORD ###########
+
+# NAME CHANGES FROM Jun-17-2024 (Round 1)
+
+# fully_replace_token DataReceiverConf DataReaderConf      "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
+# fully_replace_token DataReceiverModule DataReaderModule  "readoutmodules appmodel oksconfgen dpdklibs integrationtest flxlibs fdreadoutmodules"
+
+# fully_replace_token FDFakeCardReader FDFakeCardReaderModule "appmodel oksconfgen fdreadoutmodules"
+# cd fdreadoutmodules
+# git mv plugins/FDFakeCardReader.hpp plugins/FDFakeCardReaderModule.hpp
+# git mv plugins/FDFakeCardReader.cpp plugins/FDFakeCardReaderModule.cpp
+# cd ..
+
+# # DPDK-related changes are just an automated double check on Alessandro's work, basically
+# fully_replace_token DPDKReader DPDKReaderModule             "appmodel oksconfgen dpdklibs"
+# fully_replace_token DPDKReaderModuleConf DPDKReaderConf     "appmodel oksconfgen dpdklibs"
+# fully_replace_token DPDKReaderModuleModule DPDKReaderModule "appmodel oksconfgen dpdklibs"
+
+######################################################################
 
 # NAME CHANGES FROM Jun-14-2024 :
 
