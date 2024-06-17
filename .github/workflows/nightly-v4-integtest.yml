@@ -50,12 +50,12 @@ jobs:
           DET=fd
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+          export PATH=$HOME/bin:$PATH
+          type get-ticket.sh && get-ticket.sh
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest|| true
           dbt-setup-release -n $NIGHTLY_TAG
           #dbt-setup-release -n last_${DET}daq
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
           rm -f $GITHUB_WORKSPACE/*-test-results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
