@@ -42,7 +42,7 @@ jobs:
       with:
         repository: DUNE-DAQ/listrev
         ref: develop
-        path: daqsystemtest
+        path: listrev
     
     - name: setup release and run tests
       env:
@@ -58,10 +58,10 @@ jobs:
           dbt-setup-release -n $NIGHTLY_TAG
           #dbt-setup-release -n last_${DET}daq
           rm -f $GITHUB_WORKSPACE/*-test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
+          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
-          rm -rf daqsystemtest
+          rm -rf listrev
 
   parse_results:
     runs-on: daq
