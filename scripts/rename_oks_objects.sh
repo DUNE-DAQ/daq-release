@@ -27,7 +27,7 @@ function gitclone {
 	    fi
 
 	    cd $pkg
-	    local branch_name=johnfreeman/daq-release_issue376_renames_for_v5_pt2
+	    local branch_name=johnfreeman/daq-release_issue376_renames_for_v5_pt3
 	    git checkout $branch_name || git checkout -b $branch_name
 	    cd ..
 	fi
@@ -66,13 +66,26 @@ function fully_replace_token() {
     done
 }
 
-fully_replace_token FDFakeCardReaderModule FDFakeReaderModule "appmodel oksconfgen fdreadoutmodules"
-cd fdreadoutmodules
-git mv plugins/FDFakeCardReaderModule.hpp plugins/FDFakeReaderModule.hpp
-git mv plugins/FDFakeCardReaderModule.cpp plugins/FDFakeReaderModule.cpp
-cd .. 
+
+fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
+fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
+
+fully_replace_token WIBConfigurator WIBModule "appmodel wibmod"
+cd wibmod
+git mv plugins/WIBConfigurator.hpp plugins/WIBModule.hpp
+git mv plugins/WIBConfigurator.cpp plugins/WIBModule.cpp
+cd ..
 
 ########### EVERYTHING BELOW THIS LINE IS FOR THE HISTORICAL RECORD ###########
+
+# NAME CHANGES FROM Jun-17-2024 (Round 2)
+
+# fully_replace_token FDFakeCardReaderModule FDFakeReaderModule "appmodel oksconfgen fdreadoutmodules"
+# cd fdreadoutmodules
+# git mv plugins/FDFakeCardReaderModule.hpp plugins/FDFakeReaderModule.hpp
+# git mv plugins/FDFakeCardReaderModule.cpp plugins/FDFakeReaderModule.cpp
+# cd .. 
+
 
 # NAME CHANGES FROM Jun-17-2024 (Round 1)
 
