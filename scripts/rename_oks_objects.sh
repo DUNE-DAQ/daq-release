@@ -70,7 +70,8 @@ function fully_replace_token() {
 fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
 fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
 
-fully_replace_token WIBConfigurator WIBModule "appmodel wibmod"
+fully_replace_token WIBConfigurator WIBModule           "appmodel wibmod"
+fully_replace_token ProtoWIBModule ProtoWIBConfigurator "appmodel wibmod"
 cd wibmod
 git mv plugins/WIBConfigurator.hpp plugins/WIBModule.hpp
 git mv plugins/WIBConfigurator.cpp plugins/WIBModule.cpp
