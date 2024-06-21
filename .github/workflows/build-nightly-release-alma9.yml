@@ -58,6 +58,7 @@ jobs:
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -c -o $BASE_RELEASE_DIR/sourcecode
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -78,6 +79,7 @@ jobs:
           source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
