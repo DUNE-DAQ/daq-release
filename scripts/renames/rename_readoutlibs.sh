@@ -48,9 +48,29 @@ git mv unittest/readoutlibs_VariableSizeElementQueue_test.cxx unittest/datahandl
 cp $tmpdir/readoutmodules/scripts/* scripts/
 cp $tmpdir/readoutmodules/schema/readoutmodules/* schema/datahandlinglibs
 cp -rp $tmpdir/readoutmodules/include/readoutmodules/* include/datahandlinglibs
+git add -A
+
+git mv include/datahandlinglibs/ReadoutModulesIssues.hpp include/datahandlinglibs/DataHandlingIssues.hpp
 cd ..
 
 fully_replace_token readoutlibs datahandlinglibs "datahandlinglibs"
+
+fully_replace_token ReadoutConcept DataHandlingConcept "datahandlinglibs"
+cd datahandlinglibs
+git mv include/datahandlinglibs/concepts/ReadoutConcept.hpp include/datahandlinglibs/concepts/DataHandlingConcept.hpp
+cd ..
+
+fully_replace_token ReadoutModel DataHandlingModel "datahandlinglibs"
+cd datahandlinglibs
+git mv include/datahandlinglibs/models/ReadoutModel.hpp include/datahandlinglibs/models/DataHandlingModel.hpp
+git mv include/datahandlinglibs/models/detail/ReadoutModel.hxx include/datahandlinglibs/models/detail/DataHandlingModel.hxx
+cd ..
+
+# header guard replacement
+fully_replace_token READOUTLIBS DATAHANDLINGLIBS "datahandlinglibs"
+fully_replace_token READOUTMODULES DATAHANDLINGLIBS "datahandlinglibs"
+
+
 
 # fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
 # fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
