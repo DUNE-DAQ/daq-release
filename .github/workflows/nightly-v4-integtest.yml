@@ -56,7 +56,7 @@ jobs:
           setup_dbt latest|| true
           dbt-setup-release -n $NIGHTLY_TAG
           #dbt-setup-release -n last_${DET}daq
-          rm -f $GITHUB_WORKSPACE/*_test_results.xml
+          rm -f $GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml
           pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
