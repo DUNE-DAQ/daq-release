@@ -60,7 +60,7 @@ jobs:
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
           packages_to_checkout=$(daq-release/scripts/list_packages.py develop coredaq)
           for package in $packages_to_checkout; do 
-            git clone https://github.com/DUNE-DAQ/$package -b develop $BASE_RELEASE_DIR/sourcecode/$package; 
+            git clone https://github.com/DUNE-DAQ/$package -b develop $DET_RELEASE_DIR/sourcecode/$package; 
           done;
 
           cd $BASE_RELEASE_DIR/../
