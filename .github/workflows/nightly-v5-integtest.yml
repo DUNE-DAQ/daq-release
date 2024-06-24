@@ -1,8 +1,9 @@
 name: Nightly v5 integration tests
 
 on:
-  #schedule:
-  #  - cron: "0 9 * * *"
+  schedule:
+    - cron: "15 9 * * *"
+
 
   workflow_dispatch:
 
@@ -20,7 +21,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y%m%d)
-          echo "nightly_tag=NFD_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
@@ -30,18 +31,19 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["minimal_system_quick", "fake_data_producer", "long_window_readout", "small_footprint_quick"]
+            test_name: ["listrev"]
     defaults:
       run:
         shell: bash
 
     steps:
 
-    - name: Checkout daqsystemtest
+    - name: Checkout listrev
       uses: actions/checkout@v4
       with:
-        repository: DUNE-DAQ/daqsystemtest
-        path: daqsystemtest
+        repository: DUNE-DAQ/listrev
+        ref: develop
+        path: listrev
     
     - name: setup release and run tests
       env:
@@ -50,17 +52,19 @@ jobs:
           DET=fd
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
-          dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
-          rm -f $GITHUB_WORKSPACE/*-test-results.xml
-          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest_v5 || true
+          dbt-setup-release -n $NIGHTLY_TAG
+          #dbt-setup-release -n last_${DET}daq
+          rm -f $GITHUB_WORKSPACE/*_test_results.xml
+          pytest --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml \
+                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py \
+                 --nanorc-option partition-number 6
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
-          rm -rf daqsystemtest
+          rm -rf listrev
 
   parse_results:
     runs-on: daq
