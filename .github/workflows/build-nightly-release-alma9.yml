@@ -35,10 +35,16 @@ jobs:
   print_debug:
     name: print_debug_statements
     runs-on: iceberg01
-    run: |
-      echo "id: " id
-      echo "Who am I?" whoami
-      echo "Hostname: " hostname
+    defaults: 
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      run: |
+        echo "id: " id
+        echo "Who am I?" whoami
+        echo "Hostname: " hostname
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
