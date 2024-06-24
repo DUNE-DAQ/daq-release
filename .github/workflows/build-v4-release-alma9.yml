@@ -54,6 +54,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-production_v4/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS production/v4
 
           cd $BASE_RELEASE_DIR/../
@@ -74,6 +75,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-production_v4/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS production/v4
 
           cd $DET_RELEASE_DIR/../
