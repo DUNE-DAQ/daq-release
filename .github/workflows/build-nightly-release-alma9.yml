@@ -32,15 +32,13 @@ jobs:
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
     
-  find_rootless_podman_socket:
-    name: find socket
+  print_debug:
+    name: print_debug_statements
     runs-on: iceberg01
-    steps:
-      - id: find_socket
-        run: |
-          echo "XDG_RUNTIME_DIR=podman info --format '{{.Host.RemoteSocket.Path}}'" >> "GITHUB_OUTPUT"
-          echo "Got XDG_RUNTIME_DIR $XDG_RUNTIME_DIR"
-          cat "$GITHUB_OUTPUT"
+    run: |
+      echo "id: " id
+      echo "Who am I?" whoami
+      echo "Hostname: " hostname
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
