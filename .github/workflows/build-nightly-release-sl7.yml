@@ -262,10 +262,10 @@ jobs:
 
         kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs05.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
         rm -rf $unique_name
