@@ -41,6 +41,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-${{ github.event.inputs.base-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS
 
           cd $BASE_RELEASE_DIR/..
@@ -60,6 +61,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS
 
           cd $DET_RELEASE_DIR/..
