@@ -181,10 +181,7 @@
         - name: daqdataformats
           version: "develop"
           commit: null
-        - name: readoutlibs
-          version: "develop"
-          commit: null
-        - name: readoutmodules
+        - name: datahandlinglibs
           version: "develop"
           commit: null
         - name: dfmodules
