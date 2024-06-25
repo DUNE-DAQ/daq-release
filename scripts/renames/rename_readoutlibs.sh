@@ -48,36 +48,37 @@ git mv unittest/readoutlibs_VariableSizeElementQueue_test.cxx unittest/datahandl
 cp $tmpdir/readoutmodules/scripts/* scripts/
 cp $tmpdir/readoutmodules/schema/readoutmodules/* schema/datahandlinglibs
 cp -rp $tmpdir/readoutmodules/include/readoutmodules/* include/datahandlinglibs
+rm include/datahandlinglibs/ReadoutModulesIssues.hpp  # readoutmodules has just a subset of exactly the same set of ERS Issues as readoutlibs
 git add -A
-
-git mv include/datahandlinglibs/ReadoutModulesIssues.hpp include/datahandlinglibs/DataHandlingIssues.hpp
-cd ..
-
-fully_replace_token readoutlibs datahandlinglibs "datahandlinglibs"
-
-fully_replace_token ReadoutConcept DataHandlingConcept "datahandlinglibs"
-cd datahandlinglibs
-git mv include/datahandlinglibs/concepts/ReadoutConcept.hpp include/datahandlinglibs/concepts/DataHandlingConcept.hpp
-cd ..
-
-fully_replace_token ReadoutModel DataHandlingModel "datahandlinglibs"
-cd datahandlinglibs
-git mv include/datahandlinglibs/models/ReadoutModel.hpp include/datahandlinglibs/models/DataHandlingModel.hpp
-git mv include/datahandlinglibs/models/detail/ReadoutModel.hxx include/datahandlinglibs/models/detail/DataHandlingModel.hxx
 cd ..
 
 # header guard replacement
 fully_replace_token READOUTLIBS DATAHANDLINGLIBS "datahandlinglibs"
 fully_replace_token READOUTMODULES DATAHANDLINGLIBS "datahandlinglibs"
 
+fully_replace_token readoutlibs datahandlinglibs "datahandlinglibs dfmodules hsilibs trigger dpdklibs fdreadoutlibs fdreadoutmodules flxlibs"
+fully_replace_token fddatahandlinglibs fdreadoutlibs "trigger dpdklibs fdreadoutlibs fdreadoutmodules flxlibs"
 
+fully_replace_token readoutmodules datahandlinglibs "datahandlinglibs dfmodules hsilibs trigger dpdklibs fdreadoutlibs fdreadoutmodules flxlibs"
+fully_replace_token fddatahandlinglibs fdreadoutmodules "fdreadoutmodules"
 
-# fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
-# fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
+fully_replace_token fddatahandlinglibs fdreadoutlibs "trigger dpdklibs fdreadoutlibs fdreadoutmodules flxlibs"
 
-# fully_replace_token WIBConfigurator WIBModule           "appmodel wibmod"
-# fully_replace_token ProtoWIBModule ProtoWIBConfigurator "appmodel wibmod"
-# cd wibmod
-# git mv plugins/WIBConfigurator.hpp plugins/WIBModule.hpp
-# git mv plugins/WIBConfigurator.cpp plugins/WIBModule.cpp
-# cd ..
+fully_replace_token ReadoutIssues DataHandlingIssues "datahandlinglibs hsilibs trigger dpdklibs fdreadoutlibs fdreadoutmodules flxlibs"
+fully_replace_token ReadoutModulesIssues DataHandlingIssues "datahandlinglibs"
+fully_replace_token FDDataHandlingIssues FDReadoutIssues "fdreadoutlibs"
+cd datahandlinglibs
+git mv include/datahandlinglibs/ReadoutIssues.hpp include/datahandlinglibs/DataHandlingIssues.hpp
+cd ..
+
+fully_replace_token ReadoutConcept DataHandlingConcept "datahandlinglibs hsilibs trigger fdreadoutmodules"
+cd datahandlinglibs
+git mv include/datahandlinglibs/concepts/ReadoutConcept.hpp include/datahandlinglibs/concepts/DataHandlingConcept.hpp
+cd ..
+
+fully_replace_token ReadoutModel DataHandlingModel "datahandlinglibs hsilibs trigger dpdklibs fdreadoutmodules"
+cd datahandlinglibs
+git mv include/datahandlinglibs/models/ReadoutModel.hpp include/datahandlinglibs/models/DataHandlingModel.hpp
+git mv include/datahandlinglibs/models/detail/ReadoutModel.hxx include/datahandlinglibs/models/detail/DataHandlingModel.hxx
+cd ..
+
