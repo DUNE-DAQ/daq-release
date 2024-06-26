@@ -235,7 +235,7 @@
         - name: dbe
           version: "develop"
           commit: null
-        - name: oksconfgen
+        - name: daqconf
           version: "develop"
           commit: null
 
