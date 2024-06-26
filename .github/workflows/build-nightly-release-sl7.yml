@@ -58,6 +58,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
@@ -78,6 +79,7 @@ jobs:
           export OS=scientific7
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
@@ -262,10 +264,10 @@ jobs:
 
         kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
 
-        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs01.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs05.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
 
-        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs01.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
         rm -rf $unique_name

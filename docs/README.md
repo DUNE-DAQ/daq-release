@@ -9,7 +9,9 @@
 
 [![Spack Nightly Workflow (dev, v5)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml)
 
-[![Nightly Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-integtest.yml)
+[![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml)
+
+[![Nightly v4 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v4-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v4-integtest.yml)
 
 This is a repo containing DUNE DAQ release making tools, configuration files, and build scripts for both DUNE-DAQ and external packages. 
 

@@ -64,6 +64,7 @@
     * performancetest
     * rawdatautils
     * readoutlibs
+    * datahandlinglibs
     * readoutmodules
     * serialization
     * snbmodules
