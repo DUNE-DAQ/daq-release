@@ -34,7 +34,7 @@ jobs:
     
   print_debug:
     name: print_debug_statements
-    runs-on: iceberg01
+    runs-on: protodune-daq01
     defaults: 
       run:
         shell: bash
@@ -48,7 +48,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: iceberg01
+    runs-on: protodune-daq01
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
@@ -104,7 +104,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: iceberg01
+    runs-on: protodune-daq01
     strategy:
       matrix:
         include:
@@ -187,7 +187,7 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: iceberg01
+    runs-on: protodune-daq01
     needs: update_image
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
@@ -224,7 +224,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: iceberg01
+    runs-on: protodune-daq01
 
     steps:
     - name: check_cvmfs_deployment
