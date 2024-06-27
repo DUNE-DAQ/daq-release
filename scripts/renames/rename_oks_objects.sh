@@ -7,6 +7,12 @@
 # Execute the name changes recommended in
 # https://docs.google.com/spreadsheets/d/1k3ScIDQJTLHPjsMgsIPm8tGYSZa6HEm5f1xvsl8M5vU/edit?gid=0#gid=0
 
+# JCF, Jun-27-2024
+
+# Update the script to
+# (1) apply the successive waves of name changes to previously-untouched daqconf, and
+# (2) make the change DataLinkHandler -> RawDataHandler
+
 if [[ $( basename $PWD ) != "sourcecode" ]]; then
     echo "You need to be in the sourcecode/ directory of a work area to run this script" >&2
     exit 1
@@ -17,67 +23,116 @@ if [[ -n $( find . -mindepth 1 -maxdepth 1 -type d ) ]]; then
     exit 2
 fi
 
-function gitclone {
-    for pkg in "$@"; do
-	if [[ ! -d $pkg ]]; then
-	    git clone https://github.com/DUNE-DAQ/$pkg -b develop
-	    if [[ "$?" != "0" ]]; then
-		echo "Unable to clone $pkg; exiting.." >&2
-		exit 3
-	    fi
-
-	    cd $pkg
-	    local branch_name=johnfreeman/daq-release_issue376_renames_for_v5_pt3
-	    git checkout $branch_name || git checkout -b $branch_name
-	    cd ..
-	fi
-    done
-}
-
-function replace_token() {
-
-    local old=$1
-    local new=$2
-    
-    if [[ ! -d .git ]]; then
-	echo "Looks like $PWD isn't a git repo; exiting..." >&2
-	exit 4
-    fi
-
-    local tmpdir=$( mktemp -d )
-    mv .git $tmpdir
-    find . -type f | xargs sed -r -i 's!'$old'!'$new'!g'
-    mv $tmpdir/.git .
-    rm -rf $tmpdir
-
-}
-
-function fully_replace_token() {
-    local old=$1
-    local new=$2
-    local affected_repos=$3
-
-    gitclone $affected_repos
-
-    for repo in $affected_repos; do
-	cd $repo
-	replace_token $old $new
-	cd ..
-    done
-}
+scriptdir=$(dirname "${BASH_SOURCE[0]}")
+. $scriptdir/renaming_tools.sh
 
 
-fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
-fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
+# Run all the rounds of substitutions shown below the fold on previously-untouched daqconf
+fully_replace_token QueueWithId QueueWithSourceId daqconf
+fully_replace_token DataFlowOrchestrator DFOModule daqconf
 
-fully_replace_token WIBConfigurator WIBModule           "appmodel wibmod"
-fully_replace_token ProtoWIBModule ProtoWIBConfigurator "appmodel wibmod"
-cd wibmod
-git mv plugins/WIBConfigurator.hpp plugins/WIBModule.hpp
-git mv plugins/WIBConfigurator.cpp plugins/WIBModule.cpp
+fully_replace_token DataReaderConf DataReceiverConf daqconf
+fully_replace_token DataReader DataReceiverModule daqconf
+
+fully_replace_token DataRecorder DataRecorderModule daqconf
+fully_replace_token DataRecorderModuleConf DataRecorderConf daqconf
+
+fully_replace_token DataWriter DataWriterModule daqconf
+fully_replace_token DataWriterModuleConf DataWriterConf daqconf
+
+fully_replace_token FakeDataProd FakeDataProdModule daqconf
+fully_replace_token FakeDataProdModuleConf FakeDataProdConf daqconf
+
+fully_replace_token FakeHSIEventGenerator FakeHSIEventGeneratorModule daqconf
+fully_replace_token FakeHSIEventGeneratorModuleConf FakeHSIEventGeneratorConf daqconf
+
+fully_replace_token FragmentAggregator FragmentAggregatorModule daqconf
+fully_replace_token HSIDataLinkHandler HSIDataHandlerModule daqconf
+
+fully_replace_token ReadoutModuleConf DataHandlerConf daqconf
+fully_replace_token ReadoutModule DataHandlerModule daqconf
+fully_replace_token DataHandlerModulesIssues ReadoutModulesIssues daqconf
+
+fully_replace_token TPStreamWriter TPStreamWriterModule daqconf
+fully_replace_token TPStreamWriterModuleApplication TPStreamWriterApplication daqconf
+fully_replace_token TPStreamWriterModuleConf TPStreamWriterConf daqconf
+
+fully_replace_token TriggerRecordBuilder TRBModule daqconf
+fully_replace_token TRBModuleData TriggerRecordBuilderData daqconf
+
+fully_replace_token FDDataLinkHandler FDDataHandlerModule daqconf
+fully_replace_token FelixCardReader FelixReaderModule daqconf
+
+fully_replace_token HermesController HermesModule daqconf
+fully_replace_token NICReceiverConf DPDKReaderConf daqconf
+fully_replace_token NICReceiver DPDKReader daqconf
+
+fully_replace_token CustomTriggerCandidateMakerConf CustomTCMakerConf daqconf
+fully_replace_token CustomTriggerCandidateMaker CustomTCMaker daqconf
+
+fully_replace_token DataSubscriber DataSubscriberModule daqconf
+fully_replace_token DataSubscriberModuleBase DataSubscriberBase daqconf
+fully_replace_token DataSubscriberModuleModel DataSubscriberModel daqconf
+
+fully_replace_token ModuleLevelTriggerConf MLTConf daqconf
+fully_replace_token ModuleLevelTrigger MLTModule daqconf
+
+fully_replace_token RandomTriggerCandidateMakerConf RandomTCMakerConf daqconf
+fully_replace_token RandomTriggerCandidateMaker RandomTCMakerModule daqconf
+
+fully_replace_token StandaloneCandidateMakerConf StandaloneTCMakerConf daqconf
+fully_replace_token StandaloneCandidateMaker StandaloneTCMakerModule daqconf
+
+fully_replace_token TCCustom TCCustomAlgorithm daqconf
+
+fully_replace_token TriggerActivityMakerHorizontalMuonPlugin TAMakerHorizontalMuonAlgorithm daqconf
+fully_replace_token TriggerActivityMakerHorizontalMuon TAMakerHorizontalMuonAlgorithm daqconf
+fully_replace_token TriggerActivityMakerPrescalePlugin TAMakerPrescaleAlgorithm daqconf
+fully_replace_token TriggerActivityMakerPrescale TAMakerPrescaleAlgorithm daqconf
+
+fully_replace_token TriggerCandidateMakerHorizontalMuonPlugin TCMakerHorizontalMuonAlgorithm daqconf
+fully_replace_token TriggerCandidateMakerHorizontalMuon TCMakerHorizontalMuonAlgorithm daqconf
+
+fully_replace_token TriggerCandidateMakerPrescalePlugin TCMakerPrescaleAlgorithm daqconf
+fully_replace_token TriggerCandidateMakerPrescale TCMakerPrescaleAlgorithm daqconf
+fully_replace_token TriggerDataHandler TriggerDataHandlerModule daqconf
+
+fully_replace_token DataReceiverConf DataReaderConf daqconf
+fully_replace_token DataReceiverModule DataReaderModule daqconf
+
+fully_replace_token FDFakeCardReader FDFakeCardReaderModule daqconf
+fully_replace_token DPDKReader DPDKReaderModule daqconf
+fully_replace_token DPDKReaderModuleConf DPDKReaderConf daqconf
+fully_replace_token DPDKReaderModuleModule DPDKReaderModule daqconf
+
+fully_replace_token FDFakeCardReaderModule FDFakeReaderModule daqconf
+
+fully_replace_token DataReceiverConf DataReaderConf  daqconf
+fully_replace_token DataReceiverModule DataReaderModule daqconf
+fully_replace_token WIBConfigurator WIBModule daqconf
+fully_replace_token ProtoWIBModule ProtoWIBConfigurator daqconf
+
+# And now make the change described in bullet point 6 of Alessandro's comment for daq-release Issue #379
+
+fully_replace_token DataLinkHandler RawDataHandler "datahandlinglibs hsilibs trigger daqconf dpdklibs fdreadoutlibs"
+cd datahandlinglibs
+git mv include/datahandlinglibs/DataLinkHandlerBase.hpp include/datahandlinglibs/RawDataHandlerBase.hpp
+git mv include/datahandlinglibs/detail/DataLinkHandlerBase.hxx include/datahandlinglibs/detail/RawDataHandlerBase.hxx
 cd ..
 
 ########### EVERYTHING BELOW THIS LINE IS FOR THE HISTORICAL RECORD ###########
+
+# Name changes from June-18-2024
+
+# fully_replace_token DataReceiverConf DataReaderConf      "appmodel"
+# fully_replace_token DataReceiverModule DataReaderModule  "appmodel"
+
+# fully_replace_token WIBConfigurator WIBModule           "appmodel wibmod"
+# fully_replace_token ProtoWIBModule ProtoWIBConfigurator "appmodel wibmod"
+# cd wibmod
+# git mv plugins/WIBConfigurator.hpp plugins/WIBModule.hpp
+# git mv plugins/WIBConfigurator.cpp plugins/WIBModule.cpp
+# cd ..
 
 # NAME CHANGES FROM Jun-17-2024 (Round 2)
 

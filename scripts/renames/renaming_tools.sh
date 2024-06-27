@@ -1,5 +1,5 @@
 
-feature_branch=johnfreeman/daq-release_issue379_renames
+feature_branch=johnfreeman/daq-release_issue379_renames_pt2
 
 function gitclone {
     for pkg in "$@"; do
