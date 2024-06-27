@@ -114,7 +114,7 @@ fully_replace_token ProtoWIBModule ProtoWIBConfigurator daqconf
 
 # And now make the change described in bullet point 6 of Alessandro's comment for daq-release Issue #379
 
-fully_replace_token DataLinkHandler RawDataHandler "datahandlinglibs hsilibs trigger daqconf dpdklibs fdreadoutlibs"
+fully_replace_token DataLinkHandler RawDataHandler "datahandlinglibs hsilibs trigger daqconf dpdklibs fdreadoutmodules"
 cd datahandlinglibs
 git mv include/datahandlinglibs/DataLinkHandlerBase.hpp include/datahandlinglibs/RawDataHandlerBase.hpp
 git mv include/datahandlinglibs/detail/DataLinkHandlerBase.hxx include/datahandlinglibs/detail/RawDataHandlerBase.hxx
