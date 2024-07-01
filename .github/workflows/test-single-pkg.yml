@@ -19,7 +19,7 @@ jobs:
             os_name: "c7"
 
     steps:
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
 
     - name: change dir permission
       run: |
@@ -104,7 +104,7 @@ jobs:
         shell: bash
 
     steps:
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
 
     - name: change dir permission
       run: |
@@ -146,7 +146,7 @@ jobs:
       run: |
         sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
         sudo chmod -R go-rwx /var/lib/cvmfs
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
 
     - name: Checkout pkg
       uses: actions/checkout@v4
