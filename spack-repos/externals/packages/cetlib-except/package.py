@@ -47,7 +47,7 @@ class CetlibExcept(CMakePackage):
         depends_on(f'cetmodules build_type={build_type}', when=f'build_type={build_type}', type='build')
 #        depends_on(f'cetpkgsupport build_type={build_type}', when=f'build_type={build_type}', type=('build','run'))
     
-    depends_on('catch2', type=('build','run'))
+    depends_on('catch2@2.13.10', type=('build','run'))
 
     if 'SPACKDEV_GENERATOR' in os.environ:
         generator = os.environ['SPACKDEV_GENERATOR']

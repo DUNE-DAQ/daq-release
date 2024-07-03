@@ -42,7 +42,7 @@ fi
 
 echo "Using externals version $EXT_VERSION"
 
-export SPACK_VERSION=0.20.0
+export SPACK_VERSION=0.22.0
 export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}
 
 export DET_SPACK_AREA=$DET_RELEASE_DIR
