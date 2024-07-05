@@ -11,12 +11,14 @@
     # ghcr.io/dune-daq/alma9-spack:latest
 
 # When in the container, run:
-# /daq-release/scripts/build-ext.sh
+# /daq-release/scripts/spack/build-ext.sh
 
 if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARCH || ! -n $DAQ_RELEASE ]]; then
     echo "Error: at least one of the environment variables needed by this script is unset. Exiting..." >&2
     exit 1
 fi
+
+starttime=$( date )
 
 export DAQ_RELEASE_DIR=/daq-release
 export STANDARD_SPACK_VERSION=0.20.0
@@ -138,13 +140,13 @@ coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInf
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:"
 
-llvm_spec="llvm@15.0.7%gcc@${GCC_VERSION}~libomptarget build_type=MinSizeRel arch=${ARCH}"
+llvm_spec="llvm@15.0.7%gcc@${GCC_VERSION}~libomptarget~lua build_type=MinSizeRel arch=${ARCH}"
 
 umbrella_spec="umbrella ^$coredaq_spec ^$dbe_spec ^$llvm_spec"
 
 echo spack spec -l --reuse $umbrella_spec
-spack spec -l --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.text || exit 9
-spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.text || exit 10
+spack spec -l --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
+spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
 
 # overwrite ssh config - in the future, this part should be done in daq-release/spack-repos/externals/packages/openssh/package.py 
 SSH_INSTALL_DIR=$(spack location -i openssh)
@@ -155,3 +157,10 @@ SSH_INSTALL_DIR=$(spack location -i openssh)
 spack uninstall -y --all --dependents daq-cmake externals devtools systems
 
 spack find -l | sort |& tee /log/externals_list.txt
+
+endtime=$( date )
+
+echo "Externals build complete"
+echo "Start time: $starttime"
+echo "End time: $endtime"
+
