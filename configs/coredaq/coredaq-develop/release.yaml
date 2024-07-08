@@ -111,7 +111,7 @@
 
     systems:
         - name: python
-          version: 3.10.4
+          version: 3.10.10
           variant: ~
         - name: gcc
           version: 12.1.0

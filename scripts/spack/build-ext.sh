@@ -79,7 +79,7 @@ $cmd
 
 popd
 
-mv  ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
+mv ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
 
 ### Step 2.3 -- change spack repos.yaml to include the two repos created above
 
@@ -147,6 +147,9 @@ umbrella_spec="umbrella ^$coredaq_spec ^$dbe_spec ^$llvm_spec"
 echo spack spec -l --reuse $umbrella_spec
 spack spec -l --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
 spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
+
+# Now get the CMake we want for DUNE DAQ package building
+spack install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
 
 # overwrite ssh config - in the future, this part should be done in daq-release/spack-repos/externals/packages/openssh/package.py 
 SSH_INSTALL_DIR=$(spack location -i openssh)
