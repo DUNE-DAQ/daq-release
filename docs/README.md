@@ -3,11 +3,7 @@
 
 [![AL9 Spack Nightly Workflow (prod, v4) ](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-v4-release-alma9.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-v4-release-alma9.yml)
 
-[![Spack Nightly Workflow (prod, v4)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-v4-release-sl7.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-v4-release-sl7.yml)
-
 [![AL9 Spack Nightly Workflow (dev, v5) ](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml)
-
-[![Spack Nightly Workflow (dev, v5)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-sl7.yml)
 
 [![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml)
 
