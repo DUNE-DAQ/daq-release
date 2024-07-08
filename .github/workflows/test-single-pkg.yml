@@ -34,6 +34,7 @@ jobs:
 
     - name: restore dir permission
       run: |
+        echo "JCF, Jul-8-2024: for the time being this Workflow is deprecated" && false
         sudo chown -R cvmfs.cvmfs /var/lib/cvmfs
         sudo chmod -R go-rwx /var/lib/cvmfs
 
