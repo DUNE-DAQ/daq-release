@@ -22,7 +22,7 @@ jobs:
       - name: Intro
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
-          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1/spack-0.22.0"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -49,8 +49,8 @@ jobs:
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
-          echo "ADD spack/externals/ext-v2.1 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1" >> Dockerfile
-          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
+          echo "ADD spack/externals/ext-v2.1/spack-0.22.0 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.22.0" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.22.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
