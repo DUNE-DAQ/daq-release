@@ -206,7 +206,7 @@
           version: v1.2.1
           commit: null
         - name: trgtools
-          version: v1.0.1
+          version: v1.0.2
           commit: null
         - name: hdf5libs
           version: v3.0.0
