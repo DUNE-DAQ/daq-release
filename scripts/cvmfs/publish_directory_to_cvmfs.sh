@@ -7,8 +7,8 @@ fi
 
 PATH_TO_SYNC=$1
 
-if [[ $( hostname ) != "oasiscfs01.fnal.gov" ]]; then
-    echo "This script needs to be run on oasiscfs01.fnal.gov; exiting..." >&2
+if [[ $( hostname ) != "oasiscfs05.fnal.gov" ]]; then
+    echo "This script needs to be run on oasiscfs05.fnal.gov; exiting..." >&2
     exit 2
 fi
 
@@ -33,7 +33,8 @@ if [ ! -r $DESTPATH ]; then
 fi
 
 
-ROPTS="-rvplt --stats --delete-after"
+#ROPTS="-rvplt --stats --delete-after"
+ROPTS="-rvplt --stats"
 DRYRUN_ROPTS="$ROPTS -n"
 MYDATE=`date +%Y%m%d_%H%M%S`
 TAG=${DIR_TO_SYNC//\//_}-$MYDATE
