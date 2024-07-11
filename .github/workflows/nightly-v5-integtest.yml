@@ -60,7 +60,8 @@ jobs:
           #dbt-setup-release -n last_${DET}daq
           rm -f $GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml
           pytest -v -s --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml \
-                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py
+                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py \
+                 --nanorc-option partition-number 8
           cd $GITHUB_WORKSPACE
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf listrev
