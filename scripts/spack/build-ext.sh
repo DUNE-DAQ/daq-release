@@ -120,6 +120,8 @@ spack compiler find
 mv $HOME/.spack/linux/compilers.yaml  $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
 spack compiler list
 
+gcc_hash=$( spack find -l --loaded gcc@${GCC_VERSION} | sed -r -n 's/^(\w{7}) gcc.*/\1/p' )
+
 spack clean -a
 
 # JCF, Mar-16-2024
@@ -140,16 +142,15 @@ coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInf
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:"
 
-llvm_spec="llvm@15.0.7%gcc@${GCC_VERSION}~libomptarget~lua build_type=MinSizeRel arch=${ARCH}"
+llvm_spec="llvm@15.0.7%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
-umbrella_spec="umbrella ^$coredaq_spec ^$dbe_spec ^$llvm_spec"
+# Prevent a second build of gcc@${GCC_VERSION}
+gcc_spec="/${gcc_hash}"
 
-echo spack spec -l --reuse $umbrella_spec
-spack spec -l --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
+umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
+
+spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
 spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
-
-# Now get the CMake we want for DUNE DAQ package building
-spack install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
 
 # overwrite ssh config - in the future, this part should be done in daq-release/spack-repos/externals/packages/openssh/package.py 
 SSH_INSTALL_DIR=$(spack location -i openssh)
@@ -158,6 +159,25 @@ SSH_INSTALL_DIR=$(spack location -i openssh)
 ## Step 6 -- remove DAQ packages and umbrella packages
 
 spack uninstall -y --all --dependents daq-cmake externals devtools systems
+
+## Step 7 -- add new CMake + remove any unneeded externals (build-only packages, and
+## those which are dependencies of build-only packages only)
+
+. $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh
+
+# Now get the CMake we want for DUNE DAQ package building
+spack install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
+
+build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
+
+for pkg in $build_only_packages; do
+    spack uninstall -y $pkg || echo "Problem uninstalling $pkg"
+done
+
+# Now packages which are dependencies of build-only packages
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml; do
+    spack uninstall -y $pkg || echo "Problem uninstalling $pkg"
+done
 
 spack find -l | sort |& tee /log/externals_list.txt
 
