@@ -209,7 +209,7 @@ config:
     # dependencies. Their type can either be "rpath" or "runpath". For glibc, rpath is
     # inherited and has precedence over LD_LIBRARY_PATH; runpath is not inherited
     # and of lower precedence. DO NOT MIX these within the same install tree.
-    type: rpath
+    type: runpath
 
 
     # (Experimental) Embed absolute paths of dependent libraries directly in ELF

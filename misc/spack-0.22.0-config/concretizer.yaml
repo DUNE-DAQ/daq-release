@@ -29,7 +29,7 @@ concretizer:
     # If "false" allow targets that are incompatible with the current host (for
     # instance concretize with target "icelake" while running on "haswell").
     # If "true" only allow targets that are compatible with the host.
-    host_compatible: true
+    host_compatible: false
   # When "true" concretize root specs of environments together, so that each unique
   # package in an environment corresponds to one concrete spec. This ensures
   # environments can always be activated. When "false" perform concretization separately
