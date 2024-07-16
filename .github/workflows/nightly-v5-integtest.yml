@@ -27,6 +27,7 @@ jobs:
   integration_tests:
     name: integration_tests
     runs-on: daq
+    timeout-minutes: 30
     needs: make_nightly_tag
     strategy:
         fail-fast: false
