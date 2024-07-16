@@ -85,6 +85,7 @@ jobs:
   cleanup_stale_gunicorn_processes:
     runs-on: daq
     if: always()
+    needs: integration_tests
     steps:
       - name: Run cleanup script
         run: |
