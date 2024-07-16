@@ -78,3 +78,12 @@ jobs:
         summary: true
         display-options: fEX
         fail-on-empty: true
+
+  # Integration tests can sometimes collide with stale processes, leading to timeout
+  cleanup_stale_gunicorn_processes:
+    runs-on: daq
+    if: always()
+    steps:
+      - name: Run cleanup script
+        run: |
+          /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
