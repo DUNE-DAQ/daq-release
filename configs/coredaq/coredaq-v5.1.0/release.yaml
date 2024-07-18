@@ -137,7 +137,7 @@
           version: v1.2.1
           commit: null
         - name: opmonlib
-          version: v1.3.6
+          version: v2.0.1
           commit: null
         - name: rcif
           version: v1.2.3
@@ -155,7 +155,7 @@
           version: v2.0.0
           commit: null
         - name: kafkaopmon
-          version: v1.5.1
+          version: v2.0.0
           commit: null
         - name: ipm
           version: v2.7.0
@@ -182,10 +182,10 @@
           version: v3.7.0
           commit: null
         - name: datahandlinglibs
-          version: v3.0.0
+          version: v3.0.1
           commit: null
         - name: dfmodules
-          version: v3.1.0
+          version: v3.1.2
           commit: null
         - name: hsilibs
           version: v4.2.0
@@ -197,10 +197,10 @@
           version: v4.1.0
           commit: null
         - name: daqconf
-          version: v8.0.0
+          version: v8.0.1
           commit: null
         - name: trigger
-          version: v2.0.2
+          version: v2.0.3
           commit: null
         - name: triggeralgs
           version: v1.2.1
@@ -233,7 +233,7 @@
           version: v2.0.0
           commit: null
         - name: appmodel
-          version: v1.2.0
+          version: v1.2.1
           commit: null
         - name: dbe
           version: v1.3.0
@@ -250,8 +250,8 @@
           version: v3.2.0
           commit: null
         - name: microservices
-          version: "develop"
+          version: v2.0.0
           commit: null
         - name: grafana-dashboards
-          version: v2.1.0
+          version: v2.2.0
           commit: null
