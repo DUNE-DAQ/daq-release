@@ -1,9 +1,9 @@
 ---
-    release: fddaq-v4.4.3
+    release: fddaq-v4.4.5
 
     type: fddaq
 
-    base_release: coredaq-v4.5.3
+    base_release: coredaq-v4.5.5
 
     fddaq:
         - name: cibmodules
