@@ -75,7 +75,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 # Note that among other things you need to have successfully run "gh auth login" for this to work
-run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{10}' )
+run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{11}' )
 
 if [[ -z $run_id || ! $run_id =~ [0-9]+ ]]; then
      echo "Unable to obtain a relevant GitHub Action run ID; exiting..." >&2
