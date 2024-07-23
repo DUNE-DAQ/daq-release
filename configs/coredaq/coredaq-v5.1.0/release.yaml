@@ -241,13 +241,13 @@
 
     others:
         - name: daq-release
-          version: v2.6.0
+          version: v2.6.1
           commit: null
         - name: daq-buildtools
           version: v8.6.1
           commit: null
         - name: daqsystemtest
-          version: v3.2.0
+          version: v3.2.1
           commit: null
         - name: microservices
           version: v2.0.0
