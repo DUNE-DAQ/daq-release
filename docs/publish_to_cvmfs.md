@@ -6,7 +6,7 @@ We use CERN's [CernVM-FS filesystem](https://cernvm.cern.ch/fs/),
 better known as "cvmfs", to make our software releases available to
 the collaboration. A good user tutorial for how to publish files to it can be found [here](https://cvmfs-contrib.github.io/cvmfs-tutorial-2021/04_publishing/), but this page will focus on DUNE DAQ Software Coordination-specific use of cvmfs.
 
-We use two cvmfs repositories: `dunedaq.opensciencegrid.org` for our frozen releases, and `dunedaq-development.opensciencegrid.org` for our candidate and nightly releases. To alter the former, log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq`; to alter the latter, log in as `cvmfsdunedaqdev`. Once you've done that, you can use the `cvmfs_server` command (or a script which uses it) to modify cvmfs. 
+We use two cvmfs repositories: `dunedaq.opensciencegrid.org` for our frozen releases, and `dunedaq-development.opensciencegrid.org` for our candidate and nightly releases. To alter the former, log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq`; to alter the latter, log in as `cvmfsdunedaqdev`. Once you've done that, you can use the `cvmfs_server` command (or a script which uses it) to modify cvmfs. 
 
 ## The basics
 
@@ -23,7 +23,7 @@ The cvmfs area is relied upon by everyone so of course it's important to treat i
 Most uses of `cvmfs_server` are wrapped within scripts, but adding a
 new version of daq-buildtools to cvmfs is an exception; this section
 also doubles as a concrete example of the commands in the previous
-section. Log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` and execute the following:
+section. Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and execute the following:
 
 1. `cvmfs_server transaction dunedaq.opensciencegrid.org`
 1. `cd /cvmfs/dunedaq.opensciencegrid.org/tools/dbt/`
@@ -41,7 +41,7 @@ Publishing the releases typically does not involve running `cvmfs_server` direct
 
 ## Updating a particular directory on cvmfs
 
-As a member of Software Coordination, if you have access to the `dunedaq` account on `daq.fnal.gov` you'll notice there's a staging area called `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq`, the `scripts/cvmfs/publish_directory_to_cvmfs.sh` script will synchronize a given subdirectory in that staging area to the corresponding subdirectory on `/cvmfs`. E.g., if you've made changes to the v2.0 externals in your staging area, you can do the following if you've logged in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` and are in the base of a freshly-updated daq-release repo:
+As a member of Software Coordination, if you have access to the `dunedaq` account on `daq.fnal.gov` you'll notice there's a staging area called `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq`, the `scripts/cvmfs/publish_directory_to_cvmfs.sh` script will synchronize a given subdirectory in that staging area to the corresponding subdirectory on `/cvmfs`. E.g., if you've made changes to the v2.0 externals in your staging area, you can do the following if you've logged in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and are in the base of a freshly-updated daq-release repo:
 ```
 ./scripts/cvmfs/publish_directory_to_cvmfs.sh spack/externals/ext-v2.0 
 ``` 

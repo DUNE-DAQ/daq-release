@@ -28,7 +28,6 @@ please check!\n'.format(cmd))
 
 def checkout_commit(repo, commit, outdir, is_success_required = True):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; 
-git fetch --tags;
 git clone https://github.com/DUNE-DAQ/{repo}.git; 
 cd {repo}; 
 git checkout {commit}
@@ -41,6 +40,7 @@ def checkout_tag(repo, commit, outdir):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; \
 git clone https://github.com/DUNE-DAQ/{repo}.git; \
 cd {repo}; \
+git fetch --tags;
 if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then \
   echo "{commit} does not exist for package {repo}. Exiting..."; \
   exit 1; \

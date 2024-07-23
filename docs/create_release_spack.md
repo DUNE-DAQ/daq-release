@@ -50,7 +50,7 @@ will checkout all the DAQ packages used in the release into a randomly-named dir
 * Once the release configuration is ready, one can start the CI build for candidate releases. Go to the "Actions" tab of `daq-release` repo on GitHub. From the list of workflows on the left, select either "Alma9 build v5 candidate release" (for a develop release) or "Alma9 build v4 production candidate release" (for a production release), then click the "run workflow" button. A drop-down menu will show up. Put in the version of the base release in the `vX.Y.Z` format, the version of the detector release, the detector type for the release (`fd` or `nd`) and the candidate release number (start with 1, count up with later candidate releases). Click "Run workflow" to start the build. 
 * Once the build is completed successfully, verify if the same version tags shown in the GitHub Action log match those in the tag collector spreadsheet
 * To publish the candidate release to cvmfs:
-    * Log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaqdev`
+    * Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaqdev`
     * Get the [`publish_release_to_cvmfs.sh` script](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/cvmfs/publish_release_to_cvmfs.sh) (`git clone` this repo or use `curl`, e.g.)
     * Run the script without arguments for instructions; in a nutshell, it will publish the most recent release of a given specification (e.g., the most recent Alma9 near detector candidate build)
     * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate nd alma9 develop`)
@@ -64,7 +64,7 @@ will checkout all the DAQ packages used in the release into a randomly-named dir
 ## Building the frozen release
 
 * The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `configs` and the number (starts from 1, increment it if second deployment to cvmfs is needed).
-* Deploying the frozen release to cvmfs is the same as for a candidate release  _except_ you want to log in to `oasiscfs01.fnal.gov` as `cvmfsdunedaq` instead of `cvmfsdunedaqdev` and of course you'll want to pass `frozen` rather than `candidate` to the publishing script
+* Deploying the frozen release to cvmfs is the same as for a candidate release  _except_ you want to log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` instead of `cvmfsdunedaqdev` and of course you'll want to pass `frozen` rather than `candidate` to the publishing script
 * Do similar tests as shown in the section above for candidate releases
 * If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient, e.g. that `setup_dbt fddaq-vX.Y.Z` would give you the daq-buildtools used during the release period of `fddaq-vX.Y.Z`. How to do this is described in the [documentation on cvmfs](publish_to_cvmfs.md).
 * After the frozen release is rolled out, there will be remaining prep release and patch branches used in the production of the release. The software coordination team and the release coordinator should get in touch to establish if anything should be kept out of the merge to `develop`. The software coordination team will do the merge across all relevant repositories. Developers should handle any partial merge (cherry-pick).

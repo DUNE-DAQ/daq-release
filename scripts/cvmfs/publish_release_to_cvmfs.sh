@@ -75,7 +75,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 # Note that among other things you need to have successfully run "gh auth login" for this to work
-run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{10}' )
+run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{11}' )
 
 if [[ -z $run_id || ! $run_id =~ [0-9]+ ]]; then
      echo "Unable to obtain a relevant GitHub Action run ID; exiting..." >&2
@@ -105,7 +105,7 @@ full_det_release_name=$( ls | grep "${det}.*-v.*" )
 shorthand_det_release_name=$( echo $full_det_release_name | sed -r 's/(.*)-[0-9]+$/\1/' )
 ln -s $full_det_release_name $shorthand_det_release_name
 
-cd ${det}*-v* || exit 45
+cd $full_det_release_name || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
 
@@ -118,7 +118,7 @@ cvmfs_server transaction $REPO
 
 echo >> $LOG
 echo -n Transaction $TAG: >>$LOG
-find $SOURCE_DIR/dunedaq-* -name .cvmfscatalog -delete
+find $SOURCE_DIR/coredaq-* -name .cvmfscatalog -delete
 rsync -rlpvt --delete-after --stats $SOURCE_DIR/$BASE_WILDCARD $DEST_DIR
 rsync -rlpvt --delete-after --stats $SOURCE_DIR/$DET_WILDCARD $DEST_DIR
 
