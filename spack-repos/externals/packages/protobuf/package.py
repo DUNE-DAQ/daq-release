@@ -16,6 +16,8 @@ class Protobuf(CMakePackage):
 
     license("BSD-3-Clause")
 
+    version("4.24.4", sha256="2a2c4d5f3a750e83ed5c3a99c12e7059f4fc66f8b0533f21b9f5ddc3cf8135e9")
+    version("4.22.4", sha256="721b01f57e65c82247b6ca4572160368cbb2ba55344eb3633d42b43f9ca3775e")
     version("3.25.3", sha256="da82be8acc5347c7918ef806ebbb621b24988f7e1a19b32cd7fc73bc29b59186")
     version("3.24.3", sha256="2c23dee0bdbc36bd43ee457083f8f5560265d0815cc1c56033de3932843262fe")
     version("3.23.3", sha256="5e4b555f72a7e3f143a7aff7262292500bb02c49b174351684bb70fc7f2a6d33")
@@ -85,9 +87,9 @@ class Protobuf(CMakePackage):
         values=("Debug", "Release", "RelWithDebInfo"),
     )
 
-    depends_on("abseil-cpp@20230125.3:", when="@3.22.5:")
     # https://github.com/protocolbuffers/protobuf/issues/11828#issuecomment-1433557509
-    depends_on("abseil-cpp@20230125:", when="@3.22:")
+    depends_on("abseil-cpp@20230125: cxxstd=17", when="@3.22:")
+    depends_on("abseil-cpp@20240116.2: cxxstd=17", when="@4.24:")
     depends_on("zlib-api")
 
     conflicts("%gcc@:4.6", when="@3.6.0:")  # Requires c++11
