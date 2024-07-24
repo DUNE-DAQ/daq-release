@@ -13,12 +13,16 @@ class Grpc(CMakePackage):
     homepage = "https://grpc.io"
     url = "https://github.com/grpc/grpc/archive/v1.39.0.tar.gz"
 
-    version("1.57.0-pre1", sha256="824b9880a1c525cc01cdec3a74bfbec8be27a6f010e377be61eb9354130b4af6")
+    version("1.65.1", sha256="b40840208c904d1364c1942d966474a2fdf1481f9708547d2d4c58812b8d9603")
+    version("1.65.0", sha256="ebc3acfde70cfae3f4f04b8dbb72259540cb1dc427be362569fbc2607dabfe39")
+    version("1.64.2", sha256="c682fc39baefc6e804d735e6b48141157b7213602cc66dbe0bf375b904d8b5f9")
+    version("1.64.1", sha256="c5ad277fc21d4899f0e23f6f0337d8a2190d3c66c57ca868378be7c7bfa59fec")
+    version("1.64.0", sha256="d5509e40fb24f6390deeef8a88668124f4ec77d2ebb3b1a957b235a2f08b70c0")
+    version("1.63.1", sha256="31198ecf6ec8a79b0c42a90441ddce858e5fae690c2e300d5d08a9f45d7136df")
+    version("1.39.0", sha256="b16992aa1c949c10d5d5ce2a62f9d99fa7de77da2943e643fb66dcaf075826d6")
     version("1.57.0", sha256="8393767af531b2d0549a4c26cf8ba1f665b16c16fb6c9238a7755e45444881dd")
     version("1.56.2", sha256="931f07db9d48cff6a6007c1033ba6d691fe655bea2765444bc1ad974dfc840aa")
-    version("1.56.1-pre1", sha256="1fa985d801dbbe5aaec986113920f5ec20a04610653769d90551560ba62827c1")
     version("1.56.1", sha256="cc3e039aedd7b76f59cf922215adc7c308347a662be1e5e26711ffbc7fd3ce48")
-    version("1.56.0-pre3", sha256="20c17d16c7d665766176a45796197adf57b5a5b840777148d1859906bebb8dc2")
     version("1.56.0", sha256="e034992a0b464042021f6d440f2090acc2422c103a322b0844e3921ccea981dc")
     version("1.55.3", sha256="f17d7dac5d02247805670296523942456a2fccfbea247631342bc708ddd4a2e6")
     version("1.54.3", sha256="17e4e1b100657b88027721220cbfb694d86c4b807e9257eaf2fb2d273b41b1b1")
