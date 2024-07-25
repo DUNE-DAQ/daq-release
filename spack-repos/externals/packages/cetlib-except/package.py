@@ -41,7 +41,7 @@ class CetlibExcept(CMakePackage):
             multi=False,
             description='Use the specified C++ standard when building.')
 
-    depends_on('cmake', type='build')
+    depends_on('cmake@3.23.1', type='build')
 
     for build_type in ["Debug", "Release", "RelWithDebInfo"]:
         depends_on(f'cetmodules build_type={build_type}', when=f'build_type={build_type}', type='build')

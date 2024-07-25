@@ -142,16 +142,6 @@ gcc_hash=$( spack find -l --loaded gcc@${GCC_VERSION} | sed -r -n 's/^(\w{7}) gc
 
 spack clean -a
 
-# JCF, Mar-16-2024
-
-# Quite hacky, but the situation is that we're building coredaq,
-# etc. solely so we're guaranteed that all non-DUNE-DAQ packages on
-# which DUNE DAQ packages depend get installed and are compatible with
-# one another. So we want the traditional CMake, and not the latest
-# CMake, for consistency with older versions of externals installations
-
-sed -i 's/cmake@3.26.3/cmake@3.23.1/' $(spack location -p devtools)/package.py
-
 cp -rp $DAQ_RELEASE_DIR/spack-repos/externals/packages/umbrella $(spack location -p coredaq)
 
 ## Step 5 -- check all specs, then install
@@ -172,7 +162,9 @@ if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
     spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
 
     rm -f umbrella_build_semaphore
-    echo "The existence of this file means the umbrella package was built" >  umbrella_build_semaphore
+    echo "The existence of this file means the umbrella package was built" > umbrella_build_semaphore
+else
+    echo "Spotted a file called $PWD/umbrella_build_semaphore; will skip spack install of the umbrella package"
 fi
 
 # overwrite ssh config
@@ -186,12 +178,9 @@ for pkg in daq-cmake externals devtools systems; do
     spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
 
-# Step 7 -- add new CMake + remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
+# Step 7 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
 
 . $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh
-
-# Now get the CMake we want for DUNE DAQ package building
-spack --debug install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
 
 build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
 
