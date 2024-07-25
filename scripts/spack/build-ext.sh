@@ -11,7 +11,13 @@
     # ghcr.io/dune-daq/alma9-spack:latest
 
 # When in the container, run:
-# /daq-release/scripts/spack/build-ext.sh
+# /daq-release/scripts/spack/build-ext.sh (false)   # Adding false means script tries to pick up where it left off
+
+if [[ -z $1 ]]; then
+    fresh_build=true
+else
+    fresh_build=$1
+fi
 
 if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARCH || ! -n $DAQ_RELEASE ]]; then
     echo "Error: at least one of the environment variables needed by this script is unset. Exiting..." >&2
@@ -49,41 +55,43 @@ else
     echo "ALREADY HAVE DIRECTORY $PWD/spack-${SPACK_VERSION}; WILL SKIP INSTALLATION OF SPACK AREA"
 fi
 
-source spack-${SPACK_VERSION}/share/spack/setup-env.sh || exit 6
+source $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh || exit 6
 
 ## Step 2 -- add spack repos
 
+if $fresh_build; then
+
 ### Step 2.0 -- wipe out any pre-existing repos
-rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals \
+    rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals \
        $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo \
        $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE} \
        $SPACK_ROOT/etc/spack/defaults/repos.yaml
 
 ### Step 2.1 -- add spack repos for external packages maintained by DUNE DAQ
 
-cp -pr $DAQ_RELEASE_DIR/spack-repos/externals $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals
+    cp -pr $DAQ_RELEASE_DIR/spack-repos/externals $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals
 
 ### Step 2.2 -- add spack repos for DUNE DAQ packages
 
-pushd $DAQ_RELEASE_DIR
+    pushd $DAQ_RELEASE_DIR
 
-cmd="python3 scripts/spack/make-release-repo.py -u \
+    cmd="python3 scripts/spack/make-release-repo.py -u \
 -b develop \
 -i configs/coredaq/coredaq-develop/release.yaml \
 -t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
 -o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}"
 
-echo $cmd
-$cmd
+    echo $cmd
+    $cmd
 
-popd
+    popd
 
-mv ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
+    mv ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}
 
 ### Step 2.3 -- change spack repos.yaml to include the two repos created above
 
-if [[ "$SPACK_VERSION" == "$STANDARD_SPACK_VERSION" ]]; then
+    if [[ "$SPACK_VERSION" == "$STANDARD_SPACK_VERSION" ]]; then
 
 cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
 repos:
@@ -92,7 +100,7 @@ repos:
   - \$spack/var/spack/repos/builtin
 EOT
 
-else
+    else
 
 cat <<EOT > $SPACK_ROOT/etc/spack/defaults/repos.yaml
 repos:
@@ -101,23 +109,33 @@ repos:
   - \$spack/var/spack/repos/builtin
 EOT
     
-fi
+    fi
 
 ## Step 3 -- update spack config
 
-\cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/config.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
-\cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/modules.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
-\cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/concretizer.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
+    cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/config.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
+    cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/modules.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
+    cp  $DAQ_RELEASE_DIR/misc/spack-${SPACK_VERSION}-config/concretizer.yaml $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/
+
+fi # $fresh_build
 
 ## Step 4 -- install compiler
 
 spack compiler find
-spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
 
+spack find gcc@${GCC_VERSION} +binutils arch=${ARCH}
+retval=$?
+
+if $fresh_build || [[ "$retval" != "0" ]]; then
+    spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
+fi
 
 spack load gcc@${GCC_VERSION}
 spack compiler find
-mv $HOME/.spack/linux/compilers.yaml  $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+
+if [[ -e $HOME/.spack/linux/compilers.yaml ]]; then
+    mv $HOME/.spack/linux/compilers.yaml  $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
+fi
 spack compiler list
 
 gcc_hash=$( spack find -l --loaded gcc@${GCC_VERSION} | sed -r -n 's/^(\w{7}) gcc.*/\1/p' )
@@ -149,34 +167,43 @@ gcc_spec="/${gcc_hash}"
 
 umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
 
-spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
-spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
+if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
+    spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
+    spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
 
-# overwrite ssh config - in the future, this part should be done in daq-release/spack-repos/externals/packages/openssh/package.py 
+    rm -f umbrella_build_semaphore
+    echo "The existence of this file means the umbrella package was built" >  umbrella_build_semaphore
+fi
+
+# overwrite ssh config
 SSH_INSTALL_DIR=$(spack location -i openssh)
-\cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/openssh/ssh_config $SSH_INSTALL_DIR/etc/ || exit 7
+cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/openssh/ssh_config $SSH_INSTALL_DIR/etc/ || exit 7
 
 ## Step 6 -- remove DAQ packages and umbrella packages
 
-spack uninstall -y --all --dependents daq-cmake externals devtools systems
+for pkg in daq-cmake externals devtools systems; do
+    echo "Uninstalling $pkg"
+    spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
+done
 
-## Step 7 -- add new CMake + remove any unneeded externals (build-only packages, and
-## those which are dependencies of build-only packages only)
+# Step 7 -- add new CMake + remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
 
 . $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
 # Now get the CMake we want for DUNE DAQ package building
-spack install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
+spack --debug install --reuse cmake@3.26.3%gcc@12.1.0~doc+ncurses+ownlibs~qt build_system=generic build_type=Release patches=4759c83 arch=linux-almalinux9-x86_64 |& tee /log/spack_install_cmake.txt || exit 11
 
 build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
 
 for pkg in $build_only_packages; do
-    spack uninstall -y $pkg || echo "Problem uninstalling $pkg"
+    echo "Uninstalling $pkg"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
 
 # Now packages which are dependencies of build-only packages
 for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml; do
-    spack uninstall -y $pkg || echo "Problem uninstalling $pkg"
+    echo "Uninstalling $pkg"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
 
 spack find -l | sort |& tee /log/externals_list.txt
