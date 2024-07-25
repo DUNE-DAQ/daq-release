@@ -9,6 +9,9 @@ on:
       account-to-copy:
         description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default dunedaq)'
         default: 'dunedaq'
+      spack-version:
+        description: 'the version of Spack the v2.1 externals were built with (default 0.22.0)'
+        default: '0.22.0'
 
 jobs:
 
@@ -22,7 +25,7 @@ jobs:
       - name: Intro
         run: |
           echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
-          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1/spack-0.22.0"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -49,8 +52,8 @@ jobs:
           echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
-          echo "ADD spack/externals/ext-v2.1/spack-0.22.0 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.22.0" >> Dockerfile
-          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-0.22.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
+          echo "ADD spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }} /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
           echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
