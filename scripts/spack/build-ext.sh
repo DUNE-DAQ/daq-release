@@ -70,6 +70,7 @@ if $fresh_build; then
 ### Step 2.1 -- add spack repos for external packages maintained by DUNE DAQ
 
     cp -pr $DAQ_RELEASE_DIR/spack-repos/externals $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals
+    find $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals | xargs chmod a+rx  # Needed to ensure users' work areas will be able to access files here
 
 ### Step 2.2 -- add spack repos for DUNE DAQ packages
 

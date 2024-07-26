@@ -41,8 +41,8 @@ Publishing the releases typically does not involve running `cvmfs_server` direct
 
 ## Updating a particular directory on cvmfs
 
-As a member of Software Coordination, if you have access to the `dunedaq` account on `daq.fnal.gov` you'll notice there's a staging area called `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq`, the `scripts/cvmfs/publish_directory_to_cvmfs.sh` script will synchronize a given subdirectory in that staging area to the corresponding subdirectory on `/cvmfs`. E.g., if you've made changes to the v2.0 externals in your staging area, you can do the following if you've logged in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and are in the base of a freshly-updated daq-release repo:
+As a member of Software Coordination, if you have access to the `dunedaq` account on `daq.fnal.gov` you'll notice there's a staging area called `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq`, the `scripts/cvmfs/publish_directory_to_cvmfs.sh` script will synchronize a given subdirectory in that staging area to the corresponding subdirectory on `/cvmfs`. E.g., if you've made changes to the v2.0 externals in the Spack 0.22.0 installation in your staging area, you can do the following if you've logged in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and are in the base of a freshly-updated daq-release repo:
 ```
-./scripts/cvmfs/publish_directory_to_cvmfs.sh spack/externals/ext-v2.0 
+./scripts/cvmfs/publish_directory_to_cvmfs.sh spack/externals/ext-v2.0/spack-0.22.0 
 ``` 
-You'll be prompted a couple of times if you're sure you want to go ahead, since of course modifying `/cvmfs` is a sensitive expert action. _Be aware_ that this script behaves as a "clobber", so if along with adding files to your staging-area `spack/externals/ext-v2.0` directory you've also removed some files, the corresponding files on cvmfs will also be removed. 
+You'll be prompted a couple of times if you're sure you want to go ahead, since of course modifying `/cvmfs` is a sensitive expert action. _Be aware_ that this script behaves as a "clobber", so if along with adding files to your staging-area `spack/externals/ext-v2.0/spack-0.22.0` directory you've also removed some files, the corresponding files on cvmfs will also be removed. 

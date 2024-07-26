@@ -35,5 +35,5 @@ Once complete, the externals you've built will be located in `/home/nfs/dunedaq/
 
 1. Run the workflow off the temporary branch, and make sure that you provide a nightly tag prefix so you don't clobber the standard nightly. Also select `yes` for whether to deploy the release to cvmfs if it builds correctly.
 
-1. If it does, in fact, build successfully, now you can update the externals area on the actual cvmfs.
+1. If it does, in fact, build successfully, now you can update the externals area on the actual cvmfs. Details on how to do that are [here](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-release/publish_to_cvmfs/#updating-a-particular-directory-on-cvmfs).
 
