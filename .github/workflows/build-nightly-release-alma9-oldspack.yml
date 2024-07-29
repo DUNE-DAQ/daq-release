@@ -47,6 +47,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release
+        ref: johnfreeman/before_newspack_merge
 
     - name: setup directories and install spack for the coredaq release
       env:
