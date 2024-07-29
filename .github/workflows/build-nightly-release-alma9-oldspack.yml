@@ -1,8 +1,8 @@
-name: Alma9 build v5 nightly release
+name: Alma9 build v5 nightly release using old Spack
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 5 * * *"
 
   workflow_dispatch:
     inputs:
@@ -29,7 +29,7 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y%m%d)
-          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}T_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
@@ -37,7 +37,7 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1T
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
     defaults:
       run:
         shell: bash
@@ -96,7 +96,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1T"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
