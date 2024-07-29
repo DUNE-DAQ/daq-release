@@ -56,10 +56,10 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools-oldspack.sh
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
-          daq-release/scripts/spack/build-release-oldspack.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -77,10 +77,10 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools-oldspack.sh
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
           daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode
-          daq-release/scripts/spack/build-release-oldspack.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
