@@ -12,6 +12,9 @@
         - name: cibmodules
           version: "develop"
           commit: null
+        - name: crtmodules
+          version: "develop"
+          commit: null
         - name: daphnemodules
           version: "develop"
           commit: null
@@ -235,7 +238,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.2.6
+          version: 5.2.7
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
