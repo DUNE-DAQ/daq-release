@@ -109,7 +109,9 @@ if __name__ == "__main__":
 
                     checkout_commit(i["name"], checkout_token, args.output_path, is_success_required = True)
                 else:
-                    if i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
+                    if i["name"] == 'daq-cmake':
+                        checkout_commit(i["name"], i["version"], args.output_path, is_success_required = False)
+                    elif i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
                         print(f'\nError: package {i["name"]} is listed in {args.input_manifest}\nwith a commit hash and/or version; can\'t use the branch override\nargument to the script in this case')
                         exit(30)
                     checkout_commit(i["name"], args.branch, args.output_path, is_success_required = False)
