@@ -150,6 +150,9 @@
         - name: greenlet
           version: 2.0.2
           source:  pypi
+        - name: grpcio
+          version: 1.63.0
+          source:  pypi
         - name: gunicorn
           version: 20.1.0
           source:  pypi
