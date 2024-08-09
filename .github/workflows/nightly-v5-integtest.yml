@@ -39,6 +39,13 @@ jobs:
 
     steps:
 
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        repository: DUNE-DAQ/daq-release
+        ref: develop
+        path: daq-release
+
     - name: Checkout listrev
       uses: actions/checkout@v4
       with:
@@ -95,12 +102,13 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     name: send slack message
+    #needs: integration_tests
     steps:
     - name: Send JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        payload-file-path: "./.github/workflows/slack-webhook-payload.json"
+        payload-file-path: "${GITHUB_WORKSPACE}/daq-release/.github/workflows/slack-webhook-payload.json"
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
