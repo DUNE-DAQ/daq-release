@@ -111,7 +111,7 @@ jobs:
       id: slack
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        payload-file-path: "./this-daq-release/.github/workflows/slack-webhook-payload.json"
+        payload-file-path: ${{ github.workspace }}/this-daq-release/.github/workflows/slack-webhook-payload.json
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
