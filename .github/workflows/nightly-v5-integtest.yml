@@ -102,7 +102,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     name: send slack message
-    #needs: integration_tests
+    needs: integration_tests
     steps:
     - name: Send JSON data to Slack workflow
       id: slack
