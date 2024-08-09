@@ -39,8 +39,8 @@ jobs:
 
     steps:
 
-    - name: Checkout daq-release
-      uses: actions/checkout@v4
+    #- name: Checkout daq-release
+    #  uses: actions/checkout@v4
 
     - name: Checkout listrev
       uses: actions/checkout@v4
