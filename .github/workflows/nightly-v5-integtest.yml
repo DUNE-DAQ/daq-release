@@ -67,14 +67,6 @@ jobs:
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf listrev
 
-    - name: Send custom JSON data to Slack workflow
-      id: slack
-      uses: slackapi/slack-github-action@v1.26.0
-      with:
-        payload-file-path: "./slack-webhook-payload.json"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
   parse_results:
     runs-on: daq
     if: always()
@@ -98,4 +90,17 @@ jobs:
       - name: Run cleanup script
         run: |
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
+  send_slack_message:
+    if: always()
+    runs-on: ubuntu-latest
+    name: send slack message
+    steps:
+    - name: Send JSON data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.26.0
+      with:
+        payload-file-path: "./slack-webhook-payload.json"
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
