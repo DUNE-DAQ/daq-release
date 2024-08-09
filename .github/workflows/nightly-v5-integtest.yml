@@ -67,6 +67,14 @@ jobs:
           rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf listrev
 
+    - name: Send custom JSON data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.26.0
+      with:
+        payload-file-path: "./slack-webhook-payload.json"
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   parse_results:
     runs-on: daq
     if: always()
