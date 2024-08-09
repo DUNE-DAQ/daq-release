@@ -100,7 +100,7 @@ jobs:
       id: slack
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        payload-file-path: "./slack-webhook-payload.json"
+        payload-file-path: "./.github/workflows/slack-webhook-payload.json"
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
