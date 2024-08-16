@@ -122,7 +122,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: "amogan/build_release_with_daq_cmake_feature_branch"
+          version: "amogan/find_package_protobuf_in_daq_protobuf_codegen"
           commit: null
         - name: ers
           version: "develop"
