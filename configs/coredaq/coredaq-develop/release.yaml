@@ -122,7 +122,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: v3.0.0
+          version: "amogan/build_release_with_daq_cmake_feature_branch"
           commit: null
         - name: ers
           version: "develop"
