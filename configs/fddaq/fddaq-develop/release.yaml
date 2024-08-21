@@ -33,6 +33,9 @@
         - name: uhallibs
           version: "develop"
           commit: null
+        - name: sspmodules
+          version: "develop"
+          commit: null
         - name: wibmod
           version: "develop"
           commit: null
@@ -149,6 +152,9 @@
           source:  pypi
         - name: greenlet
           version: 2.0.2
+          source:  pypi
+        - name: grpcio
+          version: 1.63.0
           source:  pypi
         - name: gunicorn
           version: 20.1.0
