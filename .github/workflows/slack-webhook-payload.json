@@ -1,3 +1,3 @@
 {
-  "message-text": "${{ github.workflow }} workflow failed on ${{ env.DEFAULT_BRANCH }} branch in the ${{ github.event.repository.name }} repository!"
+  "message-text": "${{ github.workflow }} workflow failed when run on nightly release ${{ env.NIGHTLY_TAG }}\n Click [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) to see the full job output."
 }
