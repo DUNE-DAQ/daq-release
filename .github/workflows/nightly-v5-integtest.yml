@@ -113,5 +113,7 @@ jobs:
       with:
         payload-file-path: ${{ github.workspace }}/this-daq-release/.github/workflows/slack-webhook-payload.json
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}o STATUS: "Success"
+        WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
 

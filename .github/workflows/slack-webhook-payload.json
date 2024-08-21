@@ -1,3 +1,23 @@
 {
-  "message-text": "${{ github.workflow }} workflow failed when run on nightly release ${{ env.NIGHTLY_TAG }}\n Click [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) to see the full job output."
+  "blocks": [
+  {
+    "type": "header",
+    "text": {
+      "type:": "plain_text",
+      "text": "Header"
+    }
+  },
+  {
+    "type": "divider"
+  },
+  {
+    "type": "context",
+    "elements": [
+    {
+        "type": "mrkdwn",
+        "text": "Full output here: `${{ env.WORKFLOW_URL }}`"
+    }
+    ]
+  }
+  ]
 }
