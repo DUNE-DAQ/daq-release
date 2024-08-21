@@ -102,11 +102,6 @@ jobs:
     name: send slack message
     needs: integration_tests
     steps:
-    - name: Print debug statements
-      run: |
-        echo "Who am I? $(whoami)"
-        echo "Where am I? $(pwd)"
-        echo "What's here? $(ls -l)"
     - name: Send JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.26.0
