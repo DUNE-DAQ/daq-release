@@ -73,7 +73,7 @@ jobs:
   parse_results:
     runs-on: daq
     if: always()
-    needs: integration_tests
+    needs: [make_nightly_tag, integration_tests]
     steps:
     - name: Surface failing tests
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
@@ -89,7 +89,7 @@ jobs:
   cleanup_xml_files:
     runs-on: daq
     if: always()
-    needs: parse_results
+    needs: [make_nightly_tag, parse_results]
     steps:
       - name: Remove xml files
         env:
