@@ -67,7 +67,7 @@ jobs:
                  --nanorc-option partition-number 4
           cd $GITHUB_WORKSPACE
           echo "Back in GitHub Workspace $(pwd)"
-          rm -rf integration_tests_$NIGHTLY_TAG
+          # rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
 
   parse_results:
@@ -95,6 +95,7 @@ jobs:
         env:
           NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         run: |
+          echo "Do files exist? $(ls ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml)"
           rm -rf ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml
 
 
