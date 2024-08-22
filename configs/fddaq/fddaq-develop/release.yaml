@@ -109,10 +109,10 @@
           version: 1.1.0
           source:  github_DUNE-DAQ
         - name: drunc
-          version: 0.10.4
+          version: 0.10.5
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: 0.8.1
+          version: 0.8.2
           source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: 1.0.0
