@@ -73,6 +73,8 @@ jobs:
     - name: Surface failing tests
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
       uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       with:
         path: ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml
         summary: true
@@ -85,6 +87,8 @@ jobs:
     needs: parse_results
     steps:
       - name: Remove xml files
+        env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         run: |
           rm -rf ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml
 
