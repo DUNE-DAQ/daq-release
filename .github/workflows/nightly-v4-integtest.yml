@@ -58,7 +58,7 @@ jobs:
           dbt-setup-release -n $NIGHTLY_TAG
           #dbt-setup-release -n last_${DET}daq
           rm -f $GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml
-          pytest -v -s --junit-xml=$GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG/${{ matrix.test_name }}_test_results.xml \
+          pytest -v -s --junit-xml=$GITHUB_WORKSPACE/integration_tests_${{ env.NIGHTLY_TAG }}/${{ matrix.test_name }}_test_results.xml \
                  $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py \
                  --nanorc-option partition-number 4
           cd $GITHUB_WORKSPACE
@@ -76,7 +76,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       with:
-        path: ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
