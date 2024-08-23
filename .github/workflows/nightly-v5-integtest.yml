@@ -58,28 +58,38 @@ jobs:
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5 || true
           dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
-          rm -f $GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml
-          pytest -v -s --junit-xml=$GITHUB_WORKSPACE/${{ matrix.test_name }}_v5_test_results.xml \
+          pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
                  $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py \
                  --nanorc-option partition-number 5
           cd $GITHUB_WORKSPACE
-          rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf listrev
 
   parse_results:
     runs-on: daq
     if: always()
-    needs: integration_tests
+    needs: [make_nightly_tag, integration_tests]
     steps:
     - name: Surface failing tests
       #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
       uses: andrewmogan/pytest-results-action@1158583ebac3346e36d76969902bc1fa7b925270
+      env:
+        NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
       with:
-        path: ${{ github.workspace }}/*_v5_test_results.xml
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
+
+  cleanup_xml_files:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, parse_results]
+    steps:
+      - name: Remove xml files
+        env:
+          NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag }}
+        run: |
+          rm -rf ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:

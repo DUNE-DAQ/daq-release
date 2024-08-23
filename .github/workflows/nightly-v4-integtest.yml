@@ -85,10 +85,9 @@ jobs:
     steps:
       - name: Remove xml files
         env:
-          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+          NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag }}
         run: |
-          rm -rf ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/
-
+          rm -rf ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
