@@ -73,7 +73,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
@@ -87,8 +87,7 @@ jobs:
         env:
           NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
         run: |
-          echo "Do files exist? $(ls ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml)"
-          rm -rf ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/*_test_results.xml
+          rm -rf ${{ github.workspace }}/integration_tests_$NIGHTLY_TAG/
 
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
