@@ -52,6 +52,7 @@ set(build_order "daq-cmake"
                 "kafkaopmon"
 		# FD packages
                 "fddetdataformats"
+                "tpglibs"
                 "fdreadoutlibs"
                 "fdreadoutmodules"
 		"crtmodules"

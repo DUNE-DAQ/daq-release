@@ -30,6 +30,9 @@
         - name: rawdatautils
           version: "develop"
           commit: null
+        - name: tpglibs
+          version: "develop"
+          commit: null
         - name: uhallibs
           version: "develop"
           commit: null
