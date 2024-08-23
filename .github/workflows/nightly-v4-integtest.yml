@@ -49,25 +49,17 @@ jobs:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           DET=fd
-          echo "Hello from $(pwd)"
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          echo "Hello now from new directory $(pwd)"
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest|| true
+          setup_dbt latest || true
           dbt-setup-release -n $NIGHTLY_TAG
-          #dbt-setup-release -n last_${DET}daq
-          echo "Still in $(pwd)"
-          echo "What's here? $(ls)"
-          rm -f $GITHUB_WORKSPACE/${{ matrix.test_name }}_test_results.xml
           pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
                  $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py \
                  --nanorc-option partition-number 4
           cd $GITHUB_WORKSPACE
-          echo "Back in GitHub Workspace $(pwd)"
-          # rm -rf integration_tests_$NIGHTLY_TAG
           rm -rf daqsystemtest
 
   parse_results:
@@ -81,7 +73,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
         summary: true
         display-options: fEX
         fail-on-empty: true
