@@ -111,7 +111,7 @@ timing: [![timing](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-
 
 timinglibs: [![timinglibs](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
-tpglibs: [![tpglibs](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-v4-cpp-ci.yml)
+tpglibs: [![tpglibs](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 tpgtools: [![tpgtools](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-v4-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-v4-cpp-ci.yml)
 
