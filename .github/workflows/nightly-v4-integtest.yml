@@ -39,11 +39,6 @@ jobs:
 
     steps:
 
-    - name: Checkout daq-release
-      uses: actions/checkout@v4
-      with:
-        path: this-v4-daq-release
-
     - name: Checkout daqsystemtest
       uses: actions/checkout@v4
       with:
@@ -112,13 +107,11 @@ jobs:
     name: send slack message
     needs: integration_tests
     steps:
-    - name: Debug JSON Payload
-      run: cat ${{ github.workspace }}/this-daq-release/.github/workflows/slack-webhook-payload.json
-
     - name: Send JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.26.0
       with:
+        # Variables used by the Slack workflow
         payload: |
           {
             "workflow_name": "${{ github.workflow }}",
@@ -127,4 +120,3 @@ jobs:
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        #WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
