@@ -44,6 +44,7 @@ jobs:
       with:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
+        ref: amogan/break_minimal_system_quick_test
     
     - name: setup release and run tests
       env:
