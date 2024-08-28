@@ -114,9 +114,25 @@ jobs:
         # Variables used by the Slack workflow
         payload: |
           {
-            "workflow_name": "${{ github.workflow }}",
-            "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-            "workflow_status": "${{ contains(join(needs.*.result, ' '), 'failure') && 'failure' || 'success' }}"
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "GitHub Actions Failure :x:",
+                  "emoji": "true"
+                }
+              }
+              {"type": "divider"},
+              {
+                "type": "section",
+                "text": {
+                  "type:" "mrkdown",
+                  "text": "*Workflow:* `${{ github.workflow }}` has failed. View the full output here: <${{ env.WORKFLOW_URL }}|GitHub Actions Run Output>"
+                }
+              }
+            ]
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
