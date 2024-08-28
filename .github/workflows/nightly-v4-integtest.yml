@@ -39,6 +39,11 @@ jobs:
 
     steps:
 
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: this-v4-daq-release
+
     - name: Checkout daqsystemtest
       uses: actions/checkout@v4
       with:
