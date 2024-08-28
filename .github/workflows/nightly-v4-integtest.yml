@@ -121,8 +121,8 @@ jobs:
       with:
         payload: |
           {
-            "workflow_name": "${{ github.workflow }}"
-            "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            "workflow_name": "${{ github.workflow }}",
+            "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             "workflow_status": "${{ job.status }}"
           }
       env:
