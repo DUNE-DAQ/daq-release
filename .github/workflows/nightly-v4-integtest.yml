@@ -123,7 +123,7 @@ jobs:
           {
             "workflow_name": "${{ github.workflow }}",
             "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-            "workflow_status": "${{ job.status }}"
+            "workflow_status": "${{ job.status }} ${{ join(needs.*.result, ' ') }}"
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
