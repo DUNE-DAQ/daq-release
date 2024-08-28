@@ -1,0 +1,3 @@
+{
+  "text": "A GitHub Action Event ${{ github.eventName }} has ${{ env.JOB_STATUS }}"
+}
