@@ -1,46 +1,64 @@
 ---
-    release: fddaq-develop
+    release: fddaq-v4.4.7
 
     type: fddaq
 
-    base_release: coredaq-develop
+    base_release: coredaq-v4.5.7
 
     fddaq:
+        - name: cibmodules
+          version: v1.0.1
+          commit: null
+        - name: ctbmodules
+          version: v3.0.1
+          commit: null
+        - name: crtmodules
+          version: v1.0.1
+          commit: null
         - name: daqsystemtest
-          version: "develop"
+          version: v2.3.8
+          commit: null
+        - name: daphnemodules
+          version: v1.5.0
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: v1.3.1
+          commit: null
+        - name: fddaqconf
+          version: v1.2.6
           commit: null
         - name: fddetdataformats
-          version: "develop"
+          version: v1.2.1
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: v1.9.7
           commit: null
         - name: fdreadoutmodules
-          version: "develop"
+          version: v1.0.5
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: v1.8.6
           commit: null
         - name: hermesmodules
-          version: "develop"
+          version: v1.1.0
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: v1.5.8
           commit: null
-        - name: tpglibs
-          version: "develop"
-          commit: null
-        - name: uhallibs
-          version: "develop"
+        - name: snbmodules
+          version: v1.0.1
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: v1.3.2
+          commit: null
+        - name: tpgtools
+          version: v1.1.1
+          commit: null
+        - name: uhallibs
+          version: v1.2.0
           commit: null
         - name: wibmod
-          version: "develop"
+          version: v1.5.1
           commit: null
 
 
@@ -111,12 +129,6 @@
         - name: daq-assettools
           version: 1.1.0
           source:  github_DUNE-DAQ
-        - name: drunc
-          version: 0.10.5
-          source:  github_DUNE-DAQ
-        - name: druncschema
-          version: 0.8.2
-          source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: 1.0.0
           source:  github_DUNE-DAQ
@@ -156,9 +168,6 @@
         - name: greenlet
           version: 2.0.2
           source:  pypi
-        - name: grpcio
-          version: 1.63.0
-          source:  pypi
         - name: gunicorn
           version: 20.1.0
           source:  pypi
@@ -184,7 +193,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 2.3.3
+          version: 1.10.0
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
@@ -229,7 +238,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.2.0
+          version: 5.2.7
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
