@@ -3,7 +3,7 @@
   {
     "type": "header",
     "text": {
-      "type:": "plain_text",
+      "type": "plain_text",
       "text": "Header"
     }
   },
@@ -15,7 +15,7 @@
     "elements": [
     {
         "type": "mrkdwn",
-        "text": "Full output here: `${{ env.WORKFLOW_URL }}`"
+        "text": "Full output here: <${{ env.WORKFLOW_URL }}>"
     }
     ]
   }
