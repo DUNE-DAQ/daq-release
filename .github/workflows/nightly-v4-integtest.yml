@@ -102,22 +102,20 @@ jobs:
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   send_slack_message:
-    if: always()
+    if: failure()
     runs-on: daq
     name: send slack message
     needs: integration_tests
     steps:
     - name: Send JSON data to Slack workflow
       id: slack
-      uses: slackapi/slack-github-action@v1.27.0
+      uses: slackapi/slack-github-action@v1.26.0
       with:
-        payload-delimiter: "_"
         # Variables used by the Slack workflow
         payload: |
           {
             "workflow_name": "${{ github.workflow }}",
             "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-            "workflow_status": "${{ contains(join(needs.*.result, ' '), 'failure') && 'failure' || 'success' }}"
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
