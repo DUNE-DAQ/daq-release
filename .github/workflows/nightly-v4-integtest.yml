@@ -120,14 +120,14 @@ jobs:
                 "text": {
                   "type": "plain_text",
                   "text": "GitHub Actions Failure :x:",
-                  "emoji": "true"
+                  "emoji": true
                 }
-              }
+              },
               {"type": "divider"},
               {
                 "type": "section",
                 "text": {
-                  "type:" "mrkdown",
+                  "type": "mrkdwn",
                   "text": "*Workflow:* `${{ github.workflow }}` has failed. View the full output here: <${{ env.WORKFLOW_URL }}|GitHub Actions Run Output>"
                 }
               }
