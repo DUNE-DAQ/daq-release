@@ -34,7 +34,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: dunebuild03
+    runs-on: daq
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1T
@@ -92,7 +92,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: dunebuild03
+    runs-on: daq
     strategy:
       matrix:
         include:
@@ -175,7 +175,7 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: dunebuild03
+    runs-on: daq
     needs: update_image
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
@@ -212,7 +212,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: dunebuild03
+    runs-on: daq
 
     steps:
     - name: check_cvmfs_deployment
