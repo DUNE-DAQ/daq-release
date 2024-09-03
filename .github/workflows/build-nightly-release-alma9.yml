@@ -272,3 +272,22 @@ jobs:
         ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
 
         rm -rf $unique_name
+
+  send_slack_message:
+    if: failure()
+    runs-on: daq
+    name: send slack message
+    needs: publish_to_cvmfs
+    steps:
+    - name: Send JSON data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.26.0
+      with:
+        # Variables used by the Slack workflow
+        payload: |
+          {
+            "workflow_name": "${{ github.workflow }}",
+            "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
