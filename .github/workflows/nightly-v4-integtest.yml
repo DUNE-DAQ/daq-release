@@ -31,8 +31,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            #test_name: ["minimal_system_quick", "fake_data_producer", "long_window_readout", "small_footprint_quick"]
-            test_name: ["minimal_system_quick"]
+            test_name: ["minimal_system_quick", "fake_data_producer", "long_window_readout", "small_footprint_quick"]
     defaults:
       run:
         shell: bash
@@ -44,7 +43,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
-        ref: amogan/break_minimal_system_quick_test
     
     - name: setup release and run tests
       env:
