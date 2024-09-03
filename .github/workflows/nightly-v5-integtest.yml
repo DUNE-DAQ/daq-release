@@ -39,16 +39,11 @@ jobs:
 
     steps:
 
-    - name: Checkout daq-release
-      uses: actions/checkout@v4
-      with:
-        path: this-daq-release
-
     - name: Checkout listrev
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/listrev
-        ref: amogan/intentionally_fail_integtest
+        ref: develop
         path: listrev
     
     - name: setup release and run tests
