@@ -32,7 +32,6 @@
     * logging
     * nanorc
     * oks
-    * oksconfgen
     * oksconflibs
     * oksdalgen
     * okssystem
