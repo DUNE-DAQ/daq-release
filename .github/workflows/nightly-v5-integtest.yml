@@ -59,8 +59,7 @@ jobs:
           setup_dbt latest_v5 || true
           dbt-setup-release -n $NIGHTLY_TAG
           pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
-                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py \
-                 --nanorc-option partition-number 5
+                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py
           cd $GITHUB_WORKSPACE
           rm -rf listrev
 
