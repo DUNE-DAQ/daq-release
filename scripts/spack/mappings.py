@@ -9,7 +9,7 @@ cmake_to_spack = {
     'msgpack': 'msgpack-c',
     'rdkafka': 'librdkafka',
     'qt5': 'qt',
-    'highfive': 'highfive +mpi',
+    'highfive': 'highfive ~mpi',
     'pkgconfig': 'pkgconf',
     'tbb': 'intel-tbb',
 }
