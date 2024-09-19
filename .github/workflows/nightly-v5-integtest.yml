@@ -53,15 +53,13 @@ jobs:
           DET=fd
           mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
           cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-          export PATH=$HOME/bin:$PATH
-          type get-ticket.sh && get-ticket.sh
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest_v5 || true
+          setup_dbt latest_v5
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG/daq_app_rte.sh ]]
           dbt-setup-release -n $NIGHTLY_TAG
+          export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG
           pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
-                 $GITHUB_WORKSPACE/listrev/integtest/${{ matrix.test_name }}_test.py
-          cd $GITHUB_WORKSPACE
-          rm -rf listrev
+                 $LISTREV_SHARE/integtest/listrev_test.py
 
   parse_results:
     runs-on: daq
