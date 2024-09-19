@@ -67,6 +67,9 @@
         - name: cli11
           version: 2.3.2
           variant: ~
+        - name: krb5
+          version: 1.19.2
+          variant: ~
         - name: intel-tbb
           version: 2020.3
           variant: ~
@@ -77,7 +80,7 @@
           version: 8.1.1
           variant: "cxxstd=17 shared=True"
         - name: py-moo
-          version: 0.6.3
+          version: 0.6.7
           variant: ~
         - name: py-anyconfig
           version: 0.9.11
@@ -87,6 +90,9 @@
           variant: ~
         - name: py-fastjsonschema
           version: 2.14.5
+          variant: ~
+        - name: rclone
+          version: 1.64.0
           variant: ~
         - name: libtorrent
           version: 2.0.9
@@ -110,6 +116,9 @@
         - name: gcc
           version: 12.1.0
           variant: "+binutils"
+        - name: openssh
+          version: 8.7p1
+          variant: ~
 
     coredaq:
         - name: daq-cmake
