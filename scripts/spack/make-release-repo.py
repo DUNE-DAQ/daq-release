@@ -299,7 +299,6 @@ class DAQRelease:
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
-                    iline = f"git+https://github.com/"
                     iuser = i["source"].replace("github_", "")
                     if iname == "moo":
                         iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
