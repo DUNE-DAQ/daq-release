@@ -184,7 +184,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: "develop"
+          version: develop
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
