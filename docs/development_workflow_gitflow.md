@@ -16,18 +16,18 @@ A team is defined at the level of [the GitHub DUNE-DAQ organization](https://git
 We have four types of branch in our workflow:
 
 * **Common branches** 
-    * The default branch of each repository. As of Feb-11-2024 it has only one of two names: either `production/v4` if you're developing for current datataking at `np04` or `develop` if you're doing longer-term development (e.g., OKS changes for the future `v5.0.0` software release). This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs) which require at least one approving review. For the rest of this document both `production/v4` and `develop` will be referred to as `<common branch>`; let that stand in for whichever of the two branches is relevant for your purposes.   
+    * The default branch of each repository. As of Sep-23-2024, the default branch for all repositories is `develop`. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs). While we do not require reviews before pushing to `develop`, developers are strongly encouraged to seek a review for any non-trivial change. An example of a trivial change would be fixing a typo in the README or bumping a version number.    
 * **Feature branches**
-    * Forked off of the `<common branch>`, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `<common branch>` branch via a PR.  
+    * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
     * These are only intended for use if changes need to be made after the initial tags are made for a particular frozen release's release cycle
-    * Intended to be forked off the tag, _not_ the `<common branch>`
+    * Intended to be forked off the tag, _not_ `develop`
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time 
-    * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `<common branch>`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
+    * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
     * Nomenclature: for a given release `fddaq-vX.Y.Z` use `prep-release/fddaq-vX.Y.Z` and similarly `prep-release/nddaq-vX.Y.Z` for `nddaq-vX.Y.Z`
 * **Patch branches**  `patch/fddaq-vX.Y.x`/`patch/nddaq-vX.Y.x`**
     * Used for patch frozen releases; these are forked off of the final tags of the frozen releases we're patching
-    * Same rules for merging into `<common branch>` apply here as apply to the prep-release branches
+    * Same rules for merging into `develop` apply here as apply to the prep-release branches
     * Nomenclature is the same as for prep release branches, _except_ we leave the patch version a "variable". So, e.g., while a prep release branch for a FD-based `v4.4.0` release would be `prep-release/fddaq-v4.4.0`, if a `v4.4.1` patch released is based off it a patch release branch would be `patch/fddaq-v4.4.x`
 
 ## Tags of DAQ repositories
@@ -52,15 +52,15 @@ We have adopted a three-phased release cycle:
 
 ### Phase 1 - Active Development Period
  
-In this period, developers make frequent updates to the `<common branch>` via pull requests. The workflow is as follows:
+In this period, developers make frequent updates to the `develop` branch via pull requests. The workflow is as follows:
 
 1. Create a GitHub Issue in the repo describing the code change. This is optional for small changes.
-2. Create a feature branch, preferably containing the GitHub user name of the creator and the Issue (if applicable). E.g. `git checkout <common branch>; git checkout -b dingpf/issue_12_feature_dev_demo`
+2. Create a feature branch, preferably containing the GitHub user name of the creator and the Issue (if applicable). E.g. `git checkout develop; git checkout -b dingpf/issue_12_feature_dev_demo`
 3. Locally make commits to the feature branch and push it to GitHub; (`git push -u origin dingpf/issue_12_feature_dev_demo`)
-4. Create a pull request to the `<common branch>` branch and link the issue to the pull request if applicable
+4. Create a pull request to the `develop` branch and link the issue to the pull request if applicable
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
-The active development period comes to an end when the `<common branch>` is ready to be tagged. The procedure for this is described in the next section. It is _highly_ recommended that before this is done the package's codebase is checked for:
+The active development period comes to an end when the `develop` branch is ready to be tagged. The procedure for this is described in the next section. It is _highly_ recommended that before this is done the package's codebase is checked for:
 
 1. [compliance with our coding guidelines](https://dune-daq-sw.readthedocs.io/en/latest/packages/styleguide/) -- in particular that `dbt-build` is run with the `--lint` option and no major issues revealed
 2. `dbt-clang-format.sh` is run on the codebase so that whitespace formatting is correct
@@ -73,11 +73,11 @@ Details on the first two steps above can be found in the [daq-buildtools documen
 
 #### Before the testing period starts
 
-Developers need to bump the version of the package on the `<common branch>`. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
+Developers need to bump the version of the package on the `develop` branch. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
 1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet is by convention linked to [from the top of the "Instructions for setting up a development area" page of the daqconf Wiki](https://github.com/DUNE-DAQ/daqconf/wiki/Instructions-for-setting-up-a-development-software-area)
 2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`.
-3. With the `CMakeLists.txt` modification committed on the `<common branch>`, perform an annotated tag on `<common branch>`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
-4. Push your `<common branch>` branch and your tag to the central repo: `git push origin <common branch>; git push --tags`
+3. With the `CMakeLists.txt` modification committed on `develop` branch, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
+4. Push your `develop` branch and your tag to the central repo: `git push origin develop; git push --tags`
 5. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
 #### During the testing period
