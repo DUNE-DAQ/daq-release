@@ -30,10 +30,6 @@ cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-
 
 confmodel: [![confmodel](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
-ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-cibmodules: [![cibmodules](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cibmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
 daq-cmake: [![daq-cmake](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 daqconf: [![daqconf](https://github.com/DUNE-DAQ/daqconf/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daqconf/actions/workflows/dunedaq-develop-cpp-ci.yml)
@@ -92,10 +88,6 @@ rawdatautils: [![rawdatautils](https://github.com/DUNE-DAQ/rawdatautils/actions/
 
 rcif: [![rcif](https://github.com/DUNE-DAQ/rcif/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/rcif/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
-readoutlibs: [![readoutlibs](https://github.com/DUNE-DAQ/readoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/readoutlibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-readoutmodules: [![readoutmodules](https://github.com/DUNE-DAQ/readoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/readoutmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
 restcmd: [![restcmd](https://github.com/DUNE-DAQ/restcmd/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/restcmd/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 serialization: [![serialization](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml)
@@ -107,8 +99,6 @@ timing: [![timing](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-
 timinglibs: [![timinglibs](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/timinglibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 tpglibs: [![tpglibs](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpglibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
-
-tpgtools: [![tpgtools](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tpgtools/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 trgdataformats: [![trgdataformats](https://github.com/DUNE-DAQ/trgdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/trgdataformats/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
