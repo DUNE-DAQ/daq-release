@@ -9,7 +9,7 @@ import tempfile
 import re
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack
+from mappings import cmake_to_spack, pyvenv_url_names
 
 class MyDumper(yaml.Dumper):
 
@@ -302,12 +302,14 @@ class DAQRelease:
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    if iname == "elisa-client-api":
-                        repo_name = "elisa_client_api"
-                    if iname == "connectivityserver":
-                        egg_name = "connection-service"
+                    # Special cases are handled using mappings.py
+                    repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
+                    egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
+                    # The main branch for moo is called master, not develop
+                    if iname == "moo" and iversion == "develop":
+                        iversion = pyvenv_url_names["moo"]["develop"]
 
-                    if iversion == "develop" or iname == "moo":
+                    if iversion == "develop":
                         iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
