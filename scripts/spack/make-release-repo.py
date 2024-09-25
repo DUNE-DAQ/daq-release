@@ -306,7 +306,7 @@ class DAQRelease:
                         iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
                     elif iname == "connectivityserver":
                         iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg=connection-service"
-                    elif iversion == "develop"
+                    elif iversion == "develop":
                         iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
