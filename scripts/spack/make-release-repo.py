@@ -9,7 +9,7 @@ import tempfile
 import re
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack, pyvenv_url_names
+from mappings import cmake_to_spack, pyvenv_url_names, packages_without_develop
 
 class MyDumper(yaml.Dumper):
 
@@ -296,20 +296,17 @@ class DAQRelease:
             for i in self.rdict['pymodules']:
                 iname = i["name"]
                 iversion = i["version"]
-                repo_name = iname
-                egg_name = iname
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    # Special cases are handled using mappings.py
+                    # Special cases are handled using dictionaries in mappings.py
                     repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
                     egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
-                    # The main branch for moo is called master, not develop
-                    if iname == "moo" and iversion == "develop":
-                        iversion = pyvenv_url_names["moo"]["develop"]
+                    if iname in packages_without_develop:
+                        iversion = packages_without_develop[iname]
 
-                    if iversion == "develop":
+                    if iversion == "develop" or iversion in packages_without_develop.values():
                         iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
