@@ -296,20 +296,21 @@ class DAQRelease:
             for i in self.rdict['pymodules']:
                 iname = i["name"]
                 iversion = i["version"]
+                repo_name = iname
+                egg_name = iname
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    if iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
-                    elif iname == "elisa-client-api":
-                        iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
-                    elif iname == "connectivityserver":
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg=connection-service"
-                    elif iversion == "develop":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
+                    if iname == "elisa-client-api":
+                        repo_name = "elisa_client_api"
+                    if iname == "connectivityserver":
+                        egg_name = "connection-service"
+
+                    if iversion == "develop" or iname == "moo":
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
                 f.write(iline + '\n')
         return
 
