@@ -9,7 +9,7 @@ import tempfile
 import re
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack, pyvenv_url_names, packages_without_develop
+from mappings import cmake_to_spack, pyvenv_url_names
 
 class MyDumper(yaml.Dumper):
 
