@@ -112,17 +112,25 @@ jobs:
         # For posting a rich message using Block Kit
         payload: |
           {
-            "text": "!!!GitHub Action Failure!!!",
             "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": :rotating_light: "GitHub Action Failed: ${{ github.workflow }} :rotating_light:",
+                  "emoji": true
+                }
+              },
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "The GitHub Action ${{ github.workflow }} has failed! For more information, see ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  "text": "The GitHub Action *${{ github.workflow }}* failed for commit `${{ github.sha }}` in repository *${{ github.repository }}*.\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View GitHub Actions output>"
                 }
               }
             ]
           }
+
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
