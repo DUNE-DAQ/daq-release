@@ -59,8 +59,9 @@ jobs:
           dbt-setup-release -n $NIGHTLY_TAG
           export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG
           pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
-                 $LISTREV_SHARE/integtest/listrev_test.py
+                 /home/nfs/amogan/listrev_intentional_failure/sourcecode/listrev/integtest/listrev_test.py
 
+  #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
     runs-on: daq
     if: always()
