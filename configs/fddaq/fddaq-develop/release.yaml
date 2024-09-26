@@ -100,7 +100,7 @@
           version: 5.2.0
           source:  pypi
         - name: connectivityserver
-          version: 1.0.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: deepdiff
           version: 6.3.1
@@ -109,16 +109,16 @@
           version: 5.0.3
           source:  pypi
         - name: daq-assettools
-          version: 1.1.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: drunc
-          version: 0.10.6
+          version: develop
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: 0.8.2
+          version: develop
           source:  github_DUNE-DAQ
         - name: elisa-client-api
-          version: 1.0.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: et-xmlfile
           version: 1.0.1
@@ -184,7 +184,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 3.0.1
+          version: develop
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
@@ -229,7 +229,7 @@
           version: 2.0.0
           source:  pypi
         - name: nanorc
-          version: 5.2.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
