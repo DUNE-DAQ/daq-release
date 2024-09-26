@@ -122,10 +122,13 @@ jobs:
                 }
               },
               {
+                "type": "divider"
+              },
+              {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "The GitHub Action *${{ github.workflow }}* failed for commit `${{ github.sha }}` in repository *${{ github.repository }}*.\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View GitHub Actions output>"
+                  "text": " For more information, see the full output <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here>"
                 }
               }
             ]
