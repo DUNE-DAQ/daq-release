@@ -300,13 +300,11 @@ class DAQRelease:
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    # Special cases are handled using dictionaries in mappings.py
+                    # Special cases are handled using a dictionary in mappings.py
                     repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
                     egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
-                    if iname in packages_without_develop:
-                        iversion = packages_without_develop[iname]
 
-                    if iversion == "develop" or iversion in packages_without_develop.values():
+                    if iversion == "develop":
                         iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
