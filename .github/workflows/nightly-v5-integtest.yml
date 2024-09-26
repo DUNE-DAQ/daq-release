@@ -117,7 +117,7 @@ jobs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": :rotating_light: "GitHub Action Failed: ${{ github.workflow }} :rotating_light:",
+                  "text": ":rotating_light: GitHub Action Failed: ${{ github.workflow }} :rotating_light:",
                   "emoji": true
                 }
               },
