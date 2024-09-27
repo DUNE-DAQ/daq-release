@@ -56,7 +56,7 @@ jobs:
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
         fi
-        pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml 
+        pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}_test.py
 
   parse_results:
