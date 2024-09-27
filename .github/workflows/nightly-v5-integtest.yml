@@ -32,7 +32,13 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["listrev", "minimal_system_quick"]
+            test_name: ["listrev", 
+                        "minimal_system_quick", 
+                        "3ru_1df_multirun", 
+                        "example_system", 
+                        "long_window_readout", 
+                        "small_footprint_quick", 
+                        "tpstream_writing"]
     defaults:
       run:
         shell: bash
