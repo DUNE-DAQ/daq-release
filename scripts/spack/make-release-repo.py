@@ -9,7 +9,7 @@ import tempfile
 import re
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack
+from mappings import cmake_to_spack, pyvenv_url_names
 
 class MyDumper(yaml.Dumper):
 
@@ -299,16 +299,15 @@ class DAQRelease:
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
-                    iline = f"git+https://github.com/"
                     iuser = i["source"].replace("github_", "")
-                    if iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
-                    elif iname == "elisa-client-api":
-                        iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
-                    elif iname == "connectivityserver":
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg=connection-service"
+                    # Special cases are handled using a dictionary in mappings.py
+                    repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
+                    egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
+
+                    if iversion == "develop" or iname == "moo":
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
                 f.write(iline + '\n')
         return
 
