@@ -43,6 +43,7 @@ jobs:
       with:
         repository: DUNE-DAQ/daqsystemtest
         path: daqsystemtest
+        ref: production/v4
     
     - name: setup release and run tests
       env:
