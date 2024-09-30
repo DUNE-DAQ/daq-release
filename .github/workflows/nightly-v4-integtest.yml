@@ -19,7 +19,7 @@ jobs:
     steps:
       - id: create_nightly_tag
         run: |
-          date_tag=$(date +%y%m%d) -d 'last sunday + 7 days'
+          date_tag=$(date +%y%m%d -d 'last sunday + 7 days')
           echo "nightly_tag=NFD_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
