@@ -66,6 +66,7 @@ jobs:
         pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}_test.py
 
+  #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
     runs-on: daq
     if: always()
@@ -109,15 +110,35 @@ jobs:
     name: send slack message
     needs: integration_tests
     steps:
-    - name: Send JSON data to Slack workflow
+    - name: Send custom JSON data to Slack workflow
       id: slack
-      uses: slackapi/slack-github-action@v1.26.0
+      uses: slackapi/slack-github-action@v1.27.0
       with:
-        # Variables used by the Slack workflow
+        # For posting a rich message using Block Kit
         payload: |
           {
-            "workflow_name": "${{ github.workflow }}",
-            "workflow_url":  "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Full report>"
+                }
+              }
+            ]
           }
+
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
