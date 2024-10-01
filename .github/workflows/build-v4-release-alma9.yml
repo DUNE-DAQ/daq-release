@@ -26,6 +26,9 @@ jobs:
       - id: create_nightly_tag
         run: |
           date_tag=$(date +%y%m%d)
+          if [ "$(date +%a)" != "Sun" ]; then 
+            date_tag=$(date +%y%m%d -d 'last sunday'); 
+          fi
           echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_PROD4_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
