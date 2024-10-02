@@ -127,13 +127,10 @@ jobs:
                 }
               },
               {
-                "type": "divider"
-              },
-              {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Full report>"
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
                 }
               }
             ]
