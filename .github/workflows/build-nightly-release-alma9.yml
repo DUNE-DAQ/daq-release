@@ -15,6 +15,9 @@ on:
       cvmfs-deployment:
         description: 'whether to deploy the release to cvmfs'
         default: 'no'
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on failure'
+        default: 'no'
 
 jobs:
   make_nightly_tag:
@@ -274,7 +277,7 @@ jobs:
         rm -rf $unique_name
 
   send_slack_message:
-    if: failure()
+    if: failure() || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     runs-on: daq
     name: send slack message
     needs: publish_to_cvmfs

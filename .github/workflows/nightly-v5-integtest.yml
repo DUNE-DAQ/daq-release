@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       send-slack-message:
-        description: 'Send message to daq-release-notifications on failure?'
+        description: 'whether to send a message to #daq-release-notifications on failure'
         default: 'no'
 
 
