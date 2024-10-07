@@ -113,6 +113,7 @@ jobs:
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/spack /cvmfs/dunedaq.opensciencegrid.org/spack" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -223,6 +224,7 @@ jobs:
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/spack /cvmfs/dunedaq.opensciencegrid.org/spack" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
           echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
