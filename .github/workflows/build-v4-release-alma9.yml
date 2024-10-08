@@ -2,7 +2,7 @@ name: Alma9 build v4 production nightly release
 
 on:
   schedule:
-    - cron: "0 7 * * 0"
+    - cron: "0 0 * * 0"
 
   workflow_dispatch:
     inputs:
