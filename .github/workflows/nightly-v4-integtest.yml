@@ -62,7 +62,7 @@ jobs:
           export PATH=$HOME/bin:$PATH
           type get-ticket.sh && get-ticket.sh
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt latest_v4
           dbt-setup-release -n $NIGHTLY_TAG
           pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
                  $GITHUB_WORKSPACE/daqsystemtest/integtest/${{ matrix.test_name }}_test.py \

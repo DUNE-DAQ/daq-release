@@ -1,16 +1,6 @@
 name: Update pypi-repo
 
 on:
-  schedule:
-    - cron: "0 1 * * *"
-    # update pypi-repo "0 1 * * *"
-    # publish pypi-repo to cvmfs "30 21 * * *(CST/CDT)" 30 1/2 * * *
-    # c8-cvmfs docker build on "0 3 * * *"
-    # sl7-cvmfs docker build on "0 4 * * *"
-    # nighlty release build on "0 5 * * *"
-    # publish to cvmfs on "0 1 * * *(CST/CDT)" 0 6/7 * * *
-    # package CI build on "0 7 * * *"
-
   workflow_dispatch:
 
 jobs:

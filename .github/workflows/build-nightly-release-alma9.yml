@@ -40,7 +40,7 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1T
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
     defaults:
       run:
         shell: bash
@@ -99,7 +99,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1T"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
@@ -193,7 +193,7 @@ jobs:
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt latest_v5
           dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
