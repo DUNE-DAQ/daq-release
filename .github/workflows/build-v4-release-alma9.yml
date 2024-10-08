@@ -193,7 +193,7 @@ jobs:
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest || true
+          setup_dbt latest_v4
           dbt-setup-release -n last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
