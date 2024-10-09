@@ -27,6 +27,7 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+          exit 1
 
   integration_tests:
     name: integration_tests
