@@ -113,15 +113,15 @@ jobs:
   send_slack_message:
     runs-on: daq
     name: send slack message
-    needs: [make_nightly_tag, integration_tests]
+    needs: integration_tests
     if: ${{ !cancelled() }}
     steps:
     - name: Set payload path for failure message
-      if: failure() 
-      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/daq-release/.github/workflows/workflow-failure-message.json" >> $GITHUB_ENV
+      if: !success() && failure() 
+      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-failure-message.json" >> $GITHUB_ENV
     - name: Set payload path for success message
       if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/daq-release/.github/workflows/workflow-success-message.json" >> $GITHUB_ENV
+      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-success-message.json" >> $GITHUB_ENV
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
