@@ -27,6 +27,7 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+          echo "Github workspace: $GITHUB_WORKSPACE"
           exit 1
 
   integration_tests:
@@ -113,21 +114,21 @@ jobs:
     runs-on: daq
     name: send slack message
     needs: [make_nightly_tag, integration_tests]
-    if: always()
+    if: ${{ !cancelled() }}
     steps:
     - name: Set payload path for failure message
       if: failure() 
-      run: echo "PAYLOAD_PATH=workflow-failure-message.json" >> $GITHUB_ENV
+      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/daq-release/.github/workflows/workflow-failure-message.json" >> $GITHUB_ENV
     - name: Set payload path for success message
       if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-      run: echo "PAYLOAD_PATH=workflow-success-message.json" >> $GITHUB_ENV
+      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/daq-release/.github/workflows/workflow-success-message.json" >> $GITHUB_ENV
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
       if: (failure() && github.event_name != 'workflow_dispatch') || (success() && github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
       with:
         # For posting a rich message using Block Kit
-        payload-file-path: ${{ steps.payload.outputs.PAYLOAD_PATH }}
+        payload-file-path: ${{ env.PAYLOAD_PATH }}
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
