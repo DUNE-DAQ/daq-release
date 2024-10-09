@@ -119,7 +119,7 @@ jobs:
     if: ${{ !cancelled() }}
     steps:
     - name: Set payload path for failure message
-      if: failure() 
+      if: failure() || (failure() && github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
       run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-failure-message.json" >> $GITHUB_ENV
     - name: Set payload path for success message
       if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
@@ -127,7 +127,7 @@ jobs:
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
-      if: (failure() && github.event_name != 'workflow_dispatch') || (success() && github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+      if: env.PAYLOAD_PATH
       with:
         # For posting a rich message using Block Kit
         payload-file-path: ${{ env.PAYLOAD_PATH }}
