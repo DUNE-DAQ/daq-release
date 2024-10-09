@@ -110,7 +110,7 @@ jobs:
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   send_slack_message:
-    runs-on: ubuntu-latest
+    runs-on: daq
     name: send slack message
     needs: [make_nightly_tag, integration_tests]
     if: always()
