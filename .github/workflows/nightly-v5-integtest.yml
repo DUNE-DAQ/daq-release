@@ -112,7 +112,7 @@ jobs:
   send_slack_message:
     runs-on: ubuntu-latest
     name: send slack message
-    needs: integration_tests
+    needs: [make_nightly_tag, integration_tests]
     steps:
     - name: Set payload path for failure message
       if: failure() 
