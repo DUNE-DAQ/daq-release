@@ -28,6 +28,7 @@ jobs:
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
           echo "Github workspace: $GITHUB_WORKSPACE"
+          echo "ls Github workspace: $(ls $GITHUB_WORKSPACE)"
           exit 1
 
   integration_tests:
@@ -54,6 +55,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+        exit 1
         DET=fd
         mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
         cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
@@ -116,12 +118,12 @@ jobs:
     needs: integration_tests
     if: ${{ !cancelled() }}
     steps:
-    - name: Set payload path for success message
-      if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-success-message.json" >> $GITHUB_ENV
     - name: Set payload path for failure message
       if: failure() 
       run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-failure-message.json" >> $GITHUB_ENV
+    - name: Set payload path for success message
+      if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+      run: echo "PAYLOAD_PATH=$GITHUB_WORKSPACE/.github/workflows/workflow-success-message.json" >> $GITHUB_ENV
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
