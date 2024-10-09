@@ -1,0 +1,19 @@
+{
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
+          "emoji": true
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+        }
+      }
+    ]
+  }

@@ -1,0 +1,19 @@
+{
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
+          "emoji": true
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+        }
+      }
+    ]
+  }

@@ -109,37 +109,23 @@ jobs:
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   send_slack_message:
-    if: failure() || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: daq
+    runs-on: ubuntu-latest
     name: send slack message
     needs: integration_tests
     steps:
+    - name: Set payload path for failure message
+      if: failure() || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes' && failure())
+      run: echo "PAYLOAD_PATH=workflow-failure-message.json" >> $GITHUB_ENV
+    - name: Set payload path for success message
+      if: success() && (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+      run: echo "PAYLOAD_PATH=workflow-success-message.json" >> $GITHUB_ENV
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
       with:
         # For posting a rich message using Block Kit
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
-                }
-              }
-            ]
-          }
-
+        payload-file-path: ${{ steps.payload.outputs.PAYLOAD_PATH }}
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
