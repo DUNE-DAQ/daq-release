@@ -277,7 +277,7 @@ jobs:
         rm -rf $unique_name
 
   send_slack_message:
-    if: failure() || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     runs-on: daq
     name: send slack message
     needs: publish_to_cvmfs
