@@ -36,15 +36,16 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["listrev", 
-                        "3ru_1df_multirun", 
-                        "3ru_3df_multirun", 
-                        "example_system", 
-                        "fake_data_producer", 
-                        "long_window_readout", 
-                        "minimal_system_quick", 
-                        "small_footprint_quick", 
-                        "tpstream_writing"]
+            test_name: ["listrev_test", 
+                        "3ru_1df_multirun_test", 
+                        "3ru_3df_multirun_test", 
+                        "example_system_test", 
+                        "fake_data_producer_test", 
+                        "long_window_readout_test", 
+                        "minimal_system_quick_test", 
+                        "readout_type_scan",
+                        "small_footprint_quick_test", 
+                        "tpstream_writing_test"]
     defaults:
       run:
         shell: bash
@@ -63,14 +64,14 @@ jobs:
         dbt-setup-release -n $NIGHTLY_TAG
         export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG
         TEST_PATH=""
-        if [[ "${{ matrix.test_name }}" == "listrev" ]]; then
+        if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
           TEST_PATH=$LISTREV_SHARE/integtest
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
           export DUNEDAQ_DB_PATH=$DAQSYSTEMTEST_SHARE:$DUNEDAQ_DB_PATH
         fi
-        pytest -v -s --junit-xml=${{ matrix.test_name }}_test_results.xml \
-                $TEST_PATH/${{ matrix.test_name }}_test.py
+        pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
+                $TEST_PATH/${{ matrix.test_name }}.py
 
   #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
@@ -84,7 +85,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
