@@ -37,10 +37,12 @@ jobs:
         fail-fast: false
         matrix:
             test_name: ["listrev", 
-                        "minimal_system_quick", 
                         "3ru_1df_multirun", 
+                        "3ru_3df_multirun", 
                         "example_system", 
+                        "fake_data_producer", 
                         "long_window_readout", 
+                        "minimal_system_quick", 
                         "small_footprint_quick", 
                         "tpstream_writing"]
     defaults:
