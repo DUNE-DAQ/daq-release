@@ -37,7 +37,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: daq
+    runs-on: protodune-daq01
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1T
@@ -95,7 +95,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on: protodune-daq01
     strategy:
       matrix:
         include:
@@ -178,7 +178,7 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: protodune-daq01
     needs: update_image
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
@@ -215,7 +215,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: protodune-daq01
 
     steps:
     - name: check_cvmfs_deployment
@@ -278,7 +278,7 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: daq
+    runs-on: protodune-daq01
     name: send slack message
     needs: publish_to_cvmfs
     steps:
