@@ -5,7 +5,7 @@ The Release Coordinator helps to define the goals of a release, collects deliver
 A Release Coordinator **DOES**:
 * Schedule regular release coordination meetings to ensure that the working groups are making progress towards a release
 * Create/Link `daq-deliverables` Issues to track defined deliverables for a release
-* Solicits updates from the working groups and tries to keep the deliverable Issues up-to-date
+* Solicits updates from the working groups on deliverable progress
 * Reports to the Coordination Team (CT) with progress updates
 * Ensures that acceptance tests are run on release candidates
 
