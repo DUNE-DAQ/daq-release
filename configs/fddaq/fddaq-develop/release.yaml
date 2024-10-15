@@ -79,7 +79,7 @@
           version: 3.0.4
           source:  pypi
         - name: click
-          version: 8.1.2
+          version: 8.1.7
           source:  pypi
         - name: click-configfile
           version: 0.2.3
@@ -316,7 +316,7 @@
           version: 1.5.0
           source:  pypi
         - name: rich
-          version: 13.3.2
+          version: 13.9.2
           source:  pypi
         - name: rsa
           version: 4.8
@@ -331,7 +331,7 @@
           version: 1.3.0
           source:  pypi
         - name: textual
-          version: 0.10.1
+          version: 0.83.0
           source:  pypi
         - name: toml
           version: 0.10.2
