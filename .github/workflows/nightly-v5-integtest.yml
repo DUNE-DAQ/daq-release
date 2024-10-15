@@ -30,7 +30,7 @@ jobs:
 
   integration_tests:
     name: integration_tests
-    runs-on: protodune-daq01
+    runs-on: daq
     timeout-minutes: 30
     needs: make_nightly_tag
     strategy:
@@ -75,7 +75,7 @@ jobs:
 
   #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: [make_nightly_tag, integration_tests]
     steps:
@@ -91,7 +91,7 @@ jobs:
         fail-on-empty: true
 
   cleanup_xml_files:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: [make_nightly_tag, parse_results]
     steps:
@@ -103,7 +103,7 @@ jobs:
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: integration_tests
     steps:
@@ -113,7 +113,7 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: protodune-daq01
+    runs-on: daq
     name: send slack message
     needs: integration_tests
     steps:
