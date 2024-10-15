@@ -53,7 +53,7 @@ jobs:
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
           echo "ADD spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }} /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}" >> Dockerfile
-          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}/share/spack/setup-env.sh && spack uninstall -y llvm || true" >> Dockerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
           echo "ADD assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
@@ -164,7 +164,7 @@ jobs:
           echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
           echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
           echo "ADD spack/externals/ext-v2.0 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.0" >> Dockerfile
-          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.0/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.0/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm || true" >> Dockerfile
           echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
           echo "ADD assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
           echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
