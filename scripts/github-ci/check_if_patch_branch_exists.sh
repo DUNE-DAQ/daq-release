@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if (( $# != 1 )); then
+    echo "Usage: $( basename $0 ) <release_tag>" >&2
+    echo "Example release tag format: fddaq-v4.4.x" >&2
+    exit 1
+fi
+
+release_tag=$1
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
 
@@ -8,6 +16,7 @@ function check_patch {
   cd $tmp_dir
   prd_list_name=$1[@]
   release_tag=$2
+  echo "Release tag: ${release_tag}"
   prd_list=("${!prd_list_name}")
   for prod in "${prd_list[@]}"; do
     iprd_arr=(${prod})
@@ -16,12 +25,11 @@ function check_patch {
     echo "********************* $prod_name *****************************"
     git clone --quiet https://github.com/DUNE-DAQ/${prod_name}.git 
     cd ${prod_name}
-    git branch -r --contains $release_tag|grep patch
+    git show-ref | awk '{print $2}' | grep "patch/$release_tag"
     cd ..
   done
   cd ..
   rm -rf $tmp_dir
 }
 
-
-check_patch dune_packages_with_ci dunedaq-v3.2.2
+check_patch dune_packages_with_ci $release_tag
