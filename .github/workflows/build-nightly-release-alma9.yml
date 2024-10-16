@@ -40,7 +40,7 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1T
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
     defaults:
       run:
         shell: bash
@@ -99,7 +99,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1T"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
@@ -141,7 +141,7 @@ jobs:
             fddaq_tag="NFD${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            ln -s ${fddaq_tag} last_fddaq
+            test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
@@ -179,7 +179,7 @@ jobs:
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
     runs-on: daq
-    needs: update_image
+    needs: [make_nightly_tag, update_image]
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
@@ -189,12 +189,14 @@ jobs:
     steps:
     
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+      env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n last_${DET}daq
+          dbt-setup-release -n NFD${NIGHTLY_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
