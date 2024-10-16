@@ -11,7 +11,7 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 ### For DAQ software developers and users:
 1. [DAQ software development workflow](development_workflow_gitflow.md)
 2. [List of GitHub Teams and Repositories](team_repos.md)
-3. [How to build external software with Spack in a local workarea](Build-external-packages-with-spack-in-a-work-area.md)
+3. [How to build a package with Spack in a local workarea](Build-packages-with-spack-in-a-work-area.md)
 
 ### For the Software Coordination team (expert only):
 

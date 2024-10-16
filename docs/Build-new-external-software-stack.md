@@ -16,7 +16,7 @@ inside a container based on the `ghcr.io/dune-daq/alma9-spack:latest`
 image. To provide a bit more detail, you'll want to do the following
 once you're logged into `daq.fnal.gov` as `dunedaq`:
 
-1. Check whether there are already externals installed in `/home/nfs/dunedaq/docker-scratch/spack/externals/ext-v${EXT_VERSION}/spack-${SPACK_VERSION}` (*), and if so, that you know why they're already there.
+1. Check whether there are already externals installed in `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v${EXT_VERSION}/spack-${SPACK_VERSION}` (*), and if so, that you know why they're already there.
 1. Create a directory which will be the base of operations for your work, if you don't already have one
 1. Inside that directory, `git clone https://github.com/DUNE-DAQ/daq-release`
 1. Launch a container using the [example at the top of the `build-ext.sh` script as a guide](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/spack/build-ext.sh). Note that `<location of local area for installation>` here would be `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq` (as of Jul-25-2024)
