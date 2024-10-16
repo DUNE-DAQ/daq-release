@@ -179,7 +179,7 @@ jobs:
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
     runs-on: daq
-    needs: update_image
+    needs: [make_nightly_tag, update_image]
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
@@ -189,12 +189,15 @@ jobs:
     steps:
     
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+      env:
+          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
           dbt-setup-release -n last_${DET}daq
+          test "${NIGHTLY_TAG:0:1}" != "_" && rm -f /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh

@@ -195,6 +195,7 @@ jobs:
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v4
           dbt-setup-release -n last_${DET}daq
+          rm -f /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_${DET}daq
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
