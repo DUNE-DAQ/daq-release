@@ -14,7 +14,7 @@ function check_patch {
     prod_name=${iprd_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $prod_name *****************************"
-    git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
+    git clone --quiet https://github.com/DUNE-DAQ/${prod_name}.git 
     cd ${prod_name}
     git branch -r --contains $release_tag|grep patch
     cd ..
