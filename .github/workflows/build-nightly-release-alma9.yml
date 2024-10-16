@@ -141,7 +141,7 @@ jobs:
             fddaq_tag="NFD${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            ln -s ${fddaq_tag} last_fddaq
+            test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
@@ -196,8 +196,7 @@ jobs:
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n last_${DET}daq
-          test "${NIGHTLY_TAG:0:1}" != "_" && rm -f /cvmfs/dunedaq-development.opensciencegrid.org/nightly/last_${DET}daq
+          dbt-setup-release -n NFD${NIGHTLY_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
