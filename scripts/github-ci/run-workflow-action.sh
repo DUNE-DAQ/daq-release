@@ -25,7 +25,6 @@ if [[ $action != "sync" && $action != "trigger" && $action != "disable" ]]; then
     exit 4
 fi
 
-echo "Starting directory: $(pwd)"
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 pushd $tmp_dir
 
