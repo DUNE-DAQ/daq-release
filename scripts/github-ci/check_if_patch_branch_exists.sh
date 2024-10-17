@@ -14,17 +14,16 @@ source $SCRIPT_DIR/repo.sh
 function check_patch {
   tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
   cd $tmp_dir
-  prd_list_name=$1[@]
+  repo_list_name=$1[@]
   release_tag=$2
-  echo "Release tag: ${release_tag}"
-  prd_list=("${!prd_list_name}")
-  for prod in "${prd_list[@]}"; do
-    iprd_arr=(${prod})
-    prod_name=${iprd_arr[0]//_/-}
+  repo_list=("${!repo_list_name}")
+  for repo in "${repo_list[@]}"; do
+    irepo_arr=(${repo})
+    repo_name=${irepo_arr[0]//_/-}
     echo "--------------------------------------------------------------"
-    echo "********************* $prod_name *****************************"
-    git clone --quiet https://github.com/DUNE-DAQ/${prod_name}.git 
-    cd ${prod_name}
+    echo "********************* $repo_name *****************************"
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git 
+    cd ${repo_name}
     git show-ref | awk '{print $2}' | grep "patch/$release_tag"
     cd ..
   done
