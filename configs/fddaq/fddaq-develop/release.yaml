@@ -112,7 +112,7 @@
           version: develop
           source:  github_DUNE-DAQ
         - name: drunc
-          version: develop
+          version: plasorak/rte-for-releases
           source:  github_DUNE-DAQ
         - name: druncschema
           version: develop
