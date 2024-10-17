@@ -40,7 +40,7 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
     defaults:
       run:
         shell: bash
@@ -99,7 +99,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
