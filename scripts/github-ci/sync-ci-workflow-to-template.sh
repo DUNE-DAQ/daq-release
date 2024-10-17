@@ -1,25 +1,15 @@
 #!/bin/bash
 
-if (( $# != 2 )); then
-    echo "Usage: $( basename $0 ) <production_v4 or develop> <workflow_file_name>" >&2
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "This script is intended to be sourced, not executed directly." >&2
+    echo "To execute a workflow action, use run-workflow-action.sh" >&2
     exit 1
-fi
-
-export DEVLINE=$1
-workflow_file=$2
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $SCRIPT_DIR/repo.sh
-
-if [[ $DEVLINE == "develop" && "$workflow_file" == *v4* ]]; then
-    echo "ERROR: You must use the production_v4 branch for v4 workflows such as $workflow_file" >&2
-    exit 2
 fi
 
 function git_checkout_and_update_ci {
   repo_list_name=$1[@]
-  src_workflow_file=$2
-  dest_workflow_file=$3
+  dest_workflow_file=$2
+  src_workflow_file=$tmp_dir/.github/workflow-templates/$workflow_file
   repo_list=("${!repo_list_name}")
   for repo in "${repo_list[@]}"; do
     irepo_arr=(${repo})
@@ -36,22 +26,3 @@ function git_checkout_and_update_ci {
     popd
   done
 }
-
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-pushd $tmp_dir
-
-git clone https://github.com/DUNE-DAQ/.github.git || exit 5
-
-existing_workflow_templates=$(ls .github/workflow-templates/*.yml | xargs -n 1 basename)
-if ! echo "$existing_workflow_templates" | grep -xq "${workflow_file}"; then
-    echo "Invalid workflow file name provided. The available options are:" >&2
-    echo $existing_workflow_templates >&2
-    exit 6
-fi
-
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/$workflow_file $workflow_file
-
-popd
-
-rm -rf $tmp_dir
