@@ -67,9 +67,6 @@
         - name: cli11
           version: 2.3.2
           variant: ~
-        - name: krb5
-          version: 1.19.2
-          variant: ~
         - name: intel-tbb
           version: 2020.3
           variant: ~
@@ -116,9 +113,6 @@
         - name: gcc
           version: 12.1.0
           variant: "+binutils"
-        - name: openssh
-          version: 8.7p1
-          variant: ~
 
     coredaq:
         - name: daq-cmake

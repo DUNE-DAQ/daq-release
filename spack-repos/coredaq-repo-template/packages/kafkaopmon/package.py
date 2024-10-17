@@ -18,10 +18,6 @@ class Kafkaopmon(CMakePackage):
     version("XVERSIONX", commit="XHASHX")
 
     XDEPENDSX
-    depends_on("cyrus-sasl")
-    depends_on("openssl")
-    depends_on("krb5")
-
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
