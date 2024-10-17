@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if (( $# != 1 )); then
+if (( $# != 2 )); then
     echo "Usage: $( basename $0 ) <production_v4 or develop> <release_tag>" >&2
     echo "Example release tag format: fddaq-v4.4.x" >&2
     exit 1
