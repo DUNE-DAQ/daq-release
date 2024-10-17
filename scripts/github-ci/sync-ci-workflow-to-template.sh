@@ -24,14 +24,13 @@ function git_checkout_and_update_ci {
   repo_list_name=$1[@]
   src_workflow_file=$2
   dest_workflow_file=$3
-  common_branch=$4
   repo_list=("${!repo_list_name}")
   for repo in "${repo_list[@]}"; do
     irepo_arr=(${repo})
     repo_name=${irepo_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $repo_name *****************************"
-    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $common_branch || exit 4
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $DEVLINE || exit 4
     pushd ${repo_name}
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
@@ -55,7 +54,7 @@ if ! echo "$existing_workflow_templates" | grep -xq "${workflow_file}"; then
     exit 7
 fi
 
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/$workflow_file $workflow_file $DEVLINE
+git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/$workflow_file $workflow_file
 
 popd
 
