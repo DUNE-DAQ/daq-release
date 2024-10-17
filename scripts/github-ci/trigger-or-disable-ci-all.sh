@@ -6,7 +6,7 @@ source $SCRIPT_DIR/repo.sh
 workflow_file=$1
 action=$2
 
-function trigger_ci_all {
+function trigger_or_disable_ci_all {
   repo_list_name=$1[@]
   workflow_file=$2
   action=$3
@@ -27,4 +27,4 @@ function trigger_ci_all {
 }
 
 
-trigger_ci_all dune_packages_with_ci $workflow_file $action
+trigger_or_disable_ci_all dune_packages_with_ci $workflow_file $action
