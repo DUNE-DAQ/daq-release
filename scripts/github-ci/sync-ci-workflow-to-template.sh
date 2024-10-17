@@ -31,13 +31,13 @@ function git_checkout_and_update_ci {
     repo_name=${irepo_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $repo_name *****************************"
-    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $common_branch || exit 2
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $common_branch || exit 4
     pushd ${repo_name}
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
     git commit -am "Syncing .github/workflows/$(basename $dest_workflow_file)"
-    git push --quiet || exit 3
+    git push --quiet || exit 5
     popd
   done
 }
@@ -46,13 +46,13 @@ tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 
 pushd $tmp_dir
 
-git clone https://github.com/DUNE-DAQ/.github.git || exit 4
+git clone https://github.com/DUNE-DAQ/.github.git || exit 6
 
 existing_workflow_templates=$(ls .github/workflow-templates/*.yml | xargs -n 1 basename)
 if ! echo "$existing_workflow_templates" | grep -xq "${workflow_file}"; then
     echo "Invalid workflow file name provided. The available options are:" >&2
     echo $existing_workflow_templates >&2
-    exit 5
+    exit 7
 fi
 
 git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/$workflow_file $workflow_file $DEVLINE
