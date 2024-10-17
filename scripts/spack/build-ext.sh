@@ -151,7 +151,7 @@ coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInf
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:"
 
-llvm_spec="llvm@15.0.7%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+llvm_spec="llvm@18.1.3%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
@@ -167,10 +167,6 @@ if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
 else
     echo "Spotted a file called $PWD/umbrella_build_semaphore; will skip spack install of the umbrella package"
 fi
-
-# overwrite ssh config
-SSH_INSTALL_DIR=$(spack location -i openssh)
-cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/openssh/ssh_config $SSH_INSTALL_DIR/etc/ || exit 7
 
 ## Step 6 -- remove DAQ packages and umbrella packages
 
@@ -191,7 +187,7 @@ for pkg in $build_only_packages; do
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go git libunistring openssh krb5 libedit; do
     echo "Uninstalling $pkg"
     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
