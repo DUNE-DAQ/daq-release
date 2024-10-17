@@ -1,12 +1,13 @@
 #!/bin/bash
 
 if (( $# != 1 )); then
-    echo "Usage: $( basename $0 ) <release_tag>" >&2
+    echo "Usage: $( basename $0 ) <production_v4 or develop> <release_tag>" >&2
     echo "Example release tag format: fddaq-v4.4.x" >&2
     exit 1
 fi
 
-release_tag=$1
+export DEVLINE=$1
+release_tag=$2
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh
