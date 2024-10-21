@@ -6,26 +6,15 @@ import argparse
 import shutil
 import subprocess
 import tempfile
+import re
 
+from dr_tools import parse_yaml_file
+from mappings import cmake_to_spack, pyvenv_url_names
 
 class MyDumper(yaml.Dumper):
 
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
-
-
-def parse_yaml_file(fname):
-    if not os.path.exists(fname):
-        print("Error: -- YAML file {} does not exist".format(fname))
-        exit(20)
-    fman = ""
-    with open(fname, 'r') as stream:
-        try:
-            fman = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-    return fman
-
 
 def check_output(cmd):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -55,6 +44,13 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
             fi"""
         output = check_output(cmd)
         tag_or_branch = output[0].decode('utf-8').strip()
+    else: # Check if tag exists
+        cmd = f"""cd {tmp_dir}/{repo}; \
+            if ! git show-ref --tags --verify --quiet "refs/tags/{tag_or_branch}"; then \
+              echo "{tag_or_branch} does not exist for package {repo}. Exiting..."; \
+              exit 1; \
+            fi;""" 
+        output = check_output(cmd)
     cmd = f"""cd {tmp_dir}/{repo}; \
         git checkout --quiet {tag_or_branch}; \
         git rev-parse --short HEAD"""
@@ -65,6 +61,14 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     output = check_output(cmd)
     return (tag_or_branch, commit_hash)
 
+def check_branch_exists(repo, branch):
+    command = f'git ls-remote --exit-code https://github.com/DUNE-DAQ/{repo}.git --heads origin {branch}'
+    args = command.split()
+    subproc = subprocess.run(args)
+    if subproc.returncode == 0:
+        return True
+    print(f'WARNING: No branch {branch} exists for package {repo}; defaulting to develop')
+    return False
 
 class DAQRelease:
 
@@ -101,11 +105,53 @@ class DAQRelease:
                     (itag, ihash) = get_commit_hash(iname, iver, ipkg["version"])
                 self.rdict[self.rtype][i]["commit"] = ihash
                 print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
+
             # rewrite YAML
             with open(self.yaml, 'w') as outfile:
                 outfile.write('---\n')
                 yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
+
+    def get_cmake_dependencies(self, package_name, branch_name):
+        if self.overwrite_branch != '':
+            if check_branch_exists(package_name, self.overwrite_branch):
+                branch_name = self.overwrite_branch
+        file_name = "CMakeLists.txt"
+        cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
+        command = f'curl -o {file_name} --fail {cmakelists_path}'
+        check_output(command)
+        args = command.split()
+        subprocess.run(args)
+
+        cmake_dependencies_list = []
+        with open(file_name, 'r') as infile:
+            lines = infile.read()
+            # Parse package names from find_package calls. Everything up to the first
+            # white space character will be taken as the package name (i.e., no "REQUIRED"
+            # or "COMPONENTS"
+            find_package_pattern  = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
+            cmake_dependencies_list = find_package_pattern.findall(lines)
+            # Special cases where the dependency has no explicit find_package call
+            find_daq_codegen = re.search(r'\s*[^# ]\s*daq_codegen\(', lines)
+            if find_daq_codegen:
+                cmake_dependencies_list.append('py-moo')
+            find_pybind = re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', lines)
+            if find_pybind: 
+                cmake_dependencies_list.append('pybind11')
+            find_numa = re.search(r'\s*[^# ]\s*pkg_check_modules\(numa', lines)
+            if find_numa:
+                cmake_dependencies_list.append('numactl')
+        cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
+        return cmake_dependencies_list
+
+    def generate_depends_on_list(self, cmake_package_list):
+        depends_on_list = ""
+        for idep in cmake_package_list:
+            # Special cases where find_package call in CMakeLists is not sufficient
+            if idep in cmake_to_spack:
+                idep = cmake_to_spack[idep]
+            depends_on_list += f'\n    depends_on("{idep}")'
+        return depends_on_list
 
     def generate_repo_file(self, repo_path):
         repo_dir = os.path.join(repo_path, "spack-repo")
@@ -129,11 +175,15 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
-                # Forzen release
+                # Frozen release
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
                     lines = lines.replace("XHASHX", ipkg["commit"])
+                # Infer dependencies from CMakeLists.txt
+                cmake_package_list = self.get_cmake_dependencies(ipkg["name"], ipkg["commit"])
+                depends_on_list = self.generate_depends_on_list(cmake_package_list)
+                lines = lines.replace("XDEPENDSX", depends_on_list)
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
@@ -145,6 +195,7 @@ class DAQRelease:
     def generate_external_umbrella_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
+
         for ipkg in ['devtools', 'externals', 'systems']:
             itemp = os.path.join(template_dir, ipkg, 'package.py')
             if not os.path.exists(itemp):
@@ -188,8 +239,8 @@ class DAQRelease:
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
-        if self.rtype != "dunedaq":
-            lines += f'\n        depends_on(f"dunedaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        if self.rtype != "coredaq":
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -214,7 +265,7 @@ class DAQRelease:
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):
-        if self.rtype == "dunedaq":
+        if self.rtype == "coredaq":
             self.generate_external_umbrella_package(repo_path, template_dir)
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return
@@ -242,23 +293,21 @@ class DAQRelease:
 
     def generate_pyvenv_requirements(self, output_file):
         with open(output_file, 'w') as f:
-            #f.write("--index-url=file:///cvmfs/dunedaq.opensciencegrid.org/pypi-repo/simple\n")
             for i in self.rdict['pymodules']:
                 iname = i["name"]
                 iversion = i["version"]
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
-                    iline = f"git+https://github.com/"
                     iuser = i["source"].replace("github_", "")
-                    if iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
-                    elif iname == "elisa-client-api":
-                        iline = f"git+https://github.com/{iuser}/elisa_client_api@v{iversion}#egg={iname}"
-                    elif iname == "connectivityserver":
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg=connection-service"
+                    # Special cases are handled using a dictionary in mappings.py
+                    repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
+                    egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
+
+                    if iversion == "develop" or iname == "moo":
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
                 f.write(iline + '\n')
         return
 
@@ -267,7 +316,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='make-release-repo.py',
         description="Parse DUNE DAQ release manifest files.",
-        epilog="Questions and comments to dingpf@fnal.gov",
+        epilog="Questions and comments to jcfree@fnal.gov",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-t', '--template-path',
                         default="../../spack-repos/packages",

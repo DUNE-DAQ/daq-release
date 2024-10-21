@@ -17,8 +17,8 @@ class Daqsystemtest(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+    XDEPENDSX
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
@@ -30,5 +30,6 @@ class Daqsystemtest(CMakePackage):
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
         env.prepend_path('DUNEDAQ_SHARE_PATH', self.prefix + "/share")
+        env.prepend_path('DUNEDAQ_DB_PATH', self.prefix + "/share")
         env.prepend_path('PYTHONPATH', self.prefix.lib + "64/python")
 

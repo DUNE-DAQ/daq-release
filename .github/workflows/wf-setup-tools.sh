@@ -4,8 +4,10 @@ if [[ -z $BASE_RELEASE_DIR || -z $DET_RELEASE_DIR || -z $OS ]]; then
     return 1
 fi
 
-if [[ $BASE_RELEASE_DIR =~ "/nightly" ]]; then
+if [[ $BASE_RELEASE_DIR =~ "_DEV_" ]]; then
     export RELEASE_TYPE="nightly"
+elif [[ $BASE_RELEASE_DIR =~ "_PROD4_" ]]; then
+    export RELEASE_TYPE="production_v4"
 elif [[ $BASE_RELEASE_DIR =~ "/candidate" ]]; then
     export RELEASE_TYPE="candidate"
 elif [[ $BASE_RELEASE_DIR =~ "/release" ]]; then
@@ -23,32 +25,28 @@ echo "Assuming base release tag is $BASE_RELEASE_TAG (i.e. the same name as the 
 export DET_RELEASE_TAG=$( basename $DET_RELEASE_DIR )
 echo "Assuming detector release tag is $DET_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${DET_RELEASE_DIR})"
 
-if [[ $OS == almalinux9 ]]; then
+if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 production nightly, externals v2.0
     export EXT_VERSION=v2.0
-elif [[ $OS == scientific7 ]]; then
+elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.1
+    export EXT_VERSION=v2.1
+elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or frozen, externals v2.0
+    export EXT_VERSION=v2.0
+elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or frozen, externals v2.1 
+    export EXT_VERSION=v2.1
+elif [[ $OS == scientific7 ]]; then                                 # SL7 _any_, externals v1.1
     export EXT_VERSION=v1.1
 else
     echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
     return 5
 fi
 
-export SPACK_VERSION=0.20.0
-export GCC_VERSION=12.1.0
-export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+echo "Using externals version $EXT_VERSION"
 
-export DET_SPACK_AREA=$DET_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
-export BASE_SPACK_AREA=$BASE_RELEASE_DIR/spack-$SPACK_VERSION-gcc-$GCC_VERSION
+export SPACK_VERSION=0.22.0
+export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}
 
-if [[ $RELEASE_TYPE == "frozen" ]]; then
-
-    if [[ -z $BUILD_NUMBER ]]; then
-        echo "BUILD_NUMBER needs to be defined for a frozen release build" >&2
-        return 10   
-    fi
-
-    export DET_SPACK_AREA=${DET_SPACK_AREA}-b${BUILD_NUMBER}
-    export BASE_SPACK_AREA=${BASE_SPACK_AREA}-b${BUILD_NUMBER}
-fi
+export DET_SPACK_AREA=$DET_RELEASE_DIR
+export BASE_SPACK_AREA=$BASE_RELEASE_DIR
 
 function get_spack() {
 
@@ -58,9 +56,14 @@ function get_spack() {
   fi
 
   wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz || return 2
-  tar xf v${SPACK_VERSION}.tar.gz 
-  ln -s spack-${SPACK_VERSION} spack-installation
+  tar xf v${SPACK_VERSION}.tar.gz
   rm -f v${SPACK_VERSION}.tar.gz
+  
+  ln -s spack-${SPACK_VERSION} spack-installation
+  mkdir spack-${SPACK_VERSION}/default
+  pushd spack-${SPACK_VERSION}/default
+  ln -s ../spack-installation
+  popd
 }
 
 function daqify_spack_environment() {
@@ -91,36 +94,36 @@ function daqify_spack_environment() {
    if [[ "$release_level" == "base" ]]; then
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
-          repos:
-            - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
+repos:
+  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+  - \$spack/var/spack/repos/builtin
 EOF
 
 
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
-          upstreams:
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+upstreams:
+  spack-externals:
+    install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
 
     elif [[ "$release_level" == "det" ]]; then
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
-          repos:
-            - ${DET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-            - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
-            - \$spack/var/spack/repos/builtin
+repos:
+  - ${DET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
+  - \$spack/var/spack/repos/builtin
 EOF
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
-          upstreams:
-            ${BASE_RELEASE_TAG}:
-              install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
-            spack-externals:
-              install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
+upstreams:
+  ${BASE_RELEASE_TAG}:
+    install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
+  spack-externals:
+    install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
 
     fi
@@ -165,15 +168,19 @@ function get_release_yaml() {
     if [[ $release_level == "base" ]]; then
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
-            echo -n "configs/dunedaq/dunedaq-develop/release.yaml"
+            echo -n "configs/coredaq/coredaq-develop/release.yaml"
+        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
+            echo -n "configs/coredaq/coredaq-production_v4/release.yaml"
 	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
-            echo -n "configs/dunedaq/dunedaq-${version}/release.yaml"
+            echo -n "configs/coredaq/coredaq-${version}/release.yaml"
         fi
 
     else
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-develop/release.yaml"
+        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
+            echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
         elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-${version}/release.yaml"
         fi
@@ -185,6 +192,14 @@ function tar_and_stage_release() {
     subdir=$1
     tarfile=${subdir}.tar.gz
 
+    echo "About to run tar zcf $tarfile $subdir in $PWD"
+    df
+    echo "######################################################################"
+    du . -s
+    echo "######################################################################"
+    du $subdir -s
+    echo
+    
     tar zcf $tarfile $subdir
     tardir=$GITHUB_WORKSPACE/tarballs_for_upload
     mkdir -p $tardir

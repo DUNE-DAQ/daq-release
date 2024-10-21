@@ -1,13 +1,15 @@
 #!/bin/bash
 
-if (( $# != 3 )); then
-    echo "Usage: "$( basename $0 )" [build type (candidate or frozen)] [detector type (nd or fd)] [OS for build (sl7 or alma9)] " >&2
+if (( $# != 4 )); then
+    echo "Usage: "$( basename $0 )" [build type (candidate or frozen)] [detector type (nd or fd)] \
+[OS for build (sl7 or alma9)] [Build line (develop or production)]" >&2
     exit 1
 fi
 
 build=$1
 det=$2
 os=$3
+dev_or_prod=$4
 
 if [[ $build != "candidate" && $build != "frozen" ]]; then
     echo "Build type needs to be \"candidate\" or \"frozen\"; exiting..." >&2
@@ -28,30 +30,37 @@ else
     exit 3
 fi
 
+if [[ $oslabel == "SL7" ]]; then
+    workflow_name="${oslabel} build v4 or v5 ${build} release"
+elif [[ $dev_or_prod == "production" && $oslabel == "Alma9" ]]; then
+    workflow_name="${oslabel} build v4 production ${build} release"
+elif [[ $dev_or_prod == "develop" && $oslabel == "Alma9" ]]; then
+    workflow_name="${oslabel} build v5 ${build} release"
+else
+    echo "Build line needs to be \"production\" (for v4) or \"develop\" (for v5); exiting..." >&2
+    exit 31
+fi
+
+
 
 REPO=
 SOURCE_DIR=
 DEST_DIR=
-BASE_WILDCARD=
-DET_WILDCARD=
 
 if [[ $build == "candidate" ]]; then
     REPO="dunedaq-development.opensciencegrid.org"
     SOURCE_DIR="candidates"
     DEST_DIR=/cvmfs/$REPO/candidates
 
-    BASE_WILDCARD='rc-v*'
-    DET_WILDCARD=$det'-v*'
-    
 elif [[ $build == "frozen" ]]; then
     REPO="dunedaq.opensciencegrid.org"
     SOURCE_DIR="releases"
     DEST_DIR=/cvmfs/$REPO/spack/releases
 
-    BASE_WILDCARD='dunedaq-v*'
-    DET_WILDCARD=$det'daq-v*'
-
 fi
+
+BASE_WILDCARD='coredaq-v*'
+DET_WILDCARD=$det'daq-v*'
 
 tmp_dir=$(mktemp --tmpdir=/dev/shm -d -t release_XXXXXXXXXX)
 
@@ -66,7 +75,7 @@ if [[ $retval != 0 ]]; then
 fi
 
 # Note that among other things you need to have successfully run "gh auth login" for this to work
-run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${oslabel} build ${build} release" | grep completed |head -n 1 | egrep -o '[[:digit:]]{10}' )
+run_id=$( gh run -R DUNE-DAQ/daq-release list | grep "${workflow_name}" | grep completed |head -n 1 | egrep -o '[[:digit:]]{11}' )
 
 if [[ -z $run_id || ! $run_id =~ [0-9]+ ]]; then
      echo "Unable to obtain a relevant GitHub Action run ID; exiting..." >&2
@@ -77,7 +86,7 @@ read -p "Will publish the results of the GitHub Action https://github.com/DUNE-D
 
 test "$answer" != "y" && exit 0
 
-artifacts="${build}s_dunedaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env ${det}daq_app_rte"
+artifacts="${build}s_coredaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env ${det}daq_app_rte"
 
 for artifact in $artifacts; do
     echo "Downloading $artifact..."
@@ -92,10 +101,13 @@ for tarfile in ../*.tar.gz ; do
     rm -f $tarfile
 done
 
-cd ${det}*-v* || exit 45
+full_det_release_name=$( ls | grep "${det}.*-v.*" )
+shorthand_det_release_name=$( echo $full_det_release_name | sed -r 's/(.*)-[0-9]+$/\1/' )
+ln -s $full_det_release_name $shorthand_det_release_name
+
+cd $full_det_release_name || exit 45
 cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
 cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
-ln -s spack-*-gcc-* default
 
 cd $tmp_dir
 
@@ -106,7 +118,7 @@ cvmfs_server transaction $REPO
 
 echo >> $LOG
 echo -n Transaction $TAG: >>$LOG
-find $SOURCE_DIR/dunedaq-* -name .cvmfscatalog -delete
+find $SOURCE_DIR/coredaq-* -name .cvmfscatalog -delete
 rsync -rlpvt --delete-after --stats $SOURCE_DIR/$BASE_WILDCARD $DEST_DIR
 rsync -rlpvt --delete-after --stats $SOURCE_DIR/$DET_WILDCARD $DEST_DIR
 

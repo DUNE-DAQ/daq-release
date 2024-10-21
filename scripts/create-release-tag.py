@@ -8,18 +8,7 @@ import subprocess
 import tempfile
 import shutil
 
-
-def parse_yaml_file(fname):
-    if not os.path.exists(fname):
-        print("Error: -- YAML file {} does not exist".format(fname))
-        exit(20)
-    fman = ""
-    with open(fname, 'r') as stream:
-        try:
-            fman = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-    return fman
+from spack.dr_tools import parse_yaml_file
 
 
 def check_output(cmd):
@@ -140,7 +129,7 @@ if __name__ == "__main__":
     pkgs = []
     if args.input_manifest is not None:
         fman = parse_yaml_file(args.input_manifest)
-        keyname = "dunedaq"
+        keyname = "coredaq"
         if "fddaq" in fman:
             keyname = "fddaq"
         if "nddaq" in fman:

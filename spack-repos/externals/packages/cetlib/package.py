@@ -52,7 +52,7 @@ class Cetlib(CMakePackage):
             multi=False,
             description='Use the specified C++ standard when building.')
 
-    depends_on('cmake', type='build')
+    depends_on('cmake@3.23.1', type='build')
     depends_on('cetmodules', type='build')
     depends_on('catch2', type=('build', 'link'))
     depends_on('intel-tbb', when='~lite', type=('build', 'link'))

@@ -1,0 +1,239 @@
+name: Build docker image with slim externals
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag-suffix:
+        description: 'optional suffix for test-only externals image (e.g., T would mean alma9-slim-externals:v2.1T)'
+        default: ''
+      account-to-copy:
+        description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default dunedaq)'
+        default: 'dunedaq'
+      spack-version:
+        description: 'the version of Spack the v2.1 externals were built with (default 0.22.0)'
+        default: '0.22.0'
+
+jobs:
+
+  build_alma9_externals:
+    name: build_al9_initial
+    runs-on: daq
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Intro
+        run: |
+          echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }} image"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/alma9-slim-externals
+          tags: |
+            type=raw,value=v2.1${{ github.event.inputs.tag-suffix }}-initial
+
+      - name: prepare build dir
+        id: prep_build_dir
+        run: |
+          build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
+          cd $build_dir
+          refresh_date=$(date +%y-%m-%d)
+          echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
+          echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+          echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
+          echo "ADD spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }} /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.1/spack-${{ github.event.inputs.spack-version }}/share/spack/setup-env.sh && spack uninstall -y llvm || true" >> Dockerfile
+          echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "ADD assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
+          echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
+          echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+          echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Clean up
+        if: always()
+        run: |
+
+            rm -f /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
+            docker image prune -f
+            docker container prune -f
+            docker network prune -f
+            docker volume prune -f
+
+  build_alma9_slim_externals:
+    name: build_alma9
+    runs-on: daq
+    needs: build_alma9_externals
+    permissions:
+      packages: write
+      contents: read
+    steps:    
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/alma9-slim-externals
+          tags: |
+            type=raw,value=v2.1${{ github.event.inputs.tag-suffix }}
+
+      - name: prepare build dir
+        run: |
+          build_dir="${{ github.workspace }}/docker-build"
+          mkdir -p $build_dir
+          cd $build_dir
+          refresh_date=$(date +%y-%m-%d)
+          echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
+          echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+          echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/spack /cvmfs/dunedaq.opensciencegrid.org/spack" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.1${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+          echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  build_alma9_externals2:
+    name: build_al9_initial2
+    runs-on: daq
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Intro
+        run: |
+          echo "Will create a ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }} image"
+          echo "Image contents will include $HOSTNAME:/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/spack/externals/ext-v2.0"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/alma9-slim-externals
+          tags: |
+            type=raw,value=v2.0${{ github.event.inputs.tag-suffix }}-initial
+
+      - name: prepare build dir
+        id: prep_build_dir
+        run: |
+          build_dir="/home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq"
+          cd $build_dir
+          refresh_date=$(date +%y-%m-%d)
+          echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
+          echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+          echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
+          echo "ADD spack/externals/ext-v2.0 /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.0" >> Dockerfile
+          echo "RUN source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.0/spack-0.20.0/share/spack/setup-env.sh && spack uninstall -y llvm || true" >> Dockerfile
+          echo "ADD tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "ADD assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
+          echo "ADD setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
+          echo "ADD pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+          echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Clean up
+        if: always()
+        run: |
+
+            rm -f /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq/Dockerfile
+            docker image prune -f
+            docker container prune -f
+            docker network prune -f
+            docker volume prune -f
+
+  build_alma9_slim_externals2:
+    name: build_alma9_2
+    runs-on: daq
+    needs: build_alma9_externals2
+    permissions:
+      packages: write
+      contents: read
+    steps:    
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/dune-daq/alma9-slim-externals
+          tags: |
+            type=raw,value=v2.0${{ github.event.inputs.tag-suffix }}
+
+      - name: prepare build dir
+        run: |
+          build_dir="${{ github.workspace }}/docker-build"
+          mkdir -p $build_dir
+          cd $build_dir
+          refresh_date=$(date +%y-%m-%d)
+          echo "FROM ghcr.io/dune-daq/alma9-spack:latest" > Dockerfile
+          echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+          echo "ENV REFRESHED_AT $refresh_date" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/spack /cvmfs/dunedaq.opensciencegrid.org/spack" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/tools /cvmfs/dunedaq.opensciencegrid.org/tools" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/assets /cvmfs/dunedaq.opensciencegrid.org/assets" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh" >> Dockerfile
+          echo "COPY --from=ghcr.io/dune-daq/alma9-slim-externals:v2.0${{ github.event.inputs.tag-suffix }}-initial /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+          echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
