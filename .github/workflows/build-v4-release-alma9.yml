@@ -67,7 +67,7 @@ jobs:
           tar_and_stage_release ${BASE_RELEASE_TAG}
 
     - name: upload spack nightly tarball for base release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nightly_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
@@ -88,10 +88,31 @@ jobs:
           tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for far detector release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nightly_fddaq
         path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
+    - name: setup directories and install spack for the nddaq release
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NND${NIGHTLY_TAG}
+          export OS=scientific7
+          source daq-release/.github/workflows/wf-setup-tools.sh
+
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR nd $OS ${{ github.event.inputs.feature-branch }}
+
+          cd $DET_RELEASE_DIR/../
+          tar_and_stage_release ${DET_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for near detector release
+      uses: actions/upload-artifact@v4
+      with:
+        name: nightly_nddaq
+        path: ${{ github.workspace }}/tarballs_for_upload/NND${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+
 
   update_image:
     name: update_spack_image_nightly
@@ -207,17 +228,28 @@ jobs:
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
 
     - name: upload fddaq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: upload fddaq_app_rte.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
+    - name: upload nddaq-dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v4
+      with:
+        name: nddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/nddaq-dbt-setup-release-env.sh
+
+    - name: upload nddaq_app_rte.sh
+      uses: actions/upload-artifact@v4
+      with:
+        name: nddaq_app_rte
+        path: ${{ github.workspace }}/nddaq_app_rte.sh
 
   publish_to_cvmfs:
     name: publish to cvmfs

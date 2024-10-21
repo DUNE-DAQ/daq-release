@@ -47,7 +47,7 @@ jobs:
           tar_and_stage_release $BASE_RELEASE_TAG
 
     - name: upload spack frozen release tarball for base release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: frozens_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -68,7 +68,7 @@ jobs:
 
 
     - name: upload spack frozen release tarball for detector release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: frozens_${{ github.event.inputs.det }}daq
         path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -178,13 +178,13 @@ jobs:
 
 
     - name: upload ${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.inputs.det }}daq-dbt_setup_release_env
         path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
 
     - name: upload ${{ github.event.inputs.det }}daq_app_rte.sh
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.inputs.det }}daq_app_rte
         path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq_app_rte.sh
