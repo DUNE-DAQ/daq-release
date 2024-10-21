@@ -16,13 +16,13 @@ A team is defined at the level of [the GitHub DUNE-DAQ organization](https://git
 We have four types of branch in our workflow:
 
 * **Common branches** 
-    * The default branch of each repository. As of Sep-23-2024, the default branch for all repositories is `develop`. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs). While we do not require reviews before pushing to `develop`, developers are strongly encouraged to seek a review for any non-trivial change. An example of a trivial change would be fixing a typo in the README or bumping a version number.    
+    * The default branch of each repository. As of Sep-23-2024, the default branch for all repositories is `develop`. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs). While we do not require reviews before pushing to `develop`, developers are strongly encouraged to seek a review for any non-trivial change. An example of a trivial change would be fixing a typo in the README or bumping a version number. At a minimum it should be established that no changes to the `develop` branch should cause unit test failures (`dbt-build --unittest <repo name>`) or fail the simplest integration test (`pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py`).
 * **Feature branches**
     * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
     * These are only intended for use if changes need to be made after the initial tags are made for a particular frozen release's release cycle
     * Intended to be forked off the tag, _not_ `develop`
-    * Can only be updated via PRs _with at least one approval review_ before release cut-off time 
+    * Can only be updated via PRs _with at least one approval review_ before release cut-off time; again, unit tests and `minimal_system_quick_test.py` should continue to pass. 
     * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
     * Nomenclature: for a given release `fddaq-vX.Y.Z` use `prep-release/fddaq-vX.Y.Z` and similarly `prep-release/nddaq-vX.Y.Z` for `nddaq-vX.Y.Z`
 * **Patch branches**  `patch/fddaq-vX.Y.x`/`patch/nddaq-vX.Y.x`**
