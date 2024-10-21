@@ -106,12 +106,20 @@ jobs:
             exit 2
           fi
           tar -czvf integration_tests_${{ env.NIGHTLY_TAG }}.tar.gz integration_tests_${{ env.NIGHTLY_TAG }}
-
+      - name: Upload tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration_tests_${{ env.NIGHTLY_TAG }}.tar.gz
+          path: integration_tests_${{ env.NIGHTLY_TAG }}.tar.gz
+          if-no-files-found:
+            error
+          retention-days:
+            7
 
   cleanup_xml_files:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, tar_results]
+    needs: [make_nightly_tag, tar_and_upload_results]
     steps:
       - name: Remove xml files
         env:
