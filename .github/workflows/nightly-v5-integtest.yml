@@ -1,0 +1,148 @@
+name: Nightly v5 integration tests
+
+on:
+  schedule:
+    - cron: "15 9 * * *"
+
+
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on failure'
+        default: 'no'
+
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  integration_tests:
+    name: integration_tests
+    runs-on: daq
+    timeout-minutes: 30
+    needs: make_nightly_tag
+    strategy:
+        fail-fast: false
+        matrix:
+            test_name: ["listrev_test", 
+                        "3ru_1df_multirun_test", 
+                        "3ru_3df_multirun_test", 
+                        "example_system_test", 
+                        "fake_data_producer_test", 
+                        "long_window_readout_test", 
+                        "minimal_system_quick_test", 
+                        "readout_type_scan",
+                        "small_footprint_quick_test", 
+                        "tpstream_writing_test"]
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: setup release and run tests
+      env:
+        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      run: |
+        DET=fd
+        mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+        cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+        [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG/daq_app_rte.sh ]]
+        dbt-setup-release -n $NIGHTLY_TAG
+        export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG
+        TEST_PATH=""
+        if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
+          TEST_PATH=$LISTREV_SHARE/integtest
+        else
+          TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
+          export DUNEDAQ_DB_PATH=$DAQSYSTEMTEST_SHARE:$DUNEDAQ_DB_PATH
+        fi
+        pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
+                $TEST_PATH/${{ matrix.test_name }}.py
+
+  #$LISTREV_SHARE/integtest/listrev_test.py
+  parse_results:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, integration_tests]
+    steps:
+    - name: Surface failing tests
+      #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
+      uses: andrewmogan/pytest-results-action@8b7955ab36427dc46b0f00ea7d4e66a75b7cc943
+      env:
+        NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
+      with:
+        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true
+
+  cleanup_xml_files:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, parse_results]
+    steps:
+      - name: Remove xml files
+        env:
+          NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag }}
+        run: |
+          rm -rf ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
+
+  # Integration tests can sometimes collide with stale processes, leading to timeout
+  cleanup_stale_gunicorn_processes:
+    runs-on: daq
+    if: always()
+    needs: integration_tests
+    steps:
+      - name: Run cleanup script
+        run: |
+          /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    runs-on: daq
+    name: send slack message
+    needs: integration_tests
+    steps:
+    - name: Send custom JSON data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.27.0
+      with:
+        # For posting a rich message using Block Kit
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+                }
+              }
+            ]
+          }
+
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

@@ -1,40 +1,28 @@
 #!/bin/bash
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $SCRIPT_DIR/repo.sh
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "This script is intended to be sourced, not executed directly." >&2
+    echo "To execute a workflow action, use run-workflow-action.sh" >&2
+    exit 1
+fi
 
 function git_checkout_and_update_ci {
-  prd_list_name=$1[@]
-  src_workflow_file=$2
-  dest_workflow_file=$3
-  prd_list=("${!prd_list_name}")
-  for prod in "${prd_list[@]}"; do
-    iprd_arr=(${prod})
-    prod_name=${iprd_arr[0]//_/-}
+  repo_list_name=$1[@]
+  dest_workflow_file=$2
+  src_workflow_file=$tmp_dir/.github/workflow-templates/$workflow_file
+  repo_list=("${!repo_list_name}")
+  for repo in "${repo_list[@]}"; do
+    irepo_arr=(${repo})
+    repo_name=${irepo_arr[0]//_/-}
     echo "--------------------------------------------------------------"
-    echo "********************* $prod_name *****************************"
-    git clone --quiet git@github.com:DUNE-DAQ/${prod_name}.git -b develop
-    pushd ${prod_name}
+    echo "********************* $repo_name *****************************"
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $DEVLINE || exit 3
+    pushd ${repo_name}
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
     git add .github/workflows
-    old_message=`git log -1|grep -v "^commit"`
-    git commit -am "syncing $(basename $workflow_file); previous commit: ${old_message}"
-    git push --quiet
+    git commit -am "Syncing .github/workflows/$(basename $dest_workflow_file)"
+    git push --quiet || exit 4
     popd
   done
 }
-
-
-tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
-
-pushd $tmp_dir
-
-git clone https://github.com/DUNE-DAQ/.github.git
-
-git_checkout_and_update_ci dune_packages_with_ci $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci.yml dunedaq-develop-cpp-ci.yml
-
-git_checkout_and_update_ci dune_packages_with_ci_nd $tmp_dir/.github/workflow-templates/dunedaq-develop-cpp-ci-nd.yml dunedaq-develop-cpp-ci.yml
-
-popd
-
-rm -rf $tmp_dir

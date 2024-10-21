@@ -21,7 +21,7 @@ class Cetmodules(CMakePackage):
     #depends_on('py-sphinx', type='build')
     #depends_on('py-sphinxcontrib-moderncmakedomain', type='build')
     #depends_on('py-sphinx-rtd-theme', type='build')
-    depends_on('catch2', type='build')
+    depends_on('catch2@2.13.10', type='build')
 
     @run_before('cmake')
     def fix_fix_man(self):

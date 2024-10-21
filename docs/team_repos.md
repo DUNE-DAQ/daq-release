@@ -1,14 +1,20 @@
 # List of teams and repositories 
 
 
+## calci
+* **People to contact**: Nuno Barros, Andrew Mogan
+* **Repositories with write access**:
+    * cibmodules
+
 ## ccm
 * **People to contact**: Pierre Lasorak, Alex Tapper
 * **Repositories with write access**:
-    * appdal
     * appfwk
+    * appmodel
     * cmdlib
+    * conffwk
+    * confmodel
     * connectivityserver
-    * coredal
     * dal
     * daqconf
     * daqsystemtest
@@ -21,14 +27,13 @@
     * erskafka
     * fddaqconf
     * flx-k8s-device-plugin
-    * genconfig
     * grafana-dashboards
     * kafkaopmon
     * logging
     * nanorc
     * oks
-    * oksconfig
-    * oksdbinterfaces
+    * oksconflibs
+    * oksdalgen
     * okssystem
     * oksutils
     * opmonlib
@@ -44,6 +49,7 @@
     * daqconf
     * daqdataformats
     * daqsystemtest
+    * datahandlinglibs
     * dfmessages
     * dfmodules
     * dpdklibs
@@ -66,8 +72,20 @@
     * readoutmodules
     * serialization
     * snbmodules
-    * sspmodules
+    * tpglibs
+    * tpgtools
     * utilities
+
+## crt
+* **People to contact**: Wes Ketchum, Matt Murphy
+* **Repositories with write access**:
+    * crtmodules
+
+## daphne
+* **People to contact**: Marco Roda, Manuel Arroyave
+* **Repositories with write access**:
+    * daphnemodules
+    * sspmodules
 
 ## datafmts
 * **People to contact**: Alessandro Thea, Kurt Biery
@@ -80,12 +98,13 @@
     * trgdataformats
 
 ## dqm
-* **People to contact**: Wes Ketchum 
+* **People to contact**: Wes Ketchum
 * **Repositories with write access**:
     * daqsystemtest
     * dqm
     * dqm-backend
     * dqmtools
+    * justintime
     * rawdatautils
 
 ## facility
@@ -101,6 +120,13 @@
     * lbrulibs
     * nddaqconf
 
+## readout
+* **People to contact**: Roland Sipos, Alessandro Thea
+* **Repositories with write access**:
+    * flxlibs
+    * hermesmodules
+    * tpglibs
+
 ## timing
 * **People to contact**: David Cussans, Stoyan Trilov
 * **Repositories with write access**:
@@ -112,23 +138,10 @@
 * **Repositories with write access**:
     * daqsystemtest
     * datafilter
+    * trgtools
     * trigger
     * triggeralgs
     * triggermodules
-
-## udaq
-* **People to contact**: Jim Brooke
-* **Repositories with write access**:
-    * daqsystemtest
-    * dtpcontrols
-    * dtpctrllibs
-    * dtpemulator
-    * dtpfeedbacktools
-    * flx-k8s-device-plugin
-    * flxlibs
-    * timing
-    * timinglibs
-    * uhallibs
 
 ## wib
 * **People to contact**: Alessandro Thea, Paul Keener
@@ -138,5 +151,5 @@
     * wibmod
 
 
-Page was generated at: 16/10/2023 14:28:53
+Page was generated at: 30/08/2024 13:03:54
 

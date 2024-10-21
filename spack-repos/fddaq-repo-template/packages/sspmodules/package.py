@@ -17,17 +17,8 @@ class Sspmodules(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("ers")
-    depends_on("detdataformats")
-    depends_on("fddetdataformats")
-    depends_on("readoutlibs")
-    depends_on("fdreadoutlibs")
-    depends_on("opmonlib")
-    depends_on("iomanager")
-    depends_on("daq-cmake")
-    depends_on('py-moo', type='build')
+    XDEPENDSX
+
 
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )

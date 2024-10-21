@@ -17,19 +17,9 @@ class Ndreadoutlibs(CMakePackage):
 
     version("XVERSIONX", commit="XHASHX")
 
-    depends_on("ers")
-    depends_on("appfwk")
-    depends_on("logging")
-    depends_on("opmonlib")
-    depends_on("readoutlibs")
-    depends_on("daqdataformats")
-    depends_on("detdataformats")
-    depends_on("nddetdataformats")
-    depends_on('folly cxxstd=2a')
-    depends_on("boost")
+    XDEPENDSX
 
-    depends_on("daq-cmake")
-    depends_on("py-moo", type='build')
+
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):

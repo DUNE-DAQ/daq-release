@@ -6,18 +6,7 @@ import argparse
 import subprocess
 import re
 
-def parse_yaml_file(fname):
-    if not os.path.exists(fname):
-        print("Error: -- YAML file {} does not exist".format(fname))
-        exit(20)
-    fman = ""
-    with open(fname, 'r') as stream:
-        try:
-            fman = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-    return fman
-
+from spack.dr_tools import parse_yaml_file
 
 def check_output(cmd, is_success_required = True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -37,7 +26,7 @@ please check!\n'.format(cmd))
     else:
         print("Checkout successful")
 
-def checkout_commit(repo, commit, outdir, is_success_required):
+def checkout_commit(repo, commit, outdir, is_success_required = True):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; 
 git clone https://github.com/DUNE-DAQ/{repo}.git; 
 cd {repo}; 
@@ -51,6 +40,11 @@ def checkout_tag(repo, commit, outdir):
     cmd = f"""\nmkdir -p {outdir}; cd {outdir}; \
 git clone https://github.com/DUNE-DAQ/{repo}.git; \
 cd {repo}; \
+git fetch --tags;
+if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then \
+  echo "{commit} does not exist for package {repo}. Exiting..."; \
+  exit 1; \
+fi; \
 git checkout {commit}; \
 cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
 tag=v"$cmake_version"; \
@@ -87,8 +81,8 @@ if __name__ == "__main__":
     pkgs = []
     if args.input_manifest is not None:
         yaml_dict = parse_yaml_file(args.input_manifest)
-        if "dunedaq" in yaml_dict:
-            pkgs = parse_yaml_file(args.input_manifest)["dunedaq"]
+        if "coredaq" in yaml_dict:
+            pkgs = parse_yaml_file(args.input_manifest)["coredaq"]
         if "fddaq" in yaml_dict:
             pkgs = parse_yaml_file(args.input_manifest)["fddaq"]
         if "nddaq" in yaml_dict:
@@ -115,7 +109,9 @@ if __name__ == "__main__":
 
                     checkout_commit(i["name"], checkout_token, args.output_path, is_success_required = True)
                 else:
-                    if i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
+                    if i["name"] == 'daq-cmake':
+                        checkout_commit(i["name"], i["version"], args.output_path, is_success_required = False)
+                    elif i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
                         print(f'\nError: package {i["name"]} is listed in {args.input_manifest}\nwith a commit hash and/or version; can\'t use the branch override\nargument to the script in this case')
                         exit(30)
                     checkout_commit(i["name"], args.branch, args.output_path, is_success_required = False)

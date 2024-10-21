@@ -3,24 +3,9 @@
 
     type: nddaq
 
-    base_release: dunedaq-develop
+    base_release: coredaq-develop
 
     nddaq:
-        - name: lbrulibs
-          version: "develop"
-          commit: null
-        - name: ndreadoutmodules
-          version: "develop"
-          commit: null
-        - name: nddetdataformats
-          version: "develop"
-          commit: null
-        - name: ndreadoutlibs
-          version: "develop"
-          commit: null
-        - name: nddaqconf
-          version: "develop"
-          commit: null
 
     pymodules:
         - name: pip
@@ -96,7 +81,7 @@
           version: 0.3.0
           source:  github_DUNE-DAQ
         - name: elisa-client-api
-          version: 0.2.0
+          version: 1.0.0
           source:  github_DUNE-DAQ
         - name: et-xmlfile
           version: 1.0.1
@@ -159,11 +144,14 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: 1.9.1
+          version: 2.1.2
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
           source:  pypi
+        - name: lxml
+          version: 5.1.0
+          source: pypi
         - name: jdcal
           version: 1.4.1
           source:  pypi
