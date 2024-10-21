@@ -68,7 +68,6 @@ jobs:
           TEST_PATH=$LISTREV_SHARE/integtest
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
-          export DUNEDAQ_DB_PATH=$DAQSYSTEMTEST_SHARE:$DUNEDAQ_DB_PATH
         fi
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
