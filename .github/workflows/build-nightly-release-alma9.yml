@@ -115,15 +115,21 @@ jobs:
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
       - name: Download spack nightly release tarball artifact for base release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack nightly release tarball artifact for far detector release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly_fddaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for near detector release
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly_nddaq
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-nightly
@@ -231,19 +237,33 @@ jobs:
 
     - name: download fddaq-dbt-setup-release-env.sh
       if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: fddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/fddaq-release
 
     - name: download fddaq_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq-rte
 
-    - name: start docker container, and then rsync...
+    - name: download nddaq-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v4
+      with:
+        name: nddaq-dbt_setup_release_env
+        path: ${{ github.workspace }}/nddaq-release
+
+    - name: download nddaq_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v4
+      with:
+        name: nddaq_app_rte
+        path: ${{ github.workspace }}/nddaq-rte
+
+    - name: start docker container, and then rsync... 
       if: steps.do_deployment.outcome == 'success'
       run: |
         [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
