@@ -34,7 +34,7 @@ jobs:
     timeout-minutes: 30
     needs: make_nightly_tag
     strategy:
-        fail-fast: false
+        fail-fast: true
         matrix:
             test_name: ["listrev_test", 
                         "3ru_1df_multirun_test", 
@@ -72,6 +72,7 @@ jobs:
         fi
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
+        exit 1
 
   #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
