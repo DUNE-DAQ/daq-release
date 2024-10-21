@@ -90,10 +90,28 @@ jobs:
         display-options: fEX
         fail-on-empty: true
 
+  tar_and_upload_results:
+    runs-on: daq
+    needs: [make_nightly_tag, parse_results]
+    env:
+      NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag }}
+      TEST_DIR: integration_tests_${{ needs.make_nightly_tag.outputs.tag }}
+    steps:
+      - name: Make tarball of testing directory
+        run: |
+          cd ${{ github.workspace }}
+          if [[ ! -e integration_tests_${{ env.NIGHTLY_TAG }} ]]; then
+            echo "Directory integration_tests${{ env.NIGHTLY_TAG }} not found"
+            echo "ls of GITHUB_WORKSPACE:\n $(ls ${{ github.workspace }})"
+            exit 2
+          fi
+          tar -czvf integration_tests_${{ env.NIGHTLY_TAG }}.tar.gz integration_tests_${{ env.NIGHTLY_TAG }}
+
+
   cleanup_xml_files:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, parse_results]
+    needs: [make_nightly_tag, tar_results]
     steps:
       - name: Remove xml files
         env:
