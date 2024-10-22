@@ -61,7 +61,7 @@ jobs:
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
           push: true
@@ -119,7 +119,7 @@ jobs:
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
@@ -172,7 +172,7 @@ jobs:
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: /home/nfs/${{ github.event.inputs.account-to-copy }}/docker-scratch/cvmfs_dunedaq
           push: true
@@ -230,7 +230,7 @@ jobs:
           echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: ${{ github.workspace }}/docker-build
           push: true
