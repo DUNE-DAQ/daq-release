@@ -149,9 +149,9 @@ cp -rp $DAQ_RELEASE_DIR/spack-repos/externals/packages/umbrella $(spack location
 
 coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^glog@0.4.0"
 
-dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:"
+dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:~sql~ssl~tools"
 
-llvm_spec="llvm@18.1.3%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+llvm_spec="llvm@15.0.7%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
@@ -187,7 +187,7 @@ for pkg in $build_only_packages; do
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go git libunistring openssh krb5 libedit; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring openssh krb5 libedit gmake findutils; do
     echo "Uninstalling $pkg"
     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
