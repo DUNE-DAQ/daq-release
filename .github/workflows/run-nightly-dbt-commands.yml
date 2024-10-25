@@ -1,0 +1,90 @@
+name: Nightly v5 integration tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  run_dbt_commands:
+    name: run_dbt
+    runs-on: daq
+    needs: make_nightly_tag
+    env:
+      NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      TEST_DIR: ${{ github.workspace }}/dbt_tests_${{needs.make_nightly_tag.outputs.tag}}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Setup test area
+      run: |
+        DET=fd
+        mkdir -p ${{ env.TEST_DIR }}
+        cd ${{ env.TEST_DIR }}
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+        [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG/daq_app_rte.sh ]]
+
+  #$LISTREV_SHARE/integtest/listrev_test.py
+  cleanup_test_area:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, run_dbt_commands]
+    env:
+      NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+      TEST_DIR: ${{ github.workspace }}/dbt_tests_${{needs.make_nightly_tag.outputs.tag}}
+    steps:
+      - name: Remove test directory
+        run: |
+          rm -rf ${{ env.TEST_DIR }}
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    runs-on: daq
+    name: send slack message
+    needs: run_dbt_commands
+    steps:
+    - name: Send custom JSON data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.27.0
+      with:
+        # For posting a rich message using Block Kit
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+                }
+              }
+            ]
+          }
+
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
