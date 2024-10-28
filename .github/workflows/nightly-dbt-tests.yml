@@ -1,57 +1,42 @@
-name: Nightly v5 integration tests
+name: Nightly dbt regression tests
 
 on:
   workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on failure'
+        default: 'no'
 
 jobs:
-  make_nightly_tag:
-    name: create nightly tag
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - id: create_nightly_tag
-        run: |
-          date_tag=$(date +%y%m%d)
-          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
-
   run_dbt_commands:
     name: run_dbt
     runs-on: daq
-    needs: make_nightly_tag
-    env:
-      NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      TEST_DIR: ${{ github.workspace }}/dbt_tests_${{needs.make_nightly_tag.outputs.tag}}
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: Setup test area
-      run: |
-        DET=fd
-        mkdir -p ${{ env.TEST_DIR }}
-        cd ${{ env.TEST_DIR }}
-        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest_v5
-        [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG/daq_app_rte.sh ]]
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release
+
+    - name: Run dbt test script
+      run: | 
+        cd daq-release/scripts || exit 1
+        ./test_daq-buildtools.sh
 
   #$LISTREV_SHARE/integtest/listrev_test.py
   cleanup_test_area:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, run_dbt_commands]
-    env:
-      NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      TEST_DIR: ${{ github.workspace }}/dbt_tests_${{needs.make_nightly_tag.outputs.tag}}
+    needs: run_dbt_commands
     steps:
       - name: Remove test directory
         run: |
-          rm -rf ${{ env.TEST_DIR }}
+          echo "Am in $(pwd)"
+          echo "$(ls)"
+          rm -rf daq-release
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
