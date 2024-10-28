@@ -16,13 +16,12 @@ jobs:
         shell: bash
 
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v4
-      with:
-        path: daq-release
-
     - name: Run dbt test script
       run: | 
+        echo "Am in $(pwd)"
+        echo "ls: $(ls)"
+        echo "ls daq-release: $(ls daq-release)"
+        echo "ls daq-release again: $(ls daq-release/daq-release)"
         cd daq-release/scripts || exit 1
         ./test_daq-buildtools.sh
 
