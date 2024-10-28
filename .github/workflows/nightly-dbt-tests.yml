@@ -14,7 +14,6 @@ jobs:
     defaults:
       run:
         shell: bash
-
     steps:
     - name: Run dbt test script
       run: | 
@@ -23,6 +22,7 @@ jobs:
         echo "ls daq-release: $(ls daq-release)"
         echo "ls daq-release again: $(ls daq-release/daq-release)"
         cd daq-release/scripts || exit 1
+        git pull origin develop
         ./test_daq-buildtools.sh
 
   #$LISTREV_SHARE/integtest/listrev_test.py
