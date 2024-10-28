@@ -107,7 +107,8 @@ if [[ $DET == "core" ]]; then
 	build_dbe=true
     else
 	build_dbe=false
-        echo "Building dbe does not appear to be possible. As this is not (necessarily) an error, will continue..."
+        echo "Building dbe does not appear to be possible. Will exit..."
+	exit 12
     fi
 fi
 
