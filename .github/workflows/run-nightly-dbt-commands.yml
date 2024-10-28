@@ -1,4 +1,4 @@
-name: Nightly v5 integration tests
+name: Nightly dbt regression tests
 
 on:
   workflow_dispatch:
