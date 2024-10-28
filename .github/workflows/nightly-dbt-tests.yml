@@ -9,7 +9,7 @@ on:
 
 jobs:
   run_dbt_commands:
-    name: run_dbt
+    name: Run dbt test script
     runs-on: daq
     defaults:
       run:
@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "Am in $(pwd)"
           echo "$(ls)"
-          rm -rf daq-release
+          rm -rf daq-release-dbt-tests
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
