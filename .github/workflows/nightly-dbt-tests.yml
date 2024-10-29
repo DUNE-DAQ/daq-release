@@ -19,7 +19,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release-dbt-tests
-        ref: amogan/slack_success_message
     - name: Run dbt test script
       run: | 
         exit 1
@@ -28,7 +27,7 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: ubuntu-latest
+    runs-on: daq
     needs: run_dbt_commands
     steps:
     - name: send slack message
