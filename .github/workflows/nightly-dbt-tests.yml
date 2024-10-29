@@ -43,7 +43,7 @@ jobs:
     steps:
     - name: Send failure message to Slack
       uses: slackapi/slack-github-action@v1.27.0
-      if: failure() 
+      if: needs.run_dbt_commands.result == 'failure'
       with:
         # For posting a rich message using Block Kit
         payload: |
