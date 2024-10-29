@@ -31,7 +31,7 @@ jobs:
     with:
       workflow_success: ${{ needs.run_dbt_commands.result == 'success' }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_test_area:
     runs-on: daq

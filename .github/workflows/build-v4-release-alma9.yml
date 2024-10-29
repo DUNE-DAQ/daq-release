@@ -285,4 +285,4 @@ jobs:
       # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
       workflow_success: ${{ needs.publish_to_cvmfs.result == 'success' }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
