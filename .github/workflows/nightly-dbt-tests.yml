@@ -31,7 +31,7 @@ jobs:
     needs: run_dbt_commands
     steps:
     - name: send slack message
-      uses: daq-release-dbt-tests/.github/workflows/slack-notification.yml
+      uses: daq-release-dbt-tests/.github/workflows/slack-notification.yml@amogan/slack_success_message
       with:
         slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
