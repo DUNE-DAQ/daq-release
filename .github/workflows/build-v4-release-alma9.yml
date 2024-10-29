@@ -13,7 +13,7 @@ on:
         description: 'whether to deploy the release to cvmfs'
         default: 'no'
       send-slack-message:
-        description: 'whether to send a message to #daq-release-notifications on failure'
+        description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
 
 jobs:
