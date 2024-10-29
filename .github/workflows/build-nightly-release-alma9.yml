@@ -283,14 +283,14 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     runs-on: daq
     name: send slack message
-    needs: publish_to_cvmfs
+    needs: [build_the_develop_release_spack, update_image, generate_dbt_setup_release_env, publish_to_cvmfs]
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
       SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
     - name: Send failure message to Slack
       uses: slackapi/slack-github-action@v1.27.0
-      if: needs.publish_to_cvmfs.result == 'failure'
+      if: needs.build_the_develop_release_spack.result == 'failure' || needs.update_image.result == 'failre' || needs.generate_dbt_setup_release_env.result == 'failure' || needs.publish_to_cvmfs.result == 'failure'
       with:
         # For posting a rich message using Block Kit
         payload: |
