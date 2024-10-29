@@ -37,7 +37,7 @@ jobs:
     - name: Print statements
       run: |
         echo "Am in $(pwd)"
-        ls
+        ls .github/workflows
     - name: send slack message
       uses: ./.github/workflows/slack-notification.yml
       with:
