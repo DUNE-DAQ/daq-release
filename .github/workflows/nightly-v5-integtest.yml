@@ -113,60 +113,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: daq
-    name: send slack message
     needs: integration_tests
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-    steps:
-    - name: Send failure message to Slack
-      uses: slackapi/slack-github-action@v1.27.0
-      if: needs.integration_tests.result == 'failure'
-      with:
-        # For posting a rich message using Block Kit
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
-                }
-              }
-            ]
-          }
-    - name: Send success message to Slack
-      uses: slackapi/slack-github-action@v1.27.0
-      if: needs.integration_tests.result == 'success'
-      with:
-        # For posting a rich message using Block Kit
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
-                }
-              }
-            ]
-          }
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
+      workflow_success: ${{ needs.integration_tests.result == 'success' }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
