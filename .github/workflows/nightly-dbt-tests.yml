@@ -30,7 +30,7 @@ jobs:
     needs: run_dbt_commands
     uses: ./.github/workflows/slack-notification.yml
     with:
-      workflow_success: ${{ needs.run_dbt_commands.result }} == 'success'
+      workflow_success: ${{ needs.run_dbt_commands.result == 'success' }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
