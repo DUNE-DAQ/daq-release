@@ -108,14 +108,17 @@ jobs:
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   send_slack_message:
-    if: failure() || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     runs-on: daq
     name: send slack message
     needs: integration_tests
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
-    - name: Send JSON data to Slack workflow
-      id: slack
+    - name: Send failure message to Slack
       uses: slackapi/slack-github-action@v1.27.0
+      if: needs.integration_tests.result == 'failure'
       with:
         # For posting a rich message using Block Kit
         payload: |
@@ -138,7 +141,28 @@ jobs:
               }
             ]
           }
-
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    - name: Send success message to Slack
+      uses: slackapi/slack-github-action@v1.27.0
+      if: needs.integration_tests.result == 'success'
+      with:
+        # For posting a rich message using Block Kit
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+                }
+              }
+            ]
+          }
