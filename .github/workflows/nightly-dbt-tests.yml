@@ -26,10 +26,9 @@ jobs:
         ./test_daq-buildtools.sh
 
   send_slack_message:
-    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: ubuntu-latest
-    needs: run_dbt_commands
     uses: ./.github/workflows/slack-notification.yml
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_test_area:
     runs-on: daq

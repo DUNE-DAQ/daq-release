@@ -8,6 +8,7 @@ on:
 
 jobs:
   notify:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     name: Send Slack Notification
     runs-on: ubuntu-latest
     env:
