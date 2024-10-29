@@ -21,6 +21,7 @@ jobs:
         path: daq-release-dbt-tests
     - name: Run dbt test script
       run: | 
+        exit 1
         cd daq-release-dbt-tests/scripts
         ./test_daq-buildtools.sh
 
