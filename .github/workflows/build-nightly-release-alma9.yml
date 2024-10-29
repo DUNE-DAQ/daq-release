@@ -55,6 +55,7 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
+          exit 1
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
           export OS=almalinux9
@@ -284,7 +285,7 @@ jobs:
     name: send slack message
     needs: publish_to_cvmfs
     env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
       SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
     - name: Send failure message to Slack
