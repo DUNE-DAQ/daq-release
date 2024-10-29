@@ -280,10 +280,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: [generate_dbt_setup_release_env, publish_to_cvmfs]
+    needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
     with:
       # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
-      workflow_success: ${{ needs.generate_dbt_setup_release_env.result == 'success' && needs.publish_to_cvmfs.result != 'failure'}}
+      workflow_success: ${{ needs.publish_to_cvmfs.result == 'success' }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
