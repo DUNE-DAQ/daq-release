@@ -314,7 +314,7 @@ jobs:
           }
     - name: Send success message to Slack
       uses: slackapi/slack-github-action@v1.27.0
-      if: needs.publish_to_cvmfs.result == 'success'
+      if: (github.event.inputs.cvmfs-deployment == 'yes' && needs.publish_to_cvmfs.result == 'success') || (github.event.inputs.cvmfs-deployment == 'no' && needs.generate_dbt_setup_release_env == 'success')
       with:
         # For posting a rich message using Block Kit
         payload: |
