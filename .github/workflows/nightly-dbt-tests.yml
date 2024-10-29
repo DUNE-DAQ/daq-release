@@ -71,7 +71,7 @@ jobs:
           }
     - name: Send success message to Slack
       uses: slackapi/slack-github-action@v1.27.0
-      if: success()
+      if: needs.run_dbt_commands.result == 'success'
       with:
         # For posting a rich message using Block Kit
         payload: |
