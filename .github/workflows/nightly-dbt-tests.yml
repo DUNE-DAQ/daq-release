@@ -40,6 +40,9 @@ jobs:
     runs-on: daq
     name: send slack message
     needs: run_dbt_commands
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
     - name: Send failure message to Slack
       uses: slackapi/slack-github-action@v1.27.0
@@ -91,7 +94,3 @@ jobs:
               }
             ]
           }
-
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_WEBHOOK }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
