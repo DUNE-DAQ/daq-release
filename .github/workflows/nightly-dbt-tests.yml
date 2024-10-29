@@ -39,7 +39,7 @@ jobs:
         echo "Am in $(pwd)"
         ls .github/workflows
     - name: send slack message
-      uses: ./.github/workflows/slack-notification.yml
+      uses: ./.github/workflows/slack-notification.yml@amogan/slack_success_message
       with:
         slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
