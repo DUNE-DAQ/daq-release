@@ -6,6 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on failure'
         default: 'no'
+  schedule:
+    - cron: "0 10 * * *"
 
 jobs:
   run_dbt_commands:
