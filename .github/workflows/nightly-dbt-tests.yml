@@ -43,4 +43,4 @@ jobs:
     - name: send slack message
       uses: ./.github/workflows/slack-notification.yml
       with:
-        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
