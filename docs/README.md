@@ -4,6 +4,8 @@
 
 [![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml)
 
+[![Nightly daq-buildtools Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml)
+
 This is a repo containing DUNE DAQ release making tools, configuration files, and build scripts for both DUNE-DAQ and external packages. 
 
 ## Table of contents
