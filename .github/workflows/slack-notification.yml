@@ -1,0 +1,69 @@
+name: Slack Notification
+
+on:
+  workflow_call:
+    inputs:
+      workflow_success: 
+        required: true
+        type: boolean
+    secrets:
+      slack_webhook_url:
+        required: true
+
+jobs:
+  notify:
+    name: Send Slack Notification
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
+      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    steps:
+    - name: Send failure message to Slack
+      uses: slackapi/slack-github-action@v1.27.0
+      if: ${{ ! inputs.workflow_success }}
+      with:
+        # For posting a rich message using Block Kit
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+                }
+              }
+            ]
+          }
+    - name: Send success message to Slack
+      uses: slackapi/slack-github-action@v1.27.0
+      if: ${{ inputs.workflow_success }}
+      with:
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+                }
+              }
+            ]
+          }

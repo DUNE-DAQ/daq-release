@@ -16,7 +16,7 @@ on:
         description: 'whether to deploy the release to cvmfs'
         default: 'no'
       send-slack-message:
-        description: 'whether to send a message to #daq-release-notifications on failure'
+        description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
 
 jobs:
@@ -280,36 +280,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    runs-on: daq
-    name: send slack message
     needs: publish_to_cvmfs
-    steps:
-    - name: Send JSON data to Slack workflow
-      id: slack
-      uses: slackapi/slack-github-action@v1.27.0
-      with:
-        # For posting a rich message using Block Kit
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
-                }
-              }
-            ]
-          }
-
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
+      workflow_success: ${{ needs.publish_to_cvmfs.result == 'success' }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
