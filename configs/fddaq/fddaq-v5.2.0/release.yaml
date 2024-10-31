@@ -10,34 +10,34 @@
           version: v4.0.0
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: v2.2.0
           commit: null
         - name: fddetdataformats
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: fdreadoutlibs
           version: v2.1.0
           commit: null
         - name: fdreadoutmodules
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: hermesmodules
           version: v2.2.0
           commit: null
         - name: rawdatautils
-          version: "develop"
+          version: v2.1.0
+          commit: null
+        - name: sspmodules
+          version: v1.3.3
           commit: null
         - name: tpglibs
           version: v1.0.0
           commit: null
         - name: uhallibs
           version: v1.2.0
-          commit: null
-        - name: sspmodules
-          version: "develop"
           commit: null
         - name: wibmod
           version: v2.0.0
@@ -112,10 +112,10 @@
           version: develop
           source:  github_DUNE-DAQ
         - name: drunc
-          version: v0.11.0
+          version: 0.11.0
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: v0.9.0
+          version: 0.9.0
           source:  github_DUNE-DAQ
         - name: elisa-client-api
           version: develop
@@ -184,7 +184,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: develop
+          version: 3.1.0
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1

@@ -176,13 +176,13 @@
           version: v1.3.0
           commit: null
         - name: detchannelmaps
-          version: "develop"
+          version: v1.7.1
           commit: null
         - name: daqdataformats
           version: v3.8.0
           commit: null
         - name: datahandlinglibs
-          version: "develop"
+          version: v3.1.0
           commit: null
         - name: dfmodules
           version: v3.2.0
@@ -195,6 +195,9 @@
           commit: null
         - name: timinglibs
           version: v4.3.0
+          commit: null
+        - name: daqconf
+          version: v8.1.0
           commit: null
         - name: trigger
           version: v2.1.0
@@ -227,16 +230,13 @@
           version: v1.2.0
           commit: null
         - name: confmodel
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: appmodel
-          version: "develop"
+          version: v2.0.0
           commit: null
         - name: dbe
           version: v1.4.0
-          commit: null
-        - name: daqconf
-          version: v8.1.0
           commit: null
 
     others:
