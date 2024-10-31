@@ -22,6 +22,7 @@ class Trace(CMakePackage):
     version('3.17.11', commit='23f21ee9c53af5bd0e1b695038cda457517028fe')   # JCF, Mar-4-2024: v3_17_11
     version('3.17.12', commit='58433e1c560c4c6538c6f6fc79b04a106691749f')   # AJM, Apr-2-2024: v3_17_12
     version('3.17.13', commit='01865d3fc90e82f20b50da10b6a7993ab428bcf5')   # AJM, Apr-18-2024: v3_17_13
+    version('3.17.14', commit='4f0a54a354b7f19a7cc3874d2d7b48a24990a102')   # JCF, Oct-31-2024: v3_17_14
 
     patch('disable_cetmodules.diff', sha256='640816dfe077382bdb5345c8b5568c92e1ccb36274887e57241d826522ba5686', when='@3.16.02')
     patch('install-exec.diff', sha256='882deacf74407e1c83fb88ae8b2d16286751a49096682e441dc53175268ddcd9', when='@3.16.02')
