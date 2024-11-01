@@ -45,7 +45,9 @@ jobs:
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
         cd ../daq-release-unittests/scripts
-        ./checkout-daq-package.py -p ipm -i ../configs/coredaq/coredaq-develop/release.yaml -o ../../${{ needs.make_nightly_tag.outputs.tag }}/sourcecode
+        ./checkout-daq-package.py -p ipm -b develop \ 
+                                  -i ../configs/coredaq/coredaq-develop/release.yaml \
+                                  -o ../../${{ needs.make_nightly_tag.outputs.tag }}/sourcecode
         dbt-build --unittest --lint
 
 
