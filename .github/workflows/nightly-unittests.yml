@@ -6,8 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-  schedule:
-    - cron: "0 10 * * *"
+  #schedule:
+  #  - cron: "0 10 * * *"
 
 jobs:
   make_nightly_tag:
@@ -26,8 +26,9 @@ jobs:
           cat "$GITHUB_OUTPUT"
 
   run_unittests:
-    name: Run dbt test script
+    name: Run unit tests
     runs-on: protodune-daq01
+    needs: make_nightly_tag
     defaults:
       run:
         shell: bash
@@ -40,6 +41,14 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
+        dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
+        cd ${{ needs.make_nightly_tag.outputs.tag }}
+        source env.sh
+        cd ../daq-release-unittests/scripts
+        ./checkout-daq-package.py -p ipm -o ../../${{ needs.make_nightly_tag.outputs.tag }}/sourcecode
+        dbt-build --unittest --lint
+
+
     - name: Create build area and checkout packages
       run: | 
         cd daq-release-unittests/scripts
@@ -50,15 +59,16 @@ jobs:
     needs: run_unittests
     uses: ./.github/workflows/slack-notification.yml
     with:
-      workflow_success: ${{ needs.run_dbt_commands.result == 'success' }}
+      workflow_success: ${{ needs.run_unittests.result == 'success' }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_test_area:
     runs-on: protodune-daq01
     if: always()
-    needs: run_unittests
+    needs: [make_nightly_tag, run_unittests]
     steps:
       - name: Remove test directory
         run: |
           rm -rf daq-release-unittests
+          rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
