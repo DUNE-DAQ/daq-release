@@ -48,12 +48,6 @@ jobs:
         ./checkout-daq-package.py -p ipm -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ../../${{ needs.make_nightly_tag.outputs.tag }}/sourcecode
         dbt-build --unittest --lint
 
-
-    - name: Create build area and checkout packages
-      run: | 
-        cd daq-release-unittests/scripts
-        scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode 
-
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: run_unittests
