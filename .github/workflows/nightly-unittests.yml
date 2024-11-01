@@ -1,0 +1,64 @@
+name: Nightly unit tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+  schedule:
+    - cron: "0 10 * * *"
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  run_unittests:
+    name: Run dbt test script
+    runs-on: protodune-daq01
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-unittests
+    - name: Create build area
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+    - name: Create build area and checkout packages
+      run: | 
+        cd daq-release-unittests/scripts
+        scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode 
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: run_unittests
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      workflow_success: ${{ needs.run_dbt_commands.result == 'success' }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_test_area:
+    runs-on: protodune-daq01
+    if: always()
+    needs: run_unittests
+    steps:
+      - name: Remove test directory
+        run: |
+          rm -rf daq-release-unittests
