@@ -253,7 +253,7 @@
           version: 4.8.0
           source:  pypi
         - name: pluggy
-          version: 0.13.1
+          version: 1.5.0
           source:  pypi
         - name: protobuf
           version: 4.24.4
