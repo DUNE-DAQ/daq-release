@@ -29,6 +29,8 @@ jobs:
     name: Run unit tests
     runs-on: protodune-daq01
     needs: make_nightly_tag
+    container:
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
       run:
         shell: bash
@@ -67,6 +69,8 @@ jobs:
     runs-on: protodune-daq01
     if: always()
     needs: [make_nightly_tag, run_unittests]
+    container:
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     steps:
       - name: Remove test directory
         run: |
