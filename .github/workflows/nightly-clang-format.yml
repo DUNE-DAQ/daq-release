@@ -49,6 +49,8 @@ jobs:
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         cd $DBT_AREA_ROOT
         dbt-workarea-env
+        spack load dbe
+        spack unload dbe
         dbt-build --unittest
         dbt-clang-format.sh sourcecode/ --view-differences-only
 
