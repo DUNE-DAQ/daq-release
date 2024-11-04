@@ -1,4 +1,4 @@
-name: Nightly linting workflow
+name: Nightly clang format workflow
 
 on:
   workflow_dispatch:
