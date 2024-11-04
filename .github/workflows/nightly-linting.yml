@@ -48,7 +48,8 @@ jobs:
         ./checkout-daq-package.py -p ipm -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         cd $DBT_AREA_ROOT
         dbt-workarea-env
-        dbt-build --unittest --lint
+        dbt-build --lint
+        dbt-clang-format.sh sourcecode/ --view-differences-only
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
