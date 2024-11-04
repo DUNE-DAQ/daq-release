@@ -1,4 +1,4 @@
-name: Nightly unit tests
+name: Nightly linting workflow
 
 on:
   workflow_dispatch:
