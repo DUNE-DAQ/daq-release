@@ -50,6 +50,7 @@ jobs:
         #./checkout-daq-package.py -p ipm -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         cd $DBT_AREA_ROOT
         dbt-workarea-env
+        spack load dbe
         dbt-build --unittest
         dbt-clang-format.sh sourcecode/ --view-differences-only
 
