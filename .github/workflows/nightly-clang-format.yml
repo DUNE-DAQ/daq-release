@@ -27,7 +27,7 @@ jobs:
 
   run_unittests:
     name: Run unit tests
-    runs-on: protodune-daq01
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
@@ -52,7 +52,7 @@ jobs:
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
-        #dbt-clang-format.sh sourcecode/ --view-differences-only
+        dbt-clang-format.sh sourcecode/ --view-differences-only
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
@@ -64,7 +64,7 @@ jobs:
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_test_area:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: [make_nightly_tag, run_unittests]
     steps:
