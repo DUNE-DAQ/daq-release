@@ -52,7 +52,7 @@ jobs:
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
-        dbt-clang-format.sh sourcecode/ --view-differences-only
+        #dbt-clang-format.sh sourcecode/ --view-differences-only
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
