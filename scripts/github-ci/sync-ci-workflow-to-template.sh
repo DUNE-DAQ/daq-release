@@ -11,12 +11,16 @@ function git_checkout_and_update_ci {
   dest_workflow_file=$2
   src_workflow_file=$tmp_dir/.github/workflow-templates/$workflow_file
   repo_list=("${!repo_list_name}")
+  branch="$DEVLINE"
+  if [[ "$branch" == "production_v4" ]]; then
+    branch="production/v4"
+  fi
   for repo in "${repo_list[@]}"; do
     irepo_arr=(${repo})
     repo_name=${irepo_arr[0]//_/-}
     echo "--------------------------------------------------------------"
     echo "********************* $repo_name *****************************"
-    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $DEVLINE || exit 3
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $branch || exit 3
     pushd ${repo_name}
     mkdir -p .github/workflows
     cp $src_workflow_file .github/workflows/$dest_workflow_file
