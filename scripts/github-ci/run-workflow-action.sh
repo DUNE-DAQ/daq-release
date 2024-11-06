@@ -11,7 +11,7 @@ action=$3
 
 # Store list of packages from repo.sh as dune_packages_with_ci
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $SCRIPT_DIR/repo.sh
+source $SCRIPT_DIR/repo.sh || exit $?
 
 if [[ $DEVLINE == "develop" && "$workflow_file" == *v4* ]]; then
     echo "ERROR: $workflow_file is a production_v4 workflow." >&2
