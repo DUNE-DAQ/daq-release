@@ -197,10 +197,10 @@
           version: v4.3.0
           commit: null
         - name: daqconf
-          version: v8.1.0
+          version: v8.1.1
           commit: null
         - name: trigger
-          version: v2.1.1
+          version: v2.1.2
           commit: null
         - name: triggeralgs
           version: v1.4.0

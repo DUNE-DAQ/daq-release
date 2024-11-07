@@ -11,13 +11,13 @@ action=$3
 
 # Store list of packages from repo.sh as dune_packages_with_ci
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $SCRIPT_DIR/repo.sh
+source $SCRIPT_DIR/repo.sh || exit $?
 
 if [[ $DEVLINE == "develop" && "$workflow_file" == *v4* ]]; then
-    echo "ERROR: $workflow_file is a production_v4 workflow." >&2
+    echo "ERROR: $workflow_file is not a develop-line workflow." >&2
     exit 2
 elif [[ $DEVLINE == "production_v4" && "$workflow_file" != *v4* ]]; then
-    echo "ERROR: $workflow_file is not a production_v4 workflow. Did you mean to use develop?" >&2
+    echo "ERROR: $workflow_file is not a production_v4 workflow." >&2
     exit 3
 fi
 if [[ $action != "sync" && $action != "trigger" && $action != "disable" ]]; then

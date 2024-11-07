@@ -27,7 +27,7 @@ jobs:
 
   run_unittests:
     name: Run unit tests
-    runs-on: protodune-daq01
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
@@ -47,8 +47,10 @@ jobs:
         cd ../daq-release-unittests/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p ipm -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         cd $DBT_AREA_ROOT
         dbt-workarea-env
+        spack load dbe
         dbt-build --unittest
         dbt-clang-format.sh sourcecode/ --view-differences-only
 
@@ -62,7 +64,7 @@ jobs:
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_test_area:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: [make_nightly_tag, run_unittests]
     steps:

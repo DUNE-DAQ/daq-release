@@ -7,7 +7,7 @@
 
     fddaq:
         - name: daqsystemtest
-          version: v4.0.0
+          version: v4.0.2
           commit: null
         - name: dpdklibs
           version: v2.2.0
