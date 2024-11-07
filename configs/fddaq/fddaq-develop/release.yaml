@@ -9,22 +9,7 @@
         - name: daqsystemtest
           version: "develop"
           commit: null
-        - name: dpdklibs
-          version: "develop"
-          commit: null
         - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: fdreadoutlibs
-          version: "develop"
-          commit: null
-        - name: fdreadoutmodules
-          version: "develop"
-          commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
-        - name: hermesmodules
           version: "develop"
           commit: null
         - name: rawdatautils
@@ -34,12 +19,6 @@
           version: "develop"
           commit: null
         - name: uhallibs
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
-          commit: null
-        - name: wibmod
           version: "develop"
           commit: null
 

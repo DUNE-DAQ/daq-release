@@ -142,12 +142,6 @@
         - name: rcif
           version: "develop"
           commit: null
-        - name: appfwk
-          version: "develop"
-          commit: null
-        - name: listrev
-          version: "develop"
-          commit: null
         - name: utilities
           version: "develop"
           commit: null
@@ -179,30 +173,6 @@
           version: "develop"
           commit: null
         - name: daqdataformats
-          version: "develop"
-          commit: null
-        - name: datahandlinglibs
-          version: "develop"
-          commit: null
-        - name: dfmodules
-          version: "develop"
-          commit: null
-        - name: hsilibs
-          version: "develop"
-          commit: null
-        - name: timing
-          version: "develop"
-          commit: null
-        - name: timinglibs
-          version: "develop"
-          commit: null
-        - name: trigger
-          version: "develop"
-          commit: null
-        - name: triggeralgs
-          version: "develop"
-          commit: null
-        - name: trgtools
           version: "develop"
           commit: null
         - name: hdf5libs
