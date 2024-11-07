@@ -42,11 +42,12 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-buildtools
         ref: amogan/clang_format_markdown_summary
-        path: daq-buildtools
+        path: daq-buildtools-markdown-feature
     - name: Create build area
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest_v5
+        #setup_dbt latest_v5
+        source daq-buildtools-markdown-feature/env.sh
         dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
@@ -54,11 +55,17 @@ jobs:
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        cd $DBT_AREA_ROOT
+        cd $DBT_AREA_ROOT/sourcecode
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
-        dbt-clang-format.sh sourcecode/ --view-differences-only 
+        dbt-clang-format.sh . --view-differences-only --output-markdown-file
+        echo "### Clang-Format Report" > $GITHUB_STEP_SUMMARY
+        cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+
+    - name: Report Formatting Results
+      if: always()
+      run: |
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
