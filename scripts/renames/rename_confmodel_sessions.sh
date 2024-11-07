@@ -21,15 +21,13 @@ fi
 scriptdir=$(dirname "${BASH_SOURCE[0]}")
 . $scriptdir/renaming_tools.sh
 
-echo "JCF, Nov-6-2024: THIS SCRIPT IS UNDER DEVELOPMENT, PLEASE CONTACT HIM FOR MORE INFO"
-sleep 5
-
 fully_replace_token partition session erskafka
 fully_replace_token Partition Session erskafka
 fully_replace_token PARTITION SESSION erskafka
 fully_replace_token SESSION_UA PARTITION_UA erskafka # Otherwise "error: 'SESSION_UA' is not a member of 'RdKafka::Topic'"
 
-fully_replace_token "modified in this DB session" "modified in this DB system" conffwk
+gitclone conffwk
+sed -i 's/modified in this DB session/modified in this DB system/' conffwk/python/conffwk/dal.py
 
 fully_replace_token Session System confmodel
 fully_replace_token session system confmodel
@@ -38,7 +36,7 @@ fully_replace_token TDAQ_SESSION DUNEDAQ_SYSTEM confmodel
 
 fully_replace_token partition session iomanager 
 
-# hermesmodules, dpdklibs, and other packages are left out of this
+# hermesmodules, dpdklibs, and several other packages are left out of this
 # loop for now since they depend on on appfwk, which we plan to
 # manually edit
 
