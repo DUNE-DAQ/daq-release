@@ -59,7 +59,7 @@ jobs:
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
-        dbt-clang-format.sh . --view-differences-only --output-markdown-file
+        dbt-clang-format.sh . --view-differences-only --markdown-summary
         echo "### Clang-Format Report" > $GITHUB_STEP_SUMMARY
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
 
