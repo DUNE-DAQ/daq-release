@@ -63,10 +63,6 @@ jobs:
         echo "### Clang-Format Report" > $GITHUB_STEP_SUMMARY
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
 
-    - name: Report Formatting Results
-      if: always()
-      run: |
-
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: run_unittests
@@ -84,4 +80,5 @@ jobs:
       - name: Remove test directory
         run: |
           rm -rf daq-release-unittests
+          rm -rf daq-buildtools-markdown-feature
           rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
