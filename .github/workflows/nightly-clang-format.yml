@@ -92,7 +92,6 @@ jobs:
         source env.sh
         cd sourcecode
         dbt-clang-format.sh . --view-differences-only --markdown-summary
-        echo "# Clang-Format Report" > $GITHUB_STEP_SUMMARY
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
