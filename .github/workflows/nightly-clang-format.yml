@@ -55,12 +55,43 @@ jobs:
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        cd $DBT_AREA_ROOT/sourcecode
+        echo "$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+    - name: Run unit tests
+      run: |
+        cd $DBT_AREA_ROOT/
+        source env.sh
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
+        echo "# Unit Test Report" > $GITHUB_STEP_SUMMARY
+        #TODO Make this a script in daq-release
+        log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
+        table_header_line="| Test | Status| \n| --- | --- |\n"
+        previous_package=""
+        markdown_content=""
+        while IFS= read -r line; do
+            this_package=$(echo "$line" | cut -d '/' -f 2)
+            test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
+            if [[ "$this_package" != "$previous_package" ]]; then
+                markdown_content+="## $this_package \n"
+                markdown_content+="$table_header_line"
+                previous_package=$this_package
+            fi
+            if [[ "$(echo "$line" | grep -o SUCCESS)" == "SUCCESS" ]]; then
+                markdown_content+="| $test_name | :white_check_mark: Passed |\n"
+            else
+                markdown_content+="| $test_name | :x: Failed |\n"
+            fi
+        done < "$log_summary_file"
+        echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
+
+    - name: Run clang formatting
+      run: |
+        cd $DBT_AREA_ROOT
+        source env.sh
+        cd sourcecode
         dbt-clang-format.sh . --view-differences-only --markdown-summary
-        echo "### Clang-Format Report" > $GITHUB_STEP_SUMMARY
+        echo "# Clang-Format Report" > $GITHUB_STEP_SUMMARY
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
