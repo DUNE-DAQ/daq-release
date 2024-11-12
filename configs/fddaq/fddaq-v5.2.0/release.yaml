@@ -99,9 +99,6 @@
         - name: configparser
           version: 5.2.0
           source:  pypi
-        - name: connectivityserver
-          version: 1.0.0
-          source:  github_DUNE-DAQ
         - name: deepdiff
           version: 6.3.1
           source:  pypi
