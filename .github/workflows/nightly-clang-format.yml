@@ -86,7 +86,7 @@ jobs:
             elif [[ "$(echo "$line" | grep -o FAILURE)" == "FAILURE" ]]; then
                 markdown_content+="| $test_name | :x: Failed |\n"
             else
-                markdown_content+=":construction: Unit tests have not been written for $this_package"
+                markdown_content+=":construction: Unit tests have not been written for $this_package\n"
             fi
         done < "$log_summary_file"
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
