@@ -83,8 +83,10 @@ jobs:
             fi
             if [[ "$(echo "$line" | grep -o SUCCESS)" == "SUCCESS" ]]; then
                 markdown_content+="| $test_name | :white_check_mark: Passed |\n"
-            else
+            elif [[ "$(echo "$line" | grep -o FAILURE)" == "FAILURE" ]]; then
                 markdown_content+="| $test_name | :x: Failed |\n"
+            else
+                markdown_content+=":construction: Unit tests have not been written for $this_package"
             fi
         done < "$log_summary_file"
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
