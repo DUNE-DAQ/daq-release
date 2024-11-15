@@ -41,7 +41,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daq-buildtools
-        ref: amogan/daq_release_issue375
+        ref: amogan/daq_release_issue405
         path: daq-buildtools-markdown-feature
     - name: Create build area
       run: |
