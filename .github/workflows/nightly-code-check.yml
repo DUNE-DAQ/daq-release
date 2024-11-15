@@ -48,6 +48,7 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         #setup_dbt latest_v5
         source daq-buildtools-markdown-feature/env.sh
+        echo "TAG: ${{ needs.make_nightly_tag.outputs.tag }}"
         dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
