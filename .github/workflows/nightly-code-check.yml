@@ -1,4 +1,4 @@
-name: Nightly clang format workflow
+name: Nightly code check workflow
 
 on:
   workflow_dispatch:
