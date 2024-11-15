@@ -14,14 +14,9 @@ def parse_yaml_file(fname):
             print(exc)
     return fman
 
-def get_packages(yaml_file):
+def get_packages(yaml_file, package_group):
     rdict = parse_yaml_file(yaml_file)
 
-    pkgs = rdict[ rdict["type"] ]
+    pkgs = rdict[package_group]
 
     return [pkg["name"] for pkg in pkgs]
-
-    # for i in range(len(pkgs)):
-    #     ipkg = pkgs[i]
-    #     iname = ipkg["name"]
-    #     print(f"{iname}")
