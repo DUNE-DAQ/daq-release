@@ -6,8 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-  #schedule:
-  #  - cron: "0 10 * * *"
+  schedule:
+    - cron: "30 10 * * *"
 
 jobs:
   make_nightly_tag:
