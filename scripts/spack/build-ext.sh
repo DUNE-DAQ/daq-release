@@ -26,6 +26,8 @@ fi
 
 starttime=$( date )
 
+thisdir="$(dirname "$(realpath "$0")")"
+
 export DAQ_RELEASE_DIR=/daq-release
 export STANDARD_SPACK_VERSION=0.20.0
 
@@ -151,12 +153,14 @@ coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInf
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:~sql~ssl~tools"
 
-llvm_spec="llvm@15.0.7%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+llvm_spec="llvm@15.0.7%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
 umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
+
+\cp -f $thisdir/artifacts/externals_no_versions.py /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/spack-repo-EXT2.2ADD/packages/externals || exit 11
 
 if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
     spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
