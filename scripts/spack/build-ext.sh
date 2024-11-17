@@ -160,7 +160,7 @@ gcc_spec="/${gcc_hash}"
 
 umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
 
-\cp -f $thisdir/artifacts/externals_no_versions.py /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/spack-repo-EXT2.2ADD/packages/externals || exit 11
+\cp -f $thisdir/artifacts/externals_no_versions.py /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v${EXT_VERSION}/spack-${SPACK_VERSION}/spack-repo-EXT${EXT_VERSION}ADD/packages/externals/package.py || exit 11
 
 if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
     spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
