@@ -19,7 +19,7 @@ jobs:
       SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
     - name: Send failure message to Slack
-      uses: slackapi/slack-github-action@v1.27.0
+      uses: slackapi/slack-github-action@v2.0.0
       if: ${{ ! inputs.workflow_success }}
       with:
         # For posting a rich message using Block Kit
@@ -44,7 +44,7 @@ jobs:
             ]
           }
     - name: Send success message to Slack
-      uses: slackapi/slack-github-action@v1.27.0
+      uses: slackapi/slack-github-action@v2.0.0
       if: ${{ inputs.workflow_success }}
       with:
         payload: |
