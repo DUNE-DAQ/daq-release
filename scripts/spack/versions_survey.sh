@@ -1,29 +1,45 @@
 # #!/bin/env
 
-# Will want to "dbt-setup-release -n last_fddaq" before calling the script as long as it is sourced
+# Will want to "dbt-create -s -n last_fddaq" before calling the script as long as it is sourced
 
 thisdir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"  # if sourced
-#thisdir="$(dirname "$(realpath "$0")")"                # if executed
+
+if [[ -z $DBT_AREA_ROOT ]]; then
+    echo "Currently you need a work area environment set up for this script to work; returning..." >&2
+    return 1
+fi
+
+if [[ $PWD != $DBT_AREA_ROOT ]]; then
+    echo "Currently you need to be in the base of a work area environment for this script to work; returning..." >&2
+    return 2
+fi
 
 tmpdir=$( mktemp -d )
 cd $tmpdir
-spack spec fddaq > $tmpdir/fddaq_spec.txt || return 1
+
+echo "Running \"spack spec fddaq\", output kept internal to this script. This will take a moment..."
+spack spec fddaq > $tmpdir/fddaq_spec.txt || return 3
+echo "\"spack spec fddaq\" completed successfully"
+
 
 external_packages=$( $thisdir/../list_packages.py develop externals )
 coredaq_packages=$( $thisdir/../list_packages.py develop coredaq )
 fddaq_packages=$( $thisdir/../list_packages.py develop fddaq )
 
-echo "EXTERNAL PACKAGES LISTED IN THE YAML FILE: "
-echo $external_packages
+# echo "EXTERNAL PACKAGES LISTED IN THE YAML FILE: "
+# echo $external_packages
 
-echo
-echo "SPEC OF EACH OF THOSE PACKAGES"
-for pkg in $external_packages; do
+# echo
+# echo "SPEC OF EACH OF THOSE PACKAGES"
+# for pkg in $external_packages; do
 
-    grep $pkg $tmpdir/fddaq_spec.txt | sed -r 's/\s//g'
-done
+#     grep $pkg $tmpdir/fddaq_spec.txt | sed -r 's/\s//g'
 
-cd -
+# done
+
+cd $DBT_AREA_ROOT
+
+if true; then
 
 random_coredaq_package=$( echo $coredaq_packages | awk '{print $1}' )
 coredaq_dir=$( spack location -p $random_coredaq_package )/..
@@ -55,6 +71,66 @@ for pkg in $( sed -r 's/^.*depends_on\(f*"([a-z\-_0-9]+).*/\1/' $tmpdir/sorted_d
 	echo "Unable to find $pkg in the externals from the YAML file; note this is not necessarily a problem"
     fi
 done
+
+fi
+
+echo
+
+# Prioritize the built in package.py over any that may have been
+# copied into daq-release since available versions may have updated
+# since the copy
+
+# -> If I source this script multiple times I get "==> Error:
+#  Repository is already registered with Spack" so swallow any
+#  errors and just list repos, which will tell you their priorities
+
+spack repo add $DBT_AREA_ROOT/.spack/var/spack/repos/builtin > /dev/null 2>&1
+spack repo list
+if [[ -z $( spack repo list | head -1 | grep "/builtin$" ) ]]; then
+    echo "This script failed to prioritize the builtin repos; returning..." >&2
+    return 4
+fi
+
+pwd
+for pkg in $external_packages ; do
+    echo
+    echo
+    echo $pkg
+
+    echo -n "Current version: "
+    sed -r -n 's/.*\s+\^'$pkg'@([^%]+).*/\1/p' $tmpdir/fddaq_spec.txt 
+    preferred_version=$( spack info $pkg | sed -n '/Preferred version/{n;p}' )
+    echo "Preferred version: "$preferred_version
+
+    archive_file_found=false
+    if [[ -n $( echo $preferred_version | grep https | grep -v "\[git\]" ) ]]; then
+	archive_file=$( echo $preferred_version | sed -r 's/.*(https\S+).*/\1/' )
+
+	if [[ -n $archive_file ]]; then
+	    echo "Archive file found, $archive_file"
+	    archive_file_found=true
+	else
+	    echo "Internal script error: curiously unable to find archive file; returning..." >&2
+	    return 5
+	fi
+    fi
+
+    if $archive_file_found ; then
+	curl -sI $archive_file | grep -i last-modified
+    else
+	echo "Unable to (automatically) determine date of preferred version"
+    fi
+
+    echo
+    cmd="spack checksum --batch --latest $pkg"
+    echo "Output of \"$cmd\":"
+    $cmd
+    echo
+    
+done
+
+# Restore repo priority to where they'd been before
+spack repo rm $DBT_AREA_ROOT/.spack/var/spack/repos/builtin || echo "Problem restoring repo priorities!"
 
 rm -rf $tmpdir
 
