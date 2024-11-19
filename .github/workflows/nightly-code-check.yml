@@ -72,7 +72,7 @@ jobs:
               CUT_DELIMITER=' '
               CUT_FIELD=9
             else
-              CUT_DELIMITER='/''
+              CUT_DELIMITER='/'
               CUT_FIELD=2
             fi
             this_package=$(echo "$cleaned_line" | cut -d $CUT_DELIMITER -f $CUT_FIELD)
