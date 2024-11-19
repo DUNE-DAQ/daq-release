@@ -64,7 +64,9 @@ jobs:
         previous_package=""
         markdown_content=""
         while IFS= read -r line; do
-            this_package=$(echo "$line" | cut -d '/' -f 2)
+            # Strip out bash color formatting
+            cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
+            this_package=$(echo "$cleaned_line" | cut -d '/' -f 2)
             echo "This package is $this_package"
             test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
             if [[ "$this_package" != "$previous_package" ]]; then
