@@ -65,6 +65,7 @@ jobs:
         markdown_content=""
         while IFS= read -r line; do
             this_package=$(echo "$line" | cut -d '/' -f 2)
+            echo "This package is $this_package"
             test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
             if [[ "$this_package" != "$previous_package" ]]; then
                 markdown_content+="## $this_package \n"
