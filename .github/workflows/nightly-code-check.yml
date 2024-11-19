@@ -66,7 +66,16 @@ jobs:
         while IFS= read -r line; do
             # Strip out bash color formatting
             cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
-            this_package=$(echo "$cleaned_line" | cut -d '/' -f 2)
+            # Depending on whether the package has tests or not, the package name will be
+            # in different positions
+            if [[ "$claned_line" == *"No unit tests"* ]]; then
+              CUT_DELIMITER=' '
+              CUT_FIELD=9
+            else
+              CUT_DELIMITER='/''
+              CUT_FIELD=2
+            fi
+            this_package=$(echo "$cleaned_line" | cut -d $CUT_DELIMITER -f $CUT_FIELD)
             echo "This package is $this_package"
             test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
             if [[ "$this_package" != "$previous_package" ]]; then
