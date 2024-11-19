@@ -68,7 +68,7 @@ jobs:
             cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
             # Depending on whether the package has tests or not, the package name will be
             # in different positions
-            if [[ "$claned_line" == *"No unit tests"* ]]; then
+            if [[ "$cleaned_line" == *"No unit tests"* ]]; then
               CUT_DELIMITER=' '
               CUT_FIELD=9
             else
