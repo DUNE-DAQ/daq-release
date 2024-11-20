@@ -58,9 +58,6 @@
         - name: folly
           version: 2021.12.13.00
           variant: "cxxstd=2a"
-        - name: fftw
-          version: 3.3.10
-          variant: "~mpi"
         - name: cli11
           version: 2.3.2
           variant: ~
