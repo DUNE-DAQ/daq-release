@@ -11,12 +11,19 @@
     # ghcr.io/dune-daq/alma9-spack:latest
 
 # When in the container, run:
-# /daq-release/scripts/spack/build-ext.sh (false)   # Adding false means script tries to pick up where it left off
+# /daq-release/scripts/spack/build-ext.sh <niceness> (false)   # Adding false means script tries to pick up where it left off
 
-if [[ -z $1 ]]; then
+niceness=$1
+
+if ! [[ $niceness =~ ^[0-9]+$ ]]; then
+    echo 'Need to pass a first argument which is the integer passed to the Linux "nice" command for computation-intensive actions; please make this 0 or greater' >&2
+    exit 12
+fi
+
+if [[ -z $2 ]]; then
     fresh_build=true
 else
-    fresh_build=$1
+    fresh_build=$2
 fi
 
 if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARCH || ! -n $DAQ_RELEASE ]]; then
@@ -130,7 +137,7 @@ spack find gcc@${GCC_VERSION} +binutils arch=${ARCH}
 retval=$?
 
 if $fresh_build || [[ "$retval" != "0" ]]; then
-    spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
+    nice -n $niceness spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
 fi
 
 spack load gcc@${GCC_VERSION}
@@ -153,18 +160,22 @@ coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInf
 
 dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:~sql~ssl~tools"
 
+boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel~icu+iostreams~json+locale+log+math~mpi+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared+signals~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~versionedlayout+wave"
+
+tbb_spec="intel-tbb@2020.3%gcc@12.1.0+shared+tm build_system=makefile cxxstd=default patches=62ba015,ce1fb16,d62cb66 arch=linux-almalinux9-x86_64"
+
 llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
+umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$tbb_spec"
 
 \cp -f $thisdir/artifacts/externals_no_versions.py /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v${EXT_VERSION}/spack-${SPACK_VERSION}/spack-repo-EXT${EXT_VERSION}ADD/packages/externals/package.py || exit 11
 
 if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
-    spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
-    spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
+    nice -n $niceness spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
+    nice -n $niceness spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
 
     rm -f umbrella_build_semaphore
     echo "The existence of this file means the umbrella package was built" > umbrella_build_semaphore
