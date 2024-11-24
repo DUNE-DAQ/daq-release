@@ -10,7 +10,9 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-
+      override-nightly-tag:
+        description: 'manually specify the nightly tag (optional)'
+        required: false
 
 jobs:
   make_nightly_tag:
@@ -24,8 +26,13 @@ jobs:
     steps:
       - id: create_nightly_tag
         run: |
-          date_tag=$(date +%y%m%d)
-          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          if [ -n "${{ github.event.inputs.override-nightly-tag }}" ]; then
+            nightly_tag="${{ github.event.inputs.override-nightly-tag }}"
+          else
+            date_tag=$(date +%y%m%d)
+            nightly_tag="NFD_DEV_${date_tag}_A9"
+          fi
+          echo "nightly_tag=${nightly_tag}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
