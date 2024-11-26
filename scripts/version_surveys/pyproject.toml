@@ -1,0 +1,46 @@
+[tool.poetry]
+package-mode = false
+description = "All the DUNE DAQ Python packages"
+authors = ["John Freeman <jcfree@fnal.gov>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9.18"
+anytree = ">=2.8.0"
+click = ">=8.1.7"
+click-didyoumean = ">=0.3.0"
+click-shell = ">=2.1"
+#colorama = ">=0.4.4"
+connection-service = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"}
+daq-assettools = {git = "https://github.com/DUNE-DAQ/daq-assettools"}
+drunc = {git = "https://github.com/DUNE-DAQ/drunc", rev = "v0.11.0"}
+druncschema = {git = "https://github.com/DUNE-DAQ/druncschema"}
+elisa_client_api = {git = "https://github.com/DUNE-DAQ/elisa_client_api"}
+Flask = ">=2.1.1"
+Flask-Cors = ">=3.0.10"
+Flask-Caching = ">0.1"  # Oldest version I could find
+Flask-HTTPAuth = ">=4.6.0"
+Flask-RESTful = ">=0.3.9"
+Flask-SQLAlchemy = ">=0.5" # Oldest version I could find 
+h5py = ">=3.7.0"
+httpx = ">=0.23.3"
+matplotlib = ">=1.5.0" # (1) is this needed? (2) lower version bound dates to 2015
+#moo = {git = "https://github.com/brettviren/moo", rev = "0.6.7"}
+numpy = ">=1.24.0"
+pandas = ">= 0.8.1" # (1) is this needed? (2) lower version bound dates to 2012
+pytest = ">= 7.3.2"
+python-ipmi = ">= 0.5.1"
+sh = ">= 1.14.1"
+textual = ">= 0.83.0"
+transitions = ">= 0.8.10"
+# xmlrpclib?
+
+
+
+[tool.poetry.group.dev.dependencies]
+pip = ">=24.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
