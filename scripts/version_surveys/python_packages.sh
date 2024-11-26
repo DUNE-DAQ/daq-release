@@ -37,11 +37,7 @@ scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cp $scriptdir/pyproject.toml . || return 10
 
-# Unclear if this is actually "shielding" you from the surrounding environment
-# Create a new subdirectory and cd into it before calling this?
-
-poetry shell || return 11
-poetry install || return 12
+poetry install || return 11
 
 pip freeze > ./pyvenv_requirements.txt
 test "$?" == "0" || return 12
