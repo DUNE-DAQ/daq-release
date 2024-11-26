@@ -53,6 +53,13 @@ jobs:
         cd $DBT_AREA_ROOT
         dbt-workarea-env
         dbt-build --lint
+        tar czf linting_results.tgz log/linting*
+
+    - name: Upload logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: Linting results
+        path: ${{ needs.make_nightly_tag.outputs.tag }}/linting_results.tgz
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
