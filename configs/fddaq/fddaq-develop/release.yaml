@@ -100,7 +100,7 @@
           version: 1.3.1
           source:  pypi
         - name: cycler
-          version: 1.12.1
+          version: 0.12.1
           source:  pypi
         - name: daq-assettools
           version: develop
@@ -123,7 +123,7 @@
         - name: elisa-client-api
           version: develop
           source:  github_DUNE-DAQ
-        - name: et-xmlfile
+        - name: et_xmlfile
           version: 2.0.0
           source:  pypi
         - name: exceptiongroup
