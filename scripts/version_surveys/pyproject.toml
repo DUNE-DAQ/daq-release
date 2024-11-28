@@ -14,7 +14,7 @@ colorama = ">=0.4.4"
 connection-service = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"}
 daq-assettools = {git = "https://github.com/DUNE-DAQ/daq-assettools"}
 deepdiff = ">=6.3.1"
-drunc = {git = "https://github.com/DUNE-DAQ/drunc", rev = "v0.11.0"}
+drunc = {git = "https://github.com/DUNE-DAQ/drunc"}
 druncschema = {git = "https://github.com/DUNE-DAQ/druncschema"}
 elisa_client_api = {git = "https://github.com/DUNE-DAQ/elisa_client_api"}
 Flask = ">=2.1.1"
