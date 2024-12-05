@@ -255,6 +255,9 @@
         - name: nest-asyncio
           version: 1.6.0
           source:  pypi
+        - name: num2words
+          version: 0.5.13
+          source:  pypi
         - name: numpy
           version: 2.1.3
           source:  pypi
