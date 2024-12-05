@@ -234,6 +234,9 @@
         - name: networkx
           version: 2.6.3
           source:  pypi
+        - name: num2words
+          version: 0.5.13
+          source:  pypi
         - name: numpy
           version: 1.24.0
           source:  pypi
