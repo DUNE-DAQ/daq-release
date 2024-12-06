@@ -25,11 +25,20 @@ class Pistache(CMakePackage):
     # least) being identical between the ups product and the commit hash's, 
     # it's probably a safe bet that this is the hash we want
 
+    # JCF, Dec-5-2024
+
+    # Commit 6e59eb21b495a7a is just the current head of the master
+    # branch; except for an isolated incident in 2022 there are no
+    # Pistache tags. The hope is this will build correctly under gcc
+    # 13.2, which was not the case with the dunedaq-v2.8.0 version
+    # below
+
+    version('fddaq-v5.3.0', commit="6e59eb21b495a7a")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
     depends_on('openssl')
     depends_on('libpthread-stubs')
-    patch('pistache_gcc12.patch')
+    patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
 
     def patch(self):
         os.mkdir(self.prefix + "/lib64")
