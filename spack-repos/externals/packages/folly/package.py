@@ -30,16 +30,18 @@ class Folly(CMakePackage):
     # folly requires gcc 4.9+ and a version of boost compiled with >= C++14
     # TODO: Specify the boost components
     variant('cxxstd', default='14', values=('14', '17', '2a'), multi=False, description='Use the specified C++ standard when building.')
-    depends_on('boost+context+container cxxstd=14', when='cxxstd=14')
-    depends_on('boost+context+container cxxstd=17', when='cxxstd=17')
-    depends_on('boost+context+container cxxstd=2a', when='cxxstd=2a')
+    depends_on('boost+context+container+filesystem+regex+date_time+system+thread+program_options cxxstd=14', when='cxxstd=14')
+    depends_on('boost+context+container+filesystem+regex+date_time+system+thread+program_options cxxstd=17', when='cxxstd=17')
+    depends_on('boost+context+container+filesystem+regex+date_time+system+thread+program_options cxxstd=2a', when='cxxstd=2a')
 
     # required dependencies
     depends_on('gflags')
-    depends_on('glog')
+    depends_on('glog@:0.6', when='@2024.12.02.00:') # Build complaints about glog header inclusion for later versions of glog
+    depends_on('glog@:0.4')                        # For older versions of folly have traditionally used glog 0.4
     depends_on('double-conversion')
     depends_on('libevent')
     depends_on('fmt')
+    depends_on('fast-float', when='@2024.12.02.00:')
 
     # optional dependencies
     variant('libdwarf', default=False, description="Optional Dependency")
