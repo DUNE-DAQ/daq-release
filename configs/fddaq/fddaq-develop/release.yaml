@@ -228,9 +228,6 @@
         - name: nanoid
           version: 2.0.0
           source:  pypi
-        - name: nanorc
-          version: develop
-          source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
           source:  pypi
