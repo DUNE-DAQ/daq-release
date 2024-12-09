@@ -8,7 +8,7 @@ from spack import *
 import os
 import sys
 
-class Pistache(CMakePackage):
+class Pistache(MesonPackage):
     """An elegant C++ REST framework."""
 
     homepage = "http://pistache.io"
@@ -38,6 +38,8 @@ class Pistache(CMakePackage):
     version('master', branch='master')
     depends_on('openssl')
     depends_on('libpthread-stubs')
+    depends_on('rapidjson')
+
     patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
 
     def patch(self):
@@ -51,6 +53,8 @@ class Pistache(CMakePackage):
              "PistacheTargets.cmake"), self.prefix + "/PistacheTargets.cmake")
         copy(join_path(os.path.dirname(__file__),
              "PistacheTargets-release.cmake"), self.prefix + "/PistacheTargets-release.cmake")
+        copy(join_path(os.path.dirname(__file__),
+             "CMakeLists.txt"), self.stage.source_path + "/CMakeLists.txt")
 
     def install(self, spec, prefix):
         super().install(spec, prefix)
