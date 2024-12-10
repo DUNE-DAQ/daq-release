@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.4.3)
+
+set(PACKAGE flxcard_py)
+set(PACKAGE_VERSION 0.0.1)
+
+include(FELIX)
+
+# python
+#find_package(PythonLibs ${pythonlibs_version} EXACT REQUIRED)
+#include_directories(${PYTHON_INCLUDE_DIR})
+#include_directories($ENV{PYTHON_INC})
+
+# others
+find_package(pybind11)
+
+
+add_definitions(-O3 -Wall -pedantic -g)
+
+tdaq_add_library(flxcard_py NOINSTALL src/flxcard_py.cpp)
+set_target_properties(flxcard_py PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(flxcard_py FlxCard regmap drivers_rcc rt pybind11::pybind11_headers Python3::Python)
+find_package(Python3 COMPONENTS Development )
+target_include_directories(flxcard_py PUBLIC Python3::Python)
