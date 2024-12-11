@@ -37,7 +37,7 @@ class Folly(CMakePackage):
     # required dependencies
     depends_on('gflags')
     depends_on('glog@:0.6', when='@2024.12.02.00:') # Build complaints about glog header inclusion for later versions of glog
-    depends_on('glog@:0.4')                        # For older versions of folly have traditionally used glog 0.4
+    depends_on('glog@:0.4', when='@:2021.12.13.00')                        # For older versions of folly have traditionally used glog 0.4
     depends_on('double-conversion')
     depends_on('libevent')
     depends_on('fmt')
