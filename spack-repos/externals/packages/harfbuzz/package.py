@@ -7,18 +7,23 @@ import spack.build_systems.meson
 from spack.package import *
 
 
-class Harfbuzz(MesonPackage, AutotoolsPackage):
+class Harfbuzz(MesonPackage):
     """The Harfbuzz package contains an OpenType text shaping engine."""
 
     homepage = "https://github.com/harfbuzz/harfbuzz"
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/2.9.1/harfbuzz-2.9.1.tar.xz"
     git = "https://github.com/harfbuzz/harfbuzz.git"
 
-    build_system(
-        conditional("autotools", when="@:2.9"), conditional("meson", when="@3:"), default="meson"
-    )
-
     license("MIT")
+
+    version("10.1.0", sha256="6ce3520f2d089a33cef0fc48321334b8e0b72141f6a763719aaaecd2779ecb82")
+    version("10.0.1", sha256="b2cb13bd351904cb9038f907dc0dee0ae07127061242fe3556b2795c4e9748fc")
+    version("10.0.0", sha256="c2dfe016ad833a5043ecc6579043f04e8e6d50064e02ad449bb466e6431e3e04")
+    version("9.0.0", sha256="a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e")
+    version("8.5.0", sha256="77e4f7f98f3d86bf8788b53e6832fb96279956e1c3961988ea3d4b7ca41ddc27")
+    version("8.4.0", sha256="af4ea73e25ab748c8c063b78c2f88e48833db9b2ac369e29bd115702e789755e")
+    version("8.3.1", sha256="f73e1eacd7e2ffae687bc3f056bb0c705b7a05aee86337686e09da8fc1c2030c")
+
 
     version("8.3.0", sha256="109501eaeb8bde3eadb25fab4164e993fbace29c3d775bcaa1c1e58e2f15f847")
     version("7.3.0", sha256="20770789749ac9ba846df33983dbda22db836c70d9f5d050cb9aa5347094a8fb")
@@ -33,41 +38,6 @@ class Harfbuzz(MesonPackage, AutotoolsPackage):
     version("3.3.2", sha256="1c13bca136c4f66658059853e2c1253f34c88f4b5c5aba6050aba7b5e0ce2503")
     version("3.2.0", sha256="0ada50a1c199bb6f70843ab893c55867743a443b84d087d54df08ad883ebc2cd")
     version("3.1.2", sha256="4056b1541dd8bbd8ec29207fe30e568805c0705515632d7fec53a94399bc7945")
-    version(
-        "2.9.1",
-        sha256="0edcc980f526a338452180e701d6aba6323aef457b6686976a7d17ccbddc51cf",
-        deprecated=True,
-    )
-    version(
-        "2.6.8",
-        sha256="6648a571a27f186e47094121f0095e1b809e918b3037c630c7f38ffad86e3035",
-        deprecated=True,
-    )
-    version(
-        "2.3.1",
-        sha256="f205699d5b91374008d6f8e36c59e419ae2d9a7bb8c5d9f34041b9a5abcae468",
-        deprecated=True,
-    )
-    version(
-        "2.1.3",
-        sha256="613264460bb6814c3894e3953225c5357402915853a652d40b4230ce5faf0bee",
-        deprecated=True,
-    )
-    version(
-        "1.9.0",
-        sha256="11eca62bf0ac549b8d6be55f4e130946399939cdfe7a562fdaee711190248b00",
-        deprecated=True,
-    )
-    version(
-        "1.4.6",
-        sha256="21a78b81cd20cbffdb04b59ac7edfb410e42141869f637ae1d6778e74928d293",
-        deprecated=True,
-    )
-    version(
-        "0.9.37",
-        sha256="255f3b3842dead16863d1d0c216643d97b80bfa087aaa8fc5926da24ac120207",
-        deprecated=True,
-    )
 
     variant("graphite2", default=False, description="enable support for graphite2 font engine")
     variant(
@@ -114,9 +84,6 @@ class Harfbuzz(MesonPackage, AutotoolsPackage):
     def setup_dependent_run_environment(self, env, dependent_spec):
         env.prepend_path("XDG_DATA_DIRS", self.prefix.share)
         env.prepend_path("GI_TYPELIB_PATH", join_path(self.prefix.lib, "girepository-1.0"))
-
-    def patch(self):
-        change_sed_delimiter("@", ";", "src/Makefile.in")
 
 
 class SetupEnvironment:

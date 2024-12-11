@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget fftw::fftw3 fftw::fftw3f fftw::fftw3l fftw::fftw3q fftw::fftw3_omp fftw::fftw3f_omp fftw::fftw3l_omp fftw::fftw3q_omp fftw::fftw3_threads fftw::fftw3f_threads fftw::fftw3l_threads fftw::fftw3q_threads)
+foreach(_expectedTarget felix::cmem_rcc felix::DFDebug felix::drivers_rcc felix::FlxCard felix::packetformat felix::rcc_error felix::getinput felix::bio_rcc felix::regmap felix:FlxTools)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -42,105 +42,96 @@ unset(_expectedTargets)
 
 
 # Compute the installation prefix relative to this file.
-# JCF, Feb-15-2022: currently stashing the *.cmake files in the base of the uhal directory
-
 get_filename_component(_IMPORT_PREFIX "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-# Create imported target fftw::fftw3
-add_library(fftw::fftw3 SHARED IMPORTED)
+# Create imported target felix::cmem_rcc
+add_library(felix::cmem_rcc SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3 PROPERTIES
+set_target_properties(felix::cmem_rcc PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libcmem_rcc.so"
 )
 
-# Create imported target fftw::fftw3f
-add_library(fftw::fftw3f SHARED IMPORTED)
+# Create imported target felix::drivers_rcc
+add_library(felix::drivers_rcc SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3f PROPERTIES
+set_target_properties(felix::drivers_rcc PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3f.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libdrivers_rcc.so"
 )
 
-# Create imported target fftw::fftw3l
-add_library(fftw::fftw3l SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3l PROPERTIES
+# Create imported target felix::DFDebug
+add_library(felix::DFDebug SHARED IMPORTED)
+
+set_target_properties(felix::DFDebug PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3l.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libDFDebug.so"
 )
 
-# Create imported target fftw::fftw3ql
-add_library(fftw::fftw3ql SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3ql PROPERTIES
+# Create imported target felix::getinput
+add_library(felix::getinput SHARED IMPORTED)
+
+set_target_properties(felix::getinput PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3ql.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libgetinput.so"
 )
 
-# Create imported target fftw::fftw3_omp
-add_library(fftw::fftw3_omp SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3_omp PROPERTIES
+# Create imported target felix::FlxCard
+add_library(felix::FlxCard SHARED IMPORTED)
+
+set_target_properties(felix::FlxCard PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3_omp.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libFlxCard.so"
 )
 
-# Create imported target fftw::fftw3f_omp
-add_library(fftw::fftw3f_omp SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3f_omp PROPERTIES
+# Create imported target felix::packetformat
+add_library(felix::packetformat SHARED IMPORTED)
+
+set_target_properties(felix::packetformat PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3f_omp.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libpacketformat.so"
 )
 
-# Create imported target fftw::fftw3l_omp
-add_library(fftw::fftw3l_omp SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3l_omp PROPERTIES
+# Create imported target felix::rcc_error
+add_library(felix::rcc_error SHARED IMPORTED)
+
+set_target_properties(felix::rcc_error PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3l_omp.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/librcc_error.so"
 )
 
-# Create imported target fftw::fftw3q_omp
-add_library(fftw::fftw3q_omp SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3q_omp PROPERTIES
+# Create imported target felix::bio_rcc
+add_library(felix::bio_rcc SHARED IMPORTED)
+
+set_target_properties(felix::bio_rcc PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3q_omp.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libbio_rcc.so"
 )
 
-# Create imported target fftw::fftw3_threads
-add_library(fftw::fftw3_threads SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3_threads PROPERTIES
+# Create imported target felix::regmap
+add_library(felix::regmap SHARED IMPORTED)
+
+set_target_properties(felix::regmap PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3_threads.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libregmap.so"
 )
 
-# Create imported target fftw::fftw3f_threads
-add_library(fftw::fftw3f_threads SHARED IMPORTED)
 
-set_target_properties(fftw::fftw3f_threads PROPERTIES
+# Create imported target felix::FlxTools
+add_library(felix::FlxTools SHARED IMPORTED)
+
+set_target_properties(felix::FlxTools PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3f_threads.so"
+        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libFlxTools.so"
 )
 
-# Create imported target fftw::fftw3l_threads
-add_library(fftw::fftw3l_threads SHARED IMPORTED)
-
-set_target_properties(fftw::fftw3l_threads PROPERTIES
-	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3l_threads.so"
-)
-
-# Create imported target fftw::fftw3q_threads
-add_library(fftw::fftw3q_threads SHARED IMPORTED)
-
-set_target_properties(fftw::fftw3q_threads PROPERTIES
-	INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/lib/libfftw3q_threads.so"
-)
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
   message(FATAL_ERROR "This file relies on consumers using CMake 2.8.12 or greater.")
@@ -148,7 +139,7 @@ endif()
 
 # Load information for each installed configuration.
 get_filename_component(_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-file(GLOB CONFIG_FILES "${_DIR}/fftwTargets-*.cmake")
+file(GLOB CONFIG_FILES "${_DIR}/felixTargets-*.cmake")
 foreach(f ${CONFIG_FILES})
   include(${f})
 endforeach()

@@ -12,6 +12,7 @@ class FelixSoftware(Package):
 
     has_code=False
 
+    version("fddaq-v5.3.0")
     version("dunedaq-v4.2.0")
     version("dunedaq-v2.10.0")
     version("dunedaq-v2.8.0")
@@ -19,8 +20,6 @@ class FelixSoftware(Package):
     depends_on('boost', type='build')
     depends_on('python', type='build')
     depends_on('cmake', type='build')
-#    depends_on('qt@5.15.2', type='build')
-#    depends_on('intel-tbb', type='build')
     depends_on('yaml-cpp', type='build')
     depends_on('czmq', type='build')
     depends_on('cppzmq', type='build')
@@ -35,7 +34,24 @@ class FelixSoftware(Package):
     def install(self, spec, prefix):
 
         hashes = {}
-        if self.spec.satisfies('@dunedaq-v4.2.0'):
+
+        if self.spec.satisfies('@fddaq-v5.3.0'):
+
+            hashes["cmake_tdaq"] = "d66ce21b"
+            hashes["drivers_rcc"] = "c5c21e00"
+            hashes["flxcard"] = "7614b8cc"
+            hashes["regmap"] = "f0fd698e"
+            hashes["packetformat"] = "a6933e36"
+            hashes["flxcard_py"] = "61001bd6"
+            hashes["ftools"] = "c326e788"
+            if self.spec.architecture.os == "almalinux9":
+                hashes["external-catch"] = "a9d9ad54"
+            else:
+                hashes["external-catch"] = "6a9aa08a"
+
+            felix_version="fddaq-v5.3.0"
+
+        elif self.spec.satisfies('@dunedaq-v4.2.0'):
             hashes["cmake_tdaq"] = "d66ce21b"
             hashes["drivers_rcc"] = "c5c21e00"
             hashes["flxcard"] = "7614b8cc"
@@ -121,9 +137,12 @@ class FelixSoftware(Package):
             return_zero_or_exit('pushd flxcard_py && git checkout %s && popd' % (hashes["flxcard_py"]))
             install(f"{os.path.dirname(__file__)}/flxcard_py_CMakeLists.txt.{felix_version}", prefix+"/software/flxcard_py/CMakeLists.txt")
 
-            print("Aout to clone https://gitlab.cern.ch/atlas-tdaq-felix/ftools.git")
+            print("About to clone https://gitlab.cern.ch/atlas-tdaq-felix/ftools.git")
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/ftools.git')
             return_zero_or_exit('pushd ftools && git checkout %s && popd' % (hashes["ftools"]))
+            if self.spec.satisfies('@fddaq-v5.3.0'):
+                return_zero_or_exit('pushd ftools && git apply %s/%s && popd' %
+                                    (os.path.dirname(__file__), "build_under_gcc_13.2.0.patch"))
             install(f"{os.path.dirname(__file__)}/ftools_CMakeLists.txt.{felix_version}", prefix+"/software/ftools/CMakeLists.txt")
 
             return_zero_or_exit('git clone https://gitlab.cern.ch/atlas-tdaq-felix/external-catch.git external/catch')
@@ -155,9 +174,9 @@ class FelixSoftware(Package):
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/packetformat/lib* lib")
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/regmap/lib* lib")
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/drivers_rcc/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/libFlxTools* lib")
+            #return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/libFlxTools* lib")
 
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/flxcard/flx-* bin")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/f* bin")
+            #return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/f* bin")
 
             return_zero_or_exit("rm -rf software")
