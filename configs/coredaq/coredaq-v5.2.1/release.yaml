@@ -244,10 +244,10 @@
           version: v2.6.2
           commit: null
         - name: daq-buildtools
-          version: v8.7.1
+          version: v8.7.2
           commit: null
         - name: daqsystemtest
-          version: v4.0.0
+          version: v4.0.3
           commit: null
         - name: pocket
           version: "develop"
