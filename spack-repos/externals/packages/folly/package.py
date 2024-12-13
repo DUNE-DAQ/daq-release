@@ -56,6 +56,11 @@ class Folly(CMakePackage):
 
     configure_directory = 'folly'
 
+    # JCF, Dec-13-2024
+    # Added the -mavx2 option so that folly won't refuse to link against fdreadoutlibs code, itself built with that option
+    # See F14LinkCheck in folly for more on this
+
     def cmake_args(self):
         return ['-DBUILD_SHARED_LIBS=ON',
-                '-DCMAKE_POSITION_INDEPENDENT_CODE=ON']
+                '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
+                '-DCMAKE_CXX_FLAGS="-mavx2"']
