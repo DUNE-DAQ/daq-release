@@ -88,9 +88,9 @@
         - name: libtorrent
           version: 2.0.9
           variant: ~
-        - name: graphviz
-          version: 8.0.5
-          variant: "+expat"
+#        - name: graphviz
+#          version: 8.0.5
+#          variant: "+expat"
 
     devtools:
         - name: cmake
@@ -105,7 +105,7 @@
 
     systems:
         - name: python
-          version: 3.11.7
+          version: 3.10.10
           variant: ~
         - name: gcc
           version: 13.2.0
