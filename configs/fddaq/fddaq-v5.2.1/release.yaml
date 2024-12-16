@@ -10,7 +10,7 @@
           version: v2.0.0
           commit: null
         - name: daqsystemtest
-          version: v4.0.2
+          version: v4.0.3
           commit: null
         - name: dpdklibs
           version: v2.2.0

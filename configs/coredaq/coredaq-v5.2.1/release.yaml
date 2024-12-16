@@ -197,7 +197,7 @@
           version: v4.4.0
           commit: null
         - name: daqconf
-          version: v8.1.1
+          version: v8.1.2
           commit: null
         - name: trigger
           version: v2.1.2
@@ -230,7 +230,7 @@
           version: v1.2.0
           commit: null
         - name: confmodel
-          version: v2.1.0
+          version: v2.1.1
           commit: null
         - name: appmodel
           version: v2.1.0
@@ -244,10 +244,10 @@
           version: v2.6.2
           commit: null
         - name: daq-buildtools
-          version: v8.7.1
+          version: v8.7.2
           commit: null
         - name: daqsystemtest
-          version: v4.0.0
+          version: v4.0.3
           commit: null
         - name: pocket
           version: "develop"
