@@ -8,7 +8,8 @@ from spack import *
 import os
 import sys
 
-class Pistache(MesonPackage):
+#class Pistache(MesonPackage):
+class Pistache(CMakePackage):
     """An elegant C++ REST framework."""
 
     homepage = "http://pistache.io"
@@ -33,17 +34,22 @@ class Pistache(MesonPackage):
     # 13.2, which was not the case with the dunedaq-v2.8.0 version
     # below
 
-    version('fddaq-v5.3.0', commit="6e59eb21b495a7a")
+    #version('fddaq-v5.3.0', commit="6e59eb21b495a7a")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
     depends_on('openssl')
     depends_on('libpthread-stubs')
     depends_on('rapidjson')
 
-    patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
+    #patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
+    patch('build_under_gcc_13.2.0.patch', when='@dunedaq-v2.8.0')
 
-    def patch(self):
-        os.mkdir(self.prefix + "/lib64")
+    def install(self, spec, prefix):
+
+        super().install(spec, prefix)
+        os.makedirs(self.prefix + "/lib64", exist_ok=True)
+
+        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
 
         copy(join_path(os.path.dirname(__file__),
              "PistacheConfig.cmake"), self.prefix + "/PistacheConfig.cmake")
@@ -55,8 +61,3 @@ class Pistache(MesonPackage):
              "PistacheTargets-release.cmake"), self.prefix + "/PistacheTargets-release.cmake")
         copy(join_path(os.path.dirname(__file__),
              "CMakeLists.txt"), self.stage.source_path + "/CMakeLists.txt")
-
-    def install(self, spec, prefix):
-        super().install(spec, prefix)
-        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
-
