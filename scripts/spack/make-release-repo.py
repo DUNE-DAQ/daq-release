@@ -240,7 +240,8 @@ class DAQRelease:
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "coredaq":
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
