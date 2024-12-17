@@ -112,7 +112,8 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev || exit 7
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ~dev || exit 7
 
 if $build_dbe; then
     spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
@@ -120,7 +121,7 @@ fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
-    spack load ${DET}daq@${RELEASE_TAG} || exit 9
+    spack load ${DET}daq@${RELEASE_TAG} +dev || exit 9
 
     cd $DAQ_RELEASE_REPO
     echo /usr/bin/python3 scripts/spack/make-release-repo.py \
