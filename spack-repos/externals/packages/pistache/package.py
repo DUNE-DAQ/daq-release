@@ -34,7 +34,12 @@ class Pistache(CMakePackage):
     # 13.2, which was not the case with the dunedaq-v2.8.0 version
     # below
 
-    #version('fddaq-v5.3.0', commit="6e59eb21b495a7a")
+    # JCF, Dec-17-2024
+
+    # fddaq-v5.3.0 and dunedaq-v2.8.0 are the same, except fddaq-v5.3.0 builds
+    # against gcc 13.2.0 because of a patch and dunedaq-v2.8.0 doesn't
+
+    version('fddaq-v5.3.0', commit="a54a4fab00252a9")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
     depends_on('openssl')
@@ -42,7 +47,7 @@ class Pistache(CMakePackage):
     depends_on('rapidjson')
 
     #patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
-    patch('build_under_gcc_13.2.0.patch', when='@dunedaq-v2.8.0')
+    patch('build_under_gcc_13.2.0.patch', when='@fddaq-v5.3.0')
 
     def install(self, spec, prefix):
 
