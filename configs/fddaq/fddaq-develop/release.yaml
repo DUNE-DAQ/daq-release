@@ -9,6 +9,9 @@
         - name: daqsystemtest
           version: "develop"
           commit: null
+        - name: dpdklibs
+          version: "develop"
+          commit: null
         - name: fddetdataformats
           version: "develop"
           commit: null
