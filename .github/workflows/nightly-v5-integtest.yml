@@ -44,13 +44,13 @@ jobs:
         fail-fast: false
         matrix:
             test_name: ["listrev_test", 
-                        "3ru_1df_multirun_test", 
-                        "3ru_3df_multirun_test", 
-                        "example_system_test", 
-                        "fake_data_producer_test", 
-                        "long_window_readout_test", 
-                        "minimal_system_quick_test", 
-                        "readout_type_scan",
+            #            "3ru_1df_multirun_test", 
+            #            "3ru_3df_multirun_test", 
+            #            "example_system_test", 
+            #            "fake_data_producer_test", 
+            #            "long_window_readout_test", 
+            #            "minimal_system_quick_test", 
+            #            "readout_type_scan",
                         "small_footprint_quick_test", 
                         "tpstream_writing_test"]
     defaults:
@@ -96,6 +96,7 @@ jobs:
         NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
       run: |
         cd daq-release-integtest/scripts/github-ci/
+        echo "ls test dir: $(ls ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }})"
         python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 

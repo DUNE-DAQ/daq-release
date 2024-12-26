@@ -48,11 +48,14 @@ def which_emoji(test_status):
 
 def format_markdown_row(test):
     emoji = which_emoji(test['result'])
+    print('row', f"| {test['test_name']} | {emoji} {test['result']} |\n")
     return f"| {test['test_name']} | {emoji} {test['result']} |\n"
 
 def generate_markdown_table(results, output_filename):
     with open(output_filename, 'w') as f:
         for idx, result in enumerate(results):
+            print('idx', idx)
+            print('result', result)
             f.write(f"# {result[idx]['test_suite_name']}\n")
             f.write("| Test Case | Status |\n")
             f.write("|-----------|--------|\n")
