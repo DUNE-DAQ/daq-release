@@ -51,25 +51,28 @@ def format_markdown_row(test):
     return f"| {test['test_name']} | {emoji} {test['result']} |\n"
 
 def generate_markdown_table(results, output_filename):
-    print('----------------------------')
     with open(output_filename, 'w') as f:
         for idx, result in enumerate(results):
             f.write(f"# {result[idx]['test_suite_name']}\n")
             f.write("| Test Case | Status |\n")
             f.write("|-----------|--------|\n")
             f.writelines(format_markdown_row(test) for test in result)
+    
+    if not os.path.exists(output_filename):
+        raise FileNotFoundError(f"There was a problem writing the output markdown file: {output_filename}")
 
+    print(f"Markdown summary generated at {output_filename}")
     return
 
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
     parser.add_argument("--input-directory", "-d",
-                        help="Path to the integtest directory containing junit xml files.")
+                        help="Path to the directory containing junit xml files.")
     parser.add_argument("--input-file", "-i",
-                        help="Path to the JUnit XML file")
+                        help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory")
     parser.add_argument("--output-markdown-file", "-o", 
                         default="pytest_summary_table.md",
-                        help="Name of the output .md file for GitHub summar table.")
+                        help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
     
     args = parser.parse_args()
 
@@ -103,8 +106,6 @@ def main():
         exit(5)
 
     generate_markdown_table(test_results, args.output_markdown_file)
-
-    print(f"Markdown summary generated at: {args.output_markdown_file}")
 
 if __name__ == "__main__":
     main()
