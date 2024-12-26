@@ -96,7 +96,7 @@ jobs:
         NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
       run: |
         cd daq-release-integtest/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }} \
+        python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   cleanup_files:
