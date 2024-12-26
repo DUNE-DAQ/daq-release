@@ -109,7 +109,6 @@ jobs:
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
           dbt-setup-release -n $RELEASE_TAG
         fi
-        export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG
         TEST_PATH=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
           TEST_PATH=$LISTREV_SHARE/integtest
