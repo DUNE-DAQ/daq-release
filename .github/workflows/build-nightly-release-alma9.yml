@@ -194,13 +194,6 @@ jobs:
 
     steps:
     
-    - name: Checkout dbt feature branch
-      uses: actions/checkout@v4
-      with:
-        repository: DUNE-DAQ/daq-buildtools
-        path: daq-buildtools-feature
-        ref: amogan/daq_release_issue134
-
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       env:
           NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
@@ -208,8 +201,7 @@ jobs:
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          #setup_dbt latest_v5
-          source daq-buildtools-feature/env.sh
+          setup_dbt latest_v5
           dbt-setup-release -n NFD${NIGHTLY_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
