@@ -63,4 +63,4 @@ class Folly(CMakePackage):
     def cmake_args(self):
         return ['-DBUILD_SHARED_LIBS=ON',
                 '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-                '-DFOLLY_F14_FORCE_FALLBACK']
+                '-DFOLLY_F14_FORCE_FALLBACK=1']
