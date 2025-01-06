@@ -91,16 +91,38 @@ if [[ -z $( spack repo list | head -1 | grep "/builtin$" ) ]]; then
     return 4
 fi
 
+
 pwd
 for pkg in $external_packages ; do
+
     echo
     echo
     echo $pkg
 
     echo -n "Current version: "
-    sed -r -n 's/.*\s+\^'$pkg'@([^%]+).*/\1/p' $tmpdir/fddaq_spec.txt 
+    sed -r -n 's/.*\s+\^'$pkg'@([^%]+).*/\1/p' $tmpdir/fddaq_spec.txt
+
     preferred_version=$( spack info $pkg | sed -n '/Preferred version/{n;p}' )
-    echo "Preferred version: "$preferred_version
+    echo -n "Preferred version is "$preferred_version
+
+    location=$( spack location -p $pkg )
+    if [[ "$location" =~ spack-repo-externals ]]; then
+	echo ", according to vendored package.py"
+    else
+	echo ", according to builtin package.py"
+    fi
+
+    if [[ -d $thisdir/../../spack-repos/externals/packages/$pkg ]]; then
+	echo "For this work area, using vendored package.py from daq-release for $pkg"
+
+	if [[ -d $DBT_AREA_ROOT/.spack/var/spack/repos/builtin/packages/$pkg ]]; then
+	    echo "package.py also found in builtin area"
+	else
+	    echo "No package.py supplied by builtin area"
+	fi
+    else
+	echo "For this work area, using Spack builtin package.py for $pkg"
+    fi
 
     archive_file_found=false
     if [[ -n $( echo $preferred_version | grep https | grep -v "\[git\]" ) ]]; then
