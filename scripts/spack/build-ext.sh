@@ -184,14 +184,19 @@ else
     echo "Spotted a file called $PWD/umbrella_build_semaphore; will skip spack install of the umbrella package"
 fi
 
-## Step 6 -- remove DAQ packages and umbrella packages
+## Step 6 -- install graphviz, useful for generating plots after
+## daqconf's create_config_plot program has created a DOT file
+
+spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gtkplus~gts~java~libgd~pangocairo~poppler~qt~quartz~x build_system=autotools arch=${ARCH} || exit 11
+
+## Step 7 -- remove DAQ packages and umbrella packages
 
 for pkg in daq-cmake externals devtools systems; do
     echo "Uninstalling $pkg"
     spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
 
-# Step 7 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
+# Step 8 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
 
 . $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
@@ -203,7 +208,7 @@ for pkg in $build_only_packages; do
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring openssh krb5 libedit gmake findutils; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring openssh krb5 libedit gmake diffutils sed libtool bison flex autoconf automake; do
     echo "Uninstalling $pkg"
     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
