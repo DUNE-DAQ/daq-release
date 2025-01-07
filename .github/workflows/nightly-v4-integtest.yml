@@ -75,16 +75,19 @@ jobs:
     if: always()
     needs: [make_nightly_tag, integration_tests]
     steps:
-    - name: Surface failing tests
-      #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
-      uses: andrewmogan/pytest-results-action@8b7955ab36427dc46b0f00ea7d4e66a75b7cc943
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_test_results.xml
-        summary: true
-        display-options: fEX
-        fail-on-empty: true
+        repository: DUNE-DAQ/daq-release
+        path: daq-release-integtest
+        ref: amogan/integtest_markdown_parser
+    - name: Generate summary tables
+      env:
+        NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
+      run: |
+        cd daq-release-integtest/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   cleanup_xml_files:
     runs-on: daq

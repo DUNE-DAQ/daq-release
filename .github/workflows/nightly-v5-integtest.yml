@@ -118,33 +118,38 @@ jobs:
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
 
-  #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
     runs-on: daq
     if: always()
     needs: [make_release_tag, integration_tests]
     steps:
-    - name: Surface failing tests
-      #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
-      uses: andrewmogan/pytest-results-action@8b7955ab36427dc46b0f00ea7d4e66a75b7cc943
-      env:
-        RELEASE_TAG: ${{ needs.make_release_tag.outputs.tag}}
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.RELEASE_TAG }}/*_results.xml
-        summary: true
-        display-options: fEX
-        fail-on-empty: true
+        repository: DUNE-DAQ/daq-release
+        path: daq-release-integtest
+        ref: amogan/integtest_markdown_parser
+    - name: Generate summary tables
+      env:
+        RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
+      run: |
+        cd daq-release-integtest/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_$RELEASE_TAG
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
-  cleanup_xml_files:
+  cleanup_files:
     runs-on: daq
     if: always()
     needs: [make_release_tag, parse_results]
     steps:
       - name: Remove xml files
         env:
-          RELEASE_TAG: ${{ needs.make_release_tag.outputs.tag }}
+          RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
         run: |
-          rm -rf ${{ github.workspace }}/integration_tests_${{ env.RELEASE_TAG }}
+          rm -rf ${{ github.workspace }}/integration_tests_$RELEASE_TAG
+      - name: Remove daq-release
+        run: |
+          rm -rf ${{ github.workspace }}/daq-release-integtest/
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
