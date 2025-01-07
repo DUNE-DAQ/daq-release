@@ -10,7 +10,7 @@ def get_xml_files(directory, pattern):
 def get_test_name(file_path):
     file_name = os.path.basename(file_path)
     # Results file names should look like minimal_system_quick_test_results.xml
-    return file_name.replace('.xml', '')
+    return file_name.replace('_results.xml', '')
 
 def parse_junit_xml(file_path):
     tree = ET.parse(file_path)
@@ -53,7 +53,7 @@ def format_markdown_row(test):
 def generate_markdown_table(results, output_filename):
     with open(output_filename, 'w') as f:
         for idx, result in enumerate(results):
-            f.write(f"# {result[0]['test_suite_name']}\n")
+            f.write(f"# {result[0]['test_suite_name']} Results\n")
             f.write("| Test Case | Status |\n")
             f.write("|-----------|--------|\n")
             f.writelines(format_markdown_row(test) for test in result)
