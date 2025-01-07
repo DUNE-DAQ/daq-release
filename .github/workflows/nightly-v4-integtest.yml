@@ -80,7 +80,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-integtest
-        ref: amogan/integtest_markdown_parser
     - name: Generate summary tables
       env:
         NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
