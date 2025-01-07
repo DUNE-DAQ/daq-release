@@ -64,6 +64,35 @@ def generate_markdown_table(results, output_filename):
     print(f"Markdown summary generated at {output_filename}")
     return
 
+def prepend_test_summary(markdown_file):
+    num_passed = 0
+    num_failed = 0
+    num_skipped = 0
+    total_tests = 0
+    with open(markdown_file, 'r') as ifile:
+        original_lines = ifile.readlines()
+        #print(original_lines)
+        for line in original_lines:
+            print(line)
+            #print(line)
+            if 'passed' in line:
+                num_passed += 1
+                total_tests += 1
+            elif 'failed' in line:
+                num_failed += 1
+                total_tests += 1
+            elif 'skipped' in line:
+                num_skipped += 1
+                total_tests += 1
+
+    print('Passed:', num_passed)
+    print('Failed:', num_failed)
+
+    summary = f"{num_passed} passed and {num_failed} failed of {total_tests} total tests.\n"
+    new_lines = [summary] + original_lines
+    with open(markdown_file, 'w') as ofile:
+        ofile.writelines(new_lines)
+
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
     parser.add_argument("--input-directory", "-d",
@@ -106,6 +135,8 @@ def main():
         exit(5)
 
     generate_markdown_table(test_results, args.output_markdown_file)
+
+    prepend_test_summary(args.output_markdown_file)
 
 if __name__ == "__main__":
     main()
