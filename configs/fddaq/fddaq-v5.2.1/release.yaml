@@ -1,46 +1,49 @@
 ---
-    release: fddaq-develop
+    release: fddaq-v5.2.1
 
     type: fddaq
 
-    base_release: coredaq-develop
+    base_release: coredaq-v5.2.1
 
     fddaq:
+        - name: daphnemodules
+          version: v2.0.0
+          commit: null
         - name: daqsystemtest
-          version: "develop"
+          version: v4.0.3
           commit: null
         - name: dpdklibs
-          version: "develop"
+          version: v2.2.0
           commit: null
         - name: fddetdataformats
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: fdreadoutlibs
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: fdreadoutmodules
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: flxlibs
-          version: "develop"
+          version: v2.2.0
           commit: null
         - name: hermesmodules
-          version: "develop"
+          version: v2.2.0
           commit: null
         - name: rawdatautils
-          version: "develop"
-          commit: null
-        - name: tpglibs
-          version: "develop"
-          commit: null
-        - name: uhallibs
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: sspmodules
-          version: "develop"
+          version: v1.4.0
+          commit: null
+        - name: tpglibs
+          version: v1.0.0
+          commit: null
+        - name: uhallibs
+          version: v1.2.0
           commit: null
         - name: wibmod
-          version: "develop"
+          version: v2.0.0
           commit: null
 
 
@@ -100,7 +103,7 @@
           version: 5.2.0
           source:  pypi
         - name: connectivityserver
-          version: develop
+          version: 1.0.0
           source:  github_DUNE-DAQ
         - name: deepdiff
           version: 6.3.1
@@ -109,16 +112,16 @@
           version: 5.0.3
           source:  pypi
         - name: daq-assettools
-          version: develop
+          version: 1.1.0
           source:  github_DUNE-DAQ
         - name: drunc
-          version: develop
+          version: 0.11.1
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: develop
+          version: 0.9.0
           source:  github_DUNE-DAQ
         - name: elisa-client-api
-          version: develop
+          version: 1.0.0
           source:  github_DUNE-DAQ
         - name: et-xmlfile
           version: 1.0.1
@@ -184,7 +187,7 @@
           version: 1.1.1
           source:  pypi
         - name: integrationtest
-          version: develop
+          version: 3.1.0
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.0.1
@@ -228,11 +231,11 @@
         - name: nanoid
           version: 2.0.0
           source:  pypi
+        - name: nanorc
+          version: 5.2.0
+          source:  github_DUNE-DAQ
         - name: networkx
           version: 2.6.3
-          source:  pypi
-        - name: num2words
-          version: 0.5.13
           source:  pypi
         - name: numpy
           version: 1.24.0
@@ -253,7 +256,7 @@
           version: 4.8.0
           source:  pypi
         - name: pluggy
-          version: 1.5.0
+          version: 0.13.1
           source:  pypi
         - name: protobuf
           version: 4.24.4
@@ -289,7 +292,7 @@
           version: 1.7.1
           source:  pypi
         - name: pytest
-          version: 8.3.3
+          version: 7.3.2
           source:  pypi
         - name: python-dateutil
           version: 2.8.2

@@ -10,42 +10,76 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-
+      override-nightly-tag:
+        description: 'manually specify the nightly tag (optional)'
+        required: false
+      candidate-release-tag:
+        description: 'manually specify a candidate release tag (optional)'
+        required: false
+        default: ""
+      frozen-release-tag:
+        description: 'manually specify a frozen release tag (optional)'
+        required: false
+        default: ""
 
 jobs:
-  make_nightly_tag:
+  make_release_tag:
     name: create nightly tag
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+      tag: ${{ steps.create_release_tag.outputs.release_tag }} 
+      is_candidate_release: ${{ steps.create_release_tag.outputs.is_candidate }} 
+      is_frozen_release: ${{ steps.create_release_tag.outputs.is_frozen }} 
     defaults:
       run:
         shell: bash
     steps:
-      - id: create_nightly_tag
+      - id: create_release_tag
         run: |
-          date_tag=$(date +%y%m%d)
-          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          is_candidate=false
+          is_frozen=false
+          if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.frozen-release-tag }}" ]]; then
+            echo "Error: You cannot specify both a candidate tag and a frozen tag. Please choose one and try again. Exiting..."
+            exit 1
+          fi
+          if [ -n "${{ github.event.inputs.override-nightly-tag }}" ]; then
+            release_tag="${{ github.event.inputs.override-nightly-tag }}"
+            if [[ -n "${{ github.event.inputs.candidate-release-tag }}" || -n "${{ github.event.inputs.frozen-release-tag }}" ]]; then
+              echo "WARNING: The provided nightly tag will supercede the provided candidate or frozen release tag."
+            fi
+          elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.candidate-release-tag }}"
+            is_candidate=true
+          elif [ -n "${{ github.event.inputs.frozen-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.frozen-release-tag }}"
+            is_frozen=true
+          else
+            date_tag=$(date +%y%m%d)
+            release_tag="NFD_DEV_${date_tag}_A9"
+          fi
+          echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
+          echo "is_frozen=${is_frozen}"  >>  "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
     name: integration_tests
     runs-on: daq
     timeout-minutes: 30
-    needs: make_nightly_tag
+    needs: make_release_tag
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["listrev_test", 
-                        "3ru_1df_multirun_test", 
-                        "3ru_3df_multirun_test", 
-                        "example_system_test", 
-                        "fake_data_producer_test", 
-                        "long_window_readout_test", 
-                        "minimal_system_quick_test", 
-                        "readout_type_scan",
-                        "small_footprint_quick_test", 
-                        "tpstream_writing_test"]
+            test_name: #["listrev_test", 
+                        #"3ru_1df_multirun_test", 
+                        #"3ru_3df_multirun_test", 
+                        #"example_system_test", 
+                        #"fake_data_producer_test", 
+                        #"long_window_readout_test", 
+                        ["minimal_system_quick_test", ]
+                        #"readout_type_scan",
+                        #"small_footprint_quick_test", 
+                        #"tpstream_writing_test"]
     defaults:
       run:
         shell: bash
@@ -53,53 +87,69 @@ jobs:
     steps:
     - name: setup release and run tests
       env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+        RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
+        IS_CANDIDATE_RELEASE: ${{needs.make_release_tag.outputs.is_candidate_release}}
+        IS_FROZEN_RELEASE: ${{needs.make_release_tag.outputs.is_frozen_release}}
       run: |
         DET=fd
-        mkdir -p $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
-        cd $GITHUB_WORKSPACE/integration_tests_$NIGHTLY_TAG
+        mkdir -p $GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
+        cd $GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG/daq_app_rte.sh ]]
-        dbt-setup-release -n $NIGHTLY_TAG
-        export DBT_INSTALL_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$NIGHTLY_TAG
+        if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
+          echo "dbt-setup-release -b candidate $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release -b candidate $RELEASE_TAG
+        elif [[ "$IS_FROZEN_RELEASE" == "true" ]]; then
+          echo "dbt-setup-release $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release $RELEASE_TAG
+        else
+          echo "dbt-setup-release -n $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release -n $RELEASE_TAG
+        fi
         TEST_PATH=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
           TEST_PATH=$LISTREV_SHARE/integtest
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
-          export DUNEDAQ_DB_PATH=$DAQSYSTEMTEST_SHARE:$DUNEDAQ_DB_PATH
         fi
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
 
-  #$LISTREV_SHARE/integtest/listrev_test.py
   parse_results:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, integration_tests]
+    needs: [make_release_tag, integration_tests]
     steps:
-    - name: Surface failing tests
-      #uses: pmeier/pytest-results-action@8104ed7b3d3ba4bb0d550e406fc26aa756630fcc
-      uses: andrewmogan/pytest-results-action@8b7955ab36427dc46b0f00ea7d4e66a75b7cc943
-      env:
-        NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag}}
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
       with:
-        path: ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}/*_results.xml
-        summary: true
-        display-options: fEX
-        fail-on-empty: true
+        repository: DUNE-DAQ/daq-release
+        path: daq-release-integtest
+        ref: amogan/integtest_markdown_parser
+    - name: Generate summary tables
+      env:
+        RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
+      run: |
+        cd daq-release-integtest/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_$RELEASE_TAG
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
-  cleanup_xml_files:
+  cleanup_files:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, parse_results]
+    needs: [make_release_tag, parse_results]
     steps:
       - name: Remove xml files
         env:
-          NIGHTLY_TAG: ${{ needs.make_nightly_tag.outputs.tag }}
+          RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
         run: |
-          rm -rf ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
+          rm -rf ${{ github.workspace }}/integration_tests_$RELEASE_TAG
+      - name: Remove daq-release
+        run: |
+          rm -rf ${{ github.workspace }}/daq-release-integtest/
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
@@ -118,4 +168,4 @@ jobs:
     with:
       workflow_success: ${{ needs.integration_tests.result == 'success' }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}

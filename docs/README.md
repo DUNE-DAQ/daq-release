@@ -6,6 +6,10 @@
 
 [![Nightly daq-buildtools Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml)
 
+[![Nightly unit tests and clang format check](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml)
+
+[![Weekly linting](https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml)
+
 This is a repo containing DUNE DAQ release making tools, configuration files, and build scripts for both DUNE-DAQ and external packages. 
 
 ## Table of contents

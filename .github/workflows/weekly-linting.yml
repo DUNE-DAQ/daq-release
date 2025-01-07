@@ -1,0 +1,81 @@
+name: Weekly linting workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+  schedule:
+    - cron: "0 12 * * 0"
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  run_linting:
+    name: Run linting
+    runs-on: daq
+    needs: make_nightly_tag
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-linting
+    - name: Create build area and run linting
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt v8.7.2
+        dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
+        cd ${{ needs.make_nightly_tag.outputs.tag }}
+        source env.sh
+        cd ../daq-release-linting/scripts
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+        cd $DBT_AREA_ROOT
+        dbt-workarea-env
+        dbt-build --lint
+        tar czf linting_results.tgz log/linting*
+
+    - name: Upload logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: Linting results
+        path: ${{ needs.make_nightly_tag.outputs.tag }}/linting_results.tgz
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: run_linting
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      workflow_success: ${{ needs.run_linting.result == 'success' }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_test_area:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, run_linting]
+    steps:
+      - name: Remove test directory
+        run: |
+          rm -rf daq-release-linting
+          rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
