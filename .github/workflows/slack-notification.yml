@@ -16,12 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
-      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      #SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     steps:
     - name: Send failure message to Slack
       uses: slackapi/slack-github-action@v2.0.0
       if: ${{ ! inputs.workflow_success }}
       with:
+        webhook-type: incoming-webhook
         # For posting a rich message using Block Kit
         payload: |
           {
@@ -47,6 +48,7 @@ jobs:
       uses: slackapi/slack-github-action@v2.0.0
       if: ${{ inputs.workflow_success }}
       with:
+        webhook-type: incoming-webhook
         payload: |
           {
             "blocks": [
