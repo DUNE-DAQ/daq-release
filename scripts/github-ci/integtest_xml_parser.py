@@ -9,7 +9,7 @@ def get_xml_files(directory, pattern):
 
 def get_test_name(file_path):
     file_name = os.path.basename(file_path)
-    # Results file names should look like minimal_system_quick_test_results.xml
+    # Results file names should look like "minimal_system_quick_test_results.xml"
     return file_name.replace('_results.xml', '')
 
 def parse_junit_xml(file_path):
@@ -35,7 +35,6 @@ def parse_junit_xml(file_path):
             "test_name": test_name,
             "result": result
         })
-
     return results
 
 def which_emoji(test_status):
@@ -62,7 +61,6 @@ def generate_markdown_table(results, output_filename):
         raise FileNotFoundError(f"There was a problem writing the output markdown file: {output_filename}")
 
     print(f"Markdown summary generated at {output_filename}")
-    return
 
 def prepend_test_summary(markdown_file):
     num_passed = 0
@@ -71,7 +69,6 @@ def prepend_test_summary(markdown_file):
     total_tests = 0
     with open(markdown_file, 'r') as ifile:
         original_lines = ifile.readlines()
-        #print(original_lines)
         for line in original_lines:
             print(line)
             #print(line)
@@ -135,7 +132,6 @@ def main():
         exit(5)
 
     generate_markdown_table(test_results, args.output_markdown_file)
-
     prepend_test_summary(args.output_markdown_file)
 
 if __name__ == "__main__":
