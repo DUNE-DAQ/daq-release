@@ -44,7 +44,7 @@
           version: 2.8.1
           variant: ~
         - name: librdkafka
-          version: 1.7.0
+          version: 2.2.0
           variant: ~
         - name: protobuf
           version: 4.24.4

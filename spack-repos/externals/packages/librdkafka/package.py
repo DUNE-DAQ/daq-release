@@ -14,6 +14,10 @@ class Librdkafka(AutotoolsPackage):
     homepage = "https://github.com/edenhill/librdkafka"
     url      = "https://codeload.github.com/edenhill/librdkafka/tar.gz/refs/tags/v1.7.0"
 
+    # JCF, Jan-7-2025
+    # librdkafka 2.2.0 under consideration for externals v2.2
+    version("2.2.0", sha256="af9a820cbecbc64115629471df7c7cecd40403b6c34bfdbb9223152677a47226", extension='tar.gz')
+
     # JCF, Oct-22-2021
     # dunedaq-v2.8.0 version of librdkafka is 1.7.0
     version('1.7.0', sha256='c71b8c5ff419da80c31bb8d3036a408c87ad523e0c7588e7660ee5f3c8973057', extension='tar.gz')
@@ -25,14 +29,25 @@ class Librdkafka(AutotoolsPackage):
     def patch(self):
         os.symlink(self.prefix + "/lib", self.prefix + "/lib64")
 
-        copy(join_path(os.path.dirname(__file__),
-             "RdKafkaConfig.cmake"), self.prefix + "/RdKafkaConfig.cmake")
-        copy(join_path(os.path.dirname(__file__),
-             "RdKafkaConfigVersion.cmake"), self.prefix + "/RdKafkaConfigVersion.cmake")
-        copy(join_path(os.path.dirname(__file__),
-             "RdKafkaTargets.cmake"), self.prefix + "/RdKafkaTargets.cmake")
-        copy(join_path(os.path.dirname(__file__),
-             "RdKafkaTargets-noconfig.cmake"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
+        if self.spec.satisfies('@1.7.0'):
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfig.cmake.v1.7.0"), self.prefix + "/RdKafkaConfig.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfigVersion.cmake.v1.7.0"), self.prefix + "/RdKafkaConfigVersion.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets.cmake.v1.7.0"), self.prefix + "/RdKafkaTargets.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets-noconfig.cmake.v1.7.0"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
+        elif self.spec.satisfies('@2.2.0'):
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfig.cmake.v2.2.0"), self.prefix + "/RdKafkaConfig.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfigVersion.cmake.v2.2.0"), self.prefix + "/RdKafkaConfigVersion.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets.cmake.v2.2.0"), self.prefix + "/RdKafkaTargets.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets-noconfig.cmake.v2.2.0"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
+
 
 
 
