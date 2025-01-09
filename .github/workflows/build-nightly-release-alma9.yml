@@ -75,9 +75,11 @@ jobs:
             # For automatically triggered workflows where feature-branch is not set, fall back to default branch
             branch=${input_feature_branch:-"develop"}
             daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-            echo "About to run build-release.sh"
             daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
-            echo "Finished with build-release.sh"
+            # In case of connection error, build-release.sh will exit 111. If so, propagate it here for the retry step.
+            if [[ $? -eq 111 ]]; then
+              exit 111
+            fi
 
             cd $BASE_RELEASE_DIR/../
             tar_and_stage_release ${BASE_RELEASE_TAG}
