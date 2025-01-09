@@ -52,22 +52,24 @@ jobs:
         path: daq-release
 
     - name: setup directories and install spack for the coredaq release
-      env:
-        NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
-      run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
-          export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
+      uses: nick-fields/retry@v3
+      with:
+        max_attempts: 2
+        retry_on_exit_code: 111 # Raised by build_release.sh when a spack FetchError occurs
+        command: |
+            export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
+            export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+            export OS=almalinux9
+            source daq-release/.github/workflows/wf-setup-tools.sh
 
-          input_feature_branch=${{ github.event.inputs.feature-branch }}
-          # For automatically triggered workflows where feature-branch is not set, fall back to default branch
-          branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+            input_feature_branch=${{ github.event.inputs.feature-branch }}
+            # For automatically triggered workflows where feature-branch is not set, fall back to default branch
+            branch=${input_feature_branch:-"develop"}
+            daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+            daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
-          cd $BASE_RELEASE_DIR/../
-          tar_and_stage_release ${BASE_RELEASE_TAG}
+            cd $BASE_RELEASE_DIR/../
+            tar_and_stage_release ${BASE_RELEASE_TAG}
 
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v4
