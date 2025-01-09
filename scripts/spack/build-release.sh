@@ -117,7 +117,7 @@ bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" 2>&1 | tee 
 spack_install_exit_code=${PIPESTATUS[0]}
 
 if [[ $spack_install_exit_code -ne 0 ]]; then
-    if grep -qi "==> Error: FetchError: All fetchers failed"; then
+    if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
         exit 111 # Specific exit code for use in retry action
     fi
     exit $spack_install_exit_code
