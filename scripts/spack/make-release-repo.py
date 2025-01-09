@@ -218,7 +218,7 @@ class DAQRelease:
                     lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
-            os.makedirs(ipkg_dir)
+            os.makedirs(ipkg_dir, exist_ok=True)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
@@ -257,7 +257,7 @@ class DAQRelease:
         lines += '\n'
 
         ipkg_dir = os.path.join(repo_dir, ipkg)
-        os.makedirs(ipkg_dir)
+        os.makedirs(ipkg_dir, exist_ok=True)
         ipkgpy = os.path.join(ipkg_dir, "package.py")
         with open(ipkgpy, 'w') as o:
             o.write(lines)
