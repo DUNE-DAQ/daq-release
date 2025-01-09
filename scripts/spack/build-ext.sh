@@ -208,7 +208,7 @@ for pkg in $build_only_packages; do
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring openssh krb5 libedit gmake diffutils sed libtool bison flex autoconf automake; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake; do
     echo "Uninstalling $pkg"
     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done

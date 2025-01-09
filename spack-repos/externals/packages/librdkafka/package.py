@@ -26,6 +26,11 @@ class Librdkafka(AutotoolsPackage):
     depends_on('lz4')
     depends_on('openssl')
 
+    # JCF, Jan-9-2025
+    # librdkafka's shared object libraries link against libgssapi_krb5.so.*, so use a Spack-installed one rather than a system one
+
+    depends_on("krb5")
+
     def patch(self):
         os.symlink(self.prefix + "/lib", self.prefix + "/lib64")
 
