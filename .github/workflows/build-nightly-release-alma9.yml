@@ -83,6 +83,9 @@ jobs:
 
             cd $BASE_RELEASE_DIR/../
             tar_and_stage_release ${BASE_RELEASE_TAG}
+        on_retry_command: | 
+            rm -rf $BASE_RELEASE_DIR
+            rm -rf $DET_RELEASE_DIR
 
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v4

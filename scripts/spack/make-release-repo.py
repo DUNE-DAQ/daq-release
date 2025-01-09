@@ -185,7 +185,7 @@ class DAQRelease:
                 depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
-            os.makedirs(ipkg_dir, exist_ok=True)
+            os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
@@ -218,7 +218,7 @@ class DAQRelease:
                     lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
-            os.makedirs(ipkg_dir, exist_ok=True)
+            os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
             with open(ipkgpy, 'w') as o:
                 o.write(lines)
@@ -257,7 +257,7 @@ class DAQRelease:
         lines += '\n'
 
         ipkg_dir = os.path.join(repo_dir, ipkg)
-        os.makedirs(ipkg_dir, exist_ok=True)
+        os.makedirs(ipkg_dir)
         ipkgpy = os.path.join(ipkg_dir, "package.py")
         with open(ipkgpy, 'w') as o:
             o.write(lines)
