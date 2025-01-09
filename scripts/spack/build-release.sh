@@ -119,7 +119,9 @@ spack_install_exit_code=${PIPESTATUS[0]}
 if [[ $spack_install_exit_code -ne 0 ]]; then
     if grep -qi "==> Error: FetchError: All fetchers failed"; then
         exit 111 # Specific exit code for use in retry action
+    fi
     exit $spack_install_exit_code
+fi
 
 #if $build_dbe; then
 #    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
