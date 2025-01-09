@@ -116,12 +116,19 @@ fi
 bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" 2>&1 | tee dunedaq_build_spack_install.log
 spack_install_exit_code=${PIPESTATUS[0]}
 
+echo "Does build log exist? $(ls dunedaq_build_spack_install.log)"
+
+echo "spack install exit code: $spack_install_exit_code"
+
 if [[ $spack_install_exit_code -ne 0 ]]; then
+    echo "In if statement"
     if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
         exit 111 # Specific exit code for use in retry action
     fi
+    echo "Past if statement (should not happen)"
     exit $spack_install_exit_code
 fi
+echo "Past ALL the new stuff (really shouldn't happen)"
 
 #if $build_dbe; then
 #    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
