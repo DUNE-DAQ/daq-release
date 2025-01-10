@@ -122,6 +122,7 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
         echo "SPACK_AREA: $SPACK_AREA"
         echo "SPACK_VERSION: $SPACK_VERSION"
         rm -rf ${SPACK_AREA}/spack-installation
+        rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
         rm -rf spack-${SPACK_VERSION}/spack-repo
         rm -rf spack-${SPACK_VERSION}/default
         exit 111 # Specific exit code to signal that we should retry
