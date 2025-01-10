@@ -54,8 +54,6 @@ elif [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
   export RELEASE_TAG=$DET_RELEASE_TAG
 fi
 
-spack repo rm /cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBU_DEV_250110_A9/spack-0.22.0/spack-repo
-
 if [[ $RELEASE_TYPE == "nightly" || $RELEASE_TYPE == "production_v4" ]]; then
   branch_arg="-b "${DEFAULT_BRANCH}
 else

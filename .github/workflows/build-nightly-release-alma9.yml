@@ -61,13 +61,11 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
-        rm -rf $BASE_RELEASE_DIR
-        rm -rf $DET_RELEASE_DIR
         source daq-release/.github/workflows/wf-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         # build-release.sh will exit 111 in case of a transient connection error
         daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
         if [[ $? -eq 111 ]]; then
