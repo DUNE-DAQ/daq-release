@@ -73,8 +73,13 @@ jobs:
           attempt=1
           echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
           while (( attempt <= max_attempts )); do
+            echo " --- Attempt number $attempt of $max_attempts --- "
             daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
-            if [[ $? -ne 111 ]]; then break; fi
+            build_release_exit_code=$?
+            echo "Build release exit code: $build_release_exit_code"
+            if [[ $build_release_exit_code -ne 111 ]]; then 
+              break
+            fi
             echo "Retry attempt $attempt/$max_attempts failed due to a FetchError."
             attempt=$((attempt+1))
           done
