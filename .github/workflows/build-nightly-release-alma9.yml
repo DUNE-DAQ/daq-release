@@ -69,7 +69,7 @@ jobs:
         branch=${input_feature_branch:-"develop"}
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         # build-release.sh will exit 111 in case of a transient connection error
-        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
+        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }} && break
         if [[ $? -eq 111 ]]; then
           max_attempts=3
           attempt=1
