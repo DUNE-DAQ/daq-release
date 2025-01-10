@@ -61,6 +61,8 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
+        rm -rf $BASE_RELEASE_DIR
+        rm -rf $DET_RELEASE_DIR
         source daq-release/.github/workflows/wf-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
@@ -73,6 +75,8 @@ jobs:
           attempt=1
           echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
           while (( attempt <= max_attempts )); do
+            rm -rf $BASE_RELEASE_DIR
+            rm -rf $DET_RELEASE_DIR
             daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
             echo "Retry attempt $attempt/$max_attempts failed."
             attempt=$((attempt+1))
