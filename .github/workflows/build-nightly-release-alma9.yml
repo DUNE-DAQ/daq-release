@@ -60,29 +60,31 @@ jobs:
         echo "OS=almalinux9" >> $GITHUB_ENV
 
     - name: setup directories and install spack for the coredaq release
-      uses: nick-fields/retry@v3
-      with:
-        timeout_minutes: 5
-        max_attempts: 2
-        retry_on_exit_code: 111 # Raised by build_release.sh when a spack FetchError occurs
-        shell: bash
-        command: |
-          source daq-release/.github/workflows/wf-setup-tools.sh
-          input_feature_branch=${{ github.event.inputs.feature-branch }}
-          # For automatically triggered workflows where feature-branch is not set, fall back to default branch
-          branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
-          if [[ $? -eq 111 ]]; then
-            exit 111
-          fi
-          cd $BASE_RELEASE_DIR/../
-          tar_and_stage_release ${BASE_RELEASE_TAG}
-
-        on_retry_command: | 
-            rm -rf $BASE_RELEASE_DIR
-            rm -rf $DET_RELEASE_DIR
-
+      run: |
+        source daq-release/.github/workflows/wf-setup-tools.sh
+        input_feature_branch=${{ github.event.inputs.feature-branch }}
+        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
+        branch=${input_feature_branch:-"develop"}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+        # build-release.sh will exit 111 in case of a transient connection error
+        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
+        if [[ $? -eq 111 ]]; then
+          max_attempts=3
+          attempt=1
+          echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
+          while (( attempt <= max_attempts )); do
+            daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
+            echo "Retry attempt $attempt/$max_attempts failed."
+            attempt=$((attempt+1))
+          done
+        fi
+        if (( attempt > max_attempts )); then
+          echo "build-release.sh failed after $max_attempts attempts. Exiting..."
+          exit 111
+        fi
+        #daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+        cd $DET_RELEASE_DIR/../
+        tar_and_stage_release ${DET_RELEASE_TAG}
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v4
       with:
@@ -90,24 +92,18 @@ jobs:
         path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
-      uses: nick-fields/retry@v3
-      with:
-        timeout_minutes: 5
-        max_attempts: 2
-        retry_on_exit_code: 111 # Raised by build_release.sh when a spack FetchError occurs
-        shell: bash
-        command: |
-          source daq-release/.github/workflows/wf-setup-tools.sh
-          input_feature_branch=${{ github.event.inputs.feature-branch }}
-          # For automatically triggered workflows where feature-branch is not set, fall back to default branch
-          branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
-            if [[ $? -eq 111 ]]; then
-              exit 111
-            fi
-          cd $DET_RELEASE_DIR/../
-          tar_and_stage_release ${DET_RELEASE_TAG}
+      run: |
+        source daq-release/.github/workflows/wf-setup-tools.sh
+        input_feature_branch=${{ github.event.inputs.feature-branch }}
+        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
+        branch=${input_feature_branch:-"develop"}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          if [[ $? -eq 111 ]]; then
+            exit 111
+          fi
+        cd $DET_RELEASE_DIR/../
+        tar_and_stage_release ${DET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for far detector release
       uses: actions/upload-artifact@v4
