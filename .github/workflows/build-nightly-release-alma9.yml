@@ -61,23 +61,19 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
-        rm -rf $BASE_RELEASE_DIR
-        rm -rf $DET_RELEASE_DIR
         source daq-release/.github/workflows/wf-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-        # build-release.sh will exit 111 in case of a transient connection error
         daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }} && break
+        # build-release.sh will exit 111 in case of a transient connection error
         if [[ $? -eq 111 ]]; then
           max_attempts=3
           attempt=1
           echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
           while (( attempt <= max_attempts )); do
-            rm -rf $BASE_RELEASE_DIR
-            rm -rf $DET_RELEASE_DIR
-            daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }} && break
+            daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }} && break
             echo "Retry attempt $attempt/$max_attempts failed."
             attempt=$((attempt+1))
           done
