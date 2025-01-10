@@ -113,7 +113,7 @@ if [[ $DET == "core" ]]; then
 fi
 
 #spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || tee dunedaq_build_spack_install.log
-bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" 2>&1 | tee dunedaq_build_spack_install.log
+bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
 spack_install_exit_code=${PIPESTATUS[0]}
 echo "Spack exit code: $spack_install_exit_code"
 
