@@ -119,6 +119,7 @@ spack_install_exit_code=${PIPESTATUS[0]}
 if [[ $spack_install_exit_code -ne 0 ]]; then
     if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
         rm -rf ${SPACK_AREA}/spack-installation
+        rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo
         exit 111 # Specific exit code to signal that we should retry
     fi
     exit $spack_install_exit_code
