@@ -73,6 +73,9 @@ jobs:
           attempt=1
           echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
           while (( attempt <= max_attempts )); do
+            rm -rf ${SPACK_AREA}/spack-installation
+            rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo
+            rm -rf $SPACK_EXTERNALS/spack-${SPACK_VERSION}/default
             daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }} && break
             echo "Retry attempt $attempt/$max_attempts failed."
             attempt=$((attempt+1))
