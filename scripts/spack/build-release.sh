@@ -133,8 +133,8 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             rm -rf spack-${SPACK_VERSION}/spack-repo
             rm -rf spack-${SPACK_VERSION}/default
             #spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log
-            #bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 0" | tee dunedaq_build_spack_install.log
-            bash -c "echo 'No more error!'; exit 0" 2>&1 | tee dunedaq_build_spack_install.log
+            bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" | tee dunedaq_build_spack_install.log
+            #bash -c "echo 'No more error!'; exit 0" 2>&1 | tee dunedaq_build_spack_install.log
             spack_install_exit_code=${PIPESTATUS[0]}
             if [[ $spack_install_exit_code -eq 0 ]]; then
                 echo "Build succeeded after attempt number $attempt"
@@ -156,9 +156,9 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
     fi
 fi
 
-#if $build_dbe; then
-#    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
-#fi
+if $build_dbe; then
+    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
