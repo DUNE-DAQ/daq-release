@@ -26,10 +26,10 @@ class Librdkafka(AutotoolsPackage):
     depends_on('lz4')
     depends_on('openssl')
 
-    # JCF, Jan-9-2025
-    # librdkafka's shared object libraries link against libgssapi_krb5.so.*, so use a Spack-installed one rather than a system one
+    # JCF, Jan-13-2025
+    # librdkafka's shared object libraries link against SASL, so use a Spack-installed one rather than a system one to avoid link warnings (or worse)
 
-    depends_on("krb5")
+    depends_on("cyrus-sasl")
 
     def patch(self):
         os.symlink(self.prefix + "/lib", self.prefix + "/lib64")

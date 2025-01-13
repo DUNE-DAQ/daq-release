@@ -85,11 +85,8 @@
         - name: libtorrent
           version: 2.0.9
           variant: ~
-        - name: openssh
-          version: 9.7p1
-          variant: "+gssapi"
-        - name: krb5
-          version: 1.20.1
+        - name: cyrus-sasl
+          version: 2.1.28
           variant: ~
 
     devtools:
