@@ -112,22 +112,41 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-#spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || tee dunedaq_build_spack_install.log
-bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" 2>&1 | tee dunedaq_build_spack_install.log
+#spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log
+bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
 spack_install_exit_code=${PIPESTATUS[0]}
 
 if [[ $spack_install_exit_code -ne 0 ]]; then
+    # In case of a transient connection error, try again
     if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
-        echo "DEBUG LS: $(ls)"
-        echo "SPACK_AREA: $SPACK_AREA"
-        echo "SPACK_VERSION: $SPACK_VERSION"
-        rm -rf ${SPACK_AREA}/spack-installation
-        rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
-        rm -rf spack-${SPACK_VERSION}/spack-repo
-        rm -rf spack-${SPACK_VERSION}/default
-        exit 111 # Specific exit code to signal that we should retry
+        is_fetch_error=true
+        max_attempts=3
+        attempt=1
+        if [[ $attempt -eq 1 ]]; then
+            echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
+        fi
+        while [[ is_fetch_error && attempt -le max_attempts ]]; do
+            is_fetch_error=false
+            echo " --- Attempt number $attempt of $max_attempts --- "
+            rm -rf ${SPACK_AREA}/spack-installation
+            rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
+            rm -rf spack-${SPACK_VERSION}/spack-repo
+            rm -rf spack-${SPACK_VERSION}/default
+            #spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log && break
+            #bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 0" | tee dunedaq_build_spack_install.log && break
+            bash -c "exit 0" | tee dunedaq_build_spack_install.log
+            spack_install_exit_code=${PIPESTATUS[0]}
+            if [[ $spack_install_exit_code -ne 0 ]]; then
+                if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
+                    is_fetch_error=true
+                fi
+            fi
+            echo "Retry attempt $attempt/$max_attempts failed due to a FetchError."
+            attempt=$((attempt+1))
+        done
+    else
+        exit $spack_install_exit_code
     fi
-    exit $spack_install_exit_code
 fi
 
 #if $build_dbe; then

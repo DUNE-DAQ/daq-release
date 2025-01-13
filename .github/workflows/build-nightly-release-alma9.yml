@@ -66,29 +66,8 @@ jobs:
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }} && break
-        # build-release.sh will exit 111 in case of a transient connection error
-        if [[ $? -eq 111 ]]; then
-          max_attempts=3
-          attempt=1
-          echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
-          while (( attempt <= max_attempts )); do
-            echo " --- Attempt number $attempt of $max_attempts --- "
-            daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
-            build_release_exit_code=$?
-            echo "Build release exit code: $build_release_exit_code"
-            if [[ $build_release_exit_code -ne 111 ]]; then 
-              break
-            fi
-            echo "Retry attempt $attempt/$max_attempts failed due to a FetchError."
-            attempt=$((attempt+1))
-          done
-        fi
-        if (( attempt > max_attempts )); then
-          echo "build-release.sh failed after $max_attempts attempts. Exiting..."
-          exit 111
-        fi
-        #daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+
         cd $DET_RELEASE_DIR/../
         tar_and_stage_release ${DET_RELEASE_TAG}
     - name: upload spack nightly tarball for base release
