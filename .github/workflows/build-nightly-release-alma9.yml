@@ -68,8 +68,9 @@ jobs:
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
-        cd $DET_RELEASE_DIR/../
-        tar_and_stage_release ${DET_RELEASE_TAG}
+        cd $BASE_RELEASE_DIR/../
+        tar_and_stage_release ${BASE_RELEASE_TAG}
+
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v4
       with:
