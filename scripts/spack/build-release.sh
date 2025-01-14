@@ -131,7 +131,12 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             echo "SPACK_AREA: $SPACK_AREA"
             echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)"
             echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
+            echo "ls SPACK_AREA/spack-version/spack-repo:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION}/spack-repo)"
             echo "ls SPACK_AREA/spack-installation:\n $(ls $SPACK_AREA/spack-installation)"
+            echo "ls SPACK_AREA/spack-installation/spack-repo:\n $(ls $SPACK_AREA/spack-installation/spack-repo)"
+            echo "Diff between $SPACK_AREA/spack-${SPACK_VERSION} and $SPACK_AREA/spack-installation :"
+            diff -r $SPACK_AREA/spack-${SPACK_VERSION} $SPACK_AREA/spack-installation
+            echo "End diff"
             rm -rf ${SPACK_AREA}/sourcecode
             rm -rf ${SPACK_AREA}/spack-installation/spack-repo
             #rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
