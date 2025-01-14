@@ -132,11 +132,12 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)"
             echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
             echo "ls SPACK_AREA/spack-installation:\n $(ls $SPACK_AREA/spack-installation)"
-            rm -rf ${SPACK_AREA}/spack-installation
+            rm -rf ${SPACK_AREA}/sourcecode
+            rm -rf ${SPACK_AREA}/spack-installation/spack-repo
             #rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
             #rm -rf spack-${SPACK_VERSION}/spack-repo
             rm -rf spack-${SPACK_VERSION}/default
-            #spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
+            spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
             #bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" | tee dunedaq_build_spack_install.log
             bash -c "echo 'No more error!'; exit 0" 2>&1 | tee dunedaq_build_spack_install.log
             spack_install_exit_code=${PIPESTATUS[0]}
