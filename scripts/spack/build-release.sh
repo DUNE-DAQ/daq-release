@@ -131,6 +131,7 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             echo "SPACK_AREA: $SPACK_AREA"
             echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)"
             echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
+            echo "ls SPACK_AREA/spack-installation:\n $(ls $SPACK_AREA/spack-installation)"
             rm -rf ${SPACK_AREA}/spack-installation
             #rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
             #rm -rf spack-${SPACK_VERSION}/spack-repo
