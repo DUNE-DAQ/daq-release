@@ -129,9 +129,8 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             echo "Is fetch error = $is_fetch_error"
             echo "spack install exit code = $spack_install_exit_code"
             echo "SPACK_AREA: $SPACK_AREA"
-            echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)
-            echo "SPACK_AREA: $SPACK_AREA"
-            echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)
+            echo "ls SPACK_AREA:\n $(ls $SPACK_AREA)"
+            echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
             rm -rf ${SPACK_AREA}/spack-installation
             #rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
             #rm -rf spack-${SPACK_VERSION}/spack-repo
