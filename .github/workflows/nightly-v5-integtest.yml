@@ -145,7 +145,7 @@ jobs:
       run: |
         TIMESTAMP=$(date +"%Y-%m-%d")
         PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
-        echo "$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
+        echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
         mkdir -p $PERSISTENT_LOG_DIR
         cp -r /tmp/pytest-of-dunedaq/pytest-current/ $PERSISTENT_LOG_DIR
     - name: Upload logs as artifact
