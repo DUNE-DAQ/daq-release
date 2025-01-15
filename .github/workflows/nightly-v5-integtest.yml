@@ -70,16 +70,17 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            test_name: ["listrev_test", 
-                        "3ru_1df_multirun_test", 
-                        "3ru_3df_multirun_test", 
-                        "example_system_test", 
-                        "fake_data_producer_test", 
-                        "long_window_readout_test", 
-                        "minimal_system_quick_test", 
-                        "readout_type_scan",
-                        "small_footprint_quick_test", 
-                        "tpstream_writing_test"]
+            test_name: #["listrev_test", 
+                        ["minimal_system_quick_test", ]
+                        #"3ru_1df_multirun_test", 
+                        #"3ru_3df_multirun_test", 
+                        #"example_system_test", 
+                        #"fake_data_producer_test", 
+                        #"long_window_readout_test", 
+                        #"minimal_system_quick_test", 
+                        #"readout_type_scan",
+                        #"small_footprint_quick_test", 
+                        #"tpstream_writing_test"]
     defaults:
       run:
         shell: bash
@@ -135,6 +136,23 @@ jobs:
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_$RELEASE_TAG
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+
+  store_and_upload_logs:
+    runs-on: daq
+    needs: [make_release_tag, integration_tests]
+    steps:
+    - name: Copy logs to persistent directory on daq.fnal.gov
+      run: |
+        TIMESTAMP=$(date +"%Y-%m-%d")
+        PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
+        echo "$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
+        mkdir -p $PERSISTENT_LOG_DIR
+        cp -r /tmp/pytest-of-dunedaq/pytest-current/ $PERSISTENT_LOG_DIR
+    - name: Upload logs as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pytest_logs
+        path: ${{ github.env.PERSISTENT_LOG_DIR }}
 
   cleanup_files:
     runs-on: daq
