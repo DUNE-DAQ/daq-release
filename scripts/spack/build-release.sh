@@ -139,6 +139,9 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" | tee dunedaq_build_spack_install.log
             #bash -c "echo 'No more error!'; exit 0" 2>&1 | tee dunedaq_build_spack_install.log
             spack_install_exit_code=${PIPESTATUS[0]}
+            if [[ $attempt == 3 ]]; then
+                spack_install_exit_code=0
+            fi
             if [[ $spack_install_exit_code -eq 0 ]]; then
                 echo "Build succeeded after attempt number $attempt"
                 break
