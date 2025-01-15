@@ -97,7 +97,6 @@ if [[ $retval != 0 ]]; then
 fi
 
 spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
-bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
 spack_install_exit_code=${PIPESTATUS[0]}
 
 if [[ $spack_install_exit_code -ne 0 ]]; then
@@ -111,11 +110,7 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
             is_fetch_error=false
             echo " --- Build attempt number $attempt of $max_attempts --- "
             spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
-            bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
             spack_install_exit_code=${PIPESTATUS[0]}
-            if [[ $attempt == 3 ]]; then
-                spack_install_exit_code=0
-            fi
             if [[ $spack_install_exit_code -eq 0 ]]; then
                 echo "Build succeeded after attempt number $attempt"
                 break
