@@ -145,13 +145,14 @@ jobs:
       run: |
         TIMESTAMP=$(date +"%Y-%m-%d")
         PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
+        echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
         mkdir -p $PERSISTENT_LOG_DIR
         cp -r /tmp/pytest-of-dunedaq/pytest-current/ $PERSISTENT_LOG_DIR
     - name: Upload logs as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pytest_logs
+        name: pytest-logs-${{ env.TIMESTAMP }}
         path: ${{ env.PERSISTENT_LOG_DIR }}
 
   cleanup_files:
