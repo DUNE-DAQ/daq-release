@@ -139,6 +139,7 @@ jobs:
   store_and_upload_logs:
     runs-on: daq
     needs: [make_release_tag, integration_tests]
+    if: success() || failure()
     steps:
     - name: Copy logs to persistent directory on daq.fnal.gov
       run: |
