@@ -152,7 +152,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pytest_logs
-        path: ${{ github.env.PERSISTENT_LOG_DIR }}
+        path: ${{ env.PERSISTENT_LOG_DIR }}
 
   cleanup_files:
     runs-on: daq
