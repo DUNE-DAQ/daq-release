@@ -27,7 +27,7 @@ class Dpdk(MesonPackage):
     depends_on("py-pyelftools")
     depends_on("libbsd")
     depends_on("numactl")
-    depends_on("openssl")
+    #depends_on("openssl")
     depends_on("libarchive~iconv")
 
     def setup_run_environment(self, env):

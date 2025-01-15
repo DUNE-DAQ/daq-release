@@ -5,6 +5,7 @@
 
 from spack.package import *
 
+# JCF, Jan-14-2025: strip away dependency on Spack-installed openssl package, use system SSL instead
 
 class Libtorrent(CMakePackage):
 
@@ -18,26 +19,30 @@ class Libtorrent(CMakePackage):
     generator = 'Ninja'
     depends_on('ninja', type='build')
     depends_on('boost')
-    depends_on('openssl')
+    #depends_on('openssl')
 
     def cmake_args(self):
         args = ["-DCMAKE_CXX_STANDARD=17"]
         return args
 
     def setup_run_environment(self, env):
-        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        #env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prepend_path('LIBRARY_PATH', "/usr/lib64")  # JCF, Jan-25-2024: use system SSL
         env.prune_duplicate_paths('LIBRARY_PATH')
 
 
     def setup_build_environment(self, env):
-        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        #env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prepend_path('LIBRARY_PATH', "/usr/lib64")	# JCF, Jan-25-2024: use system SSL
         env.prune_duplicate_paths('LIBRARY_PATH')
 
     def setup_dependent_run_environment(self, env, dependent_spec):
-        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        #env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prepend_path('LIBRARY_PATH', "/usr/lib64")	# JCF, Jan-25-2024: use system SSL
         env.prune_duplicate_paths('LIBRARY_PATH')
 
 
     def setup_dependent_build_environment(self, env, dependent_spec):
-        env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        #env.prepend_path('LIBRARY_PATH', self.spec['openssl'].prefix.lib)
+        env.prepend_path('LIBRARY_PATH', "/usr/lib64")	# JCF, Jan-25-2024: use system SSL
         env.prune_duplicate_paths('LIBRARY_PATH')

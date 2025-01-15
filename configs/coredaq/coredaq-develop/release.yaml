@@ -27,7 +27,7 @@
           variant: "+mpi+threadsafe"
         - name: libarchive
           version: 3.7.1
-          variant: ~
+          variant: "crypto=systemssl"
         - name: libzmq
           version: 4.3.5
           variant: ~
@@ -88,11 +88,14 @@
         - name: cyrus-sasl
           version: 2.1.28
           variant: ~
+        - name: libevent
+          version: 2.1.12
+          variant: "~openssl"
 
     devtools:
         - name: cmake
           version: 3.26.3
-          variant: ~
+          variant: "~ownlibs"
         - name: gdb
           version: 14.1 
           variant: "~python"
@@ -103,7 +106,7 @@
     systems:
         - name: python
           version: 3.10.10
-          variant: ~
+          variant: "~ssl"
         - name: gcc
           version: 13.2.0
           variant: "+binutils"

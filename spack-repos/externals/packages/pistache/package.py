@@ -42,7 +42,7 @@ class Pistache(CMakePackage):
     version('fddaq-v5.3.0', commit="a54a4fab00252a9")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
-    depends_on('openssl')
+    #depends_on('openssl')
     depends_on('libpthread-stubs')
     depends_on('rapidjson')
 

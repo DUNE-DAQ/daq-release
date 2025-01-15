@@ -24,7 +24,7 @@ class Librdkafka(AutotoolsPackage):
 
     depends_on('zstd')
     depends_on('lz4')
-    depends_on('openssl')
+    #depends_on('openssl')
 
     # JCF, Jan-13-2025
     # librdkafka's shared object libraries link against SASL, so use a Spack-installed one rather than a system one to avoid link warnings (or worse)
