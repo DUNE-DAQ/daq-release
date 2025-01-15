@@ -112,7 +112,7 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-#spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log
 bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
 spack_install_exit_code=${PIPESTATUS[0]}
 
@@ -126,10 +126,6 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
         while [[ $is_fetch_error && $attempt -le $max_attempts ]]; do
             is_fetch_error=false
             echo " --- Attempt number $attempt of $max_attempts --- "
-            echo "Is fetch error = $is_fetch_error"
-            echo "spack install exit code = $spack_install_exit_code"
-            echo "SPACK_AREA: $SPACK_AREA"
-            echo "ls SPACK_AREA: $(ls $SPACK_AREA)"
             #echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
             #echo "ls SPACK_AREA/spack-version/spack-repo:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION}/spack-repo)"
             #echo "ls SPACK_AREA/spack-installation:\n $(ls $SPACK_AREA/spack-installation)"
