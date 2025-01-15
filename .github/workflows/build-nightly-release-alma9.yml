@@ -50,7 +50,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release
-        ref: amogan/issue422_scan_for_fetcherrors
     
     - name: Set environment variables
       run: |
