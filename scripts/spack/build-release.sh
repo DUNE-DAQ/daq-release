@@ -112,36 +112,21 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log
-bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" 2>&1 | tee dunedaq_build_spack_install.log
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
 spack_install_exit_code=${PIPESTATUS[0]}
 
 if [[ $spack_install_exit_code -ne 0 ]]; then
-    # In case of a transient connection error, try again
+    # In case of a transient connection error, retry up to two additional times
     if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
         is_fetch_error=true
         max_attempts=3
         attempt=2
-        echo "First build attempt failed due to a FetchError. Will retry up to $max_attempts times."
+        echo "First build attempt failed due to a FetchError. Will retry up to $((max_attempts - 1)) more times."
         while [[ $is_fetch_error && $attempt -le $max_attempts ]]; do
             is_fetch_error=false
-            echo " --- Attempt number $attempt of $max_attempts --- "
-            #echo "ls SPACK_AREA/spack-version:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION})"
-            #echo "ls SPACK_AREA/spack-version/spack-repo:\n $(ls $SPACK_AREA/spack-${SPACK_VERSION}/spack-repo)"
-            #echo "ls SPACK_AREA/spack-installation:\n $(ls $SPACK_AREA/spack-installation)"
-            #echo "ls SPACK_AREA/spack-installation/spack-repo:\n $(ls $SPACK_AREA/spack-installation/spack-repo)"
-            #rm -rf ${SPACK_AREA}/sourcecode
-            #rm -rf ${SPACK_AREA}/spack-installation/spack-repo
-            #rm -rf ${SPACK_AREA}/spack-${SPACK_VERSION}
-            #rm -rf spack-${SPACK_VERSION}/spack-repo
-            #rm -rf spack-${SPACK_VERSION}/default
+            echo " --- Build attempt number $attempt of $max_attempts --- "
             spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
-            bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 111" | tee dunedaq_build_spack_install.log
-            #bash -c "echo 'No more error!'; exit 0" 2>&1 | tee dunedaq_build_spack_install.log
             spack_install_exit_code=${PIPESTATUS[0]}
-            if [[ $attempt == 3 ]]; then
-                spack_install_exit_code=0
-            fi
             if [[ $spack_install_exit_code -eq 0 ]]; then
                 echo "Build succeeded after attempt number $attempt"
                 break
