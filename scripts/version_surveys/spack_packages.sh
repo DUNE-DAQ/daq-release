@@ -14,6 +14,11 @@ if [[ $PWD != $DBT_AREA_ROOT ]]; then
     return 2
 fi
 
+if [[ ! -d $DBT_AREA_ROOT/.spack ]]; then
+    echo "The work area needs to have been installed with the \"-s\" option (i.e., have a local Spack repo); this does not appear to be the case with $DBT_AREA_ROOT. Returning..." >&2
+    return 3
+fi
+
 tmpdir=$( mktemp -d )
 cd $tmpdir
 
