@@ -143,7 +143,7 @@
           version: v1.4.0
           commit: null
         - name: appfwk
-          version: v3.2.1
+          version: v3.2.2
           commit: null
         - name: listrev
           version: v4.2.0
