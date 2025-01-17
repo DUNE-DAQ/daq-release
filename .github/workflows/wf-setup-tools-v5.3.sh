@@ -173,7 +173,7 @@ function get_release_yaml() {
     if [[ $release_level == "base" ]]; then
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
-            echo -n "configs/coredaq/coredaq-v5.3-develop/release.yaml"
+            echo -n "configs/coredaq/coredaq-develop-v5.3/release.yaml"
         elif [[ $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/coredaq/coredaq-production_v4/release.yaml"
 	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
@@ -183,7 +183,7 @@ function get_release_yaml() {
     else
 
         if [[ $RELEASE_TYPE == "nightly" ]]; then
-            echo -n "configs/${release_level}daq/${release_level}daq-v5.3-develop/release.yaml"
+            echo -n "configs/${release_level}daq/${release_level}daq-develop-v5.3/release.yaml"
         elif [[ $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
         elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
