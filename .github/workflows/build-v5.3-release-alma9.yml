@@ -73,14 +73,14 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_coredaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NBT${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBT${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDT${NIGHTLY_TAG}
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools-v5.3.sh
 
@@ -97,7 +97,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NFDT${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
   update_image:
     name: update_spack_image_nightly
@@ -107,7 +107,7 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "development_v5${{ github.event.inputs.tag-prefix }}"
+            tag: "development_v5${{ github.event.inputs.tag-prefix }}T"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -140,11 +140,11 @@ jobs:
             mkdir -p nightly
 
             cd nightly
-            base_tag="NB${NIGHTLY_TAG}"
+            base_tag="NBT${NIGHTLY_TAG}"
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
-            fddaq_tag="NFD${NIGHTLY_TAG}"
+            fddaq_tag="NFDT${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
@@ -171,7 +171,7 @@ jobs:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}
+            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}T
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -187,7 +187,7 @@ jobs:
     runs-on: daq
     needs: [make_nightly_tag, update_image]
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}T
     defaults:
       run:
         shell: bash
@@ -202,7 +202,7 @@ jobs:
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n NFD${NIGHTLY_TAG}
+          dbt-setup-release -n NFDT${NIGHTLY_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -255,7 +255,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}T"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
@@ -270,7 +270,7 @@ jobs:
         docker rm $unique_name
         docker system prune -f
 
-        dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
+        dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFDT*" )
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
         cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
 
