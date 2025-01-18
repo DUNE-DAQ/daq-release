@@ -71,11 +71,10 @@ cmd="python3 scripts/spack/make-release-repo.py -u \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
   ${branch_arg} \
-  --overwrite-daq-cmake \
-  || exit 5"
+  --overwrite-daq-cmake"
 
 echo $cmd
-$cmd
+$cmd || exit 5
 
 cd $SPACK_AREA
 
@@ -122,7 +121,7 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
         -i ${release_yaml}"
 
     echo $cmd
-    $cmd
+    $cmd || exit 8
 
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate
