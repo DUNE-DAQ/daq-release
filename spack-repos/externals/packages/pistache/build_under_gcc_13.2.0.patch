@@ -1,0 +1,24 @@
+diff --git a/include/pistache/flags.h b/include/pistache/flags.h
+index 2538773..bba6493 100644
+--- a/include/pistache/flags.h
++++ b/include/pistache/flags.h
+@@ -9,6 +9,7 @@
+ #include <climits>
+ #include <iostream>
+ #include <type_traits>
++#include <cstdint>
+ 
+ namespace Pistache {
+ 
+diff --git a/include/pistache/typeid.h b/include/pistache/typeid.h
+index 18c3245..0710e73 100644
+--- a/include/pistache/typeid.h
++++ b/include/pistache/typeid.h
+@@ -11,6 +11,7 @@
+ 
+ #pragma once
+ 
++#include <cstddef>
+ #include <functional>
+ 
+ namespace Pistache {
