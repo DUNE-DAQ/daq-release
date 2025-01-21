@@ -30,7 +30,7 @@ if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
 fi
 
 export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
-. $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools-v5.3.sh || exit 3
+. $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
 if [[ $DET == "core" ]]; then
     export SPACK_AREA=$BASE_SPACK_AREA
@@ -70,8 +70,7 @@ cmd="python3 scripts/spack/make-release-repo.py -u \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
-  ${branch_arg} \
-  --overwrite-daq-cmake"
+  ${branch_arg}"
 
 echo $cmd
 $cmd || exit 5

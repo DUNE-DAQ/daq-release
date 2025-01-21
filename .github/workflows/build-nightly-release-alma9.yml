@@ -58,13 +58,13 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBU${NIGHTLY_TAG}
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDU${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools-v5.3.sh
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
           input_feature_branch=${{ github.event.inputs.feature-branch }}
           # For automatically triggered workflows where feature-branch is not set, fall back to default branch
           branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop-v5.3/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release-v5.3.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -82,13 +82,13 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBU${NIGHTLY_TAG}
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDU${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools-v5.3.sh
+          source daq-release/.github/workflows/wf-setup-tools.sh
 
           input_feature_branch=${{ github.event.inputs.feature-branch }}
           # For automatically triggered workflows where feature-branch is not set, fall back to default branch
           branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop-v5.3/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release-v5.3.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
