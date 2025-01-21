@@ -8,6 +8,7 @@ from spack import *
 import os
 import sys
 
+#class Pistache(MesonPackage):
 class Pistache(CMakePackage):
     """An elegant C++ REST framework."""
 
@@ -25,14 +26,35 @@ class Pistache(CMakePackage):
     # least) being identical between the ups product and the commit hash's, 
     # it's probably a safe bet that this is the hash we want
 
+    # JCF, Dec-5-2024
+
+    # Commit 6e59eb21b495a7a is just the current head of the master
+    # branch; except for an isolated incident in 2022 there are no
+    # Pistache tags. The hope is this will build correctly under gcc
+    # 13.2, which was not the case with the dunedaq-v2.8.0 version
+    # below
+
+    # JCF, Dec-17-2024
+
+    # fddaq-v5.3.0 and dunedaq-v2.8.0 are the same, except fddaq-v5.3.0 builds
+    # against gcc 13.2.0 because of a patch and dunedaq-v2.8.0 doesn't
+
+    version('fddaq-v5.3.0', commit="a54a4fab00252a9")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
-    depends_on('openssl')
+    #depends_on('openssl')
     depends_on('libpthread-stubs')
-    patch('pistache_gcc12.patch')
+    depends_on('rapidjson')
 
-    def patch(self):
-        os.mkdir(self.prefix + "/lib64")
+    #patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
+    patch('build_under_gcc_13.2.0.patch', when='@fddaq-v5.3.0')
+
+    def install(self, spec, prefix):
+
+        super().install(spec, prefix)
+        os.makedirs(self.prefix + "/lib64", exist_ok=True)
+
+        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
 
         copy(join_path(os.path.dirname(__file__),
              "PistacheConfig.cmake"), self.prefix + "/PistacheConfig.cmake")
@@ -42,8 +64,5 @@ class Pistache(CMakePackage):
              "PistacheTargets.cmake"), self.prefix + "/PistacheTargets.cmake")
         copy(join_path(os.path.dirname(__file__),
              "PistacheTargets-release.cmake"), self.prefix + "/PistacheTargets-release.cmake")
-
-    def install(self, spec, prefix):
-        super().install(spec, prefix)
-        os.system(f"cp -p {self.build_directory}/src/*.so* {self.prefix}/lib64")
-
+        copy(join_path(os.path.dirname(__file__),
+             "CMakeLists.txt"), self.stage.source_path + "/CMakeLists.txt")

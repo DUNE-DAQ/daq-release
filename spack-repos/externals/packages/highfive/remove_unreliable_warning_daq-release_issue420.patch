@@ -1,0 +1,15 @@
+diff --git a/CMake/HighFiveTargetDeps.cmake b/CMake/HighFiveTargetDeps.cmake
+index 8fddf39..4cf09db 100644
+--- a/CMake/HighFiveTargetDeps.cmake
++++ b/CMake/HighFiveTargetDeps.cmake
+@@ -29,10 +29,6 @@ if(NOT TARGET libdeps)
+     find_package(HDF5 REQUIRED)
+   endif()
+ 
+-  if(HIGHFIVE_PARALLEL_HDF5 AND NOT HDF5_IS_PARALLEL)
+-    message(WARNING "Parallel HDF5 requested but libhdf5 doesnt support it")
+-  endif()
+-
+   target_include_directories(libdeps SYSTEM INTERFACE ${HDF5_INCLUDE_DIRS})
+   target_link_libraries(libdeps INTERFACE ${HDF5_LIBRARIES})
+   target_compile_definitions(libdeps INTERFACE ${HDF5_DEFINITIONS})

@@ -11,12 +11,19 @@
     # ghcr.io/dune-daq/alma9-spack:latest
 
 # When in the container, run:
-# /daq-release/scripts/spack/build-ext.sh (false)   # Adding false means script tries to pick up where it left off
+# /daq-release/scripts/spack/build-ext.sh <niceness> (false)   # Adding false means script tries to pick up where it left off
 
-if [[ -z $1 ]]; then
+niceness=$1
+
+if ! [[ $niceness =~ ^[0-9]+$ ]]; then
+    echo 'Need to pass a first argument which is the integer passed to the Linux "nice" command for computation-intensive actions; please make this 0 or greater' >&2
+    exit 12
+fi
+
+if [[ -z $2 ]]; then
     fresh_build=true
 else
-    fresh_build=$1
+    fresh_build=$2
 fi
 
 if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARCH || ! -n $DAQ_RELEASE ]]; then
@@ -25,6 +32,8 @@ if [[ ! -n $EXT_VERSION || ! -n $SPACK_VERSION || ! -n $GCC_VERSION || ! -n $ARC
 fi
 
 starttime=$( date )
+
+thisdir="$(dirname "$(realpath "$0")")"
 
 export DAQ_RELEASE_DIR=/daq-release
 export STANDARD_SPACK_VERSION=0.20.0
@@ -69,7 +78,7 @@ if $fresh_build; then
 
 ### Step 2.1 -- add spack repos for external packages maintained by DUNE DAQ
 
-    cp -pr $DAQ_RELEASE_DIR/spack-repos/externals $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals
+    cp -rp $DAQ_RELEASE_DIR/spack-repos/externals $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals
     find $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-externals | xargs chmod a+rx  # Needed to ensure users' work areas will be able to access files here
 
 ### Step 2.2 -- add spack repos for DUNE DAQ packages
@@ -81,7 +90,9 @@ if $fresh_build; then
 -i configs/coredaq/coredaq-develop/release.yaml \
 -t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
--o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}"
+-o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION} \
+-b develop
+"
 
     echo $cmd
     $cmd
@@ -128,11 +139,11 @@ spack find gcc@${GCC_VERSION} +binutils arch=${ARCH}
 retval=$?
 
 if $fresh_build || [[ "$retval" != "0" ]]; then
-    spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
+    nice -n $niceness spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
 fi
 
-spack load gcc@${GCC_VERSION}
-spack compiler find
+spack load gcc@${GCC_VERSION} || exit 12
+spack compiler find || exit 13
 
 if [[ -e $HOME/.spack/linux/compilers.yaml ]]; then
     mv $HOME/.spack/linux/compilers.yaml  $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/
@@ -147,20 +158,24 @@ cp -rp $DAQ_RELEASE_DIR/spack-repos/externals/packages/umbrella $(spack location
 
 ## Step 5 -- check all specs, then install
 
-coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^glog@0.4.0"
+coredaq_spec="coredaq@${DAQ_RELEASE}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH}"
 
-dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:"
+dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15.9:~sql~ssl~tools"
 
-llvm_spec="llvm@15.0.7%gcc@12.1.0~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel~icu+iostreams~json+locale+log+math~mpi+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared+signals~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~versionedlayout+wave"
+
+llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-umbrella_spec="umbrella ^$coredaq_spec ^$gcc_spec ^$dbe_spec ^$llvm_spec"
+umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec"
+
+echo $umbrella_spec
 
 if $fresh_build || [[ ! -e umbrella_build_semaphore ]]; then
-    spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
-    spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
+    nice -n $niceness spack spec -l -t --reuse $umbrella_spec |& tee /log/spack_spec_umbrella.txt || exit 9
+    nice -n $niceness spack install --reuse $umbrella_spec |& tee /log/spack_install_umbrella.txt || exit 10
 
     rm -f umbrella_build_semaphore
     echo "The existence of this file means the umbrella package was built" > umbrella_build_semaphore
@@ -168,18 +183,19 @@ else
     echo "Spotted a file called $PWD/umbrella_build_semaphore; will skip spack install of the umbrella package"
 fi
 
-# overwrite ssh config
-SSH_INSTALL_DIR=$(spack location -i openssh)
-cp $DAQ_RELEASE_DIR/spack-repos/externals/packages/openssh/ssh_config $SSH_INSTALL_DIR/etc/ || exit 7
+## Step 6 -- install graphviz, useful for generating plots after
+## daqconf's create_config_plot program has created a DOT file
 
-## Step 6 -- remove DAQ packages and umbrella packages
+spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gtkplus~gts~java~libgd~pangocairo~poppler~qt~quartz~x build_system=autotools arch=${ARCH} || exit 11
+
+## Step 7 -- remove DAQ packages and umbrella packages
 
 for pkg in daq-cmake externals devtools systems; do
     echo "Uninstalling $pkg"
     spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
 done
 
-# Step 7 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
+# Step 8 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
 
 . $SPACK_EXTERNALS/spack-${SPACK_VERSION}/share/spack/setup-env.sh
 
@@ -191,9 +207,9 @@ for pkg in $build_only_packages; do
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
     echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
 done
 
 spack find -l | sort |& tee /log/externals_list.txt
