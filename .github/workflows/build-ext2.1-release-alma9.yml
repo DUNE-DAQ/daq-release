@@ -1,4 +1,4 @@
-name: Alma9 build v5 nightly release
+name: Alma9 build externals v2.1 nightly release
 
 on:
   schedule:
@@ -37,7 +37,7 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: daq
+    runs-on: protodune-daq01
     needs: make_nightly_tag
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
@@ -55,16 +55,16 @@ jobs:
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBT${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDT${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
+          source daq-release/.github/workflows/wf-setup-tools-ext2.1.sh
 
           input_feature_branch=${{ github.event.inputs.feature-branch }}
           # For automatically triggered workflows where feature-branch is not set, fall back to default branch
           branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop-ext2.1/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+          daq-release/scripts/spack/build-release-ext2.1.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
           cd $BASE_RELEASE_DIR/../
           tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -73,22 +73,22 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_coredaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NBT${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       env:
         NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
       run: |
-          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${NIGHTLY_TAG}
-          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${NIGHTLY_TAG}
+          export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NBT${NIGHTLY_TAG}
+          export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFDT${NIGHTLY_TAG}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
+          source daq-release/.github/workflows/wf-setup-tools-ext2.1.sh
 
           input_feature_branch=${{ github.event.inputs.feature-branch }}
           # For automatically triggered workflows where feature-branch is not set, fall back to default branch
           branch=${input_feature_branch:-"develop"}
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
-          daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop-ext2.1/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+          daq-release/scripts/spack/build-release-ext2.1.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
           cd $DET_RELEASE_DIR/../
           tar_and_stage_release ${DET_RELEASE_TAG}
@@ -97,17 +97,17 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/NFDT${{needs.make_nightly_tag.outputs.tag}}.tar.gz
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on: protodune-daq01
     strategy:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "development_v5${{ github.event.inputs.tag-prefix }}"
+            tag: "development_v5${{ github.event.inputs.tag-prefix }}T"
     needs: [build_the_develop_release_spack, make_nightly_tag] 
     environment: dockerhub
     permissions:
@@ -140,11 +140,11 @@ jobs:
             mkdir -p nightly
 
             cd nightly
-            base_tag="NB${NIGHTLY_TAG}"
+            base_tag="NBT${NIGHTLY_TAG}"
             tar xf ../${base_tag}.tar.gz
             rm -rf ../${base_tag}.tar.gz
 
-            fddaq_tag="NFD${NIGHTLY_TAG}"
+            fddaq_tag="NFDT${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
             test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
@@ -171,7 +171,7 @@ jobs:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}
+            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}T
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -184,10 +184,10 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: protodune-daq01
     needs: [make_nightly_tag, update_image]
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}T
     defaults:
       run:
         shell: bash
@@ -202,7 +202,7 @@ jobs:
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n NFD${NIGHTLY_TAG}
+          dbt-setup-release -n NFDT${NIGHTLY_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -222,7 +222,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: protodune-daq01
 
     steps:
     - name: check_cvmfs_deployment
@@ -255,7 +255,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5T${{ github.event.inputs.tag-prefix }}"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE

@@ -30,7 +30,7 @@ if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
 fi
 
 export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
-. $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
+. $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools-ext2.1.sh || exit 3
 
 if [[ $DET == "core" ]]; then
     export SPACK_AREA=$BASE_SPACK_AREA
@@ -87,7 +87,7 @@ python3 scripts/spack/make-release-repo.py -u \
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
 retval=$?
 
 cat $SPACK_AREA/spec_${DET}daq_log.txt 
@@ -98,7 +98,7 @@ fi
 
 build_dbe=false
 if [[ $DET == "core" ]]; then
-    spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+    spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
     cat $SPACK_AREA/spec_dbe_log.txt
@@ -112,10 +112,10 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
 
 if $build_dbe; then
-    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+    spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
