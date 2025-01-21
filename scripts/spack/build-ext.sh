@@ -91,8 +91,7 @@ if $fresh_build; then
 -t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
 -o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION} \
--b johnfreeman/build_against_externals_v2.2 \
---overwrite-daq-cmake
+-b develop
 "
 
     echo $cmd
