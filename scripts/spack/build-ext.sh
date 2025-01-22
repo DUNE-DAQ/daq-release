@@ -3,8 +3,8 @@
 # Example usage:
 
 # docker run -it --name <some useful name> \
-    # -e "EXT_VERSION=2.1" -e "DAQ_RELEASE=EXT2.1ADD" \
-    # -e "SPACK_VERSION=0.20.0" -e "GCC_VERSION=12.1.0" -e "ARCH=linux-almalinux9-x86_64" \
+    # -e "EXT_VERSION=2.2" -e "DAQ_RELEASE=EXT2.2ADD" \
+    # -e "SPACK_VERSION=0.22.0" -e "GCC_VERSION=13.2.0" -e "ARCH=linux-almalinux9-x86_64" \
     # -v <location of freshly-checked-out daq-release repo>:/daq-release \
     # -v <location of local directory for log output>:/log \
     # -v <location of local area for installation>:/cvmfs/dunedaq.opensciencegrid.org \
