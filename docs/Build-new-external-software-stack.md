@@ -20,8 +20,8 @@ once you're logged into `daq.fnal.gov` as `dunedaq`:
 1. Create a directory which will be the base of operations for your work, if you don't already have one
 1. Inside that directory, `git clone https://github.com/DUNE-DAQ/daq-release`
 1. Launch a container using the [example at the top of the `build-ext.sh` script as a guide](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/spack/build-ext.sh). Note that `<location of local area for installation>` here would be `/home/nfs/dunedaq/docker-scratch/cvmfs_dunedaq` (as of Jul-25-2024)
-1. Run `/daq-release/scripts/spack/build-ext.sh` if you want to build everything from scratch (which you do if this is your first time)
-1. _or_ `/daq-release/scripts/spack/build-ext.sh false` if you want to resume an externals build (e.g. because your ssh connection got broken)
+1. Run `/daq-release/scripts/spack/build-ext.sh <niceness value>` if you want to build everything from scratch (which you do if this is your first time). The `<niceness value>` is the integer which gets passed to the Linux `nice` command to determine the priority of the build relative to other people's work on the system. Set this to `0` if you want it to have equal priority, or a value higher than `0` (e.g. `10` or `15`) if you want to be nice and give priority to other people's work. 
+1. _or_ `/daq-release/scripts/spack/build-ext.sh <niceness value> false` if you want to resume an externals build (e.g. because your ssh connection got broken)
 
 (*) Here, use `${EXT_VERSION}` and `${SPACK_VERSION}` as stand-ins for the actual externals version (e.g., `2.1`) and Spack version (e.g., `0.22.0`)
 

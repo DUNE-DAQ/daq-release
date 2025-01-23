@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget pistache_shared pistache_static)
+foreach(_expectedTarget pistache_shared )
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -58,15 +58,6 @@ set_target_properties(pistache_shared PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "PISTACHE_USE_SSL"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include;${_IMPORT_PREFIX}/include"
   INTERFACE_LINK_LIBRARIES "OpenSSL::SSL;OpenSSL::Crypto"
-)
-
-# Create imported target pistache_static
-add_library(pistache_static STATIC IMPORTED)
-
-set_target_properties(pistache_static PROPERTIES
-  INTERFACE_COMPILE_DEFINITIONS "PISTACHE_USE_SSL"
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:Threads::Threads>;OpenSSL::SSL;OpenSSL::Crypto"
 )
 
 # Load information for each installed configuration.
