@@ -1,0 +1,292 @@
+diff --git a/src/EmuDataGenerator.cpp b/src/EmuDataGenerator.cpp
+index 9eab6ce..d6c9810 100644
+--- a/src/EmuDataGenerator.cpp
++++ b/src/EmuDataGenerator.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <stdlib.h>
+ 
+diff --git a/src/EmuDataGenerator.h b/src/EmuDataGenerator.h
+index fe77844..99eaaba 100644
+--- a/src/EmuDataGenerator.h
++++ b/src/EmuDataGenerator.h
+@@ -2,6 +2,7 @@
+ #define EMUDATAGENERATOR_H
+ 
+ #include <vector>
++#include <cstdint>
+ 
+ #include "Encoder8b10b.h"
+ 
+diff --git a/src/Encoder8b10b.cpp b/src/Encoder8b10b.cpp
+index 8774b8a..0754055 100644
+--- a/src/Encoder8b10b.cpp
++++ b/src/Encoder8b10b.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ 
+ #include "Encoder8b10b.h"
+diff --git a/src/Encoder8b10b.h b/src/Encoder8b10b.h
+index 07468c5..a45b5ee 100644
+--- a/src/Encoder8b10b.h
++++ b/src/Encoder8b10b.h
+@@ -1,6 +1,8 @@
+ #ifndef ENCODER8B10B_H
+ #define ENCODER8B10B_H
+ 
++#include <cstdint>
++
+ // Placeholders in the data to be replaced by appropriate control symbols
+ const uint32_t SOC_CODE   = 0x100;
+ const uint32_t EOC_CODE   = 0x200;
+diff --git a/src/FileWriter.h b/src/FileWriter.h
+index fbaf5b9..60ced06 100644
+--- a/src/FileWriter.h
++++ b/src/FileWriter.h
+@@ -2,6 +2,7 @@
+ #define FILEWRITER_H
+ 
+ #include <thread>
++#include <cstdint>
+ #include "flxdefs.h"
+ 
+ typedef int64_t  i64;
+diff --git a/src/FlxConfig.h b/src/FlxConfig.h
+index b7a5ef8..b2a3304 100644
+--- a/src/FlxConfig.h
++++ b/src/FlxConfig.h
+@@ -2,6 +2,7 @@
+ #define FLXCONFIG_H
+ 
+ #include <string>
++#include <cstdint>
+ 
+ #include "flxcard/FlxCard.h"
+ #include "flxdefs.h"
+diff --git a/src/FlxDaq.h b/src/FlxDaq.h
+index 8f7fb8b..f42fbdf 100644
+--- a/src/FlxDaq.h
++++ b/src/FlxDaq.h
+@@ -2,6 +2,7 @@
+ #define FLXDAQ_H
+ 
+ #include <string>
++#include <cstdint>
+ 
+ class FlxReceiver;
+ class FileWriter;
+diff --git a/src/FlxReceiver.h b/src/FlxReceiver.h
+index bf90efa..1f9f7b6 100644
+--- a/src/FlxReceiver.h
++++ b/src/FlxReceiver.h
+@@ -3,6 +3,7 @@
+ 
+ #include <thread>
+ #include <mutex>
++#include <cstdint>
+ 
+ typedef int64_t  i64;
+ typedef uint64_t u64;
+diff --git a/src/FlxStrips.h b/src/FlxStrips.h
+index 24d1f7f..79590ef 100644
+--- a/src/FlxStrips.h
++++ b/src/FlxStrips.h
+@@ -4,6 +4,7 @@
+ #include <string>
+ #include <memory>
+ #include <map>
++#include <cstdint>
+ #include "FlxUpload.h"
+ 
+ using namespace std;
+diff --git a/src/FlxTrailerFormat.h b/src/FlxTrailerFormat.h
+index 3743910..f6ab2b4 100644
+--- a/src/FlxTrailerFormat.h
++++ b/src/FlxTrailerFormat.h
+@@ -1,6 +1,8 @@
+ #ifndef FLXTRAILERFORMAT_H
+ #define FLXTRAILERFORMAT_H
+ 
++#include <cstdint>
++
+ class FlxTrailerFormat
+ {
+  public:
+diff --git a/src/FlxUpload.h b/src/FlxUpload.h
+index 007bef6..6fa8431 100644
+--- a/src/FlxUpload.h
++++ b/src/FlxUpload.h
+@@ -5,6 +5,7 @@
+ #include <vector>
+ #include <list>
+ #include <fstream>
++#include <cstdint>
+ 
+ #include "cmem_rcc/cmem_rcc.h"
+ #include "flxcard/FlxCard.h"
+diff --git a/src/GbtConfig.h b/src/GbtConfig.h
+index b7a16a8..998dac7 100644
+--- a/src/GbtConfig.h
++++ b/src/GbtConfig.h
+@@ -1,6 +1,8 @@
+ #ifndef GBTCONFIG_H
+ #define GBTCONFIG_H
+ 
++#include <cstdint>
++
+ #include "flxdefs.h"
+ 
+ // Map from Elink-PROC enabled bitmask to E-path (FIFO)
+diff --git a/src/GbtConfig5.h b/src/GbtConfig5.h
+index 0d17b2d..812ed45 100644
+--- a/src/GbtConfig5.h
++++ b/src/GbtConfig5.h
+@@ -2,6 +2,7 @@
+ #define GBTCONFIG5_H
+ 
+ #include "flxdefs.h"
++#include <cstdint>
+ 
+ enum {
+   LINKMODE_GBT = 0,
+diff --git a/src/I2cGpio.h b/src/I2cGpio.h
+index c0aff72..f2014ff 100644
+--- a/src/I2cGpio.h
++++ b/src/I2cGpio.h
+@@ -4,6 +4,8 @@
+ #include "FlxUpload.h"
+ #include "FlxReceiver.h"
+ 
++#include <cstdint>
++
+ // ----------------------------------------------------------------------------
+ 
+ // Bits and bit masks
+diff --git a/src/JtagPort.h b/src/JtagPort.h
+index 2ddbe38..9b625eb 100644
+--- a/src/JtagPort.h
++++ b/src/JtagPort.h
+@@ -2,6 +2,7 @@
+ #define JTAGPORT_H
+ 
+ #include <vector>
++#include <cstdint>
+ 
+ #include "FlxUpload.h"
+ #include "FlxReceiver.h"
+diff --git a/tools/fcap.cpp b/tools/fcap.cpp
+index 2a257a8..9355873 100644
+--- a/tools/fcap.cpp
++++ b/tools/fcap.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/felink.cpp b/tools/felink.cpp
+index 2ee8d51..cada101 100644
+--- a/tools/felink.cpp
++++ b/tools/felink.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/femu.cpp b/tools/femu.cpp
+index d03aab8..d5f1c3e 100644
+--- a/tools/femu.cpp
++++ b/tools/femu.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/fexoff.cpp b/tools/fexoff.cpp
+index bbdccbe..bfbcc66 100644
+--- a/tools/fexoff.cpp
++++ b/tools/fexoff.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/ffmemu.cpp b/tools/ffmemu.cpp
+index 7a7e888..2df6975 100644
+--- a/tools/ffmemu.cpp
++++ b/tools/ffmemu.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/fgpolarity.cpp b/tools/fgpolarity.cpp
+index 50eea6f..f238374 100644
+--- a/tools/fgpolarity.cpp
++++ b/tools/fgpolarity.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/fpepo.cpp b/tools/fpepo.cpp
+index 215be14..ec9fd37 100644
+--- a/tools/fpepo.cpp
++++ b/tools/fpepo.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/fttcbusy.cpp b/tools/fttcbusy.cpp
+index 37aa742..799f071 100644
+--- a/tools/fttcbusy.cpp
++++ b/tools/fttcbusy.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/fttcemu.cpp b/tools/fttcemu.cpp
+index 97234f3..9ce7662 100644
+--- a/tools/fttcemu.cpp
++++ b/tools/fttcemu.cpp
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ using namespace std;
+ #include <unistd.h>
+ 
+diff --git a/tools/ic.h b/tools/ic.h
+index 48640a1..b8cff21 100644
+--- a/tools/ic.h
++++ b/tools/ic.h
+@@ -1,4 +1,6 @@
+ 
++#include <cstdint>
++
+ bool writeIcRegs   ( FlxUpload *fup, FlxReceiver *frecvr,
+                      int linknr, int i2c_addr,
+                      int reg_addr, int nbytes, uint8_t *reg_vals,

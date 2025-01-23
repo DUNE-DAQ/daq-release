@@ -66,7 +66,7 @@ class Grpc(CMakePackage):
     )
 
     depends_on("protobuf")
-    depends_on("openssl")
+    #depends_on("openssl")
     depends_on("zlib")
     depends_on("c-ares")
     depends_on("abseil-cpp", when="@1.27:")
