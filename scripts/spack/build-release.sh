@@ -64,30 +64,21 @@ cd $DAQ_RELEASE_REPO
 
 spack_template_dir=spack-repos/${DET}daq-repo-template
 
-echo python3 scripts/spack/make-release-repo.py -u \
+cmd="python3 scripts/spack/make-release-repo.py -u \
   -i ${release_yaml} \
   -t $spack_template_dir \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-installation \
   ${base_release_arg} \
-  ${branch_arg} \
-  || exit 5
+  ${branch_arg}"
 
-
-python3 scripts/spack/make-release-repo.py -u \
-  -i ${release_yaml} \
-  -t $spack_template_dir \
-  -r ${RELEASE_TAG} \
-  -o ${SPACK_AREA}/spack-installation \
-  ${base_release_arg} \
-  ${branch_arg} \
-  || exit 5
-
+echo $cmd
+$cmd || exit 5
 
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
 retval=$?
 
 cat $SPACK_AREA/spec_${DET}daq_log.txt 
@@ -98,7 +89,7 @@ fi
 
 build_dbe=false
 if [[ $DET == "core" ]]; then
-    spack spec -l --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+    spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
     cat $SPACK_AREA/spec_dbe_log.txt
@@ -112,7 +103,7 @@ if [[ $DET == "core" ]]; then
     fi
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
 spack_install_exit_code=${PIPESTATUS[0]}
 
 if [[ $spack_install_exit_code -ne 0 ]]; then
@@ -147,7 +138,7 @@ if [[ $spack_install_exit_code -ne 0 ]]; then
 fi
 
 if $build_dbe; then
-    spack install --reuse dbe%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+    spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
@@ -155,16 +146,13 @@ if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     spack load ${DET}daq@${RELEASE_TAG} || exit 9
 
     cd $DAQ_RELEASE_REPO
-    echo /usr/bin/python3 scripts/spack/make-release-repo.py \
+    cmd="/usr/bin/python3 scripts/spack/make-release-repo.py \
         -o ${SPACK_AREA} \
         --pyvenv-requirements \
-        -i ${release_yaml}
+        -i ${release_yaml}"
 
-    /usr/bin/python3 scripts/spack/make-release-repo.py \
-        -o ${SPACK_AREA} \
-        --pyvenv-requirements \
-        -i ${release_yaml} \
-        || exit 10
+    echo $cmd
+    $cmd || exit 8
 
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate
