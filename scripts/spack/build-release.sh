@@ -127,7 +127,27 @@ while true; do
 done
 
 if $build_dbe; then
-    spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 8
+    dbe_attempt=1
+    max_dbe_build_attempts=3
+    while true; do
+        spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
+        spack_install_dbe_exit_code=${PIPESTATUS[0]}
+        if [[ $spack_install_dbe_exit_code -eq 0 ]]; then
+            echo "dbe build succeeded on attempt number $dbe_attempt"
+            break
+        fi
+        if grep -qi "==> Error: FetchError: All fetchers failed" dbe_build_spack_install.log; then
+            echo "Attempt $attempt failed due to a FetchError."
+        else
+            echo "Build failed with a non-retryable exit code. Exiting..."
+            exit $spack_install_dbe_exit_code
+        fi
+        if [[ $dbe_attempt -ge $max_dbe_build_attempts ]]; then
+            echo "All retry attempts failed due to FetchError. Exiting."
+            exit 111
+        fi
+        attempt=$((attempt + 1))
+    done
 fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
