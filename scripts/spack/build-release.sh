@@ -120,6 +120,7 @@ while true; do
     fi
     if [[ $attempt -gt 1 && $DET == "fd" ]]; then
         bash -c "echo 'Simulating a non-retryable exit code; exit 42" | tee dunedaq_build_spack_install.log || true
+        spack_install_exit_code=${PIPESTATUS[0]}
     fi
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
