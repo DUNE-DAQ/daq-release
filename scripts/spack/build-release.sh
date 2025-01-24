@@ -106,7 +106,7 @@ fi
 attempt=1
 max_attempts=3
 while true; do
-    echo " --- Build attempt number $attempt of $max_attempts --- "
+    echo " --- ${DET}daq build attempt number $attempt of $max_attempts --- "
     spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
@@ -131,6 +131,7 @@ if $build_dbe; then
     dbe_attempt=1
     max_dbe_build_attempts=3
     while true; do
+        echo " --- dbe build attempt number $dbe_attempt of $max_dbe_build_attempts --- "
         spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
         spack_install_dbe_exit_code=${PIPESTATUS[0]}
         if [[ $spack_install_dbe_exit_code -eq 0 ]]; then
