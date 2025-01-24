@@ -147,7 +147,6 @@ jobs:
             fddaq_tag="NFDT${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
