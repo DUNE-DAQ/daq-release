@@ -107,8 +107,21 @@ attempt=1
 max_attempts=3
 while true; do
     echo " --- Build attempt number $attempt of $max_attempts --- "
-    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
-    spack_install_exit_code=${PIPESTATUS[0]}
+    #spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
+    #spack_install_exit_code=${PIPESTATUS[0]}
+    spack_install_exit_code=0
+    if [[ $attempt -eq 1 && $DET == "core" ]]; then 
+        bash -c "==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
+        spack_install_exit_code=${PIPESTATUS[0]}
+    fi
+    if [[ $attempt -eq 1 && $DET == "fd" ]]; then
+        bash -c "==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
+        spack_install_exit_code=${PIPESTATUS[0]}
+    fi
+    if [[ $attempt -gt 1 && $DET == "fd" ]]; then
+        bash -c "Simulating a non-retryable exit code; exit 42" | tee dunedaq_build_spack_install.log || true
+    fi
+
     if [[ $spack_install_exit_code -eq 0 ]]; then
         echo "Build succeeded on attempt number $attempt"
         break
