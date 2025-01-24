@@ -111,15 +111,15 @@ while true; do
     #spack_install_exit_code=${PIPESTATUS[0]}
     spack_install_exit_code=0
     if [[ $attempt -eq 1 && $DET == "core" ]]; then 
-        bash -c "==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
+        bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
         spack_install_exit_code=${PIPESTATUS[0]}
     fi
     if [[ $attempt -eq 1 && $DET == "fd" ]]; then
-        bash -c "==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
+        bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" | tee dunedaq_build_spack_install.log || true
         spack_install_exit_code=${PIPESTATUS[0]}
     fi
     if [[ $attempt -gt 1 && $DET == "fd" ]]; then
-        bash -c "Simulating a non-retryable exit code; exit 42" | tee dunedaq_build_spack_install.log || true
+        bash -c "echo 'Simulating a non-retryable exit code; exit 42" | tee dunedaq_build_spack_install.log || true
     fi
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
