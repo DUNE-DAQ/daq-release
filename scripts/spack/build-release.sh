@@ -109,11 +109,6 @@ while true; do
     echo " --- Build attempt number $attempt of $max_attempts --- "
     spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
-    # Intentional failure on each attempt
-    if [[ $DET == "fd" ]]; then
-        bash -c "echo '==> Error: FetchError: All fetchers failed'; exit 42" 2>&1 | tee dunedaq_build_spack_install.log
-        spack_install_exit_code=${PIPESTATUS[0]}
-    fi
     if [[ $spack_install_exit_code -eq 0 ]]; then
         echo "Build succeeded on attempt number $attempt"
         break
