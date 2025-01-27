@@ -43,9 +43,11 @@ jobs:
             ]
           }
     - name: Send success message to Slack
-      uses: slackapi/slack-github-action@v1.27.0
-      if: ${{ inputs.workflow_success }}
+      uses: slackapi/slack-github-action@v2.0.0
+      if: ${{ ! inputs.workflow_success }}
       with:
+        webhook: ${{ secrets.slack_webhook_url }}
+        webhook-type: incoming-webhook
         payload: |
           {
             "blocks": [
