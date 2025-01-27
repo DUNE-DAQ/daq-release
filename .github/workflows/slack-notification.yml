@@ -20,12 +20,7 @@ jobs:
         repository: DUNE-DAQ/daq-release
         path: daq-release
         ref: amogan/improved_slack_messaging
-  check_for_payload:
-    name: Check payload exists
-    needs: checkout_daq_release
-    runs-on: ubuntu-latest
-    steps:
-    - name: ls for payload
+    - name: Check for payload
       run: |
         echo -e "Currently in $(pwd). Contents:\n $(ls)"
         echo "Github workspace: ${{ github.workspace }}"
@@ -34,12 +29,7 @@ jobs:
         cat ./daq-release/.github/workflows/slack-notification-success.json || true
         echo -e "Try to cat $GITHUB_WORKSPACE/daq-release/.github/workflows/slack-notification-success.json"...
         cat ${{ github.workspace }}/daq-release/.github/workflows/slack-notification-success.json || true
-  notify:
-    name: Send Slack Notification
-    needs: checkout_daq_release
-    runs-on: ubuntu-latest
-    steps:
-    - name: Send failure message to Slack
+    - name: Send Slack Notification
       uses: slackapi/slack-github-action@v2.0.0
       if: ${{ ! inputs.workflow_success }}
       with:
