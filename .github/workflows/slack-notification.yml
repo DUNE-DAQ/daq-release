@@ -48,4 +48,4 @@ jobs:
       with:
         webhook: ${{ secrets.slack_webhook_url }}
         webhook-type: incoming-webhook
-        payload-file-path: "./.github/workflows/slack-notification-success.yml
+        payload-file-path: "./.github/workflows/slack-notification-success.json"
