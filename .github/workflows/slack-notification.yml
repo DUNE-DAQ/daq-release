@@ -21,6 +21,8 @@ jobs:
         path: daq-release
         ref: amogan/improved_slack_messaging
   check_for_payload:
+    name: Check payload exists
+    needs: checkout_daq_release
     runs-on: ubuntu-latest
     steps:
     - name: ls for payload
@@ -30,6 +32,7 @@ jobs:
         cat ./daq-release/.github/workflows/slack-notification-success.json || true
   notify:
     name: Send Slack Notification
+    needs: checkout_daq_release
     runs-on: ubuntu-latest
     steps:
     - name: Send failure message to Slack
