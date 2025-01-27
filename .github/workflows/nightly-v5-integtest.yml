@@ -170,4 +170,4 @@ jobs:
     with:
       workflow_success: ${{ needs.integration_tests.result == 'success' }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
