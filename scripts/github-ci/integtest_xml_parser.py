@@ -22,9 +22,11 @@ def parse_junit_xml(file_path):
     for testcase in root.findall(".//testcase"):
         test_name = testcase.get("name").split("[")[0]
         result = "passed"
+        failure_message = None
         
         if testcase.find("failure") is not None:
             result = "failed"
+            failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
         elif testcase.find("error") is not None:
             result = "error"
         elif testcase.find("skipped") is not None:
@@ -33,7 +35,8 @@ def parse_junit_xml(file_path):
         results.append({
             "test_suite_name": test_suite_name,
             "test_name": test_name,
-            "result": result
+            "result": result,
+            "failure_message": failure_message
         })
     return results
 
@@ -95,10 +98,17 @@ def main():
     parser.add_argument("--input-directory", "-d",
                         help="Path to the directory containing junit xml files.")
     parser.add_argument("--input-file", "-i",
-                        help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory")
-    parser.add_argument("--output-markdown-file", "-o", 
-                        default="pytest_summary_table.md",
-                        help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
+                        help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory.")
+    parser.add_argument("--generate-markdown", "-m", action="store_true",
+                        help="Whether to generate a markdown summary table for use in $GITHUB_STEP_SUMMARY.")
+    parser.add_argument("---markdown-file-name",
+                        default=None,
+                        help="Optional name of the output markdown file. If not provided, defaults to 'pytest_summary_table.md' when --generate-markdown is set.")
+    parser.add_argument("--generate-json", "-j", action="store_true",
+                        help="Whether to generate a json payload for use in slack-github-action.")
+    parser.add_argument("---json-file-name", 
+                        default=None,
+                        help="Optional name of the output markdown file. If not provided, defaults to 'pytest_summary_table.md' when --generate-markdown is set.")
     
     args = parser.parse_args()
 
@@ -106,30 +116,29 @@ def main():
         print(f"Error: You must specify either an input directory or a specific file, not both.")
         exit(1)
 
+    if args.generate_markdown and not args.output_markdown_file:
+        args.output_markdown_file = "pytest_summary_table.md"
+
     test_results = []
 
     if args.input_directory:
         if not os.path.isdir(args.input_directory):
-            print(f"Error: {args.input_directory} is not a valid directory.")
-            exit(2)
+            raise FileNotFoundError(f"Error: {args.input_directory} is not a valid directory.")
 
         xml_files = get_xml_files(args.input_directory, "*.xml")
         if not xml_files:
-            print(f"Error: No xml files found in {args.input_directory}.")
-            exit(3)
+            raise FileNotFoundError(f"Error: No xml files found in {args.input_directory}.")
 
         for file in xml_files:
             test_results.append(parse_junit_xml(file))
 
     elif args.input_file:
         if not os.path.isfile(args.input_file):
-            print(f"Error: Input file {args.input_file} is invalid.")
-            exit(4)
-    
+            raise FileNotFoundError(f"Error: Input file {args.input_file} is invalid.")
         test_results.append(parse_junit_xml(args.input_file))
+
     else:
-        print(f"Error: No input file or directory specified. Exiting...")
-        exit(5)
+        raise FileNotFoundError(f"Error: No input file or directory specified. Exiting...")
 
     generate_markdown_table(test_results, args.output_markdown_file)
     prepend_test_summary(args.output_markdown_file)
