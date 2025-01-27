@@ -24,7 +24,7 @@ def parse_junit_xml(file_path):
         result = "passed"
         failure_message = None
         
-        if testcase.find("failure") is not None:
+        if (failure_element := testcase.find("failure")) is not None:
             result = "failed"
             failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
         elif testcase.find("error") is not None:
@@ -102,11 +102,6 @@ def main():
     parser.add_argument("--generate-markdown", "-m", action="store_true",
                         help="Whether to generate a markdown summary table for use in $GITHUB_STEP_SUMMARY.")
     parser.add_argument("---markdown-file-name",
-                        default=None,
-                        help="Optional name of the output markdown file. If not provided, defaults to 'pytest_summary_table.md' when --generate-markdown is set.")
-    parser.add_argument("--generate-json", "-j", action="store_true",
-                        help="Whether to generate a json payload for use in slack-github-action.")
-    parser.add_argument("---json-file-name", 
                         default=None,
                         help="Optional name of the output markdown file. If not provided, defaults to 'pytest_summary_table.md' when --generate-markdown is set.")
     
