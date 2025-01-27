@@ -11,6 +11,16 @@ on:
         required: true
 
 jobs:
+  check_for_payload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: ls for payload
+      run: |
+        echo -e "Currently in $(pwd). Contents:\n $(ls)"
+        echo -e "Try to cat ./.github/workflows/slack-notification-success.json"...
+        cat ./.github/workflows/slack-notification-success.json
+        echo -e "Try to cat ./daq-release-integtest/.github/workflows/slack-notification-success.json"...
+        cat ./daq-release-integtest.github/workflows/slack-notification-success.json
   notify:
     name: Send Slack Notification
     runs-on: ubuntu-latest
