@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
+        "text": "Full report: https://github.com/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}|link>."
       }
     }
   ]
