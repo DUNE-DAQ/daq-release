@@ -1,4 +1,4 @@
-import os
+import os, sys
 import argparse
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -112,6 +112,10 @@ def main():
     
     args = parser.parse_args()
 
+    if len(sys.argv) == 1:
+        parser.print_usage()
+        exit(1)
+
     if args.input_directory and args.input_file:
         print(f"Error: You must specify either an input directory or a specific file, not both.")
         exit(1)
@@ -138,10 +142,11 @@ def main():
         test_results.append(parse_junit_xml(args.input_file))
 
     else:
-        raise FileNotFoundError(f"Error: No input file or directory specified. Exiting...")
+        raise RuntimeError(f"Error: No input file or directory specified. Exiting...")
 
-    generate_markdown_table(test_results, args.output_markdown_file)
-    prepend_test_summary(args.output_markdown_file)
+    if args.generate_markdown:
+        generate_markdown_table(test_results, args.output_markdown_file)
+        prepend_test_summary(args.output_markdown_file)
 
 if __name__ == "__main__":
     main()
