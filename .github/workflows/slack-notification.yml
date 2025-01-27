@@ -28,8 +28,12 @@ jobs:
     - name: ls for payload
       run: |
         echo -e "Currently in $(pwd). Contents:\n $(ls)"
+        echo "Github workspace: ${{ github.workspace }}"
+        echo "Github workspace contents: $(ls ${{ github.workspace }})"
         echo -e "Try to cat ./daq-release/.github/workflows/slack-notification-success.json"...
         cat ./daq-release/.github/workflows/slack-notification-success.json || true
+        echo -e "Try to cat $GITHUB_WORKSPACE/daq-release/.github/workflows/slack-notification-success.json"...
+        cat ${{ github.workspace }}/daq-release/.github/workflows/slack-notification-success.json || true
   notify:
     name: Send Slack Notification
     needs: checkout_daq_release
