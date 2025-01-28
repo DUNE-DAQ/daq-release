@@ -11,56 +11,36 @@ on:
         required: true
 
 jobs:
-  checkout_daq_release:
-    runs-on: ubuntu-latest
+  generate_and_send_slack_message:
+    runs-on: daq
     steps:
     - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
         repository: DUNE-DAQ/daq-release
-        path: daq-release
+        path: daq-release-slack-message
         ref: amogan/improved_slack_messaging
-    - name: Check for payload
+    - name: Get workflow failures from GitHub API
       run: |
-        echo -e "Currently in $(pwd). Contents:\n $(ls)"
-        echo "Github workspace: ${{ github.workspace }}"
-        echo "Github workspace contents: $(ls ${{ github.workspace }})"
-        echo -e "Try to cat ./daq-release/.github/workflows/slack-notification-success.json"...
-        cat ./daq-release/.github/workflows/slack-notification-success.json || true
-        echo -e "Try to cat $GITHUB_WORKSPACE/daq-release/.github/workflows/slack-notification-success.json"...
-        cat ${{ github.workspace }}/daq-release/.github/workflows/slack-notification-success.json || true
-    - name: Send Slack Notification
+        #gh api /repos/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}/jobs \
+        gh api /repos/${{ github.repository.full_name }}/actions/runs/${{ github.run_id }}/jobs \
+        | jq '[.jobs[] | select(.conclusion == "failure") | {job: .name, steps: (.steps[] | select(.conclusion == "failure") | {name: .name})}]' \
+        | tee failed_jobs.json
+    - name: Parse GitHub API output
+      run: |
+        ls ${{ github.workspace }}/daq-release-slack-message/scripts/github-ci
+        cd ${{ github.workspace }}/daq-release-slack-message/scripts/github-ci
+        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json
+        # The script above should output slack_payload.json
+        cat slack_payload.json
+    - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.0.0
-      if: ${{ ! inputs.workflow_success }}
       with:
         webhook: ${{ secrets.slack_webhook_url }}
         webhook-type: incoming-webhook
-        # For posting a rich message using Block Kit
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": ":rotating_light: Failed: ${{ github.workflow }} :rotating_light:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Full report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|link>."
-                }
-              }
-            ]
-          }
-    - name: Send success message to Slack
-      uses: slackapi/slack-github-action@v2.0.0
-      if: ${{ inputs.workflow_success }}
-      with:
-        webhook: ${{ secrets.slack_webhook_url }}
-        webhook-type: incoming-webhook
-        payload-file-path: "./daq-release/.github/workflows/slack-notification-success.json"
+        payload-file-path: "./slack_payload.json"
         payload-templated: true
+    - name: Cleanup files
+      run: |
+        rm failed_jobs.json slack_payload.json
+        rm -rf daq-release-slack-message
