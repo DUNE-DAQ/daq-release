@@ -54,7 +54,7 @@ def create_failure_payload(failed_jobs):
                 "text": {
                     "type": "plain_text",
                     "text": ":x: Failure: ${{ github.workflow }} :x:",
-                    "emoji": True
+                    "emoji": true
                 }
             },
             {
