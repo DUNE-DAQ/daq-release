@@ -1,16 +1,29 @@
+import sys
 import json
 import argparse
 
-def generate_payload(outcome, failed_steps=None, failed_tests=None):
-    """Generate the appropriate payload based on the workflow outcome."""
-    if outcome == "success":
-        return create_success_payload()
-    elif outcome == "failure":
-        return create_failure_payload(failed_steps)
-    elif outcome == "test_failure":
-        return create_integration_test_failure_payload(failed_tests)
+def get_failed_jobs(api_output_path):
+    """
+    Load the JSON file output from GitHub API call which checks for failed jobs and steps. 
+    """
+    try:
+        with open(api_output_path, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+
+def generate_payload(failed_jobs):
+    """
+    Top-level payload generator function that determines which payload to generate based on 
+    the presence of job failures. The failure information is parsed to generate a message 
+    payload in Slack's BlockKit format.  
+    """
+    slack_payload = None
+    if not failed_jobs:
+        slack_payload = create_success_payload()
     else:
-        raise ValueError(f"Invalid input: {outcome}")
+        slack_payload = create_failure_payload(failed_jobs)
+    return slack_payload
 
 def create_success_payload():
     return {
@@ -33,16 +46,65 @@ def create_success_payload():
         ]
     }
 
-def create_failure_payload():
-    pass
+def create_failure_payload(failed_jobs):
+    slack_failure_payload = {
+        "blocks": [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": ":x: Failure: ${{ github.workflow }} :x:",
+                    "emoji": True
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Full report: <https://github.com/DUNE-DAQ/daq-release/actions/runs/<RUN_ID>|View Workflow>"
+                }
+            }
+        ]
+    }
+    failed_jobs_text = "*Failed jobs and steps:*\n"
+    for job in failed_jobs:
+        failed_jobs_text += f"*Job name*: {job}"
+        failed_jobs_text += f"*Failed step: {job['steps']}*"
+
+    slack_failure_payload["blocks"].append({
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": failed_jobs_text
+        }
+    })
+
+    return slack_failure_payload
 
 def create_integration_test_failure_payload():
     from .integtest_xml_parser import parse_junit_xml
+    pass
+
+def write_payload_to_file(payload, file_name='slack_payload.json'):
+    try:
+        with open(file_name, "w") as file:
+            json.dump(payload, file)
+        print(f"Payload written to {file_name}")
+    except Exception as e:
+        print(f"Failed to write payload to file: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
-    parser.add_argument("--workflow-status", required=True, type=str
-                        help="Status of the workflow, e.g., success or failure.")
+    parser = argparse.ArgumentParser(description="Parse a workflow summary and generate a Slack message payload.")
+    parser.add_argument("--api-output", required=True,
+                        help="json file containing a summary of failed jobs, obtained from GitHub API call.")
+    args = parser.parse_args()
+    if len(sys.argv) == 1:
+        parser.print_usage()
+
+    failed_jobs = get_failed_jobs(args.api_output)
+
+    payload = generate_payload(failed_jobs)
+    write_payload_to_file(payload)
     
 if __name__ == "__main__":
     main()
