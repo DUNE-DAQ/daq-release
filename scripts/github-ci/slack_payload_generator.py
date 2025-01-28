@@ -10,7 +10,34 @@ def generate_payload(outcome, failed_steps=None, failed_tests=None):
     elif outcome == "test_failure":
         return create_integration_test_failure_payload(failed_tests)
     else:
-        raise ValueError(f"Unknown outcome: {outcome}")
+        raise ValueError(f"Invalid input: {outcome}")
+
+def create_success_payload():
+    return {
+        "blocks": [
+            {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
+                "emoji": true
+            }
+            },
+            {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Full report: <https://github.com/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}|link>."
+            }
+            }
+        ]
+    }
+
+def create_failure_payload():
+    pass
+
+def create_integration_test_failure_payload():
+    from .integtest_xml_parser import parse_junit_xml
 
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
