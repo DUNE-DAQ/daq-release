@@ -28,8 +28,7 @@ jobs:
         | tee failed_jobs.json
     - name: Parse GitHub API output
       run: |
-        cd ./daq-release-slack-message/scripts/github-ci
-        ls
+        ls ./daq-release-slack-message/scripts/github-ci
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json
         # The script above should output slack_payload.json
         cat slack_payload.json
