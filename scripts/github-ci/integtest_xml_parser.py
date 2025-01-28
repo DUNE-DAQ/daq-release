@@ -99,11 +99,9 @@ def main():
                         help="Path to the directory containing junit xml files.")
     parser.add_argument("--input-file", "-i",
                         help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory.")
-    parser.add_argument("--generate-markdown", "-m", action="store_true",
-                        help="Whether to generate a markdown summary table for use in $GITHUB_STEP_SUMMARY.")
-    parser.add_argument("---markdown-file-name",
-                        default=None,
-                        help="Optional name of the output markdown file. If not provided, defaults to 'pytest_summary_table.md' when --generate-markdown is set.")
+    parser.add_argument("--output-markdown-file", "-o", 
+                        default="pytest_summary_table.md",
+                        help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
     
     args = parser.parse_args()
 
@@ -114,9 +112,6 @@ def main():
     if args.input_directory and args.input_file:
         print(f"Error: You must specify either an input directory or a specific file, not both.")
         exit(1)
-
-    if args.generate_markdown and not args.output_markdown_file:
-        args.output_markdown_file = "pytest_summary_table.md"
 
     test_results = []
 
@@ -139,9 +134,8 @@ def main():
     else:
         raise RuntimeError(f"Error: No input file or directory specified. Exiting...")
 
-    if args.generate_markdown:
-        generate_markdown_table(test_results, args.output_markdown_file)
-        prepend_test_summary(args.output_markdown_file)
+    generate_markdown_table(test_results, args.output_markdown_file)
+    prepend_test_summary(args.output_markdown_file)
 
 if __name__ == "__main__":
     main()
