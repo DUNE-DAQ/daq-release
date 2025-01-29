@@ -70,8 +70,9 @@ def create_failure_payload(failed_jobs):
     failed_jobs_text = "*Failed jobs and steps:*\n"
     for job in failed_jobs:
         failed_jobs_text += f"*Job name*: {job['job']}\n"
+        failed_jobs_text += f"*Failed step(s) in this job:*\n"
         for step in job['steps']:
-            failed_jobs_text += f"*Failed step(s) in this job:\n\t {step['name']}*"
+            failed_jobs_text += f"\t :x: {step['name']}*\n"
 
     slack_failure_payload["blocks"].append({
         "type": "section",
