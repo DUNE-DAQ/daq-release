@@ -67,12 +67,17 @@ def create_failure_payload(failed_jobs):
             }
         ]
     }
+    # Goal:
+    #*Failed jobs and steps:*
+    #parse_results
+    #    X Generate summary tables
+    #send_slack_message / generate_and_send_slack_message
+    #    X Parse GitHub API output
     failed_jobs_text = "*Failed jobs and steps:*\n"
     for job in failed_jobs:
-        failed_jobs_text += f"*Job name*: {job['job']}\n"
-        failed_jobs_text += f"*Failed step(s) in this job:*\n"
+        failed_jobs_text += f"*{job['job']}*\n"
         for step in job['steps']:
-            failed_jobs_text += f"\t :x: {step['name']}*\n"
+            failed_jobs_text += f"\t :x: *{step['name']}*\n"
 
     slack_failure_payload["blocks"].append({
         "type": "section",
