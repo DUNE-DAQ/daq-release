@@ -4,8 +4,15 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 def get_xml_files(directory, pattern):
+    if not os.path.isdir(directory):
+        raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
+
     path = Path(directory)
-    return path.rglob(pattern)
+    xml_files = path.rglob(pattern)
+    if not xml_files:
+        raise FileNotFoundError(f"Error: No xml files found in {directory}.")
+
+    return xml_files
 
 def get_test_name(file_path):
     file_name = os.path.basename(file_path)
@@ -120,8 +127,6 @@ def main():
             raise FileNotFoundError(f"Error: {args.input_directory} is not a valid directory.")
 
         xml_files = get_xml_files(args.input_directory, "*.xml")
-        if not xml_files:
-            raise FileNotFoundError(f"Error: No xml files found in {args.input_directory}.")
 
         for file in xml_files:
             test_results.append(parse_junit_xml(file))
