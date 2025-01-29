@@ -54,7 +54,7 @@ def create_failure_payload(failed_jobs):
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":x: Failure: ${{ github.workflow }} :x:",
+                "text": ":rotating_light: Failure: ${{ github.workflow }} :rotating_light:",
                 "emoji": True
             }
             },
@@ -69,8 +69,9 @@ def create_failure_payload(failed_jobs):
     }
     failed_jobs_text = "*Failed jobs and steps:*\n"
     for job in failed_jobs:
-        failed_jobs_text += f"*Job name*: {job}"
-        failed_jobs_text += f"*Failed step: {job['steps']}*"
+        failed_jobs_text += f"*Job name*: {job['job']}\n"
+        for step in job['steps']:
+            failed_jobs_text += f"*Failed step(s) in this job:\n\t {step['name']}*"
 
     slack_failure_payload["blocks"].append({
         "type": "section",
