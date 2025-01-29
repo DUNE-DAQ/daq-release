@@ -71,7 +71,7 @@ jobs:
         fail-fast: false
         matrix:
 
-            test_name: ["minimal_system_quick_test",
+            test_name: ["small_footprint_quick_test",
                         #["listrev_test", 
                         #"3ru_1df_multirun_test", 
                         #"3ru_3df_multirun_test", 
