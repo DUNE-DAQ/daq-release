@@ -28,7 +28,7 @@ jobs:
       run: |
         #gh api /repos/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}/jobs \
         gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
-        | jq '[.jobs[] | select(.conclusion == "failure") | {job: .name, steps: (.steps[] | select(.conclusion == "failure") | {name: .name})}]' \
+        | jq '[.jobs[] | select(.conclusion == "failure") | {job: .name, steps: [.steps[] | select(.conclusion == "failure") | {name: .name}]}]'
         | tee failed_jobs.json
     - name: Parse GitHub API output
       run: |
