@@ -1,6 +1,7 @@
 import sys
 import json
 import argparse
+from integtest_xml_parser import get_xml_files, parse_junit_xml
 
 def get_failed_jobs(api_output_path):
     """
@@ -12,7 +13,7 @@ def get_failed_jobs(api_output_path):
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
 
-def generate_payload(failed_jobs):
+def generate_payload(failed_jobs, xml_files=[]):
     """
     Top-level payload generator function that determines which payload to generate based on 
     the presence of job failures. The failure information is parsed to generate a message 
@@ -33,7 +34,7 @@ def create_success_payload():
             "text": {
                 "type": "plain_text",
                 "text": ":white_check_mark: Success: ${{ github.workflow }} :white_check_mark:",
-                "emoji": true
+                "emoji": True
             }
             },
             {
@@ -50,19 +51,19 @@ def create_failure_payload(failed_jobs):
     slack_failure_payload = {
         "blocks": [
             {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": ":x: Failure: ${{ github.workflow }} :x:",
-                    "emoji": true
-                }
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":x: Failure: ${{ github.workflow }} :x:",
+                "emoji": True
+            }
             },
             {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "Full report: <https://github.com/DUNE-DAQ/daq-release/actions/runs/<RUN_ID>|View Workflow>"
-                }
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Full report: <https://github.com/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}|link>."
+            }
             }
         ]
     }
@@ -97,13 +98,18 @@ def main():
     parser = argparse.ArgumentParser(description="Parse a workflow summary and generate a Slack message payload.")
     parser.add_argument("--api-output", required=True,
                         help="json file containing a summary of failed jobs, obtained from GitHub API call.")
+    parser.add_argument("--junit-xml-dir", default="",
+                        help="Optional directory containing junit xml files output by pytests.")
     args = parser.parse_args()
     if len(sys.argv) == 1:
         parser.print_usage()
 
     failed_jobs = get_failed_jobs(args.api_output)
 
-    payload = generate_payload(failed_jobs)
+    xml_files = []
+    if args.junit_xml_dir:
+        xml_files = get_xml_files(args.junit_xml_dir)
+    payload = generate_payload(failed_jobs, xml_files)
     write_payload_to_file(payload)
     
 if __name__ == "__main__":

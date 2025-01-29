@@ -6,6 +6,10 @@ on:
       workflow_success: 
         required: true
         type: boolean
+        description: Status (success or failure) of the caller workflow.
+      integtest_output_dir:
+        type: string
+        description: Optional path to directory containing junit xml files output by pytests.
     secrets:
       slack_webhook_url:
         required: true
@@ -23,7 +27,7 @@ jobs:
     - name: Get workflow failures from GitHub API
       run: |
         #gh api /repos/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}/jobs \
-        gh api /repos/${{ github.repository.full_name }}/actions/runs/${{ github.run_id }}/jobs \
+        gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
         | jq '[.jobs[] | select(.conclusion == "failure") | {job: .name, steps: (.steps[] | select(.conclusion == "failure") | {name: .name})}]' \
         | tee failed_jobs.json
     - name: Parse GitHub API output
