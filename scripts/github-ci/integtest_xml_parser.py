@@ -1,5 +1,6 @@
 import os, sys
 import argparse
+import html
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -33,7 +34,8 @@ def parse_junit_xml(file_path):
         
         if (failure_element := testcase.find("failure")) is not None:
             result = "failed"
-            failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
+            #failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
+            failure_message = html.unescape(failure_element.text.strip()) if failure_element.text else "No message provided"
         elif testcase.find("error") is not None:
             result = "error"
         elif testcase.find("skipped") is not None:

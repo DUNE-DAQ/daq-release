@@ -65,9 +65,7 @@ def summarize_integration_test_failure(failure_message):
 
 def get_integration_test_failure(test_name, xml_files):
     xml_file = find_matching_file(test_name, xml_files)
-    if xml_file:
-        print('Found matching xml file: ', xml_file)
-    else:
+    if not xml_file:
         raise FileNotFoundError('No matching xml file found for', test_name)
 
     results = parse_junit_xml(xml_file)
