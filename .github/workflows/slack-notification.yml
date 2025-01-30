@@ -29,7 +29,11 @@ jobs:
     - name: Parse GitHub API output
       run: |
         ls
-        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir ${{ inputs.integtest_output_dir }}
+        echo "Input dir: ${{ inputs.integtest_output_dir }}"
+        XML_DIR=""
+        if [[ -n ${{ inputs.integtest_output_dir}} ]]; then
+          XML_DIR=${{ inputs.integtest_output_dir }}
+        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir $XML_DIR
         # The script above should output slack_payload.json
         cat slack_payload.json
     - name: Send Slack Message
