@@ -30,8 +30,9 @@ jobs:
       run: |
         ls
         echo "Input dir: ${{ inputs.integtest_output_dir }}"
-        XML_DIR="${{ inputs.integtest_output_dir }}"
-        if [[ -n "XML_DIR" ]]; then
+        XML_DIR=${{ inputs.integtest_output_dir }}
+        echo "XML_DIR: $XML_DIR"
+        if [[ -n "$XML_DIR" ]]; then
           echo "In if statement"
           echo "Set XML_DIR to $XML_DIR"
         echo "python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir $XML_DIR"
