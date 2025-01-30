@@ -20,11 +20,12 @@ def get_header(status):
         "success": ":white_check_mark:",
         "failure": ":rotating_light:"
     }
+    workflow_name = os.getenv("GITHUB_WORKFLOW", "Unknown Workflow")
     return {
         "type": "header",
         "text": {
             "type": "plain_text",
-            "text": f"{status_emojis.get(status, ':grey_question:')} {status.capitalize()}: ${{ github.payload.workflow }} {status_emojis.get(status, ':grey_question:')}",
+            "text": f"{status_emojis.get(status, ':grey_question:')} {status.capitalize()}: {workflow_name} {status_emojis.get(status, ':grey_question:')}",
             "emoji": True
         }
     }
