@@ -3,12 +3,9 @@ name: Slack Notification
 on:
   workflow_call:
     inputs:
-      workflow_success: 
-        required: true
-        type: boolean
-        description: Status (success or failure) of the caller workflow.
       integtest_output_dir:
         type: string
+        default: ''
         description: Optional path to directory containing junit xml files output by pytests.
     secrets:
       slack_webhook_url:
@@ -26,14 +23,13 @@ jobs:
         ref: amogan/improved_slack_messaging
     - name: Get workflow failures from GitHub API
       run: |
-        #gh api /repos/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}/jobs \
         gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
         | jq '[.jobs[] | select(.conclusion == "failure") | {job: .name, steps: [.steps[] | select(.conclusion == "failure") | {name: .name}]}]' \
         | tee failed_jobs.json
     - name: Parse GitHub API output
       run: |
         ls
-        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json
+        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir ${{ inputs.integtest_output_dir }}
         # The script above should output slack_payload.json
         cat slack_payload.json
     - name: Send Slack Message
