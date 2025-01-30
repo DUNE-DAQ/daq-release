@@ -35,6 +35,7 @@ jobs:
         if [[ -n "$XML_DIR" ]]; then
           echo "In if statement"
           echo "Set XML_DIR to $XML_DIR"
+        fi
         echo "python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir $XML_DIR"
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py --api-output failed_jobs.json --junit-xml-dir $XML_DIR
         # The script above should output slack_payload.json
