@@ -150,7 +150,6 @@ jobs:
     needs: integration_tests
     uses: ./.github/workflows/slack-notification.yml
     with:
-      workflow_success: ${{ needs.integration_tests.result == 'success' }}
       integtest_output_dir: ${{ needs.integration_tests.outputs.xml_output_path }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
