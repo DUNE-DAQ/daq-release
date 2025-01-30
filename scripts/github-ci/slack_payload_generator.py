@@ -1,6 +1,6 @@
-import sys
-import json
+import sys, os
 import argparse
+import json
 import re
 from integtest_xml_parser import get_xml_files, parse_junit_xml
 
