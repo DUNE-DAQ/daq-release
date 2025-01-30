@@ -129,7 +129,7 @@ def main():
     parser = argparse.ArgumentParser(description="Parse a workflow summary and generate a Slack message payload.")
     parser.add_argument("--api-output", required=True,
                         help="json file containing a summary of failed jobs, obtained from GitHub API call.")
-    parser.add_argument("--junit-xml-dir", default="",
+    parser.add_argument("--junit-xml-dir", nargs="?", default=None,
                         help="Optional directory containing junit xml files output by pytests.")
     args = parser.parse_args()
     if len(sys.argv) == 1:
