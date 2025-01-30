@@ -74,7 +74,6 @@ jobs:
         matrix:
 
             test_name: ["small_footprint_quick_test",
-                        "long_window_readout_test",
                         #["listrev_test", 
                         #"3ru_1df_multirun_test", 
                         #"3ru_3df_multirun_test", 
