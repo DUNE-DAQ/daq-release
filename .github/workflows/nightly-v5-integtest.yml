@@ -122,7 +122,8 @@ jobs:
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
         fi
-        echo "::set-output name=xml_output_path::$TEST_PATH"
+        #echo "::set-output name=xml_output_path::$TEST_PATH"
+        echo "TEST_PATH=$TEST_PATH" >> "$GITHUB_OUTPUT"
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
 
@@ -133,7 +134,8 @@ jobs:
     steps:
     - name: Check output xml path
       run: |
-        echo ${{ needs.integration_tests.outputs.xml_output_path }}
+        echo "${{ needs.integration_tests.outputs.xml_output_path }}"
+        echo "Does this print?"
     - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
