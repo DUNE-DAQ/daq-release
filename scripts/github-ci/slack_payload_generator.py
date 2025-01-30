@@ -24,7 +24,7 @@ def get_header(status):
         "type": "header",
         "text": {
             "type": "plain_text",
-            "text": f"{status_emojis.get(status, ':grey_question:')} {status.capitalize()}: GitHub Workflow {status_emojis.get(status, ':grey_question:')}",
+            "text": f"{status_emojis.get(status, ':grey_question:')} {status.capitalize()}: ${{ github.workflow }} {status_emojis.get(status, ':grey_question:')}",
             "emoji": True
         }
     }
