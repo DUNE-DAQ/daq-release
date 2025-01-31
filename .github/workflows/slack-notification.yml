@@ -28,7 +28,7 @@ jobs:
         | tee failed_jobs.json
     - name: Parse GitHub API output
       run: |
-        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py  
+        python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
                --api-output failed_jobs.json \
                --junit-xml-dir ${{ inputs.integtest_output_dir }}
     - name: Send Slack Message
