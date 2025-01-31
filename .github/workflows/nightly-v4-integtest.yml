@@ -105,7 +105,7 @@ jobs:
   cleanup_xml_files:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, parse_results]
+    needs: [make_nightly_tag, parse_results, send_slack_message]
     steps:
       - name: Remove xml files
         env:
