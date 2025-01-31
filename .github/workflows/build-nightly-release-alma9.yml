@@ -60,6 +60,7 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
+        exit 123
         source daq-release/.github/workflows/wf-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
@@ -283,8 +284,5 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
-    with:
-      # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
-      workflow_success: ${{ needs.publish_to_cvmfs.result == 'success' }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
