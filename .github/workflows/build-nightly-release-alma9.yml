@@ -285,4 +285,4 @@ jobs:
     needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
