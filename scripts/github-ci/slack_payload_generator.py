@@ -60,7 +60,7 @@ def summarize_integration_test_failure(failure_message):
     function_match = re.search(r"<function (\w+) at 0x[0-9a-fA-F]+>", failure_message)
     failed_function = function_match.group(1) if function_match.group(1) else "Unknown function"
 
-    summary = f"\t\t   *{test_name}* failed with: {error_type} in function {failed_function}\n"
+    summary = f"\t\t   *{test_name}* failed with: `{error_type}` in function `{failed_function}`\n"
 
     return summary
 
