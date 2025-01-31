@@ -152,7 +152,7 @@ jobs:
     with:
       integtest_output_dir: ${{ needs.integration_tests.outputs.integtest_output_path }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     runs-on: daq
