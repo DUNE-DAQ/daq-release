@@ -107,7 +107,7 @@ attempt=1
 max_attempts=3
 while true; do
     echo " --- ${DET}daq build attempt number $attempt of $max_attempts --- "
-    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
+    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 2>&1 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
