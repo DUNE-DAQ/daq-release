@@ -113,9 +113,14 @@ while true; do
     if [[ $spack_install_exit_code -eq 0 ]]; then
         echo "Build succeeded on attempt number $attempt"
         break
+    else 
+        echo "Spack has exited with code $spack_install_exit_code. Checking if this is a retryable error..."
     fi
     if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
         echo "Attempt $attempt failed due to a FetchError."
+        if [[ $attempt -lt $max_attempts ]]; then 
+            echo "Retrying..."
+        fi
     else
         echo "Build failed with a non-retryable exit code. Exiting..."
         exit $spack_install_exit_code
