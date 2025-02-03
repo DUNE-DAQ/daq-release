@@ -27,14 +27,19 @@ echo "Assuming detector release tag is $DET_RELEASE_TAG (i.e. the same name as t
 
 if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 production nightly, externals v2.0
     export EXT_VERSION=v2.0
+    export GCC_VERSION=12.1.0
 elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.1
     export EXT_VERSION=v2.1
+    export GCC_VERSION=13.2.0
 elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or frozen, externals v2.0
     export EXT_VERSION=v2.0
+    export GCC_VERSION=12.1.0
 elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or frozen, externals v2.1 
     export EXT_VERSION=v2.1
+    export GCC_VERSION=13.2.0
 elif [[ $OS == scientific7 ]]; then                                 # SL7 _any_, externals v1.1
     export EXT_VERSION=v1.1
+    export GCC_VERSION=12.1.0
 else
     echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
     return 5
