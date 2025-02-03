@@ -87,7 +87,7 @@ python3 scripts/spack/make-release-repo.py -u \
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
 retval=$?
 
 cat $SPACK_AREA/spec_${DET}daq_log.txt 
