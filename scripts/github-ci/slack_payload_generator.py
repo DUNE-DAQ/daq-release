@@ -14,11 +14,33 @@ def get_failed_jobs(api_output_path):
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
 
+def get_workflow_status(failed_jobs):
+    """
+    Determine the overall workflow status.
+    
+    If any job or step was cancelled, this should take precedence over failure.
+    Defaults to success if there were no cancellations or failures.
+    """
+    has_cancelled = False
+    has_failure = False
+    for job in failed_jobs:
+        if job['conclusion'] == 'cancelled':
+            has_cancelled = True
+        elif job['conclusion'] == 'failure':
+            has_failure = True
+    
+    if has_cancelled:
+        return 'cancelled'
+    if has_failure:
+        return 'failure'
+    return 'success'
+
 def get_header(status):
     """Generate the header block based on the status."""
     status_emojis = {
         "success": ":white_check_mark:",
-        "failure": ":rotating_light:"
+        "failure": ":rotating_light:",
+        "cancelled": ":no_entry:",
     }
     workflow_name = os.getenv("GITHUB_WORKFLOW", "Unknown Workflow")
     return {
@@ -41,12 +63,14 @@ def get_report_section():
     }
 
 def find_matching_file(test_name, xml_files):
+    """Find junit xml file that matches the job name."""
     for file in xml_files:
         if test_name in str(file):
             return file
     return None
 
 def summarize_integration_test_failure(failure_message):
+    """Parse junit xml file to obtain to determine the error type and which function failed."""
     # Get the test name
     match = re.search(r"def (\w+)\(", failure_message)
     test_name = match.group(1) if match else "Unknown test"
@@ -65,6 +89,7 @@ def summarize_integration_test_failure(failure_message):
     return summary
 
 def get_integration_test_failure(test_name, xml_files):
+    """Get the primary failure type from the junit xml file."""
     xml_file = find_matching_file(test_name, xml_files)
     if not xml_file:
         raise FileNotFoundError('No matching xml file found for', test_name)
@@ -102,22 +127,25 @@ def generate_payload(failed_jobs, xml_files=[]):
     """
     Top-level payload generator function that determines which payload sections to
     write based on inputs. The message is written such that it can be parsed by
-    Slack's BlockKit format
+    Slack's BlockKit format.
     """
     slack_payload = {"blocks": []}
 
-    workflow_status = ('failure' if failed_jobs else 'success')
+    workflow_status = get_workflow_status(failed_jobs)
     slack_payload["blocks"].append(get_header(workflow_status))
 
     slack_payload["blocks"].append(get_report_section())
 
-    failed_jobs_section = get_failed_jobs_section(failed_jobs, xml_files)
+    failed_jobs_section = ''
+    if workflow_status == 'failure':
+        failed_jobs_section = get_failed_jobs_section(failed_jobs, xml_files)
     if failed_jobs_section:
         slack_payload["blocks"].append(failed_jobs_section)
     
     return slack_payload
 
 def write_payload_to_file(payload, file_name='slack_payload.json'):
+    """Write the Slack payload to a file which can be seen by slack-github-action."""
     try:
         with open(file_name, "w") as file:
             json.dump(payload, file)
