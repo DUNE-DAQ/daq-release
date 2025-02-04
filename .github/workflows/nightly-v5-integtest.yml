@@ -140,8 +140,11 @@ jobs:
     runs-on: daq
     needs: [make_release_tag, integration_tests]
     if: success() || failure()
+    outputs:
+      pytest_log_dir: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
     steps:
     - name: Copy logs to persistent directory on daq.fnal.gov
+      id: copy_logs
       run: |
         TIMESTAMP=$(date +"%Y-%m-%d")
         PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
