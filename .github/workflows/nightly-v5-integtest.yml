@@ -174,7 +174,8 @@ jobs:
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-        echo "The directories older than one week are $old_dirs"
+        echo "Removing the following directories that are more than 7 days old: $old_dirs"
+        rm -rf $old_dirs
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
