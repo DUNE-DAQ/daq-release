@@ -87,7 +87,7 @@ python3 scripts/spack/make-release-repo.py -u \
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
 retval=$?
 
 cat $SPACK_AREA/spec_${DET}daq_log.txt 
@@ -96,7 +96,28 @@ if [[ $retval != 0 ]]; then
     exit 20
 fi
 
-spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@12.1.0 build_type=RelWithDebInfo arch=linux-${OS}-x86_64 || exit 7
+attempt=1
+max_attempts=3
+while true; do
+    echo " --- Build attempt number $attempt of $max_attempts --- "
+    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dunedaq_build_spack_install.log || true
+    spack_install_exit_code=${PIPESTATUS[0]}
+    if [[ $spack_install_exit_code -eq 0 ]]; then
+        echo "Build succeeded on attempt number $attempt"
+        break
+    fi
+    if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
+        echo "Attempt $attempt failed due to a FetchError."
+    else
+        echo "Build failed with a non-retryable exit code. Exiting..."
+        exit $spack_install_exit_code
+    fi
+    if [[ $attempt -ge $max_attempts ]]; then
+        echo "All retry attempts failed due to FetchError. Exiting."
+        exit 111
+    fi
+    attempt=$((attempt + 1))
+done
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt

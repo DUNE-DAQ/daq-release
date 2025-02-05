@@ -147,7 +147,6 @@ jobs:
             fddaq_tag="NFDT${NIGHTLY_TAG}"
             tar xf ../${fddaq_tag}.tar.gz
             rm -rf ../${fddaq_tag}.tar.gz
-            test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
@@ -288,8 +287,5 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
-    with:
-      # cvmfs != failure logic accounts for the fact that the publish step is optional and might be skipped
-      workflow_success: ${{ needs.publish_to_cvmfs.result == 'success' }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

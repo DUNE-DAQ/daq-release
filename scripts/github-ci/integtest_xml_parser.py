@@ -1,11 +1,19 @@
-import os
+import os, sys
 import argparse
+import html
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
 def get_xml_files(directory, pattern):
+    if not os.path.isdir(directory):
+        raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
+
     path = Path(directory)
-    return path.rglob(pattern)
+    xml_files = path.rglob(pattern)
+    if not xml_files:
+        raise FileNotFoundError(f"Error: No xml files found in {directory}.")
+
+    return xml_files
 
 def get_test_name(file_path):
     file_name = os.path.basename(file_path)
@@ -22,9 +30,12 @@ def parse_junit_xml(file_path):
     for testcase in root.findall(".//testcase"):
         test_name = testcase.get("name").split("[")[0]
         result = "passed"
+        failure_message = None
         
-        if testcase.find("failure") is not None:
+        if (failure_element := testcase.find("failure")) is not None:
             result = "failed"
+            #failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
+            failure_message = html.unescape(failure_element.text.strip()) if failure_element.text else "No message provided"
         elif testcase.find("error") is not None:
             result = "error"
         elif testcase.find("skipped") is not None:
@@ -33,7 +44,8 @@ def parse_junit_xml(file_path):
         results.append({
             "test_suite_name": test_suite_name,
             "test_name": test_name,
-            "result": result
+            "result": result,
+            "failure_message": failure_message
         })
     return results
 
@@ -95,12 +107,16 @@ def main():
     parser.add_argument("--input-directory", "-d",
                         help="Path to the directory containing junit xml files.")
     parser.add_argument("--input-file", "-i",
-                        help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory")
+                        help="Path to a single JUnit XML file. Cannot be used in conjunction with --input-directory.")
     parser.add_argument("--output-markdown-file", "-o", 
                         default="pytest_summary_table.md",
                         help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
     
     args = parser.parse_args()
+
+    if len(sys.argv) == 1:
+        parser.print_usage()
+        exit(1)
 
     if args.input_directory and args.input_file:
         print(f"Error: You must specify either an input directory or a specific file, not both.")
@@ -110,26 +126,20 @@ def main():
 
     if args.input_directory:
         if not os.path.isdir(args.input_directory):
-            print(f"Error: {args.input_directory} is not a valid directory.")
-            exit(2)
+            raise FileNotFoundError(f"Error: {args.input_directory} is not a valid directory.")
 
         xml_files = get_xml_files(args.input_directory, "*.xml")
-        if not xml_files:
-            print(f"Error: No xml files found in {args.input_directory}.")
-            exit(3)
 
         for file in xml_files:
             test_results.append(parse_junit_xml(file))
 
     elif args.input_file:
         if not os.path.isfile(args.input_file):
-            print(f"Error: Input file {args.input_file} is invalid.")
-            exit(4)
-    
+            raise FileNotFoundError(f"Error: Input file {args.input_file} is invalid.")
         test_results.append(parse_junit_xml(args.input_file))
+
     else:
-        print(f"Error: No input file or directory specified. Exiting...")
-        exit(5)
+        raise RuntimeError(f"Error: No input file or directory specified. Exiting...")
 
     generate_markdown_table(test_results, args.output_markdown_file)
     prepend_test_summary(args.output_markdown_file)
