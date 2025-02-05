@@ -20,7 +20,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-slack-message
-        ref: amogan/improved_slack_messaging
     - name: Get workflow failures from GitHub API
       run: |
         gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
