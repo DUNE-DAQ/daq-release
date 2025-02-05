@@ -152,6 +152,7 @@ jobs:
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
         mkdir -p $PERSISTENT_LOG_DIR
         cp -r /tmp/pytest-of-dunedaq/pytest-current/ $PERSISTENT_LOG_DIR
+        chmod o+rx $PERSISTENT_LOG_DIR
     - name: Upload logs as artifact
       uses: actions/upload-artifact@v4
       with:
