@@ -159,7 +159,7 @@ jobs:
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
         mkdir -p $PERSISTENT_LOG_DIR
         cp -r /tmp/pytest-of-dunedaq/pytest-current/ $PERSISTENT_LOG_DIR
-        chmod o+rx $PERSISTENT_LOG_DIR
+        chmod -R o+rx $PERSISTENT_LOG_DIR
         if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
           echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
           rm -rf $PERSISTENT_LOG_DIR
