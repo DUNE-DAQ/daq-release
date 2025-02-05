@@ -108,6 +108,8 @@ def get_failed_jobs_section(failed_jobs, xml_files):
 
     failed_jobs_text = "*Failed jobs and steps:*\n"
     for job in failed_jobs:
+        # Jobs that have not yet run will have status "None"
+        if not job['conclusion']: continue
         failed_jobs_text += f"- *{job['job']}*\n"
         for step in job['steps']:
             failed_jobs_text += f"\t:x: *{step['name']}*\n"
