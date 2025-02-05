@@ -67,9 +67,12 @@ jobs:
     runs-on: daq
     timeout-minutes: 30
     needs: make_release_tag
+    outputs:
+      integtest_xml_path: ${{ steps.setup_and_run_test.outputs.INTEGTEST_OUTPUT_PATH }}
     strategy:
         fail-fast: false
         matrix:
+
             test_name: ["listrev_test", 
                         "3ru_1df_multirun_test", 
                         "3ru_3df_multirun_test", 
@@ -90,10 +93,12 @@ jobs:
         RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
         IS_CANDIDATE_RELEASE: ${{needs.make_release_tag.outputs.is_candidate_release}}
         IS_FROZEN_RELEASE: ${{needs.make_release_tag.outputs.is_frozen_release}}
+      id: setup_and_run_test
       run: |
         DET=fd
-        mkdir -p $GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
-        cd $GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
+        INTEGTEST_OUTPUT_PATH=$GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
+        mkdir -p $INTEGTEST_OUTPUT_PATH
+        cd $INTEGTEST_OUTPUT_PATH
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
@@ -115,6 +120,7 @@ jobs:
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
         fi
+        echo "INTEGTEST_OUTPUT_PATH=$INTEGTEST_OUTPUT_PATH" >> "$GITHUB_OUTPUT"
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
 
@@ -142,7 +148,7 @@ jobs:
     needs: [make_release_tag, integration_tests]
     if: success() || failure()
     outputs:
-      pytest_log_dir: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
+      integtest_log_path: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
     steps:
     - name: Copy logs to persistent directory on daq.fnal.gov
       id: copy_logs
@@ -169,10 +175,20 @@ jobs:
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
         echo "The directories older than one week are $old_dirs"
 
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: [integration_tests, store_and_upload_logs]
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      integtest_xml_dir: ${{ needs.integration_tests.outputs.integtest_xml_path }}
+      integtest_log_dir: ${{ needs.store_and_upload_logs.outputs.integtest_log_path }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   cleanup_files:
     runs-on: daq
     if: always()
-    needs: [make_release_tag, parse_results]
+    needs: [make_release_tag, parse_results, send_slack_message]
     steps:
       - name: Remove xml files
         env:
@@ -193,11 +209,3 @@ jobs:
         run: |
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
-  send_slack_message:
-    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: integration_tests
-    uses: ./.github/workflows/slack-notification.yml
-    with:
-      workflow_success: ${{ needs.integration_tests.result == 'success' }}
-    secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

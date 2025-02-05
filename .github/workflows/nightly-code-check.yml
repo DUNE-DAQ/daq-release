@@ -101,8 +101,6 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: run_unittests
     uses: ./.github/workflows/slack-notification.yml
-    with:
-      workflow_success: ${{ needs.run_unittests.result == 'success' }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
