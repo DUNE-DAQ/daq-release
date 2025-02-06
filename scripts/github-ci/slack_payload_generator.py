@@ -69,25 +69,6 @@ def find_matching_file(test_name, xml_files):
             return file
     return None
 
-def summarize_integration_test_failure(failure_message):
-    """Parse junit xml file to obtain to determine the error type and which function failed."""
-    # Get the test name
-    match = re.search(r"def (\w+)\(", failure_message)
-    test_name = match.group(1) if match else "Unknown test"
-
-    # Get the type of error, e.g., AssertionError
-    error_pattern = r"([A-Za-z]+Error):"
-    error_match = re.search(error_pattern, failure_message)
-    error_type = error_match.group(1) if error_match.group(1) else "Unknown error type"
-
-    # Get the function that caused the failure
-    function_match = re.search(r"<function (\w+) at 0x[0-9a-fA-F]+>", failure_message)
-    failed_function = function_match.group(1) if function_match.group(1) else "Unknown function"
-
-    summary = f"\t\t   *{test_name}* failed with: `{error_type}` in function `{failed_function}`\n"
-
-    return summary
-
 def get_integration_test_failure(test_name, xml_files):
     """Get the primary failure type from the junit xml file."""
     xml_file = find_matching_file(test_name, xml_files)
@@ -95,11 +76,18 @@ def get_integration_test_failure(test_name, xml_files):
         raise FileNotFoundError('No matching xml file found for', test_name)
 
     results = parse_junit_xml(xml_file)
+    # Lines that failed will be preceeded by a newline followed by ">" and
+    # some number of whitespace characters; search between this and the next
+    # newline to see what the failure was.
+    failed_line_pattern = r"\n>\s+(.*?)\n"
+    failure_summary = ''
     for result in results:
-        if result.get('failure_message'):
-            failure = summarize_integration_test_failure(result['failure_message'])
-
-    return failure
+        if not result.get('failure_message'): continue
+        failure_summary += f"\n\t\t  *{result['test_name']}* failed"
+        failed_line_match = re.findall(failed_line_pattern, result['failure_message'])
+        if failed_line_match:
+            failure_summary += f" while checking \n\t\t`{failed_line_match[0]}`\n" 
+    return failure_summary
 
 def get_failed_jobs_section(failed_jobs, xml_files):
     """Generate the section block that lists failed jobs and steps."""
@@ -108,8 +96,8 @@ def get_failed_jobs_section(failed_jobs, xml_files):
 
     failed_jobs_text = "*Failed jobs and steps:*\n"
     for job in failed_jobs:
-        # Jobs that have not yet run will have status "None"
-        if not job['conclusion']: continue
+        # Jobs may be skipped or have not yet run
+        if not job['conclusion'] == 'failure': continue
         failed_jobs_text += f"- *{job['job']}*\n"
         for step in job['steps']:
             failed_jobs_text += f"\t:x: *{step['name']}*\n"
