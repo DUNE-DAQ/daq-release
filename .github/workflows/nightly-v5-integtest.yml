@@ -166,6 +166,7 @@ jobs:
           exit 2
         fi
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> "$GITHUB_OUTPUT"
+        ls -l $PERSISTENT_LOG_DIR
     - name: Upload logs as artifact
       uses: actions/upload-artifact@v4
       with:
