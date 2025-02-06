@@ -78,11 +78,15 @@ def summarize_integration_test_failure(failure_message):
     # Get the type of error, e.g., AssertionError
     error_pattern = r"([A-Za-z]+Error):"
     error_match = re.search(error_pattern, failure_message)
-    error_type = error_match.group(1) if error_match.group(1) else "Unknown error type"
+    error_type = "Unknown error type"
+    if error_match:
+        error_type = error_match.group(1) if error_match.group(1) else "Unknown error type"
 
     # Get the function that caused the failure
     function_match = re.search(r"<function (\w+) at 0x[0-9a-fA-F]+>", failure_message)
-    failed_function = function_match.group(1) if function_match.group(1) else "Unknown function"
+    failed_function = "Unknown function"
+    if function_match:
+        failed_function = function_match.group(1) if function_match.group(1) else "Unknown function"
 
     summary = f"\t\t   *{test_name}* failed with: `{error_type}` in function `{failed_function}`\n"
 
