@@ -12,8 +12,10 @@ class Externals(BundlePackage):
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
+    variant("dev", default=True, description="Include build dependencies for a development environment")
+
     version("XRELEASEX")
 
     # Generate from release YAML file
-    depends_on("devtools@XRELEASEX")
+    depends_on("devtools@XRELEASEX", when="+dev")
     # Additional dependencies defined in YAML file to be filled below
