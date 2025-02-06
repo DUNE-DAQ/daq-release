@@ -98,6 +98,7 @@ def get_integration_test_failure(test_name, xml_files):
     if not xml_file:
         raise FileNotFoundError('No matching xml file found for', test_name)
 
+    failure = "Unknown failure"
     results = parse_junit_xml(xml_file)
     for result in results:
         if result.get('failure_message'):
