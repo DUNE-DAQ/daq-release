@@ -19,6 +19,8 @@ class Fddaq(BundlePackage):
             values=('Debug', 'Release', 'RelWithDebInfo'),
             multi=True)
 
+    variant("dev", default=True, description="Include build dependencies for a development environment")
+
     def setup_run_environment(self, env):
         env.set('DUNE_DAQ_BASE_RELEASE', "XRELEASEX")
 

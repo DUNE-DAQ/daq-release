@@ -107,7 +107,7 @@ attempt=1
 max_attempts=3
 while true; do
     echo " --- ${DET}daq build attempt number $attempt of $max_attempts --- "
-    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 2>&1 | tee dunedaq_build_spack_install.log || true
+    spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
@@ -131,6 +131,13 @@ while true; do
     fi
     attempt=$((attempt + 1))
 done
+
+# JCF, Feb-4-2024: since fddaq~dev is a subset of the just-now
+# installed fddaq+dev, I don't think network timeouts from Spack
+# installing new packages should be a failure mode (see
+# https://github.com/DUNE-DAQ/daq-release/pull/423 for more)
+
+spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 ~dev || exit 7
 
 if $build_dbe; then
     dbe_attempt=1
@@ -159,7 +166,7 @@ fi
 
 if [[ "$DET" == "fd" || "$DET" == "nd" ]]; then
     # Generate pyvenv_requirements.txt
-    spack load ${DET}daq@${RELEASE_TAG} || exit 9
+    spack load ${DET}daq@${RELEASE_TAG} +dev || exit 9
 
     cd $DAQ_RELEASE_REPO
     cmd="/usr/bin/python3 scripts/spack/make-release-repo.py \
