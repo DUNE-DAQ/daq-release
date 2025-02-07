@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 30
     needs: make_nightly_tag
     outputs:
-      integtest_output_path: ${{ steps.setup_and_run_test.outputs.INTEGTEST_OUTPUT_PATH }}
+      integtest_xml_path: ${{ steps.setup_and_run_test.outputs.INTEGTEST_OUTPUT_PATH }}
     strategy:
         fail-fast: false
         matrix:
@@ -93,12 +93,48 @@ jobs:
         python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_${{ env.NIGHTLY_TAG }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
+  store_and_upload_logs:
+    runs-on: daq
+    timeout-minutes: 5
+    needs: [make_nightly_tag, integration_tests]
+    if: success() || failure()
+    outputs:
+      integtest_log_path: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
+    steps:
+    - name: Copy logs to persistent directory on daq.fnal.gov
+      id: copy_logs
+      run: |
+        TIMESTAMP=$(date +"%Y-%m-%d")
+        PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
+        echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+        echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
+        mkdir -p $PERSISTENT_LOG_DIR
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR
+        chmod -R 755 $PERSISTENT_LOG_DIR
+        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
+          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
+          rm -rf $PERSISTENT_LOG_DIR
+          exit 2
+        fi
+        echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> "$GITHUB_OUTPUT"
+    - name: Upload logs as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pytest-logs-${{ env.TIMESTAMP }}
+        path: ${{ env.PERSISTENT_LOG_DIR }}
+    - name: Delete old log directories
+      run: |
+        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+        echo "Removing the following directories that are more than 7 days old: $old_dirs"
+        rm -rf $old_dirs
+
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: integration_tests
     uses: ./.github/workflows/slack-notification.yml
     with:
-      integtest_output_dir: ${{ needs.integration_tests.outputs.integtest_output_path }}
+      integtest_xml_dir: ${{ needs.integration_tests.outputs.integtest_xml_path }}
+      integtest_log_dir: ${{ needs.store_and_upload_logs.outputs.integtest_log_path }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
