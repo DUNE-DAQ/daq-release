@@ -75,6 +75,7 @@ def get_integration_test_failure(test_name, xml_files):
     if not xml_file:
         raise FileNotFoundError('No matching xml file found for', test_name)
 
+    failure = "Unknown failure"
     results = parse_junit_xml(xml_file)
     # Lines that failed will be preceeded by a newline followed by ">" and
     # some number of whitespace characters; search between this and the next
@@ -113,7 +114,18 @@ def get_failed_jobs_section(failed_jobs, xml_files):
         }
     }
 
-def generate_payload(failed_jobs, xml_files=[]):
+def get_pytest_log_section(pytest_log_dir):
+    """Generate a section showing where the pytest logs are stored."""
+    return {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": f"The pytest logs will be stored for the next 7 days at: `daq.fnal.gov:{pytest_log_dir}`.\n"
+                     "You can also download the logs from the \"Full report\" link above (scroll to the bottom)."
+        }
+    }
+
+def generate_payload(failed_jobs, xml_files=[], pytest_log_dir=None):
     """
     Top-level payload generator function that determines which payload sections to
     write based on inputs. The message is written such that it can be parsed by
@@ -131,6 +143,9 @@ def generate_payload(failed_jobs, xml_files=[]):
         failed_jobs_section = get_failed_jobs_section(failed_jobs, xml_files)
     if failed_jobs_section:
         slack_payload["blocks"].append(failed_jobs_section)
+
+    if pytest_log_dir:
+        slack_payload["blocks"].append(get_pytest_log_section(pytest_log_dir))
     
     return slack_payload
 
@@ -149,6 +164,8 @@ def main():
                         help="json file containing a summary of failed jobs, obtained from GitHub API call.")
     parser.add_argument("--junit-xml-dir", nargs="?", default=None,
                         help="Optional directory containing junit xml files output by pytests.")
+    parser.add_argument("--pytest-log-dir", nargs="?", default=None,
+                        help="Optional directory containing the full pytest output.")
     args = parser.parse_args()
     if len(sys.argv) == 1:
         parser.print_usage()
@@ -160,7 +177,7 @@ def main():
     if args.junit_xml_dir:
         xml_files = get_xml_files(args.junit_xml_dir, "*_results.xml")
 
-    payload = generate_payload(failed_jobs, xml_files)
+    payload = generate_payload(failed_jobs, xml_files, args.pytest_log_dir)
     write_payload_to_file(payload)
     
 if __name__ == "__main__":

@@ -3,10 +3,14 @@ name: Slack Notification
 on:
   workflow_call:
     inputs:
-      integtest_output_dir:
+      integtest_xml_dir:
         type: string
         default: ''
         description: Optional path to directory containing junit xml files output by pytests.
+      integtest_log_dir:
+        type: string
+        default: ''
+        description: Optional path to directory containing the full pytest output.
     secrets:
       slack_webhook_url:
         required: true
@@ -29,7 +33,8 @@ jobs:
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
                --api-output failed_jobs.json \
-               --junit-xml-dir ${{ inputs.integtest_output_dir }}
+               --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
+               --pytest-log-dir ${{ inputs.integtest_log_dir }}
     - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.0.0
       with:
