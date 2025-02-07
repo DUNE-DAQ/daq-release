@@ -153,7 +153,7 @@ jobs:
     - name: Copy logs to persistent directory on daq.fnal.gov
       id: copy_logs
       run: |
-        TIMESTAMP=$(date +"%Y-%m-%d")
+        TIMESTAMP=$(date +"%Y-%m-%d-%H%M%Z")
         PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
         echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV

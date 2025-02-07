@@ -104,7 +104,7 @@ jobs:
     - name: Copy logs to persistent directory on daq.fnal.gov
       id: copy_logs
       run: |
-        TIMESTAMP=$(date +"%Y-%m-%d")
+        TIMESTAMP=$(date +"%Y-%m-%d-%H%M%Z")
         PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
         echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
         echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
@@ -130,7 +130,7 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: integration_tests
+    needs: [integration_tests, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
       integtest_xml_dir: ${{ needs.integration_tests.outputs.integtest_xml_path }}
