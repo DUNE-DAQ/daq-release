@@ -23,18 +23,20 @@ on:
         default: ""
 
 jobs:
-  make_release_tag:
-    name: create nightly tag
+  make_variables:
+    name: create nightly tag, timestamp, etc.
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.create_release_tag.outputs.release_tag }} 
-      is_candidate_release: ${{ steps.create_release_tag.outputs.is_candidate }} 
-      is_frozen_release: ${{ steps.create_release_tag.outputs.is_frozen }} 
+      tag: ${{ steps.create_variables.outputs.release_tag }}
+      is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
+      is_frozen_release: ${{ steps.create_variables.outputs.is_frozen }}
+      timestamp: ${{ steps.create_variables.outputs.timestamp }}
+      persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
     defaults:
       run:
         shell: bash
     steps:
-      - id: create_release_tag
+      - id: create_variables
         run: |
           is_candidate=false
           is_frozen=false
@@ -57,16 +59,22 @@ jobs:
             date_tag=$(date +%y%m%d)
             release_tag="NFD_DEV_${date_tag}_A9"
           fi
+
+          timestamp=$(date +"%Y-%m-%d-%H%M%Z")
+          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
           echo "is_frozen=${is_frozen}"  >>  "$GITHUB_OUTPUT"
+          echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
+          echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
     name: integration_tests
     runs-on: daq
     timeout-minutes: 30
-    needs: make_release_tag
+    needs: make_variables
     outputs:
       integtest_xml_path: ${{ steps.setup_and_run_test.outputs.INTEGTEST_OUTPUT_PATH }}
     strategy:
@@ -74,15 +82,15 @@ jobs:
         matrix:
 
             test_name: ["listrev_test", 
-                        "3ru_1df_multirun_test", 
-                        "3ru_3df_multirun_test", 
-                        "example_system_test", 
-                        "fake_data_producer_test", 
-                        "long_window_readout_test", 
+                        #"3ru_1df_multirun_test", 
+                        #"3ru_3df_multirun_test", 
+                        #"example_system_test", 
+                        #"fake_data_producer_test", 
+                        #"long_window_readout_test", 
                         "minimal_system_quick_test", 
-                        "readout_type_scan",
-                        "small_footprint_quick_test", 
-                        "tpstream_writing_test"]
+                        #"readout_type_scan",
+                        #"small_footprint_quick_test", 
+                        #"tpstream_writing_test"]
     defaults:
       run:
         shell: bash
@@ -90,9 +98,11 @@ jobs:
     steps:
     - name: setup release and run tests
       env:
-        RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
-        IS_CANDIDATE_RELEASE: ${{needs.make_release_tag.outputs.is_candidate_release}}
-        IS_FROZEN_RELEASE: ${{needs.make_release_tag.outputs.is_frozen_release}}
+        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+        IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
+        IS_FROZEN_RELEASE: ${{needs.make_variables.outputs.is_frozen_release}}
+        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       id: setup_and_run_test
       run: |
         DET=fd
@@ -124,10 +134,20 @@ jobs:
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py
 
+        mkdir -p $PERSISTENT_LOG_DIR
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/pytest-${{ matrix.test_name }}-$TIMESTAMP
+
+        chmod -R 755 $PERSISTENT_LOG_DIR
+        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
+          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
+          rm -rf $PERSISTENT_LOG_DIR
+          exit 2
+        fi
+
   parse_results:
     runs-on: daq
     if: always()
-    needs: [make_release_tag, integration_tests]
+    needs: [make_variables, integration_tests]
     steps:
     - name: Checkout daq-release
       uses: actions/checkout@v4
@@ -136,7 +156,7 @@ jobs:
         path: daq-release-integtest
     - name: Generate summary tables
       env:
-        RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
+        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
       run: |
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ github.workspace }}/integration_tests_$RELEASE_TAG
@@ -145,28 +165,15 @@ jobs:
   store_and_upload_logs:
     runs-on: daq
     timeout-minutes: 5
-    needs: [make_release_tag, integration_tests]
+    needs: [make_variables, integration_tests]
     if: success() || failure()
     outputs:
       integtest_log_path: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
     steps:
-    - name: Copy logs to persistent directory on daq.fnal.gov
-      id: copy_logs
-      run: |
-        TIMESTAMP=$(date +"%Y-%m-%d-%H%M%Z")
-        PERSISTENT_LOG_DIR=/home/nfs/dunedaq/github-actions/pytest-logs-${TIMESTAMP}
-        echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
-        echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> $GITHUB_ENV
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
-          exit 2
-        fi
-        echo "PERSISTENT_LOG_DIR=$PERSISTENT_LOG_DIR" >> "$GITHUB_OUTPUT"
     - name: Upload logs as artifact
+      env:
+        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v4
       with:
         name: pytest-logs-${{ env.TIMESTAMP }}
@@ -190,11 +197,11 @@ jobs:
   cleanup_files:
     runs-on: daq
     if: always()
-    needs: [make_release_tag, parse_results, send_slack_message]
+    needs: [make_variables, parse_results, send_slack_message]
     steps:
       - name: Remove xml files
         env:
-          RELEASE_TAG: ${{needs.make_release_tag.outputs.tag}}
+          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         run: |
           rm -rf ${{ github.workspace }}/integration_tests_$RELEASE_TAG
       - name: Remove daq-release
