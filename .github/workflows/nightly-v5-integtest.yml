@@ -82,15 +82,15 @@ jobs:
         matrix:
 
             test_name: ["listrev_test",
-                        #"3ru_1df_multirun_test", 
-                        #"3ru_3df_multirun_test", 
-                        #"example_system_test", 
-                        #"fake_data_producer_test", 
-                        #"long_window_readout_test", 
+                        "3ru_1df_multirun_test", 
+                        "3ru_3df_multirun_test", 
+                        "example_system_test", 
+                        "fake_data_producer_test", 
+                        "long_window_readout_test", 
                         "minimal_system_quick_test"
-                        #"readout_type_scan",
-                        #"small_footprint_quick_test", 
-                        #"tpstream_writing_test"
+                        "readout_type_scan",
+                        "small_footprint_quick_test", 
+                        "tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -102,7 +102,6 @@ jobs:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
         IS_FROZEN_RELEASE: ${{needs.make_variables.outputs.is_frozen_release}}
-        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       id: setup_and_run_test
       run: |
@@ -136,7 +135,7 @@ jobs:
                 $TEST_PATH/${{ matrix.test_name }}.py
 
         mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/pytest-${{ matrix.test_name }}-$TIMESTAMP
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
 
         chmod -R 755 $PERSISTENT_LOG_DIR
         if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
