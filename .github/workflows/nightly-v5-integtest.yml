@@ -81,16 +81,17 @@ jobs:
         fail-fast: false
         matrix:
 
-            test_name: ["listrev_test", 
+            test_name: ["listrev_test",
                         #"3ru_1df_multirun_test", 
                         #"3ru_3df_multirun_test", 
                         #"example_system_test", 
                         #"fake_data_producer_test", 
                         #"long_window_readout_test", 
-                        "minimal_system_quick_test", 
+                        "minimal_system_quick_test"
                         #"readout_type_scan",
                         #"small_footprint_quick_test", 
-                        #"tpstream_writing_test"]
+                        #"tpstream_writing_test"
+                       ]
     defaults:
       run:
         shell: bash
