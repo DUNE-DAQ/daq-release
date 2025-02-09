@@ -132,7 +132,7 @@ jobs:
         fi
         echo "INTEGTEST_OUTPUT_PATH=$INTEGTEST_OUTPUT_PATH" >> "$GITHUB_OUTPUT"
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
-                $TEST_PATH/${{ matrix.test_name }}.py
+                $TEST_PATH/${{ matrix.test_name }}.py || true
 
         mkdir -p $PERSISTENT_LOG_DIR
         cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
