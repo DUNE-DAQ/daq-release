@@ -81,7 +81,8 @@ jobs:
         fail-fast: false
         matrix:
 
-            test_name: ["listrev_test",
+            test_name: [
+                        "listrev_test",
                         "3ru_1df_multirun_test",
                         "3ru_3df_multirun_test",
                         "example_system_test",
@@ -131,8 +132,10 @@ jobs:
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
         fi
         echo "INTEGTEST_OUTPUT_PATH=$INTEGTEST_OUTPUT_PATH" >> "$GITHUB_OUTPUT"
+
+        pytest_retval=0
         pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
-                $TEST_PATH/${{ matrix.test_name }}.py || true
+                $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
 
         mkdir -p $PERSISTENT_LOG_DIR
         cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
@@ -143,6 +146,8 @@ jobs:
           rm -rf $PERSISTENT_LOG_DIR
           exit 2
         fi
+
+        test $pytest_retval == 0 || false
 
   parse_results:
     runs-on: daq
