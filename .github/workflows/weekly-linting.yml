@@ -40,7 +40,7 @@ jobs:
     - name: Create build area and run linting
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt v8.7.2
+        setup_dbt latest_v5
         dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
