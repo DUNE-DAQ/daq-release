@@ -39,4 +39,4 @@ class Dpdk(MesonPackage):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_LIB", self.prefix + "/lib" )
 
     def meson_args(self):
-                return ['-Dplatform=generic']
+                return ['-Dplatform=generic',  '-Dmax_lcores=512']
