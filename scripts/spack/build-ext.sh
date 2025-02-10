@@ -166,10 +166,12 @@ boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+
 
 llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
+dpdk_spec="dpdk max_lcores=512"
+
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec"
+umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
 
 echo $umbrella_spec
 

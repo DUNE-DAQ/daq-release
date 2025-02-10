@@ -30,6 +30,8 @@ class Dpdk(MesonPackage):
     #depends_on("openssl")
     depends_on("libarchive~iconv")
 
+    variant("max_lcores", default=512, description="Set max_lcores for DPDK")
+
     def setup_run_environment(self, env):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_INC", self.prefix + "/include" )
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_LIB", self.prefix + "/lib" )
@@ -39,4 +41,6 @@ class Dpdk(MesonPackage):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_LIB", self.prefix + "/lib" )
 
     def meson_args(self):
-                return ['-Dplatform=generic',  '-Dmax_lcores=512']
+        max_lcores = self.spec.variants['max_lcores'].value
+        return ['-Dplatform=generic',  f'-Dmax_lcores={max_lcores}']
+
