@@ -20,7 +20,7 @@ class FelixSoftware(Package):
     depends_on('boost', type='build')
     depends_on('python', type='build')
     depends_on('cmake', type='build')
-    depends_on('yaml-cpp', type='build')
+    depends_on('yaml-cpp', type=('build', 'link'))
     depends_on('czmq', type='build')
     depends_on('cppzmq', type='build')
     depends_on('py-pybind11', type=('build', 'link', 'run'))
@@ -174,9 +174,9 @@ class FelixSoftware(Package):
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/packetformat/lib* lib")
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/regmap/lib* lib")
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/drivers_rcc/lib* lib")
-            #return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/libFlxTools* lib")
+            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/libFlxTools* lib")
 
             return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/flxcard/flx-* bin")
-            #return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/f* bin")
+            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/f* bin")
 
             return_zero_or_exit("rm -rf software")
