@@ -21,7 +21,7 @@ jobs:
     name: build_dev_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
     defaults:
       run:
         shell: bash
@@ -78,7 +78,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
             output_image: "ghcr.io/dune-daq/candidate-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
     needs: build_the_candidate_release_spack
