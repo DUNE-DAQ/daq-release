@@ -169,8 +169,9 @@ jobs:
       run: |
           DET=${{ github.event.inputs.det }}
 
-          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest_v5
+          git clone https://github.com/DUNE-DAQ/daq-buildtools -b v8.8.0
+          . ./daq-buildtools/env.sh
+
           dbt-setup-release ${DET}daq-${{ github.event.inputs.det-release }}-a9
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
