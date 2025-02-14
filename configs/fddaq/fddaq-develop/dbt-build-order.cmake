@@ -61,6 +61,7 @@ set(build_order "daq-cmake"
                 "uhallibs"
                 "rawdatautils"
                 "dpdklibs"
+                "daphnemodules"
 		"daqsystemtest"
 )
 
