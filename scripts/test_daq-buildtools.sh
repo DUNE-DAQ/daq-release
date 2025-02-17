@@ -52,6 +52,9 @@ dbt-build --codegen || exit 13
 echo "********************TEST local workarea Spack package installation **********************"
 spack install py-wesanderson || exit 14
 
+echo "*********************************TEST dbt-lcov.sh****************************************"
+dbt-lcov.sh || exit 15
+
 rm -rf $newdir
 
 exit 0
