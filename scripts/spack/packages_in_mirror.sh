@@ -5,7 +5,7 @@ if [[ -z $1 ]]; then
 fi
 
 cache_package=$1
-buildcache_name="spack-local-buildcache"
+buildcache_name="spack-local-buildcache1"
 
 if [[ -z $DBT_AREA_ROOT ]]; then
     echo "Error: need a work area to be set up for this script to work. Returning..." >&2
@@ -19,9 +19,14 @@ fi
 
 function remove_buildcache() {
 
-    echo "This function is a stub until it can be made safe against \"rm -rf\""
-    #rm -rf $DBT_AREA_ROOT/$buildcache_name 
-    #spack mirror rm mirror-of-${buildcache_name}
+    local buildcache_name=$1
+    
+    if [[ -n $buildcache_name && $buildcache_name != "" ]]; then
+	rm -rf $DBT_AREA_ROOT/$buildcache_name
+	spack mirror rm mirror-of-${buildcache_name}
+    else
+	echo "ERROR: remove_buildcache called but \$buildcache_name not set; no action will be taken..." >&2
+    fi	
 }
 
 spack find $cache_package
@@ -33,16 +38,30 @@ if [[ $retval != 0 ]]; then
 fi
 
 # The sed command below is designed to give you the Spack hashes of
-# the target package and all its dependencies *which are
-# installed*. This way we can use the "--only package" argument to
-# "spack buildcache push" to circumvent the error that occurs if you
-# try pushing an installed package whose build-only dependencies have
-# been deleted
+# the target package and all its dependencies (1) which are installed
+# and (2) which aren't part of our externals. This way we can use the
+# "--only package" argument to "spack buildcache push" to circumvent
+# the error that occurs if you try pushing an installed package whose
+# build-only dependencies have been deleted
 
-for installed_hash in $( spack spec -t -l ${cache_package} | sed -r -n '/Concretized/,$s/^\[[^-]\]\s+(\S+)\s+.*/\1/p' ); do
+hashes_to_install=$( spack spec -t -l -N ${cache_package} |  sed -r -n '/Concretized/,${/\^builtin|\^dunedaq-externals/d;s/^\[[^-]\]\s+(\S+)\s+.*/\1/p}' )
+
+num_packages=$( echo $hashes_to_install | wc -w )
+
+if ! (( num_packages > 0 )); then
+    echo "Problem determining which packages to install; returning..." >&2
+    return 5
+fi
+
+package_counter=1
+
+for installed_hash in $hashes_to_install; do
+
+    echo "Installing package $package_counter of $num_packages"
     cmd="spack buildcache push --unsigned --only package $DBT_AREA_ROOT/$buildcache_name /$installed_hash"
     echo $cmd
     $cmd || return 5
+    package_counter=$(( package_counter + 1 ))
 done
 
 mirrorname="mirror-of-${buildcache_name}"
