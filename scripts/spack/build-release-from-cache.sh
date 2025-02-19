@@ -1,30 +1,31 @@
 #!/bin/bash
 
-# You'll want to run this in a container which is set up, e.g., in the following manner:
+if (( $# != 2 )); then
+    echo "Usage: $( basename $0 ) <path-qualified cache directory name> <tag of nightly in cache directory (NFD...) >" >&2
+    exit 1
+fi
 
-# docker run -it --name build-from-cache \
-    #       -v <daq release repo>:/daq-release \
-    #       -v <directory with needed spack buildcache>:/cachedir \
-    #        ghcr.io/dune-daq/alma9-slim-externals:v2.2
+BUILDCACHE_DIR=$1
+NIGHTLY_TAG=$2
 
-# ...where cachedir is a local directory that contains a XXXXXXXXX
+INSTALL_DIRECTORY=$HOME/buildcache_installed_packages
 
-# Then run
-#
-# /daq-release/scripts/spack/build-release-from-cache.sh
-#
-
-NIGHTLY_TAG="_DEV_250217_A9"  # Could (should) make this a passable environment
-			      # variable. Likewise the name of the
-			      # buildcache file.
+TAG_NO_PREFIX=$( echo $NIGHTLY_TAG | sed -r 's/^[^_]+(.*)/\1/' )
 
 # Make the buildcache available to build-release.sh for rapid binary installation
-. /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/share/spack/setup-env.sh
-spack mirror add local-buildcache file:///cachedir/spack-local-buildcache1
-spack mirror set local-buildcache --unsigned   # REMOVE THIS LINE unless you're doing local testing
+. /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/share/spack/setup-env.sh || exit 1
 
-random_directory=/my/new/area
-mkdir -p $random_directory
+spack mirror rm script-created-mirror
+spack mirror add script-created-mirror file://$BUILDCACHE_DIR || exit 2
 
-/daq-release/scripts/spack/build-release.sh $random_directory/NB${NIGHTLY_TAG} $random_directory/NFD${NIGHTLY_TAG} core almalinux9 develop
+spack mirror set script-created-mirror --unsigned || exit 3  # REMOVE THIS LINE unless you're doing local testing
 
+mkdir -p $INSTALL_DIRECTORY
+
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+$SCRIPT_DIR/build-release.sh $INSTALL_DIRECTORY/NB${TAG_NO_PREFIX} $INSTALL_DIRECTORY/NFD${TAG_NO_PREFIX} core almalinux9 develop || exit 3
+
+$SCRIPT_DIR/build-release.sh $INSTALL_DIRECTORY/NB${TAG_NO_PREFIX} $INSTALL_DIRECTORY/NFD${TAG_NO_PREFIX} fd almalinux9 develop || exit 4
+
+exit 0

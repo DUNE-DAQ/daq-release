@@ -29,7 +29,7 @@ if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
     exit 3
 fi
 
-export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
+export DAQ_RELEASE_REPO=$(dirname "$0")/../..
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
 if [[ $DET == "core" ]]; then

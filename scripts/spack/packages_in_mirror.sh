@@ -5,7 +5,8 @@ if [[ -z $1 ]]; then
 fi
 
 cache_package=$1
-buildcache_name="spack-local-buildcache1"
+buildcache_name="spack-local-buildcache"
+mirrorname="mirror-of-${buildcache_name}"
 
 if [[ -z $DBT_AREA_ROOT ]]; then
     echo "Error: need a work area to be set up for this script to work. Returning..." >&2
@@ -23,7 +24,7 @@ function remove_buildcache() {
     
     if [[ -n $buildcache_name && $buildcache_name != "" ]]; then
 	rm -rf $DBT_AREA_ROOT/$buildcache_name
-	spack mirror rm mirror-of-${buildcache_name}
+	spack mirror rm $mirrorname
     else
 	echo "ERROR: remove_buildcache called but \$buildcache_name not set; no action will be taken..." >&2
     fi	
@@ -64,22 +65,26 @@ for installed_hash in $hashes_to_install; do
     package_counter=$(( package_counter + 1 ))
 done
 
-mirrorname="mirror-of-${buildcache_name}"
-
 if [[ -z $( spack mirror list | grep $mirrorname ) ]]; then
     spack mirror add --unsigned $mirrorname $DBT_AREA_ROOT/$buildcache_name || return 6
 fi
 
+echo
+echo
 spack mirror list
+echo
 
 # Note that you need to give an absolute directory below,
 # otherwise it seems like the index isn't updated the way you'd
 # expect it to be
     
 spack buildcache update-index $DBT_AREA_ROOT/$buildcache_name || return 7
-spack buildcache list
 
-echo "Now try uninstalling and re-installing $cache_package and perhaps some of its dependencies as described in https://spack.readthedocs.io/en/latest/binary_caches.html"
+cmd="spack buildcache list --allarch"
+echo "Running $cmd ..."
+$cmd
+
+echo "Script completed successfully"
 
 return 0
 
