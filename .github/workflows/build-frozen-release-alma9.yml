@@ -21,7 +21,7 @@ jobs:
     name: build_frozen_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.1
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
     defaults:
       run:
         shell: bash
@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.1"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/frozen-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
     needs: build_the_frozen_release_spack
@@ -169,8 +169,8 @@ jobs:
       run: |
           DET=${{ github.event.inputs.det }}
 
-          git clone https://github.com/DUNE-DAQ/daq-buildtools -b v8.8.0
-          . ./daq-buildtools/env.sh
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest_v5
 
           dbt-setup-release ${DET}daq-${{ github.event.inputs.det-release }}-a9
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
