@@ -65,7 +65,7 @@ jobs:
         # spack load dbe
         dbt-lcov.sh
         echo "DBT_AREA_ROOT: ${DBT_AREA_ROOT}"
-        echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results" >> "$GITHUB_OUTPUT"
+        echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results/html" >> "$GITHUB_OUTPUT"
         echo "PWD: $(pwd)"
         echo "ls: $(ls)"
         echo "ls code_coverage_results: $(ls code_coverage_results)"
