@@ -62,6 +62,8 @@ jobs:
         # spack load dbe
         dbt-lcov.sh
         echo "coverage_results_dir=${DBT_AREA_ROOT}/code_coverage_results" >> "$GITHUB_OUTPUT"
+        echo "PWD: $(pwd)"
+        echo "ls: $(ls)"
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
@@ -77,6 +79,12 @@ jobs:
     steps:
     - name: Configure GitHub Pages
       uses: actions/configure-pages@v5
+    - name: Print debug
+      run: |
+        echo "Where am I? $(pwd)"
+        echo "What's here? $(ls)"
+        echo "Coverage results dir? ${{ needs.generate_code_coverage_report.outputs.coverage_results_dir }}"
+        echo "ls coverage results dir? $(ls ${{ needs.generate_code_coverage_report.outputs.coverage_results_dir }})"
     - name: Upload pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
