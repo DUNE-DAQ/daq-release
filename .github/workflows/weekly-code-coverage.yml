@@ -1,4 +1,4 @@
-name: Nightly code check workflow
+name: Weekly code coverage workflow
 
 on:
   workflow_dispatch:
