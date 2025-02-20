@@ -6,8 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-  #schedule:
-  #  - cron: "0 18 * * 0"
+  schedule:
+    - cron: "0 18 * * 0"
 
 jobs:
   make_nightly_tag:
@@ -52,7 +52,6 @@ jobs:
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        echo "DBT_AREA_ROOT: $DBT_AREA_ROOT"
         echo "DBT_AREA_ROOT=${DBT_AREA_ROOT}" >> "$GITHUB_ENV"
     - name: Run dbt-lcov.sh
       id: run_lcov
@@ -64,11 +63,7 @@ jobs:
         dbt-workarea-env
         # spack load dbe
         dbt-lcov.sh
-        echo "DBT_AREA_ROOT: ${DBT_AREA_ROOT}"
         echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results/html" >> "$GITHUB_OUTPUT"
-        echo "PWD: $(pwd)"
-        echo "ls: $(ls)"
-        echo "ls code_coverage_results: $(ls code_coverage_results)"
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
@@ -84,12 +79,6 @@ jobs:
     steps:
     - name: Configure GitHub Pages
       uses: actions/configure-pages@v5
-    - name: Print debug
-      run: |
-        echo "Where am I? $(pwd)"
-        echo "What's here? $(ls)"
-        echo "Coverage results dir? ${{ needs.generate_code_coverage_report.outputs.coverage_results_dir }}"
-        echo "ls coverage results dir? $(ls ${{ needs.generate_code_coverage_report.outputs.coverage_results_dir }})"
     - name: Upload pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
