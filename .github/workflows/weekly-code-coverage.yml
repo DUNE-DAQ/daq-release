@@ -47,7 +47,7 @@ jobs:
         dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
-        cd ../daq-release-unittests/scripts
+        cd ../daq-release-lcov/scripts
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
