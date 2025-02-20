@@ -52,18 +52,23 @@ jobs:
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT: $DBT_AREA_ROOT"
         echo "DBT_AREA_ROOT=${DBT_AREA_ROOT}" >> "$GITHUB_ENV"
     - name: Run dbt-lcov.sh
       id: run_lcov
       run: |
         cd $DBT_AREA_ROOT/
+        echo "Where am I? $(pwd)"
+        echo "DBT_AREA_ROOT in lcov step: $DBT_AREA_ROOT"
         source env.sh
         dbt-workarea-env
         # spack load dbe
         dbt-lcov.sh
-        echo "coverage_results_dir=${DBT_AREA_ROOT}/code_coverage_results" >> "$GITHUB_OUTPUT"
+        echo "DBT_AREA_ROOT: ${DBT_AREA_ROOT}"
+        echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results" >> "$GITHUB_OUTPUT"
         echo "PWD: $(pwd)"
         echo "ls: $(ls)"
+        echo "ls code_coverage_results: $(ls code_coverage_results)"
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
