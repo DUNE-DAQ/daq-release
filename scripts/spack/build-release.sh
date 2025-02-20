@@ -151,7 +151,7 @@ if $build_dbe; then
             break
         fi
         if grep -qi "==> Error: FetchError: All fetchers failed" dbe_build_spack_install.log; then
-            echo "Attempt $attempt failed due to a FetchError."
+            echo "Attempt $dbe_attempt failed due to a FetchError."
         else
             echo "Build failed with a non-retryable exit code. Exiting..."
             exit $spack_install_dbe_exit_code
@@ -160,7 +160,7 @@ if $build_dbe; then
             echo "All retry attempts failed due to FetchError. Exiting."
             exit 111
         fi
-        attempt=$((attempt + 1))
+        dbe_attempt=$((dbe_attempt + 1))
     done
 fi
 
