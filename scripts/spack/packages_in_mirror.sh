@@ -34,8 +34,21 @@ spack find $cache_package
 retval=$?
 
 if [[ $retval != 0 ]]; then
-    echo "Need to install ${cache_package}, a dependency-free package"
+    echo "Can't find a package with the Spack hash ${cache_package}; this needs to be installed. Returning..."
     return 4
+fi
+
+
+
+if [[ -z $( spack gpg list ) ]]; then
+
+    echo "Need to set up gpg keys using spack, i.e.: "
+    echo "spack gpg init"
+    echo "spack gpg create <your name> <your email>"
+    echo "Note this doesn't seem to work on daq.fnal.gov, specifically"
+    echo
+    echo "Returning..."
+    return 5
 fi
 
 # The sed command below is designed to give you the Spack hashes of
@@ -59,20 +72,15 @@ package_counter=1
 for installed_hash in $hashes_to_install; do
 
     echo "Installing package $package_counter of $num_packages"
-    cmd="spack buildcache push --unsigned --only package $DBT_AREA_ROOT/$buildcache_name /$installed_hash"
+    cmd="spack buildcache push --only package $DBT_AREA_ROOT/$buildcache_name /$installed_hash"
     echo $cmd
     $cmd || return 5
     package_counter=$(( package_counter + 1 ))
 done
 
 if [[ -z $( spack mirror list | grep $mirrorname ) ]]; then
-    spack mirror add --unsigned $mirrorname $DBT_AREA_ROOT/$buildcache_name || return 6
+    spack mirror add $mirrorname $DBT_AREA_ROOT/$buildcache_name || return 6
 fi
-
-echo
-echo
-spack mirror list
-echo
 
 # Note that you need to give an absolute directory below,
 # otherwise it seems like the index isn't updated the way you'd
@@ -83,6 +91,12 @@ spack buildcache update-index $DBT_AREA_ROOT/$buildcache_name || return 7
 cmd="spack buildcache list --allarch"
 echo "Running $cmd ..."
 $cmd
+
+echo
+echo
+spack mirror list
+echo
+
 
 echo "Script completed successfully"
 
