@@ -2,7 +2,7 @@ import sys, os
 import argparse
 import json
 import re
-from integtest_xml_parser import get_xml_files, parse_junit_xml
+from integtest_xml_parser import parse_junit_xml
 
 def get_failed_jobs(api_output_path):
     """
@@ -13,6 +13,15 @@ def get_failed_jobs(api_output_path):
             return json.load(f)
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
+
+def get_xml_files(directory, pattern):
+    if not os.path.isdir(directory):
+        raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
+
+    path = Path(directory)
+    xml_files = path.rglob(pattern)
+
+    return xml_files
 
 def get_workflow_status(failed_jobs):
     """
@@ -73,7 +82,8 @@ def get_integration_test_failure(test_name, xml_files):
     """Get the primary failure type from the junit xml file."""
     xml_file = find_matching_file(test_name, xml_files)
     if not xml_file:
-        raise FileNotFoundError('No matching xml file found for', test_name)
+        print('WARNING: No matching xml file found for', test_name)
+        return "Unknown failure: could not find results.xml file for this test."
 
     failure = "Unknown failure"
     results = parse_junit_xml(xml_file)
