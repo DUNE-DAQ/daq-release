@@ -88,7 +88,7 @@ jobs:
       uses: actions/deploy-pages@v4
 
   send_slack_message:
-    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
     needs: deploy_to_github_pages
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
