@@ -176,7 +176,7 @@ def main():
         with open(args.api_output, "r") as f:
             workflow_summary = json.load(f)
     except json.JSONDecodeError as e:
-        print(f"Error decoding JSON: {e}")
+        print(f"Error decoding GH API output: {e}")
         return
 
     xml_files = []
@@ -185,7 +185,6 @@ def main():
 
     slack_payload = SlackPayload(workflow_summary, xml_files, args.pytest_log_dir)
     write_payload_to_file(slack_payload.to_dict())
-
 
 if __name__ == "__main__":
     main()
