@@ -2,6 +2,7 @@ import sys, os
 import argparse
 import json
 import re
+from pathlib import Path
 from integtest_xml_parser import parse_junit_xml
 
 def get_failed_jobs(api_output_path):
@@ -16,7 +17,8 @@ def get_failed_jobs(api_output_path):
 
 def get_xml_files(directory, pattern):
     if not os.path.isdir(directory):
-        raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
+        print(f"Warning: {directory} is not a valid directory.")
+        return []
 
     path = Path(directory)
     xml_files = path.rglob(pattern)

@@ -35,8 +35,8 @@ elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v
     export EXT_VERSION=v2.0
     export GCC_VERSION=12.1.0
 elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or frozen, externals v2.1 
-    export EXT_VERSION=v2.2
-    export GCC_VERSION=13.2.0
+    export EXT_VERSION=v2.1
+    export GCC_VERSION=12.1.0   # JCF, Feb-3-2025: update GCC version to 13.2.0 once fddaq-v5.2.1 is out the door
 elif [[ $OS == scientific7 ]]; then                                 # SL7 _any_, externals v1.1
     export EXT_VERSION=v1.1
     export GCC_VERSION=12.1.0
