@@ -115,12 +115,28 @@ class SlackPayload:
                 }
             })
 
+    def add_footer(self):
+        workflow_trigger = self.workflow_summary['event']
+        workflow_actor = self.workflow_summary['actor']
+        footer_text = ""
+        if workflow_trigger == "schedule":
+            footer_text = "This was a scheduled workflow."
+        elif workflow_trigger == "workflow_dispatch":
+            footer_text = f"This workflow was manually triggered by user `{workflow_actor}`"
+
+        if footer_text:
+            self.blocks.append({
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": footer_text}
+            })
+
     def to_dict(self):
         """Build and return the final Slack payload."""
         self.add_header()
         self.add_report_section()
         self.add_failed_jobs_section()
         self.add_pytest_log_section()
+        self.add_footer()
         return {"blocks": self.blocks}
 
 def write_payload_to_file(payload, file_name='slack_payload.json'):
