@@ -16,8 +16,12 @@ class SlackPayload:
     }
 
     def __init__(self, workflow_summary, xml_files=None, pytest_log_dir=None):
-        self.workflow_summary = workflow_summary
-        self.failed_jobs = workflow_summary['failed_jobs']
+        self.workflow_summary  = workflow_summary
+        self.workflow_name     = workflow_summary['workflow']
+        self.workflow_trigger  = workflow_summary['event']
+        self.workflow_actor    = workflow_summary['actor']
+        self.workflow_html_url = workflow_summary['html_url']
+        self.failed_jobs       = workflow_summary['failed_jobs']
         self.xml_files = xml_files or []
         self.pytest_log_dir = pytest_log_dir
         self.workflow_status = self.get_workflow_status()
@@ -35,7 +39,7 @@ class SlackPayload:
 
     def add_header(self):
         """Add the header block displaying the workflow name and status."""
-        workflow_name = os.getenv("GITHUB_WORKFLOW", "Unknown Workflow")
+        workflow_name = self.workflow_summary['workflow']
         emoji = self.STATUS_EMOJIS.get(self.workflow_status, ":grey_question:")
         self.blocks.append({
             "type": "header",
@@ -52,9 +56,18 @@ class SlackPayload:
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Full report: <https://github.com/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}|link>."
+                #"text": "Full report: <https://github.com/${{ github.payload.repository.full_name }}/actions/runs/${{ github.runId }}|link>."
+                "text": f"Full report: <{self.workflow_html_url}|link>."
             }
         })
+        if self.workflow_name == "Weekly code coverage workflow":
+            self.blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "You can view the full lcov coverage report <https://dune-daq.github.io/daq-release/|here>."
+                }
+            })
 
     def add_failed_jobs_section(self):
         """Sections that lists failed jobs and steps."""
@@ -116,13 +129,11 @@ class SlackPayload:
             })
 
     def add_footer(self):
-        workflow_trigger = self.workflow_summary['event']
-        workflow_actor = self.workflow_summary['actor']
         footer_text = ""
-        if workflow_trigger == "schedule":
+        if self.workflow_trigger == "schedule":
             footer_text = "This was a scheduled workflow."
-        elif workflow_trigger == "workflow_dispatch":
-            footer_text = f"This workflow was manually triggered by user `{workflow_actor}`"
+        elif self.workflow_trigger == "workflow_dispatch":
+            footer_text = f"This workflow was manually triggered by user `{self.workflow_actor}`"
 
         if footer_text:
             self.blocks.append({
