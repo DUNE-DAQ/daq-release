@@ -26,7 +26,7 @@ jobs:
         path: daq-release-slack-message
     - name: Get workflow failures from GitHub API
       run: |
-        WORKFLOW_DETAILS=$(gh api /repos/DUNE-DAQ/daq-release/actions/runs/${{ github.run_id }})
+        WORKFLOW_DETAILS=$(gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
         WORKFLOW_NAME=$(echo "$WORKFLOW_DETAILS" | jq -r '.name')
         ACTOR_LOGIN=$(echo "$WORKFLOW_DETAILS" | jq -r '.actor.login')
