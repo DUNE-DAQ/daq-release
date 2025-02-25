@@ -123,7 +123,7 @@ class SlackPayload:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"The pytest logs are stored for 7 days at: `daq.fnal.gov:{self.pytest_log_dir}`.\n"
+                    "text": f"The pytest logs for these tests will be stored for 7 days at: `daq.fnal.gov:{self.pytest_log_dir}`.\n"
                              "You can also download logs from the 'Full report' link above."
                 }
             })
