@@ -4,7 +4,7 @@ import argparse
 import sys
 import re
 from pathlib import Path
-from integtest_xml_parser import parse_junit_xml
+from integtest_xml_parser import JUnitXMLParser
 
 class SlackPayload:
     """Class to generate a Slack JSON payload for workflow notifications."""
@@ -15,17 +15,19 @@ class SlackPayload:
         "cancelled": ":no_entry:",
     }
 
-    def __init__(self, workflow_summary, xml_files=None, pytest_log_dir=None):
+    def __init__(self, workflow_summary, junit_xml_dir=None, pytest_log_dir=None):
         self.workflow_summary  = workflow_summary
         self.workflow_name     = workflow_summary['workflow']
         self.workflow_trigger  = workflow_summary['event']
         self.workflow_actor    = workflow_summary['actor']
         self.workflow_html_url = workflow_summary['html_url']
         self.failed_jobs       = workflow_summary['failed_jobs']
-        self.xml_files = xml_files or []
         self.pytest_log_dir = pytest_log_dir
         self.workflow_status = self.get_workflow_status()
         self.blocks = []
+        self.junit_xml_dir = junit_xml_dir
+        self.xml_parser = JUnitXMLParser(self.junit_xml_dir) if self.junit_xml_dir else None
+        self.xml_files = self.xml_parser.get_xml_files(self.junit_xml_dir, "*_results.xml") if self.xml_parser else []
 
     def get_workflow_status(self):
         """Determine the overall workflow status based on job conclusions."""
@@ -97,7 +99,7 @@ class SlackPayload:
             return "\n\t\t  *Unknown failure:* No matching results.xml file found.\n"
 
         failure_summary = ''
-        results = parse_junit_xml(xml_file)
+        results = self.xml_parser.parse_junit_xml(xml_file)
         failed_line_pattern = r"\n>\s+(.*?)\n"
 
         for result in results:
@@ -183,7 +185,8 @@ def main():
     if args.junit_xml_dir and os.path.isdir(args.junit_xml_dir):
         xml_files = list(Path(args.junit_xml_dir).rglob("*_results.xml"))
 
-    slack_payload = SlackPayload(workflow_summary, xml_files, args.pytest_log_dir)
+    print('args.pytest_log_dir:', args.pytest_log_dir)
+    slack_payload = SlackPayload(workflow_summary, args.junit_xml_dir, args.pytest_log_dir)
     write_payload_to_file(slack_payload.to_dict())
 
 if __name__ == "__main__":
