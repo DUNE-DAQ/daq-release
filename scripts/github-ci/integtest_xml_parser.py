@@ -1,106 +1,144 @@
-import os, sys
+import os
+import sys
 import argparse
 import html
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-def get_xml_files(directory, pattern):
-    if not os.path.isdir(directory):
-        raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
+class JUnitXMLParser:
+    def __init__(self, input_directory=None, input_file=None, output_filename="pytest_summary_table.md"):
+        self.input_directory = input_directory
+        self.input_file = input_file
+        self.output_filename = output_filename
+        self.test_results = []
 
-    path = Path(directory)
-    xml_files = path.rglob(pattern)
-    if not xml_files:
-        raise FileNotFoundError(f"Error: No xml files found in {directory}.")
+    def get_xml_files(self, directory, pattern):
+        if not os.path.isdir(directory):
+            raise FileNotFoundError(f"Error: {directory} is not a valid directory.")
 
-    return xml_files
+        path = Path(directory)
+        xml_files = path.rglob(pattern)
+        if not xml_files:
+            raise FileNotFoundError(f"Error: No xml files found in {directory}.")
+        return xml_files
 
-def get_test_name(file_path):
-    file_name = os.path.basename(file_path)
-    # Results file names should look like "minimal_system_quick_test_results.xml"
-    return file_name.replace('_results.xml', '')
+    def get_test_name(self, file_path):
+        file_name = os.path.basename(file_path)
+        # Results file names should look like "minimal_system_quick_test_results.xml"
+        return file_name.replace('_results.xml', '')
 
-def parse_junit_xml(file_path):
-    tree = ET.parse(file_path)
-    root = tree.getroot()
+    def parse_junit_xml(self, file_path):
+        tree = ET.parse(file_path)
+        root = tree.getroot()
 
-    test_suite_name = get_test_name(file_path)
-    
-    results = []
-    for testcase in root.findall(".//testcase"):
-        test_name = testcase.get("name").split("[")[0]
-        result = "passed"
-        failure_message = None
-        
-        if (failure_element := testcase.find("failure")) is not None:
-            result = "failed"
-            #failure_message = failure_element.text.strip() if failure_element.text else "No message provided"
-            failure_message = html.unescape(failure_element.text.strip()) if failure_element.text else "No message provided"
-        elif testcase.find("error") is not None:
-            result = "error"
-        elif testcase.find("skipped") is not None:
-            result = "skipped"
+        test_suite_name = self.get_test_name(file_path)
 
-        results.append({
-            "test_suite_name": test_suite_name,
-            "test_name": test_name,
-            "result": result,
-            "failure_message": failure_message
-        })
-    return results
+        results = []
+        for testcase in root.findall(".//testcase"):
+            test_name = testcase.get("name").split("[")[0]
+            result = "passed"
+            failure_message = None
 
-def which_emoji(test_status):
-    emoji_map = {
-        'passed': ':white_check_mark:',
-        'failed': ':x:',
-        'skipped': ':grey_question:'
-    }
-    return emoji_map.get(test_status, ':shrug:')
+            if (failure_element := testcase.find("failure")) is not None:
+                result = "failed"
+                failure_message = html.unescape(failure_element.text.strip()) if failure_element.text else "No message provided"
+            elif testcase.find("error") is not None:
+                result = "error"
+            elif testcase.find("skipped") is not None:
+                result = "skipped"
 
-def format_markdown_row(test):
-    emoji = which_emoji(test['result'])
-    return f"| {test['test_name']} | {emoji} {test['result']} |\n"
+            results.append({
+                "test_suite_name": test_suite_name,
+                "test_name": test_name,
+                "result": result,
+                "failure_message": failure_message
+            })
+        return results
 
-def generate_markdown_table(results, output_filename):
-    with open(output_filename, 'w') as f:
-        for idx, result in enumerate(results):
-            f.write(f"# {result[0]['test_suite_name']} Results\n")
-            f.write("| Test Case | Status |\n")
-            f.write("|-----------|--------|\n")
-            f.writelines(format_markdown_row(test) for test in result)
-    
-    if not os.path.exists(output_filename):
-        raise FileNotFoundError(f"There was a problem writing the output markdown file: {output_filename}")
+    def which_emoji(self, test_status):
+        emoji_map = {
+            'passed': ':white_check_mark:',
+            'failed': ':x:',
+            'skipped': ':grey_question:'
+        }
+        return emoji_map.get(test_status, ':shrug:')
 
-    print(f"Markdown summary generated at {output_filename}")
+    def format_markdown_row(self, test):
+        emoji = self.which_emoji(test['result'])
+        return f"| {test['test_name']} | {emoji} {test['result']} |\n"
 
-def prepend_test_summary(markdown_file):
-    num_passed = 0
-    num_failed = 0
-    num_skipped = 0
-    total_tests = 0
-    with open(markdown_file, 'r') as ifile:
-        original_lines = ifile.readlines()
-        for line in original_lines:
-            print(line)
-            #print(line)
-            if 'passed' in line:
-                num_passed += 1
-                total_tests += 1
-            elif 'failed' in line:
-                num_failed += 1
-                total_tests += 1
-            elif 'skipped' in line:
-                num_skipped += 1
-                total_tests += 1
+    def generate_markdown_table(self):
+        print("Results:", self.test_results)
+        print("Results[0]:", self.test_results[0])
+        with open(self.output_filename, 'w') as f:
+            for idx, result in enumerate(self.test_results):
+                if not result: continue
+                print('------', idx, '---------')
+                print('result:', result)
+                print('result type:', type(result))
+                print('len result:', len(result))
+                print('result[0]:', result[0])
+                f.write(f"# {result[0]['test_suite_name']} Results\n")
+                f.write("| Test Case | Status |\n")
+                f.write("|-----------|--------|\n")
+                f.writelines(self.format_markdown_row(test) for test in result)
 
-    print('Passed:', num_passed)
-    print('Failed:', num_failed)
+        if not os.path.exists(self.output_filename):
+            raise FileNotFoundError(f"There was a problem writing the output markdown file: {self.output_filename}")
 
-    summary = f"{num_passed} passed and {num_failed} failed of {total_tests} total tests.\n"
-    new_lines = [summary] + original_lines
-    with open(markdown_file, 'w') as ofile:
-        ofile.writelines(new_lines)
+        print(f"Markdown summary generated at {self.output_filename}")
+
+    def prepend_test_summary(self):
+        num_passed = 0
+        num_failed = 0
+        num_skipped = 0
+        total_tests = 0
+        with open(self.output_filename, 'r') as ifile:
+            original_lines = ifile.readlines()
+            for line in original_lines:
+                print(line)
+                if 'passed' in line:
+                    num_passed += 1
+                    total_tests += 1
+                elif 'failed' in line:
+                    num_failed += 1
+                    total_tests += 1
+                elif 'skipped' in line:
+                    num_skipped += 1
+                    total_tests += 1
+
+        print('Passed:', num_passed)
+        print('Failed:', num_failed)
+
+        summary = f"{num_passed} passed and {num_failed} failed of {total_tests} total tests.\n"
+        new_lines = [summary] + original_lines
+        with open(self.output_filename, 'w') as ofile:
+            ofile.writelines(new_lines)
+
+    def parse(self):
+        if self.input_directory and self.input_file:
+            print(f"Error: You must specify either an input directory or a specific file, not both.")
+            exit(1)
+
+        if self.input_directory:
+            if not os.path.isdir(self.input_directory):
+                raise FileNotFoundError(f"Error: {self.input_directory} is not a valid directory.")
+
+            xml_files = self.get_xml_files(self.input_directory, "*.xml")
+            for file in xml_files:
+                self.test_results.append(self.parse_junit_xml(file))
+
+        elif self.input_file:
+            if not os.path.isfile(self.input_file):
+                raise FileNotFoundError(f"Error: Input file {self.input_file} is invalid.")
+            self.test_results.append(self.parse_junit_xml(self.input_file))
+
+        else:
+            raise RuntimeError(f"Error: No input file or directory specified. Exiting...")
+
+        self.generate_markdown_table()
+        self.prepend_test_summary()
+
 
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
@@ -111,7 +149,7 @@ def main():
     parser.add_argument("--output-markdown-file", "-o", 
                         default="pytest_summary_table.md",
                         help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
-    
+
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
@@ -122,27 +160,13 @@ def main():
         print(f"Error: You must specify either an input directory or a specific file, not both.")
         exit(1)
 
-    test_results = []
+    parser = JUnitXMLParser(
+        input_directory=args.input_directory,
+        input_file=args.input_file,
+        output_filename=args.output_markdown_file
+    )
+    parser.parse()
 
-    if args.input_directory:
-        if not os.path.isdir(args.input_directory):
-            raise FileNotFoundError(f"Error: {args.input_directory} is not a valid directory.")
-
-        xml_files = get_xml_files(args.input_directory, "*.xml")
-
-        for file in xml_files:
-            test_results.append(parse_junit_xml(file))
-
-    elif args.input_file:
-        if not os.path.isfile(args.input_file):
-            raise FileNotFoundError(f"Error: Input file {args.input_file} is invalid.")
-        test_results.append(parse_junit_xml(args.input_file))
-
-    else:
-        raise RuntimeError(f"Error: No input file or directory specified. Exiting...")
-
-    generate_markdown_table(test_results, args.output_markdown_file)
-    prepend_test_summary(args.output_markdown_file)
 
 if __name__ == "__main__":
     main()
