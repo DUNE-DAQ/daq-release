@@ -29,7 +29,7 @@
 
 if [[ -z $( which file ) ]]; then
 
-    yum install file || exit 1
+    yum install file -y || exit 1
 fi
 
 . /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/share/spack/setup-env.sh || exit 2
@@ -41,7 +41,7 @@ fi
 
 buildcache_dir=/scratch/externals_buildcache
 
-direct_external_installs="gcc boost cetlib trace nlohmann-json pistache highfive hdf5 libarchive libzmq cppzmq msgpack-c py-pybind11 uhal librdkafka protobuf grpc felix-software folly cli11 intel-tbb dpdk fmt py-moo py-anyconfig py-jsonnet rclone libtorrent cyrus-sasl libevent"
+direct_external_installs="gcc boost cetlib trace nlohmann-json pistache highfive hdf5 libarchive libzmq cppzmq msgpack-c py-pybind11 uhal librdkafka protobuf grpc felix-software folly cli11 intel-tbb dpdk fmt py-moo py-anyconfig py-jsonnet rclone libtorrent cyrus-sasl libevent qt"
 
 for package in $direct_external_installs ; do
 

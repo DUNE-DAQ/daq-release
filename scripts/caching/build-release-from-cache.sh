@@ -19,7 +19,7 @@ fi
 
 mkdir -p $installation_dir
 
-script_dir="$(dirname "$(realpath "$0")")"  # This script is expected to share a directory with build-release.sh
+script_dir="$(dirname "$(realpath "$0")")"/../spack 
 
 # SPACK_EXTERNALS is used in build-release.sh's plumbing to find the externals packages
 export SPACK_EXTERNALS=$externals_dir
