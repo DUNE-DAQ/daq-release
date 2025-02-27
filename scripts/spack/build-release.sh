@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if (( $# < 4 || $# > 5 )); then
+if (( $# < 5 || $# > 6 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or core)> 
                         <OS (almalinux9 or scientific7)>
-                        (optional default repo branch (nightly only, default is develop) )" >&2
+                        <default repo branch (only used in nightly)>
+                        (optional buildcache directory)" >&2
     exit 1
 fi
 
@@ -13,10 +14,10 @@ export BASE_RELEASE_DIR=$1
 export DET_RELEASE_DIR=$2
 export DET=$3
 export OS=$4
+export DEFAULT_BRANCH=$5
 
-export DEFAULT_BRANCH="develop"
-if [[ -n $5 ]]; then
-    export DEFAULT_BRANCH=$5
+if [[ -n $6 ]]; then
+    export BUILDCACHE_DIR=$6
 fi
 
 if [[ $DET != "core" && $DET != "fd" && $DET != "nd" ]]; then
@@ -27,6 +28,16 @@ fi
 if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
     echo "OS needs to be specified either as \"almalinux9\" or \"scientific7\"; exiting..." >&2
     exit 3
+fi
+
+if [[ -z $DEFAULT_BRANCH ]]; then
+    echo $( basename $0 ) " now *requires* a default branch for the repos, even though it's ignored in the case of candidate and frozen release builds" >&2
+    exit 5
+fi
+
+if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
+    echo "A buildcache directory \"$BUILDCACHE_DIR\" was provided but it's not found on "$( hostname )"; exiting..." >&2
+    exit 4
 fi
 
 export DAQ_RELEASE_REPO=$(dirname "$0")/../..
@@ -78,17 +89,32 @@ $cmd || exit 5
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
-retval=$?
 
-cat $SPACK_AREA/spec_${DET}daq_log.txt 
+if [[ -n $BUILDCACHE_DIR ]]; then
 
-if [[ $retval != 0 ]]; then
-    exit 20
+    mirror_name=$( basename ${BUILDCACHE_DIR%/} )-mirror
+    
+    spack mirror list
+    if [[ -z $( spack mirror list | grep $mirror_name ) ]]; then
+	spack mirror add --unsigned $mirror_name file://$BUILDCACHE_DIR || exit 21
+    else
+	echo "Already have $mirror_name available; won't add it"
+    fi
+fi
+
+if [[ -z $BUILDCACHE_DIR ]]; then
+    spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+    retval=$?
+
+    cat $SPACK_AREA/spec_${DET}daq_log.txt 
+
+    if [[ $retval != 0 ]]; then
+	exit 20
+    fi
 fi
 
 build_dbe=false
-if [[ $DET == "core" ]]; then
+if [[ $DET == "core" && -z $BUILDCACHE_DIR ]]; then
     spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
@@ -101,12 +127,15 @@ if [[ $DET == "core" ]]; then
         echo "Building dbe does not appear to be possible. Will exit..."
 	exit 12
     fi
+elif [[ $DET == "core" ]]; then
+    build_dbe=true  # Any buildcache provided will be assumed to contain dbe
 fi
 
 attempt=1
 max_attempts=3
 while true; do
     echo " --- ${DET}daq build attempt number $attempt of $max_attempts --- "
+
     spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
@@ -144,7 +173,8 @@ if $build_dbe; then
     max_dbe_build_attempts=3
     while true; do
         echo " --- dbe build attempt number $dbe_attempt of $max_dbe_build_attempts --- "
-        spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
+
+	spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
         spack_install_dbe_exit_code=${PIPESTATUS[0]}
         if [[ $spack_install_dbe_exit_code -eq 0 ]]; then
             echo "dbe build succeeded on attempt number $dbe_attempt"

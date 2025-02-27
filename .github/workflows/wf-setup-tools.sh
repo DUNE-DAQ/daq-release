@@ -48,7 +48,8 @@ fi
 echo "Using externals version $EXT_VERSION"
 
 export SPACK_VERSION=0.22.0
-export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}
+
+export SPACK_EXTERNALS=${SPACK_EXTERNALS:-/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}}
 
 export DET_SPACK_AREA=$DET_RELEASE_DIR
 export BASE_SPACK_AREA=$BASE_RELEASE_DIR
@@ -98,6 +99,8 @@ function daqify_spack_environment() {
 
    if [[ "$release_level" == "base" ]]; then
 
+   echo "Deleting $SPACK_ROOT/etc/spack/defaults/repos.yaml to remake it"
+   rm -f $SPACK_ROOT/etc/spack/defaults/repos.yaml
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
 repos:
   - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo

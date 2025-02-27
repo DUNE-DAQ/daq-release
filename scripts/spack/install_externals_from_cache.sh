@@ -75,5 +75,7 @@ for package in $direct_external_installs ; do
     install_package $package
 done
 
+cp ~/.spack/linux/compilers.yaml $PWD/spack-0.22.0/etc/spack/defaults/
+
 echo "Script completed successfully"
 exit 0
