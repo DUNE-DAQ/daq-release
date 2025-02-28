@@ -24,7 +24,14 @@
 
 ######################################################################
 
-# ghcr.io/dune-daq/alma9-spack:latest doesn't have "file", but Spack
+if [[ ! -d /scratch ]]; then
+    echo "A /scratch directory hasn't been volume mounted in the container; exiting..." >&2
+    exit 3
+fi
+
+. "$(dirname "$(realpath "$0")")"/caching_tools.sh || exit 5
+
+# ghcr.io/dune-daq/alma9-spack:latest doesn't have the "file" command, but Spack
 # needs this
 
 if [[ -z $( which file ) ]]; then
@@ -34,25 +41,14 @@ fi
 
 . /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.2/spack-0.22.0/share/spack/setup-env.sh || exit 2
 
-if [[ ! -d /scratch ]]; then
-    echo "A /scratch directory hasn't been volume mounted in the container; exiting..." >&2
-    exit 3
-fi
-
 buildcache_dir=/scratch/externals_buildcache
 
-direct_external_installs="gcc boost cetlib trace nlohmann-json pistache highfive hdf5 libarchive libzmq cppzmq msgpack-c py-pybind11 uhal librdkafka protobuf grpc felix-software folly cli11 intel-tbb dpdk fmt py-moo py-anyconfig py-jsonnet rclone libtorrent cyrus-sasl libevent qt"
-
-for package in $direct_external_installs ; do
+for package in $EXTERNALS_PACKAGES ; do
 
     echo
     echo "Pushing $package into the buildcache"
     
-    spack_hash=$( spack find -l $package | sed -n -r 's/^(\w{7}) .*/\1/p' )
-    if [[ -z $spack_hash ]]; then
-	echo "Unable to get hash for $package; exiting..." >&2
-	exit 4
-    fi
+    spack_hash=$( get_spack_hash $package )
 
     spack buildcache push --unsigned $buildcache_dir /${spack_hash} 
     retval=$?

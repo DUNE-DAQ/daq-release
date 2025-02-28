@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if (( $# != 2 )); then
-    echo "Usage: "$( basename $0 )" <relative installation directory> <path-qualified name of buildcache with externals>" >&2
+    echo "Usage: "$( basename $0 )" <new installation directory> <path-qualified name of buildcache with externals>" >&2
     exit 1
 fi
 
@@ -19,20 +19,21 @@ if [[ -d $installation_dir ]]; then
     exit 1
 fi
 
-if [[ -e $HOME/.spack ]]; then
-    echo "An account-wide Spack directory \"$HOME/.spack\" has been found which could interfere with the running of this script. Exiting..." >&2
-    exit 2
-fi
-
-export DAQ_RELEASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"/../..
+. "$(dirname "$(realpath "$0")")"/caching_tools.sh || exit 5
 
 mkdir $installation_dir
 cd $installation_dir
-git clone https://github.com/spack/spack.git -b v0.22.0 spack-0.22.0
 
-. $PWD/spack-0.22.0/share/spack/setup-env.sh
+download_and_setup_spack
 
-spack mirror add --unsigned externals-mirror file://$buildcache_dir || exit 3
+mirrorname=externals-mirror
+
+if [[ -n $( spack mirror list | awk '{print $1}' | grep $mirrorname ) ]] ; then
+    echo "Found mirror with name $mirrorname already existing; will remove"
+    spack mirror rm $mirrorname 
+fi
+
+spack mirror add --unsigned $mirrorname file://$buildcache_dir || exit 3
 
 cp -rp $DAQ_RELEASE_DIR/spack-repos/externals spack-0.22.0/spack-repo-externals
 find spack-0.22.0/spack-repo-externals | xargs chmod a+rx  # Needed to ensure users' work areas will be able to access files here
@@ -50,9 +51,12 @@ cp $DAQ_RELEASE_DIR/misc/spack-0.22.0-config/concretizer.yaml $PWD/spack-0.22.0/
 
 # This function relies on there being one, and only one, version of the package in the buildcache(s)
 
+spack buildcache list -l --allarch
+
 function install_package() {
     local pkg=$1
 
+    echo "Searching for hash of package $pkg"
     local pkg_hash=$(spack buildcache list -l --allarch | sed -r -n 's/^(\w{7}) '$pkg'@.*/\1/p')
 
     cmd="spack install /$pkg_hash"
@@ -68,14 +72,11 @@ install_package gcc
 
 spack load gcc@13.2.0 || exit 6
 spack compiler find
+cp ~/.spack/linux/compilers.yaml $PWD/spack-0.22.0/etc/spack/defaults/
 
-direct_external_installs="boost cetlib trace nlohmann-json pistache highfive hdf5 libarchive libzmq cppzmq msgpack-c py-pybind11 uhal librdkafka protobuf grpc felix-software folly cli11 intel-tbb dpdk fmt py-moo py-anyconfig py-jsonnet rclone libtorrent cyrus-sasl libevent"
-
-for package in $direct_external_installs ; do
+for package in $EXTERNALS_PACKAGES ; do
     install_package $package
 done
-
-cp ~/.spack/linux/compilers.yaml $PWD/spack-0.22.0/etc/spack/defaults/
 
 echo "Script completed successfully"
 exit 0
