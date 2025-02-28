@@ -16,7 +16,8 @@ setup_dbt latest_v5
 
 dbt-setup-release -n $nightly_tag || exit 1
 
-top_level_specs="fddaq+dev fddaq~dev dbe"
+# Leaving out fddaq~dev since it's a subset of fddaq+dev
+top_level_specs="fddaq+dev dbe"
 
 for top_level_spec in $top_level_specs ; do
 
@@ -42,12 +43,12 @@ for top_level_spec in $top_level_specs ; do
     package_counter=1
     for installed_hash in $hashes_to_install; do
 
-	echo "Installing package $package_counter of $num_packages for $top_level_spec"
+	echo "Caching package $package_counter of $num_packages for $top_level_spec"
 	cmd="spack buildcache push --only package --unsigned $buildcache_dir /$installed_hash"
 	echo $cmd
-	$cmd || exit 4
+	eval "$cmd" || exit 4
 	package_counter=$(( package_counter + 1 ))
-    done
+    done ;
 done
     
 spack buildcache update-index $buildcache_dir || exit 5
