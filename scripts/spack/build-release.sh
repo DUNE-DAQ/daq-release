@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if (( $# < 5 || $# > 6 )); then
+if (( $# < 4 || $# > 6 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or core)> 
                         <OS (almalinux9 or scientific7)>
-                        <default repo branch (only used in nightly)>
+                        (optional default repo branch (only used in nightly))
                         (optional buildcache directory)" >&2
     exit 1
 fi
@@ -14,7 +14,11 @@ export BASE_RELEASE_DIR=$1
 export DET_RELEASE_DIR=$2
 export DET=$3
 export OS=$4
-export DEFAULT_BRANCH=$5
+
+export DEFAULT_BRANCH="develop"
+if [[ -n $5 ]]; then
+    export DEFAULT_BRANCH=$5
+fi
 
 if [[ -n $6 ]]; then
     export BUILDCACHE_DIR=$6
@@ -28,11 +32,6 @@ fi
 if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
     echo "OS needs to be specified either as \"almalinux9\" or \"scientific7\"; exiting..." >&2
     exit 3
-fi
-
-if [[ -z $DEFAULT_BRANCH ]]; then
-    echo $( basename $0 ) " now *requires* a default branch for the repos, even though it's ignored in the case of candidate and frozen release builds" >&2
-    exit 5
 fi
 
 if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
@@ -101,6 +100,13 @@ if [[ -n $BUILDCACHE_DIR ]]; then
 	echo "Already have $mirror_name available; won't add it"
     fi
 fi
+
+# JCF, Mar-3-2025
+
+# Supplying a buildcache directory to build-release.sh is something
+# that would be done at the command line, typically in a situation
+# where speed as opposed to record-keeping is a priority, so we're
+# skipping the logging of a spec in that case
 
 if [[ -z $BUILDCACHE_DIR ]]; then
     spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
