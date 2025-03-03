@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import argparse
 import html
 from pathlib import Path
@@ -22,16 +23,18 @@ class JUnitXMLParser:
             raise FileNotFoundError(f"Error: No xml files found in {directory}.")
         return xml_files
 
-    def get_test_name(self, file_path):
+    def get_package_and_pytest_name_from_file(self, file_path):
         file_name = os.path.basename(file_path)
-        # Results file names should look like "minimal_system_quick_test_results.xml"
-        return file_name.replace('_results.xml', '')
+        # Junit xml files should be structured as <package_name>_<pytest_name>_results.xml
+        package_and_pytest_name = file_name.replace('_results.xml', '')
+        package_name, pytest_name = package_and_pytest_name.split("_", 1)
+        return package_name, pytest_name
 
     def parse_junit_xml(self, file_path):
         tree = ET.parse(file_path)
         root = tree.getroot()
 
-        test_suite_name = self.get_test_name(file_path)
+        package_name, pytest_name = self.get_package_and_pytest_name_from_file(file_path)
 
         results = []
         for testcase in root.findall(".//testcase"):
@@ -48,7 +51,8 @@ class JUnitXMLParser:
                 result = "skipped"
 
             results.append({
-                "test_suite_name": test_suite_name,
+                "package_name": package_name,
+                "pytest_name": pytest_name,
                 "test_name": test_name,
                 "result": result,
                 "failure_message": failure_message
@@ -59,7 +63,8 @@ class JUnitXMLParser:
         emoji_map = {
             'passed': ':white_check_mark:',
             'failed': ':x:',
-            'skipped': ':grey_question:'
+            'skipped': ':fast_forward:',
+            'error': ':warning:'
         }
         return emoji_map.get(test_status, ':shrug:')
 
@@ -68,19 +73,18 @@ class JUnitXMLParser:
         return f"| {test['test_name']} | {emoji} {test['result']} |\n"
 
     def generate_markdown_table(self):
-        print("Results:", self.test_results)
-        print("Results[0]:", self.test_results[0])
         with open(self.output_filename, 'w') as f:
+            previous_package_name = ''
             for idx, result in enumerate(self.test_results):
                 if not result: continue
-                print('------', idx, '---------')
-                print('result:', result)
-                print('result type:', type(result))
-                print('len result:', len(result))
-                print('result[0]:', result[0])
-                f.write(f"# {result[0]['test_suite_name']} Results\n")
-                f.write("| Test Case | Status |\n")
-                f.write("|-----------|--------|\n")
+                this_package_name = result[idx]['package_name']
+                print('This package is', this_package_name)
+                # Write header lines for each new package
+                if this_package_name != previous_package_name:
+                    f.write(f"# {result[idx]['package_name']} Results\n")
+                    previous_package_name = this_package_name
+                    f.write("| Test Case | Status |\n")
+                    f.write("|-----------|--------|\n")
                 f.writelines(self.format_markdown_row(test) for test in result)
 
         if not os.path.exists(self.output_filename):
@@ -92,6 +96,7 @@ class JUnitXMLParser:
         num_passed = 0
         num_failed = 0
         num_skipped = 0
+        num_errors = 0
         total_tests = 0
         with open(self.output_filename, 'r') as ifile:
             original_lines = ifile.readlines()
@@ -106,11 +111,20 @@ class JUnitXMLParser:
                 elif 'skipped' in line:
                     num_skipped += 1
                     total_tests += 1
+                elif 'error' in line:
+                    num_errors += 1
+                    total_tests += 1
 
         print('Passed:', num_passed)
+        print('Skipped:', num_skipped)
         print('Failed:', num_failed)
+        print('Errors:', num_errors)
 
-        summary = f"{num_passed} passed and {num_failed} failed of {total_tests} total tests.\n"
+        summary = f"""There were {total_tests} total tests run. 
+           {num_passed} passed {self.which_emoji('passed')}, 
+           {num_failed} failed {self.which_emoji('failed')}, 
+           {num_skipped} were skipped {self.which_emoji('skipped')}, and
+           {num_errors} had errors {self.which_emoji('error')} which prevented the test from completing.\n"""
         new_lines = [summary] + original_lines
         with open(self.output_filename, 'w') as ofile:
             ofile.writelines(new_lines)
