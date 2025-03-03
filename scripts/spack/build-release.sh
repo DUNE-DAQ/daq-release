@@ -39,7 +39,7 @@ if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
     exit 4
 fi
 
-export DAQ_RELEASE_REPO=$(dirname "$0")/../..
+export DAQ_RELEASE_REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../..
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
 if [[ $DET == "core" ]]; then
