@@ -172,8 +172,6 @@ jobs:
     timeout-minutes: 5
     needs: [make_variables, integration_tests]
     if: success() || failure()
-    outputs:
-      integtest_log_path: ${{ steps.copy_logs.outputs.PERSISTENT_LOG_DIR }}
     steps:
     - name: Upload logs as artifact
       env:
@@ -191,11 +189,11 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: [integration_tests, store_and_upload_logs]
+    needs: [make_variables, integration_tests, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
       integtest_xml_dir: ${{ needs.integration_tests.outputs.integtest_xml_path }}
-      integtest_log_dir: ${{ needs.store_and_upload_logs.outputs.integtest_log_path }}
+      integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 

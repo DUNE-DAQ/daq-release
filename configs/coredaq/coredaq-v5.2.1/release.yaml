@@ -241,10 +241,10 @@
 
     others:
         - name: daq-release
-          version: v2.6.2
+          version: v2.6.3
           commit: null
         - name: daq-buildtools
-          version: v8.7.2
+          version: v8.7.1
           commit: null
         - name: daqsystemtest
           version: v4.0.3
