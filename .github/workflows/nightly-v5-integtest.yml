@@ -126,15 +126,18 @@ jobs:
           dbt-setup-release -n $RELEASE_TAG
         fi
         TEST_PATH=""
+        TEST_SOURCE=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
           TEST_PATH=$LISTREV_SHARE/integtest
+          TEST_SOURCE=listrev
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
+          TEST_SOURCE=daqsystemtest
         fi
         echo "INTEGTEST_OUTPUT_PATH=$INTEGTEST_OUTPUT_PATH" >> "$GITHUB_OUTPUT"
 
         pytest_retval=0
-        pytest -v -s --junit-xml=${{ matrix.test_name }}_results.xml \
+        pytest -v -s --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
 
         mkdir -p $PERSISTENT_LOG_DIR
