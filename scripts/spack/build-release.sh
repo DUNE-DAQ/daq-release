@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if (( $# < 4 || $# > 5 )); then
+if (( $# < 4 || $# > 6 )); then
     echo "Usage: $( basename $0 ) <desired base release directory> 
                         <desired detector release directory> 
                         <build type (fd, nd, or core)> 
                         <OS (almalinux9 or scientific7)>
-                        (optional default repo branch (nightly only, default is develop) )" >&2
+                        (optional default repo branch (only used in nightly))
+                        (optional buildcache directory)" >&2
     exit 1
 fi
 
@@ -19,6 +20,10 @@ if [[ -n $5 ]]; then
     export DEFAULT_BRANCH=$5
 fi
 
+if [[ -n $6 ]]; then
+    export BUILDCACHE_DIR=$6
+fi
+
 if [[ $DET != "core" && $DET != "fd" && $DET != "nd" ]]; then
     echo "Type of build needs to be specified as \"core\" (common packages only), \"fd\" (far detector stack) or \"nd\" (near detector stack); exiting..." >&2
     exit 2
@@ -29,7 +34,12 @@ if [[ $OS != "almalinux9" && $OS != "scientific7" ]]; then
     exit 3
 fi
 
-export DAQ_RELEASE_REPO=$PWD/$(dirname "$0")/../..
+if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
+    echo "A buildcache directory \"$BUILDCACHE_DIR\" was provided but it's not found on "$( hostname )"; exiting..." >&2
+    exit 4
+fi
+
+export DAQ_RELEASE_REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../..
 . $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
 
 if [[ $DET == "core" ]]; then
@@ -78,17 +88,39 @@ $cmd || exit 5
 cd $SPACK_AREA
 
 spack clean -m 
-spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
-retval=$?
 
-cat $SPACK_AREA/spec_${DET}daq_log.txt 
+if [[ -n $BUILDCACHE_DIR ]]; then
 
-if [[ $retval != 0 ]]; then
-    exit 20
+    mirror_name=$( basename ${BUILDCACHE_DIR%/} )-mirror
+    
+    spack mirror list
+    if [[ -z $( spack mirror list | grep $mirror_name ) ]]; then
+	spack mirror add --unsigned $mirror_name file://$BUILDCACHE_DIR || exit 21
+    else
+	echo "Already have $mirror_name available; won't add it"
+    fi
+fi
+
+# JCF, Mar-3-2025
+
+# Supplying a buildcache directory to build-release.sh is something
+# that would be done at the command line, typically in a situation
+# where speed as opposed to record-keeping is a priority, so we're
+# skipping the logging of a spec in that case
+
+if [[ -z $BUILDCACHE_DIR ]]; then
+    spack spec -l --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+    retval=$?
+
+    cat $SPACK_AREA/spec_${DET}daq_log.txt 
+
+    if [[ $retval != 0 ]]; then
+	exit 20
+    fi
 fi
 
 build_dbe=false
-if [[ $DET == "core" ]]; then
+if [[ $DET == "core" && -z $BUILDCACHE_DIR ]]; then
     spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
     retval=$?    
 
@@ -101,12 +133,15 @@ if [[ $DET == "core" ]]; then
         echo "Building dbe does not appear to be possible. Will exit..."
 	exit 12
     fi
+elif [[ $DET == "core" ]]; then
+    build_dbe=true  # Any buildcache provided will be assumed to contain dbe
 fi
 
 attempt=1
 max_attempts=3
 while true; do
     echo " --- ${DET}daq build attempt number $attempt of $max_attempts --- "
+
     spack install --reuse ${DET}daq@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee dunedaq_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
@@ -144,7 +179,8 @@ if $build_dbe; then
     max_dbe_build_attempts=3
     while true; do
         echo " --- dbe build attempt number $dbe_attempt of $max_dbe_build_attempts --- "
-        spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
+
+	spack install --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 | tee dbe_build_spack_install.log || true
         spack_install_dbe_exit_code=${PIPESTATUS[0]}
         if [[ $spack_install_dbe_exit_code -eq 0 ]]; then
             echo "dbe build succeeded on attempt number $dbe_attempt"
