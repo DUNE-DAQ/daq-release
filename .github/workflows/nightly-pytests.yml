@@ -42,6 +42,7 @@ jobs:
     - name: Checkout daq-buildtools
       uses: actions/checkout@v4
       with:
+        repository: DUNE-DAQ/daq-buildtools
         path: daq-buildtools-pytests
         ref: amogan/issue295_dbt_build_pytest
     - name: Create build area
