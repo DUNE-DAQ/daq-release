@@ -70,7 +70,8 @@ jobs:
         # Run tests while capturing output
         dbt-build --pytest | tee pytest_full_output.log
         # Log directory is the last non-empty line of output
-        pytest_log_dir=$(grep . pytest_full_output.log | tail -n 1)
+        #pytest_log_dir=$(grep . pytest_full_output.log | tail -n 1)
+        pytest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/pytest_tests_* | tail -n 1)
         echo "pytest_log_dir=${pytest_log_dir}" >> "$GITHUB_OUTPUT"
         echo "PYTEST_LOG_DIR: $pytest_log_dir"
         echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
