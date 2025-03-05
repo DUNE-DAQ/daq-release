@@ -1,0 +1,107 @@
+name: Nightly pytest workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+  #schedule:
+  #  - cron: "30 10 * * *"
+
+jobs:
+  make_nightly_tag:
+    name: create nightly tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_nightly_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  run_pytests:
+    name: Run unit tests
+    runs-on: daq
+    needs: make_nightly_tag
+    outputs:
+      pytest_xml_dir: ${{ steps.pytests.outputs.pytest_log_dir }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-pytests
+    - name: Checkout daq-buildtools
+      uses: actions/checkout@v4
+      with:
+        path: daq-buildtools-pytests
+        ref: amogan/issue295_dbt_build_pytest
+    - name: Create build area
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+        dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
+        cd ${{ needs.make_nightly_tag.outputs.tag }}
+        source env.sh
+        source ~/daq-buildtools-pytests/env.sh
+        cd ../daq-release-pytests/scripts
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+    - name: Run pytests
+      id: pytests
+      run: |
+        cd $DBT_AREA_ROOT/
+        source env.sh
+        source ~/daq-buildtools-pytests/env.sh
+        dbt-workarea-env
+        spack load dbe
+        # Run tests while capturing output
+        dbt-build --pytest | tee pytest_full_output.log
+        # Log directory is the last non-empty line of output
+        pytest_log_dir=$(grep . pytest_full_output.log | tail -n 1)
+        echo "pytest_log_dir=${pytest_log_dir}" >> GITHUB_OUTPUT
+        echo "PYTEST_LOG_DIR: $pytest_log_dir"
+        echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
+
+  parse_results:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, run_pytests]
+    steps:
+    - name: Generate summary tables
+      env:
+        RELEASE_TAG: ${{needs.make_nightly_tag.outputs.tag }}
+      run: |
+        cd daq-release-pytests/scripts/github-ci/
+        echo "Did the output get stored correctly? ${{ needs.run_pytests.outputs.pytest_xml_dir }}"
+        python integtest_xml_parser.py --input-directory ${{ needs.run_pytests.outputs.pytest_xml_dir }}
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: parse_results
+    uses: ./.github/workflows/slack-notification.yml
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_test_area:
+    runs-on: daq
+    if: always()
+    needs: [make_nightly_tag, parse_results]
+    steps:
+      - name: Remove test directory
+        run: |
+          rm -rf daq-release-pytests
+          rm -rf daq-buildtools-pytests
+          rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
