@@ -74,17 +74,11 @@ class JUnitXMLParser:
 
     def generate_markdown_table(self):
         with open(self.output_filename, 'w') as f:
-            previous_package_name = ''
             for idx, result in enumerate(self.test_results):
                 if not result: continue
-                this_package_name = result[idx]['package_name']
-                print('This package is', this_package_name)
-                # Write header lines for each new package
-                if this_package_name != previous_package_name:
-                    f.write(f"# {result[idx]['package_name']} Results\n")
-                    previous_package_name = this_package_name
-                    f.write("| Test Case | Status |\n")
-                    f.write("|-----------|--------|\n")
+                f.write(f"# {result[0]['package_name']} {result[0]['pytest_name']} Results\n")
+                f.write("| Test Case | Status |\n")
+                f.write("|-----------|--------|\n")
                 f.writelines(self.format_markdown_row(test) for test in result)
 
         if not os.path.exists(self.output_filename):
