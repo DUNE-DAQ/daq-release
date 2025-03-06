@@ -39,7 +39,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release-pytests
-        ref: amogan/pytest_workflow
     - name: Checkout daq-buildtools
       uses: actions/checkout@v4
       with:
