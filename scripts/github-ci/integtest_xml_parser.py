@@ -68,16 +68,9 @@ class JUnitXMLParser:
         return f"| {test['test_name']} | {emoji} {test['result']} |\n"
 
     def generate_markdown_table(self):
-        print("Results:", self.test_results)
-        print("Results[0]:", self.test_results[0])
         with open(self.output_filename, 'w') as f:
             for idx, result in enumerate(self.test_results):
                 if not result: continue
-                print('------', idx, '---------')
-                print('result:', result)
-                print('result type:', type(result))
-                print('len result:', len(result))
-                print('result[0]:', result[0])
                 f.write(f"# {result[0]['test_suite_name']} Results\n")
                 f.write("| Test Case | Status |\n")
                 f.write("|-----------|--------|\n")
