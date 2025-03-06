@@ -59,9 +59,9 @@ class JUnitXMLParser:
         emoji_map = {
             'passed': ':white_check_mark:',
             'failed': ':x:',
-            'skipped': ':grey_question:'
+            'skipped': ':fast_forward:'
         }
-        return emoji_map.get(test_status, ':shrug:')
+        return emoji_map.get(test_status, ':question:')
 
     def format_markdown_row(self, test):
         emoji = self.which_emoji(test['result'])
