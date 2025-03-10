@@ -116,7 +116,7 @@ jobs:
     steps:
     - name: Generate summary tables
       run: |
-        cd daq-release-integtest/scripts/github-ci/
+        cd daq-release-unittests/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.run_unittests.outputs.pytest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
