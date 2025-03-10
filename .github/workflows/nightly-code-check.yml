@@ -89,6 +89,15 @@ jobs:
         done < "$log_summary_file"
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
 
+    - name: Run pytest tests
+      run: |
+        cd $DBT_AREA_ROOT
+        source env.sh
+        dbt-workarea-env
+        dbt-build --pytest | tee pytest_full_output.log
+        # Log directory is the last non-empty line of output
+        pytest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/pytest_tests_* | tail -n 1)
+        echo "pytest_log_dir=${pytest_log_dir}" >> "$GITHUB_OUTPUT"
     - name: Run clang formatting
       run: |
         cd $DBT_AREA_ROOT
