@@ -29,6 +29,8 @@ jobs:
     name: Run unit tests
     runs-on: daq
     needs: make_nightly_tag
+    outputs:
+      pytest_log_dir: ${{ steps.pytests.outputs.pytest_log_dir }}
     defaults:
       run:
         shell: bash
@@ -90,6 +92,7 @@ jobs:
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
 
     - name: Run pytest tests
+      id: pytests
       run: |
         cd $DBT_AREA_ROOT
         source env.sh
@@ -98,6 +101,7 @@ jobs:
         # Log directory is the last non-empty line of output
         pytest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/pytest_tests_* | tail -n 1)
         echo "pytest_log_dir=${pytest_log_dir}" >> "$GITHUB_OUTPUT"
+        echo "pytest_log_dir: $pytest_log_dir"
     - name: Run clang formatting
       run: |
         cd $DBT_AREA_ROOT
@@ -106,9 +110,19 @@ jobs:
         dbt-clang-format.sh . --view-differences-only --markdown-summary
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
 
+  parse_pytest_results:
+    runs-on: daq
+    needs: run_unittests
+    steps:
+    - name: Generate summary tables
+      run: |
+        cd daq-release-integtest/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ needs.run_unittests.outputs.pytest_log_dir }}
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: run_unittests
+    needs: parse_pytest_results
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -116,10 +130,9 @@ jobs:
   cleanup_test_area:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, run_unittests]
+    needs: [make_nightly_tag, parse_pytest_results]
     steps:
-      - name: Remove test directory
+      - name: Remove test directory and daq-release
         run: |
           rm -rf daq-release-unittests
-          rm -rf daq-buildtools-markdown-feature
           rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
