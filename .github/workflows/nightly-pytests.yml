@@ -42,6 +42,7 @@ jobs:
     - name: Checkout daq-buildtools
       uses: actions/checkout@v4
       with:
+        repository: DUNE-DAQ/daq-buildtools
         path: daq-buildtools-pytests
         ref: amogan/issue295_dbt_build_pytest
     - name: Create build area
@@ -51,10 +52,14 @@ jobs:
         dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
-        source ~/daq-buildtools-pytests/env.sh
+        source $GITHUB_WORKSPACE/daq-buildtools-pytests/env.sh
         cd ../daq-release-pytests/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        # daqsystemtest and listrev tests are already run in the nightly integration tests
+        cd ${DBT_AREA_ROOT}/sourcecode
+        rm -rf daqsystemtest
+        rm -rf listrev
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
@@ -63,16 +68,14 @@ jobs:
       run: |
         cd $DBT_AREA_ROOT/
         source env.sh
-        source ~/daq-buildtools-pytests/env.sh
+        source $GITHUB_WORKSPACE/daq-buildtools-pytests/env.sh
         dbt-workarea-env
         spack load dbe
         # Run tests while capturing output
         dbt-build --pytest | tee pytest_full_output.log
         # Log directory is the last non-empty line of output
-        pytest_log_dir=$(grep . pytest_full_output.log | tail -n 1)
-        echo "pytest_log_dir=${pytest_log_dir}" >> GITHUB_OUTPUT
-        echo "PYTEST_LOG_DIR: $pytest_log_dir"
-        echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
+        pytest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/pytest_tests_* | tail -n 1)
+        echo "pytest_log_dir=${pytest_log_dir}" >> "$GITHUB_OUTPUT"
 
   parse_results:
     runs-on: daq
