@@ -70,7 +70,7 @@ jobs:
           echo "is_frozen=${is_frozen}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
-          echo "integtest_output_path=${integtest_output_path}" >> "GITHUB_OUTPUT"
+          echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
