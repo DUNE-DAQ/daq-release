@@ -32,6 +32,7 @@ jobs:
       is_frozen_release: ${{ steps.create_variables.outputs.is_frozen }}
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
+      integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
     defaults:
       run:
         shell: bash
@@ -62,12 +63,14 @@ jobs:
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+          integtest_output_path=$GITHUB_WORKSPACE/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
           echo "is_frozen=${is_frozen}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
+          echo "integtest_output_path=${integtest_output_path}" >> "GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   integration_tests:
@@ -75,8 +78,6 @@ jobs:
     runs-on: daq
     timeout-minutes: 30
     needs: make_variables
-    outputs:
-      integtest_xml_path: ${{ steps.setup_and_run_test.outputs.INTEGTEST_OUTPUT_PATH }}
     strategy:
         fail-fast: false
         matrix:
@@ -104,10 +105,10 @@ jobs:
         IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
         IS_FROZEN_RELEASE: ${{needs.make_variables.outputs.is_frozen_release}}
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+        INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
         DET=fd
-        INTEGTEST_OUTPUT_PATH=$GITHUB_WORKSPACE/integration_tests_$RELEASE_TAG
         mkdir -p $INTEGTEST_OUTPUT_PATH
         cd $INTEGTEST_OUTPUT_PATH
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
@@ -134,7 +135,6 @@ jobs:
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
           TEST_SOURCE=daqsystemtest
         fi
-        echo "INTEGTEST_OUTPUT_PATH=$INTEGTEST_OUTPUT_PATH" >> "$GITHUB_OUTPUT"
 
         pytest_retval=0
         pytest -v -s --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
@@ -191,12 +191,11 @@ jobs:
         rm -rf $old_dirs
 
   send_slack_message:
-    #if: (github.event_name != 'workflow_dispatch' && (success() || failure())) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    if: (!(github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'no'))
-    needs: [make_variables, integration_tests, store_and_upload_logs]
+    if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      integtest_xml_dir: ${{ needs.integration_tests.outputs.integtest_xml_path }}
+      integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
