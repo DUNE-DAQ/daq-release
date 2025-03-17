@@ -63,7 +63,7 @@ jobs:
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
-          integtest_output_path=$GITHUB_WORKSPACE/integration_tests_${release_tag}
+          integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
@@ -111,6 +111,8 @@ jobs:
         DET=fd
         mkdir -p $INTEGTEST_OUTPUT_PATH
         cd $INTEGTEST_OUTPUT_PATH
+        echo "Am in $(pwd)"
+        echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
