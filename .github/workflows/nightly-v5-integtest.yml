@@ -211,7 +211,8 @@ jobs:
         env:
           RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         run: |
-          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+          #rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+          echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
           rm -rf ${{ github.workspace }}/daq-release-integtest/
