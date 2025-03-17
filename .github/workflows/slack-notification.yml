@@ -45,14 +45,17 @@ jobs:
                --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
+    #- name: Send Slack Message
+    #  uses: slackapi/slack-github-action@v2.0.0
+    #  with:
+    #    webhook: ${{ secrets.slack_webhook_url }}
+    #    webhook-type: incoming-webhook
+    #    payload-file-path: "./slack_payload.json"
+    #    payload-templated: true
+    #    errors: true
     - name: Send Slack Message
-      uses: slackapi/slack-github-action@v2.0.0
-      with:
-        webhook: ${{ secrets.slack_webhook_url }}
-        webhook-type: incoming-webhook
-        payload-file-path: "./slack_payload.json"
-        payload-templated: true
-        errors: true
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data @slack_payload.json ${{ secrets.slack_webhook_url }}
     - name: Cleanup files
       run: |
         rm failed_jobs.json slack_payload.json
