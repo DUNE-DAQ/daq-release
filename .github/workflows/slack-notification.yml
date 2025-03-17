@@ -45,16 +45,6 @@ jobs:
                --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
-    - name: Validate payload
-      run: |
-        characters=$(cat slack_payload.json | wc -c)
-        if [[ $characters -gt 3000 ]]; then
-          echo "This payload has $characters characters, which exceeds Slack's limit of 3,000"
-          # Replace the failure message block, which is most likely what exceeded the character limit.
-          jq "( .blocks[2].text.text ) = \":warning: The failure text exceeded Slack's character limit of 3,000. This indicates a large number of failures across multiple tests. :warning:\"" slack_payload.json > slack_payload.json
-          echo "The payload now has $(cat slack_payload.json | wc -c) characters"
-          cat slack_payload.json
-        fi
     - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.0.0
       with:
