@@ -143,14 +143,30 @@ class SlackPayload:
                 "text": {"type": "mrkdwn", "text": footer_text}
             })
 
-    def to_dict(self):
+    def to_dict(self, shorten_failed_jobs_section=False):
         """Build and return the final Slack payload."""
+        self.blocks = []
         self.add_header()
         self.add_report_section()
         self.add_failed_jobs_section()
+        if shorten_failed_jobs_section:
+            self.blocks[2]['text']['text'] = f""":warning: The failed jobs text exceeded Slack's limit of 3,000 characters. This indicates a large number of failures across multiple tests. :warning:"""
         self.add_pytest_log_section()
         self.add_footer()
         return {"blocks": self.blocks}
+
+    def to_json(self):
+        """Build and return the final Slack payload."""
+
+        json_payload = json.dumps(self.to_dict())
+        # In case we exceed Slack's character limit overwrite the failed jobs
+        # section since it's almost certainly the longest section. 
+        char_count = len(json_payload)
+        char_limit = 3000
+        if char_count > char_limit:
+            json_payload = json.dumps(self.to_dict(shorten_failed_jobs_section=True))
+        return json.loads(json_payload)
+
 
 def write_payload_to_file(payload, file_name='slack_payload.json'):
     """Write the Slack payload to a file."""
@@ -187,7 +203,8 @@ def main():
 
     print('args.pytest_log_dir:', args.pytest_log_dir)
     slack_payload = SlackPayload(workflow_summary, args.junit_xml_dir, args.pytest_log_dir)
-    write_payload_to_file(slack_payload.to_dict())
+    json_payload = slack_payload.to_json()
+    write_payload_to_file(json_payload)
 
 if __name__ == "__main__":
     main()
