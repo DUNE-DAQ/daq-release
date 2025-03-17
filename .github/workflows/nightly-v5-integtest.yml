@@ -193,7 +193,7 @@ jobs:
         rm -rf $old_dirs
 
   send_slack_message:
-    if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
     needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
