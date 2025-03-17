@@ -45,17 +45,22 @@ jobs:
                --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
-    #- name: Send Slack Message
-    #  uses: slackapi/slack-github-action@v2.0.0
-    #  with:
-    #    webhook: ${{ secrets.slack_webhook_url }}
-    #    webhook-type: incoming-webhook
-    #    payload-file-path: "./slack_payload.json"
-    #    payload-templated: true
-    #    errors: true
-    - name: Send Slack Message
+    - name: Validate payload
       run: |
-        curl -X POST -H 'Content-type: application/json' --data @slack_payload.json ${{ secrets.slack_webhook_url }}
+        characters=$(cat slack_payload.json | wc -c)
+        if [[ $characters -gt 3000 ]]; then
+          echo "This payload has $characters characters, which exceeds Slack's limit of 3,000"
+          # Replace the failure message block, which is most likely what exceeded the character limit.
+          jq "( .blocks[2].text.text ) = \":warning: The failure text exceeded Slack's character limit of 3,000. This indicates a large number of failures across multiple tests. :warning:\"" slack_payload.json
+        fi
+    - name: Send Slack Message
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        webhook: ${{ secrets.slack_webhook_url }}
+        webhook-type: incoming-webhook
+        payload-file-path: "./slack_payload.json"
+        payload-templated: true
+        errors: true
     - name: Cleanup files
       run: |
         rm failed_jobs.json slack_payload.json
