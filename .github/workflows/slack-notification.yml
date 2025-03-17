@@ -52,6 +52,7 @@ jobs:
         webhook-type: incoming-webhook
         payload-file-path: "./slack_payload.json"
         payload-templated: true
+        errors: true
     - name: Cleanup files
       run: |
         rm failed_jobs.json slack_payload.json
