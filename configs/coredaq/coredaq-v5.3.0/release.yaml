@@ -164,7 +164,7 @@
           version: v4.0.1
           commit: null
         - name: trgdataformats
-          version: v2.0.1
+          version: v2.0.0
           commit: null
         - name: detchannelmaps
           version: v1.7.2
@@ -194,7 +194,7 @@
           version: v1.5.0
           commit: null
         - name: trgtools
-          version: v2.1.0
+          version: v2.2.0
           commit: null
         - name: hdf5libs
           version: v3.2.0
