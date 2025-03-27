@@ -1,5 +1,5 @@
 ---
-    release: coredaq-develop
+    release: coredaq-v5.3.0
 
     type: coredaq
 
@@ -131,7 +131,7 @@
           version: v2.1.0
           commit: null
         - name: rcif
-          version: "develop"
+          version: v1.4.0
           commit: null
         - name: appfwk
           version: v4.0.0
@@ -161,10 +161,10 @@
           version: v2.8.0
           commit: null
         - name: detdataformats
-          version: "develop"
+          version: v4.0.1
           commit: null
         - name: trgdataformats
-          version: v2.0.0
+          version: v2.0.1
           commit: null
         - name: detchannelmaps
           version: v1.7.2
@@ -179,13 +179,13 @@
           version: v4.0.0
           commit: null
         - name: hsilibs
-          version: "develop"
+          version: v4.5.0
           commit: null
         - name: timing
-          version: "develop"
+          version: v7.9.1
           commit: null
         - name: timinglibs
-          version: "develop"
+          version: v4.4.1
           commit: null
         - name: trigger
           version: v2.2.0
@@ -194,31 +194,31 @@
           version: v1.5.0
           commit: null
         - name: trgtools
-          version: "develop"
+          version: v2.1.0
           commit: null
         - name: hdf5libs
           version: v3.2.0
           commit: null
         - name: oks
-          version: "develop"
+          version: v1.3.0
           commit: null
         - name: okssystem
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: oksutils
-          version: "develop"
+          version: v1.0.0
           commit: null
         - name: oksconflibs
-          version: "develop"
+          version: v1.1.0
           commit: null
         - name: conffwk
           version: v1.3.0
           commit: null
         - name: oksdalgen
-          version: "develop"
+          version: v1.2.0
           commit: null
         - name: confmodel
-          version: v2.2.0
+          version: v2.2.1
           commit: null
         - name: appmodel
           version: v3.0.0
@@ -238,7 +238,7 @@
           version: v8.9.1
           commit: null
         - name: daqsystemtest
-          version: "develop"
+          version: v4.1.0
           commit: null
         - name: pocket
           version: "develop"
