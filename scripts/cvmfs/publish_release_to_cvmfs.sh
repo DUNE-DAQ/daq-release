@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if (( $# != 4 )); then
-    echo "Usage: "$( basename $0 )" [build type (candidate or frozen)] [detector type (nd or fd)] \
+    echo "Usage: "$( basename $0 )" [build type (candidate or stable)] [detector type (nd or fd)] \
 [OS for build (sl7 or alma9)] [Build line (develop or production)]" >&2
     exit 1
 fi
@@ -11,8 +11,8 @@ det=$2
 os=$3
 dev_or_prod=$4
 
-if [[ $build != "candidate" && $build != "frozen" ]]; then
-    echo "Build type needs to be \"candidate\" or \"frozen\"; exiting..." >&2
+if [[ $build != "candidate" && $build != "stable" ]]; then
+    echo "Build type needs to be \"candidate\" or \"stable\"; exiting..." >&2
     exit 1
 fi
 
@@ -52,7 +52,7 @@ if [[ $build == "candidate" ]]; then
     SOURCE_DIR="candidates"
     DEST_DIR=/cvmfs/$REPO/candidates
 
-elif [[ $build == "frozen" ]]; then
+elif [[ $build == "stable" ]]; then
     REPO="dunedaq.opensciencegrid.org"
     SOURCE_DIR="releases"
     DEST_DIR=/cvmfs/$REPO/spack/releases

@@ -1,4 +1,4 @@
-name: Alma9 build v5 frozen release 
+name: Alma9 build v5 stable release 
 
 on:
   workflow_dispatch:
@@ -13,12 +13,12 @@ on:
         description: 'detector type (nd or fd)'
         required: true
       build-number:
-        description: 'frozen release number, e.g. 1'
+        description: 'stable release number, e.g. 1'
         required: true
 
 jobs:
-  build_the_frozen_release_spack:
-    name: build_frozen_release_spack
+  build_the_stable_release_spack:
+    name: build_stable_release_spack
     runs-on: daq
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
@@ -46,10 +46,10 @@ jobs:
           cd $BASE_RELEASE_DIR/..
           tar_and_stage_release $BASE_RELEASE_TAG
 
-    - name: upload spack frozen release tarball for base release
+    - name: upload spack stable release tarball for base release
       uses: actions/upload-artifact@v4
       with:
-        name: frozens_coredaq
+        name: stables_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
 
     - name: setup directories and install spack for the detector release
@@ -67,10 +67,10 @@ jobs:
           tar_and_stage_release $DET_RELEASE_TAG
 
 
-    - name: upload spack frozen release tarball for detector release
+    - name: upload spack stable release tarball for detector release
       uses: actions/upload-artifact@v4
       with:
-        name: frozens_${{ github.event.inputs.det }}daq
+        name: stables_${{ github.event.inputs.det }}daq
         path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
 
   update_image:
@@ -80,9 +80,9 @@ jobs:
       matrix:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
-            output_image: "ghcr.io/dune-daq/frozen-release-alma9"
+            output_image: "ghcr.io/dune-daq/stable-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
-    needs: build_the_frozen_release_spack
+    needs: build_the_stable_release_spack
     environment: dockerhub
     permissions:
       packages: write
@@ -94,19 +94,19 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack frozen release tarball artifact for base release
+      - name: Download spack stable release tarball artifact for base release
         uses: actions/download-artifact@v4
         with:
-          name: frozens_coredaq
+          name: stables_coredaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack frozen release tarball artifact for detector release
+      - name: Download spack stable release tarball artifact for detector release
         uses: actions/download-artifact@v4
         with:
-          name: frozens_${{ github.event.inputs.det }}daq
+          name: stables_${{ github.event.inputs.det }}daq
           path: ${{ github.workspace }}/docker-build
 
-      - name: prepare cvmfs mirror spack-frozens
+      - name: prepare cvmfs mirror spack-stables
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p releases
@@ -158,7 +158,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_image
     container:
-      image: ghcr.io/dune-daq/frozen-release-alma9:${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
+      image: ghcr.io/dune-daq/stable-release-alma9:${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
     defaults:
       run:
         shell: bash

@@ -11,7 +11,7 @@ elif [[ $BASE_RELEASE_DIR =~ "_PROD4_" ]]; then
 elif [[ $BASE_RELEASE_DIR =~ "/candidate" ]]; then
     export RELEASE_TYPE="candidate"
 elif [[ $BASE_RELEASE_DIR =~ "/release" ]]; then
-    export RELEASE_TYPE="frozen"
+    export RELEASE_TYPE="stable"
 else
     echo "Provided BASE_RELEASE_DIR \"${BASE_RELEASE_DIR}\" appears nonstandard and cannot be parsed; returning..." >&2
     return 10
@@ -31,9 +31,9 @@ if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 p
     export EXT_VERSION=v2.0
 elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.1
     export EXT_VERSION=v2.1
-elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or frozen, externals v2.0
+elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or stable, externals v2.0
     export EXT_VERSION=v2.0
-elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or frozen, externals v2.1 
+elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or stable, externals v2.1 
     export EXT_VERSION=v2.1
 elif [[ $OS == scientific7 ]]; then                                 # SL7 _any_, externals v1.1
     export EXT_VERSION=v1.1
@@ -159,7 +159,7 @@ function get_release_yaml() {
     fi
 
     version=""
-    if [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
+    if [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
         if [[ $release_level == "base" ]]; then
             version=$( echo $BASE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
         else
@@ -173,7 +173,7 @@ function get_release_yaml() {
             echo -n "configs/coredaq/coredaq-develop/release.yaml"
         elif [[ $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/coredaq/coredaq-production_v4/release.yaml"
-	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
+	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
             echo -n "configs/coredaq/coredaq-${version}/release.yaml"
         fi
 
@@ -183,7 +183,7 @@ function get_release_yaml() {
             echo -n "configs/${release_level}daq/${release_level}daq-develop/release.yaml"
         elif [[ $RELEASE_TYPE == "production_v4" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
-        elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "frozen" ]]; then
+        elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
             echo -n "configs/${release_level}daq/${release_level}daq-${version}/release.yaml"
         fi
     fi

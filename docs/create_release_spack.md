@@ -1,10 +1,10 @@
-# Making a new frozen DAQ release
+# Making a new stable DAQ release
 
 ## Overview
 
-Making a new frozen DAQ release consists of:
+Making a new stable DAQ release consists of:
 
-1. Preparations before performing each candidate/frozen release build, detailed below
+1. Preparations before performing each candidate/stable release build, detailed below
 2. Build/deploy candidate releases during the testing period of a release cycle
 3. One last build of the release at the end of the testing period
 
@@ -61,15 +61,15 @@ will checkout all the DAQ packages used in the release into a randomly-named dir
     * The above tests should be run on at least one NP04 DAQ server, and one Fermilab server
 * Repeat all the above steps with "SL7" replacing "Alma9". 
 
-## Building the frozen release
+## Building the stable release
 
-* The release will be cut at the end of the testing period. The build of the final frozen release can be done in a similar way as the candidate releases. Choose "Build frozen release" in the workflows list, and trigger the build by specifying release name used in `configs` and the number (starts from 1, increment it if second deployment to cvmfs is needed).
-* Deploying the frozen release to cvmfs is the same as for a candidate release  _except_ you want to log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` instead of `cvmfsdunedaqdev` and of course you'll want to pass `frozen` rather than `candidate` to the publishing script
-* Do similar tests as shown in the section above for candidate releases, though fill in the "frozen release tag" field of the integration test workflow rather than the "candidate release tag" field
+* The release will be cut at the end of the testing period. The build of the final stable release can be done in a similar way as the candidate releases. Choose "Build stable release" in the workflows list, and trigger the build by specifying release name used in `configs` and the number (starts from 1, increment it if second deployment to cvmfs is needed).
+* Deploying the stable release to cvmfs is the same as for a candidate release  _except_ you want to log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` instead of `cvmfsdunedaqdev` and of course you'll want to pass `stable` rather than `candidate` to the publishing script
+* Do similar tests as shown in the section above for candidate releases, though fill in the "stable release tag" field of the integration test workflow rather than the "candidate release tag" field
 * If there is a new version of `daq-buildtools` for the release, it will need to be deployed to cvmfs too. Otherwise, creating a symbolic link in cvmfs to the latest tagged version will be sufficient, e.g. that `setup_dbt fddaq-vX.Y.Z` would give you the daq-buildtools used during the release period of `fddaq-vX.Y.Z`. How to do this is described in the [documentation on cvmfs](publish_to_cvmfs.md).
-* After the frozen release is rolled out, there will be remaining prep release and patch branches used in the production of the release. The software coordination team and the release coordinator should get in touch to establish if anything should be kept out of the merge to `develop`. The software coordination team will do the merge across all relevant repositories. Developers should handle any partial merge (cherry-pick).
+* After the stable release is rolled out, there will be remaining prep release and patch branches used in the production of the release. The software coordination team and the release coordinator should get in touch to establish if anything should be kept out of the merge to `develop`. The software coordination team will do the merge across all relevant repositories. Developers should handle any partial merge (cherry-pick).
 * Also make sure that if the version of daq-cmake and/or any Python packages was bumped for the release, that these version increments make it into the nightly for the relevant development line. 
-* The last step of making a frozen release is to create release tags for all packages used by the release. To do so, use the script `scripts/create-release-tag.py`:
+* The last step of making a stable release is to create release tags for all packages used by the release. To do so, use the script `scripts/create-release-tag.py`:
     * make sure `daq-release` is tagged for the new release, and the version is updated in the release YAML file. It will be tagged by the `create-release-tag.py` script;
     *  Make sure you're able to push changes to repos without needing to enter your password; `gh auth login` should set you up to be able to do this if you have a GitHub Personal Access Token with the appropriate permissions
     * `scripts/create-release-tag.py -h` to show the usage of the script;

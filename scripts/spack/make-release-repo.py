@@ -175,7 +175,7 @@ class DAQRelease:
                 # Nightlies
                 if "daq" not in self.rdict["release"]:
                     lines = lines.replace("XVERSIONX", self.rdict["release"])
-                # Frozen release
+                # Stable release
                 else:
                     lines = lines.replace("XVERSIONX", ipkg["version"])
                 if ipkg["commit"] is not None:
