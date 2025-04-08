@@ -339,6 +339,9 @@
         - name: rsa
           version: 4.9
           source:  pypi
+        - name: runconftools
+          version: develop
+          source:  github_DUNE-DAQ
         - name: sh
           version: 2.1.0
           source:  pypi
