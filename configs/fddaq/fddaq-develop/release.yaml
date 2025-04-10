@@ -6,6 +6,9 @@
     base_release: coredaq-develop
 
     fddaq:
+        - name: asiolibs
+          version: "develop"
+          commit: null
         - name: daqsystemtest
           version: "develop"
           commit: null
