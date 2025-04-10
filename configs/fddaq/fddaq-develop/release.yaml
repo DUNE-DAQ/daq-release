@@ -345,6 +345,9 @@
         - name: runconftools
           version: develop
           source:  github_DUNE-DAQ
+        - name: runconf-ui
+          version: develop
+          source:  github_DUNE-DAQ
         - name: sh
           version: 2.1.0
           source:  pypi
