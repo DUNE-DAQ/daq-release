@@ -46,6 +46,7 @@ jobs:
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
                --api-output failed_jobs.json \
+               --release-name ${{ inputs.release_tag }} \
                --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
