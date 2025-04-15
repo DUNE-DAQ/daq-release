@@ -16,13 +16,13 @@
           version: v2.2.2
           commit: null
         - name: fddetdataformats
-          version: v2.2.0
+          version: v2.3.0
           commit: null
         - name: fdreadoutlibs
-          version: v2.2.0
+          version: v2.3.0
           commit: null
         - name: fdreadoutmodules
-          version: v2.1.1
+          version: v2.1.2
           commit: null
         - name: flxlibs
           version: v2.2.2
@@ -43,7 +43,7 @@
           version: v1.5.0
           commit: null
         - name: daphnemodules
-          version: v2.1.0
+          version: v2.1.1
           commit: null
         - name: wibmod
           version: v2.0.1
@@ -115,10 +115,10 @@
           version: 7.1.0
           source:  pypi
         - name: drunc
-          version: 0.12.0
+          version: 0.13.0
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: 0.10.0
+          version: 0.11.0
           source:  github_DUNE-DAQ
         - name: durationpy
           version: 0.9

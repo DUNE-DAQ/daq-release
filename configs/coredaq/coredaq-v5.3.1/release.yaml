@@ -170,19 +170,19 @@
           version: v1.7.2
           commit: null
         - name: daqdataformats
-          version: v3.9.0
+          version: v3.10.0
           commit: null
         - name: datahandlinglibs
           version: v3.1.2
           commit: null
         - name: dfmodules
-          version: v4.0.0
+          version: v4.1.0
           commit: null
         - name: hsilibs
-          version: v4.5.0
+          version: v4.6.0
           commit: null
         - name: timing
-          version: v7.9.1
+          version: v7.10.0
           commit: null
         - name: timinglibs
           version: v4.4.1
@@ -197,7 +197,7 @@
           version: v2.2.0
           commit: null
         - name: hdf5libs
-          version: v3.3.0
+          version: v3.3.1
           commit: null
         - name: oks
           version: v1.3.0
