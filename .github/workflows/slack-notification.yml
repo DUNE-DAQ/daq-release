@@ -3,6 +3,10 @@ name: Slack Notification
 on:
   workflow_call:
     inputs:
+      release_tag:
+        type: string
+        default: ''
+        description: Name of the release used in the caller workflow.
       integtest_xml_dir:
         type: string
         default: ''

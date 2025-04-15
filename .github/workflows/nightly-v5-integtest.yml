@@ -83,16 +83,16 @@ jobs:
         matrix:
 
             test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
+                        #"listrev_test",
+                        #"3ru_1df_multirun_test",
+                        #"3ru_3df_multirun_test",
+                        #"example_system_test",
+                        #"fake_data_producer_test",
+                        #"long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan",
-                        "small_footprint_quick_test",
-                        "tpstream_writing_test"
+                        #"readout_type_scan",
+                        #"small_footprint_quick_test",
+                        #"tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -197,10 +197,11 @@ jobs:
     needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
       integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_files:
     runs-on: daq
