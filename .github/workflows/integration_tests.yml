@@ -1,4 +1,4 @@
-name: Nightly v5 integration tests
+name: Integration test workflow
 
 on:
   schedule:
