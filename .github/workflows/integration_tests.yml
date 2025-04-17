@@ -1,0 +1,71 @@
+name: Integration test workflow
+
+on:
+
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+      override-nightly-tag:
+        description: 'manually specify the nightly tag (optional)'
+        required: false
+      candidate-release-tag:
+        description: 'manually specify a candidate release tag (optional)'
+        required: false
+        default: ""
+      frozen-release-tag:
+        description: 'manually specify a frozen release tag (optional)'
+        required: false
+        default: ""
+
+jobs:
+  make_variables:
+    name: create nightly tag, timestamp, etc.
+    runs-on: daq
+    outputs:
+      tag: ${{ steps.create_variables.outputs.release_tag }}
+      is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
+      is_frozen_release: ${{ steps.create_variables.outputs.is_frozen }}
+      timestamp: ${{ steps.create_variables.outputs.timestamp }}
+      persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
+      integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_variables
+        run: |
+          is_candidate=false
+          is_frozen=false
+          if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.frozen-release-tag }}" ]]; then
+            echo "Error: You cannot specify both a candidate tag and a frozen tag. Please choose one and try again. Exiting..."
+            exit 1
+          fi
+          if [ -n "${{ github.event.inputs.override-nightly-tag }}" ]; then
+            release_tag="${{ github.event.inputs.override-nightly-tag }}"
+            if [[ -n "${{ github.event.inputs.candidate-release-tag }}" || -n "${{ github.event.inputs.frozen-release-tag }}" ]]; then
+              echo "WARNING: The provided nightly tag will supercede the provided candidate or frozen release tag."
+            fi
+          elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.candidate-release-tag }}"
+            is_candidate=true
+          elif [ -n "${{ github.event.inputs.frozen-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.frozen-release-tag }}"
+            is_frozen=true
+          else
+            date_tag=$(date +%y%m%d)
+            release_tag="NFD_DEV_${date_tag}_A9"
+          fi
+
+          timestamp=$(date +"%Y-%m-%d-%H%M%Z")
+          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+          integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+
+          echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
+          echo "is_frozen=${is_frozen}"  >>  "$GITHUB_OUTPUT"
+          echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
+          echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
+          echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
