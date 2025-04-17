@@ -15,13 +15,14 @@ class SlackPayload:
         "cancelled": ":no_entry:",
     }
 
-    def __init__(self, workflow_summary, junit_xml_dir=None, pytest_log_dir=None):
+    def __init__(self, workflow_summary, release_name=None, junit_xml_dir=None, pytest_log_dir=None):
         self.workflow_summary  = workflow_summary
         self.workflow_name     = workflow_summary['workflow']
         self.workflow_trigger  = workflow_summary['event']
         self.workflow_actor    = workflow_summary['actor']
         self.workflow_html_url = workflow_summary['html_url']
         self.failed_jobs       = workflow_summary['failed_jobs']
+        self.release_name = release_name
         self.pytest_log_dir = pytest_log_dir
         self.workflow_status = self.get_workflow_status()
         self.blocks = []
@@ -49,6 +50,23 @@ class SlackPayload:
                 "type": "plain_text",
                 "text": f"{emoji} {self.workflow_status.capitalize()}: {workflow_name} {emoji}",
                 "emoji": True
+            }
+        })
+
+    def add_release_section(self):
+        """State which release the workflow was run on."""
+        if not self.release_name:
+            return
+        release_type = 'stable'
+        if 'rc' in self.release_name:
+            release_type = 'candidate'
+        elif 'NFD' in self.release_name:
+            release_type = 'nightly'
+        self.blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"This workflow was run using the {release_type} release `{self.release_name}`."
             }
         })
 
@@ -147,6 +165,7 @@ class SlackPayload:
         """Build and return the final Slack payload."""
         self.blocks = []
         self.add_header()
+        self.add_release_section()
         self.add_report_section()
         self.add_failed_jobs_section()
         if shorten_failed_jobs_section:
@@ -181,6 +200,8 @@ def main():
     parser = argparse.ArgumentParser(description="Parse a workflow summary and generate a Slack message payload.")
     parser.add_argument("--api-output", required=True,
                         help="JSON file containing a summary of failed jobs from GitHub API.")
+    parser.add_argument("--release-name", nargs="?", default=None,
+                        help="Optional name of the release used in the caller workflow.")
     parser.add_argument("--junit-xml-dir", nargs="?", default=None,
                         help="Optional directory containing JUnit XML files.")
     parser.add_argument("--pytest-log-dir", nargs="?", default=None,
@@ -202,7 +223,7 @@ def main():
         xml_files = list(Path(args.junit_xml_dir).rglob("*_results.xml"))
 
     print('args.pytest_log_dir:', args.pytest_log_dir)
-    slack_payload = SlackPayload(workflow_summary, args.junit_xml_dir, args.pytest_log_dir)
+    slack_payload = SlackPayload(workflow_summary, args.release_name, args.junit_xml_dir, args.pytest_log_dir)
     json_payload = slack_payload.to_json()
     write_payload_to_file(json_payload)
 

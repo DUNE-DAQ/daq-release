@@ -3,6 +3,10 @@ name: Slack Notification
 on:
   workflow_call:
     inputs:
+      release_tag:
+        type: string
+        default: ''
+        description: Name of the release used in the caller workflow.
       integtest_xml_dir:
         type: string
         default: ''
@@ -42,6 +46,7 @@ jobs:
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
                --api-output failed_jobs.json \
+               --release-name ${{ inputs.release_tag }} \
                --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
