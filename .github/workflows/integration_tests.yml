@@ -4,7 +4,6 @@ on:
   schedule:
     - cron: "15 9 * * *"
 
-
   workflow_dispatch:
     inputs:
       send-slack-message:
@@ -227,4 +226,5 @@ jobs:
       - name: Run cleanup script
         run: |
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
 
