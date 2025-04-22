@@ -60,6 +60,7 @@ jobs:
           dbt-create -b candidate "$RELEASE_TAG"
         else
           dbt-create "$RELEASE_TAG"
+        fi
         cd "$RELEASE_TAG"
         source env.sh
 
