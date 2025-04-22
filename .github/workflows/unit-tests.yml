@@ -1,0 +1,124 @@
+name: Run Unit Tests on a Given Release
+
+on:
+  workflow_call:
+    inputs:
+      release_tag:
+        type: string
+        required: true
+        description: Name of the release used in the caller workflow.
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        type: string
+        required: true
+        description: Name of the release to unit test
+      send-slack-message:
+          description: 'whether to send a message to #daq-release-notifications on completion'
+          default: 'no'
+
+
+jobs:
+  run_unittests:
+    name: Run unit tests
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-unittests
+    - name: Determine release type
+      env:
+        RELEASE_TAG: ${{ inputs.release_tag }}
+      run: |
+        RELEASE_TYPE=""
+        echo "RELEASE_TAG: $RELEASE_TAG"
+        if [[ "$RELEASE_TAG" == NFD* ]]; then
+          RELEASE_TYPE="nightly"
+        elif [[ "$RELEASE_TAG" == *rc* ]]; then
+          RELEASE_TYPE="candidate"
+        elif [[ "$RELEASE_TAG" =~ ^fddaq-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          RELEASE_TYPE="stable"
+        else
+          echo "Could not determine release type. Please check your spelling."
+          exit 1
+
+        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+        echo "RELEASE_TYPE=$RELEASE_TYPE" >> $GITHUB_ENV
+
+    - name: Create build area
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest
+        if [[ "$RELEASE_TYPE" == "nightly" ]]; then
+          dbt-create -n "$RELEASE_TAG"
+        elif [[ "$RELEASE_TYPE" == "candidate" ]]; then
+          dbt-create -b candidate "$RELEASE_TAG"
+        else
+          dbt-create "$RELEASE_TAG"
+        cd "$RELEASE_TAG"
+        source env.sh
+
+        if [[ "$RELEASE_TYPE" == "nightly" ]]; then
+          VERSION_TAG="develop"
+        else
+          VERSION_TAG=$(echo "$RELEASE_TAG" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+')
+        fi
+        echo "VERSION_TAG: $VERSION_TAG"
+
+        cd ../daq-release-unittests/scripts
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+    - name: Run unit tests
+      run: |
+        cd $DBT_AREA_ROOT/
+        source env.sh
+        dbt-workarea-env
+        spack load dbe
+        dbt-build --unittest
+        echo "# Unit Test Report" > $GITHUB_STEP_SUMMARY
+        #TODO Make this a script in daq-release
+        log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
+        table_header_line="| Test | Status| \n| --- | --- |\n"
+        previous_package=""
+        markdown_content=""
+        while IFS= read -r line; do
+            # Strip out bash color formatting
+            cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
+            # Depending on whether the package has tests or not, the package name will be
+            # in different positions
+            if [[ "$cleaned_line" == *"No unit tests"* ]]; then
+              this_package=$(echo "$cleaned_line" | cut -d ' ' -f 9)
+            else
+              this_package=$(echo "$cleaned_line" | cut -d '/' -f 2)
+            fi
+            test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
+            if [[ "$this_package" != "$previous_package" ]]; then
+                markdown_content+="## $this_package \n"
+                markdown_content+="$table_header_line"
+                previous_package=$this_package
+            fi
+            if [[ "$(echo "$line" | grep -o SUCCESS)" == "SUCCESS" ]]; then
+                markdown_content+="| $test_name | :white_check_mark: Passed |\n"
+            elif [[ "$(echo "$line" | grep -o FAILURE)" == "FAILURE" ]]; then
+                markdown_content+="| $test_name | :x: Failed |\n"
+            else
+                markdown_content+="\n:construction: Unit tests have not been written for $this_package\n"
+            fi
+        done < "$log_summary_file"
+        echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
+
+  send_slack_message:
+    if: (github.event.inputs.send-slack-message == 'yes')
+    needs: [run_unittests]
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      release_tag: ${{ inputs.release_tag }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
