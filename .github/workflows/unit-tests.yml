@@ -45,6 +45,7 @@ jobs:
         else
           echo "Could not determine release type. Please check your spelling."
           exit 1
+        fi
 
         echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
         echo "RELEASE_TYPE=$RELEASE_TYPE" >> $GITHUB_ENV
