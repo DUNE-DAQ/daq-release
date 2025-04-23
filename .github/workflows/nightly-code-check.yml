@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
-      daq_release_path: ${{ steps.set_daq_release_path.outputs.nightly_tag }} 
+      daq_release_path: ${{ steps.set_daq_release_path.outputs.daq_release_path }} 
     defaults:
       run:
         shell: bash
@@ -26,7 +26,6 @@ jobs:
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
       - id: set_daq_release_path
         run: |
-          echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
           echo "daq_release_path=${{ github.workspace }}/daq-release-code-checks" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
