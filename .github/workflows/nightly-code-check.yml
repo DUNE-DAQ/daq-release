@@ -53,6 +53,10 @@ jobs:
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+    - name: Check contents of daq-release area
+      run: |
+        echo "Contents of daq-release-unittests: $(ls -a daq-release-unittests)"
+        echo "Contents of daq-release-unittests workflows: $(ls -a daq-release-unittests/.github/workflows)"
     - name: Run unit tests
       uses: ./daq-release-unittests/.github/workflows/unit-tests.yml
       with:
