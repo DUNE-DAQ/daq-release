@@ -7,6 +7,9 @@ on:
         type: string
         required: true
         description: Name of the release used in the caller workflow.
+      daq_release_path:
+        type: string
+        description: Path to daq-release if it's already checked out
   workflow_dispatch:
     inputs:
       release_tag:
@@ -26,8 +29,7 @@ jobs:
         shell: bash
     steps:
     - name: Checkout daq-release
-      # If this workflow is called, daq-release should already be checked out
-      if: github.event_name == 'workflow_dispatch'
+      if: ${{ !inputs.daq_release_path }}
       uses: actions/checkout@v4
       with:
         path: daq-release-unittests

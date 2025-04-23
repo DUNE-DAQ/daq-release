@@ -57,6 +57,7 @@ jobs:
       uses: ./.github/workflows/unit-tests.yml
       with:
         release_tag: ${{ needs.make_nightly_tag.outputs.tag }}
+        daq_release_path: daq-release-unittests
     - name: Run unit tests
       run: |
         cd $DBT_AREA_ROOT/
