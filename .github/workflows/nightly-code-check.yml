@@ -23,9 +23,15 @@ jobs:
         run: |
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-
+  
   run_unittests:
-    name: Run unit tests
+    needs: make_variables
+    uses: ./.github/workflows/unit-tests.yml
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
+
+  run_checks:
+    name: Run linting and integration tests
     runs-on: daq
     needs: make_variables
     outputs:
@@ -53,10 +59,6 @@ jobs:
         ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-    - name: Run unit tests
-      uses: ./daq-release-code-checks/.github/workflows/unit-tests.yml
-      with:
-        release_tag: ${{ needs.make_variables.outputs.tag }}
     - name: Run clang formatting
       run: |
         cd $DBT_AREA_ROOT
