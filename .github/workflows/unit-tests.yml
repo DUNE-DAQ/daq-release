@@ -17,7 +17,6 @@ on:
           description: 'whether to send a message to #daq-release-notifications on completion'
           default: 'no'
 
-
 jobs:
   run_unittests:
     name: Run unit tests

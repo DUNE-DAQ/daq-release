@@ -39,6 +39,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release-unittests
+        ref: amogan/factor_unit_test_workflow
     - name: Create build area
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
