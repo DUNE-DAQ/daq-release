@@ -26,6 +26,8 @@ jobs:
         shell: bash
     steps:
     - name: Checkout daq-release
+      # If this workflow is called, daq-release should already be checked out
+      if: github.event_name == 'workflow_dispatch'
       uses: actions/checkout@v4
       with:
         path: daq-release-unittests
@@ -71,10 +73,10 @@ jobs:
         echo "VERSION_TAG: $VERSION_TAG"
 
         cd ../daq-release-unittests/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
       run: |
@@ -123,3 +125,19 @@ jobs:
       release_tag: ${{ inputs.release_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+
+  cleanup_files:
+    # If this workflow was called, the caller workflow should handle cleanup
+    if: (github.event_name == 'workflow_dispatch')
+    needs: run_unittests
+    runs-on: daq
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag }}
+    steps:
+    - name: Remove files
+      run: |
+        echo "Where am I? $(pwd)"
+        echo "Contents of RELEASE_TAG: $(ls $RELEASE_TAG)"
+        rm -rf $RELEASE_TAG
+        echo "Contents of daq-release-unittests: $(ls ${{ github.workspace }}/daq-release-unittests)"
+        rm -rf ${{ github.workspace }}/daq-release-unittests
