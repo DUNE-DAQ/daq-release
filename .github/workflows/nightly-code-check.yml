@@ -33,7 +33,7 @@ jobs:
   run_checks:
     name: Run linting and integration tests
     runs-on: daq
-    needs: make_variables
+    needs: [make_variables, run_unittests]
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
     defaults:
@@ -84,12 +84,12 @@ jobs:
 
   parse_integtest_results:
     runs-on: daq
-    needs: [make_variables, run_unittests]
+    needs: [make_variables, run_unittests, run_checks]
     steps:
     - name: Generate summary tables
       run: |
         cd daq-release-code-checks/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.run_unittests.outputs.integtest_log_dir }}
+        python integtest_xml_parser.py --input-directory ${{ needs.run_checks.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
