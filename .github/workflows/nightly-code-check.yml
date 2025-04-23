@@ -54,7 +54,7 @@ jobs:
         ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
-      uses: ./.github/workflows/unit-tests.yml
+      uses: ./daq-release-code-checks/.github/workflows/unit-tests.yml
       with:
         release_tag: ${{ needs.make_variables.outputs.tag }}
     - name: Run clang formatting
