@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
-      daq_release_path: ${{ steps.set_daq_release_path.outputs.daq_release_path }} 
     defaults:
       run:
         shell: bash
@@ -24,10 +23,6 @@ jobs:
         run: |
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-      - id: set_daq_release_path
-        run: |
-          echo "daq_release_path=${{ github.workspace }}/daq-release-code-checks" >> "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
 
   run_unittests:
     name: Run unit tests
@@ -35,8 +30,6 @@ jobs:
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
-    env:
-      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
     defaults:
       run:
         shell: bash
@@ -44,7 +37,7 @@ jobs:
     - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
-        path: ${{ needs.make_variables.outputs.daq_release_path }}
+        path: daq-release-code-checks
         ref: amogan/factor_unit_test_workflow
     - name: Create build area
       run: |
@@ -53,8 +46,8 @@ jobs:
         dbt-create -n ${{ needs.make_variables.outputs.tag }}
         cd ${{ needs.make_variables.outputs.tag }}
         source env.sh
-        #cd ../daq-release-unittests/scripts
-        cd ${{ env.DAQ_RELEASE_PATH }}/scripts
+        cd ../daq-release-code-checks/scripts
+        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
@@ -93,7 +86,7 @@ jobs:
     steps:
     - name: Generate summary tables
       run: |
-        cd ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/
+        cd daq-release-code-checks/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.run_unittests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
@@ -111,5 +104,5 @@ jobs:
     steps:
       - name: Remove test directory and daq-release
         run: |
-          rm -rf ${{ needs.make_variables.outputs.daq_release_path }}
+          rm -rf daq-release-code-checks
           rm -rf ${{ needs.make_variables.outputs.tag }}
