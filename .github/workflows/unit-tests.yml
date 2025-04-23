@@ -7,9 +7,6 @@ on:
         type: string
         required: true
         description: Name of the release used in the caller workflow.
-      daq_release_path:
-        type: string
-        description: Path to daq-release if it's already checked out
   workflow_dispatch:
     inputs:
       release_tag:
@@ -29,7 +26,6 @@ jobs:
         shell: bash
     steps:
     - name: Checkout daq-release
-      if: ${{ !inputs.daq_release_path }}
       uses: actions/checkout@v4
       with:
         path: daq-release-unittests
@@ -46,7 +42,7 @@ jobs:
         elif [[ "$RELEASE_TAG" =~ ^fddaq-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           RELEASE_TYPE="stable"
         else
-          echo "Could not determine release type. Please check your spelling."
+          echo "Could not determine release type. Exiting..."
           exit 1
         fi
 
