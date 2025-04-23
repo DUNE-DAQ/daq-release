@@ -125,8 +125,7 @@ jobs:
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_files:
-    # If this workflow was called, the caller workflow should handle cleanup
-    if: (github.event_name == 'workflow_dispatch')
+    if: always()
     needs: run_unittests
     runs-on: daq
     env:
