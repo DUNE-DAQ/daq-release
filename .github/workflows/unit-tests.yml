@@ -39,7 +39,7 @@ jobs:
           RELEASE_TYPE="nightly"
         elif [[ "$RELEASE_TAG" == *rc* ]]; then
           RELEASE_TYPE="candidate"
-        elif [[ "$RELEASE_TAG" =~ ^fddaq-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        elif [[ "$RELEASE_TAG" =~ ^fddaq-v[0-9]+\.[0-9]+\.[0-9]+-a9 ]]; then
           RELEASE_TYPE="stable"
         else
           echo "Could not determine release type. Exiting..."
