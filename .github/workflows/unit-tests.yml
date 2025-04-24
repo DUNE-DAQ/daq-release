@@ -66,6 +66,7 @@ jobs:
         if [[ "$RELEASE_TYPE" == "nightly" ]]; then
           VERSION_TAG="develop"
         else
+          # To find the correct release manifest, extract vX.Y.Z from the release name
           VERSION_TAG=$(echo "$RELEASE_TAG" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+')
         fi
         echo "VERSION_TAG: $VERSION_TAG"
@@ -116,13 +117,13 @@ jobs:
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
-    if: (github.event.inputs.send-slack-message == 'yes')
+    if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes')
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ inputs.release_tag }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     if: always()
@@ -133,8 +134,5 @@ jobs:
     steps:
     - name: Remove files
       run: |
-        echo "Where am I? $(pwd)"
-        echo "Contents of RELEASE_TAG: $(ls $RELEASE_TAG)"
         rm -rf $RELEASE_TAG
-        echo "Contents of daq-release-unittests: $(ls ${{ github.workspace }}/daq-release-unittests)"
         rm -rf ${{ github.workspace }}/daq-release-unittests
