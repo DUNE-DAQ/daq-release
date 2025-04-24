@@ -27,7 +27,7 @@ jobs:
 
   run_linting:
     name: Run linting
-    runs-on: protodune-daq01
+    runs-on: daq
     needs: make_nightly_tag
     defaults:
       run:
@@ -78,7 +78,7 @@ jobs:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_test_area:
-    runs-on: protodune-daq01
+    runs-on: daq
     if: always()
     needs: [make_nightly_tag, run_linting]
     steps:
