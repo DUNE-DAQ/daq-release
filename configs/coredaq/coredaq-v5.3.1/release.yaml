@@ -155,7 +155,7 @@
           version: v2.0.0
           commit: null
         - name: iomanager
-          version: v2.2.0
+          version: v2.2.1
           commit: null
         - name: dfmessages
           version: v2.9.0
