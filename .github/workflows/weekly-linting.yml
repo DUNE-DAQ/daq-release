@@ -51,7 +51,7 @@ jobs:
         cd ${{ needs.make_nightly_tag.outputs.tag }}
         source env.sh
 
-        exclude_list="ers okssystem oks oksutils oksconflibs dbe"
+        exclude_list="ers okssystem oks oksutils oksconflibs dbe daq-cmake rcif daqsystemtest"
 
         for repodir in $( find $tmpdirname -mindepth 1 -maxdepth 1 ); do
           repo=$( echo $repodir | tr "/" "\n" | tail -1 )
@@ -72,7 +72,7 @@ jobs:
 
         rmdir $tmpdirname
 
-        find log -type f | xargs -i mv {} log/
+        find log -mindepth 2 -type f | xargs -i mv {} log/
         find log -type d -mindepth 1 -maxdepth 1 | xargs -i rmdir {}
 
         tar czf linting_results.tgz log/linting*
