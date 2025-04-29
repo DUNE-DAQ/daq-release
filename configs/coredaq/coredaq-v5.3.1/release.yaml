@@ -179,13 +179,13 @@
           version: v4.1.1
           commit: null
         - name: hsilibs
-          version: v4.6.0
+          version: v4.6.1
           commit: null
         - name: timing
-          version: v7.10.0
+          version: v7.10.1
           commit: null
         - name: timinglibs
-          version: v4.4.1
+          version: v4.4.2
           commit: null
         - name: trigger
           version: v2.3.0
