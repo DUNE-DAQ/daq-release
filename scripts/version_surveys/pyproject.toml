@@ -15,7 +15,7 @@ connection-service = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"
 daq-assettools = {git = "https://github.com/DUNE-DAQ/daq-assettools"}
 deepdiff = ">=6.3.1"
 drunc = {git = "https://github.com/DUNE-DAQ/drunc"}
-druncschema = {git = "https://github.com/DUNE-DAQ/druncschema"}
+drunc-messages = {git = "https://github.com/DUNE-DAQ/drunc-messages"}
 elisa_client_api = {git = "https://github.com/DUNE-DAQ/elisa_client_api"}
 Flask = ">=2.1.1"
 Flask-Cors = ">=3.0.10"

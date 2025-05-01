@@ -20,7 +20,7 @@
     * daqsystemtest
     * dbe
     * drunc
-    * druncschema
+    * druncschema/drunc-messages
     * elisa_client_api
     * ers
     * erskafka

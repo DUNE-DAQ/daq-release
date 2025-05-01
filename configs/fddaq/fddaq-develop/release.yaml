@@ -117,7 +117,7 @@
         - name: drunc
           version: develop
           source:  github_DUNE-DAQ
-        - name: druncschema
+        - name: drunc-messages
           version: develop
           source:  github_DUNE-DAQ
         - name: durationpy
