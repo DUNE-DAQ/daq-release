@@ -1,9 +1,8 @@
-name: Nightly v5 integration tests
+name: Integration test workflow
 
 on:
   schedule:
     - cron: "15 9 * * *"
-
 
   workflow_dispatch:
     inputs:
@@ -197,6 +196,7 @@ jobs:
     needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
       integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
@@ -211,8 +211,8 @@ jobs:
         env:
           RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         run: |
-          #rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-          echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
+          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
           rm -rf ${{ github.workspace }}/daq-release-integtest/
@@ -226,4 +226,5 @@ jobs:
       - name: Run cleanup script
         run: |
           /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
 

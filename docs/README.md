@@ -2,7 +2,7 @@
 
 [![AL9 Spack Nightly Workflow (dev, v5) ](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml)
 
-[![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-v5-integtest.yml)
+[![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml)
 
 [![Nightly daq-buildtools Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml)
 
@@ -31,6 +31,8 @@ This is a repo containing DUNE DAQ release making tools, configuration files, an
 appmodel: [![appmodel](https://github.com/DUNE-DAQ/appmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 appfwk: [![appfwk](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/appfwk/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+asiolibs: [![asiolibs](https://github.com/DUNE-DAQ/asiolibs/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/asiolibs/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml)
 

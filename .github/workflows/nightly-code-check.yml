@@ -10,7 +10,7 @@ on:
     - cron: "30 10 * * *"
 
 jobs:
-  make_nightly_tag:
+  make_variables:
     name: create nightly tag
     runs-on: ubuntu-latest
     outputs:
@@ -23,12 +23,17 @@ jobs:
         run: |
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
-
+  
   run_unittests:
-    name: Run unit tests
+    needs: make_variables
+    uses: ./.github/workflows/unit-tests.yml
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
+
+  run_checks:
+    name: Run linting and integration tests
     runs-on: daq
-    needs: make_nightly_tag
+    needs: [make_variables, run_unittests]
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
     defaults:
@@ -38,59 +43,21 @@ jobs:
     - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
-        path: daq-release-unittests
+        path: daq-release-code-checks
     - name: Create build area
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
-        cd ${{ needs.make_nightly_tag.outputs.tag }}
+        dbt-create -n ${{ needs.make_variables.outputs.tag }}
+        cd ${{ needs.make_variables.outputs.tag }}
         source env.sh
-        cd ../daq-release-unittests/scripts
+        cd ../daq-release-code-checks/scripts
+        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-    - name: Run unit tests
-      run: |
-        cd $DBT_AREA_ROOT/
-        source env.sh
-        dbt-workarea-env
-        spack load dbe
-        dbt-build --unittest
-        echo "# Unit Test Report" > $GITHUB_STEP_SUMMARY
-        #TODO Make this a script in daq-release
-        log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        table_header_line="| Test | Status| \n| --- | --- |\n"
-        previous_package=""
-        markdown_content=""
-        while IFS= read -r line; do
-            # Strip out bash color formatting
-            cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
-            # Depending on whether the package has tests or not, the package name will be
-            # in different positions
-            if [[ "$cleaned_line" == *"No unit tests"* ]]; then
-              this_package=$(echo "$cleaned_line" | cut -d ' ' -f 9)
-            else
-              this_package=$(echo "$cleaned_line" | cut -d '/' -f 2)
-            fi
-            test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
-            if [[ "$this_package" != "$previous_package" ]]; then
-                markdown_content+="## $this_package \n"
-                markdown_content+="$table_header_line"
-                previous_package=$this_package
-            fi
-            if [[ "$(echo "$line" | grep -o SUCCESS)" == "SUCCESS" ]]; then
-                markdown_content+="| $test_name | :white_check_mark: Passed |\n"
-            elif [[ "$(echo "$line" | grep -o FAILURE)" == "FAILURE" ]]; then
-                markdown_content+="| $test_name | :x: Failed |\n"
-            else
-                markdown_content+="\n:construction: Unit tests have not been written for $this_package\n"
-            fi
-        done < "$log_summary_file"
-        echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
-
     - name: Run clang formatting
       run: |
         cd $DBT_AREA_ROOT
@@ -116,12 +83,12 @@ jobs:
 
   parse_integtest_results:
     runs-on: daq
-    needs: run_unittests
+    needs: [make_variables, run_unittests, run_checks]
     steps:
     - name: Generate summary tables
       run: |
-        cd daq-release-unittests/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.run_unittests.outputs.integtest_log_dir }}
+        cd daq-release-code-checks/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ needs.run_checks.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
@@ -134,9 +101,9 @@ jobs:
   cleanup_test_area:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, parse_integtest_results]
+    needs: [make_variables, parse_integtest_results]
     steps:
       - name: Remove test directory and daq-release
         run: |
-          rm -rf daq-release-unittests
-          rm -rf ${{ needs.make_nightly_tag.outputs.tag }}
+          rm -rf daq-release-code-checks
+          rm -rf ${{ needs.make_variables.outputs.tag }}

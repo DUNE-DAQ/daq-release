@@ -11,15 +11,14 @@
 * **Repositories with write access**:
     * appfwk
     * appmodel
+    * cider
     * cmdlib
     * conffwk
     * confmodel
     * connectivityserver
-    * dal
     * daqconf
     * daqsystemtest
     * dbe
-    * dqm
     * drunc
     * druncschema
     * elisa_client_api
@@ -40,11 +39,14 @@
     * pocket
     * rcif
     * restcmd
+    * runconf-ui
+    * runconftools
 
 ## core-sw
 * **People to contact**: Kurt Biery, Roland Sipos
 * **Repositories with write access**:
     * appfwk
+    * asiolibs
     * ctbmodules
     * daqconf
     * daqdataformats
@@ -84,6 +86,8 @@
 ## daphne
 * **People to contact**: Marco Roda, Manuel Arroyave
 * **Repositories with write access**:
+    * daphe-firmware
+    * daphne-os
     * daphnemodules
     * sspmodules
 
@@ -101,8 +105,6 @@
 * **People to contact**: Wes Ketchum
 * **Repositories with write access**:
     * daqsystemtest
-    * dqm
-    * dqm-backend
     * dqmtools
     * justintime
     * rawdatautils
@@ -141,7 +143,6 @@
     * trgtools
     * trigger
     * triggeralgs
-    * triggermodules
 
 ## wib
 * **People to contact**: Alessandro Thea, Paul Keener
@@ -151,5 +152,5 @@
     * wibmod
 
 
-Page was generated at: 30/08/2024 13:03:54
+Page was generated at: 25/04/2025 08:44:43
 
