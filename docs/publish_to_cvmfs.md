@@ -6,7 +6,7 @@ We use CERN's [CernVM-FS filesystem](https://cernvm.cern.ch/fs/),
 better known as "cvmfs", to make our software releases available to
 the collaboration. A good user tutorial for how to publish files to it can be found [here](https://cvmfs-contrib.github.io/cvmfs-tutorial-2021/04_publishing/), but this page will focus on DUNE DAQ Software Coordination-specific use of cvmfs.
 
-We use two cvmfs repositories: `dunedaq.opensciencegrid.org` for our frozen releases, and `dunedaq-development.opensciencegrid.org` for our candidate and nightly releases. To alter the former, log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq`; to alter the latter, log in as `cvmfsdunedaqdev`. Once you've done that, you can use the `cvmfs_server` command (or a script which uses it) to modify cvmfs. 
+We use two cvmfs repositories: `dunedaq.opensciencegrid.org` for our stable releases, and `dunedaq-development.opensciencegrid.org` for our candidate and nightly releases. To alter the former, log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq`; to alter the latter, log in as `cvmfsdunedaqdev`. Once you've done that, you can use the `cvmfs_server` command (or a script which uses it) to modify cvmfs. 
 
 ## The basics
 
@@ -37,7 +37,7 @@ section. Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and execute the follo
 
 ## Updating releases on cvmfs
 
-Publishing the releases typically does not involve running `cvmfs_server` directly. [The nightly is published directly](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-release/ci_github_action/#how-the-nightly-releases-are-made) via GitHub Workflows, and [candidate and frozen releases are published via the `publish_release_to_cvmfs.sh` script](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-release/create_release_spack/#building-candidate-releases)
+Publishing the releases typically does not involve running `cvmfs_server` directly. [The nightly is published directly](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-release/ci_github_action/#how-the-nightly-releases-are-made) via GitHub Workflows, and [candidate and stable releases are published via the `publish_release_to_cvmfs.sh` script](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-release/create_release_spack/#building-candidate-releases)
 
 ## Updating a particular directory on cvmfs
 

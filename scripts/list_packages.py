@@ -6,7 +6,7 @@ import sys
 from spack.dr_tools import get_packages
 
 if len(sys.argv) < 3:
-    print("Usage: {} <name of release type (\"develop\", \"production_v4\", or frozen release version as vX.Y.Z)> <name of package group (coredaq, fddaq, nddaq, externals>".format(sys.argv[0].split("/")[-1]))
+    print("Usage: {} <name of release type (\"develop\", \"production_v4\", or stable release version as vX.Y.Z)> <name of package group (coredaq, fddaq, nddaq, externals>".format(sys.argv[0].split("/")[-1]))
     sys.exit(1)
 
 reltype=sys.argv[1]

@@ -20,13 +20,13 @@ We have four types of branch in our workflow:
 * **Feature branches**
     * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
-    * These are only intended for use if changes need to be made after the initial tags are made for a particular frozen release's release cycle
+    * These are only intended for use if changes need to be made after the initial tags are made for a particular stable release's release cycle. Note that as of May-2-2025, "stable" is the term which replaces "frozen".
     * Intended to be forked off the tag, _not_ `develop`
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time; again, unit tests and `minimal_system_quick_test.py` should continue to pass. 
-    * After the final tag for the frozen release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
+    * After the final tag for the stable release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
     * Nomenclature: for a given release `fddaq-vX.Y.Z` use `prep-release/fddaq-vX.Y.Z` and similarly `prep-release/nddaq-vX.Y.Z` for `nddaq-vX.Y.Z`
 * **Patch branches**  `patch/fddaq-vX.Y.x`/`patch/nddaq-vX.Y.x`**
-    * Used for patch frozen releases; these are forked off of the final tags of the frozen releases we're patching
+    * Used for patch stable releases; these are forked off of the final tags of the stable releases we're patching
     * Same rules for merging into `develop` apply here as apply to the prep-release branches
     * Nomenclature is the same as for prep release branches, _except_ we leave the patch version a "variable". So, e.g., while a prep release branch for a FD-based `v4.4.0` release would be `prep-release/fddaq-v4.4.0`, if a `v4.4.1` patch released is based off it a patch release branch would be `patch/fddaq-v4.4.x`
 
