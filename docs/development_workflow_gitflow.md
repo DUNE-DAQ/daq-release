@@ -20,7 +20,7 @@ We have four types of branch in our workflow:
 * **Feature branches**
     * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
-    * These are only intended for use if changes need to be made after the initial tags are made for a particular stable release's release cycle
+    * These are only intended for use if changes need to be made after the initial tags are made for a particular stable release's release cycle. Note that as of May-2-2025, "stable" is the term which replaces "frozen".
     * Intended to be forked off the tag, _not_ `develop`
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time; again, unit tests and `minimal_system_quick_test.py` should continue to pass. 
     * After the final tag for the stable release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
