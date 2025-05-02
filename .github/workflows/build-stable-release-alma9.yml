@@ -1,0 +1,33 @@
+name: Alma9 build v5 stable release 
+
+on:
+  workflow_dispatch:
+    inputs:
+      base-release:
+        description: 'targeted base release (e.g. v4.4.0)'
+        required: true
+      det-release:
+        description: 'targeted detector release (e.g. v4.3.0)'
+        required: true
+      det:
+        description: 'detector type (nd or fd)'
+        required: true
+      build-number:
+        description: 'stable release number, e.g. 1'
+        required: true
+
+jobs:
+  build_the_stable_release_spack:
+    name: build_stable_release_spack
+    runs-on: daq
+    container:
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release
