@@ -305,7 +305,10 @@ class DAQRelease:
                     repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
                     egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
 
-                    if iversion == "develop" or iname == "moo":
+                    if iversion == "develop" and not iname == "moo":
+                        (itag, ihash) = get_commit_hash(iname, iversion, iversion)
+                        iline = f"git+https://github.com/{iuser}/{repo_name}@{ihash}#egg={egg_name}"
+                    elif iname == "moo":
                         iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
