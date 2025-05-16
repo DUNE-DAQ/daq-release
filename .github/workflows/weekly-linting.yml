@@ -58,7 +58,7 @@ jobs:
 
           if [[ " $exclude_list " == *" $repo "* ]]; then
             echo "SKIPPING LINTING OF $repo REPOSITORY"
-            rm -rf $tmpdir/$repo
+            rm -rf $tmpdirname/$repo
             continue
           fi
 
