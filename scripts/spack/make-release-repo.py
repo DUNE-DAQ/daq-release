@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import tempfile
 import re
+from time import sleep
 
 from dr_tools import parse_yaml_file
 from mappings import cmake_to_spack, pyvenv_url_names
@@ -16,18 +17,32 @@ class MyDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
 
-def check_output(cmd):
-    irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    out = irun.communicate()
-    rc = irun.returncode
-    if rc != 0:
-        print('\nERROR: command "{}" has exit non-zero exit status,\
-please check!\n'.format(cmd))
-        print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
-        print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+def check_output(cmd, max_tries = 1):
 
-        exit(10)
+    ntries = 0
+
+    while True:
+        ntries += 1
+
+        irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        out = irun.communicate()
+        rc = irun.returncode
+
+        if rc == 0:
+            break
+        elif rc != 0:
+            print('\nERROR: command "{}" has exit non-zero exit status,\
+    please check!\n'.format(cmd))
+            print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
+            print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+
+            if ntries >= max_tries:
+                exit(10)
+            else:
+                sleep_time = 5
+                print(f"On try {ntries}; will sleep {sleep_time} seconds before trying again")
+                sleep(sleep_time)
     return out
 
 
@@ -119,9 +134,7 @@ class DAQRelease:
         file_name = "CMakeLists.txt"
         cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
         command = f'curl -o {file_name} --fail {cmakelists_path}'
-        check_output(command)
-        args = command.split()
-        subprocess.run(args)
+        check_output(command, 5)
 
         cmake_dependencies_list = []
         with open(file_name, 'r') as infile:
