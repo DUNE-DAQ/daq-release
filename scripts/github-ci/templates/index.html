@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DUNE DAQ CI Summary</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #f4f4f4;
+            padding: 1em;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+        }
+
+        .content {
+            margin-left: 240px;
+            padding: 2em;
+            flex-grow: 1;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1em;
+        }
+
+        th, td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .status-success {
+            color: green;
+        }
+
+        .status-failure {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="index.html">CI Summary</a></li>
+            <li><a href="https://your-domain/doxygen/">Doxygen</a></li>
+            <li><a href="https://your-domain/coverage/">Coverage Report</a></li>
+            <li><a href="https://your-domain/unit-tests/">Unit Tests</a></li>
+            <li><a href="https://your-domain/integration-tests/">Integration Tests</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1>DUNE DAQ CI Summary</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Repository</th>
+                    <th>Open Issues</th>
+                    <th>Open PRs</th>
+                    <th>Workflow Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repo in repos %}
+                <tr>
+                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}">{{ repo.repo }}</a></td>
+                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/issues">{{ repo.open_issues }}</a></td>
+                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/pulls">{{ repo.open_prs }}</a></td>
+                    <td>
+                        <a href="{{ repo.build_develop.url }}">
+                            <span class="status-{{ repo.build_develop.conclusion }}">
+                                {{ repo.build_develop.conclusion | capitalize }}
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
