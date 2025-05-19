@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Usage?
-#if (( $# != 3 )); then
-#    echo "Usage: $( basename $0 ) <production_v4 or develop> <workflow_file_name> <sync, trigger, or disable>" >&2
-#    exit 1
-#fi
-
 export DEVLINE="develop"
 
 # Store list of packages from repo.sh as dune_packages_with_ci
@@ -29,7 +23,9 @@ for REPO in "${dune_packages_with_ci[@]}"; do
 
   # Count open issues and PRs
   OPEN_ISSUES=$(gh issue list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
+  ISSUES_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/issues")
   OPEN_PRS=$(gh pr list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
+  PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
   # Get most recent workflow run
   BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow "build-develop" -q '.[0]')
@@ -39,13 +35,17 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   JSON_ENTRY=$(jq -n \
     --arg repo "$REPO" \
     --argjson issues "$OPEN_ISSUES" \
+    --arg issues_url "$ISSUES_URL" \
     --argjson prs "$OPEN_PRS" \
+    --arg prs_url "$PRS_URL" \
     --argjson build_develop "$BUILD_DEVELOP_STATUS" \
     '{
       repo: $repo,
       open_issues: $issues,
+      issues_url: $issues_url,
       open_prs: $prs,
-      build_develop: $build_develop
+      prs_url: $prs_url,
+      build_develop: $build_develop,
     }')
   retval=$?
 
@@ -55,10 +55,6 @@ for REPO in "${dune_packages_with_ci[@]}"; do
     else 
       echo "," >> "$OUTFILE"
     fi
-  #if [[ "$FIRST" = true && $retval == 0 ]]; then
-  #  FIRST=false
-  #elif [[ "$FIRST" != true && $retval == 0 ]]; then
-  #  echo "," >> "$OUTFILE"
   else
     echo "Non-zero return value. Skipping..."
     continue
@@ -68,3 +64,5 @@ for REPO in "${dune_packages_with_ci[@]}"; do
 done
 
 echo "]" >> "$OUTFILE"
+
+echo "Results saved to $OUTFILE"
