@@ -102,6 +102,17 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+              <tr>
+                  <td><strong>Total</strong></td>
+                  <td><strong>{{ total_issues }}</strong></td>
+                  <td><strong>{{ total_prs }}</strong></td>
+                  <td>
+                      <strong>{{ passing_percentage }}% passing</strong>
+                  </td>
+              </tr>
+          </tfoot>
+
         </table>
     </div>
 </body>
