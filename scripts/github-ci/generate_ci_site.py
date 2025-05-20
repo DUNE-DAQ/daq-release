@@ -24,6 +24,29 @@ def generate_site(json_input_path):
     passing_percentage = round((passing_repos / total_repos) * 100, 1) if total_repos else 0
 
     last_updated=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+    workflow_badges = [
+    {
+        "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml",
+        "alt": "AL9 Spack Nightly Workflow"},
+    {
+        "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml",
+        "alt": "Nightly v5 Integration Test Workflow"},
+    {
+        "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml",
+        "alt": "Nightly daq-buildtools Workflow"},
+    {
+        "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml",
+        "alt": "Nightly unit tests and clang format check"},
+    {
+        "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml",
+        "alt": "Weekly linting"},
+    ]
+
 
     context = {
         "repos": repos,
@@ -33,7 +56,8 @@ def generate_site(json_input_path):
         "passing_percentage": passing_percentage,
         "links": {
             "doxygen": "https://dune-daq.github.io/docs/",
-        }
+        },
+        "workflow_badges": workflow_badges,
     }
 
     output_html = template.render(context)
