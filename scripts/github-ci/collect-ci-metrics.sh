@@ -15,19 +15,16 @@ OUTFILE="ci_summary.json"
 echo "[" > "$OUTFILE"
 FIRST=true
 
-#for REPO in $REPOS; do
 for REPO in "${dune_packages_with_ci[@]}"; do
-#for REPO in "dfmodules"; do
   FULL_NAME="$ORG/$REPO"
   echo "This repo: $FULL_NAME"
 
-  # Count open issues and PRs
   OPEN_ISSUES=$(gh issue list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
   ISSUES_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/issues")
   OPEN_PRS=$(gh pr list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
   PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
-  # Get most recent workflow run
+  # Get most recent single-repo CI build status
   BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow "build-develop" -q '.[0]')
   echo $?
 
