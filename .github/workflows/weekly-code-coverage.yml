@@ -29,6 +29,7 @@ jobs:
     name: Generate code coverage report
     runs-on: daq
     needs: make_nightly_tag
+    timeout-minutes: 60
     outputs:
       coverage_results_dir: ${{ steps.run_lcov.outputs.results_dir }}
     defaults:

@@ -13,6 +13,7 @@ jobs:
   run_dbt_commands:
     name: Run dbt test script
     runs-on: daq
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash

@@ -34,6 +34,7 @@ jobs:
     name: Run linting and integration tests
     runs-on: daq
     needs: [make_variables, run_unittests]
+    timeout-minutes: 30
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
     defaults:
