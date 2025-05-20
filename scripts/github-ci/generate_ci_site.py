@@ -23,19 +23,20 @@ def generate_site(json_input_path):
 
     passing_percentage = round((passing_repos / total_repos) * 100, 1) if total_repos else 0
 
-    links = {
-        "doxygen": "https://dune-daq.github.io/docs/",
+    last_updated=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+
+    context = {
+        "repos": repos,
+        "last_updated": last_updated,
+        "total_issues": total_issues,
+        "total_prs": total_prs,
+        "passing_percentage": passing_percentage,
+        "links": {
+            "doxygen": "https://dune-daq.github.io/docs/",
+        }
     }
 
-    output_html = template.render(
-        repos=repos,
-        last_updated=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-        total_issues=total_issues,
-        total_prs=total_prs,
-        passing_percentage=passing_percentage,
-        links=links,
-    )
-
+    output_html = template.render(context)
     output_path = Path("site/index.html")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(output_html)
