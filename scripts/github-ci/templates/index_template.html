@@ -25,6 +25,26 @@
             flex-grow: 1;
         }
 
+    .summary-section {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .summary-block {
+        background-color: #f4f4f4;
+        padding: 1rem;
+        border-radius: 8px;
+        flex: 1 1 300px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary-block h3 {
+        margin-top: 0;
+        font-size: 1.2rem;
+    }
+
         h1 {
             margin-top: 0;
         }
@@ -80,6 +100,57 @@
           Last updated: {{ last_updated }}
         </div>
         <h1>DUNE DAQ CI Summary</h1>
+        <h2>Workflow Statuses</h2>
+        <div class="badge-summary">
+            {% for badge in workflow_badges %}
+                <a href="{{ badge.link }}">
+                <img src="{{ badge.image }}" alt="{{ badge.alt }}">
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="summary-section">
+            <div class="summary-block">
+              <h3>Integration Tests</h3>
+              <p>
+                123 total tests run.<br>
+                321 passed,<br>
+                543 failed,<br>
+                yyy were skipped, and <br>
+                abc had errors which prevented tests from completing.
+              </p>
+            </div>
+          
+            <div class="summary-block">
+              <h3>Unit Tests</h3>
+              <p>
+                abc passed,<br>
+                123 failed,<br>
+                xyz repos don’t have unit tests.
+              </p>
+            </div>
+            <div class="summary-block">
+              <h3>More Tests</h3>
+              <p>
+                abc passed,<br>
+                123 failed,<br>
+                xyz repos don’t have unit tests.
+              </p>
+            </div>
+          
+          </div>
+        <h2>Individual Repo Summaries</h2>
+        <div class="individual-repo-summary">
+            <p>
+                There are <strong>{{total_issues}}</strong> open issues and
+                <strong>{{total_prs}}</strong> open pull requests.
+            </p>
+            <p>
+                <strong class="{{ 'status-success' if passing_percentage == 100 else 'status-failure' }}">
+                    {{ passing_percentage }}%
+                </strong> of repos are passing their CI builds.
+            </p>
+        </div>
         <table>
             <thead>
                 <tr>
