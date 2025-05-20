@@ -68,7 +68,7 @@
         <h2>Navigation</h2>
         <ul>
             <li><a href="index.html">CI Summary</a></li>
-            <li><a href="https://your-domain/doxygen/">Doxygen</a></li>
+            <li><a href="{{ links['doxygen'] }}">Doxygen</a></li>
             <li><a href="https://your-domain/coverage/">Coverage Report</a></li>
             <li><a href="https://your-domain/unit-tests/">Unit Tests</a></li>
             <li><a href="https://your-domain/integration-tests/">Integration Tests</a></li>
@@ -76,6 +76,9 @@
     </div>
 
     <div class="content">
+        <div style="text-align: right; font-size: 0.9em; color: #666;">
+          Last updated: {{ last_updated }}
+        </div>
         <h1>DUNE DAQ CI Summary</h1>
         <table>
             <thead>
