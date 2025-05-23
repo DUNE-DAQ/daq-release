@@ -184,9 +184,12 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pytest-logs-${{ env.TIMESTAMP }}
-        path: |
-          ${{ env.PERSISTENT_LOG_DIR }}
-          daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+        path: ${{ env.PERSISTENT_LOG_DIR }}
+    - name: Upload markdown summary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: markdown-summary
+        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
