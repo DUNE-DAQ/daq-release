@@ -188,6 +188,7 @@ jobs:
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v4
       with:
+        if-no-files-found: error
         name: markdown-summary
         path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
     - name: Delete old log directories
