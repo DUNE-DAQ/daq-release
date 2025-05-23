@@ -177,6 +177,14 @@ jobs:
     needs: [make_variables, integration_tests]
     if: success() || failure()
     steps:
+    - name: Debug markdown summary path
+      run: |
+        echo "Where am I? $(pwd)"
+        echo $(ls)
+        echo "Github workspace: ${{ github.workspace }}"
+        echo "ls Github workspace: $(ls ${{ github.workspace }})"
+        echo "Find daq-release-integtest: $(find . -name daq-release-integtest -type d)"
+        echo "Find daq-release-integtest in Github workspace: $(find ${{ github.workspace }} -name daq-release-integtest -type d)"
     - name: Upload logs as artifact
       env:
         TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
@@ -190,7 +198,7 @@ jobs:
       with:
         if-no-files-found: error
         name: markdown-summary
-        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+        path: ${{ github.workspace }}/daq-release-integtest/scripts/github-ci/pytest_summary_table.md
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
