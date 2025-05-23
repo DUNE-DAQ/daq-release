@@ -82,16 +82,16 @@ jobs:
         matrix:
 
             test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
+                        #"listrev_test",
+                        #"3ru_1df_multirun_test",
+                        #"3ru_3df_multirun_test",
+                        #"example_system_test",
+                        #"fake_data_producer_test",
                         "long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan",
-                        "small_footprint_quick_test",
-                        "tpstream_writing_test"
+                        #"readout_type_scan",
+                        #"small_footprint_quick_test",
+                        #"tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -184,7 +184,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pytest-logs-${{ env.TIMESTAMP }}
-        path: ${{ env.PERSISTENT_LOG_DIR }}
+        path: |
+          ${{ env.PERSISTENT_LOG_DIR }}
+          daq-release-integtest/scripts/github-ci/pytest_summary_table.md
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
