@@ -25,28 +25,33 @@
             flex-grow: 1;
         }
 
-    .summary-section {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-    }
+        .summary-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
 
-    .summary-block {
-        background-color: #f4f4f4;
-        padding: 1rem;
-        border-radius: 8px;
-        flex: 1 1 300px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+        .summary-block {
+            background-color: #f4f4f4;
+            padding: 1rem;
+            border-radius: 8px;
+            flex: 1 1 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .summary-block h3 {
-        margin-top: 0;
-        font-size: 1.2rem;
-    }
+        .summary-block h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
 
         h1 {
             margin-top: 0;
+        }
+
+        h2 {
+            margin-top: 1;
+            margin-bottom: 1;
         }
 
         table {
@@ -108,7 +113,7 @@
                 </a>
             {% endfor %}
         </div>
-
+        <h2>Test Summaries</h2>
         <div class="summary-section">
             <div class="summary-block">
               <h3>Integration Tests</h3>
