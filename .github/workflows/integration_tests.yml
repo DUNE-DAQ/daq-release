@@ -153,7 +153,7 @@ jobs:
 
         test $pytest_retval == 0 || false
 
-  parse_results:
+  parse_and_upload_results:
     runs-on: daq
     if: always()
     needs: [make_variables, integration_tests]
@@ -170,13 +170,6 @@ jobs:
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
-
-  store_and_upload_logs:
-    runs-on: daq
-    timeout-minutes: 5
-    needs: [make_variables, integration_tests]
-    if: success() || failure()
-    steps:
     - name: Debug markdown summary path
       run: |
         echo "Where am I? $(pwd)"
@@ -185,6 +178,19 @@ jobs:
         echo "ls Github workspace: $(ls ${{ github.workspace }})"
         echo "Find daq-release-integtest: $(find . -name daq-release-integtest -type d)"
         echo "Find daq-release-integtest in Github workspace: $(find ${{ github.workspace }} -name daq-release-integtest -type d)"
+    - name: Upload markdown summary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: markdown-summary
+        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+
+  store_and_upload_logs:
+    runs-on: daq
+    timeout-minutes: 5
+    needs: [make_variables, integration_tests]
+    if: success() || failure()
+    steps:
     - name: Upload logs as artifact
       env:
         TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
@@ -193,12 +199,6 @@ jobs:
       with:
         name: pytest-logs-${{ env.TIMESTAMP }}
         path: ${{ env.PERSISTENT_LOG_DIR }}
-    - name: Upload markdown summary as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        if-no-files-found: error
-        name: markdown-summary
-        path: ${{ github.workspace }}/daq-release-integtest/scripts/github-ci/pytest_summary_table.md
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
@@ -219,7 +219,7 @@ jobs:
   cleanup_files:
     runs-on: daq
     if: always()
-    needs: [make_variables, parse_results, send_slack_message]
+    needs: [make_variables, parse_and_upload_results, send_slack_message]
     steps:
       - name: Remove xml files
         env:
