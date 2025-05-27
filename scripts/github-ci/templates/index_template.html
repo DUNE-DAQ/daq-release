@@ -1,115 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>DUNE DAQ CI Summary</title>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-    <div class="sidebar">
-        <h2>Navigation</h2>
-        <ul>
-            <li><a href="index.html">CI Summary</a></li>
-            <li><a href="{{ links['doxygen'] }}">Doxygen</a></li>
-            <li><a href="https://your-domain/coverage/">Coverage Report</a></li>
-            <li><a href="https://your-domain/unit-tests/">Unit Tests</a></li>
-            <li><a href="https://your-domain/integration-tests/">Integration Tests</a></li>
-        </ul>
+<!-- templates/index_template.html -->
+{% extends "base_template.html" %}
+
+{% block title %}DUNE DAQ CI Summary{% endblock %}
+
+{% block content %}
+<div style="text-align: right; font-size: 0.9em; color: #666;">
+  Last updated: {{ last_updated }}
+</div>
+
+<h1>DUNE DAQ CI Summary</h1>
+
+<h2>Workflow Statuses</h2>
+<div class="badge-summary">
+    {% for badge in workflow_badges %}
+        <a href="{{ badge.link }}">
+            <img src="{{ badge.image }}" alt="{{ badge.alt }}">
+        </a>
+    {% endfor %}
+</div>
+
+<h2>Test Summaries</h2>
+<div class="summary-section">
+    <div class="summary-block">
+      <h3>Integration Tests</h3>
+      <p>
+        123 total tests run.<br>
+        321 passed,<br>
+        543 failed,<br>
+        yyy were skipped, and <br>
+        abc had errors which prevented tests from completing.
+      </p>
+    </div>
+  
+    <div class="summary-block">
+      <h3>Unit Tests</h3>
+      <p>
+        {{ unit_test_totals.Total }} tests run. <br>
+          <span class="status-success">
+            Passed: {{ unit_test_totals.Passed }} 
+            ({{ (100 * unit_test_totals.Passed // (unit_test_totals.Passed + unit_test_totals.Failed)) }}%)
+            <br>
+          </span>
+          <span class="status-failure">
+            Failed: {{ unit_test_totals.Failed }} 
+            ({{ (100 * unit_test_totals.Failed // (unit_test_totals.Passed + unit_test_totals.Failed)) }}%)
+            <br>
+          </span>
+        {% if unit_test_totals['NoTests']|length > 1 %}
+          <span>{{ unit_test_totals['NoTests']|length }} repos don’t have unit tests.</span>
+        {% elif unit_test_totals['NoTests']|length == 1 %}
+          <span>1 repo does not have unit tests.</span>
+        {% endif %}
+        {% if unit_test_totals.Other > 0 %}
+          <br>{{ unit_test_totals.Other }} repo(s) finished with unknown status.
+        {% endif %}
+      </p>
     </div>
 
-    <div class="content">
-        <div style="text-align: right; font-size: 0.9em; color: #666;">
-          Last updated: {{ last_updated }}
-        </div>
-        <h1>DUNE DAQ CI Summary</h1>
-        <h2>Workflow Statuses</h2>
-        <div class="badge-summary">
-            {% for badge in workflow_badges %}
-                <a href="{{ badge.link }}">
-                <img src="{{ badge.image }}" alt="{{ badge.alt }}">
+    <div class="summary-block">
+      <h3>More Tests</h3>
+      <p>
+        abc passed,<br>
+        123 failed,<br>
+        xyz repos don’t have unit tests.
+      </p>
+    </div>
+</div>
+
+<h2>Individual Repo Summaries</h2>
+<div class="individual-repo-summary">
+    <p>
+        There are <strong>{{ total_issues }}</strong> open issues and
+        <strong>{{ total_prs }}</strong> open pull requests.
+    </p>
+    <p>
+        <strong class="{{ 'status-success' if passing_percentage == 100 else 'status-failure' }}">
+            {{ passing_percentage }}%
+        </strong> of repos are passing their CI builds.
+    </p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Repository</th>
+            <th>Open Issues</th>
+            <th>Open PRs</th>
+            <th>Workflow Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for repo in repos %}
+        <tr>
+            <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}">{{ repo.repo }}</a></td>
+            <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/issues">{{ repo.open_issues }}</a></td>
+            <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/pulls">{{ repo.open_prs }}</a></td>
+            <td>
+                <a href="{{ repo.build_develop.url }}">
+                    <span class="status-{{ repo.build_develop.conclusion }}">
+                        {{ repo.build_develop.conclusion | capitalize }}
+                    </span>
                 </a>
-            {% endfor %}
-        </div>
-        <h2>Test Summaries</h2>
-        <div class="summary-section">
-            <div class="summary-block">
-              <h3>Integration Tests</h3>
-              <p>
-                123 total tests run.<br>
-                321 passed,<br>
-                543 failed,<br>
-                yyy were skipped, and <br>
-                abc had errors which prevented tests from completing.
-              </p>
-            </div>
-          
-            <div class="summary-block">
-              <h3>Unit Tests</h3>
-              <p>
-                abc passed,<br>
-                123 failed,<br>
-                xyz repos don’t have unit tests.
-              </p>
-            </div>
-            <div class="summary-block">
-              <h3>More Tests</h3>
-              <p>
-                abc passed,<br>
-                123 failed,<br>
-                xyz repos don’t have unit tests.
-              </p>
-            </div>
-          
-          </div>
-        <h2>Individual Repo Summaries</h2>
-        <div class="individual-repo-summary">
-            <p>
-                There are <strong>{{total_issues}}</strong> open issues and
-                <strong>{{total_prs}}</strong> open pull requests.
-            </p>
-            <p>
-                <strong class="{{ 'status-success' if passing_percentage == 100 else 'status-failure' }}">
-                    {{ passing_percentage }}%
-                </strong> of repos are passing their CI builds.
-            </p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Repository</th>
-                    <th>Open Issues</th>
-                    <th>Open PRs</th>
-                    <th>Workflow Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for repo in repos %}
-                <tr>
-                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}">{{ repo.repo }}</a></td>
-                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/issues">{{ repo.open_issues }}</a></td>
-                    <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/pulls">{{ repo.open_prs }}</a></td>
-                    <td>
-                        <a href="{{ repo.build_develop.url }}">
-                            <span class="status-{{ repo.build_develop.conclusion }}">
-                                {{ repo.build_develop.conclusion | capitalize }}
-                            </span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-              <tr>
-                  <td><strong>Total</strong></td>
-                  <td><strong>{{ total_issues }}</strong></td>
-                  <td><strong>{{ total_prs }}</strong></td>
-                  <td>
-                      <strong>{{ passing_percentage }}% passing</strong>
-                  </td>
-              </tr>
-          </tfoot>
-
-        </table>
-    </div>
-</body>
-</html>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+          <td><strong>Total</strong></td>
+          <td><strong>{{ total_issues }}</strong></td>
+          <td><strong>{{ total_prs }}</strong></td>
+          <td>
+              <strong>{{ passing_percentage }}% passing</strong>
+          </td>
+      </tr>
+  </tfoot>
+</table>
+{% endblock %}
