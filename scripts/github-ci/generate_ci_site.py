@@ -1,12 +1,94 @@
+import re
 import argparse
 import json
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 from datetime import datetime
-from generate_unit_test_summary import parse_unit_test_summary
 
-def generate_site(json_input_path, unit_test_summary=''):
+def strip_ansi(line):
+    """Strip color coding from unit test summary log."""
+    return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
 
+def parse_unit_test_summary(log_path):
+    """Summarize unit test summary as a dictionary."""
+    content_by_package = {}
+    current_package = None
+
+    with open(log_path, "r") as f:
+        for line in f:
+            clean_line = strip_ansi(line.strip())
+
+            if "No unit tests" in clean_line:
+                this_package = clean_line.split()[8]
+                test_name = None
+            else:
+                parts = clean_line.split("/")
+                this_package = parts[1]
+                test_name = parts[3].split(".")[0]
+
+            if this_package not in content_by_package:
+                content_by_package[this_package] = []
+
+            if "SUCCESS" in clean_line:
+                content_by_package[this_package].append((test_name, "Passed"))
+            elif "FAILURE" in clean_line:
+                content_by_package[this_package].append((test_name, "Failed"))
+            elif test_name is None:
+                content_by_package[this_package].append((None, "NoTests"))
+
+    return content_by_package
+
+def parse_pytest_summary(pytest_summary):
+    with open(pytest_summary, "r") as f:
+        lines = [line.strip() for line in f if line.strip()]
+
+    summary = {
+        "totals": {
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "errors": 0,
+        },
+        "results": {}
+    }
+
+    summary_pattern = re.compile(r"(\d+) (\w+)")
+    for i, line in enumerate(lines):
+        print('Line:', line)
+        for match in re.finditer(summary_pattern, line):
+            print('Found on line %s: %s' % (i+1, match.group()))
+
+    # Parse test results
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if line.startswith("#"):
+            # New section title
+            section_title = re.sub(r"^#+ ", "", line)
+            summary["results"][section_title] = []
+            i += 3  # Skip table header and separator
+
+            # Read test rows until next heading or end of list
+            while i < len(lines) and not lines[i].startswith("#"):
+                row = lines[i]
+                if "|" in row:
+                    columns = [c.strip() for c in row.strip("|").split("|")]
+                    if len(columns) == 2:
+                        test_name, status_col = columns
+                        status = "passed" if "passed" in status_col else "failed" if "failed" in status_col else "skipped" if "skipped" in status_col else "error"
+                        summary["results"][section_title].append({
+                            "name": test_name,
+                            "status": status
+                        })
+                i += 1
+        else:
+            i += 1
+
+    print('pytest summary:', summary)
+    return summary
+
+def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
+    """Render html files from templates to generate the site."""
     with open(json_input_path, 'r') as f:
         repos = json.load(f)
 
@@ -23,7 +105,6 @@ def generate_site(json_input_path, unit_test_summary=''):
     )
 
     passing_percentage = round((passing_repos / total_repos) * 100, 1) if total_repos else 0
-
 
     last_updated=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
     workflow_badges = [
@@ -49,10 +130,10 @@ def generate_site(json_input_path, unit_test_summary=''):
         "alt": "Weekly linting"},
     ]
 
+    # Parse and summarize unit test information
     unit_test_totals = {
         'Passed': 0,
         'Failed': 0,
-        #'NoTests': 0,
         'NoTests': [],
         'Other': 0,
         'Total': 0,
@@ -64,11 +145,6 @@ def generate_site(json_input_path, unit_test_summary=''):
     for repo_name, tests in unit_test_data.items():
         has_tests = False
         for _, status in tests:
-            #if status in unit_test_totals:
-            #    unit_test_totals[status] += 1
-            #else:
-            #    unit_test_totals['Other'] += 1
-
             if status in {'Passed', 'Failed'}:
                 unit_test_totals[status] += 1
                 unit_test_totals['Total'] += 1
@@ -77,11 +153,8 @@ def generate_site(json_input_path, unit_test_summary=''):
                 unit_test_totals['NoTests'].append(repo_name)
             else:
                 unit_test_totals['Other'] += 1
-        #if not has_tests:
-        #    repos_without_unit_tests.append(repo_name)
     
-    print('Repos without tests:', unit_test_totals['NoTests'])
-
+    # Content of the index page
     context = {
         "repos": repos,
         "last_updated": last_updated,
@@ -95,6 +168,8 @@ def generate_site(json_input_path, unit_test_summary=''):
         "unit_test_totals": unit_test_totals,
     }
 
+    pytest_results = parse_pytest_summary(pytest_summary)
+
     index_template = env.get_template("index_template.html")
     index_html = index_template.render(context)
     index_path = Path("site/index.html")
@@ -102,19 +177,26 @@ def generate_site(json_input_path, unit_test_summary=''):
     index_path.write_text(index_html)
 
     unit_test_template = env.get_template("unit_test_template.html")
-    print('Unit test data:', unit_test_data)
     unit_test_html = unit_test_template.render(unit_test_data=unit_test_data, no_tests=unit_test_totals['NoTests'], links=context["links"])
     unit_test_path = Path("site/unit_test_summary.html")
     unit_test_path.parent.mkdir(parents=True, exist_ok=True)
     unit_test_path.write_text(unit_test_html)
 
+    #with open(pytest_summary, 'r') as fin:
+    #    integtest_table = fin.read()
+    #integtest_template = env.get_template("integration_test_template.html")
+    #integtest_html = integtest_template.render(integtest_table=integtest_table, links=context["links"])
+    #integtest_path = Path("site/integtest_summary.html")
+    #integtest_path.parent.mkdir(parents=True, exist_ok=True)
+    #integtest_path.write_text(integtest_html)
 
-    print(f"CI site html file written to {index_path}")
+    print('Done')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate CI HTML site from a JSON summary file.")
     parser.add_argument("--json_input", required=True, help="Path to the JSON file containing CI summary data. See collect-ci-metrics.sh.")
-    parser.add_argument("--unit_test_summary", required=False, help="Path to the markdown or html table summarizing unit test results.")
+    parser.add_argument("--unit_test_summary", required=False, help="Path to the unit test summary output by dbt-build --unittest.")
+    parser.add_argument("--pytest_summary", required=False, help="Path to the pytest markdown summary output by integration test workflow.")
     args = parser.parse_args()
 
-    generate_site(args.json_input, args.unit_test_summary)
+    generate_site(args.json_input, args.unit_test_summary, args.pytest_summary)
