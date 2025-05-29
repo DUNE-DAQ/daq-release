@@ -45,9 +45,6 @@
         - name: daphnemodules
           version: v2.2.0
           commit: null
-        - name: tdemodules
-          version: v1.0.0
-          commit: null
         - name: wibmod
           version: v2.0.2
           commit: null
