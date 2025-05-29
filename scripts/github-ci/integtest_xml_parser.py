@@ -7,11 +7,12 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 class JUnitXMLParser:
-    def __init__(self, input_directory=None, input_file=None, output_filename="pytest_summary_table.md"):
+    def __init__(self, input_directory=None, input_file=None, output_filename="pytest_summary_table.md", to_html=False):
         self.input_directory = input_directory
         self.input_file = input_file
         self.output_filename = output_filename
         self.test_results = []
+        self.to_html = to_html
 
     def get_xml_files(self, directory, pattern):
         if not os.path.isdir(directory):
@@ -146,7 +147,54 @@ class JUnitXMLParser:
 
         self.generate_markdown_table()
         self.prepend_test_summary()
+        if self.to_html:
+            self.convert_markdown_to_html()
 
+    def convert_markdown_to_html(self):
+        html_output_file = self.output_filename.replace(".md", ".html")
+
+        with open(self.output_filename, 'r') as f:
+            lines = f.readlines()
+
+        html_lines = ["<html>", "  <body>"]
+        in_table = False
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                if in_table:
+                    html_lines.append("    </table>")
+                    in_table = False
+                continue
+            if line.startswith("# "):
+                if in_table:
+                    html_lines.append("    </table>")
+                    in_table = False
+                html_lines.append(f"    <h1>{html.escape(line[2:])}</h1>")
+            elif line.startswith("|") and "---" not in line:
+                cells = [html.escape(cell.strip()) for cell in line.strip("|").split("|")]
+                if not in_table:
+                    html_lines.append("    <table border='1'>")
+                    in_table = True
+                html_lines.append("      <tr>" + "".join(f"<td>{cell}</td>" for cell in cells) + "</tr>")
+            elif "---" in line:
+                continue
+            else:
+                if in_table:
+                    html_lines.append("    </table>")
+                    in_table = False
+                html_lines.append(f"    <p>{html.escape(line)}</p>")
+
+        if in_table:
+            html_lines.append("    </table>")
+
+        html_lines.append("  </body>")
+        html_lines.append("</html>")
+
+        with open(html_output_file, 'w') as f:
+            f.write("\n".join(html_lines))
+
+        print(f"HTML summary generated at {html_output_file}")
 
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
@@ -157,6 +205,8 @@ def main():
     parser.add_argument("--output-markdown-file", "-o", 
                         default="pytest_summary_table.md",
                         help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
+    parser.add_argument("--to-html", "-t", action="store_true",
+                        help="Also generate an HTML file from the markdown output.")
 
     args = parser.parse_args()
 
@@ -171,7 +221,8 @@ def main():
     parser = JUnitXMLParser(
         input_directory=args.input_directory,
         input_file=args.input_file,
-        output_filename=args.output_markdown_file
+        output_filename=args.output_markdown_file,
+        to_html=args.to_html,
     )
     parser.parse()
 
