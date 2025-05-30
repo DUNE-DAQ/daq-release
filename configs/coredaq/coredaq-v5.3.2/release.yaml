@@ -167,7 +167,7 @@
           version: v2.0.0
           commit: null
         - name: detchannelmaps
-          version: v1.8.0
+          version: v1.8.1
           commit: null
         - name: daqdataformats
           version: v3.10.0
@@ -238,7 +238,7 @@
           version: v8.9.1
           commit: null
         - name: daqsystemtest
-          version: v4.2.1
+          version: v4.3.0
           commit: null
         - name: pocket
           version: "develop"
