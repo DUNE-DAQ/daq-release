@@ -134,13 +134,13 @@
           version: v1.4.0
           commit: null
         - name: appfwk
-          version: v4.1.0
+          version: v4.2.0
           commit: null
         - name: listrev
           version: v5.0.0
           commit: null
         - name: utilities
-          version: v3.2.0
+          version: v3.2.1
           commit: null
         - name: erskafka
           version: v2.1.1
@@ -155,7 +155,7 @@
           version: v2.0.0
           commit: null
         - name: iomanager
-          version: v2.2.1
+          version: v2.2.2
           commit: null
         - name: dfmessages
           version: v2.9.0
@@ -167,7 +167,7 @@
           version: v2.0.0
           commit: null
         - name: detchannelmaps
-          version: v1.7.2
+          version: v1.8.1
           commit: null
         - name: daqdataformats
           version: v3.10.0
@@ -179,7 +179,7 @@
           version: v4.1.1
           commit: null
         - name: hsilibs
-          version: v4.6.1
+          version: v4.7.0
           commit: null
         - name: timing
           version: v7.10.1
@@ -188,19 +188,19 @@
           version: v4.4.2
           commit: null
         - name: trigger
-          version: v2.3.0
+          version: v2.4.0
           commit: null
         - name: triggeralgs
-          version: v1.5.0
+          version: v1.5.1
           commit: null
         - name: trgtools
-          version: v2.2.0
+          version: v2.2.1
           commit: null
         - name: hdf5libs
           version: v3.3.1
           commit: null
         - name: oks
-          version: v1.3.1
+          version: v1.3.2
           commit: null
         - name: okssystem
           version: v1.0.0
@@ -212,22 +212,22 @@
           version: v1.2.0
           commit: null
         - name: conffwk
-          version: v2.0.0
+          version: v2.0.1
           commit: null
         - name: oksdalgen
-          version: v1.3.0
+          version: v1.3.1
           commit: null
         - name: confmodel
           version: v2.3.0
           commit: null
         - name: appmodel
-          version: v3.3.0
+          version: v3.4.0
           commit: null
         - name: dbe
           version: v1.5.0
           commit: null
         - name: daqconf
-          version: v8.3.0
+          version: v8.4.0
           commit: null
 
     others:
@@ -238,7 +238,7 @@
           version: v8.9.1
           commit: null
         - name: daqsystemtest
-          version: v4.2.1
+          version: v4.3.0
           commit: null
         - name: pocket
           version: "develop"
