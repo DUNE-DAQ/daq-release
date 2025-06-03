@@ -36,41 +36,43 @@ def parse_unit_test_summary(log_path):
             elif test_name is None:
                 content_by_package[this_package].append((None, "NoTests"))
 
+    print('UNIT TEST CONTENT:', content_by_package)
     return content_by_package
 
-def parse_pytest_summary(pytest_summary):
+def parse_integration_test_summary(pytest_summary):
     with open(pytest_summary, "r") as f:
         lines = [line.strip() for line in f if line.strip()]
+        header_lines = lines[:5]
+        results_lines = lines[5:]
 
+    numbers = [int(re.search(r'\d+', line).group()) for line in header_lines]
+    total, passed, failed, skipped, errors = numbers
+    print('numbers', numbers)
     summary = {
         "totals": {
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "errors": 0,
+            "total": total,
+            "passed": passed,
+            "failed": failed,
+            "skipped": skipped,
+            "errors": errors,
         },
         "results": {}
     }
-
-    summary_pattern = re.compile(r"(\d+) (\w+)")
-    for i, line in enumerate(lines):
-        print('Line:', line)
-        for match in re.finditer(summary_pattern, line):
-            print('Found on line %s: %s' % (i+1, match.group()))
-
+    print('numbers again', summary['totals'])
+    
     # Parse test results
     i = 0
-    while i < len(lines):
-        line = lines[i]
+    while i < len(results_lines):
+        line = results_lines[i]
         if line.startswith("#"):
-            # New section title
+            # Each section represents a new package
             section_title = re.sub(r"^#+ ", "", line)
             summary["results"][section_title] = []
             i += 3  # Skip table header and separator
 
             # Read test rows until next heading or end of list
-            while i < len(lines) and not lines[i].startswith("#"):
-                row = lines[i]
+            while i < len(results_lines) and not results_lines[i].startswith("#"):
+                row = results_lines[i]
                 if "|" in row:
                     columns = [c.strip() for c in row.strip("|").split("|")]
                     if len(columns) == 2:
@@ -153,6 +155,11 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
                 unit_test_totals['NoTests'].append(repo_name)
             else:
                 unit_test_totals['Other'] += 1
+
+    # Parse integration tests
+    integration_test_summary = parse_integration_test_summary(pytest_summary)
+    integration_test_totals = integration_test_summary['totals']
+    integration_test_results = integration_test_summary['results']
     
     # Content of the index page
     context = {
@@ -166,9 +173,9 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         },
         "workflow_badges": workflow_badges,
         "unit_test_totals": unit_test_totals,
+        "integration_test_totals": integration_test_summary['totals'],
     }
 
-    pytest_results = parse_pytest_summary(pytest_summary)
 
     index_template = env.get_template("index_template.html")
     index_html = index_template.render(context)
@@ -182,13 +189,11 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     unit_test_path.parent.mkdir(parents=True, exist_ok=True)
     unit_test_path.write_text(unit_test_html)
 
-    #with open(pytest_summary, 'r') as fin:
-    #    integtest_table = fin.read()
-    #integtest_template = env.get_template("integration_test_template.html")
-    #integtest_html = integtest_template.render(integtest_table=integtest_table, links=context["links"])
-    #integtest_path = Path("site/integtest_summary.html")
-    #integtest_path.parent.mkdir(parents=True, exist_ok=True)
-    #integtest_path.write_text(integtest_html)
+    integtest_template = env.get_template("integration_test_template.html")
+    integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
+    integtest_path = Path("site/integtest_summary.html")
+    integtest_path.parent.mkdir(parents=True, exist_ok=True)
+    integtest_path.write_text(integtest_html)
 
     print('Done')
 

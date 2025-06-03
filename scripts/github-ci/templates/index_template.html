@@ -24,11 +24,11 @@
     <div class="summary-block">
       <h3>Integration Tests</h3>
       <p>
-        123 total tests run.<br>
-        321 passed,<br>
-        543 failed,<br>
-        yyy were skipped, and <br>
-        abc had errors which prevented tests from completing.
+        {{ integration_test_totals.total }} total tests run.<br>
+        {{ integration_test_totals.passed }} passed,<br>
+        {{ integration_test_totals.failed }} failed,<br>
+        {{ integration_test_totals.skipped }} were skipped, and <br>
+        {{ integration_test_totals.errors }} had errors which prevented the test from completing.
       </p>
     </div>
   

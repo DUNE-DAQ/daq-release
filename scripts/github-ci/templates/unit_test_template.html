@@ -22,7 +22,7 @@
         {% for test, status in tests %}
           <tr>
             <td>{{ test }}</td>
-            <td>{% if status == 'Passed' %}✅{% elif status == 'Failed' %}❌{% else %}⚠️{% endif %} {{ status }}</td>
+            <td>{% if status == 'Passed' %}	&#x2705{% elif status == 'Failed' %}	&#x274C{% else %}⚠️{% endif %} {{ status }}</td>
           </tr>
         {% endfor %}
       </tbody>
