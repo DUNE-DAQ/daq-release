@@ -1,0 +1,50 @@
+name: Nightly CI Dashboard Publication
+
+on:
+  workflow_dispatch:
+    inputs:
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+
+jobs:
+  download_artifacts:
+    name: Download artifacts
+    runs-on: ubuntu-latest
+    outputs:
+      lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
+    defaults:
+      run: 
+        shell: bash
+    steps:
+    - name: Set paths to artifacts
+      id: set_paths
+      run : |
+        echo "lcov_html_report_path=lcov_report" >> "$GITHUB_OUTPUT"
+    - name: Get workflow run IDs
+      id: run_ids
+      run: |
+        lcov_id=$(gh run list --workflow "Weekly code coverage workflow" --limit 1 --json databaseId --jq '.[0].databaseId')
+        echo "Most recent coverage workflow ID: $lcov_id"
+        echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
+    - name: Download lcov html report
+      id: download_lcov
+      uses: actions/download-artifact@v4
+      with:
+        name: code_coverage_html
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
+        run-id: ${{ steps.run_ids.outputs.lcov_id }}
+  
+  check_artifacts:
+    name: Check artifacts
+    needs: download_artifacts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Check artifacts
+      run: |
+        echo "pwd: $(pwd)"
+        echo "ls: $(ls)"
