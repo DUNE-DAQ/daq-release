@@ -55,6 +55,7 @@ jobs:
         echo "ls: $(ls)"
 
   build_ci_dashboard:
+    needs: [download_artifacts, check_artifacts]
     runs-on: daq
     defaults:
       run:
