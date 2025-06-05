@@ -10,12 +10,14 @@ on:
 jobs:
   download_artifacts:
     name: Download artifacts
-    runs-on: ubuntu-latest
+    runs-on: daq
     outputs:
       lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
     defaults:
       run: 
         shell: bash
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - name: Set paths to artifacts
       id: set_paths
@@ -24,7 +26,10 @@ jobs:
     - name: Get workflow run IDs
       id: run_ids
       run: |
-        lcov_id=$(gh run list --workflow "Weekly code coverage workflow" --limit 1 --json databaseId --jq '.[0].databaseId')
+        lcov_id=$(gh run list --repo DUNE-DAQ/daq-release \
+                              --workflow "Weekly code coverage workflow" \
+                              --limit 1 \
+                              --json databaseId --jq '.[0].databaseId')
         echo "Most recent coverage workflow ID: $lcov_id"
         echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
     - name: Download lcov html report
@@ -39,7 +44,7 @@ jobs:
   check_artifacts:
     name: Check artifacts
     needs: download_artifacts
-    runs-on: ubuntu-latest
+    runs-on: daq
     defaults:
       run:
         shell: bash
@@ -48,3 +53,41 @@ jobs:
       run: |
         echo "pwd: $(pwd)"
         echo "ls: $(ls)"
+
+  build_ci_dashboard:
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release feature branch
+      uses: actions/checkout@v4
+      with:
+        ref: amogan/ci_dashboard
+        path: daq-release-ci-dashboard
+    - name: Copy lcov report into dashboard
+      run: |
+        mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
+        cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site
+
+  deploy_to_github_pages:
+    name: Deploy to GitHub Pages
+    runs-on: daq
+    needs: build_ci_dashboard
+    permissions:
+        contents: read
+        pages: write
+        id-token: write
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - name: Configure GitHub Pages
+      uses: actions/configure-pages@v5
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ${{ github.workspace }}/daq-release-ci-dashboard/scripts/github-ci/site
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
