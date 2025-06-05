@@ -26,7 +26,10 @@ jobs:
     - name: Get workflow run IDs
       id: run_ids
       run: |
-        lcov_id=$(gh run list --workflow "Weekly code coverage workflow" --limit 1 --json databaseId --jq '.[0].databaseId')
+        lcov_id=$(gh run list --repo DUNE-DAQ/daq-release \
+                              --workflow "Weekly code coverage workflow" \
+                              --limit 1 \
+                              --json databaseId --jq '.[0].databaseId')
         echo "Most recent coverage workflow ID: $lcov_id"
         echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
     - name: Download lcov html report
