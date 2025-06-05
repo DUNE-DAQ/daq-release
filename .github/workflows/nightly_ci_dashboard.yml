@@ -53,3 +53,41 @@ jobs:
       run: |
         echo "pwd: $(pwd)"
         echo "ls: $(ls)"
+
+  build_ci_dashboard:
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release feature branch
+      uses: actions/checkout@v4
+      with:
+        ref: amogan/ci_dashboard
+        path: daq-release-ci-dashboard
+    - name: Copy lcov report into dashboard
+      run: |
+        mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
+        cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site
+
+  deploy_to_github_pages:
+    name: Deploy to GitHub Pages
+    runs-on: daq
+    needs: build_ci_dashboard
+    permissions:
+        contents: read
+        pages: write
+        id-token: write
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - name: Configure GitHub Pages
+      uses: actions/configure-pages@v5
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ${{ github.workspace }}/daq-release-ci-dashboard/scripts/github-ci/site
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
