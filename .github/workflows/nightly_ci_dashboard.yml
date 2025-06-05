@@ -10,7 +10,7 @@ on:
 jobs:
   download_artifacts:
     name: Download artifacts
-    runs-on: ubuntu-latest
+    runs-on: daq
     outputs:
       lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
     defaults:
@@ -44,7 +44,7 @@ jobs:
   check_artifacts:
     name: Check artifacts
     needs: download_artifacts
-    runs-on: ubuntu-latest
+    runs-on: daq
     defaults:
       run:
         shell: bash
