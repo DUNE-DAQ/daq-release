@@ -29,6 +29,7 @@ jobs:
     uses: ./.github/workflows/unit-tests.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
+      upload_logs: 'yes'
 
   run_checks:
     name: Run linting and integration tests
