@@ -38,6 +38,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release-unittests
+        ref: amogan/ci_dashboard
     - name: Determine release type
       env:
         RELEASE_TAG: ${{ inputs.release_tag }}
