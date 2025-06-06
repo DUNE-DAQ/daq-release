@@ -88,6 +88,7 @@ jobs:
         ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
+      id: unit_tests
       run: |
         cd $DBT_AREA_ROOT/
         source env.sh
@@ -109,7 +110,7 @@ jobs:
       with:
         if-no-files-found: error
         name: unit_test_summary
-        path: ${{ steps.run_unittests.outputs.unit_test_summary }}
+        path: ${{ steps.unit_tests.outputs.unit_test_summary }}
 
   send_slack_message:
     if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes')
