@@ -7,12 +7,20 @@ on:
         type: string
         required: true
         description: Name of the release used in the caller workflow.
+      upload_logs:
+        type: boolean
+        required: true
+        description: Whether to upload unit test summary logs.
   workflow_dispatch:
     inputs:
       release_tag:
         type: string
         required: true
         description: Name of the release to unit test
+      upload_logs:
+        type: boolean
+        required: true
+        description: Whether to upload unit test summary logs.
       send-slack-message:
           description: 'whether to send a message to #daq-release-notifications on completion'
           default: 'no'
@@ -73,10 +81,10 @@ jobs:
         echo "VERSION_TAG: $VERSION_TAG"
 
         cd ../daq-release-unittests/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
       run: |
@@ -85,37 +93,18 @@ jobs:
         dbt-workarea-env
         spack load dbe
         dbt-build --unittest
-        echo "# Unit Test Report" > $GITHUB_STEP_SUMMARY
-        #TODO Make this a script in daq-release
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        table_header_line="| Test | Status| \n| --- | --- |\n"
-        previous_package=""
-        markdown_content=""
-        while IFS= read -r line; do
-            # Strip out bash color formatting
-            cleaned_line=$(echo "$line" | sed -E 's/\x1B\[[0-9;]*[a-zA-Z]//g')
-            # Depending on whether the package has tests or not, the package name will be
-            # in different positions
-            if [[ "$cleaned_line" == *"No unit tests"* ]]; then
-              this_package=$(echo "$cleaned_line" | cut -d ' ' -f 9)
-            else
-              this_package=$(echo "$cleaned_line" | cut -d '/' -f 2)
-            fi
-            test_name=$(echo "$line" | cut -d '/' -f 4 | cut -d '.' -f 1)
-            if [[ "$this_package" != "$previous_package" ]]; then
-                markdown_content+="## $this_package \n"
-                markdown_content+="$table_header_line"
-                previous_package=$this_package
-            fi
-            if [[ "$(echo "$line" | grep -o SUCCESS)" == "SUCCESS" ]]; then
-                markdown_content+="| $test_name | :white_check_mark: Passed |\n"
-            elif [[ "$(echo "$line" | grep -o FAILURE)" == "FAILURE" ]]; then
-                markdown_content+="| $test_name | :x: Failed |\n"
-            else
-                markdown_content+="\n:construction: Unit tests have not been written for $this_package\n"
-            fi
-        done < "$log_summary_file"
-        echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
+        cd ${{ github.workspace }}/daq-release-unittests/scripts/github-ci
+        echo "STDOUT TEST:"
+        ./parse_unittest_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
+    - name: Upload summary log
+      if: ${{ inputs.upload_logs }}
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: unit_test_summary
+        path: ${{ steps.run_unittests.outputs.unit_test_summary }}
 
   send_slack_message:
     if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes')
