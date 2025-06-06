@@ -8,8 +8,9 @@ on:
         required: true
         description: Name of the release used in the caller workflow.
       upload_logs:
-        type: boolean
-        required: true
+        type: string
+        required: false
+        default: 'yes'
         description: Whether to upload unit test summary logs.
   workflow_dispatch:
     inputs:
@@ -18,8 +19,8 @@ on:
         required: true
         description: Name of the release to unit test
       upload_logs:
-        type: boolean
-        required: true
+        required: false
+        default: 'yes'
         description: Whether to upload unit test summary logs.
       send-slack-message:
           description: 'whether to send a message to #daq-release-notifications on completion'
@@ -105,7 +106,7 @@ jobs:
         ./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
-      if: ${{ inputs.upload_logs == 'true' }}
+      if: ${{ github.event.inputs.upload_logs == 'yes' }}
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
