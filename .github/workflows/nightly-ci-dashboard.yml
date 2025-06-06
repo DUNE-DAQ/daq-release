@@ -23,6 +23,7 @@ jobs:
       id: set_paths
       run : |
         echo "lcov_html_report_path=lcov_report" >> "$GITHUB_OUTPUT"
+        echo "unit_test_summary_path=unit_test_summary" >> "$GITHUB_OUTPUT"
     - name: Get workflow run IDs
       id: run_ids
       run: |
