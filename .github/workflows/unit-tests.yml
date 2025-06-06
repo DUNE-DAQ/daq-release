@@ -96,11 +96,10 @@ jobs:
         dbt-build --unittest
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
         echo "Where is daq-release?"
-        cd
-        echo $(pwd)
-        echo $(ls)
-        cd daq-release-unittests/scripts/github-ci
-        cd ${{ github.workspace }}/daq-release-unittests/scripts/github-ci || exit 1
+        cd ${{ github.workspace }}
+        pwd
+        ls
+        cd daq-release-unittests/scripts/github-ci || exit 2
         echo "STDOUT TEST:"
         ./parse_unittest_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
