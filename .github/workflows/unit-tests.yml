@@ -101,7 +101,7 @@ jobs:
         ls
         cd daq-release-unittests/scripts/github-ci || exit 2
         echo "STDOUT TEST:"
-        ./parse_unittest_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        ./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
       if: ${{ inputs.upload_logs }}
