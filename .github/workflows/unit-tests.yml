@@ -105,8 +105,13 @@ jobs:
         echo "STDOUT TEST:"
         ./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
+    - name: Check inputs
+      run: |
+        echo "CHECK THIS IS YES:"
+        echo ${{ github.event.inputs.upload_logs }}
     - name: Upload summary log
-      if: ${{ github.event.inputs.upload_logs == 'yes' }}
+      # Handle both workflow_call and workflow_dispatch cases
+      if: ${{ inputs.upload_logs == 'yes' || github.event.inputs.upload_logs == 'yes' }}
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
