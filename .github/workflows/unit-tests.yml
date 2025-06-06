@@ -105,7 +105,7 @@ jobs:
         ./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
-      if: ${{ inputs.upload_logs }}
+      if: ${{ inputs.upload_logs == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
