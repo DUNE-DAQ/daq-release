@@ -35,7 +35,9 @@ jobs:
                                    --workflow "Run Unit Tests on a Given Release" \
                                    --limit 1 \
                                    --json databaseId --jq '.[0].databaseId')
+        echo "Most recent unit test workflow ID: $unit_test_id"
         echo "Most recent coverage workflow ID: $lcov_id"
+        echo "unit_test_id=$unit_test_id" >> "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
     - name: Download lcov html report
       id: download_lcov
@@ -45,6 +47,14 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
         run-id: ${{ steps.run_ids.outputs.lcov_id }}
+    - name: Download unit test summary
+      id: download_unit_test
+      uses: actions/download-artifact@v4
+      with:
+        name: unit_test_summary
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.unit_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.unit_test_id }}
   
   check_artifacts:
     name: Check artifacts
