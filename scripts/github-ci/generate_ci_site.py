@@ -39,7 +39,19 @@ def parse_unit_test_summary(log_path):
     print('UNIT TEST CONTENT:', content_by_package)
     return content_by_package
 
-def parse_integration_test_summary(pytest_summary):
+def parse_integration_test_summary(pytest_summary={}):
+    if not pytest_summary:
+        return {
+        "totals": {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "errors": 0,
+        },
+        "results": {}
+    }
+
     with open(pytest_summary, "r") as f:
         lines = [line.strip() for line in f if line.strip()]
         header_lines = lines[:5]
@@ -157,10 +169,9 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
                 unit_test_totals['Other'] += 1
 
     # Parse integration tests
-    if pytest_summary:
-        integration_test_summary = parse_integration_test_summary(pytest_summary)
-        integration_test_totals = integration_test_summary['totals']
-        integration_test_results = integration_test_summary['results']
+    integration_test_summary = parse_integration_test_summary(pytest_summary)
+    integration_test_totals = integration_test_summary['totals']
+    integration_test_results = integration_test_summary['results']
     
     # Content of the index page
     context = {
