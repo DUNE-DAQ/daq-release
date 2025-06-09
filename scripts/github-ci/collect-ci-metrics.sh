@@ -25,7 +25,7 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
   # Get most recent single-repo CI build status
-  BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow "build-develop" -q '.[0]')
+  BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow dunedaq-develop-cpp-ci.yml -q '.[0]')
   echo $?
 
   # Prepare JSON fragment
@@ -53,7 +53,7 @@ for REPO in "${dune_packages_with_ci[@]}"; do
       echo "," >> "$OUTFILE"
     fi
   else
-    echo "Non-zero return value. Skipping..."
+    echo "Non-zero return value in $REPO. Skipping..."
     continue
   fi
 
