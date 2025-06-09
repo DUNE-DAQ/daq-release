@@ -36,6 +36,8 @@ asiolibs: [![asiolibs](https://github.com/DUNE-DAQ/asiolibs/actions/workflows/du
 
 cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
+ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
 confmodel: [![confmodel](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 daq-cmake: [![daq-cmake](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-cmake/actions/workflows/dunedaq-develop-cpp-ci.yml)
@@ -101,6 +103,8 @@ restcmd: [![restcmd](https://github.com/DUNE-DAQ/restcmd/actions/workflows/duned
 serialization: [![serialization](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/serialization/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 sspmodules: [![sspmodules](https://github.com/DUNE-DAQ/sspmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/sspmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+tdemodules: [![tdemodules](https://github.com/DUNE-DAQ/tdemodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/tdemodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 timing: [![timing](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/timing/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
