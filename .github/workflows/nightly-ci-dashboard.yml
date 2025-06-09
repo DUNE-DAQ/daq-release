@@ -31,6 +31,10 @@ jobs:
                               --workflow "Weekly code coverage workflow" \
                               --limit 1 \
                               --json databaseId --jq '.[0].databaseId')
+        unit_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
+                                   --workflow "Run Unit Tests on a Given Release" \
+                                   --limit 1 \
+                                   --json databaseId --jq '.[0].databaseId')
         echo "Most recent coverage workflow ID: $lcov_id"
         echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
     - name: Download lcov html report
