@@ -119,7 +119,7 @@ jobs:
         path: ${{ steps.unit_tests.outputs.unit_test_summary }}
 
   send_slack_message:
-    if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes')
+    if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:
