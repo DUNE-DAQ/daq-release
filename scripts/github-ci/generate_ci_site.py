@@ -185,7 +185,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         },
         "workflow_badges": workflow_badges,
         "unit_test_totals": unit_test_totals,
-        #"integration_test_totals": integration_test_summary['totals'],
+        "integration_test_totals": integration_test_summary['totals'],
     }
 
 
