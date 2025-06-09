@@ -10,8 +10,12 @@ on:
       upload_logs:
         type: string
         required: false
-        default: 'yes'
+        default: 'no'
         description: Whether to upload unit test summary logs.
+      send-slack-message:
+          description: 'whether to send a message to #daq-release-notifications on completion'
+          type: string
+          default: 'no'
   workflow_dispatch:
     inputs:
       release_tag:
@@ -24,6 +28,7 @@ on:
         description: Whether to upload unit test summary logs.
       send-slack-message:
           description: 'whether to send a message to #daq-release-notifications on completion'
+          type: string
           default: 'no'
 
 jobs:
@@ -119,7 +124,7 @@ jobs:
         path: ${{ steps.unit_tests.outputs.unit_test_summary }}
 
   send_slack_message:
-    if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
+    if: (success() || failure()) && (inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:

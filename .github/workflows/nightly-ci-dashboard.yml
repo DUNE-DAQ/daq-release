@@ -112,3 +112,14 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+  cleanup_test_area:
+    runs-on: daq
+    if: always()
+    needs: [deploy_to_github_pages]
+    steps:
+    - name: Remove test directory
+      run: |
+        echo "NOT REMOVING YET, will be done once everything works"
+        ls daq-release-ci-dashboard/scripts/github-ci/site
+
