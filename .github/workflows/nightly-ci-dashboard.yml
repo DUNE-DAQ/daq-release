@@ -36,7 +36,6 @@ jobs:
                                    --workflow "Run Unit Tests on a Given Release" \
                                    --limit 1 \
                                    --json databaseId --jq '.[0].databaseId' \
-                                   # TODO Remove this branch argument \
                                    --branch amogan/ci_dashboard)
         echo "Most recent unit test workflow ID: $unit_test_id"
         echo "Most recent coverage workflow ID: $lcov_id"
@@ -91,7 +90,8 @@ jobs:
         cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site
         cd daq-release-ci-dashboard/scripts/github-ci/
         ./collect-ci-metrics.sh
-        python generate_ci_site.py --json_input ci_summary.json --unit_test_summary ${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log
+        echo "Summary file? $(ls ${{ github.workspace }}/${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log)"
+        python generate_ci_site.py --json_input ci_summary.json --unit_test_summary ${{ github.workspace }}/${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
