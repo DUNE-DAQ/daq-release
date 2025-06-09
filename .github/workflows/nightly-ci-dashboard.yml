@@ -36,7 +36,6 @@ jobs:
                                    --workflow "Run Unit Tests on a Given Release" \
                                    --limit 1 \
                                    --json databaseId --jq '.[0].databaseId' \
-                                   # TODO Remove this branch argument \
                                    --branch amogan/ci_dashboard)
         echo "Most recent unit test workflow ID: $unit_test_id"
         echo "Most recent coverage workflow ID: $lcov_id"
