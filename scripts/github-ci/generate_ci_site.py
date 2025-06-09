@@ -157,9 +157,10 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
                 unit_test_totals['Other'] += 1
 
     # Parse integration tests
-    integration_test_summary = parse_integration_test_summary(pytest_summary)
-    integration_test_totals = integration_test_summary['totals']
-    integration_test_results = integration_test_summary['results']
+    if pytest_summary:
+        integration_test_summary = parse_integration_test_summary(pytest_summary)
+        integration_test_totals = integration_test_summary['totals']
+        integration_test_results = integration_test_summary['results']
     
     # Content of the index page
     context = {
@@ -173,7 +174,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         },
         "workflow_badges": workflow_badges,
         "unit_test_totals": unit_test_totals,
-        "integration_test_totals": integration_test_summary['totals'],
+        #"integration_test_totals": integration_test_summary['totals'],
     }
 
 
@@ -189,11 +190,11 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     unit_test_path.parent.mkdir(parents=True, exist_ok=True)
     unit_test_path.write_text(unit_test_html)
 
-    integtest_template = env.get_template("integration_test_template.html")
-    integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
-    integtest_path = Path("site/integtest_summary.html")
-    integtest_path.parent.mkdir(parents=True, exist_ok=True)
-    integtest_path.write_text(integtest_html)
+    #integtest_template = env.get_template("integration_test_template.html")
+    #integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
+    #integtest_path = Path("site/integtest_summary.html")
+    #integtest_path.parent.mkdir(parents=True, exist_ok=True)
+    #integtest_path.write_text(integtest_html)
 
     print('Done')
 
