@@ -13,6 +13,7 @@ jobs:
     runs-on: daq
     outputs:
       lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
+      unit_test_summary_path: ${{ steps.set_paths.outputs.unit_test_summary_path }}
     defaults:
       run: 
         shell: bash
@@ -68,9 +69,11 @@ jobs:
       run: |
         echo "pwd: $(pwd)"
         echo "ls: $(ls)"
+        ls ${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log
 
   build_ci_dashboard:
     runs-on: daq
+    needs: download_artifacts
     defaults:
       run:
         shell: bash
@@ -84,6 +87,9 @@ jobs:
       run: |
         mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
         cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site
+        cd daq-release-ci-dashboard/scripts/github-ci/
+        ./collect-ci-metrics.sh
+        python generate_ci_site.py --json_input ci_summary.json --unit_test_summary ${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
