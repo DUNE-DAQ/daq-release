@@ -6,13 +6,16 @@
     base_release: coredaq-develop
 
     fddaq:
-        - name: asiolibs
+        - name: ctbmodules
           version: "develop"
           commit: null
         - name: daqsystemtest
           version: "develop"
           commit: null
         - name: dpdklibs
+          version: "develop"
+          commit: null
+        - name: asiolibs
           version: "develop"
           commit: null
         - name: fddetdataformats
@@ -33,16 +36,19 @@
         - name: rawdatautils
           version: "develop"
           commit: null
-        - name: tpglibs
-          version: "develop"
-          commit: null
-        - name: uhallibs
-          version: "develop"
-          commit: null
         - name: sspmodules
           version: "develop"
           commit: null
         - name: daphnemodules
+          version: "develop"
+          commit: null
+        - name: tdemodules
+          version: "develop"
+          commit: null
+        - name: tpglibs
+          version: "develop"
+          commit: null
+        - name: uhallibs
           version: "develop"
           commit: null
         - name: wibmod

@@ -63,6 +63,8 @@ set(build_order "daq-cmake"
                 "rawdatautils"
                 "dpdklibs"
                 "daphnemodules"
+		"ctbmodules"
+		"tdemodules"
 		"daqsystemtest"
 )
 
