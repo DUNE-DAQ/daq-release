@@ -7,6 +7,10 @@ on:
         type: string
         required: true
         description: Name of the release used in the caller workflow.
+      send-slack-message:
+          description: 'whether to send a message to #daq-release-notifications on completion'
+          type: string
+          default: 'no'
   workflow_dispatch:
     inputs:
       release_tag:
@@ -15,6 +19,7 @@ on:
         description: Name of the release to unit test
       send-slack-message:
           description: 'whether to send a message to #daq-release-notifications on completion'
+          type: string
           default: 'no'
 
 jobs:
@@ -118,7 +123,7 @@ jobs:
         echo -e "$markdown_content" >> $GITHUB_STEP_SUMMARY
 
   send_slack_message:
-    if: (success() || failure()) && (github.event.inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
+    if: (success() || failure()) && (inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:
