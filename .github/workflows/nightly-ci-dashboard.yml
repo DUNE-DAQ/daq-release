@@ -45,7 +45,7 @@ jobs:
       id: download_lcov
       uses: actions/download-artifact@v4
       with:
-        name: code_coverage_html
+        name: code_coverage
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
         run-id: ${{ steps.run_ids.outputs.lcov_id }}
