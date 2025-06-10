@@ -182,7 +182,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
-        name: markdown-summary
+        name: nightly_integtest_summary
         path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
 
   store_and_upload_logs:
