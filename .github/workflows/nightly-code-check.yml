@@ -67,6 +67,12 @@ jobs:
         cd sourcecode
         dbt-clang-format.sh . --view-differences-only --markdown-summary
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+    - name: Upload clang formatting summary
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: clang_formatting_summary
+        path: ${{ github.env.DBT_AREA_ROOT }}/clang_format_summary_table.md
 
     - name: Run integration tests
       id: integtests
@@ -92,6 +98,13 @@ jobs:
         cd daq-release-code-checks/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.run_checks.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload pytest summary
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: pytest_summary
+        path: daq-release-code-checks/scripts/github-ci/pytest_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
