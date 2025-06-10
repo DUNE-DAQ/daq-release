@@ -111,7 +111,8 @@ jobs:
         ./collect-ci-metrics.sh
         echo "Summary file? $(ls code_check_summary/unit_test_summary/unit_test_summary.log)"
         python generate_ci_site.py --json_input ci_summary.json \
-                                   --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log
+                                   --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
+                                   --pytest_summary integration_test_summary/pytest_summary_table.md
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
