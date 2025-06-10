@@ -72,7 +72,7 @@ jobs:
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        path: ${{ github.env.DBT_AREA_ROOT }}/clang_format_summary_table.md
+        path: ${{ github.env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
 
     - name: Run integration tests
       id: integtests
