@@ -87,7 +87,7 @@ jobs:
     - name: Copy lcov report into dashboard
       run: |
         mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
-        cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site
+        cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site/code_coverage
         cd daq-release-ci-dashboard/scripts/github-ci/
         ./collect-ci-metrics.sh
         echo "Summary file? $(ls ${{ github.workspace }}/${{ needs.download_artifacts.outputs.unit_test_summary_path }}/unit_test_summary.log)"
