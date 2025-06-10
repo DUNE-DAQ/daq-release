@@ -38,6 +38,8 @@ jobs:
     timeout-minutes: 30
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+    env:
+      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
     defaults:
       run:
         shell: bash
@@ -50,8 +52,8 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        dbt-create -n ${{ needs.make_variables.outputs.tag }}
-        cd ${{ needs.make_variables.outputs.tag }}
+        dbt-create -n ${{ env.DBT_AREA_ROOT }}
+        cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../daq-release-code-checks/scripts
         #cd ${{ github.workspace }}/daq-release-code-checks/scripts
@@ -62,7 +64,7 @@ jobs:
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run clang formatting
       run: |
-        cd $DBT_AREA_ROOT
+        cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd sourcecode
         dbt-clang-format.sh . --view-differences-only --markdown-summary
@@ -72,7 +74,7 @@ jobs:
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        path: ${{ github.env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
+        path: ${{ env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
 
     - name: Run integration tests
       id: integtests
