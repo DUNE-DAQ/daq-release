@@ -201,11 +201,11 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     unit_test_path.parent.mkdir(parents=True, exist_ok=True)
     unit_test_path.write_text(unit_test_html)
 
-    #integtest_template = env.get_template("integration_test_template.html")
-    #integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
-    #integtest_path = Path("site/integtest_summary.html")
-    #integtest_path.parent.mkdir(parents=True, exist_ok=True)
-    #integtest_path.write_text(integtest_html)
+    integtest_template = env.get_template("integration_test_template.html")
+    integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
+    integtest_path = Path("site/integtest_summary.html")
+    integtest_path.parent.mkdir(parents=True, exist_ok=True)
+    integtest_path.write_text(integtest_html)
 
     print('Done')
 
