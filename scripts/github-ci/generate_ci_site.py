@@ -10,7 +10,7 @@ def strip_ansi(line):
     return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
 
 def parse_unit_test_summary(log_path):
-    """Summarize unit test summary as a dictionary."""
+    """Parse unit test summary and store as a dictionary."""
     content_by_package = {}
     current_package = None
 
@@ -36,7 +36,6 @@ def parse_unit_test_summary(log_path):
             elif test_name is None:
                 content_by_package[this_package].append((None, "NoTests"))
 
-    print('UNIT TEST CONTENT:', content_by_package)
     return content_by_package
 
 def parse_integration_test_summary(pytest_summary={}):
@@ -70,9 +69,7 @@ def parse_integration_test_summary(pytest_summary={}):
         },
         "results": {}
     }
-    print('numbers again', summary['totals'])
-    
-    # Parse test results
+    # Parse test results line by line
     i = 0
     while i < len(results_lines):
         line = results_lines[i]
@@ -98,7 +95,6 @@ def parse_integration_test_summary(pytest_summary={}):
         else:
             i += 1
 
-    print('pytest summary:', summary)
     return summary
 
 def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
@@ -187,7 +183,6 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "unit_test_totals": unit_test_totals,
         "integration_test_totals": integration_test_summary['totals'],
     }
-
 
     index_template = env.get_template("index_template.html")
     index_html = index_template.render(context)
