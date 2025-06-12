@@ -52,9 +52,10 @@ def parse_integration_test_summary(pytest_summary={}):
     }
 
     with open(pytest_summary, "r") as f:
+        num_header_lines = 6
         lines = [line.strip() for line in f if line.strip()]
-        header_lines = lines[:5]
-        results_lines = lines[5:]
+        header_lines = lines[:num_header_lines]
+        results_lines = lines[num_header_lines:]
 
     numbers = [int(re.search(r'\d+', line).group()) for line in header_lines]
     total, passed, failed, skipped, errors = numbers
