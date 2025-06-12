@@ -80,3 +80,7 @@ a:hover {
 .status-failure {
     color: red;
 }
+
+.status-error {
+    color: yellow;
+}

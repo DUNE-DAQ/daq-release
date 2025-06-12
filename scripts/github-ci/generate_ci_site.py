@@ -59,7 +59,6 @@ def parse_integration_test_summary(pytest_summary={}):
 
     numbers = [int(re.search(r'\d+', line).group()) for line in header_lines]
     total, passed, failed, skipped, errors = numbers
-    print('numbers', numbers)
     summary = {
         "totals": {
             "total": total,
