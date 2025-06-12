@@ -88,10 +88,10 @@ jobs:
         echo "VERSION_TAG: $VERSION_TAG"
 
         cd ../daq-release-unittests/scripts
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
       id: unit_tests
@@ -102,18 +102,11 @@ jobs:
         spack load dbe
         dbt-build --unittest
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        echo "Where is daq-release?"
-        cd ${{ github.workspace }}
-        pwd
-        ls
-        cd daq-release-unittests/scripts/github-ci || exit 2
-        echo "STDOUT TEST:"
-        ./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        #cd ${{ github.workspace }}
+        #cd daq-release-unittests/scripts/github-ci || exit 2
+        #echo "STDOUT TEST:"
+        #./parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
-    - name: Check inputs
-      run: |
-        echo "CHECK THIS IS YES:"
-        echo ${{ github.event.inputs.upload_logs }}
     - name: Upload summary log
       # Handle both workflow_call and workflow_dispatch cases
       if: ${{ inputs.upload_logs == 'yes' || github.event.inputs.upload_logs == 'yes' }}
