@@ -52,7 +52,7 @@ def parse_integration_test_summary(pytest_summary={}):
     }
 
     with open(pytest_summary, "r") as f:
-        num_header_lines = 6
+        num_header_lines = 5
         lines = [line.strip() for line in f if line.strip()]
         header_lines = lines[:num_header_lines]
         results_lines = lines[num_header_lines:]
