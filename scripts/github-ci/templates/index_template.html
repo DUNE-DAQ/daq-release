@@ -25,10 +25,6 @@
       <h3>Integration Tests</h3>
       <p>
         {{ integration_test_totals.total }} total tests run.<br>
-        {{ integration_test_totals.passed }} passed,<br>
-        {{ integration_test_totals.failed }} failed,<br>
-        {{ integration_test_totals.skipped }} were skipped, and <br>
-        {{ integration_test_totals.errors }} had errors which prevented the test from completing.
         <span class="status-success">
           Passed: {{ integration_test_totals.passed }} 
           ({{ (100 * integration_test_totals.passed / integration_test_totals.total) | round(1) }}%)
@@ -40,12 +36,12 @@
           <br>
         </span>
         <span class="status-skipped">
-          Failed: {{ integration_test_totals.skipped }} 
+          Skipped: {{ integration_test_totals.skipped }} 
           ({{ (100 * integration_test_totals.skipped / integration_test_totals.total) | round(1) }}%)
           <br>
         </span>
         <span class="status-error">
-          Failed: {{ integration_test_totals.errors }} 
+          Errored: {{ integration_test_totals.errors }} 
           ({{ (100 * integration_test_totals.errors / integration_test_totals.total) | round(1) }}%)
           <br>
         </span>
