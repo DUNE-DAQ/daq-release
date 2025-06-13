@@ -6,6 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
+  schedule:
+    - cron: "0 11 * * *"
 
 jobs:
   download_artifacts:
@@ -37,13 +39,11 @@ jobs:
         code_check_id=$(gh run list --repo DUNE-DAQ/daq-release \
                                    --workflow nightly-code-check.yml \
                                    --limit 1 \
-                                   --json databaseId --jq '.[0].databaseId' \
-                                   --branch amogan/ci_dashboard)
+                                   --json databaseId --jq '.[0].databaseId')
         integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
                                           --workflow integration_tests.yml \
                                           --limit 1 \
-                                          --json databaseId --jq '.[0].databaseId' \
-                                          --branch amogan/ci_dashboard)
+                                          --json databaseId --jq '.[0].databaseId')
         echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
@@ -71,20 +71,6 @@ jobs:
         path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
         run-id: ${{ steps.run_ids.outputs.integration_test_id }}
   
-  check_artifacts:
-    name: Check artifacts
-    needs: download_artifacts
-    runs-on: daq
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - name: Check artifacts
-      run: |
-        echo "pwd: $(pwd)"
-        echo "ls: $(ls)"
-        ls ${{ needs.download_artifacts.outputs.code_check_summary_path }}/
-
   build_ci_dashboard:
     runs-on: daq
     needs: download_artifacts
@@ -96,7 +82,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: amogan/ci_dashboard
-        path: daq-release-ci-dashboard
     - name: Copy artifacts and generate dashboard
       run: |
         mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
@@ -105,7 +90,6 @@ jobs:
         cp -r integration_test_summary/ daq-release-ci-dashboard/scripts/github-ci/integration_test_summary
         cd daq-release-ci-dashboard/scripts/github-ci/
         ./collect-ci-metrics.sh
-        echo "Summary file? $(ls code_check_summary/unit_test_summary/unit_test_summary.log)"
         ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md code_check_summary/pytest_summary/pytest_summary_table.md > combined_pytest_summary.md
         cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
@@ -141,6 +125,5 @@ jobs:
     steps:
     - name: Remove test directory
       run: |
-        echo "NOT REMOVING YET, will be done once everything works"
-        ls daq-release-ci-dashboard/scripts/github-ci/site
+        rm -rf daq-release-ci-dashboard/
 
