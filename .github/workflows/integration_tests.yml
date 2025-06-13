@@ -170,14 +170,6 @@ jobs:
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
-    - name: Debug markdown summary path
-      run: |
-        echo "Where am I? $(pwd)"
-        echo $(ls)
-        echo "Github workspace: ${{ github.workspace }}"
-        echo "ls Github workspace: $(ls ${{ github.workspace }})"
-        echo "Find daq-release-integtest: $(find . -name daq-release-integtest -type d)"
-        echo "Find daq-release-integtest in Github workspace: $(find ${{ github.workspace }} -name daq-release-integtest -type d)"
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v4
       with:
