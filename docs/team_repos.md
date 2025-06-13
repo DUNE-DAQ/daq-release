@@ -20,6 +20,8 @@
     * daqsystemtest
     * dbe
     * drunc
+    * druncactions
+    * drunccore
     * druncschema
     * elisa_client_api
     * ers
@@ -127,6 +129,7 @@
 * **Repositories with write access**:
     * flxlibs
     * hermesmodules
+    * tdemodules
     * tpglibs
 
 ## timing
@@ -152,5 +155,5 @@
     * wibmod
 
 
-Page was generated at: 25/04/2025 08:44:43
+Page was generated at: 13/06/2025 14:44:42
 
