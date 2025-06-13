@@ -156,8 +156,6 @@ def main():
     parser.add_argument("--output-markdown-file", "-o", 
                         default="pytest_summary_table.md",
                         help="Name of the output file containing the markdown summary table. Default: ./pytest_summary_table.md")
-    parser.add_argument("--to-html", "-t", action="store_true",
-                        help="Also generate an HTML file from the markdown output.")
 
     args = parser.parse_args()
 
@@ -172,7 +170,7 @@ def main():
     parser = JUnitXMLParser(
         input_directory=args.input_directory,
         input_file=args.input_file,
-        output_filename=args.output_markdown_file,
+        output_filename=args.output_markdown_file
     )
     parser.parse()
 
