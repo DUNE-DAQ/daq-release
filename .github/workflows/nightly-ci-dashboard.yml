@@ -44,13 +44,9 @@ jobs:
                                           --limit 1 \
                                           --json databaseId --jq '.[0].databaseId' \
                                           --branch amogan/ci_dashboard)
-        #echo "Most recent code check workflow ID: $code_check_id"
-        echo "Most recent coverage workflow ID: $lcov_id"
-        echo "Most recent integration test workflow ID: $integration_test_id"
-        #echo "code_check_id=$code_check_id" >> "$GITHUB_OUTPUT"
         echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
-        echo "lcov_id=$lcov_id" >> "$GITHUB_OUTPUT"
-        echo "integration_test_id=$integration_test_id" >> "$GITHUB_OUTPUT"
+        echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
+        echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
     - name: Download lcov html report
       id: download_lcov
       uses: actions/download-artifact@v4
@@ -108,9 +104,10 @@ jobs:
         cp -r code_check_summary/ daq-release-ci-dashboard/scripts/github-ci/code_check_summary
         cp -r integration_test_summary/ daq-release-ci-dashboard/scripts/github-ci/integration_test_summary
         cd daq-release-ci-dashboard/scripts/github-ci/
-        ./collect-ci-metrics.sh 
+        ./collect-ci-metrics.sh
         echo "Summary file? $(ls code_check_summary/unit_test_summary/unit_test_summary.log)"
         ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md code_check_summary/pytest_summary/pytest_summary_table.md > combined_pytest_summary.md
+        cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
                                    --pytest_summary combined_pytest_summary.md
