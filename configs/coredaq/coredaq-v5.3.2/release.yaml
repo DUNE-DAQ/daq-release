@@ -113,7 +113,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: v3.0.5
+          version: v3.1.0
           commit: null
         - name: ers
           version: v1.5.3
@@ -128,16 +128,16 @@
           version: v1.4.0
           commit: null
         - name: opmonlib
-          version: v2.1.1
+          version: v2.1.2
           commit: null
         - name: rcif
           version: v1.4.0
           commit: null
         - name: appfwk
-          version: v4.2.0
+          version: v4.2.1
           commit: null
         - name: listrev
-          version: v5.0.0
+          version: v5.0.1
           commit: null
         - name: utilities
           version: v3.2.1
@@ -146,7 +146,7 @@
           version: v2.1.1
           commit: null
         - name: kafkaopmon
-          version: v3.1.0
+          version: v3.1.1
           commit: null
         - name: ipm
           version: v2.9.0
@@ -176,16 +176,16 @@
           version: v3.1.4
           commit: null
         - name: dfmodules
-          version: v4.1.1
+          version: v4.1.2
           commit: null
         - name: hsilibs
-          version: v4.7.0
+          version: v4.8.0
           commit: null
         - name: timing
           version: v7.10.1
           commit: null
         - name: timinglibs
-          version: v4.4.2
+          version: v4.5.0
           commit: null
         - name: trigger
           version: v2.4.0
@@ -212,22 +212,22 @@
           version: v1.2.0
           commit: null
         - name: conffwk
-          version: v2.0.1
+          version: v2.1.0
           commit: null
         - name: oksdalgen
           version: v1.3.1
           commit: null
         - name: confmodel
-          version: v2.3.0
+          version: v2.4.0
           commit: null
         - name: appmodel
-          version: v3.4.0
+          version: v3.5.0
           commit: null
         - name: dbe
           version: v1.5.0
           commit: null
         - name: daqconf
-          version: v8.4.0
+          version: v8.4.1
           commit: null
 
     others:
@@ -235,10 +235,10 @@
           version: v3.0.1
           commit: null
         - name: daq-buildtools
-          version: v8.9.1
+          version: v8.9.4
           commit: null
         - name: daqsystemtest
-          version: v4.3.0
+          version: v4.4.0
           commit: null
         - name: pocket
           version: "develop"
