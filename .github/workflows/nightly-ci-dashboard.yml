@@ -81,7 +81,7 @@ jobs:
     - name: Checkout daq-release feature branch
       uses: actions/checkout@v4
       with:
-        ref: amogan/ci_dashboard
+        path: daq-release-ci-dashboard
     - name: Copy artifacts and generate dashboard
       run: |
         mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
