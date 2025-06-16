@@ -101,7 +101,7 @@ jobs:
         spack load dbe
         dbt-build --unittest
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        ./daq-release-unittests/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        ../daq-release-unittests/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
       # Handle both workflow_call and workflow_dispatch cases
