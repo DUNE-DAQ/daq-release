@@ -147,7 +147,6 @@ class JUnitXMLParser:
         self.generate_markdown_table()
         self.prepend_test_summary()
 
-
 def main():
     parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
     parser.add_argument("--input-directory", "-d",

@@ -29,6 +29,7 @@ jobs:
     uses: ./.github/workflows/unit-tests.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
+      upload_logs: 'yes'
 
   run_checks:
     name: Run linting and integration tests
@@ -37,6 +38,8 @@ jobs:
     timeout-minutes: 30
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+    env:
+      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
     defaults:
       run:
         shell: bash
@@ -49,23 +52,29 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        dbt-create -n ${{ needs.make_variables.outputs.tag }}
-        cd ${{ needs.make_variables.outputs.tag }}
+        dbt-create -n ${{ env.DBT_AREA_ROOT }}
+        cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../daq-release-code-checks/scripts
         #cd ${{ github.workspace }}/daq-release-code-checks/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run clang formatting
       run: |
-        cd $DBT_AREA_ROOT
+        cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd sourcecode
         dbt-clang-format.sh . --view-differences-only --markdown-summary
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+    - name: Upload clang formatting summary
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: clang_formatting_summary
+        path: ${{ env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
 
     - name: Run integration tests
       id: integtests
@@ -91,6 +100,13 @@ jobs:
         cd daq-release-code-checks/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.run_checks.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload pytest summary
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: pytest_summary
+        path: daq-release-code-checks/scripts/github-ci/pytest_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')

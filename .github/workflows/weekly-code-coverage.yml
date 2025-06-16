@@ -58,39 +58,21 @@ jobs:
       id: run_lcov
       run: |
         cd $DBT_AREA_ROOT/
-        echo "Where am I? $(pwd)"
-        echo "DBT_AREA_ROOT in lcov step: $DBT_AREA_ROOT"
         source env.sh
         dbt-workarea-env
         # spack load dbe
         dbt-lcov.sh
         echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results/html" >> "$GITHUB_OUTPUT"
-
-  deploy_to_github_pages:
-    name: Deploy to GitHub Pages
-    runs-on: daq
-    needs: generate_code_coverage_report
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-    - name: Configure GitHub Pages
-      uses: actions/configure-pages@v5
-    - name: Upload pages artifact
-      uses: actions/upload-pages-artifact@v3
+    - name: Upload html output as artifact
+      uses: actions/upload-artifact@v4
       with:
-        path: ${{ needs.generate_code_coverage_report.outputs.coverage_results_dir }}
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        if-no-files-found: error
+        name: code_coverage
+        path: ${{ steps.run_lcov.outputs.results_dir }}
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: deploy_to_github_pages
+    needs: generate_code_coverage_report
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -98,7 +80,7 @@ jobs:
   cleanup_test_area:
     runs-on: daq
     if: always()
-    needs: [make_nightly_tag, deploy_to_github_pages]
+    needs: [make_nightly_tag, generate_code_coverage_report]
     steps:
       - name: Remove test directory
         run: |

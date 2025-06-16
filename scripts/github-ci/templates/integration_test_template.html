@@ -1,0 +1,29 @@
+<!-- templates/integration_test_template.html -->
+{% extends "base_template.html" %}
+
+{% block title %}Integration Test Summary{% endblock %}
+
+{% block content %}
+<h1>Integration Test Report</h1>
+{% for package, tests in integration_test_results.items() %}
+  <h2>{{ package }}</h2>
+    <table>
+      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for test in tests %}
+          <tr>
+            <td>{{ test.name }}</td>
+            <td>
+              {% if test.status == 'passed' %}	&#x2705
+              {% elif test.status == 'failed' %}&#x274C
+              {% elif test.status == 'skipped' %}⏩
+              {% elif test.status == 'errors' %}	&#x2757
+              {% else %}&#x2753 Unknown
+              {% endif %} {{ test.status }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endfor %}
+{% endblock %}
