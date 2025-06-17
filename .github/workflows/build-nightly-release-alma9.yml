@@ -48,6 +48,14 @@ jobs:
         base_tag="${prefix}B_DEV_${date_tag}_A9"
         detector_tag="${prefix}FD_DEV_${date_tag}_A9"
 
+        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+
+        if ssh -o ForwardX11=no -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov \
+          "[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]"; then
+          echo "ERROR: Build area $detector_tag already exists on CVMFS."
+          exit 1
+        fi
+
         echo "base_tag=$base_tag" | tee -a "$GITHUB_OUTPUT"
         echo "detector_tag=$detector_tag" | tee -a "$GITHUB_OUTPUT"
 
@@ -79,6 +87,7 @@ jobs:
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
+        #daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
