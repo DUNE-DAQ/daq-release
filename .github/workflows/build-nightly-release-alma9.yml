@@ -41,7 +41,7 @@ jobs:
         fi
 
         if [[ "${{ github.event_name }}" == "workflow_dispatch" && "$prefix" == "N" ]]; then
-          echo "ERROR: The prefix 'N' is reserved for scheduled nightly builds. Please choose a different prefix."
+          echo "ERROR: Invalid prefix. Please choose a prefix that is not 'N'."
           exit 1
         fi
 
@@ -69,11 +69,8 @@ jobs:
     
     - name: Set environment variables
       run: |
-        echo "BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${{ needs.make_tags.outputs.base_tag }}" >> $GITHUB_ENV
-        echo "DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${{ needs.make_tags.outputs.detector_tag }}" >> $GITHUB_ENV
-        echo "ls BASE_RELEASE_DIR: $(ls ${BASE_RELEASE_DIR})"
-        echo "ls DET_RELEASE_DIR: $(ls ${DET_RELEASE_DIR})"
-        echo "ls NFD_DEV_250615_A9: $(ls /cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD_DEV_250615_A9)"
+        echo "BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.base_tag }}" >> $GITHUB_ENV
+        echo "DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.detector_tag }}" >> $GITHUB_ENV
         echo "OS=almalinux9" >> $GITHUB_ENV
 
     - name: setup directories and install spack for the coredaq release
