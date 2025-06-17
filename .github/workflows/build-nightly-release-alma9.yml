@@ -40,11 +40,6 @@ jobs:
           prefix="N"
         fi
 
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" && "$prefix" == "N" ]]; then
-          echo "ERROR: Invalid prefix. Please choose a prefix that is not 'N'."
-          exit 1
-        fi
-
         base_tag="${prefix}B_DEV_${date_tag}_A9"
         detector_tag="${prefix}FD_DEV_${date_tag}_A9"
 
