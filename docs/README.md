@@ -36,6 +36,8 @@ asiolibs: [![asiolibs](https://github.com/DUNE-DAQ/asiolibs/actions/workflows/du
 
 cmdlib: [![cmdlib](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/cmdlib/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
+crtmodules: [![crtmodules](https://github.com/DUNE-DAQ/crtmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/crtmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
 ctbmodules: [![ctbmodules](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/ctbmodules/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 confmodel: [![confmodel](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/confmodel/actions/workflows/dunedaq-develop-cpp-ci.yml)
@@ -123,3 +125,5 @@ uhallibs: [![uhallibs](https://github.com/DUNE-DAQ/uhallibs/actions/workflows/du
 utilities: [![utilities](https://github.com/DUNE-DAQ/utilities/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/utilities/actions/workflows/dunedaq-develop-cpp-ci.yml)
 
 wibmod: [![wibmod](https://github.com/DUNE-DAQ/wibmod/actions/workflows/dunedaq-develop-cpp-ci.yml/badge.svg)](https://github.com/DUNE-DAQ/wibmod/actions/workflows/dunedaq-develop-cpp-ci.yml)
+
+
