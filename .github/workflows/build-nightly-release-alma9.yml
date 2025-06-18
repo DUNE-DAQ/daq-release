@@ -46,12 +46,13 @@ jobs:
         echo "base_tag=$base_tag" >> "$GITHUB_OUTPUT"
         echo "detector_tag=$detector_tag" >> "$GITHUB_OUTPUT"
         echo "detector_tag=$detector_tag" >> "$GITHUB_ENV"
+        echo "base_tag=$base_tag"
+        echo "detector_tag=$detector_tag"
     - uses: cvmfs-contrib/github-action-cvmfs@v4
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - name: Check tag on cvmfs
       run: |
-        ls /cvmfs/dunedaq-development.opensciencegrid.org/nightly/
         if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]]; then
           echo "ERROR: Build area $detector_tag already exists on CVMFS."
           exit 1
