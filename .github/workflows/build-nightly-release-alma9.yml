@@ -47,6 +47,8 @@ jobs:
         echo "detector_tag=$detector_tag" >> "$GITHUB_OUTPUT"
         echo "detector_tag=$detector_tag" >> "$GITHUB_ENV"
     - uses: cvmfs-contrib/github-action-cvmfs@v4
+      with:
+        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - name: Check tag on cvmfs
       run: |
         ls /cvmfs/dunedaq-development.opensciencegrid.org/nightly/
