@@ -54,6 +54,9 @@
         - name: wibmod
           version: "develop"
           commit: null
+        - name: crtmodules
+          version: "develop"
+          commit: null
 
 
     pymodules:
