@@ -43,16 +43,17 @@ jobs:
         base_tag="${prefix}B_DEV_${date_tag}_A9"
         detector_tag="${prefix}FD_DEV_${date_tag}_A9"
 
-        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
-
-        if ssh -o ForwardX11=no -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov \
-          "[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]"; then
+        echo "base_tag=$base_tag" >> "$GITHUB_OUTPUT"
+        echo "detector_tag=$detector_tag" >> "$GITHUB_OUTPUT"
+        echo "detector_tag=$detector_tag" >> "$GITHUB_ENV"
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - name: Check tag on cvmfs
+      run: |
+        ls /cvmfs/dunedaq-development.opensciencegrid.org/nightly/
+        if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]]; then
           echo "ERROR: Build area $detector_tag already exists on CVMFS."
           exit 1
         fi
-
-        echo "base_tag=$base_tag" | tee -a "$GITHUB_OUTPUT"
-        echo "detector_tag=$detector_tag" | tee -a "$GITHUB_OUTPUT"
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
