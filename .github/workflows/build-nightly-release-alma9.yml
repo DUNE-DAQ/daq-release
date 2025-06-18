@@ -20,25 +20,48 @@ on:
         default: 'no'
 
 jobs:
-  make_nightly_tag:
-    name: create nightly tag
+  make_tags:
+    name: create base tag and detector tag
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+      base_tag: ${{ steps.create_tags.outputs.base_tag }} 
+      detector_tag: ${{ steps.create_tags.outputs.detector_tag }} 
     defaults:
       run:
         shell: bash
     steps:
-      - id: create_nightly_tag
-        run: |
-          date_tag=$(date +%y%m%d)
-          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
+    - id: create_tags
+      run: |
+        date_tag=$(date +%y%m%d)
+
+        # Use GitHub input if provided, else default to N
+        prefix="${{ github.event.inputs.tag-prefix }}"
+        if [[ -z "$prefix" ]]; then
+          prefix="N"
+        fi
+
+        base_tag="${prefix}B_DEV_${date_tag}_A9"
+        detector_tag="${prefix}FD_DEV_${date_tag}_A9"
+
+        echo "base_tag=$base_tag" >> "$GITHUB_OUTPUT"
+        echo "detector_tag=$detector_tag" >> "$GITHUB_OUTPUT"
+        echo "detector_tag=$detector_tag" >> "$GITHUB_ENV"
+        echo "base_tag=$base_tag"
+        echo "detector_tag=$detector_tag"
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+      with:
+        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
+    - name: Check tag on cvmfs
+      run: |
+        if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]]; then
+          echo "ERROR: Build area $detector_tag already exists on CVMFS."
+          exit 1
+        fi
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
     runs-on: daq
-    needs: make_nightly_tag
+    needs: make_tags
     container:
       image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
     defaults:
@@ -53,9 +76,8 @@ jobs:
     
     - name: Set environment variables
       run: |
-        echo "NIGHTLY_TAG=${{ needs.make_nightly_tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NB${{ needs.make_nightly_tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD${{ needs.make_nightly_tag.outputs.tag }}" >> $GITHUB_ENV
+        echo "BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.base_tag }}" >> $GITHUB_ENV
+        echo "DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.detector_tag }}" >> $GITHUB_ENV
         echo "OS=almalinux9" >> $GITHUB_ENV
 
     - name: setup directories and install spack for the coredaq release
@@ -64,6 +86,7 @@ jobs:
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
+        #daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
         daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
@@ -74,7 +97,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_coredaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NB${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.base_tag}}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       run: |
@@ -92,7 +115,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nightly_fddaq
-        path: ${{ github.workspace }}/tarballs_for_upload/NFD${{needs.make_nightly_tag.outputs.tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.detector_tag}}.tar.gz
 
   update_image:
     name: update_spack_image_nightly
@@ -103,7 +126,7 @@ jobs:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5${{ github.event.inputs.tag-prefix }}"
-    needs: [build_the_develop_release_spack, make_nightly_tag] 
+    needs: [build_the_develop_release_spack, make_tags] 
     environment: dockerhub
     permissions:
       packages: write
@@ -129,25 +152,27 @@ jobs:
 
       - name: prepare cvmfs mirror spack-nightly
         env:
-          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+          BASE_TAG: ${{needs.make_tags.outputs.base_tag}}
+          DETECTOR_TAG: ${{needs.make_tags.outputs.detector_tag}}
         run: |
             cd ${{ github.workspace }}/docker-build
             mkdir -p nightly
 
             cd nightly
-            base_tag="NB${NIGHTLY_TAG}"
-            tar xf ../${base_tag}.tar.gz
-            rm -rf ../${base_tag}.tar.gz
+            tar xf ../${BASE_TAG}.tar.gz
+            rm -rf ../${BASE_TAG}.tar.gz
 
-            fddaq_tag="NFD${NIGHTLY_TAG}"
-            tar xf ../${fddaq_tag}.tar.gz
-            rm -rf ../${fddaq_tag}.tar.gz
-            test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
+            tar xf ../${DETECTOR_TAG}.tar.gz
+            rm -rf ../${DETECTOR_TAG}.tar.gz
+            #test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
+            if [[ "${DETECTOR_TAG}" == NFD_* ]]; then
+              ln -s ${fddaq_tag} last_fddaq
+            fi
 
             cd ..
             echo "FROM "${{ matrix.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${NIGHTLY_TAG}" >> Dockerfile
+            echo "ENV REFRESHED_AT ${BASE_TAG}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -180,7 +205,7 @@ jobs:
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
     runs-on: daq
-    needs: [make_nightly_tag, update_image]
+    needs: [make_tags, update_image]
     container:
       image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}
     defaults:
@@ -191,13 +216,13 @@ jobs:
     
     - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
       env:
-          NIGHTLY_TAG: ${{needs.make_nightly_tag.outputs.tag}}
+          DETECTOR_TAG: ${{needs.make_tags.outputs.detector_tag}}
       run: |
           export DET=fd
 
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n NFD${NIGHTLY_TAG}
+          dbt-setup-release -n ${DETECTOR_TAG}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -216,7 +241,7 @@ jobs:
 
   publish_to_cvmfs:
     name: publish to cvmfs
-    needs: generate_dbt_setup_release_env
+    needs: [generate_dbt_setup_release_env, make_tags]
     runs-on: daq
 
     steps:
@@ -265,7 +290,8 @@ jobs:
         docker rm $unique_name
         docker system prune -f
 
-        dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
+        #dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
+        dir_for_env_scripts="$unique_name/${{ needs.make_tags.outputs.detector_tag }}"
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
         cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
 
