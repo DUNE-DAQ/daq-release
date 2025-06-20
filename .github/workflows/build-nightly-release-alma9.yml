@@ -164,9 +164,9 @@ jobs:
 
             tar xf ../${DETECTOR_TAG}.tar.gz
             rm -rf ../${DETECTOR_TAG}.tar.gz
-            #test "${NIGHTLY_TAG:0:1}" == "_" && ln -s ${fddaq_tag} last_fddaq
+
             if [[ "${DETECTOR_TAG}" == NFD_* ]]; then
-              ln -s ${fddaq_tag} last_fddaq
+              ln -s ${DETECTOR_TAG} last_fddaq
             fi
 
             cd ..
