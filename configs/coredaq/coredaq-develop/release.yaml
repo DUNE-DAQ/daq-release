@@ -105,7 +105,7 @@
 
     systems:
         - name: python
-          version: 3.10.10
+          version: 3.11.7
           variant: "~ssl"
         - name: gcc
           version: 13.2.0

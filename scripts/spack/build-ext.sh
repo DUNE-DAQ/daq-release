@@ -164,14 +164,18 @@ dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15
 
 boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel~icu+iostreams~json+locale+log+math~mpi+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared+signals~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~versionedlayout+wave"
 
-llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+python_spec="python@3.11.7%gcc@13.2.0+bz2+crypt+ctypes+dbm~debug+libxml2+lzma~nis~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tkinter+uuid+zlib build_system=generic patches=13fa8bf,b0615b2,ebdca64,f2fd060 arch=linux-almalinux9-x86_64"
+
+
+#llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 dpdk_spec="dpdk max_lcores=512"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec ^$python_spec"
 
 echo $umbrella_spec
 
@@ -188,7 +192,7 @@ fi
 ## Step 6 -- install graphviz, useful for generating plots after
 ## daqconf's create_config_plot program has created a DOT file
 
-spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gtkplus~gts~java~libgd~pangocairo~poppler~qt~quartz~x build_system=autotools arch=${ARCH} || exit 11
+#spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gtkplus~gts~java~libgd~pangocairo~poppler~qt~quartz~x build_system=autotools arch=${ARCH} || exit 11
 
 ## Step 7 -- remove DAQ packages and umbrella packages
 
