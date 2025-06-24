@@ -108,33 +108,18 @@
         - name: configparser
           version: 7.1.0
           source:  pypi
-        - name: connectivityserver
-          version: develop
-          source:  github_DUNE-DAQ
         - name: contourpy
           version: 1.3.1
           source:  pypi
         - name: cycler
           version: 0.12.1
           source:  pypi
-        - name: daq-assettools
-          version: develop
-          source:  github_DUNE-DAQ
         - name: docker
           version: 7.1.0
           source:  pypi
-        - name: drunc
-          version: develop
-          source:  github_DUNE-DAQ
-        - name: druncschema
-          version: develop
-          source:  github_DUNE-DAQ
         - name: durationpy
           version: 0.9
           source:  pypi
-        - name: elisa_client_api
-          version: develop
-          source:  github_DUNE-DAQ
         - name: et_xmlfile
           version: 2.0.0
           source:  pypi
@@ -207,9 +192,6 @@
         - name: iniconfig
           version: 2.0.0
           source:  pypi
-        - name: integrationtest
-          version: develop
-          source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.2.0
           source:  pypi
@@ -351,12 +333,6 @@
         - name: rsa
           version: 4.9
           source:  pypi
-        - name: runconftools
-          version: develop
-          source:  github_DUNE-DAQ
-        - name: runconf-ui
-          version: develop
-          source:  github_DUNE-DAQ
         - name: sh
           version: 2.1.0
           source:  pypi
