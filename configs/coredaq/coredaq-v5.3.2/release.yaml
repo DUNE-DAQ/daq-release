@@ -167,7 +167,7 @@
           version: v2.0.0
           commit: null
         - name: detchannelmaps
-          version: v1.8.1
+          version: v1.9.0
           commit: null
         - name: daqdataformats
           version: v3.10.0
@@ -176,7 +176,7 @@
           version: v3.1.4
           commit: null
         - name: dfmodules
-          version: v4.1.2
+          version: v4.1.3
           commit: null
         - name: hsilibs
           version: v4.8.0
@@ -221,7 +221,7 @@
           version: v2.4.0
           commit: null
         - name: appmodel
-          version: v3.5.0
+          version: v3.6.0
           commit: null
         - name: dbe
           version: v1.5.0
@@ -238,7 +238,7 @@
           version: v8.9.4
           commit: null
         - name: daqsystemtest
-          version: v4.4.0
+          version: v4.4.1
           commit: null
         - name: pocket
           version: "develop"
