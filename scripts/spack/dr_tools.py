@@ -17,6 +17,10 @@ def parse_yaml_file(fname):
 def get_packages(yaml_file, package_group):
     rdict = parse_yaml_file(yaml_file)
 
-    pkgs = rdict[package_group]
+    pkgs = rdict.get(package_group)
 
-    return [pkg["name"] for pkg in pkgs]
+    if pkgs is None:
+        return []
+
+    return [pkg["name"] for pkg in pkgs if pkg.get("source", "github_DUNE-DAQ") == "github_DUNE-DAQ"]
+
