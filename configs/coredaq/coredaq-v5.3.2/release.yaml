@@ -238,7 +238,7 @@
           version: v8.9.4
           commit: null
         - name: daqsystemtest
-          version: v4.4.1
+          version: v4.4.2
           commit: null
         - name: pocket
           version: "develop"
