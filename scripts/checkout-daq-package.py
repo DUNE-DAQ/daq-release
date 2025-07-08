@@ -5,20 +5,20 @@ import yaml
 import argparse
 import subprocess
 import re
+import textwrap
 
 from spack.dr_tools import parse_yaml_file
 
 def check_output(cmd, is_success_required = True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
-    out = irun.communicate()
+    stdout, stderr = irun.communicate()
     rc = irun.returncode
     if rc != 0:
         if is_success_required:
-            print('\nERROR: command "{}" has exit non-zero exit status, \
-please check!\n'.format(cmd))
-            print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
-            print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
+            print(f'\nERROR: command "{cmd}" failed with exit code {rc}')
+            print(f'STDOUT:\n{stdout.decode()}')
+            print(f'STDERR:\n{stderr.decode()}')
 
             exit(10)
         else:
@@ -27,31 +27,33 @@ please check!\n'.format(cmd))
         print("Checkout successful")
 
 def checkout_commit(repo, commit, outdir, is_success_required = True):
-    cmd = f"""\nmkdir -p {outdir}; cd {outdir}; 
-git clone https://github.com/DUNE-DAQ/{repo}.git; 
-cd {repo}; 
-git checkout {commit}
-    """
+    cmd = textwrap.dedent(f"""\nmkdir -p {outdir}; cd {outdir}; 
+        git clone https://github.com/DUNE-DAQ/{repo}.git; 
+        cd {repo}; 
+        git checkout {commit}
+    """)
     print(f"\nInfo: attempting checkout of {repo:<20} {commit:<20} under {outdir}")
     check_output(cmd, is_success_required)
     return
 
 def checkout_tag(repo, commit, outdir):
-    cmd = f"""\nmkdir -p {outdir}; cd {outdir}; \
-git clone https://github.com/DUNE-DAQ/{repo}.git; \
-cd {repo}; \
-git fetch --tags;
-if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then \
-  echo "{commit} does not exist for package {repo}. Exiting..."; \
-  exit 1; \
-fi; \
-git checkout {commit}; \
-cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"`; \
-tag=v"$cmake_version"; \
-echo $tag ;\
-echo $commit; \
-if [[ $tag != "{commit}" ]]; then echo "Tag mismatches version in CMakeLists.txt ( $tag vs {commit} )" && exit 1; fi
-    """
+    cmd = textwrap.dedent(f"""
+        mkdir -p {outdir} && cd {outdir} &&
+        git clone https://github.com/DUNE-DAQ/{repo}.git &&
+        cd {repo} &&
+        git fetch --tags &&
+        if ! git show-ref --tags --verify --quiet "refs/tags/{commit}"; then
+            echo "{commit} does not exist for package {repo}. Exiting..." && exit 1
+        fi
+        git checkout {commit} &&
+        cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+&&.)([[:digit:]]+&&.)([[:digit:]]+))"` &&
+        tag=v"$cmake_version" &&
+        echo $tag &&
+        echo $commit &&
+        if [[ $tag != "{commit}" ]]; then 
+            echo "Tag mismatches version in CMakeLists.txt ( $tag vs {commit} )" && exit 1; 
+        fi
+    """)
     check_output(cmd)
     print(f"Info: verified version in CMake, checked out {repo:<20} {commit:<20} under {outdir}.")
     return
