@@ -27,7 +27,8 @@ def check_output(cmd, is_success_required = True):
         print("Checkout successful")
 
 def checkout_commit(repo, commit, outdir, is_success_required = True):
-    cmd = textwrap.dedent(f"""\nmkdir -p {outdir}; cd {outdir}; 
+    cmd = textwrap.dedent(f"""
+        mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git; 
         cd {repo}; 
         git checkout {commit}
@@ -36,7 +37,7 @@ def checkout_commit(repo, commit, outdir, is_success_required = True):
     check_output(cmd, is_success_required)
     return
 
-def checkout_tag(repo, commit, outdir):
+def checkout_tag(repo, commit, outdir, is_pymodule=False):
     cmd = textwrap.dedent(f"""
         mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git &&
@@ -46,17 +47,34 @@ def checkout_tag(repo, commit, outdir):
             echo "{commit} does not exist for package {repo}. Exiting..." && exit 1
         fi
         git checkout {commit} &&
-        cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+&&.)([[:digit:]]+&&.)([[:digit:]]+))"` &&
-        tag=v"$cmake_version" &&
-        echo $tag &&
-        echo $commit &&
-        if [[ $tag != "{commit}" ]]; then 
-            echo "Tag mismatches version in CMakeLists.txt ( $tag vs {commit} )" && exit 1; 
+        if [[ "{is_pymodule}" == "False" ]]; then
+            cmake_version=`grep "^project" CMakeLists.txt |grep ")$"|grep -oP "(([[:digit:]]+\.)([[:digit:]]+\.)([[:digit:]]+))"` &&
+            tag=v"$cmake_version" &&
+            echo $tag &&
+            echo $commit &&
+            if [[ $tag != "{commit}" ]]; then
+                echo "Tag mismatches version in CMakeLists.txt ( $tag vs {commit} )" && exit 1;
+            fi
+        # TODO AJM 2025/07/08: Once python package structure is standardized, add an else block for checking python package tags
         fi
     """)
     check_output(cmd)
     print(f"Info: verified version in CMake, checked out {repo:<20} {commit:<20} under {outdir}.")
     return
+
+def load_packages(manifest_path, load_pymodules=False):
+    yaml_dict = parse_yaml_file(manifest_path)
+    pkgs = yaml_dict.get("coredaq", []) + yaml_dict.get("fddaq", []) + yaml_dict.get("nddaq", [])
+    if load_pymodules:
+        pymodules = yaml_dict.get("pymodules", [])
+        if not pymodules:
+            print(f'WARNING: You\'ve requested --pymodules, but {manifest_path} does not have any pymodules.')
+        dunedaq_pymodules = [entry for entry in pymodules if entry["source"] == "github_DUNE-DAQ"]
+        pkgs += dunedaq_pymodules
+    if not pkgs:
+        print("Error: No packages found in manifest.")
+        sys.exit(20)
+    return pkgs
 
 
 if __name__ == "__main__":
@@ -77,67 +95,46 @@ if __name__ == "__main__":
                         help="whether to check if tag is the same as used in CMakeLists.txt;")
     parser.add_argument('-o', '--output-path', default="./sourcecode",
                         help="path to the output directory;")
+    parser.add_argument('-m', '--pymodules', action='store_true',
+                        help="whether to checkout DAQ python modules;")
 
     args = parser.parse_args()
 
-    pkgs = []
-    if args.input_manifest is not None:
-        yaml_dict = parse_yaml_file(args.input_manifest)
-        if "coredaq" in yaml_dict:
-            pkgs = parse_yaml_file(args.input_manifest)["coredaq"]
-        if "fddaq" in yaml_dict:
-            pkgs = parse_yaml_file(args.input_manifest)["fddaq"]
-        if "nddaq" in yaml_dict:
-            pkgs = parse_yaml_file(args.input_manifest)["nddaq"]
-    if len(pkgs) == 0:
-        print("Error: proper release manifest file is required.")
-        exit(20)
+    pkgs = load_packages(args.input_manifest, args.pymodules)
 
     if args.all_packages:
-        for i in pkgs:
-            if i["name"].startswith("py-"):
-                continue
+        for pkg in pkgs:
+            name = pkg.get("name")
+            if name == "elisa-client-api":
+                name = "elisa_client_api"
+            commit = pkg.get("commit")
+            version = pkg.get("version")
+            source = pkg.get("source")
+            is_pymodule = True if source else False
+            if is_pymodule:
+                version = f"v{version}"
             if args.check_tag:
-                checkout_tag(i["name"], i["version"], args.output_path)
+                checkout_tag(name, version, args.output_path, is_pymodule)
             else:
-                if args.branch is None:
-                    checkout_token = None
-                    if i["commit"] is not None:
-                        checkout_token = i["commit"]
-                    elif re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
-                        checkout_token = i["version"]
-                    else:
-                        checkout_token = "develop"
-
-                    checkout_commit(i["name"], checkout_token, args.output_path, is_success_required = True)
+                token = args.branch or commit or (version if re.match(r"v\d+\.\d+\.\d+", version) else "develop")
+                if name == 'daq-cmake' and args.branch:
+                    checkout_commit(name, version, args.output_path, is_success_required=False)
+                elif args.branch and (commit or re.match(r"v\d+\.\d+\.\d+", version)):
+                    print(f"\nError: {name} uses a fixed commit/tag in the manifest. Can't override with a branch.")
+                    sys.exit(30)
                 else:
-                    if i["name"] == 'daq-cmake':
-                        checkout_commit(i["name"], i["version"], args.output_path, is_success_required = False)
-                    elif i["commit"] is not None or re.search(r"v[0-9]+\.[0-9]+\.[0-9]+", i["version"]):
-                        print(f'\nError: package {i["name"]} is listed in {args.input_manifest}\nwith a commit hash and/or version; can\'t use the branch override\nargument to the script in this case')
-                        exit(30)
-                    checkout_commit(i["name"], args.branch, args.output_path, is_success_required = False)
-                    
+                    checkout_commit(name, token, args.output_path) 
     elif args.package is not None:
-        # verify entry in manifest file
-        commit = ""
-        version = ""
-        found = False
-        for i in pkgs:
-            if i["name"] == args.package:
-                found = True
-                commit = i["commit"]
-                version = i["version"]
-        if not found:
-            print(f"Error: package {args.package} is not found in {args.input_manifest}")
-            exit(21)
-        if args.branch is not None:
-            commit = args.branch
-            version = args.branch
+        pkg_entry = next((pkg for pkg in pkgs if pkg["name"] == args.package), None)
+        if not pkg_entry:
+            print(f"Error: {args.package} not found in {args.input_manifest}")
+            sys.exit(21)
+        version = args.branch or pkg_entry["version"]
+        commit = args.branch or pkg_entry["commit"] or pkg_entry["version"] or "develop"
         if args.check_tag:
-            checkout_tag((args.package), version, args.output_path)
+            checkout_tag(args.package, version, args.output_path)
         else:
-            checkout_commit((args.package), commit, args.output_path)
+            checkout_commit(args.package, commit, args.output_path)
     else:
         print('Error: please specify "-a" or "-b <pkg>" option.')
         exit(22)
