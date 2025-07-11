@@ -156,7 +156,6 @@ if __name__ == "__main__":
         source = pkg_entry.get("source")
         is_pymodule = bool(source)
         token = get_checkout_token(name, args.branch, commit, version, source, args.check_tag)
-        print('TOKEN:', token)
         if args.check_tag:
             checkout_tag(args.package, token, args.output_path, is_pymodule)
         else:
