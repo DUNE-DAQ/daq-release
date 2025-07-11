@@ -9,7 +9,7 @@ import textwrap
 
 from spack.dr_tools import parse_yaml_file
 
-def check_output(cmd, is_success_required = True):
+def check_output(cmd, is_success_required=True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
     stdout, stderr = irun.communicate()
