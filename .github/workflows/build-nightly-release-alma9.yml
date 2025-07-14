@@ -22,7 +22,7 @@ on:
 jobs:
   make_tags:
     name: create base tag and detector tag
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       base_tag: ${{ steps.create_tags.outputs.base_tag }} 
       detector_tag: ${{ steps.create_tags.outputs.detector_tag }} 
