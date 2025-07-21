@@ -8,6 +8,7 @@ import re
 import textwrap
 
 from spack.dr_tools import parse_yaml_file
+from spack.mappings import pymodule_github_url_names
 
 def check_output(cmd, is_success_required=True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -27,6 +28,8 @@ def check_output(cmd, is_success_required=True):
         print("Checkout successful")
 
 def checkout_commit(repo, commit, outdir, is_success_required=True):
+    if repo in pymodule_github_url_names:
+        repo = pymodule_github_url_names[repo]
     cmd = textwrap.dedent(f"""
         mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git; 
@@ -38,6 +41,8 @@ def checkout_commit(repo, commit, outdir, is_success_required=True):
     return
 
 def checkout_tag(repo, version, outdir, is_pymodule=False):
+    if repo in pymodule_github_url_names:
+        repo = pymodule_github_url_names[repo]
     cmd = textwrap.dedent(f"""
         mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git &&
@@ -93,12 +98,12 @@ def get_checkout_token(name, branch, commit, version, source, check_tag=False):
         exit(31)
     if branch:
         return branch
-    if commit:
-        return commit
     if re.search(r"\d+\.\d+\.\d+", version):
         # Python package versions don't start with "v" in the release manifest; 
         # add it here for consistency in checkout tokens
         return f"v{version}" if source else version
+    if commit:
+        return commit
     return "develop"
 
 

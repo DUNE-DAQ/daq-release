@@ -7,10 +7,13 @@ import shutil
 import subprocess
 import tempfile
 import re
+import copy
+import tempfile
+
 from time import sleep
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack, pyvenv_url_names
+from mappings import cmake_to_spack, pyvenv_url_names, pymodule_github_url_names
 
 class MyDumper(yaml.Dumper):
 
@@ -48,33 +51,47 @@ def check_output(cmd, max_tries = 1):
 
 def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
-    cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
-    output = check_output(cmd)
-    if not tag_or_branch.startswith('v'):
-        cmd = f"""cd {tmp_dir}/{repo}; \
-            if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
-              echo {tag_or_branch}; \
-            else \
-              echo {fall_back_tag} ;\
-            fi"""
-        output = check_output(cmd)
-        tag_or_branch = output[0].decode('utf-8').strip()
-    else: # Check if tag exists
-        cmd = f"""cd {tmp_dir}/{repo}; \
-            if ! git show-ref --tags --verify --quiet "refs/tags/{tag_or_branch}"; then \
-              echo "{tag_or_branch} does not exist for package {repo}. Exiting..."; \
-              exit 1; \
-            fi;""" 
-        output = check_output(cmd)
-    cmd = f"""cd {tmp_dir}/{repo}; \
-        git checkout --quiet {tag_or_branch}; \
-        git rev-parse --short HEAD"""
-    output = check_output(cmd)
-    shutil.rmtree(tmp_dir)
-    commit_hash = output[0].decode('utf-8').strip()
-    cmd = "cd /tmp; rm -rf daq_repo_*"
-    output = check_output(cmd)
-    return (tag_or_branch, commit_hash)
+
+    if repo in pymodule_github_url_names:
+        repo = pymodule_github_url_names[repo]
+    repo_url = f"https://github.com/DUNE-DAQ/{repo}.git"
+    clone_path = os.path.join(tmp_dir, repo)
+
+    try:
+        subprocess.run(["git", "clone", "--quiet", repo_url], cwd=tmp_dir, check=True)
+
+        used_ref = tag_or_branch
+        repo_dir = os.path.join(tmp_dir, repo)
+
+        is_tag = re.search('\d+.\d+.\d+', tag_or_branch)
+        if not is_tag:
+            result = subprocess.run(
+                ["git", "ls-remote", "--heads", "origin", tag_or_branch],
+                cwd=repo_dir,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0 or not result.stdout.strip():
+                used_ref = fall_back_tag
+        else:
+            if not is_tag.string.startswith("v"):
+                tag_or_branch = f"v{tag_or_branch}"
+                used_ref = tag_or_branch
+            result = subprocess.run(
+                ["git", "show-ref", "--tags", f"refs/tags/{tag_or_branch}"],
+                cwd=repo_dir,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(f"{tag_or_branch} does not exist for package {repo}.")
+
+        subprocess.run(["git", "checkout", "--quiet", used_ref], cwd=repo_dir, check=True)
+        result = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=repo_dir, capture_output=True, text=True)
+        commit_hash = result.stdout.strip()
+
+        return (used_ref, commit_hash)
+
+    finally:
+        shutil.rmtree(tmp_dir)
 
 def check_branch_exists(repo, branch):
     command = f'git ls-remote --exit-code https://github.com/DUNE-DAQ/{repo}.git --heads origin {branch}'
@@ -103,28 +120,42 @@ class DAQRelease:
         repo_dir = os.path.join(repo_path, "spack-repo")
         os.makedirs(repo_dir, exist_ok=True)
         self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
-        # Now modify self.yaml and update self.rdict
-        pkgs = self.rdict[self.rtype]
-        if update_hash:
-            for i in range(len(pkgs)):
-                ipkg = pkgs[i]
-                iname = ipkg["name"]
 
-                if self.overwrite_branch != "" and (iname != "daq-cmake" or self.overwrite_daq_cmake):
-                    iver = self.overwrite_branch
-                else:
-                    iver = ipkg["version"]
-                ihash = ipkg["commit"]
-                itag = iver
-                if not iname.startswith('py-'):
-                    (itag, ihash) = get_commit_hash(iname, iver, ipkg["version"])
+        if not update_hash:
+            return
+
+        # Use deepcopy to avoid modifying self.rdict during processing
+        pkgs = copy.deepcopy(self.rdict[self.rtype])
+        pymodules = [
+            copy.deepcopy(pkg)
+            for pkg in self.rdict.get("pymodules", [])
+            if pkg.get("source") == "github_DUNE-DAQ"
+        ]
+        all_pkgs = pkgs + pymodules
+
+        for i, pkg in enumerate(all_pkgs):
+            iname = pkg.get("name")
+            iver  = pkg.get("version")
+            ihash = pkg.get("commit")
+            itag = iver
+            if self.overwrite_branch != "" and (iname != "daq-cmake" or self.overwrite_daq_cmake):
+                iver = self.overwrite_branch
+            if not iname.startswith('py-'):
+                (itag, ihash) = get_commit_hash(iname, iver, pkg.get("version"))
+
+            # Only python modules contain a 'source' field
+            if pkg.get("source"):
+                for ipy, pymod in enumerate(self.rdict['pymodules']):
+                    if pymod.get("name") == iname:
+                        self.rdict['pymodules'][ipy]["commit"] = ihash
+            else:
                 self.rdict[self.rtype][i]["commit"] = ihash
-                print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
+            print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
 
-            # rewrite YAML
-            with open(self.yaml, 'w') as outfile:
-                outfile.write('---\n')
-                yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
+        # rewrite YAML
+        with open(self.yaml, 'w') as outfile:
+            outfile.write('---\n')
+            yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
     def get_cmake_dependencies(self, package_name, branch_name):
