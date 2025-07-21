@@ -124,7 +124,7 @@
           version: 7.1.0
           source:  pypi
         - name: drunc
-          version: 0.17.0
+          version: 0.18.0
           source:  github_DUNE-DAQ
         - name: druncschema
           version: 0.11.2
