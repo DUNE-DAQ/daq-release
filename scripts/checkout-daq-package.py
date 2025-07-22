@@ -126,6 +126,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     pkgs = load_packages(args.input_manifest, args.pymodules)
+    is_success_required = False if args.branch else True
 
     if args.all_packages:
         for pkg in pkgs:
@@ -140,10 +141,7 @@ if __name__ == "__main__":
             if args.check_tag:
                 checkout_tag(name, token, args.output_path, is_pymodule)
             else:
-                if name == 'daq-cmake' and args.branch:
-                    checkout_commit(name, token, args.output_path, is_success_required=False)
-                else:
-                    checkout_commit(name, token, args.output_path) 
+                checkout_commit(name, token, args.output_path, is_success_required)
     elif args.package is not None:
         pkg_entry = next((pkg for pkg in pkgs if pkg.get("name") == args.package), None)
         if not pkg_entry:
@@ -161,7 +159,7 @@ if __name__ == "__main__":
         if args.check_tag:
             checkout_tag(args.package, token, args.output_path, is_pymodule)
         else:
-            checkout_commit(args.package, token, args.output_path)
+            checkout_commit(args.package, token, args.output_path, is_success_required)
     else:
         print('Error: please specify "-a" or "-p <pkg>" option.')
         exit(22)
