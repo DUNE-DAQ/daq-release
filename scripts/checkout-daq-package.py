@@ -84,9 +84,9 @@ def load_packages(manifest_path, load_pymodules=False):
 def get_checkout_token(name, branch, commit, version, source, check_tag=False):
     if name == 'daq-cmake' and branch:
         return version
-    if branch and re.search(r"\d+\.\d+\.\d+", version):
+    if branch and (commit or re.search(r"\d+\.\d+\.\d+", version)):
         print(textwrap.dedent(f"""\n
-            Error: {name} uses a fixed tag in the manifest. Can't override with a branch.
+            Error: {name} uses a fixed tag or commit in the manifest. Can't override with a branch.
         """))
         exit(30)
     if version == 'develop' and check_tag:
