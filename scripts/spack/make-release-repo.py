@@ -52,42 +52,42 @@ def check_output(cmd, max_tries = 1):
 def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
 
+    # Account for packages whose names in release manifest don't match the URL
     if repo in pymodule_github_url_names:
         repo = pymodule_github_url_names[repo]
-    repo_url = f"https://github.com/DUNE-DAQ/{repo}.git"
-    clone_path = os.path.join(tmp_dir, repo)
 
     try:
-        subprocess.run(["git", "clone", "--quiet", repo_url], cwd=tmp_dir, check=True)
+        cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
+        output = check_output(cmd)
 
         used_ref = tag_or_branch
         repo_dir = os.path.join(tmp_dir, repo)
 
         is_tag = re.search('\d+.\d+.\d+', tag_or_branch)
         if not is_tag:
-            result = subprocess.run(
-                ["git", "ls-remote", "--heads", "origin", tag_or_branch],
-                cwd=repo_dir,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode != 0 or not result.stdout.strip():
-                used_ref = fall_back_tag
+            cmd = f"""cd {repo_dir}; \
+                if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
+                    echo {tag_or_branch}; \
+                else \
+                    echo {fall_back_tag} ;\
+                fi"""
+            output = check_output(cmd)
+            used_ref = output[0].decode('utf-8').strip()
         else:
+            # Python package versions don't start with 'v' in the manifest, but it's needed for checking tags here
             if not is_tag.string.startswith("v"):
-                tag_or_branch = f"v{tag_or_branch}"
-                used_ref = tag_or_branch
-            result = subprocess.run(
-                ["git", "show-ref", "--tags", f"refs/tags/{tag_or_branch}"],
-                cwd=repo_dir,
-            )
-            if result.returncode != 0:
-                raise RuntimeError(f"{tag_or_branch} does not exist for package {repo}.")
-
-        subprocess.run(["git", "checkout", "--quiet", used_ref], cwd=repo_dir, check=True)
-        result = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=repo_dir, capture_output=True, text=True)
-        commit_hash = result.stdout.strip()
-
+                used_ref = f"v{tag_or_branch}"
+            cmd = f"""cd {tmp_dir}/{repo}; \
+                if ! git show-ref --tags --verify --quiet "refs/tags/{used_ref}"; then \
+                    echo "{used_ref} does not exist for package {repo}. Exiting..."; \
+                    exit 1; \
+                fi;"""
+            output = check_output(cmd)
+        cmd = f"""cd {repo_dir}; \
+            git checkout --quiet {used_ref}; \
+            git rev-parse --short HEAD"""
+        output = check_output(cmd)
+        commit_hash = output[0].decode('utf-8').strip()
         return (used_ref, commit_hash)
 
     finally:
