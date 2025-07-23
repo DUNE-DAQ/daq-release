@@ -73,7 +73,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release
-        ref: amogan/checkout_pymodules_to_sourcecode
     
     - name: Set environment variables
       run: |
