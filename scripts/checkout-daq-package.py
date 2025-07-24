@@ -8,6 +8,7 @@ import re
 import textwrap
 
 from spack.dr_tools import parse_yaml_file
+from spack.mappings import pyvenv_url_names
 
 def check_output(cmd, is_success_required=True):
     irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -27,6 +28,8 @@ def check_output(cmd, is_success_required=True):
         print("Checkout successful")
 
 def checkout_commit(repo, commit, outdir, is_success_required=True):
+    if repo in pyvenv_url_names:
+        repo = pyvenv_url_names[repo].get('repo_name', repo)
     cmd = textwrap.dedent(f"""
         mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git; 
@@ -38,6 +41,8 @@ def checkout_commit(repo, commit, outdir, is_success_required=True):
     return
 
 def checkout_tag(repo, version, outdir, is_pymodule=False):
+    if repo in pyvenv_url_names:
+        repo = pyvenv_url_names[repo].get('repo_name', repo)
     cmd = textwrap.dedent(f"""
         mkdir -p {outdir} && cd {outdir} &&
         git clone https://github.com/DUNE-DAQ/{repo}.git &&
@@ -81,24 +86,22 @@ def get_checkout_token(name, branch, commit, version, source, check_tag=False):
         return version
     if branch and (commit or re.search(r"\d+\.\d+\.\d+", version)):
         print(textwrap.dedent(f"""\n
-            Error: {name} uses a fixed commit/tag in the manifest. Can't override with a branch.
-            Perhaps you need a manifest labeled 'develop'?
+            Error: {name} uses a fixed tag or commit in the manifest. Can't override with a branch.
         """))
         exit(30)
     if version == 'develop' and check_tag:
         print(textwrap.dedent(f"""\n
             Error: You requested to check tags ('-c'), but the manifest specifies the develop branch of {name}.
-            Perhaps you need a manifest labeled 'vX.Y.Z'?
         """))
         exit(31)
     if branch:
         return branch
-    if commit:
-        return commit
     if re.search(r"\d+\.\d+\.\d+", version):
         # Python package versions don't start with "v" in the release manifest; 
         # add it here for consistency in checkout tokens
         return f"v{version}" if source else version
+    if commit:
+        return commit
     return "develop"
 
 
