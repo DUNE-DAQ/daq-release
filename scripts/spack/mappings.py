@@ -18,7 +18,3 @@ pyvenv_url_names = {
     "elisa-client-api": {"repo_name": "elisa_client_api"},
     "connectivityserver": {"egg_name": "connection-service"},
 }
-
-pymodule_github_url_names = {
-    "elisa-client-api": "elisa_client_api",
-}

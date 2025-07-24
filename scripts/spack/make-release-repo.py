@@ -52,9 +52,9 @@ def check_output(cmd, max_tries = 1):
 def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
 
-    # Account for packages whose names in release manifest don't match the URL
-    if repo in pymodule_github_url_names:
-        repo = pymodule_github_url_names[repo]
+    # Account for packages whose names in release manifest don't match the GitHub URL
+    if repo in pyvenv_url_names:
+        repo = pyvenv_url_names[repo].get('repo_name', repo)
 
     try:
         cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
