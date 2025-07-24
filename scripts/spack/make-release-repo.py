@@ -13,7 +13,7 @@ import tempfile
 from time import sleep
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack, pyvenv_url_names, pymodule_github_url_names
+from mappings import cmake_to_spack, pyvenv_url_names
 
 class MyDumper(yaml.Dumper):
 
