@@ -51,7 +51,7 @@ jobs:
                --pytest-log-dir ${{ inputs.integtest_log_dir }}
         cat slack_payload.json
     - name: Send Slack Message
-      uses: slackapi/slack-github-action@v2.1.0
+      uses: slackapi/slack-github-action@v2.1.1
       with:
         webhook: ${{ secrets.slack_webhook_url }}
         webhook-type: incoming-webhook
