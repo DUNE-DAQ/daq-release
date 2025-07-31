@@ -66,8 +66,11 @@ jobs:
           cd sourcecode; git clone https://github.com/DUNE-DAQ/appfwk.git; cd ..
           dbt-build  # --unittest done elsewhere; --lint unavailable due to llvm being too large for images
 
-          git clone https://github.com/DUNE-DAQ/drunc.git -b plasorak/popen-pm
+          git clone https://github.com/DUNE-DAQ/drunc.git -b johnfreeman/automatic_integration_testing
           cd drunc; pip install -U . ; cd ..
+
+          git clone https://github.com/DUNE-DAQ/integrationtest.git -b johnfreeman/automatic_integration_testing
+          cd integrationtest; pip install -U . ; cd ..
 
           source env.sh
           pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
