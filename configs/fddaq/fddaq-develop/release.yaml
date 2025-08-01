@@ -124,7 +124,7 @@
           version: 7.1.0
           source:  pypi
         - name: drunc
-          version: develop
+          version: tmp
           source:  github_DUNE-DAQ
         - name: druncschema
           version: develop
@@ -208,7 +208,7 @@
           version: 2.0.0
           source:  pypi
         - name: integrationtest
-          version: develop
+          version: tmp
           source:  github_DUNE-DAQ
         - name: itsdangerous
           version: 2.2.0
