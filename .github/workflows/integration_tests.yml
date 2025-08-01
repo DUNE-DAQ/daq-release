@@ -126,15 +126,12 @@ jobs:
         echo "$0"
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
           echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
           source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
           echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
           source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG
         else
           echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
           source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG
         fi
         TEST_PATH=""
