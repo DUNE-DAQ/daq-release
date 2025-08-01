@@ -124,19 +124,22 @@ jobs:
         ls -ltr /cvmfs/dunedaq-development.opensciencegrid.org/nightly
         uname -a
         echo "$0"
+
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG"
+          echo "dbt-create  -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG
+          dbt-create  -b candidate $RELEASE_TAG
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG"
+          echo "dbt-create  $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG
+          dbt-create  $RELEASE_TAG
         else
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG"
+          echo "dbt-create  -n $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG
+          dbt-create  -n $RELEASE_TAG
         fi
+        cd $RELEASE_TAG
+        source ./env.sh
         TEST_PATH=""
         TEST_SOURCE=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
