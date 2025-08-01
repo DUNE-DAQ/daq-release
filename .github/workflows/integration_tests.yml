@@ -26,7 +26,7 @@ jobs:
     name: create nightly tag, timestamp, etc.
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
       is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
@@ -78,7 +78,7 @@ jobs:
     name: integration_tests
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     timeout-minutes: 30
     needs: make_variables
     strategy:
@@ -160,7 +160,7 @@ jobs:
   parse_and_upload_results:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     if: always()
     needs: [make_variables, integration_tests]
     steps:
@@ -186,7 +186,7 @@ jobs:
   store_and_upload_logs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     timeout-minutes: 5
     needs: [make_variables, integration_tests]
     if: success() || failure()
@@ -219,7 +219,7 @@ jobs:
   cleanup_files:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     if: always()
     needs: [make_variables, parse_and_upload_results, send_slack_message]
     steps:
@@ -237,7 +237,7 @@ jobs:
   cleanup_stale_gunicorn_processes:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG
     if: always()
     needs: integration_tests
     steps:
