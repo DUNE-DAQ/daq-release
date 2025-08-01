@@ -125,15 +125,20 @@ jobs:
         uname -a
         echo "$0"
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG"
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -b candidate $RELEASE_TAG
+          echo "dbt-create -q -b candidate $RELEASE_TAG"
+          dbt-create -q -b candidate $RELEASE_TAG
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG"
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  $RELEASE_TAG
+          echo "dbt-create -q $RELEASE_TAG"
+          dbt-create -q $RELEASE_TAG
         else
-          echo "source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG"
-          source ${DBT_ROOT}/scripts/dbt-setup-release.sh  -n $RELEASE_TAG
+          echo "dbt-create -q -n $RELEASE_TAG"
+          dbt-create -q -n $RELEASE_TAG
         fi
+
+        cd $RELEASE_TAG
+        . ./env.sh
+        dbt-build
+
         TEST_PATH=""
         TEST_SOURCE=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
