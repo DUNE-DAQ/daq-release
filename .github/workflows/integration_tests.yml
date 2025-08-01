@@ -104,6 +104,12 @@ jobs:
         shell: bash
 
     steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release
+
     - name: setup release and run tests
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
@@ -125,18 +131,20 @@ jobs:
         uname -a
         echo "$0"
 
+        logfile=/tmp/cmd_output.txt
+
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
           echo "dbt-create  -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create  -b candidate $RELEASE_TAG
+          dbt-create  -b candidate $RELEASE_TAG  > ./cmd_output.txt 2>&1 || cat ./cmd_output.txt
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
           echo "dbt-create  $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create  $RELEASE_TAG
+          dbt-create  $RELEASE_TAG  > ./cmd_output.txt 2>&1 || cat ./cmd_output.txt
         else
           echo "dbt-create  -n $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create  -n $RELEASE_TAG
+          dbt-create  -n $RELEASE_TAG  > ./cmd_output.txt 2>&1 || cat ./cmd_output.txt
         fi
         cd $RELEASE_TAG
         source ./env.sh
