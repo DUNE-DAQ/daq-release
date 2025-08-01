@@ -118,6 +118,9 @@ jobs:
         echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
+        which dbt-setup-release
+        ls -ltr /cvmfs/dunedaq-development.opensciencegrid.org/nightly
+        uname -a
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
           echo "dbt-setup-release -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
