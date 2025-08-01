@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5"
+          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG"
             os_name: "a9"
     container:
       image: ${{ matrix.image }}
@@ -63,17 +63,13 @@ jobs:
           source env.sh
           test $REPO == "dbe" && spack load dbe
           cp -pr $GITHUB_WORKSPACE/DUNE-DAQ/$REPO $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/sourcecode
-          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqsystemtest.git -b johnfreeman/automatic_integration_testing; cd ..
-          dbt-build  # --unittest done elsewhere; --lint unavailable due to llvm being too large for images
 
-          git clone https://github.com/DUNE-DAQ/drunc.git -b johnfreeman/automatic_integration_testing
-          cd drunc; pip install -U . ; cd ..
+          # Choosing daqconf semi-arbitrarily (it builds quickly)
+          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf.git -b johnfreeman/automatic_integration_testing; cd ..
+          dbt-build
 
-          git clone https://github.com/DUNE-DAQ/integrationtest.git -b johnfreeman/automatic_integration_testing
-          cd integrationtest; pip install -U . ; cd ..
-
-          source env.sh
-          pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/3ru_1df_multirun_test.py
+          pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
+          pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/3ru_3df_multirun_test.py
 
     - name: upload build log file
       uses: actions/upload-artifact@v4
