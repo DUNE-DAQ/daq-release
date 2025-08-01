@@ -65,7 +65,7 @@ jobs:
           cp -pr $GITHUB_WORKSPACE/DUNE-DAQ/$REPO $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/sourcecode
 
           # Choosing daqconf semi-arbitrarily (it builds quickly)
-          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf.git -b johnfreeman/automatic_integration_testing; cd ..
+          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf; cd ..
           dbt-build
 
           pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
