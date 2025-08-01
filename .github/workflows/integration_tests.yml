@@ -154,7 +154,13 @@ jobs:
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
 
         mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        ls -l /tmp/pytest-of-dunedaq/pytest-current || true
+        echo "About to call echo"
+        echo $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        echo "Survived"
+        mkdir -p $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        #cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/)/* $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
 
         chmod -R 755 $PERSISTENT_LOG_DIR
         if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
