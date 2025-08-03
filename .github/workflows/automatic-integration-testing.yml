@@ -3,15 +3,6 @@ name: automatic-integration-testing
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  push:
-    branches: 
-      - johnfreeman/workflow_sandbox*
-    paths-ignore:
-      - 'docs/**'
-      - '.github/**'
-  pull_request:
-    branches: [ johnfreeman/workflow_sandbox ]
-
   workflow_dispatch:
 
 jobs:
