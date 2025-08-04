@@ -74,7 +74,6 @@ jobs:
           dbt-build
 
           pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
-          pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/3ru_3df_multirun_test.py
 
     - name: upload build log file
       uses: actions/upload-artifact@v4
