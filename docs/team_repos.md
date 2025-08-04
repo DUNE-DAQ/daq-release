@@ -7,7 +7,7 @@
     * cibmodules
 
 ## ccm
-* **People to contact**: Pierre Lasorak, Alex Tapper
+* **People to contact**: Alex Tapper
 * **Repositories with write access**:
     * appfwk
     * appmodel
@@ -155,5 +155,5 @@
     * wibmod
 
 
-Page was generated at: 13/06/2025 14:44:42
+Page was generated at: 04/08/2025 11:26:11
 
