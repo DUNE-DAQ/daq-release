@@ -91,6 +91,7 @@ jobs:
                         "minimal_system_quick_test",
                         "readout_type_scan",
                         "small_footprint_quick_test",
+                        "tpreplay_test",
                         "tpstream_writing_test"
                        ]
     defaults:
