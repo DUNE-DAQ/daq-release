@@ -89,7 +89,7 @@ jobs:
                         "fake_data_producer_test",
                         "long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan",
+                        "readout_type_scan_test",
                         "small_footprint_quick_test",
                         "tpreplay_test",
                         "tpstream_writing_test"
