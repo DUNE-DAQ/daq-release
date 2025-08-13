@@ -1,6 +1,7 @@
 import argparse
 import os
 import requests
+import sys
 
 from spack.dr_tools import get_packages
 
@@ -16,7 +17,7 @@ def main():
 
     if GITHUB_TOKEN is None:
         print("GITHUB_TOKEN environment variable is not set.")
-        return
+        sys.exit(1)
 
     headers = {
         "Accept": "application/vnd.github+json",
