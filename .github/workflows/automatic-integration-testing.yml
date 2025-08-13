@@ -73,10 +73,11 @@ jobs:
           cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf; cd ..
           ls -ltr ..
           cd sourcecode
-          ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group coredaq
-          #../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --py-modules --package-group fddaq
+          python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group coredaq
+          #python ../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --py-modules --package-group fddaq
           dbt-build
           dbt-workarea-env
+          dbt-info sourcecode
 
           pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
 
