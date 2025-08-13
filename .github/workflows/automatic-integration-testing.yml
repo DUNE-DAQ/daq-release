@@ -77,7 +77,7 @@ jobs:
           cd sourcecode
           python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group coredaq
           cd ..
-          python ../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --py-modules --package-group pymodules
+          python ../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group pymodules
           dbt-build
           dbt-workarea-env
           dbt-info sourcecode
