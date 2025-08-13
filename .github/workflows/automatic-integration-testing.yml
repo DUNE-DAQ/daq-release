@@ -3,6 +3,15 @@ name: automatic-integration-testing
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
+  push:
+    branches: 
+      - johnfreeman/workflow_sandbox*
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+  pull_request:
+    branches: [ johnfreeman/workflow_sandbox ]
+
   workflow_dispatch:
 
 jobs:
@@ -13,7 +22,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5"
+          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG"
             os_name: "a9"
     container:
       image: ${{ matrix.image }}
@@ -36,7 +45,12 @@ jobs:
           export REPO=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5 || true
-          release_name="last_fddaq"
+          echo "DBT_ROOT == $DBT_ROOT" || true
+          ls -ltr /cvmfs/dunedaq-development.opensciencegrid.org/nightly
+          uname -a
+          echo "$0"
+
+          release_name=INTGFD_DEV_250801_A9
 
           if [[ -n $( sed -r -n '/- name: '$REPO'$/p' daq-release/configs/nddaq/nddaq-develop/release.yaml ) ]] ; then release_name="last_nddaq"; fi
 
@@ -54,7 +68,17 @@ jobs:
           source env.sh
           test $REPO == "dbe" && spack load dbe
           cp -pr $GITHUB_WORKSPACE/DUNE-DAQ/$REPO $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/sourcecode
-          dbt-build  # --unittest done elsewhere; --lint unavailable due to llvm being too large for images
+
+          # Choosing daqconf semi-arbitrarily (it builds quickly)
+          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf; cd ..
+          ls -ltr ..
+          cd sourcecode
+          ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group coredaq
+          #../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --py-modules --package-group fddaq
+          dbt-build
+          dbt-workarea-env
+
+          pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py
 
     - name: upload build log file
       uses: actions/upload-artifact@v4
