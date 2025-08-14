@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 import requests
@@ -31,10 +33,6 @@ def main():
     branch = args.branch
     verbose = args.verbose
     package_group = args.package_group
-
-    if package_group not in ["coredaq", "fddaq", "pymodules"]:
-        print(f"ERROR: package group \"{package_group}\" not known")
-        sys.exit(2)
 
     repos_to_clone = []
 
