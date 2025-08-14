@@ -42,9 +42,6 @@ jobs:
         
     - name: setup dev area
       run: |
-          echo "github.head_ref == ${{ github.head_ref }}"
-          echo "github.ref == ${{ github.ref }}"
-          echo "github.base_ref == ${{ github.base_ref }}"
           export REPO=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5 || true
@@ -74,13 +71,15 @@ jobs:
           test $REPO == "dbe" && spack load dbe
           cp -pr $GITHUB_WORKSPACE/DUNE-DAQ/$REPO $GITHUB_WORKSPACE/dev-${{ matrix.os_name }}/sourcecode
 
-          # Choosing daqconf semi-arbitrarily (it builds quickly)
-          cd sourcecode; git clone https://github.com/DUNE-DAQ/daqconf; cd ..
-          ls -ltr ..
           cd sourcecode
-          python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group coredaq
+          python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch ${{ github.head_ref }} --package-group coredaq
+          python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch ${{ github.head_ref }} --package-group fddaq
           cd ..
-          python ../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch johnfreeman/sandbox --package-group pymodules
+          mkdir tmp
+          cd tmp
+          python ../../daq-release/scripts/clone_all_packages_with_branch.py --verbose --branch ${{ github.head_ref }} --package-group pymodules
+          ls
+          cd ..
           dbt-build
           dbt-workarea-env
           dbt-info sourcecode
