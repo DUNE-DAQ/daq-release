@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG"
+          - image: "ghcr.io/dune-daq/nightly-release-alma9:development_v5INTG2"
             os_name: "a9"
     container:
       image: ${{ matrix.image }}
@@ -50,7 +50,7 @@ jobs:
           uname -a
           echo "$0"
 
-          release_name=INTGFD_DEV_250801_A9
+          release_name=INTG2FD_DEV_250814_A9
 
           if [[ -n $( sed -r -n '/- name: '$REPO'$/p' daq-release/configs/nddaq/nddaq-develop/release.yaml ) ]] ; then release_name="last_nddaq"; fi
 
