@@ -5,12 +5,12 @@ name: automatic-integration-testing
 on:
   push:
     branches: 
-      - johnfreeman/workflow_sandbox*
+      - johnfreeman/workflow_sandbox3
     paths-ignore:
       - 'docs/**'
       - '.github/**'
   pull_request:
-    branches: [ johnfreeman/workflow_sandbox ]
+    branches: [ johnfreeman/workflow_sandbox3 ]
 
   workflow_dispatch:
 
@@ -42,6 +42,9 @@ jobs:
         
     - name: setup dev area
       run: |
+          echo "github.head_ref == ${{ github.head_ref }}"
+          echo "github.ref == ${{ github.ref }}"
+          echo "github.base_ref == ${{ github.base_ref }}"
           export REPO=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5 || true
