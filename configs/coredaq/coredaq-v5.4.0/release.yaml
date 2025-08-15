@@ -188,7 +188,7 @@
           version: v4.5.0
           commit: null
         - name: trigger
-          version: v2.4.0
+          version: v2.5.0
           commit: null
         - name: triggeralgs
           version: v1.5.1
