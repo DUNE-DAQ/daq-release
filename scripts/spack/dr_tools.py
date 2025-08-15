@@ -19,4 +19,5 @@ def get_packages(yaml_file, package_group):
 
     pkgs = rdict[package_group]
 
-    return [pkg["name"] for pkg in pkgs]
+    return [pkg["name"] for pkg in pkgs if pkg.get("source", "github_DUNE-DAQ") == "github_DUNE-DAQ"]
+
