@@ -97,8 +97,8 @@ jobs:
       run: |
         cd $DBT_AREA_ROOT/
         source env.sh
-        dbt-workarea-env
         spack load dbe
+        dbt-workarea-env
         dbt-build --unittest
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
         ../daq-release-unittests/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
