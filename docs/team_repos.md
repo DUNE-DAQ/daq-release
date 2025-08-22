@@ -7,11 +7,10 @@
     * cibmodules
 
 ## ccm
-* **People to contact**: Alex Tapper
+* **People to contact**: Alex Tapper, Marco Roda
 * **Repositories with write access**:
     * appfwk
     * appmodel
-    * cider
     * cmdlib
     * conffwk
     * confmodel
@@ -26,12 +25,10 @@
     * elisa_client_api
     * ers
     * erskafka
-    * fddaqconf
     * flx-k8s-device-plugin
     * grafana-dashboards
     * kafkaopmon
     * logging
-    * nanorc
     * oks
     * oksconflibs
     * oksdalgen
@@ -57,7 +54,6 @@
     * dfmessages
     * dfmodules
     * dpdklibs
-    * fddaqconf
     * fdreadoutlibs
     * fdreadoutmodules
     * hdf5libs
@@ -72,8 +68,6 @@
     * ndreadoutmodules
     * performancetest
     * rawdatautils
-    * readoutlibs
-    * readoutmodules
     * serialization
     * snbmodules
     * tpglibs
@@ -88,7 +82,7 @@
 ## daphne
 * **People to contact**: Marco Roda, Manuel Arroyave
 * **Repositories with write access**:
-    * daphe-firmware
+    * daphne-firmware
     * daphne-os
     * daphnemodules
     * sspmodules
@@ -155,5 +149,5 @@
     * wibmod
 
 
-Page was generated at: 04/08/2025 11:26:11
+Page was generated at: 22/08/2025 12:10:10
 
