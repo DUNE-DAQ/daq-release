@@ -176,7 +176,7 @@
           version: v3.1.6
           commit: null
         - name: dfmodules
-          version: v5.0.0
+          version: v5.0.1
           commit: null
         - name: hsilibs
           version: v4.9.0
@@ -194,7 +194,7 @@
           version: v1.5.1
           commit: null
         - name: trgtools
-          version: v2.2.1
+          version: v2.2.2
           commit: null
         - name: hdf5libs
           version: v3.3.2
@@ -224,7 +224,7 @@
           version: v3.8.0
           commit: null
         - name: dbe
-          version: v1.6.0
+          version: v1.6.1
           commit: null
         - name: daqconf
           version: v8.6.1
