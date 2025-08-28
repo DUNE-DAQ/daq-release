@@ -81,9 +81,6 @@ jobs:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/candidate-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
-            output_image: "ghcr.io/dune-daq/candidate-release-alma9"
-            tag: latest
     needs: build_the_candidate_release_spack
     environment: dockerhub
     permissions:
@@ -145,6 +142,7 @@ jobs:
             ${{ matrix.output_image }}
           tags: |
             type=raw,value=${{ matrix.tag }}
+            type=raw,value=latest
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
