@@ -111,7 +111,7 @@ jobs:
     - name: Configure GitHub Pages
       uses: actions/configure-pages@v5
     - name: Upload pages artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v4
       with:
         path: ${{ github.workspace }}/daq-release-ci-dashboard/scripts/github-ci/site
     - name: Deploy to GitHub Pages
