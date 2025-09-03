@@ -232,19 +232,19 @@
 
     others:
         - name: daq-release
-          version: "develop"
+          version: v3.1.0
           commit: null
         - name: daq-buildtools
-          version: "develop"
+          version: v8.9.7
           commit: null
         - name: daqsystemtest
-          version: "develop"
+          version: v4.5.0
           commit: null
         - name: pocket
           version: "develop"
           commit: null
         - name: microservices
-          version: "develop"
+          version: v3.1.0
           commit: null
         - name: dqm-backend
           version: "develop"
