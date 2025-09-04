@@ -143,6 +143,7 @@ jobs:
             ${{ matrix.output_image }}
           tags: |
             type=raw,value=${{ matrix.tag }}
+            type=raw,value=latest
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
