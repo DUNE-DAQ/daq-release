@@ -18,15 +18,25 @@ function git_checkout_and_update_ci {
   for repo in "${repo_list[@]}"; do
     irepo_arr=(${repo})
     repo_name=${irepo_arr[0]//_/-}
+    if [[ "$repo_name" == "elisa-client-api" ]]; then
+      repo_name="elisa_client_api"
+    fi
     echo "--------------------------------------------------------------"
     echo "********************* $repo_name *****************************"
-    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b $branch || exit 3
-    pushd ${repo_name}
+    git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b "$branch" || exit 3
+    pushd "${repo_name}"
     mkdir -p .github/workflows
-    cp $src_workflow_file .github/workflows/$dest_workflow_file
-    git add .github/workflows
-    git commit -am "Syncing .github/workflows/$(basename $dest_workflow_file)"
-    git push --quiet || exit 4
+    if diff -q "$src_workflow_file" ".github/workflows/$dest_workflow_file" > /dev/null; then
+      echo "The workflow "$dest_workflow_file" in "$repo_name" is already up to date; continuing..."
+      popd
+      continue
+    fi
+    echo "Would overwrite $dest_workflow_file in $repo_name"
+    #cp "$src_workflow_file" ".github/workflows/$dest_workflow_file"
+    #git add .github/workflows
+    #git commit -am "Syncing .github/workflows/$(basename $dest_workflow_file)"
+    #git push --quiet || exit 4
     popd
   done
+  echo "Sync complete"
 }
