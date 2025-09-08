@@ -31,10 +31,12 @@ function git_checkout_and_update_ci {
       popd > /dev/null
       continue
     fi
+    echo "Syncing $dest_workflow_file..."
     cp "$src_workflow_file" ".github/workflows/$dest_workflow_file"
     git add .github/workflows
     git commit -am "Sync .github/workflows/$(basename $dest_workflow_file)"
     git push --quiet || exit 4
+    echo "Done"
     popd > /dev/null
   done
   echo "Sync complete"
