@@ -232,7 +232,7 @@
 
     others:
         - name: daq-release
-          version: v3.1.0
+          version: v3.1.1
           commit: null
         - name: daq-buildtools
           version: v8.9.7
@@ -240,14 +240,8 @@
         - name: daqsystemtest
           version: v4.5.0
           commit: null
-        - name: pocket
-          version: "develop"
-          commit: null
         - name: microservices
           version: v3.1.0
-          commit: null
-        - name: dqm-backend
-          version: "develop"
           commit: null
         - name: grafana-dashboards
           version: "develop"
