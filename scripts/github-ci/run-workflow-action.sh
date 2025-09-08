@@ -24,40 +24,36 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh || exit $?
 
 if [[ "$run_pymodules" == "true" ]]; then
-    packages_to_run=( "${dune_packages_with_ci[@]}" "${dune_pymodules[@]}" )
+    packages_to_run=( "${dune_pymodules[@]}" )
 else
     packages_to_run=( "${dune_packages_with_ci[@]}" )
 fi
 
 if [[ $DEVLINE == "develop" && "$workflow_file" == *v4* ]]; then
     echo "ERROR: $workflow_file is not a develop-line workflow." >&2
-    exit 2
+    exit 3
 elif [[ $DEVLINE == "production_v4" && "$workflow_file" != *v4* ]]; then
     echo "ERROR: $workflow_file is not a production_v4 workflow." >&2
-    exit 3
+    exit 4
 fi
 if [[ $action != "sync" && $action != "trigger" && $action != "disable" ]]; then
     echo "ERROR: $action is not a valid action argument. Available options are sync, trigger, or disable" >&2
-    exit 4
+    exit 5
 fi
 
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 pushd $tmp_dir
 
-git clone https://github.com/DUNE-DAQ/.github.git || exit 5
+git clone https://github.com/DUNE-DAQ/.github.git || exit 6
 existing_workflow_templates=$(ls .github/workflow-templates/*.yml | xargs -n 1 basename)
 if ! echo "$existing_workflow_templates" | grep -xq "${workflow_file}"; then
     echo "ERROR: $workflow_file is not a valid workflow file name. The available options are:" >&2
     echo $existing_workflow_templates >&2
-    exit 6
+    exit 7
 fi
 
-extra_info=""
-if [[ "$run_pymodules" == "true" ]]; then
-    extra_info=", including ${#dune_pymodules[@]} Python packages"
-fi
-read -r -p "This action will $action the workflow $workflow_file in ${#packages_to_run[@]} packages$extra_info. Proceed? (y/N): " response
-[[ "$response" != "y" && "$response" != "Y" ]] && { echo "Action canceled."; exit 7; }
+read -r -p "This action will $action the workflow $workflow_file in ${#packages_to_run[@]} packages. Proceed? (y/N): " response
+[[ "$response" != "y" && "$response" != "Y" ]] && { echo "Action canceled."; exit 8; }
 
 if [[ $action == "sync" ]]; then
     source $SCRIPT_DIR/sync-ci-workflow-to-template.sh
@@ -69,5 +65,5 @@ else
     echo "WARNING: No action taken. If this is unexpected, check your syntax or contact software coordination."
 fi
 
-popd
+popd > /dev/null
 rm -rf $tmp_dir
