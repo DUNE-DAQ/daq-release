@@ -237,6 +237,9 @@
         - name: linkify-it-py
           version: 2.0.3
           source:  pypi
+        - name: lxml
+          version: 5.1.0
+          source:  pypi
         - name: markdown-it-py
           version: 3.0.0
           source:  pypi
