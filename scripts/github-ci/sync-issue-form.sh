@@ -37,12 +37,8 @@ pushd $tmp_dir
 
 git clone https://github.com/DUNE-DAQ/.github.git -b amogan/new_templates dunedaq_github || exit 6
 src_issue_dir=$(readlink -f dunedaq_github/issue-templates)
-# Allow for individual repos to have their own set of forms to sync, separate from the generic ones
-special_cases=($(ls -d $src_issue_dir/*/ | tr "/" " "))
-echo "ls of source dir: $(ls $src_issue_dir)"
-echo "Found special cases: ${special_cases[@]}"
 
-ORG="andrewmogan"
+ORG="DUNE-DAQ"
 for REPO in "${repo_list[@]}"; do
     echo "REPO: $REPO..."
     if [[ "$REPO" == "elisa-client-api" ]]; then
@@ -52,9 +48,10 @@ for REPO in "${repo_list[@]}"; do
     echo "********************* $REPO *****************************"
     git clone --quiet https://github.com/${ORG}/${REPO}.git || exit 3
     pushd "${REPO}" > /dev/null
-    if [[ -d ${src_issue_dir}/${REPO} ]];
-      src_issue_dir=$(readlink -f dunedaq_github/issue-templates/$REPO)
-      echo "$REPO has its own issue forms, so will sync from"
+    if [[ -d "${src_issue_dir}/${REPO}" ]]; then
+      readlink -f ../dunedaq_github/issue-templates/$REPO
+      src_issue_dir="$(readlink -f ../dunedaq_github/issue-templates/$REPO)"
+      echo "$REPO has its own issue forms, so will sync from $src_issue_dir"
     fi
     dest_issue_dir=".github/ISSUE_TEMPLATE"
     mkdir -p .github/ISSUE_TEMPLATE
@@ -68,8 +65,8 @@ for REPO in "${repo_list[@]}"; do
     git status
     git add "$dest_issue_dir"
     git status
-    #git commit -am "Sync issue form templates"
-    #git push --quiet || exit 4
+    git commit -am "Sync issue form templates"
+    git push --quiet || exit 4
     echo "Done with $REPO"
     popd > /dev/null
 done
