@@ -67,7 +67,7 @@ GitHub Projects are described [here](https://docs.github.com/en/issues/planning-
 6. **Target Date**
     * This field indicates the date by which the work is expected to reach the “Ready to Merge” state.  
 7. **Parent Issue (for PRs)**
-    * This field is used to link a child Pull Request to a parent Issue.  This is needed because GitHub currently does not provide this functionality.  The format that should be used is “DUNE-DAQ/<repo_name>#<Issue_number>”, for example, DUNE-DAQ/daq-deliverables#188.  This format helps GitHub display the text as a link, in certain cases.
+    * This field is used to link a child Pull Request to a parent Issue.  This is needed because GitHub currently does not provide this functionality.  The format that should be used is 'DUNE-DAQ/<repo_name>#<Issue_number>', for example, DUNE-DAQ/daq-deliverables#188.  This format helps GitHub display the text as a link, in certain cases.
 
 ## Status Field Values for fddaq-v5.5.0
 
