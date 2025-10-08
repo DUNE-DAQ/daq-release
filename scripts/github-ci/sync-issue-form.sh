@@ -40,7 +40,6 @@ src_issue_dir=$(readlink -f dunedaq_github/issue-templates)
 
 ORG="DUNE-DAQ"
 for REPO in "${repo_list[@]}"; do
-    echo "REPO: $REPO..."
     if [[ "$REPO" == "elisa-client-api" ]]; then
       REPO="elisa_client_api"
     fi
@@ -54,22 +53,25 @@ for REPO in "${repo_list[@]}"; do
       echo "$REPO has its own issue forms, so will sync from $src_issue_dir"
     fi
     dest_issue_dir=".github/ISSUE_TEMPLATE"
-    mkdir -p .github/ISSUE_TEMPLATE
+    mkdir -p "$dest_issue_dir"
     if diff -rq "$src_issue_dir" "$dest_issue_dir" > /dev/null; then
       echo "The issue forms in "$repo_name" are already up to date; continuing..."
       popd > /dev/null
       continue
     fi
     echo "Copying contents of $src_issue_dir into $(pwd)/${dest_issue_dir}"
-    cp "$src_issue_dir"/* "$dest_issue_dir"
+    echo "LS:"
+    ls "$src_issue_dir"/*
+    cp "$src_issue_dir"/*.yml "$dest_issue_dir"
     git status
     git add "$dest_issue_dir"
     git status
-    git commit -am "Sync issue form templates"
-    git push --quiet || exit 4
+    #git commit -am "Sync issue form templates"
+    #git push --quiet || exit 4
     echo "Done with $REPO"
     popd > /dev/null
 done
 
 popd > /dev/null
+rm -rf $tmp_dir
 echo "Done"
