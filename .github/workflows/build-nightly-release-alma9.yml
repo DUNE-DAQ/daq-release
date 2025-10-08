@@ -319,22 +319,11 @@ jobs:
     steps:
     - name: cleanup tarballs from daq.fnal.gov
       run: |
-        echo "=========BEGIN DEBUG============"
-        echo "PWD: $(pwd)"
-        echo "ls: $(ls -l)"
-        echo "Is there a directory called tarballs_for_upload?"
-        if [[ -d "$(find . -name tarballs_for_upload -type d)" ]]; then
-          echo "Yes, here: $(find . -name tarballs_for_upload -type d)"
-        else
-          echo "Nope lol"
-        fi
-        echo "Github workspace is ${{ github.workspace }}"
-        echo "ls -l github workspace:"
-        ls -l ${{ github.workspace }}
         files_older_than_30_days=$(find "${{ github.workspace }}/tarballs_for_upload" -name "*.tar.gz" -mtime +30 -print)
         echo "Found the following files older than 30 days:"
         echo "$files_older_than_30_days"
         if [[ -n "$files_older_than_30_days" ]]; then
+          echo "Removing $(files_older_than_30_days)"
           rm -f "$files_older_than_30_days"
         fi
 
