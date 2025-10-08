@@ -116,15 +116,6 @@ jobs:
         name: nightly_fddaq
         path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.detector_tag}}.tar.gz
 
-    - name: cleanup tarballs from daq.fnal.gov
-      run: |
-        files_older_than_30_days=$(find "${{ github.workspace }}/tarballs_for_upload" -name "*.tar.gz" -mtime +30 -print)
-        echo "Found the following files older than 30 days:"
-        echo "$files_older_than_30_days"
-        if [[ -n "$files_older_than_30_days" ]]; then
-          rm -f "$files_older_than_30_days"
-        fi
-
   update_image:
     name: update_spack_image_nightly
     runs-on: daq
@@ -319,3 +310,31 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_tarballs:
+    name: cleanup tarballs from runner
+    runs-on: daq
+    if: always()
+    needs: publish_to_cvmfs
+    steps:
+    - name: cleanup tarballs from daq.fnal.gov
+      run: |
+        echo "=========BEGIN DEBUG============"
+        echo "PWD: $(pwd)"
+        echo "ls: $(ls -l)"
+        echo "Is there a directory called tarballs_for_upload?"
+        if [[ -d "$(find . -name tarballs_for_upload -type d)" ]]; then
+          echo "Yes, here: $(find . -name tarballs_for_upload -type d)"
+        else
+          echo "Nope lol"
+        fi
+        echo "Github workspace is ${{ github.workspace }}"
+        echo "ls -l github workspace:"
+        ls -l ${{ github.workspace }}
+        files_older_than_30_days=$(find "${{ github.workspace }}/tarballs_for_upload" -name "*.tar.gz" -mtime +30 -print)
+        echo "Found the following files older than 30 days:"
+        echo "$files_older_than_30_days"
+        if [[ -n "$files_older_than_30_days" ]]; then
+          rm -f "$files_older_than_30_days"
+        fi
+
