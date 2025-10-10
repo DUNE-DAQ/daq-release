@@ -169,7 +169,7 @@
           version: 0.20.0
           source:  pypi
         - name: googleapis-common-protos
-          version: 1.66.0
+          version: 1.70.0
           source:  pypi
         - name: google-auth
           version: 2.36.0
@@ -178,13 +178,13 @@
           version: 3.1.1
           source:  pypi
         - name: grpcio
-          version: 1.68.0
+          version: 1.75.0
           source:  pypi
         - name: grpcio-status
-          version: 1.68.0
+          version: 1.75.0
           source:  pypi
         - name: grpcio-tools
-          version: 1.68.0
+          version: 1.75.0
           source:  pypi
         - name: gunicorn
           version: 23.0.0
@@ -295,7 +295,7 @@
           version: 1.5.0
           source:  pypi
         - name: protobuf
-          version: 5.29.0
+          version: 6.32.1
           source:  pypi
         - name: psutil
           version: 6.1.0
