@@ -279,6 +279,9 @@
         - name: pandas
           version: 2.2.3
           source:  pypi
+        - name: paramiko
+          version: 4.0.0
+          source:  pypi
         - name: pexpect
           version: 4.9.0
           source:  pypi
