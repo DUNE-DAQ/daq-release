@@ -3,11 +3,15 @@
 set -euo pipefail
 
 usage() {
-    echo "Usage: $0 <repo_list>"
-    echo
-    echo "Arguments:"
-    echo "  repo_list    : Repository or repositories in which to sync the issue form. Use 'all' to sync issue forms in all repos, or a single repo name (e.g., 'trigger')."
-    exit 1
+  local prog=$(basename $0)
+  cat <<EOF
+Usage: $prog <repo_list>
+
+Arguments:
+  repo_list: Repository or repositories in which to sync the issue form. 
+             Use 'all' to sync issue forms in all repos, or a single repo name (e.g., 'trigger').
+EOF
+  exit 1
 }
 
 if [[ $# -eq 0 || $# -gt 1 ]]; then
@@ -35,8 +39,7 @@ esac
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 pushd $tmp_dir
 
-git clone https://github.com/DUNE-DAQ/.github.git -b amogan/new_templates dunedaq_github || exit 6
-src_issue_dir=$(readlink -f dunedaq_github/issue-templates)
+git clone https://github.com/DUNE-DAQ/.github.git dunedaq_github || exit 6
 
 ORG="DUNE-DAQ"
 for REPO in "${repo_list[@]}"; do
@@ -47,27 +50,24 @@ for REPO in "${repo_list[@]}"; do
     echo "********************* $REPO *****************************"
     git clone --quiet https://github.com/${ORG}/${REPO}.git || exit 3
     pushd "${REPO}" > /dev/null
+
+    src_issue_dir=$(readlink -f ../dunedaq_github/issue-templates)
     if [[ -d "${src_issue_dir}/${REPO}" ]]; then
-      readlink -f ../dunedaq_github/issue-templates/$REPO
       src_issue_dir="$(readlink -f ../dunedaq_github/issue-templates/$REPO)"
-      echo "$REPO has its own issue forms, so will sync from $src_issue_dir"
+      echo "Syncing custom issue forms for $REPO..."
     fi
+
     dest_issue_dir=".github/ISSUE_TEMPLATE"
     mkdir -p "$dest_issue_dir"
     if diff -rq "$src_issue_dir" "$dest_issue_dir" > /dev/null; then
-      echo "The issue forms in "$repo_name" are already up to date; continuing..."
+      echo "The issue forms in "$REPO" are already up to date; continuing..."
       popd > /dev/null
       continue
     fi
-    echo "Copying contents of $src_issue_dir into $(pwd)/${dest_issue_dir}"
-    echo "LS:"
-    ls "$src_issue_dir"/*
     cp "$src_issue_dir"/*.yml "$dest_issue_dir"
-    git status
     git add "$dest_issue_dir"
-    git status
-    #git commit -am "Sync issue form templates"
-    #git push --quiet || exit 4
+    git commit -am "Sync issue form templates"
+    git push --quiet || exit 4
     echo "Done with $REPO"
     popd > /dev/null
 done
