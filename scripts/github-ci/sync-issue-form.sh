@@ -30,6 +30,15 @@ case "$arg" in
   all)
     repo_list=( "${coredaq_packages[@]}" "${fddaq_packages[@]}" "${python_packages[@]}" )
     ;;
+  coredaq)
+    repo_list=( "${coredaq_packages[@]}" )
+    ;;
+  fddaq)
+    repo_list=( "${fddaq_packages[@]}" )
+    ;;
+  pymodules)
+    repo_list=( "${dune_pymodules[@]}" )
+    ;;
   *)
     echo "INFO: interpreting $arg as the name of a single repo name since it doesn't match an umbrella name."
     repo_list=( "$arg" )
@@ -39,7 +48,7 @@ esac
 tmp_dir=$(mktemp -d -t cvmfs_dunedaq_release_XXXXXXXXXX)
 pushd $tmp_dir
 
-git clone https://github.com/DUNE-DAQ/.github.git dunedaq_github || exit 6
+git clone https://github.com/DUNE-DAQ/.github.git dunedaq_github || exit 2
 
 ORG="DUNE-DAQ"
 for REPO in "${repo_list[@]}"; do
