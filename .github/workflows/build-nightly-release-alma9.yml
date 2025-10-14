@@ -310,3 +310,20 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_tarballs:
+    name: cleanup tarballs from runner
+    runs-on: daq
+    if: always()
+    needs: publish_to_cvmfs
+    steps:
+    - name: cleanup tarballs from daq.fnal.gov
+      run: |
+        files_older_than_30_days=$(find "${{ github.workspace }}/tarballs_for_upload" -name "*.tar.gz" -mtime +30 -print)
+        echo "Found the following files older than 30 days:"
+        echo "$files_older_than_30_days"
+        if [[ -n "$files_older_than_30_days" ]]; then
+          echo "Removing $(files_older_than_30_days)"
+          rm -f "$files_older_than_30_days"
+        fi
+
