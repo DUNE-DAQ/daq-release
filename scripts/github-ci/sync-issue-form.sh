@@ -9,7 +9,9 @@ Usage: $prog <repo_list>
 
 Arguments:
   repo_list: Repository or repositories in which to sync the issue form. 
-             Use 'all' to sync issue forms in all repos, or a single repo name (e.g., 'trigger').
+             Use 'all' to sync issue forms in all repos, 'coredaq' for all
+             coredaq packages, 'fddaq' for all fddaq packages, 'pymodules' 
+             for python packages, or a single repo name (e.g., 'trigger').
 EOF
   exit 1
 }
