@@ -30,7 +30,7 @@ source $SCRIPT_DIR/repo.sh
 arg="$1"
 case "$arg" in
   all)
-    repo_list=( "${coredaq_packages[@]}" "${fddaq_packages[@]}" "${python_packages[@]}" )
+    repo_list=( "${coredaq_packages[@]}" "${fddaq_packages[@]}" "${dune_pymodules[@]}" )
     ;;
   coredaq)
     repo_list=( "${coredaq_packages[@]}" )
@@ -63,21 +63,33 @@ for REPO in "${repo_list[@]}"; do
     pushd "${REPO}" > /dev/null
 
     src_issue_dir=$(readlink -f ../dunedaq_github/issue-templates)
+    src_pr_dir=$(readlink -f ../dunedaq_github/pull-request-templates/)
     if [[ -d "${src_issue_dir}/${REPO}" ]]; then
       src_issue_dir="$(readlink -f ../dunedaq_github/issue-templates/$REPO)"
       echo "Syncing custom issue forms for $REPO..."
     fi
+    if [[ -d "${src_pr_dir}/${REPO}" ]]; then
+      src_pr_dir="$(readlink -f ../dunedaq_github/pull-request-templates/$REPO)"
+      echo "Syncing custom pull request forms for $REPO..."
+    fi
 
     dest_issue_dir=".github/ISSUE_TEMPLATE"
+    dest_pr_dir=".github/"
+
     mkdir -p "$dest_issue_dir"
-    if diff -rq "$src_issue_dir" "$dest_issue_dir" > /dev/null; then
-      echo "The issue forms in "$REPO" are already up to date; continuing..."
+    cp "$src_issue_dir"/*.yml "$dest_issue_dir"
+    git add "$dest_issue_dir"
+
+    cp "$src_pr_dir"/pull_request_template.md "$dest_pr_dir"
+    git add "$dest_pr_dir/pull_request_template.md"
+
+    git status
+    if ! git commit -am "Sync issue forms and PR template"; then
+      echo "The issue forms and PR template in "$REPO" are already up to date; continuing..."
       popd > /dev/null
       continue
     fi
-    cp "$src_issue_dir"/*.yml "$dest_issue_dir"
-    git add "$dest_issue_dir"
-    git commit -am "Sync issue form templates"
+
     git push --quiet || exit 4
     echo "Done with $REPO"
     popd > /dev/null
