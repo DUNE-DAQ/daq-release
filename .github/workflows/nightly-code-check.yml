@@ -70,7 +70,7 @@ jobs:
         dbt-clang-format.sh . --view-differences-only --markdown-summary
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         if-no-files-found: error
         name: clang_formatting_summary
@@ -102,7 +102,7 @@ jobs:
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
 
     - name: Upload pytest summary
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         if-no-files-found: error
         name: pytest_summary
