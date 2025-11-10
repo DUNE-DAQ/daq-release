@@ -16,5 +16,4 @@ cmake_to_spack = {
 
 pyvenv_url_names = {
     "elisa-client-api": {"repo_name": "elisa_client_api"},
-    "connectivityserver": {"egg_name": "connection-service"},
 }

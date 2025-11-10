@@ -120,6 +120,9 @@
         - name: daq-assettools
           version: develop
           source:  github_DUNE-DAQ
+        - name: daqpytools
+          version: develop
+          source:  github_DUNE-DAQ
         - name: docker
           version: 7.1.0
           source:  pypi

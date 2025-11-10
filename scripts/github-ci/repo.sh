@@ -14,10 +14,14 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 packages_with_ci_single_string=$( $SCRIPT_DIR/../list_packages.py $DEVLINE coredaq )" "$( $SCRIPT_DIR/../list_packages.py $DEVLINE fddaq )  #" "$( $SCRIPT_DIR/../list_packages.py $DEVLINE nddaq )
+coredaq_packages_single_string=$( $SCRIPT_DIR/../list_packages.py $DEVLINE coredaq )
+fddaq_packages_single_string=$( $SCRIPT_DIR/../list_packages.py $DEVLINE fddaq )
 dune_pymodules_single_string=$( $SCRIPT_DIR/../list_packages.py $DEVLINE pymodules )
 
 read -r -a dune_packages_with_ci <<< $packages_with_ci_single_string
 read -r -a dune_pymodules <<< $dune_pymodules_single_string
+read -r -a coredaq_packages <<< $coredaq_packages_single_string
+read -r -a fddaq_packages <<< $fddaq_packages_single_string
 
 dune_packages=(
   "${dune_packages_with_ci[@]}"

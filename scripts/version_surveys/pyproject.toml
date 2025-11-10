@@ -11,7 +11,7 @@ click = ">=8.1.7"
 click-didyoumean = ">=0.3.0"
 click-shell = ">=2.1"
 colorama = ">=0.4.4"
-connection-service = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"}
+connectivityserver = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"}
 daq-assettools = {git = "https://github.com/DUNE-DAQ/daq-assettools"}
 deepdiff = ">=6.3.1"
 drunc = {git = "https://github.com/DUNE-DAQ/drunc"}
