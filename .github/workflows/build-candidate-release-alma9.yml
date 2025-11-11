@@ -38,7 +38,7 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.base-release }}-rc${{ github.event.inputs.build-number }}-a9
           export DET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/${DET}daq-${{ github.event.inputs.det-release }}-rc${{ github.event.inputs.build-number }}-a9
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
+          source daq-release/scripts/spack/release-setup-tools.sh
 
           daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-${{ github.event.inputs.base-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS

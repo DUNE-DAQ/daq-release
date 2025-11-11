@@ -82,7 +82,7 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
-        source daq-release/.github/workflows/wf-setup-tools.sh
+        source daq-release/scripts/spack/release-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}

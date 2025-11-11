@@ -40,7 +40,7 @@ if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
 fi
 
 export DAQ_RELEASE_REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../..
-. $DAQ_RELEASE_REPO/.github/workflows/wf-setup-tools.sh || exit 3
+. $DAQ_RELEASE_REPO/scripts/spack/release-setup-tools.sh || exit 3
 
 if [[ $DET == "core" ]]; then
     export SPACK_AREA=$BASE_SPACK_AREA
