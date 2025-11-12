@@ -139,7 +139,7 @@ jobs:
         fi
 
         pytest_retval=0
-        pytest -v -s --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
+        pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
 
         mkdir -p $PERSISTENT_LOG_DIR
