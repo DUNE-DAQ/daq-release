@@ -66,5 +66,6 @@ set(build_order "daq-cmake"
 		"ctbmodules"
 		"tdemodules"
 		"daqsystemtest"
+                "snbmodules"
 )
 

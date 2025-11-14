@@ -36,6 +36,9 @@
         - name: rawdatautils
           version: "develop"
           commit: null
+        - name: snbmodules
+          version: "develop"
+          commit: null
         - name: sspmodules
           version: "develop"
           commit: null

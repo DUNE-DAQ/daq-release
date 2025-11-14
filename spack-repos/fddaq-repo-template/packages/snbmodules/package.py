@@ -8,7 +8,7 @@ from spack import *
 
 
 class Snbmodules(CMakePackage):
-    """The HERMES core modules and control libraries."""
+    """Utilities and plugins for SNB data transfer and format conversion (transform)"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/packages/snbmodules/"
     git =      "https://github.com/DUNE-DAQ/snbmodules.git"
