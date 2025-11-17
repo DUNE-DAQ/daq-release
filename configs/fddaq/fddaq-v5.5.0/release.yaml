@@ -13,7 +13,7 @@
           version: v4.7.0
           commit: null
         - name: dpdklibs
-          version: v2.3.4 ### TODO UPDATE THIS DO NOT FORGET ###
+          version: v2.3.4
           commit: null
         - name: asiolibs
           version: v1.2.1
