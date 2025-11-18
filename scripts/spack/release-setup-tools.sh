@@ -1,58 +1,33 @@
 
-if [[ -z $BASE_RELEASE_DIR || -z $DET_RELEASE_DIR || -z $OS ]]; then
-    echo "You need to define the release's BASE_RELEASE_DIR, DET_RELEASE_DIR and OS variables for this script to source correctly; returning..." >&2
+if [[ -z $CORE_RELEASE_DIR || -z $TARGET_RELEASE_DIR || -z $OS ]]; then
+    echo "You need to define the release's CORE_RELEASE_DIR, TARGET_RELEASE_DIR and OS variables for this script to source correctly; returning..." >&2
     return 1
 fi
 
-if [[ $BASE_RELEASE_DIR =~ "_DEV_" ]]; then
+if [[ $CORE_RELEASE_DIR =~ "_DEV_" ]]; then
     export RELEASE_TYPE="nightly"
-elif [[ $BASE_RELEASE_DIR =~ "_PROD4_" ]]; then
-    export RELEASE_TYPE="production_v4"
-elif [[ $BASE_RELEASE_DIR =~ "/candidate" ]]; then
+elif [[ $CORE_RELEASE_DIR =~ "/candidate" ]]; then
     export RELEASE_TYPE="candidate"
-elif [[ $BASE_RELEASE_DIR =~ "/release" ]]; then
+elif [[ $CORE_RELEASE_DIR =~ "/release" ]]; then
     export RELEASE_TYPE="stable"
 else
-    echo "Provided BASE_RELEASE_DIR \"${BASE_RELEASE_DIR}\" appears nonstandard and cannot be parsed; returning..." >&2
+    echo "Provided CORE_RELEASE_DIR \"${CORE_RELEASE_DIR}\" appears nonstandard and cannot be parsed; returning..." >&2
     return 10
 fi
 
-echo "Deduced release type \"${RELEASE_TYPE}\" from the name of the base release directory"
+echo "Deduced release type \"${RELEASE_TYPE}\" from the name of the coredaq directory"
 
-export BASE_RELEASE_TAG=$( basename $BASE_RELEASE_DIR )
-echo "Assuming base release tag is $BASE_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${BASE_RELEASE_DIR})"
+export CORE_RELEASE_TAG=$( basename $CORE_RELEASE_DIR )
+export TARGET_RELEASE_TAG=$( basename $TARGET_RELEASE_DIR )
 
-export DET_RELEASE_TAG=$( basename $DET_RELEASE_DIR )
-echo "Assuming detector release tag is $DET_RELEASE_TAG (i.e. the same name as the lowest-level directory in the path ${DET_RELEASE_DIR})"
-
-if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 production nightly, externals v2.0
-    export EXT_VERSION=v2.0
-    export GCC_VERSION=12.1.0
-elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.2
-    export EXT_VERSION=v2.2
-    export GCC_VERSION=13.2.0
-elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or stable, externals v2.0
-    export EXT_VERSION=v2.0
-    export GCC_VERSION=12.1.0
-elif [[ $OS == almalinux9 ]]; then                                  # Alma9 v5 candidate or stable, externals v2.1 
-    export EXT_VERSION=v2.2
-    export GCC_VERSION=13.2.0
-elif [[ $OS == scientific7 ]]; then                                 # SL7 _any_, externals v1.1
-    export EXT_VERSION=v1.1
-    export GCC_VERSION=12.1.0
-else
-    echo "Environment variable \"OS\" set to unknown operating system \"$OS\"; returning..." >&2
-    return 5
-fi
-
-echo "Using externals version $EXT_VERSION"
-
+export EXT_VERSION=v2.2
+export GCC_VERSION=13.2.0
 export SPACK_VERSION=0.22.0
 
 export SPACK_EXTERNALS=${SPACK_EXTERNALS:-/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}}
 
-export DET_SPACK_AREA=$DET_RELEASE_DIR
-export BASE_SPACK_AREA=$BASE_RELEASE_DIR
+export TARGET_SPACK_AREA=$TARGET_RELEASE_DIR
+export CORE_SPACK_AREA=$CORE_RELEASE_DIR
 
 function get_spack() {
 
@@ -65,21 +40,16 @@ function get_spack() {
   tar xf v${SPACK_VERSION}.tar.gz
   rm -f v${SPACK_VERSION}.tar.gz
   
-  ln -s spack-${SPACK_VERSION} spack-installation
-  mkdir spack-${SPACK_VERSION}/default
-  pushd spack-${SPACK_VERSION}/default
-  ln -s ../spack-installation
-  popd
+  #ln -s spack-${SPACK_VERSION} spack-installation
+  #mkdir spack-${SPACK_VERSION}/default
+  #pushd spack-${SPACK_VERSION}/default
+  #ln -s ../spack-installation
+  #popd
 }
 
 function daqify_spack_environment() {
   
-   release_level=$1
-
-   if [[ -z $release_level || ("$release_level" != "base" && "$release_level" != "det") ]]; then
-       echo "You need to pass daqify_spack_environment either \"base\" or \"det\" to specify whether to set up for a base release or a detector release" >&2
-      return 4 
-   fi
+   local umbrella_package=$1
 
    if [[ ! -e spack-${SPACK_VERSION}/share/spack/setup-env.sh ]]; then
        echo "Can't find spack-${SPACK_VERSION}/share/spack/setup-env.sh; you may be calling daqify_spack_environment from the wrong directory ($PWD). Contents are as follows:"
@@ -97,13 +67,13 @@ function daqify_spack_environment() {
    echo "*********** spack arch ************ "
    spack arch
 
-   if [[ "$release_level" == "base" ]]; then
+   if [[ "$umbrella_package" == "coredaq" ]]; then
 
    echo "Deleting $SPACK_ROOT/etc/spack/defaults/repos.yaml to remake it"
    rm -f $SPACK_ROOT/etc/spack/defaults/repos.yaml
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
 repos:
-  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${CORE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
   - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
   - \$spack/var/spack/repos/builtin
 EOF
@@ -116,20 +86,20 @@ upstreams:
     install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
 
-    elif [[ "$release_level" == "det" ]]; then
+    else
 
    cat <<EOF > $SPACK_ROOT/etc/spack/defaults/repos.yaml 
 repos:
-  - ${DET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
-  - ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${TARGET_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
+  - ${CORE_SPACK_AREA}/spack-${SPACK_VERSION}/spack-repo
   - ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/spack-repo-externals
   - \$spack/var/spack/repos/builtin
 EOF
 
    cat <<EOF  >> $SPACK_ROOT/etc/spack/defaults/upstreams.yaml  
 upstreams:
-  ${BASE_RELEASE_TAG}:
-    install_tree: ${BASE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
+  ${CORE_RELEASE_TAG}:
+    install_tree: ${CORE_SPACK_AREA}/spack-${SPACK_VERSION}/opt/spack
   spack-externals:
     install_tree: ${SPACK_EXTERNALS}/spack-${SPACK_VERSION}/opt/spack
 EOF
@@ -138,10 +108,10 @@ EOF
 
     spack repo list
 
-    if [[ "$release_level" == "base" ]]; then
-        SPACK_AREA=$BASE_SPACK_AREA
+    if [[ "$umbrella_package" == "coredaq" ]]; then
+        SPACK_AREA=$CORE_SPACK_AREA
     else
-        SPACK_AREA=$DET_SPACK_AREA
+        SPACK_AREA=$TARGET_SPACK_AREA
     fi
 
     cp $SPACK_EXTERNALS/spack-${SPACK_VERSION}/etc/spack/defaults/linux/compilers.yaml \
@@ -157,41 +127,21 @@ EOF
 
 function get_release_yaml() {
 
-    release_level=$1
-
-    if [[ -z $release_level || ("$release_level" != "base" && "$release_level" != "fd" && "$release_level" != "nd") ]]; then
-        echo "You need to pass \"get_release_yaml\" either \"base\", \"fd\" or \"nd\" to get it to find the release's YAML file. Returning..." >&2
-        return 1
-    fi
+    local umbrella_package=$1
 
     version=""
     if [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
-        if [[ $release_level == "base" ]]; then
-            version=$( echo $BASE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
+        if [[ $umbrella_package == "coredaq" ]]; then
+            version=$( echo $CORE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
         else
-            version=$( echo $DET_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )
+            version=$( echo $TARGET_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )
 	fi
     fi
 
-    if [[ $release_level == "base" ]]; then
-
-        if [[ $RELEASE_TYPE == "nightly" ]]; then
-            echo -n "configs/coredaq/coredaq-develop/release.yaml"
-        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
-            echo -n "configs/coredaq/coredaq-production_v4/release.yaml"
-	elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
-            echo -n "configs/coredaq/coredaq-${version}/release.yaml"
-        fi
-
-    else
-
-        if [[ $RELEASE_TYPE == "nightly" ]]; then
-            echo -n "configs/${release_level}daq/${release_level}daq-develop/release.yaml"
-        elif [[ $RELEASE_TYPE == "production_v4" ]]; then
-            echo -n "configs/${release_level}daq/${release_level}daq-production_v4/release.yaml"
-        elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
-            echo -n "configs/${release_level}daq/${release_level}daq-${version}/release.yaml"
-        fi
+    if [[ $RELEASE_TYPE == "nightly" ]]; then
+        echo -n "configs/${umbrella_package}/${umbrella_package}-develop/release.yaml"
+    elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
+            echo -n "configs/${umbrella_package}/${umbrella_package}-${version}/release.yaml"
     fi
 }
 

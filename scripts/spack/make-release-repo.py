@@ -111,9 +111,9 @@ class DAQRelease:
         self.overwrite_daq_cmake = overwrite_daq_cmake
         self.rtype = self.rdict["type"]
 
-    def set_release(self, release_name, base_release=""):
-        if base_release != "":
-                self.rdict["base_release"] = base_release
+    def set_release(self, release_name, core_release=""):
+        if core_release != "":
+                self.rdict["core_release"] = core_release
         self.rdict["release"] = release_name
 
     def copy_release_yaml(self, repo_path, update_hash=False):
@@ -284,8 +284,8 @@ class DAQRelease:
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "coredaq":
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["base_release"]} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]
@@ -315,9 +315,9 @@ class DAQRelease:
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return
 
-    def generate_repo(self, outdir, tempdir, update_hash, release_name, base_release):
+    def generate_repo(self, outdir, tempdir, update_hash, release_name, core_release):
         if release_name is not None:
-            self.set_release(release_name, base_release)
+            self.set_release(release_name, core_release)
         self.copy_release_yaml(outdir, update_hash)
         self.generate_repo_file(outdir)
         self.generate_daq_package(outdir, tempdir)
@@ -388,8 +388,8 @@ if __name__ == "__main__":
                         help="whether to generate file containing bash array for python modules;")
     parser.add_argument('--pyvenv-requirements', action='store_true',
                         help="whether to generate requirements file for pyvenv;")
-    parser.add_argument('--base-release',
-                        help="base release name")
+    parser.add_argument('--core-release',
+                        help="core release name")
 
     args = parser.parse_args()
 
@@ -409,4 +409,4 @@ if __name__ == "__main__":
     else:
         daq_release.generate_repo(args.output_path, args.template_path,
                                   args.update_hash, args.release_name,
-                                  args.base_release)
+                                  args.core_release)
