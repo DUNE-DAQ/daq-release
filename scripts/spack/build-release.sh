@@ -106,10 +106,10 @@ fi
 # skipping the logging of a spec in that case
 
 if [[ -z $BUILDCACHE_DIR ]]; then
-    spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${DET}daq_log.txt 2>&1
+    spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
     retval=$?
 
-    cat $SPACK_AREA/spec_${DET}daq_log.txt 
+    cat $SPACK_AREA/spec_${NAME}_log.txt 
 
     if [[ $retval != 0 ]]; then
 	exit 20
@@ -139,7 +139,7 @@ max_attempts=3
 while true; do
     echo " --- ${NAME} build attempt number $attempt of $max_attempts --- "
 
-    spack install --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee dunedaq_build_spack_install.log || true
+    spack install --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee ${NAME}_build_spack_install.log || true
     spack_install_exit_code=${PIPESTATUS[0]}
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
@@ -148,7 +148,7 @@ while true; do
     else 
         echo "Spack has exited with code $spack_install_exit_code. Checking if this is a retryable error..."
     fi
-    if grep -qi "==> Error: FetchError: All fetchers failed" dunedaq_build_spack_install.log; then
+    if grep -qi "==> Error: FetchError: All fetchers failed" ${NAME}_build_spack_install.log; then
         echo "Attempt $attempt failed due to a FetchError."
         if [[ $attempt -lt $max_attempts ]]; then 
             echo "Retrying..."
