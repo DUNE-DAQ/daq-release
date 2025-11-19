@@ -40,7 +40,7 @@ function get_spack() {
   tar xf v${SPACK_VERSION}.tar.gz
   rm -f v${SPACK_VERSION}.tar.gz
   
-  #ln -s spack-${SPACK_VERSION} spack-installation
+  ln -s spack-${SPACK_VERSION} spack-installation
   #mkdir spack-${SPACK_VERSION}/default
   #pushd spack-${SPACK_VERSION}/default
   #ln -s ../spack-installation
