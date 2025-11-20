@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 import yaml
 import argparse
 import subprocess
@@ -187,8 +187,7 @@ class DAQCheckoutPackage:
         else:
             print(f"{self.checkout_path}: No [project] section found in pyproject.toml")
             return None
-
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         prog='checkout-daq-package.py',
         description="Tool for checking out DAQ package(s).",
@@ -229,4 +228,9 @@ if __name__ == "__main__":
     print("Successfully checked out", success_count ,"packages to", checkout_area.path)
     if checkout_area.packages_with_errors:
         print("The following packages had one or more errors:", checkout_area.packages_with_errors)
+        return 1
+    return 0
 
+
+if __name__ == "__main__":
+    sys.exit(main())
