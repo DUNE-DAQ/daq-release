@@ -1,0 +1,75 @@
+---
+    release: coredaq-develop
+
+    type: coredaq
+
+    externals:
+        - name: boost
+          version: 1.85.0
+          variant: "cxxstd=2a"
+        - name: cetlib
+          version: 3.18.01
+          variant: "+lite"
+        - name: trace
+          version: 3.17.14
+          variant: ~
+        - name: highfive
+          version: 2.9.0
+          variant: "+mpi"
+        - name: hdf5
+          version: 1.14.3
+          variant: "+mpi+threadsafe"
+        - name: libarchive
+          version: 3.7.1
+          variant: "crypto=systemssl"
+        - name: py-pybind11
+          version: 2.12.0
+          variant: ~
+        - name: protobuf
+          version: 4.24.4
+          variant: ~
+        - name: fmt
+          version: 8.1.1
+          variant: "cxxstd=17 shared=True"
+        - name: libevent
+          version: 2.1.12
+          variant: "~openssl"
+
+    devtools:
+        - name: cmake
+          version: 3.26.3
+          variant: "~ownlibs"
+        - name: gdb
+          version: 14.1 
+          variant: "~python"
+        - name: ninja
+          version: 1.10.0
+          variant: ~
+
+    systems:
+        - name: python
+          version: 3.10.10
+          variant: "~ssl"
+        - name: gcc
+          version: 13.2.0
+          variant: "+binutils"
+
+    coredaq:
+        - name: daq-cmake
+          version: v3.2.1
+          commit: null
+        - name: ers
+          version: "develop"
+          commit: null
+        - name: logging
+          version: "develop"
+          commit: null
+        - name: detdataformats
+          version: "develop"
+          commit: null
+        - name: detchannelmaps
+          version: "develop"
+          commit: null
+        - name: daqdataformats
+          version: "develop"
+          commit: null
