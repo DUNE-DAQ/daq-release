@@ -134,7 +134,7 @@
           version: v1.4.0
           commit: null
         - name: appfwk
-          version: v6.0.0
+          version: v6.0.1
           commit: null
         - name: listrev
           version: v6.1.0
@@ -221,13 +221,13 @@
           version: v2.6.0
           commit: null
         - name: appmodel
-          version: v4.0.0
+          version: v4.0.1
           commit: null
         - name: dbe
-          version: v1.7.0
+          version: v1.7.1
           commit: null
         - name: daqconf
-          version: v8.7.0
+          version: v8.7.1
           commit: null
 
     others:

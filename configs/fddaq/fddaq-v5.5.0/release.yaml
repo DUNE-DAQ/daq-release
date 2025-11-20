@@ -43,7 +43,7 @@
           version: v1.6.1
           commit: null
         - name: daphnemodules
-          version: v3.0.0
+          version: v3.0.1
           commit: null
         - name: tdemodules
           version: v1.1.2
@@ -130,7 +130,7 @@
           version: 7.1.0
           source:  pypi
         - name: drunc
-          version: 1.0.0
+          version: 1.0.1
           source:  github_DUNE-DAQ
         - name: druncschema
           version: 1.0.0
