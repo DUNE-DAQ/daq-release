@@ -24,7 +24,7 @@ class DAQCheckoutArea:
             raise ValueError("Please specify '-a' or '-p <pkg>' option.")
 
         self.release_manifest = release_manifest
-        self.path = path
+        self.path = Path(path)
         self.package = package
         self.all_packages = all_packages
         self.load_pymodules = load_pymodules
@@ -38,12 +38,15 @@ class DAQCheckoutArea:
 
         self.package_list = self.load_packages()
         if package:
-            pkg_entry = next((pkg for pkg in self.package_list if pkg.get("name") == args.package), None)
+            pkg_entry = next((pkg for pkg in self.package_list if pkg.get("name") == self.package), None)
             if not pkg_entry:
                 raise ValueError(textwrap.dedent(f"""
                     Package {self.package} not found in {self.release_manifest}
                     Note that you must pass '-m' or '--pymodules' to load python packages."""))
             self.package_list = [pkg_entry]
+
+        if not self.path.is_dir():
+            self.path.mkdir()
     
     def load_packages(self):
         yaml_dict = parse_yaml_file(self.release_manifest)
@@ -61,8 +64,11 @@ class DAQCheckoutArea:
     def confirm_overwrite(self):
         if not self.config["overwrite"]:
             return
-        target = ", ".join(pkg["name"] for pkg in self.package_list)
-        proceed = input(f"This action will overwrite {target} in {self.path}. Continue? [y/N] ")
+        target = " ".join(pkg["name"] for pkg in self.package_list)
+        packages_to_overwrite = [tgt for tgt in target.split() if Path(f"{self.path}/{tgt}").is_dir()]
+        if not packages_to_overwrite:
+            return
+        proceed = input(f"This action will overwrite {packages_to_overwrite} in {self.path}. Continue? [y/N] ")
         if proceed.lower() not in ("y", "yes"):
             raise RuntimeError("Aborted")
 
