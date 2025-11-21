@@ -46,7 +46,7 @@ class DAQCheckoutArea:
             self.package_list = [pkg_entry]
 
         if not self.path.is_dir():
-            self.path.mkdir()
+            self.path.mkdir(parents=True)
     
     def load_packages(self):
         yaml_dict = parse_yaml_file(self.release_manifest)
