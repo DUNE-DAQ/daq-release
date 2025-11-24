@@ -91,15 +91,20 @@
     <thead>
         <tr>
             <th>Repository</th>
+            <th>Last Commit</th>
             <th>Open Issues</th>
             <th>Open PRs</th>
-            <th>Workflow Status</th>
+            <th>Develop Build Status</th>
         </tr>
     </thead>
     <tbody>
         {% for repo in repos %}
         <tr>
             <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}">{{ repo.repo }}</a></td>
+            <td>
+                {% set label, cls = repo.time_since_last_commit | commit_age %}
+                <span class="{{cls}}">{{label}}</span>
+            </td>
             <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/issues">{{ repo.open_issues }}</a></td>
             <td><a href="https://github.com/DUNE-DAQ/{{ repo.repo }}/pulls">{{ repo.open_prs }}</a></td>
             <td>

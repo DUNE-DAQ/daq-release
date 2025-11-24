@@ -9,6 +9,18 @@ def strip_ansi(line):
     """Strip color coding from unit test summary log."""
     return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
 
+def commit_age(time_since_last_commit):
+    """Categorize the age of the latest commit."""
+    week = 7 * 24 * 60 * 60
+    month = 30 * 24 * 60 * 60
+
+    if time_since_last_commit < week:
+        return ("This week", "status-fresh")
+    elif time_since_last_commit < month:
+        return ("This month", "status-aging")
+    else:
+        return ("More than a month ago", "status-stale")
+
 def parse_unit_test_summary(log_path):
     """Parse unit test summary and store as a dictionary."""
     content_by_package = {}
@@ -103,6 +115,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         repos = json.load(f)
 
     env = Environment(loader=FileSystemLoader("templates"))
+    env.filters["commit_age"] = commit_age
     index_template = env.get_template("index_template.html")
 
     total_issues = sum(repo["open_issues"] for repo in repos)
@@ -134,6 +147,10 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml/badge.svg",
         "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml",
         "alt": "Nightly unit tests and clang format check"},
+    {
+        "image": "https://github.com/DUNE-DAQ/docs/actions/workflows/build-and-publish-doxygen.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/docs/actions/workflows/build-and-publish-doxygen.yml",
+        "alt": "Doxygen"},
     {
         "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml/badge.svg",
         "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml",

@@ -6,8 +6,6 @@ export DEVLINE="develop"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/repo.sh || exit $?
 
-#echo "${dune_packages_with_ci[@]}"
-
 ORG="DUNE-DAQ"
 REPOS=$(gh repo list "$ORG" --limit 100 --json name -q '.[].name')
 OUTFILE="ci_summary.json"
@@ -17,7 +15,7 @@ FIRST=true
 
 for REPO in "${dune_packages_with_ci[@]}"; do
   FULL_NAME="$ORG/$REPO"
-  echo "This repo: $FULL_NAME"
+  echo "Collecting metrics for $FULL_NAME..."
 
   OPEN_ISSUES=$(gh issue list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
   ISSUES_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/issues")
@@ -26,7 +24,10 @@ for REPO in "${dune_packages_with_ci[@]}"; do
 
   # Get most recent single-repo CI build status
   BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow dunedaq-develop-cpp-ci.yml -q '.[0]')
-  echo $?
+
+  now=$(date +%s)
+  last_commit_time=$(date -d "$(gh api repos/$ORG/$REPO/commits --jq '.[0].commit.author.date')" +%s)
+  TIME_SINCE_LAST_COMMIT=$(( now - last_commit_time ))
 
   # Prepare JSON fragment
   JSON_ENTRY=$(jq -n \
@@ -35,6 +36,7 @@ for REPO in "${dune_packages_with_ci[@]}"; do
     --arg issues_url "$ISSUES_URL" \
     --argjson prs "$OPEN_PRS" \
     --arg prs_url "$PRS_URL" \
+    --argjson time_since_last_commit $TIME_SINCE_LAST_COMMIT \
     --argjson build_develop "$BUILD_DEVELOP_STATUS" \
     '{
       repo: $repo,
@@ -42,11 +44,13 @@ for REPO in "${dune_packages_with_ci[@]}"; do
       issues_url: $issues_url,
       open_prs: $prs,
       prs_url: $prs_url,
+      time_since_last_commit: $time_since_last_commit,
       build_develop: $build_develop,
     }')
   retval=$?
 
   if [[ $retval == 0 ]]; then
+    echo "Success"
     if [[ "$FIRST" = true ]]; then
       FIRST=false
     else 
