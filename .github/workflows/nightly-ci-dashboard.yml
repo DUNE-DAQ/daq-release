@@ -94,7 +94,7 @@ jobs:
         cd daq-release-ci-dashboard/scripts/github-ci/
         ./collect-ci-metrics.sh
         ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
-                                        code_check_summary/pytest_summary_table.md \
+                                        code_check_summary/pytest_summary/pytest_summary_table.md \
                                         > combined_pytest_summary.md
         cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
