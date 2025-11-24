@@ -34,19 +34,20 @@ jobs:
       run: |
         lcov_id=$(gh run list --repo DUNE-DAQ/daq-release \
                               --workflow "Weekly code coverage workflow" \
-                              --limit 1 \
+                              --limit 1 --status success \
                               --json databaseId --jq '.[0].databaseId')
         code_check_id=$(gh run list --repo DUNE-DAQ/daq-release \
                                    --workflow nightly-code-check.yml \
-                                   --limit 1 \
+                                   --limit 1 --status success \
                                    --json databaseId --jq '.[0].databaseId')
         integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
                                           --workflow integration_tests.yml \
-                                          --limit 1 \
+                                          --limit 1 --status success \
                                           --json databaseId --jq '.[0].databaseId')
         echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
+
     - name: Download lcov html report
       id: download_lcov
       uses: actions/download-artifact@v6
@@ -55,6 +56,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
         run-id: ${{ steps.run_ids.outputs.lcov_id }}
+        
     - name: Download code check summaries
       id: download_code_checks
       uses: actions/download-artifact@v6
@@ -62,6 +64,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.code_check_summary_path }}
         run-id: ${{ steps.run_ids.outputs.code_check_id }}
+
     - name: Download integration test summary
       id: download_integration_test
       uses: actions/download-artifact@v6
