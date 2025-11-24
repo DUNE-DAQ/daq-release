@@ -84,3 +84,15 @@ a:hover {
 .status-error {
     color: darkorange;
 }
+
+.status-fresh {
+    color: green;
+}
+
+.status-aging {
+    color: #99cc00;
+}
+
+.status-stale {
+    color: darkorange;
+}
