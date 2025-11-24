@@ -135,6 +135,10 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml",
         "alt": "Nightly unit tests and clang format check"},
     {
+        "image": "https://github.com/DUNE-DAQ/docs/actions/workflows/build-and-publish-doxygen.yml/badge.svg",
+        "link": "https://github.com/DUNE-DAQ/docs/actions/workflows/build-and-publish-doxygen.yml",
+        "alt": "Doxygen"},
+    {
         "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml/badge.svg",
         "link": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml",
         "alt": "Weekly linting"},
