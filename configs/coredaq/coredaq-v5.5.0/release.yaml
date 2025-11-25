@@ -170,7 +170,7 @@
           version: v1.10.0
           commit: null
         - name: daqdataformats
-          version: v3.11.0
+          version: v3.12.0
           commit: null
         - name: datahandlinglibs
           version: v3.2.0
