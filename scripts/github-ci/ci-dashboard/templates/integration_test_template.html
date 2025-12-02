@@ -5,7 +5,7 @@
 
 {% block content %}
 <h1>Integration Test Report</h1>
-{% for package, tests in integration_test_results.repo_results.items() %}
+{% for package, tests in repo_results.items() %}
   <h2>{{ package }}</h2>
     <table>
       <thead><tr><th>Test</th><th>Status</th></tr></thead>
