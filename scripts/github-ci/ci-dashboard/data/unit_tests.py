@@ -30,6 +30,15 @@ class UnitTestSummary:
                         self.no_tests.append(repo_name)
                 else:
                     self.other += 1
+        
+    def to_dict(self):
+        return {
+            "passed": self.passed,
+            "failed": self.failed,
+            "other": self.other,
+            "no_tests": self.no_tests,
+            "repo_results": self.repo_results
+        }
 
 def strip_ansi(line):
     """Strip color coding from unit test summary log."""

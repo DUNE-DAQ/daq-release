@@ -17,6 +17,16 @@ class IntegrationTestSummary:
     total: int = 0
     repo_results: dict[str, list[TestCaseResult]] = field(default_factory=dict)
 
+    def to_dict(self):
+        return {
+            "passed": self.passed,
+            "failed": self.failed,
+            "skipped": self.skipped,
+            "errors": self.errors,
+            "total": self.total,
+            "repo_results": self.repo_results
+        }
+
 def parse_integration_test_summary(pytest_summary):
     summary = IntegrationTestSummary()
 
