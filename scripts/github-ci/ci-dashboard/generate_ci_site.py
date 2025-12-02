@@ -7,120 +7,13 @@ from datetime import datetime
 
 from data.integration_tests import parse_integration_test_summary
 from data.unit_tests import parse_unit_test_summary
-
-def strip_ansi(line):
-    """Strip color coding from unit test summary log."""
-    return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
-
-def commit_age(time_since_last_commit):
-    """Categorize the age of the latest commit."""
-    week = 7 * 24 * 60 * 60
-    month = 30 * 24 * 60 * 60
-
-    if time_since_last_commit < week:
-        return ("This week", "status-fresh")
-    elif time_since_last_commit < month:
-        return ("This month", "status-aging")
-    else:
-        return ("More than a month ago", "status-stale")
-
-def parse_unit_test_summary_backup(log_path):
-    """Parse unit test summary and store as a dictionary."""
-    content_by_package = {}
-    current_package = None
-
-    with open(log_path, "r") as f:
-        for line in f:
-            clean_line = strip_ansi(line.strip())
-
-            if "No unit tests" in clean_line:
-                this_package = clean_line.split()[8]
-                test_name = None
-            else:
-                parts = clean_line.split("/")
-                this_package = parts[1]
-                test_name = parts[3].split(".")[0]
-
-            if this_package not in content_by_package:
-                content_by_package[this_package] = []
-
-            if "SUCCESS" in clean_line:
-                content_by_package[this_package].append((test_name, "Passed"))
-            elif "FAILURE" in clean_line:
-                content_by_package[this_package].append((test_name, "Failed"))
-            elif test_name is None:
-                content_by_package[this_package].append((None, "NoTests"))
-
-    return content_by_package
-
-def parse_integration_test_summary_backup(pytest_summary={}):
-    if not pytest_summary:
-        return {
-        "totals": {
-            "total": 0,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "errors": 0,
-        },
-        "results": {}
-    }
-
-    with open(pytest_summary, "r") as f:
-        num_header_lines = 5
-        lines = [line.strip() for line in f if line.strip()]
-        header_lines = lines[:num_header_lines]
-        results_lines = lines[num_header_lines:]
-
-    numbers = [int(re.search(r'\d+', line).group()) for line in header_lines]
-    total, passed, failed, skipped, errors = numbers
-    summary = {
-        "totals": {
-            "total": total,
-            "passed": passed,
-            "failed": failed,
-            "skipped": skipped,
-            "errors": errors,
-        },
-        "results": {}
-    }
-    # Parse test results line by line
-    i = 0
-    while i < len(results_lines):
-        line = results_lines[i]
-        if line.startswith("#"):
-            # Each section represents a new package
-            section_title = re.sub(r"^#+ ", "", line)
-            summary["results"][section_title] = []
-            i += 3  # Skip table header and separator
-
-            # Read test rows until next heading or end of list
-            while i < len(results_lines) and not results_lines[i].startswith("#"):
-                row = results_lines[i]
-                if "|" in row:
-                    columns = [c.strip() for c in row.strip("|").split("|")]
-                    if len(columns) == 2:
-                        test_name, status_col = columns
-                        status = "passed" if "passed" in status_col else "failed" if "failed" in status_col else "skipped" if "skipped" in status_col else "error"
-                        summary["results"][section_title].append({
-                            "name": test_name,
-                            "status": status
-                        })
-                i += 1
-        else:
-            i += 1
-
-    return summary
+from renderer.renderer import Renderer
+from pages.page import Page, IndexPage, UnitTestPage, IntegrationTestPage
 
 def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     """Render html files from templates to generate the site."""
     with open(json_input_path, 'r') as f:
         repos = json.load(f)
-
-    links = {"doxygen": "https://dune-daq.github.io/docs/"}
-    env = Environment(loader=FileSystemLoader("templates"))
-    env.filters["commit_age"] = commit_age
-    env.globals["links"] = links
 
     total_issues = sum(repo["open_issues"] for repo in repos)
     total_prs = sum(repo["open_prs"] for repo in repos)
@@ -162,9 +55,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     ]
 
     unit_test_data = parse_unit_test_summary(unit_test_summary)
-
-    # Parse integration tests
-    integration_test_summary = parse_integration_test_summary(pytest_summary)
+    integration_test_data = parse_integration_test_summary(pytest_summary)
     
     # Content of the index page
     index_context = {
@@ -175,26 +66,18 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "passing_percentage": passing_percentage,
         "workflow_badges": workflow_badges,
         "unit_test_summary": unit_test_data,
-        "integration_test_summary": integration_test_summary,
+        "integration_test_summary": integration_test_data,
     }
 
-    index_template = env.get_template("index_template.html")
-    index_html = index_template.render(index_context)
-    index_path = Path("site/index.html")
-    index_path.parent.mkdir(parents=True, exist_ok=True)
-    index_path.write_text(index_html)
+    pages = [
+        IndexPage(index_context),
+        UnitTestPage(unit_test_data.to_dict()),
+        IntegrationTestPage(integration_test_data.to_dict()),
+    ]
 
-    unit_test_template = env.get_template("unit_test_template.html")
-    unit_test_html = unit_test_template.render(unit_test_data=unit_test_data)
-    unit_test_path = Path("site/unit_test_summary.html")
-    unit_test_path.parent.mkdir(parents=True, exist_ok=True)
-    unit_test_path.write_text(unit_test_html)
-
-    integtest_template = env.get_template("integration_test_template.html")
-    integtest_html = integtest_template.render(integration_test_results=integration_test_summary)
-    integtest_path = Path("site/integtest_summary.html")
-    integtest_path.parent.mkdir(parents=True, exist_ok=True)
-    integtest_path.write_text(integtest_html)
+    renderer = Renderer()
+    for page in pages:
+        page.render(renderer)
 
     print('Done')
 

@@ -11,20 +11,10 @@ class Page:
         renderer.render_page(self.template_name, self.context, output_file)
 
 class IndexPage(Page):
-    def __init__(self, repos, last_updated, total_issues, total_prs, passing_percentage, workflow_badges, unit_test_summary, integration_test_summary):
-        context = {
-            "repos": repos,
-            "last_updated": last_updated,
-            "total_issues": total_issues,
-            "total_prs": total_prs,
-            "passing_percentage": passing_percentage,
-            "workflow_badges": workflow_badges,
-            "unit_test_summary": unit_test_summary,
-            "integration_test_summary": integration_test_summary,
-        }
+    def __init__(self, index_context):
         super().__init__(
             template_name="index_template.html",
-            context=context,
+            context=index_context,
             output_file="index.html"
         )
 
