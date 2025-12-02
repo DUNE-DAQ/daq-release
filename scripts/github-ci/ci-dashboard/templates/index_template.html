@@ -24,25 +24,25 @@
     <div class="summary-block">
       <h3>Integration Tests</h3>
       <p>
-        {{ integration_test_totals.total }} total tests run.<br>
+        {{ integration_test_summary.total }} total tests run.<br>
         <span class="status-success">
-          Passed: {{ integration_test_totals.passed }} 
-          ({{ (100 * integration_test_totals.passed / integration_test_totals.total) | round(1) }}%)
+          Passed: {{ integration_test_summary.passed }} 
+          ({{ (100 * integration_test_summary.passed / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
         <span class="status-failure">
-          Failed: {{ integration_test_totals.failed }} 
-          ({{ (100 * integration_test_totals.failed / integration_test_totals.total) | round(1) }}%)
+          Failed: {{ integration_test_summary.failed }} 
+          ({{ (100 * integration_test_summary.failed / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
         <span class="status-skipped">
-          Skipped: {{ integration_test_totals.skipped }} 
-          ({{ (100 * integration_test_totals.skipped / integration_test_totals.total) | round(1) }}%)
+          Skipped: {{ integration_test_summary.skipped }} 
+          ({{ (100 * integration_test_summary.skipped / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
         <span class="status-error">
-          Errored: {{ integration_test_totals.errors }} 
-          ({{ (100 * integration_test_totals.errors / integration_test_totals.total) | round(1) }}%)
+          Errored: {{ integration_test_summary.errors }} 
+          ({{ (100 * integration_test_summary.errors / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
       </p>
@@ -51,24 +51,24 @@
     <div class="summary-block">
       <h3>Unit Tests</h3>
       <p>
-        {{ unit_test_totals.Total }} tests run. <br>
+        {{ unit_test_summary.total }} tests run. <br>
           <span class="status-success">
-            Passed: {{ unit_test_totals.Passed }} 
-            ({{ (100 * unit_test_totals.Passed // (unit_test_totals.Passed + unit_test_totals.Failed)) }}%)
+            Passed: {{ unit_test_summary.passed }} 
+            ({{ (100 * unit_test_summary.passed // (unit_test_summary.passed + unit_test_summary.failed)) }}%)
             <br>
           </span>
           <span class="status-failure">
-            Failed: {{ unit_test_totals.Failed }} 
-            ({{ (100 * unit_test_totals.Failed // (unit_test_totals.Passed + unit_test_totals.Failed)) }}%)
+            Failed: {{ unit_test_summary.failed }} 
+            ({{ (100 * unit_test_summary.failed // (unit_test_summary.passed + unit_test_summary.failed)) }}%)
             <br>
           </span>
-        {% if unit_test_totals['NoTests']|length > 1 %}
-          <span>{{ unit_test_totals['NoTests']|length }} repos don’t have unit tests.</span>
-        {% elif unit_test_totals['NoTests']|length == 1 %}
+        {% if unit_test_summary.no_tests|length > 1 %}
+          <span>{{ unit_test_summary.no_tests|length }} repos don’t have unit tests.</span>
+        {% elif unit_test_summary.no_tests|length == 1 %}
           <span>1 repo does not have unit tests.</span>
         {% endif %}
-        {% if unit_test_totals.Other > 0 %}
-          <br>{{ unit_test_totals.Other }} repo(s) finished with unknown status.
+        {% if unit_test_summary.other > 0 %}
+          <br>{{ unit_test_summary.other }} repo(s) finished with unknown status.
         {% endif %}
       </p>
     </div>

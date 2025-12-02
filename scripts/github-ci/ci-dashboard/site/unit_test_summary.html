@@ -1,0 +1,90 @@
+<!-- templates/unit_test_template.html -->
+<!-- templates/base_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Test Summary</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Navigation</h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="https://dune-daq.github.io/docs/">Doxygen</a></li>
+      <li><a href="unit_test_summary.html">Unit Test Summary</a></li>
+      <li><a href="integtest_summary.html">Integration Test Summary</a></li>
+      <li><a href="code_coverage/index.html" target="_blank">Code Coverage Report</a></li>
+      <!-- TODO: Add more links -->
+    </ul>
+  </div>
+  <div class="content">
+    
+<h1>Unit Test Report</h1>
+<p>
+  The following packages do not have unit tests written: 
+  
+    <li>timing</li>
+  
+</p>
+
+  <h2>trigger</h2>
+  
+    <table>
+      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        
+          <tr>
+            <td>TriggerTypeAdapters_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  <h2>dfmodules</h2>
+  
+    <table>
+      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        
+          <tr>
+            <td>HDF5FileUtils_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+          <tr>
+            <td>DataStoreFactory_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+          <tr>
+            <td>TriggerRecordBuilderData_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+          <tr>
+            <td>HDF5Write_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+          <tr>
+            <td>DFOModule_test</td>
+            <td>	&#x2705 Passed</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  <h2>timing</h2>
+  
+    <p><strong>&#128679 Unit tests have not been written for <code>timing</code></strong></p>
+  
+
+
+  </div>
+</body>
+</html>

@@ -5,6 +5,9 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 from datetime import datetime
 
+from data.integration_tests import parse_integration_test_summary
+from data.unit_tests import parse_unit_test_summary
+
 def strip_ansi(line):
     """Strip color coding from unit test summary log."""
     return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
@@ -21,7 +24,7 @@ def commit_age(time_since_last_commit):
     else:
         return ("More than a month ago", "status-stale")
 
-def parse_unit_test_summary(log_path):
+def parse_unit_test_summary_backup(log_path):
     """Parse unit test summary and store as a dictionary."""
     content_by_package = {}
     current_package = None
@@ -50,7 +53,7 @@ def parse_unit_test_summary(log_path):
 
     return content_by_package
 
-def parse_integration_test_summary(pytest_summary={}):
+def parse_integration_test_summary_backup(pytest_summary={}):
     if not pytest_summary:
         return {
         "totals": {
@@ -114,9 +117,10 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     with open(json_input_path, 'r') as f:
         repos = json.load(f)
 
+    links = {"doxygen": "https://dune-daq.github.io/docs/"}
     env = Environment(loader=FileSystemLoader("templates"))
     env.filters["commit_age"] = commit_age
-    index_template = env.get_template("index_template.html")
+    env.globals["links"] = links
 
     total_issues = sum(repo["open_issues"] for repo in repos)
     total_prs = sum(repo["open_prs"] for repo in repos)
@@ -157,64 +161,37 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "alt": "Weekly linting"},
     ]
 
-    # Parse and summarize unit test information
-    unit_test_totals = {
-        'Passed': 0,
-        'Failed': 0,
-        'NoTests': [],
-        'Other': 0,
-        'Total': 0,
-    }
-
-    repos_without_unit_tests = []
     unit_test_data = parse_unit_test_summary(unit_test_summary)
-
-    for repo_name, tests in unit_test_data.items():
-        has_tests = False
-        for _, status in tests:
-            if status in {'Passed', 'Failed'}:
-                unit_test_totals[status] += 1
-                unit_test_totals['Total'] += 1
-                has_tests = True
-            elif status == 'NoTests':
-                unit_test_totals['NoTests'].append(repo_name)
-            else:
-                unit_test_totals['Other'] += 1
 
     # Parse integration tests
     integration_test_summary = parse_integration_test_summary(pytest_summary)
-    integration_test_totals = integration_test_summary['totals']
-    integration_test_results = integration_test_summary['results']
     
     # Content of the index page
-    context = {
+    index_context = {
         "repos": repos,
         "last_updated": last_updated,
         "total_issues": total_issues,
         "total_prs": total_prs,
         "passing_percentage": passing_percentage,
-        "links": {
-            "doxygen": "https://dune-daq.github.io/docs/",
-        },
         "workflow_badges": workflow_badges,
-        "unit_test_totals": unit_test_totals,
-        "integration_test_totals": integration_test_summary['totals'],
+        "unit_test_summary": unit_test_data,
+        "integration_test_summary": integration_test_summary,
     }
 
     index_template = env.get_template("index_template.html")
-    index_html = index_template.render(context)
+    index_html = index_template.render(index_context)
     index_path = Path("site/index.html")
     index_path.parent.mkdir(parents=True, exist_ok=True)
     index_path.write_text(index_html)
 
     unit_test_template = env.get_template("unit_test_template.html")
-    unit_test_html = unit_test_template.render(unit_test_data=unit_test_data, no_tests=unit_test_totals['NoTests'], links=context["links"])
+    unit_test_html = unit_test_template.render(unit_test_data=unit_test_data)
     unit_test_path = Path("site/unit_test_summary.html")
     unit_test_path.parent.mkdir(parents=True, exist_ok=True)
     unit_test_path.write_text(unit_test_html)
 
     integtest_template = env.get_template("integration_test_template.html")
-    integtest_html = integtest_template.render(integration_test_results=integration_test_summary['results'], links=context["links"])
+    integtest_html = integtest_template.render(integration_test_results=integration_test_summary)
     integtest_path = Path("site/integtest_summary.html")
     integtest_path.parent.mkdir(parents=True, exist_ok=True)
     integtest_path.write_text(integtest_html)
