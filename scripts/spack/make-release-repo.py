@@ -111,6 +111,11 @@ class DAQRelease:
         self.overwrite_daq_cmake = overwrite_daq_cmake
         self.rtype = self.rdict["type"]
 
+        # Figure out what the full umbrella package is by parsing the yaml file path
+        # e.g., from config/coredaq/fddaq-develop/release.yaml we extract "fddaq"
+        subdir = os.path.basename(os.path.dirname(yaml_file))
+        self.full_umbrella = subdir.split("-")[0]
+
     def set_release(self, release_name, core_release=""):
         if core_release != "":
                 self.rdict["core_release"] = core_release
@@ -248,6 +253,11 @@ class DAQRelease:
             with open(itemp, 'r') as f:
                 lines = f.read()
                 lines = lines.replace("XRELEASEX", self.rdict["release"])
+                lines = lines.replace("XTARGETX", self.full_umbrella)
+
+            possible_subset_qualifier=""
+            if ipkg == 'externals':
+                possible_subset_qualifier=f', when="subset={self.full_umbrella}"'
 
             # now add additional deps:
             for idep in self.rdict[ipkg]:
@@ -257,9 +267,9 @@ class DAQRelease:
                 # version
                 ivar = idep["variant"]
                 if ivar == None:
-                    lines += f'\n    depends_on("{iname}@{iver}")'
+                    lines += f'\n    depends_on("{iname}@{iver}"{possible_subset_qualifier})'
                 else:
-                    lines += f'\n    depends_on("{iname}@{iver} {ivar}")'
+                    lines += f'\n    depends_on("{iname}@{iver} {ivar}"{possible_subset_qualifier})'
             lines += '\n'
             ipkg_dir = os.path.join(repo_dir, ipkg)
             os.makedirs(ipkg_dir)
@@ -280,12 +290,13 @@ class DAQRelease:
         with open(itemp, 'r') as f:
             lines = f.read()
             lines = lines.replace("XRELEASEX", self.rdict["release"])
+            lines = lines.replace("XTARGETX", self.full_umbrella)
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
         if self.rtype != "coredaq":
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
-            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} subset={self.full_umbrella} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
+            lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} subset={self.full_umbrella} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
         for idep in self.rdict[ipkg]:
             iname = idep["name"]
             iver = idep["version"]

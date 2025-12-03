@@ -15,6 +15,48 @@ else
     return 10
 fi
 
+# Deduce what the full umbrella package is based on the name of its repo
+# E.g. /cvmfs/dunedaq-development.opensciencegrid.org/nightly/NFD_DEV_240426_A9 => fddaq
+
+# The name of the full umbrella package will match both the needed
+# value of the "subset" variant for the coredaq and externals
+# packages, as well as the path to the relevant release.yaml files
+
+# E.g., if TARGET gets set to fddaq, that means the
+# release.yaml for the relevant variant of the coredaq umbrella
+# package is in
+#
+# ./configs/coredaq/fddaq-develop/
+#
+# and that the full umbrella package is "fddaq", and it depends on
+# "coredaq subset=fddaq", which in turn depends on "externals subset=fddaq"
+
+export TARGET=
+
+if [[ $RELEASE_TYPE == "nightly" ]]; then
+    export TARGET_ABBREV=$( echo $TARGET_RELEASE_DIR | sed -r 's!.*/.*(FD|ND|FDDU)_.*!\1!' )
+
+    if [[ -z $TARGET_ABBREV ]]; then
+	echo "Unable to intepret abbreviation of full umbrella package from repo path name ${FULL_RELEASE_DIR}; exiting...
+" >&2
+	exit 4
+    fi
+
+    if [[ "$TARGET_ABBREV" == "FD" ]]; then
+	export TARGET="fddaq"
+    elif [[ "$TARGET_ABBREV" == "ND" ]]; then
+	export TARGET="nddaq"
+    elif [[ "$TARGET_ABBREV" == "FDDU" ]]; then
+	export TARGET="fddatautilities"
+    else
+	echo "Unknown full umbrella package abbreviation \"$TARGET_ABBREV\"; exiting..." >&2
+	exit 5
+    fi
+else  # candidate or stable build
+    export TARGET=$( echo $TARGET_RELEASE_DIR | sed -r 's!.*/([^-]+).*!\1!' )
+fi
+
+echo "Deduced full umbrella package as \"${TARGET}\""
 echo "Deduced release type \"${RELEASE_TYPE}\" from the name of the coredaq directory"
 
 export CORE_RELEASE_TAG=$( basename $CORE_RELEASE_DIR )
@@ -127,21 +169,25 @@ EOF
 
 function get_release_yaml() {
 
-    local umbrella_package=$1
-
-    version=""
-    if [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
-        if [[ $umbrella_package == "coredaq" ]]; then
-            version=$( echo $CORE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
-        else
-            version=$( echo $TARGET_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )
-	fi
-    fi
-
+    local name=$1
+    
     if [[ $RELEASE_TYPE == "nightly" ]]; then
-        echo -n "configs/${umbrella_package}/${umbrella_package}-develop/release.yaml"
+	if [[ $name == "coredaq" ]]; then
+            echo -n "configs/coredaq/${TARGET}-develop/release.yaml"	    
+	else
+            echo -n "configs/${TARGET}/${TARGET}-develop/release.yaml"
+	fi
     elif [[ $RELEASE_TYPE == "candidate" || $RELEASE_TYPE == "stable" ]]; then
-            echo -n "configs/${umbrella_package}/${umbrella_package}-${version}/release.yaml"
+	
+	if [[ $name == "coredaq" ]]; then
+	    version=$( echo $CORE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
+            echo -n "configs/coredaq/${TARGET}-${version}/release.yaml"
+	else
+	    version=$( echo $TARGET_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )
+	    echo -n "configs/${TARGET}/${TARGET}-${version}/release.yaml"
+	fi
+    else
+	echo -n "unable/to/find/release.yaml"
     fi
 }
 

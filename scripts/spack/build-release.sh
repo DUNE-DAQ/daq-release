@@ -2,10 +2,11 @@
 
 # JCF, Nov-18-2025: The basic model here is that a Spack umbrella
 # package which people use (e.g., fddaq) always depends on coredaq,
-# which is an umbrella package encompassing our core packages (ers,
-# logging, appfwk, etc.). This script can build either coredaq or an
-# end-product "target" umbrella package; as you might expect, its
-# behavior differs depending on which of the two options is passed.
+# which is itself an umbrella package encompassing our core packages
+# (ers, logging, appfwk, etc.). This script can build either coredaq
+# or an end-product "target" umbrella package; as you might expect,
+# its behavior differs depending on which of the two options is
+# passed.
 
 if (( $# < 4 || $# > 6 )); then
     echo "Usage: $( basename $0 ) <desired coredaq release directory>
@@ -29,6 +30,11 @@ fi
 
 if [[ -n $6 ]]; then
     export BUILDCACHE_DIR=$6
+fi
+
+if [[ -n $BUILDCACHE_DIR ]]; then
+    echo "JCF, Dec-3-2025: buildcache support has been disabled for the time being until it can accommodate the changes in daq-release Issue #500; exiting..." >&2
+    exit 4
 fi
 
 if [[ -n $BUILDCACHE_DIR && ! -d $BUILDCACHE_DIR ]]; then
@@ -106,32 +112,39 @@ fi
 # skipping the logging of a spec in that case
 
 if [[ -z $BUILDCACHE_DIR ]]; then
-    spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
-    retval=$?
 
+    if [[ "$NAME" == "coredaq" ]]; then
+	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
+	retval=$?
+    else
+	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
+	retval=$?
+    fi
     cat $SPACK_AREA/spec_${NAME}_log.txt 
-
+    
     if [[ $retval != 0 ]]; then
 	exit 20
     fi
 fi
 
 build_dbe=false
-if [[ $NAME == "coredaq" && -z $BUILDCACHE_DIR ]]; then
-    spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
-    retval=$?    
+if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
+    if [[ -z $BUILDCACHE_DIR ]]; then
+	spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+	retval=$?    
 
-    cat $SPACK_AREA/spec_dbe_log.txt
+	cat $SPACK_AREA/spec_dbe_log.txt
 
-    if [[ $retval == 0 ]]; then
-	build_dbe=true
+	if [[ $retval == 0 ]]; then
+	    build_dbe=true
+	else
+	    build_dbe=false
+            echo "Building dbe does not appear to be possible. Will exit..."
+	    exit 12
+	fi
     else
-	build_dbe=false
-        echo "Building dbe does not appear to be possible. Will exit..."
-	exit 12
+	build_dbe=true  # Any buildcache provided will be assumed to contain dbe
     fi
-elif [[ $NAME == "coredaq" ]]; then
-    build_dbe=true  # Any buildcache provided will be assumed to contain dbe
 fi
 
 attempt=1
@@ -139,8 +152,13 @@ max_attempts=3
 while true; do
     echo " --- ${NAME} build attempt number $attempt of $max_attempts --- "
 
-    spack install --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee ${NAME}_build_spack_install.log || true
-    spack_install_exit_code=${PIPESTATUS[0]}
+    if [[ $NAME == "coredaq" ]]; then
+	spack install --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee ${NAME}_build_spack_install.log || true
+	spack_install_exit_code=${PIPESTATUS[0]}
+    else
+	spack install --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 +dev 2>&1 | tee ${NAME}_build_spack_install.log || true
+	spack_install_exit_code=${PIPESTATUS[0]}
+    fi
 
     if [[ $spack_install_exit_code -eq 0 ]]; then
         echo "Build succeeded on attempt number $attempt"
