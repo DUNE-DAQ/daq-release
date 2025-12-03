@@ -7,7 +7,7 @@ on:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
   schedule:
-    - cron: "30 10 * * *"
+    - cron: "30 8 * * *"
 
 jobs:
   make_variables:
@@ -35,7 +35,7 @@ jobs:
     name: Run linting and integration tests
     runs-on: daq
     needs: [make_variables, run_unittests]
-    timeout-minutes: 45
+    timeout-minutes: 60
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
     env:

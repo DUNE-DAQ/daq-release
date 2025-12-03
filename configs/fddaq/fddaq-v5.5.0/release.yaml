@@ -13,19 +13,19 @@
           version: v4.7.0
           commit: null
         - name: dpdklibs
-          version: v2.3.4
+          version: v2.3.5
           commit: null
         - name: asiolibs
           version: v1.2.1
           commit: null
         - name: fddetdataformats
-          version: v2.5.0
+          version: v2.6.0
           commit: null
         - name: fdreadoutlibs
-          version: v2.6.3
+          version: v2.7.0
           commit: null
         - name: fdreadoutmodules
-          version: v2.1.6
+          version: v2.2.0
           commit: null
         - name: flxlibs
           version: v2.2.4
@@ -34,7 +34,7 @@
           version: v2.2.3
           commit: null
         - name: rawdatautils
-          version: v2.5.0
+          version: v2.6.0
           commit: null
         - name: snbmodules
           version: v2.0.0
@@ -43,7 +43,7 @@
           version: v1.6.1
           commit: null
         - name: daphnemodules
-          version: v3.0.0
+          version: v3.0.1
           commit: null
         - name: tdemodules
           version: v1.1.2
@@ -130,7 +130,7 @@
           version: 7.1.0
           source:  pypi
         - name: drunc
-          version: 1.0.0
+          version: 1.0.1
           source:  github_DUNE-DAQ
         - name: druncschema
           version: 1.0.0
