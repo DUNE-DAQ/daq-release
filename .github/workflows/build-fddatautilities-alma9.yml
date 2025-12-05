@@ -218,6 +218,7 @@ jobs:
           TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
       run: |
           echo "SKIPPING STANDARD daq-buildtools SETUP TO USE johnfreeman/daq-release_issue500 FEAUTURE BRANCH"
+          rm -rf daq-buildtools
           git clone https://github.com/DUNE-DAQ/daq-buildtools -b johnfreeman/daq-release_issue500
           . ./daq-buildtools/env.sh
           #source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
