@@ -173,7 +173,7 @@
           version: v3.12.0
           commit: null
         - name: datahandlinglibs
-          version: v3.2.0
+          version: v3.2.1
           commit: null
         - name: dfmodules
           version: v5.2.0
@@ -182,7 +182,7 @@
           version: v4.10.0
           commit: null
         - name: timing
-          version: v7.12.0
+          version: v7.12.1
           commit: null
         - name: timinglibs
           version: v4.6.0
