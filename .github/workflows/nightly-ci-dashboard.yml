@@ -86,12 +86,18 @@ jobs:
       with:
         path: daq-release-ci-dashboard
     - name: Copy artifacts and generate dashboard
+      env:
+        CI_DASHBOARD_DIR: daq-release-ci-dashboard/scripts/github-ci/ci-dashboard
       run: |
-        mkdir -p daq-release-ci-dashboard/scripts/github-ci/site
-        cp -r lcov_report daq-release-ci-dashboard/scripts/github-ci/site/code_coverage
-        cp -r code_check_summary/ daq-release-ci-dashboard/scripts/github-ci/code_check_summary
-        cp -r integration_test_summary/ daq-release-ci-dashboard/scripts/github-ci/integration_test_summary
-        cd daq-release-ci-dashboard/scripts/github-ci/
+        echo "Debug: pwd - $(pwd)"
+        echo "Debug: ls - $(ls)"
+        echo "Debug: ls CI_DASHBOARD_DIR - $(ls ${{ env.CI_DASHBOARD_DIR }})"
+        cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
+        cp -r code_check_summary/ ${{ env.CI_DASHBOARD_DIR }}/code_check_summary
+        cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
+        cd ${{ env.CI_DASHBOARD_DIR }}
+        echo "Debug: pwd - $(pwd)"
+        echo "Debug: ls - $(ls)"
         ./collect-ci-metrics.sh
         echo "Collected the following metrics:"
         cat ci_summary.json
