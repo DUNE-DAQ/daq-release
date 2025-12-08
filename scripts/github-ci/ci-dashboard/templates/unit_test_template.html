@@ -11,7 +11,7 @@
     <li>{{ repo }}</li>
   {% endfor %}
 </p>
-{% for package, tests in unit_test_data.items() %}
+{% for package, tests in repo_results.items() %}
   <h2>{{ package }}</h2>
   {% if tests[0][0] is none %}
     <p><strong>&#128679 Unit tests have not been written for <code>{{ package }}</code></strong></p>

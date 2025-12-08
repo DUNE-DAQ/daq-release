@@ -4,7 +4,7 @@ export DEVLINE="develop"
 
 # Store list of packages from repo.sh as dune_packages_with_ci
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $SCRIPT_DIR/repo.sh || exit $?
+source $SCRIPT_DIR/../repo.sh || exit $?
 
 ORG="DUNE-DAQ"
 REPOS=$(gh repo list "$ORG" --limit 100 --json name -q '.[].name')
