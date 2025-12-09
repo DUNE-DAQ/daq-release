@@ -176,7 +176,7 @@
           version: v3.2.1
           commit: null
         - name: dfmodules
-          version: v5.2.0
+          version: v5.2.1
           commit: null
         - name: hsilibs
           version: v4.10.0
@@ -235,7 +235,7 @@
           version: v3.1.4
           commit: null
         - name: daq-buildtools
-          version: v8.9.10
+          version: v8.9.11
           commit: null
         - name: daqsystemtest
           version: v4.7.0
