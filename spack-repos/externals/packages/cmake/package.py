@@ -242,6 +242,7 @@ class Cmake(Package):
         depends_on("libuv@1.10.0:1.10", when="@3.11.0:3.11")
         depends_on("libuv@1.10.0:", when="@3.12.0:")
         depends_on("rhash", when="@3.8.0:")
+        depends_on("jsoncpp build_system=meson", when="@3.2:")
 
     for plat in ["darwin", "linux", "cray"]:
         with when("+ownlibs platform=%s" % plat):
