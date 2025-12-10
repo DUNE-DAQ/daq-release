@@ -94,7 +94,7 @@
 
     devtools:
         - name: cmake
-          version: 3.26.3
+          version: 4.2.0
           variant: "~ownlibs"
         - name: gdb
           version: 14.1 
@@ -108,7 +108,7 @@
           version: 3.10.10
           variant: "~ssl"
         - name: gcc
-          version: 13.2.0
+          version: 15.2.0
           variant: "+binutils"
 
     coredaq:
