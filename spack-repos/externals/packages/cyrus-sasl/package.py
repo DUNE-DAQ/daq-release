@@ -13,9 +13,11 @@ class CyrusSasl(AutotoolsPackage):
 
     homepage = "https://github.com/cyrusimap/cyrus-sasl"
     url = "https://github.com/cyrusimap/cyrus-sasl/archive/cyrus-sasl-2.1.27.tar.gz"
+    git = "https://github.com/cyrusimap/cyrus-sasl.git"
 
     license("custom")
 
+    version("fddaq-v5.6.0", commit="ac0c278817a082c625c496ec812318c019e0b96f")
     version("2.1.28", sha256="3e38933a30b9ce183a5488b4f6a5937a702549cde0d3287903d80968ad4ec341")
     version("2.1.27", sha256="b564d773803dc4cff42d2bdc04c80f2b105897a724c247817d4e4a99dd6b9976")
     version("2.1.26", sha256="7c14d1b5bd1434adf2dd79f70538617e6aa2a7bde447454b90b84ac5c4d034ba")
@@ -23,20 +25,7 @@ class CyrusSasl(AutotoolsPackage):
     version("2.1.24", sha256="1df15c492f7ecb90be49531a347b3df21b041c2e0325dcc4fc5a6e98384c40dd")
     version("2.1.23", sha256="b1ec43f62d68446a6a5879925c63d94e26089c5a46cd83e061dd685d014c7d1f")
 
-    # JCF, Dec-10-2025: see https://github.com/spack/spack/pull/47019
-    # for an explanation of my manual addition of this patch and the
-    # conflict (long story short, the patch is needed to build
-    # cyrus-sasl for gcc 14 onwards)
-
-    # cyrus-fix-time-headers.patch is downloaded from https://github.com/cyrusimap/cyrus-sasl/commit/266f0acf7f5e029afbb3e263437039e50cd6c262.patch?full_index=1
-
-    patch(
-        "cyrus-fix-time-headers.patch",
-        sha256="819342fe68475ac1690136ff4ce9b73c028f433ae150898add36f724a8e2274b",
-        when="@2.1.27:",
-    )
-
-    conflicts("%gcc@14:", when="@:2.1.26")
+    conflicts("%gcc@14:", when="@:2.1.28")
 
     depends_on("m4", type="build")
     depends_on("autoconf", type="build")
