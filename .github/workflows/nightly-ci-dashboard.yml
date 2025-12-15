@@ -50,7 +50,7 @@ jobs:
 
     - name: Download lcov html report
       id: download_lcov
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: code_coverage
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
         
     - name: Download code check summaries
       id: download_code_checks
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.code_check_summary_path }}
@@ -67,7 +67,7 @@ jobs:
 
     - name: Download integration test summary
       id: download_integration_test
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: nightly_integtest_summary
         github-token: ${{ secrets.GITHUB_TOKEN }}
