@@ -3,8 +3,8 @@
 # Example usage:
 
 # docker run -it --name <some useful name> \
-    # -e "EXT_VERSION=2.2" -e "DAQ_RELEASE=EXT2.2ADD" \
-    # -e "SPACK_VERSION=0.22.0" -e "GCC_VERSION=13.2.0" -e "ARCH=linux-almalinux9-x86_64" \
+    # -e "EXT_VERSION=2.3" -e "DAQ_RELEASE=EXT2.3ADD" \
+    # -e "SPACK_VERSION=0.22.0" -e "GCC_VERSION=14.3.0" -e "ARCH=linux-almalinux9-x86_64" \
     # -v <location of freshly-checked-out daq-release repo>:/daq-release \
     # -v <location of local directory for log output>:/log \
     # -v <location of local area for installation>:/cvmfs/dunedaq.opensciencegrid.org \
@@ -171,7 +171,9 @@ dpdk_spec="dpdk max_lcores=512"
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+echo "JCF, Dec-12-2025: FOR DEVELOPMENT PURPOSES, SKIPPING llvm BUILD FOR NOW" >&2
+umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec"
 
 echo $umbrella_spec
 
