@@ -21,6 +21,8 @@ class MsgpackC(CMakePackage):
     depends_on('googletest', type='test')
     depends_on('boost', when='@7.0.0:')
 
+    patch("update_cmake_minimum_required.patch", when="@3.3.0", sha256="35c18b96d7c96eac7007cdb2df9a9078c4eb4eaf448b2c5765e54edca88b25f0")
+    
     def cmake_args(self):
         args = [
             "-DCMAKE_CXX_FLAGS=-Wno-implicit-fallthrough",

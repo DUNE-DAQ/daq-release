@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 846b444..4a0e579 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.16)
++cmake_minimum_required (VERSION 3.26)
+ project (glog
+   VERSION 0.6.0
+   DESCRIPTION "C++ implementation of the Google logging module"
+diff --git a/cmake/GetCacheVariables.cmake b/cmake/GetCacheVariables.cmake
+index ead3589..7adfedc 100644
+--- a/cmake/GetCacheVariables.cmake
++++ b/cmake/GetCacheVariables.cmake
+@@ -1,5 +1,5 @@
+ cmake_policy (PUSH)
+-cmake_policy (VERSION 3.3)
++cmake_policy (VERSION 3.26)
+ 
+ include (CMakeParseArguments)
+ 
