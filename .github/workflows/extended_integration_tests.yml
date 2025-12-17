@@ -95,6 +95,8 @@ jobs:
 
     - name: Create build area
       run: |
+        echo "PWD: $(pwd)"
+        echo "ls: $(ls)"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
@@ -113,7 +115,6 @@ jobs:
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../daq-release-extended-tests/scripts
-        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
@@ -212,6 +213,8 @@ jobs:
       - name: Remove daq-release
         run: |
           rm -rf ${{ github.workspace }}/daq-release-extended-tests/
+          pwd
+          ls -lrt ${{ needs.make_variables.outputs.tag }}
           rm -rf ${{ needs.make_variables.outputs.tag }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
