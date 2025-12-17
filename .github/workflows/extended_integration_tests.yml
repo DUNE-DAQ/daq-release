@@ -82,6 +82,7 @@ jobs:
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+      PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
     defaults:
       run:
         shell: bash
@@ -113,10 +114,10 @@ jobs:
         source env.sh
         cd ../daq-release-extended-tests/scripts
         #cd ${{ github.workspace }}/daq-release-code-checks/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
@@ -134,6 +135,19 @@ jobs:
         echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
         echo "integtest_log_dir: $integtest_log_dir"
 
+    - name:
+      id: move_logs
+      run: |
+        mkdir -p $PERSISTENT_LOG_DIR
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-*/) $PERSISTENT_LOG_DIR/
+
+        chmod -R 755 $PERSISTENT_LOG_DIR
+        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
+          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
+          rm -rf $PERSISTENT_LOG_DIR
+          exit 2
+        fi
+
   parse_and_upload_results:
     runs-on: daq
     if: always()
@@ -144,13 +158,13 @@ jobs:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
       run: |
         cd daq-release-extended-tests/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
+        python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
-        name: nightly_integtest_summary
+        name: nightly_extended_integtest_summary
         path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
 
   store_and_upload_logs:
@@ -197,7 +211,8 @@ jobs:
           #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
-          rm -rf ${{ github.workspace }}/daq-release-integtest/
+          rm -rf ${{ github.workspace }}/daq-release-extended-tests/
+          rm -rf ${{ needs.make_variables.outputs.tag }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
