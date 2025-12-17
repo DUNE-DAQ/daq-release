@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bad2b00..9c699b3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.26.3)
+ # Note: this is a header only library. If you have an older CMake than 3.4,
+ # just add the CLI11/include directory and that's all you need to do.
+ 
+diff --git a/book/code/CMakeLists.txt b/book/code/CMakeLists.txt
+index 987d53c..4dec5cd 100644
+--- a/book/code/CMakeLists.txt
++++ b/book/code/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.11)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ project(CLI11_Examples LANGUAGES CXX)
+ 
+diff --git a/test_package/CMakeLists.txt b/test_package/CMakeLists.txt
+index 48f6d99..27ce416 100644
+--- a/test_package/CMakeLists.txt
++++ b/test_package/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project(PackageTest CXX)
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+ conan_basic_setup()

@@ -28,6 +28,7 @@ class Highfive(CMakePackage):
 
     patch('cmake_deps.patch', sha256='84200e200e56f90ce91f0bceb67494ebaf2a1f6c07d1c37d886701292b078d57', when='@2.7.1:')
     patch('remove_unreliable_warning_daq-release_issue420.patch', sha256='416728b1be85478faa4df752abf54a30b5ddb3ab4cc327e880db850c8d85f7c7')
+    patch('update_cmake_minimum_required.patch', sha256='18f67cd6b0a47c5421f0a901526c4a64d829d10ca04b76c666188f3d5d5cde66', when="@2.9.0")
     variant('mpi', default=False, description='Support MPI')
     variant('boost', default=False, description='Support Boost')
 

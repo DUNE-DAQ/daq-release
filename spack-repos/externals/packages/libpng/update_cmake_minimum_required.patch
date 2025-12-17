@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 86e0affc4..a655634a0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,8 +25,8 @@
+ # For conditions of distribution and use, see the disclaimer
+ # and license in png.h
+ 
+-cmake_minimum_required(VERSION 3.1)
+-cmake_policy(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
++cmake_policy(VERSION 3.26.3)
+ 
+ project(libpng C ASM)
+ enable_testing()
+diff --git a/contrib/pngminus/CMakeLists.txt b/contrib/pngminus/CMakeLists.txt
+index 1f815a582..1034e2329 100644
+--- a/contrib/pngminus/CMakeLists.txt
++++ b/contrib/pngminus/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-cmake_minimum_required(VERSION 3.1)
+-cmake_policy(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
++cmake_policy(VERSION 3.26.3)
+ 
+ project(PNGMINUS C)
+ 
