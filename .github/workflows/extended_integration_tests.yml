@@ -1,0 +1,252 @@
+name: Extended integration test workflow
+
+on:
+  #schedule:
+  #  - cron: "0 7 * * *"
+
+  workflow_dispatch:
+    inputs:
+      subset:
+        type: choice
+        description: 'which subset of tests to run (core or extended)'
+        default: 'core'
+        options:
+          - core
+          - extended
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+      override-nightly-tag:
+        description: 'manually specify the nightly tag (optional)'
+        required: false
+      candidate-release-tag:
+        description: 'manually specify a candidate release tag (optional)'
+        required: false
+        default: ""
+      stable-release-tag:
+        description: 'manually specify a stable release tag (optional)'
+        required: false
+        default: ""
+
+jobs:
+  make_variables:
+    name: create nightly tag, timestamp, etc.
+    runs-on: daq
+    outputs:
+      tag: ${{ steps.create_variables.outputs.release_tag }}
+      is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
+      is_stable_release: ${{ steps.create_variables.outputs.is_stable }}
+      timestamp: ${{ steps.create_variables.outputs.timestamp }}
+      persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
+      integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: create_variables
+        run: |
+          is_candidate=false
+          is_stable=false
+          if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
+            echo "Error: You cannot specify both a candidate tag and a stable tag. Please choose one and try again. Exiting..."
+            exit 1
+          fi
+          if [ -n "${{ github.event.inputs.override-nightly-tag }}" ]; then
+            release_tag="${{ github.event.inputs.override-nightly-tag }}"
+            if [[ -n "${{ github.event.inputs.candidate-release-tag }}" || -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
+              echo "WARNING: The provided nightly tag will supercede the provided candidate or stable release tag."
+            fi
+          elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.candidate-release-tag }}"
+            is_candidate=true
+          elif [ -n "${{ github.event.inputs.stable-release-tag }}" ]; then
+            release_tag="${{ github.event.inputs.stable-release-tag }}"
+            is_stable=true
+          else
+            date_tag=$(date +%y%m%d)
+            release_tag="NFD_DEV_${date_tag}_A9"
+          fi
+
+          timestamp=$(date +"%Y-%m-%d-%H%M%Z")
+          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+          integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+
+          echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
+          echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
+          echo "is_stable=${is_stable}"  >>  "$GITHUB_OUTPUT"
+          echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
+          echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
+          echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+  integration_tests:
+    name: integration_tests
+    runs-on: daq
+    timeout-minutes: 30
+    needs: make_variables
+    if: ${{ github.event.inputs.subset == 'core' }} 
+    strategy:
+        fail-fast: false
+        matrix:
+
+            test_name: [
+                        "listrev_test",
+                        "3ru_1df_multirun_test",
+                        "3ru_3df_multirun_test",
+                        "example_system_test",
+                        "fake_data_producer_test",
+                        "long_window_readout_test",
+                        "minimal_system_quick_test",
+                        "readout_type_scan_test",
+                        "small_footprint_quick_test",
+                        "tpreplay_test",
+                        "tpstream_writing_test"
+                       ]
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: setup release and run tests
+      env:
+        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+        IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
+        IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+        INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
+      id: setup_and_run_test
+      run: |
+        DET=fd
+        mkdir -p $INTEGTEST_OUTPUT_PATH
+        cd $INTEGTEST_OUTPUT_PATH
+        echo "Am in $(pwd)"
+        echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+        if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
+          echo "dbt-setup-release -b candidate $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release -b candidate $RELEASE_TAG
+        elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
+          echo "dbt-setup-release $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release $RELEASE_TAG
+        else
+          echo "dbt-setup-release -n $RELEASE_TAG"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
+          dbt-setup-release -n $RELEASE_TAG
+        fi
+        TEST_PATH=""
+        TEST_SOURCE=""
+        if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
+          TEST_PATH=$LISTREV_SHARE/integtest
+          TEST_SOURCE=listrev
+        else
+          TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
+          TEST_SOURCE=daqsystemtest
+        fi
+
+        pytest_retval=0
+        pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
+                $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
+
+        mkdir -p $PERSISTENT_LOG_DIR
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+
+        chmod -R 755 $PERSISTENT_LOG_DIR
+        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
+          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
+          rm -rf $PERSISTENT_LOG_DIR
+          exit 2
+        fi
+
+        test $pytest_retval == 0 || false
+
+  extended_integration_tests:
+    name: extended_integration_tests
+    runs-on: daq
+    timeout-minutes: 30
+    needs: make_variables
+    if: ${{ github.event.inputs.subset == 'extended' }} 
+
+  parse_and_upload_results:
+    runs-on: daq
+    if: always()
+    needs: [make_variables, integration_tests]
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        repository: DUNE-DAQ/daq-release
+        path: daq-release-integtest
+    - name: Generate summary tables
+      env:
+        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+      run: |
+        cd daq-release-integtest/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+    - name: Upload markdown summary as artifact
+      uses: actions/upload-artifact@v6
+      with:
+        if-no-files-found: error
+        name: nightly_integtest_summary
+        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+
+  store_and_upload_logs:
+    runs-on: daq
+    timeout-minutes: 5
+    needs: [make_variables, integration_tests]
+    if: success() || failure()
+    steps:
+    - name: Upload logs as artifact
+      env:
+        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+      uses: actions/upload-artifact@v6
+      with:
+        name: pytest-logs-${{ env.TIMESTAMP }}
+        path: ${{ env.PERSISTENT_LOG_DIR }}
+    - name: Delete old log directories
+      run: |
+        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+        echo "Removing the following directories that are more than 7 days old: $old_dirs"
+        rm -rf $old_dirs
+
+  send_slack_message:
+    if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
+    needs: [make_variables, store_and_upload_logs]
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
+      integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
+      integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_files:
+    runs-on: daq
+    if: always()
+    needs: [make_variables, parse_and_upload_results, send_slack_message]
+    steps:
+      - name: Remove xml files
+        env:
+          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+        run: |
+          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
+      - name: Remove daq-release
+        run: |
+          rm -rf ${{ github.workspace }}/daq-release-integtest/
+
+  # Integration tests can sometimes collide with stale processes, leading to timeout
+  cleanup_stale_gunicorn_processes:
+    runs-on: daq
+    if: always()
+    needs: integration_tests
+    steps:
+      - name: Run cleanup script
+        run: |
+          /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
+
