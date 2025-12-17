@@ -77,6 +77,10 @@ jobs:
     runs-on: daq
     timeout-minutes: 30
     needs: make_variables
+    outputs:
+      integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+    env:
+      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
     defaults:
       run:
         shell: bash
@@ -87,58 +91,47 @@ jobs:
       with:
         path: daq-release-extended-tests
 
-    - name: setup release and run tests
-      env:
-        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
-        IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
-        IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
-        INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
-      id: setup_and_run_test
+    - name: Create build area
       run: |
-        mkdir -p $INTEGTEST_OUTPUT_PATH
-        cd $INTEGTEST_OUTPUT_PATH
-        echo "Am in $(pwd)"
-        echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release -b candidate $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create -b candidate $RELEASE_TAG
+          echo "dbt-setup-release -b candidate $release_tag"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$release_tag/daq_app_rte.sh ]]
+          dbt-create -b candidate $release_tag
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create $RELEASE_TAG
+          echo "dbt-setup-release $release_tag"
+          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$release_tag/daq_app_rte.sh ]]
+          dbt-create $release_tag
         else
-          echo "dbt-setup-release -n $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create -n $RELEASE_TAG
+          echo "dbt-setup-release -n $release_tag"
+          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$release_tag/daq_app_rte.sh ]]
+          dbt-create -n $release_tag
         fi
-
-        ./daq-release-extended-tests/scripts/checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o $RELEASE_TAG/sourcecode
-        ./daq-release-extended-tests/scripts/checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o $RELEASE_TAG/sourcecode
-        # daqsystemtest and listrev tests are already run as part of the core tests
-        rm -rf $RELEASE_TAG/sourcecode/daqsystemtest
-        rm -rf $RELEASE_TAG/sourcecode/listrev
-
-        cd $RELEASE_TAG
+        cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
+        cd ../daq-release-extended-tests/scripts
+        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
+    - name: Run integration tests
+      id: integtests
+      run: |
+        cd $DBT_AREA_ROOT
+        # daqsystemtest and listrev tests are already run as part of the nightly integration tests
+        rm -rf sourcecode/daqsystemtest
+        rm -rf sourcecode/listrev
+        source env.sh
         dbt-workarea-env
-        dbt-build --integtest
-
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/
-
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
-          exit 2
-        fi
-
-        test $pytest_retval == 0 || false
+        dbt-build --integtest | tee integtest_full_output.log
+        # Log directory is the last non-empty line of output
+        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
+        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
+        echo "integtest_log_dir: $integtest_log_dir"
 
   parse_and_upload_results:
     runs-on: daq
