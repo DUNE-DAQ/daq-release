@@ -208,21 +208,20 @@ jobs:
     runs-on: daq
     if: always()
     needs: [make_variables, parse_and_upload_results, send_slack_message]
+    env:
+      RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
     steps:
       - name: Remove xml files
-        env:
-          RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-          DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
         run: |
           rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
           #rm -rf $DAQ_RELEASE_PATH
+          echo "DAQ_RELEASE_PATH: $DAQ_RELEASE_PATH"
           ls -lrt $DAQ_RELEASE_PATH
           echo "PWD REMOVE: $(pwd)"
-          ls -lrt ${{ needs.make_variables.outputs.tag }}
-          #rm -rf ${{ needs.make_variables.outputs.tag }}
+          rm -rf ${{ needs.make_variables.outputs.tag }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
