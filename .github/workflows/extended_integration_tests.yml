@@ -32,6 +32,7 @@ jobs:
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
+      daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
     defaults:
       run:
         shell: bash
@@ -63,6 +64,7 @@ jobs:
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-extended-${timestamp}
           integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+          daq_release_path="daq-release-extended-tests"
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
@@ -70,6 +72,7 @@ jobs:
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
+          echo "daq_release_path=${daq_release_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
   extended_integration_tests:
@@ -83,6 +86,7 @@ jobs:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
       PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
+      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
     defaults:
       run:
         shell: bash
@@ -91,7 +95,7 @@ jobs:
     - name: checkout daq-release
       uses: actions/checkout@v6
       with:
-        path: daq-release-extended-tests
+        path: ${{ needs.make_variables.outputs.daq_release_path }}
 
     - name: Create build area
       run: |
@@ -114,7 +118,7 @@ jobs:
         fi
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
-        cd ../daq-release-extended-tests/scripts
+        cd ../$DAQ_RELEASE_PATH/scripts
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
@@ -156,9 +160,10 @@ jobs:
     steps:
     - name: Generate summary tables
       env:
-        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+        RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+        DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
       run: |
-        cd daq-release-extended-tests/scripts/github-ci/
+        cd $DAQ_RELEASE_PATH/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
@@ -166,7 +171,7 @@ jobs:
       with:
         if-no-files-found: error
         name: nightly_extended_integtest_summary
-        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+        path: $DAQ_RELEASE_PATH/scripts/github-ci/pytest_summary_table.md
 
   store_and_upload_logs:
     runs-on: daq
@@ -206,13 +211,14 @@ jobs:
     steps:
       - name: Remove xml files
         env:
-          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+          RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+          DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
         run: |
           rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
           #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
-          rm -rf ${{ github.workspace }}/daq-release-extended-tests/
+          rm -rf ${{ github.workspace }}/$DAQ_RELEASE_PATH
           pwd
           ls -lrt ${{ needs.make_variables.outputs.tag }}
           rm -rf ${{ needs.make_variables.outputs.tag }}
