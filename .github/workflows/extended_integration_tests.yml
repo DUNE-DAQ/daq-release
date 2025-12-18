@@ -185,7 +185,7 @@ jobs:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v6
       with:
-        name: pytest-logs-${{ env.TIMESTAMP }}
+        name: pytest-logs-extended-${{ env.TIMESTAMP }}
         path: ${{ env.PERSISTENT_LOG_DIR }}
     - name: Delete old log directories
       run: |
