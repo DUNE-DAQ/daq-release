@@ -218,10 +218,11 @@ jobs:
           #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
-          rm -rf ${{ github.workspace }}/$DAQ_RELEASE_PATH
-          pwd
+          #rm -rf $DAQ_RELEASE_PATH
+          ls -lrt $DAQ_RELEASE_PATH
+          echo "PWD REMOVE: $(pwd)"
           ls -lrt ${{ needs.make_variables.outputs.tag }}
-          rm -rf ${{ needs.make_variables.outputs.tag }}
+          #rm -rf ${{ needs.make_variables.outputs.tag }}
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
