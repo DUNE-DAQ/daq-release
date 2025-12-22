@@ -194,11 +194,6 @@ jobs:
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
         echo "Removing the following directories that are more than 7 days old: $old_dirs"
         rm -rf $old_dirs
-    - name: Debug prints
-      run: |
-        echo "Integtest_log_dir: ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}"
-        echo "ls integtest_log_dir: $(ls ${{ needs.extended_integration_tests.outputs.integtest_log_dir }})"
-
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
@@ -206,7 +201,6 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
-      #integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_xml_dir: ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
