@@ -118,21 +118,25 @@ jobs:
           echo "create -n $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
           dbt-create -n $RELEASE_TAG $RELEASE_TAG
+          ln -sfn $(readlink -f $RELEASE_TAG) latest-nightly
         fi
+        echo "1 --------- 1"
         pwd
         ls
         cd $RELEASE_TAG
+        echo "2 --------- 2"
         pwd
         ls
         source env.sh
-        ln -sfn $(readlink -f $RELEASE_TAG) build-latest
+        echo "3 --------- 3"
         ls -l
-        cd ../$DAQ_RELEASE_PATH/scripts
+        cd ${{ github.workspace }}/$DAQ_RELEASE_PATH/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+        echo "4 --------- 4"
         readlink -f build-latest
         ls -l build-latest
         ls -l build-latest/sourcecode
