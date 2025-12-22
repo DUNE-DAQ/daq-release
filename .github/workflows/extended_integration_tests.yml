@@ -87,6 +87,8 @@ jobs:
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
       PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
       DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
+      IS_CANDIDATE_RELEASE: ${{ needs.make_variables.outputs.is_candidate_release }}
+      IS_STABLE_RELEASE: ${{ needs.make_variables.outputs.is_stable_release }}
     defaults:
       run:
         shell: bash
