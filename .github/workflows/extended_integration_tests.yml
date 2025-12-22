@@ -103,6 +103,9 @@ jobs:
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
+        cd builds
+        pwd
+        ls
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
           echo "create -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
@@ -116,14 +119,24 @@ jobs:
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
           dbt-create -n $RELEASE_TAG $RELEASE_TAG
         fi
-        cd ${{ env.DBT_AREA_ROOT }}
+        pwd
+        ls
+        cd $RELEASE_TAG
+        pwd
+        ls
         source env.sh
+        ln -sfn $(readlink -f $RELEASE_TAG) build-latest
+        ls -l
         cd ../$DAQ_RELEASE_PATH/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+        readlink -f build-latest
+        ls -l build-latest
+        ls -l build-latest/sourcecode
+        exit 123
 
     - name: Run integration tests
       id: integtests
