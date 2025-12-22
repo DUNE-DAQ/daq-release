@@ -1,8 +1,8 @@
 name: Extended integration test workflow
 
 on:
-  #schedule:
-  #  - cron: "0 7 * * *"
+  schedule:
+    - cron: "0 7 * * *"
 
   workflow_dispatch:
     inputs:
