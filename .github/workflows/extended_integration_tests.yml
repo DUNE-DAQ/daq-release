@@ -101,8 +101,6 @@ jobs:
 
     - name: Create build area
       run: |
-        echo "PWD: $(pwd)"
-        echo "ls: $(ls)"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
@@ -204,8 +202,7 @@ jobs:
       integtest_xml_dir: ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     runs-on: daq
