@@ -101,11 +101,17 @@ jobs:
 
     - name: Create build area
       run: |
+        echo 1
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        echo 2
         setup_dbt latest_v5
+        echo 3
         cd builds
+        echo 4
         pwd
+        echo 5
         ls
+        echo 6
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
           echo "create -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
@@ -115,10 +121,12 @@ jobs:
           [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
           dbt-create $RELEASE_TAG $RELEASE_TAG
         else
-          echo "create -n $RELEASE_TAG"
+          echo "dbt-create -n $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
           dbt-create -n $RELEASE_TAG $RELEASE_TAG
-          ln -sfn $(readlink -f $RELEASE_TAG) ~/latest-nightly
+          echo "Created release area"
+          ln -sfn $(readlink -f $RELEASE_TAG) latest-nightly
+          echo "Updated soft link"
         fi
         echo "1 --------- 1"
         pwd
@@ -138,7 +146,7 @@ jobs:
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
         echo "4 --------- 4"
         ls -l ~
-        ls -l ~/latest-nightly-sourcecode
+        ls -l ~/latest-nightly/sourcecode
         exit 123
 
     - name: Run integration tests
