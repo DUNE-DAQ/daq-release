@@ -220,12 +220,14 @@ jobs:
         echo "---------- CHECKING CONDITIONS ---------------"
         echo "GitHub event name: ${{ github.event_name }}"
         echo "Send Slack message?: ${{ github.event.inputs.send-slack-message }}"
+        echo "Send Slack message?: ${{ inputs.send-slack-message }}"
 
   send_slack_message:
     if: |
       (success() || failure()) &&
       ((github.event_name != 'workflow_dispatch') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
+      (github.event_name == 'workflow_dispatch' && 
+      (github.event.inputs.send-slack-message == 'yes' || inputs.send-slack-message == 'yes')))
     needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
