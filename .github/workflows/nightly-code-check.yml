@@ -64,13 +64,13 @@ jobs:
         ls -l
 
   run_integration_tests:
-    needs: make_variables
+    needs: [make_variables, setup_build_area]
     uses: ./.github/workflows/integration_tests.yml
     with:
       send-slack-message: 'yes'
   
   run_unittests:
-    needs: make_variables
+    needs: [make_variables, run_integration_tests]
     uses: ./.github/workflows/unit-tests.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
