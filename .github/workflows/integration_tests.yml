@@ -217,9 +217,15 @@ jobs:
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
         echo "Removing the following directories that are more than 7 days old: $old_dirs"
         rm -rf $old_dirs
+        echo "---------- CHECKING CONDITIONS ---------------"
+        echo "GitHub event name: ${{ github.event_name }}"
+        echo "Send Slack message?: ${{ github.event.inputs.send-slack-message }}"
 
   send_slack_message:
-    if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
+    if: |
+      (success() || failure()) &&
+      ((github.event_name != 'workflow_dispatch') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
     needs: [make_variables, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
