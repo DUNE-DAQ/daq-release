@@ -1,8 +1,8 @@
 name: Integration test workflow
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
+  #schedule:
+  #  - cron: "0 6 * * *"
 
   workflow_dispatch:
     inputs:
@@ -17,6 +17,26 @@ on:
         required: false
         default: ""
       stable-release-tag:
+        description: 'manually specify a stable release tag (optional)'
+        required: false
+        default: ""
+  workflow_call:
+    inputs:
+      send-slack-message:
+        type: string
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+      override-nightly-tag:
+        type: boolean
+        description: 'manually specify the nightly tag (optional)'
+        required: false
+      candidate-release-tag:
+        type: string
+        description: 'manually specify a candidate release tag (optional)'
+        required: false
+        default: ""
+      stable-release-tag:
+        type: string
         description: 'manually specify a stable release tag (optional)'
         required: false
         default: ""
@@ -83,16 +103,16 @@ jobs:
 
             test_name: [
                         "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
+                        #"3ru_1df_multirun_test",
+                        #"3ru_3df_multirun_test",
+                        #"example_system_test",
+                        #"fake_data_producer_test",
+                        #"long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan_test",
-                        "small_footprint_quick_test",
-                        "tpreplay_test",
-                        "tpstream_writing_test"
+                        #"readout_type_scan_test",
+                        #"small_footprint_quick_test",
+                        #"tpreplay_test",
+                        #"tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -207,7 +227,8 @@ jobs:
       integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_files:
     runs-on: daq

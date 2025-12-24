@@ -23,6 +23,51 @@ jobs:
         run: |
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
+
+  setup_build_area:
+    name: Setup build area
+    runs-on: daq
+    needs: make_variables
+    outputs:
+      DBT_AREA_ROOT: ${{ steps.create_build_area.outputs.DBT_AREA_ROOT }}
+    env:
+      RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-code-checks
+    - name: Create build area
+      id: create_build_area
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest_v5
+        cd builds
+        dbt-create -n $RELEASE_TAG
+        cd $RELEASE_TAG
+        source env.sh
+        cd ../../daq-release-code-checks/scripts
+        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_OUTPUT"
+        cd ${{ github.workspace }}
+        pwd
+        ls
+        ln -sfn $DBT_AREA_ROOT latest-nightly
+        ln -sfn daq-release-code-checks latest-daq-release
+        ls -l
+
+  run_integration_tests:
+    needs: make_variables
+    uses: ./.github/workflows/integration_tests.yml
+    with:
+      send-slack-message: 'yes'
   
   run_unittests:
     needs: make_variables
@@ -34,10 +79,11 @@ jobs:
   run_checks:
     name: Run integration tests and clang formatting
     runs-on: daq
-    needs: [make_variables, run_unittests]
+    needs: [make_variables, setup_build_area, run_unittests]
     timeout-minutes: 60
     env:
-      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
+      #DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
+      DBT_AREA_ROOT: ${{ needs.setup_build_area.outputs.DBT_AREA_ROOT }}
     defaults:
       run:
         shell: bash
