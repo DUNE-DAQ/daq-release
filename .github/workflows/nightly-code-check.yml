@@ -46,6 +46,10 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         cd builds
+        if [[ -d "$RELEASE_TAG" ]]; then
+          echo "Removing $RELEASE_TAG since it already exists..."
+          rm -rf $RELEASE_TAG
+        fi
         dbt-create -n $RELEASE_TAG
         cd $RELEASE_TAG
         source env.sh
