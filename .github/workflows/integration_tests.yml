@@ -40,6 +40,9 @@ on:
         description: 'manually specify a stable release tag (optional)'
         required: false
         default: ""
+    secrets:
+      slack_webhook_url:
+        required: true
 
 jobs:
   make_variables:
