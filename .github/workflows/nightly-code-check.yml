@@ -72,6 +72,8 @@ jobs:
     uses: ./.github/workflows/integration_tests.yml
     with:
       send-slack-message: 'yes'
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
   
   run_unittests:
     needs: [make_variables, run_integration_tests]
