@@ -68,15 +68,23 @@ jobs:
         ls -l
 
   run_integration_tests:
-    needs: [make_variables, setup_build_area]
+    needs: setup_build_area
     uses: ./.github/workflows/integration_tests.yml
     with:
       send-slack-message: 'yes'
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+
+  run_extended_integration_tests:
+    needs: run_integration_tests
+    uses: ./.github/workflows/extended_integration_tests.yml
+    with:
+      send-slack-message: 'yes'
+    secrets:
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
   
   run_unittests:
-    needs: [make_variables, run_integration_tests]
+    needs: [make_variables, run_extended_integration_tests]
     uses: ./.github/workflows/unit-tests.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}

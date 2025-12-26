@@ -20,6 +20,29 @@ on:
         description: 'manually specify a stable release tag (optional)'
         required: false
         default: ""
+  workflow_call:
+    inputs:
+      send-slack-message:
+        type: string
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+      override-nightly-tag:
+        type: boolean
+        description: 'manually specify the nightly tag (optional)'
+        required: false
+      candidate-release-tag:
+        type: string
+        description: 'manually specify a candidate release tag (optional)'
+        required: false
+        default: ""
+      stable-release-tag:
+        type: string
+        description: 'manually specify a stable release tag (optional)'
+        required: false
+        default: ""
+    secrets:
+      slack_webhook_url:
+        required: true
 
 jobs:
   make_variables:
