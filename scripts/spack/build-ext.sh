@@ -173,6 +173,9 @@ gcc_spec="/${gcc_hash}"
 
 #umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
 echo "JCF, Dec-12-2025: FOR DEVELOPMENT PURPOSES, SKIPPING llvm BUILD FOR NOW" >&2
+#echo "JCF, Dec-17-2025: also force version of py-openpyxl" >&2
+
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec ^py-openpyxl@3.1.2"
 umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec"
 
 echo $umbrella_spec
@@ -205,16 +208,17 @@ done
 
 build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
 
-for pkg in $build_only_packages; do
-    echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
-done
+echo "FOR DEVELOPMENT PURPOSES, SKIPPING UNINSTALLATION OF BUILD-ONLY DEPENDENCIES"
+# for pkg in $build_only_packages; do
+#     echo "Uninstalling $pkg"
+#     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
+# done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
-    echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
-done
+# for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
+#     echo "Uninstalling $pkg"
+#     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
+# done
 
 spack find -l | sort |& tee /log/externals_list.txt
 
