@@ -37,7 +37,7 @@ jobs:
         WORKFLOW_DETAILS=$(gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
         #WORKFLOW_NAME=$(echo "$WORKFLOW_DETAILS" | jq -r '.name')
-        WORKFLOW_NAME=${{ inputs.workflow_name }}
+        WORKFLOW_NAME="${{ inputs.workflow_name }}"
         ACTOR_LOGIN=$(echo "$WORKFLOW_DETAILS" | jq -r '.actor.login')
         EVENT_TYPE=$(echo "$WORKFLOW_DETAILS" | jq -r '.event')
         HTML_URL=$(echo "$WORKFLOW_DETAILS" | jq -r '.html_url')
