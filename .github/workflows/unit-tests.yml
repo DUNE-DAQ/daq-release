@@ -117,6 +117,7 @@ jobs:
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:
+      workflow_name: "Unit tests"
       release_tag: ${{ inputs.release_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
