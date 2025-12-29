@@ -124,6 +124,7 @@ jobs:
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     with:
+      workflow_name: "Nightly code check workflow"
       release_tag: ${{ needs.make_variables.outputs.tag }}
 
   cleanup_test_area:

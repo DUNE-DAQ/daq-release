@@ -221,6 +221,7 @@ jobs:
     needs: [make_variables, extended_integration_tests, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
+      workflow_name: "Extended integration tests"
       release_tag: ${{ needs.make_variables.outputs.tag }}
       integtest_xml_dir: ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
