@@ -28,8 +28,8 @@ echo "Assuming detector release tag is $DET_RELEASE_TAG (i.e. the same name as t
 if [[ $OS == almalinux9 && $RELEASE_TYPE == production_v4 ]]; then  # Alma9 v4 production nightly, externals v2.0
     export EXT_VERSION=v2.0
     export GCC_VERSION=12.1.0
-elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.2
-    export EXT_VERSION=v2.2
+elif [[ $OS == almalinux9 && $RELEASE_TYPE == nightly ]]; then      # Alma9 v5 development nightly, externals v2.3
+    export EXT_VERSION=v2.3
     export GCC_VERSION=13.2.0
 elif [[ $OS == almalinux9 && $DET_RELEASE_TAG =~ "v4." ]]; then        # Alma9 v4 candidate or stable, externals v2.0
     export EXT_VERSION=v2.0
