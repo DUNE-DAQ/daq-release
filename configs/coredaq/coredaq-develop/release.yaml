@@ -17,7 +17,7 @@
           version: 3.12.0
           variant: ~
         - name: pistache
-          version: fddaq-v5.3.0
+          version: fddaq-v5.6.0
           variant: ~
         - name: highfive
           version: 2.9.0
