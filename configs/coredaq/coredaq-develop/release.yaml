@@ -74,7 +74,7 @@
           version: 0.6.7
           variant: ~
         - name: py-anyconfig
-          version: 0.9.11
+          version: 0.14.0
           variant: ~
         - name: py-jsonnet
           version: 0.16.0
@@ -105,7 +105,7 @@
 
     systems:
         - name: python
-          version: 3.12.12
+          version: 3.11.14
           variant: "~ssl"
         - name: gcc
           version: 14.3.0
