@@ -327,3 +327,38 @@ jobs:
           rm -f "$files_older_than_30_days"
         fi
 
+  wait_for_cvmfs_publication:
+    needs: publish_to_cvmfs
+    runs-on: daq
+    timeout-minutes: 90
+    steps:
+    - name: Check for release on CVMFS
+      run: |
+        SECONDS=0
+        while true; do
+          ~/check_new_releases.sh
+          rc=$?
+          case $rc in
+            0)
+              echo "Release appeared on CVMFS in $(( SECONDS / 60)) m $(( SECONDS % 60 )) s"
+              break
+              ;;
+            1)
+              echo "Release has not appeared. Waiting..."
+              sleep 60
+              ;;
+            *)
+              echo "check_new_releases.sh failed with $rc"
+              exit $rc
+              ;;
+          esac
+        done
+
+  run_build_tests:
+    needs: wait_for_cvmfs_publication
+    uses: ./.github/workflows/nightly-code-check.yml
+    with:
+      send-slack-message: 'yes'
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+

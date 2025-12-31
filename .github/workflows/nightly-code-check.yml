@@ -6,6 +6,15 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
+  workflow_call:
+    inputs:
+      send-slack-message:
+        type: string
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+    secrets:
+      slack_webhook_url:
+        required: true
   schedule:
     - cron: "30 8 * * *"
 
@@ -96,7 +105,6 @@ jobs:
     needs: [make_variables, setup_build_area, run_unittests]
     timeout-minutes: 60
     env:
-      #DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       DBT_AREA_ROOT: ${{ needs.setup_build_area.outputs.DBT_AREA_ROOT }}
     defaults:
       run:
