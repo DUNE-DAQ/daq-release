@@ -1,0 +1,10 @@
+diff --git a/uhal/config/mfPythonRPMRules.mk b/uhal/config/mfPythonRPMRules.mk
+index 4756a820..33e7f19c 100644
+--- a/uhal/config/mfPythonRPMRules.mk
++++ b/uhal/config/mfPythonRPMRules.mk
+@@ -100,4 +100,4 @@ install: _setup_update
+ 	# Change into rpm/pkg to finally run the customized setup.py
+ 	if [ -f setup.cfg ]; then cp setup.cfg ${RPMBUILD_DIR}/ ; fi
+ 	cd ${RPMBUILD_DIR} && \
+-	  $(if ${CUSTOM_INSTALL_PREFIX},PYTHONPATH=${prefix}/lib/python${PYTHON_VERSION}/site-packages,) bindir=$(bindir) ${PYTHON} ${PythonDistName}.py install $(if ${CUSTOM_INSTALL_PREFIX},--prefix=${prefix},) $(if ${CUSTOM_INSTALL_PREFIX}${CUSTOM_INSTALL_EXEC_PREFIX},--exec-prefix=${exec_prefix},)
++	  $(if ${CUSTOM_INSTALL_PREFIX},PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(PYTHONPATH):${prefix}/lib/python${PYTHON_VERSION}/site-packages,) bindir=$(bindir) ${PYTHON} ${PythonDistName}.py install --single-version-externally-managed --record=record.txt  --no-compile $(if ${CUSTOM_INSTALL_PREFIX},--prefix=${prefix},) $(if ${CUSTOM_INSTALL_PREFIX}${CUSTOM_INSTALL_EXEC_PREFIX},--exec-prefix=${exec_prefix},)
