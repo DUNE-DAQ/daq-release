@@ -74,6 +74,7 @@ jobs:
       with:
         path: daq-release
         fetch-depth: 0
+        clean: true
 
     - name: Set environment variables
       run: |
