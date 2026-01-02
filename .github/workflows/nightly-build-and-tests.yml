@@ -1,0 +1,65 @@
+name: Alma9 build v5 nightly release with externals v2.2
+
+on:
+  #schedule:
+  #  - cron: "0 3 * * *"
+
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'nightly tag prefix (also used for output container tag)'
+        default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-nightly-release-alma9.yml
+    with:
+      tag-prefix: ${{ inputs.tag-prefix }}
+      feature-branch: ${{ inputs.feature-branch }}
+      cvmfs-deployment: ${{ inputs.cvmfs-deployment }}
+      send-slack-message: ${{ inputs.send-slack-message }}
+
+  wait_for_cvmfs_publication:
+    needs: build
+    runs-on: daq
+    timeout-minutes: 90
+    steps:
+    - name: Check for release on CVMFS
+      run: |
+        SECONDS=0
+        while true; do
+          ~/check_new_releases.sh
+          rc=$?
+          case $rc in
+            0)
+              echo "Release appeared on CVMFS in $(( SECONDS / 60)) m $(( SECONDS % 60 )) s"
+              break
+              ;;
+            1)
+              echo "Release has not appeared. Waiting..."
+              sleep 60
+              ;;
+            *)
+              echo "check_new_releases.sh failed with $rc"
+              exit $rc
+              ;;
+          esac
+        done
+
+  run_build_tests:
+    needs: wait_for_cvmfs_publication
+    uses: ./.github/workflows/nightly-code-check.yml
+    with:
+      send-slack-message: 'yes'
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+
