@@ -1,4 +1,4 @@
-name: Alma9 build v5 nightly release with externals v2.2
+name: Nightly build and tests
 
 on:
   schedule:
