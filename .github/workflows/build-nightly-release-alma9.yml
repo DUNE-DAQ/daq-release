@@ -18,6 +18,27 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
+  workflow_call:
+    inputs:
+      tag-prefix:
+        type: string
+        description: 'nightly tag prefix (also used for output container tag)'
+        default: ''
+      feature-branch:
+        type: string
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        type: string
+        description: 'whether to deploy the release to cvmfs'
+        default: 'yes'
+      send-slack-message:
+        type: string
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+    secrets:
+      slack_webhook_url:
+        required: true
 
 jobs:
   make_tags:
@@ -305,13 +326,17 @@ jobs:
         rm -rf $unique_name
 
   send_slack_message:
-    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    if: |
+      (success() || failure()) &&
+      ((github.event_name != 'workflow_dispatch') ||
+      (github.event_name == 'workflow_dispatch' && 
+      (github.event.inputs.send-slack-message == 'yes' || inputs.send-slack-message == 'yes')))
     needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
     with:
       workflow_name: "Nightly build"
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
