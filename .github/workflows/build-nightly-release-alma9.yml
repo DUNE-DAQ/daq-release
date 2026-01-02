@@ -73,8 +73,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: daq-release
-        fetch-depth: 0
-
+    
     - name: Set environment variables
       run: |
         echo "BASE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.base_tag }}" >> $GITHUB_ENV
