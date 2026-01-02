@@ -27,6 +27,8 @@ jobs:
       feature-branch: ${{ inputs.feature-branch }}
       cvmfs-deployment: ${{ inputs.cvmfs-deployment }}
       send-slack-message: ${{ inputs.send-slack-message }}
+    secrets:
+      slack_webhook_url: ${{ secrets.slack_webhook_url }}
 
   wait_for_cvmfs_publication:
     needs: build
