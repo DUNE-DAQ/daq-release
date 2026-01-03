@@ -164,19 +164,19 @@ dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15
 
 boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel~icu+iostreams~json+locale+log+math~mpi+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared+signals~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~versionedlayout+wave"
 
-llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+llvm_spec="llvm@19.1.7%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 dpdk_spec="dpdk max_lcores=512"
 
 # Prevent a second build of gcc@${GCC_VERSION}
 gcc_spec="/${gcc_hash}"
 
-#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
-echo "JCF, Dec-12-2025: FOR DEVELOPMENT PURPOSES, SKIPPING llvm BUILD FOR NOW" >&2
+umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+#echo "JCF, Dec-12-2025: FOR DEVELOPMENT PURPOSES, SKIPPING llvm BUILD FOR NOW" >&2
 #echo "JCF, Dec-17-2025: also force version of py-openpyxl" >&2
 
 #umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec ^py-openpyxl@3.1.2"
-umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec"
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec"
 
 echo $umbrella_spec
 
@@ -208,17 +208,17 @@ done
 
 build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
 
-echo "FOR DEVELOPMENT PURPOSES, SKIPPING UNINSTALLATION OF BUILD-ONLY DEPENDENCIES"
-# for pkg in $build_only_packages; do
-#     echo "Uninstalling $pkg"
-#     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
-# done
+#echo "FOR DEVELOPMENT PURPOSES, SKIPPING UNINSTALLATION OF BUILD-ONLY DEPENDENCIES"
+for pkg in $build_only_packages; do
+    echo "Uninstalling $pkg"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
+done
 
 # Now packages which are dependencies of build-only packages
-# for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
-#     echo "Uninstalling $pkg"
-#     spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
-# done
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
+    echo "Uninstalling $pkg"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
+done
 
 spack find -l | sort |& tee /log/externals_list.txt
 

@@ -16,4 +16,4 @@ class Umbrella(BundlePackage):
 
     depends_on("coredaq")
     depends_on("dbe")
-    #depends_on("llvm")
+    depends_on("llvm")
