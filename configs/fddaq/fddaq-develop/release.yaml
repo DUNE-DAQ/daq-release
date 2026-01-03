@@ -232,7 +232,7 @@
           version: 2024.10.1
           source:  pypi
         - name: kafka-python
-          version: 2.0.2
+          version: 2.3.0
           source:  pypi
         - name: kiwisolver
           version: 1.4.7
