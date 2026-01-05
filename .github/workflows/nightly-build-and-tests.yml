@@ -39,7 +39,7 @@ jobs:
       run: |
         SECONDS=0
         while true; do
-          ~/check_new_releases.sh
+          ~/check_new_releases.sh --check-for "TFD_*"
           rc=$?
           case $rc in
             0)
