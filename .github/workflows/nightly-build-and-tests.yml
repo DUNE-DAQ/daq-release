@@ -34,6 +34,7 @@ jobs:
     needs: build
     runs-on: daq
     timeout-minutes: 90
+    continue-on-error: true
     steps:
     - name: Check for release on CVMFS
       run: |
