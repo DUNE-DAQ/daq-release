@@ -246,8 +246,9 @@ class Cmake(Package):
 
     for plat in ["darwin", "linux", "cray"]:
         with when("+ownlibs platform=%s" % plat):
-            depends_on("openssl")
-            depends_on("openssl@:1.0", when="@:3.6.9")
+            pass  # JCF, Jan-5-2026: use system openssl, not Spack openssl
+            #depends_on("openssl")
+            #depends_on("openssl@:1.0", when="@:3.6.9")
 
     depends_on("qt", when="+qt")
     depends_on("ncurses", when="+ncurses")
@@ -336,7 +337,8 @@ class Cmake(Package):
     def setup_build_environment(self, env):
         spec = self.spec
         if "+ownlibs" in spec and "platform=windows" not in spec:
-            env.set("OPENSSL_ROOT_DIR", spec["openssl"].prefix)
+            env.set("OPENSSL_ROOT_DIR", "/usr")
+            #env.set("OPENSSL_ROOT_DIR", spec["openssl"].prefix)
 
     def bootstrap_args(self):
         spec = self.spec
