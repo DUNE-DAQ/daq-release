@@ -199,7 +199,7 @@ spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gt
 
 for pkg in daq-cmake externals devtools systems; do
     echo "Uninstalling $pkg"
-    spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
+    spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero" >> /log/uninstallations.txt
 done
 
 # Step 8 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
@@ -211,16 +211,19 @@ build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \
 #echo "FOR DEVELOPMENT PURPOSES, SKIPPING UNINSTALLATION OF BUILD-ONLY DEPENDENCIES"
 for pkg in $build_only_packages; do
     echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero" >> /log/uninstallations.txt
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git openssh krb5 libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
     echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled" >> /log/uninstallations.txt
 done
 
 spack find -l | sort |& tee /log/externals_list.txt
+
+echo "Calling spack clean -a ..."
+spack clean -a
 
 endtime=$( date )
 
