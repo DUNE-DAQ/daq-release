@@ -38,25 +38,8 @@ jobs:
     steps:
     - name: Check for release on CVMFS
       run: |
-        SECONDS=0
-        while true; do
-          ~/check_new_releases.sh --check-for "TFD_*"
-          rc=$?
-          case $rc in
-            0)
-              echo "Release appeared on CVMFS in $(( SECONDS / 60)) m $(( SECONDS % 60 )) s"
-              break
-              ;;
-            1)
-              echo "Release has not appeared. Waiting..."
-              sleep 60
-              ;;
-            *)
-              echo "check_new_releases.sh failed with $rc"
-              exit $rc
-              ;;
-          esac
-        done
+        ~/wait_for_cvmfs_publication.sh \
+          --check-for "T3FD_*" \
 
   run_build_tests:
     needs: wait_for_cvmfs_publication
