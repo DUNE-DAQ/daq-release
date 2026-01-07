@@ -1,0 +1,12 @@
+diff --git a/plugins/cram.c b/plugins/cram.c
+index d02e9baa..f9adf9ca 100644
+--- a/plugins/cram.c
++++ b/plugins/cram.c
+@@ -48,6 +48,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <stdio.h>
++#include <time.h>
+ #ifndef macintosh
+ #include <sys/stat.h>
+ #endif
