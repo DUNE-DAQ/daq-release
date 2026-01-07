@@ -86,7 +86,7 @@
           version: 2.0.9
           variant: ~
         - name: cyrus-sasl
-          version: fddaq-v5.6.0
+          version: 2.1.28
           variant: ~
         - name: libevent
           version: 2.1.12
