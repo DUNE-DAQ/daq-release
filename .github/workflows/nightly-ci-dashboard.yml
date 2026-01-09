@@ -119,7 +119,7 @@ jobs:
         cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
-                                   --pytest_summary pytest_summary.json
+                                   --pytest_summary combined_pytest_summary.md
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
