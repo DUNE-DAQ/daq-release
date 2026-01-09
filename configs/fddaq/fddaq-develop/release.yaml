@@ -150,9 +150,6 @@
         - name: druncschema
           version: develop
           source:  github_DUNE-DAQ
-        - name: durationpy
-          version: 0.10
-          source:  pypi
         - name: elisa-client-api
           version: develop
           source:  github_DUNE-DAQ
