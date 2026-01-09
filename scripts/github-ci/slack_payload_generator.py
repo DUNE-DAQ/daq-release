@@ -4,7 +4,8 @@ import argparse
 import sys
 import re
 from pathlib import Path
-from integtest_xml_parser import JUnitXMLParser
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+from parsers.junit_xml import JUnitXMLParser
 
 class SlackPayload:
     """Class to generate a Slack JSON payload for workflow notifications."""
@@ -28,7 +29,7 @@ class SlackPayload:
         self.blocks = []
         self.junit_xml_dir = junit_xml_dir
         self.xml_parser = JUnitXMLParser(self.junit_xml_dir) if self.junit_xml_dir else None
-        self.xml_files = self.xml_parser.get_xml_files(self.junit_xml_dir, "*_results.xml") if self.xml_parser else []
+        self.xml_files = self.xml_parser.get_xml_files() if self.xml_parser else []
 
     def get_workflow_status(self):
         """Determine the overall workflow status based on job conclusions."""
@@ -222,7 +223,6 @@ def main():
     if args.junit_xml_dir and os.path.isdir(args.junit_xml_dir):
         xml_files = list(Path(args.junit_xml_dir).rglob("*_results.xml"))
 
-    print('args.pytest_log_dir:', args.pytest_log_dir)
     slack_payload = SlackPayload(workflow_summary, args.release_name, args.junit_xml_dir, args.pytest_log_dir)
     json_payload = slack_payload.to_json()
     write_payload_to_file(json_payload)
