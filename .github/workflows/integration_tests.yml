@@ -173,7 +173,7 @@ jobs:
             --input-directory ${{ needs.make_variables.outputs.integtest_output_path }} \
             --to-json
         echo "-------json summary------------"
-        cat pytset_summary.json
+        cat pytest_summary.json
         echo "-------json summary end------------"
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
