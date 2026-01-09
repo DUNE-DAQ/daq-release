@@ -12,6 +12,7 @@ click-shell = ">=2.1"
 colorama = ">=0.4.6"
 connectivityserver = {git = "https://github.com/DUNE-DAQ/connectivityserver.git"}
 daq-assettools = {git = "https://github.com/DUNE-DAQ/daq-assettools"}
+daqpytools = {git = "https://github.com/DUNE-DAQ/daqpytools"}
 drunc = {git = "https://github.com/DUNE-DAQ/drunc"}
 druncschema = {git = "https://github.com/DUNE-DAQ/druncschema"}
 elisa_client_api = {git = "https://github.com/DUNE-DAQ/elisa_client_api"}
@@ -27,15 +28,14 @@ grpcio-status = "== 1.75.0"
 grpcio-tools = "== 1.75.0"
 gunicorn = ">= 23.0.0"
 h5py = ">=3.12.1"
-ipython = ">=0.0.0"
 httpx = ">=0.23.3"
 integrationtest = {git = "https://github.com/DUNE-DAQ/integrationtest"}
+ipython = ">=0.0.0"
 Jinja2 = ">=3.1.4"
 kafka-python = ">=2.3.0"
 kubernetes = ">=31.0.0"
 lxml = ">=5.1.0"
 matplotlib = ">=3.9.2" 
-moo = {git = "https://github.com/brettviren/moo", rev = "0.6.7"}
 nest-asyncio = ">=1.6.0"
 num2words = ">=0.5.13"
 numpy = ">=2.1.3"
@@ -45,12 +45,15 @@ pexpect = ">=4.9.0"
 protobuf = ">=6.32.1"
 psutil = ">=6.1.0"
 PySocks = ">=1.7.1"
+PyYAML = ">= 6.0.2"
 pytest = ">= 8.3.3"
 python-ipmi = ">= 0.5.7"
 pytz = ">=2024.2"
 requests = ">=2.32.3"
 rich = ">=13.9.4"
 rsa = ">= 4.8"
+runconftools = {git = "https://github.com/DUNE-DAQ/runconftools"}
+runconf-ui = {git = "https://github.com/DUNE-DAQ/runconf-ui"}
 setuptools = ">=69.2.0"
 sh = ">= 2.1.0"
 textual = ">= 0.87.1"
@@ -58,7 +61,6 @@ textual_dev = ">= 1.8.0"
 types-grpcio = ">=1.0.0.20251009"
 types-protobuf = ">=6.32.1.20251210"
 tqdm = ">= 0.0.0"
-PyYAML = ">= 6.0.2"
 
 
 [tool.poetry.group.dev.dependencies]
