@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 from datetime import datetime
 
-from data.integration_tests import parse_integration_test_summary
+from data.integration_tests import load_integration_test_data
 from data.unit_tests import parse_unit_test_summary
 from renderer.renderer import Renderer
 from pages.page import Page, IndexPage, UnitTestPage, IntegrationTestPage
@@ -55,9 +55,8 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     ]
 
     unit_test_data = parse_unit_test_summary(unit_test_summary)
-    integration_test_data = parse_integration_test_summary(pytest_summary)
+    integration_test_data = load_integration_test_data(pytest_summary)
     
-    # Content of the index page
     index_context = {
         "repos": repos,
         "last_updated": last_updated,
@@ -66,13 +65,13 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "passing_percentage": passing_percentage,
         "workflow_badges": workflow_badges,
         "unit_test_summary": unit_test_data,
-        "integration_test_summary": integration_test_data,
+        "integration_test_summary": integration_test_data["totals"],
     }
 
     pages = [
         IndexPage(index_context),
         UnitTestPage(unit_test_data.to_dict()),
-        IntegrationTestPage(integration_test_data.to_dict()),
+        IntegrationTestPage(integration_test_data),
     ]
 
     renderer = Renderer()
@@ -85,7 +84,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate CI HTML site from a JSON summary file.")
     parser.add_argument("--json_input", required=True, help="Path to the JSON file containing CI summary data. See collect-ci-metrics.sh.")
     parser.add_argument("--unit_test_summary", required=False, help="Path to the unit test summary output by dbt-build --unittest.")
-    parser.add_argument("--pytest_summary", required=False, help="Path to the pytest markdown summary output by integration test workflow.")
+    parser.add_argument("--pytest_summary", required=False, help="Path to the json summary output by integration test workflow.")
     args = parser.parse_args()
 
     generate_site(args.json_input, args.unit_test_summary, args.pytest_summary)
