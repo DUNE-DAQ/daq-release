@@ -80,7 +80,7 @@
           version: 0.16.0
           variant: ~
         - name: rclone
-          version: 1.64.0
+          version: 1.69.1
           variant: ~
         - name: libtorrent
           version: 2.0.9
@@ -93,6 +93,9 @@
           variant: "~openssl"
         - name: glib
           version: 2.80.5
+          variant: ~
+        - name: openmpi
+          version: 5.0.9
           variant: ~
 
     devtools:
