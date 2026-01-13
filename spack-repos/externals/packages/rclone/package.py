@@ -17,6 +17,7 @@ class Rclone(Package):
     maintainers("alecbcs")
 
 
+    version("1.69.1", sha256="02ea0fa75c0895b14153a7faf7b1a1273224c4782e6deeb60a366a48786e0722")
     version("1.64.0", sha256="3297838fdcf611a5ad605835f41c0e51031ce9f220c77a4ad0af6283b7805329")
     version("1.62.2", sha256="340371f94604e6771cc4a2c91e37d1bf00a524deab520340440fb0968e783f63")
     version("1.61.1", sha256="34b5f52047741c7bbf54572c02cc9998489c4736a753af3c99255296b1af125d")
@@ -90,10 +91,15 @@ class Rclone(Package):
 
         mkdirp(prefix.lib.cmake.rclone)
         install("librclone.so", prefix.lib)
-        copy(join_path(os.path.dirname(__file__),"rcloneConfig.cmake"), self.prefix + "/lib/cmake/rclone")
-        copy(join_path(os.path.dirname(__file__),"rcloneConfigVersion.cmake"), self.prefix + "/lib/cmake/rclone")
-        copy(join_path(os.path.dirname(__file__),"rcloneTargets.cmake"), self.prefix + "/lib/cmake/rclone")
+
+        if self.spec.satisfies('@1.64.0'):
+            copy(join_path(os.path.dirname(__file__),"rcloneConfig.cmake.1.64.0"), self.prefix + "/lib/cmake/rclone/rcloneConfig.cmake")
+            copy(join_path(os.path.dirname(__file__),"rcloneConfigVersion.cmake.1.64.0"), self.prefix + "/lib/cmake/rclone/rcloneConfigVersion.cmake")
+            copy(join_path(os.path.dirname(__file__),"rcloneTargets.cmake.1.64.0"), self.prefix + "/lib/cmake/rclone/rcloneTargets.cmake")
+        elif self.spec.satisfies('@1.69.1'):
+            copy(join_path(os.path.dirname(__file__),"rcloneConfig.cmake.1.69.1"), self.prefix + "/lib/cmake/rclone/rcloneConfig.cmake")
+            copy(join_path(os.path.dirname(__file__),"rcloneConfigVersion.cmake.1.69.1"), self.prefix + "/lib/cmake/rclone/rcloneConfigVersion.cmake")
+            copy(join_path(os.path.dirname(__file__),"rcloneTargets.cmake.1.69.1"), self.prefix + "/lib/cmake/rclone/rcloneTargets.cmake")
 
         mkdirp(prefix.include)
         install("librclone.h", prefix.include)
-
