@@ -177,6 +177,11 @@ class Cmake(Package):
         values=("Debug", "Release", "RelWithDebInfo", "MinSizeRel"),
     )
 
+    patch("suppress_excessive_warning.patch",
+          sha256="c5b3d6205211d526679e1b94b1cea43446686a389297e8cc4fae846c548f9a8a",
+          when="@4.1.2"
+          )
+
     patch(
         "cmake-findprotobuf.patch",
         sha256="4759c83e94606f7e69668b1f457fe7c5ff5d98826b5c23a837e4718cd4bcab90",
