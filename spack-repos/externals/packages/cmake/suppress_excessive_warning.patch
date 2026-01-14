@@ -1,5 +1,5 @@
 diff --git a/Source/cmPolicies.cxx b/Source/cmPolicies.cxx
-index 45838630..fcc2f12c 100644
+index 45838630..3a345b24 100644
 --- a/Source/cmPolicies.cxx
 +++ b/Source/cmPolicies.cxx
 @@ -396,14 +396,7 @@ std::string cmPolicies::GetPolicyWarning(cmPolicies::PolicyID id)
@@ -14,7 +14,7 @@ index 45838630..fcc2f12c 100644
 -    "policies are deprecated and that a policy should be set to OLD only "
 -    "under specific short-term circumstances.  Projects should be ported "
 -    "to the NEW behavior and not rely on setting a policy to OLD.");
-+  return cmStrCat("[Suppressed harmless CMake policy deprecation warning for CMP0116]");
++  return cmStrCat("Suppressed harmless CMake policy deprecation warning for ", idToString(id), "\n");
  }
  
  bool cmPolicies::IsRemoved(cmPolicies::PolicyID id)

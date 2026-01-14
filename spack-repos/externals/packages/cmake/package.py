@@ -178,7 +178,7 @@ class Cmake(Package):
     )
 
     patch("suppress_excessive_warning.patch",
-          sha256="c5b3d6205211d526679e1b94b1cea43446686a389297e8cc4fae846c548f9a8a",
+          sha256="8676b35476eef5d4b92fc31dfba2c1d229968629e8fee0372f8dba91a7f8a115",
           when="@4.1.2"
           )
 
