@@ -108,6 +108,9 @@
         - name: ninja
           version: 1.10.0
           variant: ~
+        - name: gcc-runtime
+          version: 14.3.0
+          variant: ~
 
     systems:
         - name: python
