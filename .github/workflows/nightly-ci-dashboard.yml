@@ -105,11 +105,11 @@ jobs:
       env:
         CI_DASHBOARD_DIR: daq-release-ci-dashboard/scripts/github-ci/ci-dashboard
       run: |
-        cd ${{ env.CI_DASHBOARD_DIR }}
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
         cp -r code_check_summary/ ${{ env.CI_DASHBOARD_DIR }}/code_check_summary
         cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
         cp -r extended_integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/extended_integration_test_summary
+        cd ${{ env.CI_DASHBOARD_DIR }}
         ls integration_test_summary
         ls extended_integration_test_summary
         ./collect-ci-metrics.sh
