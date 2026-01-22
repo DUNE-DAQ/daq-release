@@ -2,7 +2,7 @@ name: Alma9 build backup v5 nightly release with externals v2.2
 
 on:
   schedule:
-    - cron: "40 18 * * *"
+    - cron: "30 4 * * *"
 
   workflow_dispatch:
     inputs:
