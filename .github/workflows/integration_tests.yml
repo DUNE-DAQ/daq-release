@@ -164,6 +164,7 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-integtest
+        ref: amogan/refactor_xml_parsing
     - name: Generate summary tables
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
