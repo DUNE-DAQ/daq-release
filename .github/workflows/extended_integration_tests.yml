@@ -165,6 +165,9 @@ jobs:
       run: |
         cd $DAQ_RELEASE_PATH/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
+        echo "-------json summary------------"
+        cat pytest_summary.json
+        echo "-------json summary end------------"
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v6
@@ -172,6 +175,12 @@ jobs:
         if-no-files-found: error
         name: nightly_extended_integtest_summary
         path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary_table.md
+    - name: Upload json summary as artifact
+      uses: actions/upload-artifact@v6
+      with:
+        if-no-files-found: error
+        name: nightly_extended_integtest_json
+        path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary.json
 
   store_and_upload_logs:
     runs-on: daq

@@ -115,13 +115,14 @@ jobs:
         ./collect-ci-metrics.sh
         echo "Collected the following metrics:"
         cat ci_summary.json
-        ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
-                                        extended_integration_test_summary/pytest_summary_table.md \
-                                        > combined_pytest_summary.md
-        cat combined_pytest_summary.md
+        #./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
+        #                                extended_integration_test_summary/pytest_summary_table.md \
+        #                                > combined_pytest_summary.md
+        #cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
-                                   --pytest_summary combined_pytest_summary.md
+                                   --core_pytest_summary integration_test_summary/pytest_summary.json \
+                                   --extended_pytest_summary extended_integration_test_summary/pytest_summary.json \
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages

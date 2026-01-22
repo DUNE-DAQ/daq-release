@@ -171,7 +171,6 @@ jobs:
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py \
             --input-directory ${{ needs.make_variables.outputs.integtest_output_path }} \
-            --to-json
         echo "-------json summary------------"
         cat pytest_summary.json
         echo "-------json summary end------------"
