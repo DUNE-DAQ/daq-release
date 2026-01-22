@@ -5,7 +5,7 @@ import argparse
 import html
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from integration_test_summary import IntegrationTestSummary
+from integration_test_summary import IntegrationTestSummary, PytestResult, TestCaseResult
 
 class JUnitXMLParser:
     def __init__(self, input_directory: str='', input_file: str=''):
@@ -90,8 +90,8 @@ def main():
     elif integtest_parser.input_file:
         integtest_parser.parse_xml_file(integtest_parser.input_file)
 
-    integtest_parser.to_markdown()
-    integtest_parser.to_json()
+    integtest_parser.summary.to_markdown()
+    integtest_parser.summary.to_json()
     #integtest_parser.prepend_totals()
     #summary = integtest_parser.parse_integration_test_summary('pytest_summary_table.md')
     print('SUMMARY:', integtest_parser.summary)

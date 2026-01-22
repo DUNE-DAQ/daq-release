@@ -10,7 +10,7 @@ from data.unit_tests import parse_unit_test_summary
 from renderer.renderer import Renderer
 from pages.page import Page, IndexPage, UnitTestPage, IntegrationTestPage
 
-def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
+def generate_site(json_input_path, unit_test_summary='', core_summary='', extended_summary=''):
     """Render html files from templates to generate the site."""
     with open(json_input_path, 'r') as f:
         repos = json.load(f)
@@ -55,7 +55,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
     ]
 
     unit_test_data = parse_unit_test_summary(unit_test_summary)
-    integration_test_data = load_integration_test_data(pytest_summary)
+    integration_test_data = load_integration_test_data(core_summary, extended_summary)
     
     index_context = {
         "repos": repos,
@@ -65,7 +65,7 @@ def generate_site(json_input_path, unit_test_summary='', pytest_summary=''):
         "passing_percentage": passing_percentage,
         "workflow_badges": workflow_badges,
         "unit_test_summary": unit_test_data,
-        "integration_test_summary": integration_test_data["totals"],
+        "integration_test_summary": integration_test_data['totals'],
     }
 
     pages = [
@@ -84,7 +84,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate CI HTML site from a JSON summary file.")
     parser.add_argument("--json_input", required=True, help="Path to the JSON file containing CI summary data. See collect-ci-metrics.sh.")
     parser.add_argument("--unit_test_summary", required=False, help="Path to the unit test summary output by dbt-build --unittest.")
-    parser.add_argument("--pytest_summary", required=False, help="Path to the json summary output by integration test workflow.")
+    parser.add_argument("--core_pytest_summary", required=False, help="Path to the json summary output by core integration test workflow.")
+    parser.add_argument("--extended_pytest_summary", required=False, help="Path to the json summary output by extended integration test workflow.")
     args = parser.parse_args()
 
-    generate_site(args.json_input, args.unit_test_summary, args.pytest_summary)
+    generate_site(args.json_input, args.unit_test_summary, args.core_pytest_summary, args.extended_pytest_summary)
