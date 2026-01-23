@@ -132,12 +132,6 @@ jobs:
         ./collect-ci-metrics.sh
         echo "Collected the following metrics:"
         cat ci_summary.json
-        ls integration_test_summary
-        ls extended_integration_test_summary
-        #./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
-        #                                extended_integration_test_summary/pytest_summary_table.md \
-        #                                > combined_pytest_summary.md
-        #cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
                                    --core_pytest_summary integration_test_summary/pytest_summary.json \
