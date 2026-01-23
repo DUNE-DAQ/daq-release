@@ -2,7 +2,7 @@ name: Hello world
 
 on:
   schedule:
-    - cron: "40 16 * * *"
+    - cron: "0 17 * * *"
 
   workflow_dispatch:
     inputs:
