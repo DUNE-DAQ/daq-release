@@ -83,16 +83,16 @@ jobs:
 
             test_name: [
                         "listrev_test",
-                        #"3ru_1df_multirun_test",
-                        #"3ru_3df_multirun_test",
-                        #"example_system_test",
-                        #"fake_data_producer_test",
-                        #"long_window_readout_test",
+                        "3ru_1df_multirun_test",
+                        "3ru_3df_multirun_test",
+                        "example_system_test",
+                        "fake_data_producer_test",
+                        "long_window_readout_test",
                         "minimal_system_quick_test",
-                        #"readout_type_scan_test",
-                        #"small_footprint_quick_test",
-                        #"tpreplay_test",
-                        #"tpstream_writing_test"
+                        "readout_type_scan_test",
+                        "small_footprint_quick_test",
+                        "tpreplay_test",
+                        "tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -164,7 +164,6 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-integtest
-        ref: amogan/refactor_xml_parsing
     - name: Generate summary tables
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
@@ -172,9 +171,6 @@ jobs:
         cd daq-release-integtest/scripts/github-ci/
         python integtest_xml_parser.py \
                --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
-        echo "-------json summary------------"
-        cat pytest_summary.json
-        echo "-------json summary end------------"
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v6
@@ -218,8 +214,7 @@ jobs:
       integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     runs-on: daq
