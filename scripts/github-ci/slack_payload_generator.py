@@ -4,8 +4,7 @@ import argparse
 import sys
 import re
 from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parents[2]))
-from parsers.junit_xml import JUnitXMLParser
+from integtest_xml_parser import JUnitXMLParser
 
 class SlackPayload:
     """Class to generate a Slack JSON payload for workflow notifications."""
