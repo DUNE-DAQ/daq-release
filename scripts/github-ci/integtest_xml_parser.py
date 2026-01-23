@@ -23,13 +23,13 @@ class JUnitXMLParser:
         return xml_files
 
     # Junit xml file names should be structured as <package_name>_<pytest_name>_results.xml
-    def get_package_name(self, file):
+    def get_package_name(self, file) -> str:
         return file.stem.split('_')[0]
 
-    def get_pytest_name(self, file):
+    def get_pytest_name(self, file) -> str:
         return file.stem.replace('_results', '').split('_', 1)[1]
 
-    def parse_xml_file(self, file_path):
+    def parse_xml_file(self, file_path: str) -> None:
         tree = ET.parse(file_path)
         root = tree.getroot()
 
@@ -92,10 +92,6 @@ def main():
 
     integtest_parser.summary.to_markdown()
     integtest_parser.summary.to_json()
-    #integtest_parser.prepend_totals()
-    #summary = integtest_parser.parse_integration_test_summary('pytest_summary_table.md')
-    print('SUMMARY:', integtest_parser.summary)
-
 
 if __name__ == "__main__":
     main()
