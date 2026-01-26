@@ -32,4 +32,5 @@ class Crtmodules(CMakePackage):
         env.set(self.__module__.split(".")[-1].upper().replace("-", "_") + "_SHARE", self.prefix + "/share" )
         env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
+        env.prepend_path('DUNEDAQ_DB_PATH', self.prefix + "/share")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
