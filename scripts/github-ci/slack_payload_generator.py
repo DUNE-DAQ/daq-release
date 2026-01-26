@@ -117,7 +117,7 @@ class SlackPayload:
             return "\n\t\t  *Unknown failure:* No matching results.xml file found.\n"
 
         failure_summary = ''
-        results = self.xml_parser.parse_junit_xml(xml_file)
+        results = self.xml_parser.parse_xml_file(xml_file)
         failed_line_pattern = r"\n>\s+(.*?)\n"
 
         for result in results:
