@@ -25,7 +25,6 @@ class Renderer:
             "Integration Test Summary": "integtest_summary.html",
             "Code Coverage Report": "code_coverage/index.html",
         }
-        #self.env = Environment(loader=FileSystemLoader(str(self.templates_path)))
         self.env = Environment(loader=FileSystemLoader(self.templates_path))
         self.env.filters["commit_age"] = commit_age
         self.env.globals["links"] = self.links
