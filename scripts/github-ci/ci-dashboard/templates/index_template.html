@@ -24,25 +24,23 @@
     <div class="summary-block">
       <h3>Integration Tests</h3>
       <p>
-        {{ integration_test_summary.total }} total tests run.<br>
+        {{ integration_test_summary.total_run }} total tests run.<br>
         <span class="status-success">
           Passed: {{ integration_test_summary.passed }} 
-          ({{ (100 * integration_test_summary.passed / integration_test_summary.total) | round(1) }}%)
+          ({{ (100 * integration_test_summary.passed / integration_test_summary.total_run) | round(1) }}%)
           <br>
         </span>
         <span class="status-failure">
           Failed: {{ integration_test_summary.failed }} 
-          ({{ (100 * integration_test_summary.failed / integration_test_summary.total) | round(1) }}%)
+          ({{ (100 * integration_test_summary.failed / integration_test_summary.total_run) | round(1) }}%)
           <br>
         </span>
         <span class="status-skipped">
           Skipped: {{ integration_test_summary.skipped }} 
-          ({{ (100 * integration_test_summary.skipped / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
         <span class="status-error">
           Errored: {{ integration_test_summary.errors }} 
-          ({{ (100 * integration_test_summary.errors / integration_test_summary.total) | round(1) }}%)
           <br>
         </span>
       </p>

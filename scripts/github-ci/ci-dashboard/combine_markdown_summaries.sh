@@ -22,7 +22,6 @@ extract_counts() {
   errored=$((errored + $(grep -oP '\s+\K[0-9]+(?= had errors)' "$file")))
 }
 
-# Loop over all input files
 for file in "$@"; do
   extract_counts "$file"
 
@@ -30,7 +29,6 @@ for file in "$@"; do
   awk '/^# /{flag=1} flag' "$file" >> /tmp/all_tables.tmp
 done
 
-# Output the combined summary
 echo "There were $total_tests total tests run."
 echo "           $passed passed :white_check_mark:,"
 echo "           $failed failed :x:,"
@@ -38,8 +36,6 @@ echo "           $skipped were skipped :fast_forward:, and"
 echo "           $errored had errors :warning: which prevented the test from completing."
 echo
 
-# Output the combined tables
 cat /tmp/all_tables.tmp
 
-# Clean up
 rm /tmp/all_tables.tmp

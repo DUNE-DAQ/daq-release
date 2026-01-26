@@ -72,7 +72,7 @@ jobs:
         path: ${{ steps.set_paths.outputs.code_check_summary_path }}
         run-id: ${{ steps.run_ids.outputs.code_check_id }}
 
-    - name: Download integration test summary
+    - name: Download integration test markdown
       id: download_integration_test
       uses: actions/download-artifact@v7
       with:
@@ -81,11 +81,29 @@ jobs:
         path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
         run-id: ${{ steps.run_ids.outputs.integration_test_id }}
 
-    - name: Download extended integration test summary
+    - name: Download integration test json
+      id: download_integration_test_json
+      uses: actions/download-artifact@v7
+      with:
+        name: nightly_integtest_json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.integration_test_id }}
+
+    - name: Download extended integration test markdown
       id: download_extended_integration_test
       uses: actions/download-artifact@v7
       with:
         name: nightly_extended_integtest_summary
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
+
+    - name: Download extended integration test json
+      id: download_extended_integration_test_json
+      uses: actions/download-artifact@v7
+      with:
+        name: nightly_extended_integtest_json
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
         run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
@@ -113,13 +131,10 @@ jobs:
         ./collect-ci-metrics.sh
         echo "Collected the following metrics:"
         cat ci_summary.json
-        ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
-                                        extended_integration_test_summary/pytest_summary_table.md \
-                                        > combined_pytest_summary.md
-        cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
-                                   --pytest_summary combined_pytest_summary.md
+                                   --core_pytest_summary integration_test_summary/pytest_summary.json \
+                                   --extended_pytest_summary extended_integration_test_summary/pytest_summary.json \
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
