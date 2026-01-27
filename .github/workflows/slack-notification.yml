@@ -30,25 +30,12 @@ jobs:
         path: daq-release-slack-message
     - name: Get workflow failures from GitHub API
       run: |
-        WORKFLOW_DETAILS=$(gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-        WORKFLOW_NAME=$(echo "$WORKFLOW_DETAILS" | jq -r '.name')
-        ACTOR_LOGIN=$(echo "$WORKFLOW_DETAILS" | jq -r '.actor.login')
-        EVENT_TYPE=$(echo "$WORKFLOW_DETAILS" | jq -r '.event')
-        HTML_URL=$(echo "$WORKFLOW_DETAILS" | jq -r '.html_url')
-
-        # Get failed jobs and merge with workflow details
-        gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
-        | jq --arg workflow "$WORKFLOW_NAME" --arg actor "$ACTOR_LOGIN" --arg event "$EVENT_TYPE" --arg html_url "$HTML_URL" \
-          '{workflow: $workflow, actor: $actor, event: $event, html_url: $html_url, failed_jobs: [ .jobs[] | select(.conclusion != "success") | {job: .name, conclusion: .conclusion, steps: [.steps[] | select(.conclusion == "failure") | {name: .name}]}]}' \
-        | tee failed_jobs.json
+        # Outputs workflow_summary.json
+        ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
-               --api-output failed_jobs.json \
-               --release-name ${{ inputs.release_tag }} \
-               --junit-xml-dir ${{ inputs.integtest_xml_dir }} \
-               --pytest-log-dir ${{ inputs.integtest_log_dir }}
+               --workflow-data workflow_summary.json
         cat slack_payload.json
     - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.1.1
