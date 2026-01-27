@@ -167,7 +167,7 @@ class SlackPayload:
         self.add_header()
         self.add_release_section()
         self.add_report_section()
-        self.add_failed_jobs_section()
+        #self.add_failed_jobs_section()
         if shorten_failed_jobs_section:
             self.blocks[2]['text']['text'] = f""":warning: The failed jobs text exceeded Slack's limit of 3,000 characters. This indicates a large number of failures across multiple tests. :warning:"""
         self.add_pytest_log_section()
