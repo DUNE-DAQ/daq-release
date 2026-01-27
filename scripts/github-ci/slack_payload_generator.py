@@ -1,10 +1,57 @@
+from __future__ import annotations
 import sys, os
 import json
 import argparse
 import sys
 import re
 from pathlib import Path
+from dataclasses import dataclass
+from typing import List, Optional
+
 from integtest_xml_parser import JUnitXMLParser
+
+def choose_strategy(workflow: str):
+    if workflow == "Integration test workflow":
+        return IntegrationTestMessageStrategy()
+    else:
+        return DefaultMessageStrategy()
+
+@dataclass
+class FailedStep:
+    step: str
+
+@dataclass
+class FailedJob:
+    job: str
+    conclusion: str
+    steps: List[FailedStep]
+
+@dataclass
+class WorkflowSummary:
+    workflow: str
+    conclusion: str
+    event: str
+    actor: str
+    html_url: str
+    failed_jobs: List[FailedJob]
+
+    @classmethod
+    def from_dict(cls, data: dict) -> WorkflowSummary:
+        return cls(
+            workflow=data["workflow"],
+            conclusion=data["conclusion"],
+            event=data["event"],
+            actor=data["actor"],
+            html_url=data["html_url"],
+            failed_jobs=[
+                FailedJob(
+                    job=j["job"],
+                    conclusion=j["conclusion"],
+                    steps=[FailedStep(step=s["name"]) for s in j.get("steps", [])]
+                )
+                for j in data.get("failed_jobs", [])
+            ]
+        )
 
 class SlackPayload:
     """Class to generate a Slack JSON payload for workflow notifications."""
@@ -17,11 +64,6 @@ class SlackPayload:
 
     def __init__(self, workflow_summary, release_name=None, junit_xml_dir=None, pytest_log_dir=None):
         self.workflow_summary  = workflow_summary
-        self.workflow_name     = workflow_summary['workflow']
-        self.workflow_trigger  = workflow_summary['event']
-        self.workflow_actor    = workflow_summary['actor']
-        self.workflow_html_url = workflow_summary['html_url']
-        self.failed_jobs       = workflow_summary['failed_jobs']
         self.release_name = release_name
         self.pytest_log_dir = pytest_log_dir
         self.workflow_status = self.get_workflow_status()
@@ -213,7 +255,7 @@ def main():
 
     try:
         with open(args.api_output, "r") as f:
-            workflow_summary = json.load(f)
+            data = json.load(f)
     except json.JSONDecodeError as e:
         print(f"Error decoding GH API output: {e}")
         return
@@ -222,9 +264,11 @@ def main():
     if args.junit_xml_dir and os.path.isdir(args.junit_xml_dir):
         xml_files = list(Path(args.junit_xml_dir).rglob("*_results.xml"))
 
-    slack_payload = SlackPayload(workflow_summary, args.release_name, args.junit_xml_dir, args.pytest_log_dir)
-    json_payload = slack_payload.to_json()
-    write_payload_to_file(json_payload)
+    workflow_summary = WorkflowSummary(data)
+    if workflow_summary.workflow == "Integration test workflow":
+    #slack_payload = SlackPayload(workflow_summary, args.release_name, args.junit_xml_dir, args.pytest_log_dir)
+    #json_payload = slack_payload.to_json()
+    #write_payload_to_file(json_payload)
 
 if __name__ == "__main__":
     main()
