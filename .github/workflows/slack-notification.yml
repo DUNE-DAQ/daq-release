@@ -7,10 +7,10 @@ on:
         type: string
         default: ''
         description: Name of the release used in the caller workflow.
-      integtest_xml_dir:
-        type: string
-        default: ''
-        description: Optional path to directory containing junit xml files output by pytests.
+      #integtest_xml_dir:
+      #  type: string
+      #  default: ''
+      #  description: Optional path to directory containing junit xml files output by pytests.
       integtest_log_dir:
         type: string
         default: ''
@@ -32,10 +32,19 @@ jobs:
       run: |
         # Outputs workflow_summary.json
         ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
+    - name: Add metadata to workflow summary
+      if: ${{ inputs.integtest_log_dir }}
+      run: |
+        jq --null-input \
+           --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
+           --arg release "${{ inputs.release_tag }}" \
+           '{"pytest_log_dir": $pytest_log_dir,
+             "release"       : $release}' > additional_metadata.json
+             jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \
-               --workflow-data workflow_summary.json
+               --workflow-data workflow_summary_with_metadata.json
         cat slack_payload.json
     - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.1.1

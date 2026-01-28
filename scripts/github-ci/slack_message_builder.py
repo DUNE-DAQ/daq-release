@@ -19,11 +19,15 @@ STATUS_EMOJIS = {
 
 def choose_strategy(workflow: str):
     if workflow == "Integration test workflow":
+        print("Integtest strat")
         return IntegrationTestMessageStrategy()
     else:
+        print("Default strat")
         return DefaultMessageStrategy()
 
 def get_release_type(release_name):
+    if not release_name:
+        return "Unknown"
     if "NFD_" in release_name:
         return "nightly"
     elif "rc" in release_name:
@@ -41,17 +45,17 @@ def get_workflow_event(event, actor):
 
 class MessageStrategy(ABC):
     @abstractmethod
-    def build(self, summary, release="unknown"):
+    def build(self, summary):
         pass
 
 class BaseMessageStrategy(MessageStrategy):
-    def build(self, summary: dict, release: str, output_path: str = "slack_payload.json"):
+    def build(self, summary: dict, output_path: str = "slack_payload.json"):
         emoji = STATUS_EMOJIS.get(summary['conclusion'], ":question:")
 
         builder = SlackMessageBuilder(summary)
 
         builder.add_block(self.build_header(emoji, summary))
-        builder.add_block(self.build_release_section(release))
+        #builder.add_block(self.build_release_section(release))
         builder.add_block(self.build_report_section(summary))
 
         # Classes which inherit from BaseMessageStrategy can override this for additional information
@@ -66,8 +70,9 @@ class BaseMessageStrategy(MessageStrategy):
     def build_header(self, emoji, summary):
         return HeaderBlock(f"{emoji} {summary['conclusion'].capitalize()}: {summary['workflow']} {emoji}")
 
-    def build_release_section(self, release):
-        release_type = get_release_type(release)
+    def build_release_section(self, summary):
+        release_type = get_release_type(summary['release'])
+        release = summary['release']
         return SectionBlock(f"This workflow was run using the {release_type} release `{release}`")
 
     def build_report_section(self, summary):
@@ -85,14 +90,17 @@ class DefaultMessageStrategy(BaseMessageStrategy):
 
 class IntegrationTestMessageStrategy(BaseMessageStrategy):
     def build_extra_blocks(self, summary):
-        pytest_log_dir = "test"
-        return [
+        pytest_log_dir = summary.get("pytest_log_dir", None)
+        extra_blocks = []
+        extra_blocks.append(self.build_release_section(summary))
+        extra_blocks.append(
             SectionBlock(
-                "The pytest logs for these tests will be stored for 7 days at:\n"
-                "`daq.fnal.gov:{pytest_log_dir}`\n\n"
-                "You can also download logs from the *Full report* link above."
+                f"The pytest logs for these tests will be stored for 7 days at:\n"
+                f"`daq.fnal.gov:{pytest_log_dir}`\n\n"
+                f"You can also download logs from the *Full report* link above."
             )
-        ]
+        )
+        return extra_blocks
 
 
 class Block(ABC):
@@ -152,9 +160,9 @@ class SlackMessageBuilder:
 
     def __init__(self, workflow_summary, release_name=None, junit_xml_dir=None, pytest_log_dir=None):
         self.blocks: list[Block] = []
-        self.workflow_summary: dict  = workflow_summary
-        self.release_name: str = release_name
-        self.pytest_log_dir: Path = Path(pytest_log_dir) if pytest_log_dir else None
+        #self.workflow_summary: dict  = workflow_summary
+        #self.release_name: str = release_name
+        #self.pytest_log_dir: Path = Path(pytest_log_dir) if pytest_log_dir else None
         #self.junit_xml_dir = junit_xml_dir
         #self.xml_parser = JUnitXMLParser(self.junit_xml_dir) if self.junit_xml_dir else None
         #self.xml_files = self.xml_parser.get_xml_files() if self.xml_parser else []
@@ -217,12 +225,12 @@ def main():
     parser = argparse.ArgumentParser(description="Parse a workflow summary and generate a Slack message payload.")
     parser.add_argument("--workflow-summary", required=True,
                         help="JSON file containing a workflow summary. Output from get_workflow_summary.sh")
-    parser.add_argument("--release-name", required=True, default=None,
-                        help="Optional name of the release used in the caller workflow.")
-    parser.add_argument("--junit-xml-dir", type=str, default=None,
-                        help="Optional directory containing JUnit XML files.")
-    parser.add_argument("--pytest-log-dir", type=str, default=None,
-                        help="Optional directory for full pytest logs.")
+    #parser.add_argument("--release-name", type=str, default=None,
+    #                    help="Optional name of the release used in the caller workflow.")
+    #parser.add_argument("--junit-xml-dir", type=str, default=None,
+    #                    help="Optional directory containing JUnit XML files.")
+    #parser.add_argument("--pytest-log-dir", type=str, default=None,
+    #                    help="Optional directory for full pytest logs.")
     parser.add_argument("--output-path", type=str, default="slack_payload.json",
                         help="Optional path/name for output json file.")
     args = parser.parse_args()
@@ -238,7 +246,7 @@ def main():
         return
 
     message_strategy = choose_strategy(data['workflow'])
-    message_strategy.build(data, args.release_name)
+    message_strategy.build(data)
 
     if Path('slack_payload.json').is_file():
         print("Slack payload saved to slack_payload.json")
