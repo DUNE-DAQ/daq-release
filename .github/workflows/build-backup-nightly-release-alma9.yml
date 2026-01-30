@@ -306,8 +306,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: publish_to_cvmfs
+    needs: [make_tags, publish_to_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
+    with:
+      release_tag: ${{ needs.make_tags.outputs.detector_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 

@@ -211,7 +211,6 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
-      integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
