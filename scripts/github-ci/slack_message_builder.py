@@ -15,7 +15,7 @@ STATUS_EMOJIS = {
     "unknown": ":question:",
 }
 
-def choose_strategy(data: dict):
+def choose_strategy(data: dict) -> MessageStrategy:
     workflow_name = data['workflow']
     if workflow_name == "Integration test workflow":
         print("Integtest strat")
@@ -69,7 +69,6 @@ class BaseMessageStrategy(MessageStrategy):
 
         builder.add_block(self.build_footer())
 
-        print('OUTPUT PATH:', output_path)
         builder.write(output_path)
 
     def build_header(self, emoji):
@@ -160,13 +159,6 @@ class FooterBlock(Block):
 
 
 class SlackMessageBuilder:
-    STATUS_EMOJIS = {
-        "success": ":white_check_mark:",
-        "failure": ":rotating_light:",
-        "cancelled": ":no_entry:",
-    }
-
-    #def __init__(self, workflow_summary=None, release_name=None, junit_xml_dir=None, pytest_log_dir=None):
     def __init__(self):
         self.blocks: list[Block] = []
 
@@ -179,7 +171,6 @@ class SlackMessageBuilder:
         }
 
     def write(self, path: str):
-        print("OUTPUT PATH??", path)
         path = Path(path)
         with path.open("w") as f:
             json.dump(self.to_dict(), f)
