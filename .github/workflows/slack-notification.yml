@@ -44,7 +44,7 @@ jobs:
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_message_builder.py \
-               --workflow-data workflow_summary_with_metadata.json
+               --workflow-summary workflow_summary_with_metadata.json
         cat slack_payload.json
     - name: Send Slack Message
       uses: slackapi/slack-github-action@v2.1.1
