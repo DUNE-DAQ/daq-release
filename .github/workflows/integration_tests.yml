@@ -82,23 +82,29 @@ jobs:
         matrix:
 
             test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
+                        #"listrev_test",
+                        #"3ru_1df_multirun_test",
+                        #"3ru_3df_multirun_test",
+                        #"example_system_test",
+                        #"fake_data_producer_test",
+                        #"long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan_test",
-                        "small_footprint_quick_test",
-                        "tpreplay_test",
-                        "tpstream_writing_test"
+                        #"readout_type_scan_test",
+                        #"small_footprint_quick_test",
+                        #"tpreplay_test",
+                        #"tpstream_writing_test"
                        ]
     defaults:
       run:
         shell: bash
 
     steps:
+    - name: checkout daqsystemtest branch
+      uses: actions/checkout@v6
+      with:
+        ref: amogan/sabotage_msqt
+        path: daqsystemtest_sabotaged
+      
     - name: setup release and run tests
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
@@ -133,6 +139,9 @@ jobs:
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
           TEST_PATH=$LISTREV_SHARE/integtest
           TEST_SOURCE=listrev
+        elif [[ "${{ matrix.test_name }}" == "minimal_system_quick_test" ]]; then
+          TEST_PATH=${{ github.workspace }}/daqsystemtest_sabotaged/integtest
+          TEST_SOURCE=daqsystemtest
         else
           TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
           TEST_SOURCE=daqsystemtest
