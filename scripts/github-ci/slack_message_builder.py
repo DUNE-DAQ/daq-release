@@ -17,7 +17,7 @@ STATUS_EMOJIS = {
 
 def choose_strategy(data: dict) -> MessageStrategy:
     workflow_name = data['workflow']
-    if workflow_name == "Integration test workflow":
+    if "integration test workflow" in workflow_name.lower():
         return IntegrationTestMessageStrategy(data)
     elif workflow_name == "Weekly code coverage workflow":
         return CodeCoverageMessageStrategy(data)
@@ -28,9 +28,11 @@ def choose_strategy(data: dict) -> MessageStrategy:
 
 def get_release_type(release_name: str) -> str:
     if not release_name:
-        return "Unknown"
-    if "NFD_" in release_name:
+        return None
+    if release_name.startswith("NFD_"):
         return "nightly"
+    elif "FD_" in release_name and not release_name.startswith("N"):
+        return "test"
     elif "rc" in release_name:
         return "candidate"
     else:
@@ -74,11 +76,15 @@ class BaseMessageStrategy(MessageStrategy):
         builder.write(output_path)
 
     def build_header(self, emoji):
-        return HeaderBlock(f"{emoji} {self.summary['conclusion'].capitalize()}: {self.summary['workflow']} {emoji}")
+        conclusion = self.summary.get("conclusion", "Unknown status")
+        workflow = self.summary.get("workflow", "Unknown workflow name")
+        return HeaderBlock(f"{emoji} {conclusion}: {workflow} {emoji}")
 
     def build_release_section(self):
-        release_type = get_release_type(self.summary['release'])
-        release = self.summary['release']
+        release = self.summary.get("release", None)
+        release_type = get_release_type(release)
+        if not release_type:
+            return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
         return SectionBlock(f"This workflow was run using the {release_type} release `{release}`")
 
     def build_report_section(self):
@@ -94,7 +100,9 @@ class BaseMessageStrategy(MessageStrategy):
         return SectionBlock(failed_jobs_text)
 
     def build_footer(self):
-        return FooterBlock(get_workflow_event(self.summary['event'], self.summary['actor']))
+        event = self.summary.get("event", None)
+        actor = self.summary.get("actor", None)
+        return FooterBlock(get_workflow_event(event, actor))
 
     def build_extra_blocks(self):
         return []
@@ -204,46 +212,6 @@ class SlackMessageBuilder:
         path = Path(path)
         with path.open("w") as f:
             json.dump(self.to_dict(), f)
-
-    def add_failed_jobs_section(self):
-        """Sections that lists failed jobs and steps."""
-        if not self.failed_jobs or self.workflow_status != 'failure':
-            return
-        
-        failed_jobs_text = "*Failed jobs and steps:*\n"
-        for job in self.failed_jobs:
-            if job['conclusion'] != 'failure':
-                continue
-            failed_jobs_text += f"- *{job['job']}*\n"
-            for step in job['steps']:
-                failed_jobs_text += f"\t:x: *{step['name']}*\n"
-                if 'integration_tests' in job['job']:
-                    test_name = job['job'].split()[1].strip("()")
-                    failed_jobs_text += self.get_integration_test_failure(test_name)
-
-        self.blocks.append({
-            "type": "section",
-            "text": {"type": "mrkdwn", "text": failed_jobs_text}
-        })
-
-    def get_integration_test_failure(self, test_name):
-        """Parse JUnit XML files output by integration tests to roughly determine failure reason."""
-        xml_file = self.find_matching_file(test_name)
-        if not xml_file:
-            return "\n\t\t  *Unknown failure:* No matching results.xml file found.\n"
-
-        failure_summary = ''
-        results = self.xml_parser.parse_xml_file(xml_file)
-        failed_line_pattern = r"\n>\s+(.*?)\n"
-
-        for result in results:
-            if not result.get('failure_message'):
-                continue
-            failure_summary += f"\n\t\t  *{result['test_name']}* failed"
-            failed_line_match = re.findall(failed_line_pattern, result['failure_message'])
-            if failed_line_match:
-                failure_summary += f" while checking \n\t\t`{failed_line_match[0]}`\n"
-        return failure_summary
 
 
 def main():
