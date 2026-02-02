@@ -158,14 +158,18 @@ class DAQRelease:
             yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def get_cmake_dependencies(self, package_name, branch_name):
+    def get_file_from_package(self, package_name, branch_name, file_name):
         if self.overwrite_branch != '':
             if check_branch_exists(package_name, self.overwrite_branch):
                 branch_name = self.overwrite_branch
-        file_name = "CMakeLists.txt"
-        cmakelists_path = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
-        command = f'curl -o {file_name} --fail {cmakelists_path}'
+        file_url = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
+        command = f'curl -o {file_name} --fail {file_url}'
         check_output(command, 5)
+
+    def get_cmake_dependencies(self, package_name, branch_name):
+
+        file_name = "CMakeLists.txt"
+        self.get_file_from_package(package_name, branch_name, file_name)
 
         cmake_dependencies_list = []
         with open(file_name, 'r') as infile:
@@ -187,6 +191,18 @@ class DAQRelease:
                 cmake_dependencies_list.append('numactl')
         cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
         return cmake_dependencies_list
+
+    def get_is_db_path_needed(self, package_name, branch_name):
+        file_name = "CMakeLists.txt"
+        self.get_file_from_package(package_name, branch_name, file_name)
+
+        pattern = re.compile(r"\bdaq_add_dal_library\s*\(")
+        with open(file_name, 'r') as infile:
+            for line in [l.lstrip() for l in infile]:
+                if pattern.search(line) and not line.startswith("#"):
+                    return True
+
+        return False
 
     def generate_depends_on_list(self, cmake_package_list):
         depends_on_list = ""
@@ -228,6 +244,12 @@ class DAQRelease:
                 cmake_package_list = self.get_cmake_dependencies(ipkg["name"], ipkg["commit"])
                 depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
+
+                if self.get_is_db_path_needed(ipkg["name"], ipkg["commit"]):
+                    lines = lines.replace("XDBPATHX", "env.prepend_path(\"DUNEDAQ_DB_PATH\", self.prefix + \"/share\")")
+                else:
+                    lines = lines.replace("XDBPATHX", "")
+
             ipkg_dir = os.path.join(repo_dir, ipkg["name"])
             os.makedirs(ipkg_dir)
             ipkgpy = os.path.join(ipkg_dir, "package.py")
