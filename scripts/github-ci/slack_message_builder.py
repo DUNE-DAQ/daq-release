@@ -46,6 +46,15 @@ def get_workflow_event(event: str, actor:str) -> str:
     else:
         return "This workflow triggered under mysterious circumstances. Someone should investigate!"
 
+# Using the GitHub Actions "conclusion" from gh api doesn't work because
+# this script runs *during* a larger workflow. gh api therefore returns 
+# "null" as the conclusion
+
+# On second thought, maybe this should be added as metadata during the workflow?
+def get_workflow_status(summary: dict) -> str:
+    pass
+
+
 class MessageStrategy(ABC):
     def __init__(self, summary: dict):
         self.summary = summary
