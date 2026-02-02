@@ -40,7 +40,7 @@ jobs:
            --arg release "${{ inputs.release_tag }}" \
            '{"pytest_log_dir": $pytest_log_dir,
              "release"       : $release}' > additional_metadata.json
-             jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
+        jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_payload_generator.py \

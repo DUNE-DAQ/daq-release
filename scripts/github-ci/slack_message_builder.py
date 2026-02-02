@@ -18,10 +18,12 @@ STATUS_EMOJIS = {
 def choose_strategy(data: dict) -> MessageStrategy:
     workflow_name = data['workflow']
     if workflow_name == "Integration test workflow":
-        print("Integtest strat")
         return IntegrationTestMessageStrategy(data)
+    elif workflow_name == "Weekly code coverage workflow":
+        return CodeCoverageMessageStrategy(data)
+    elif workflow_name == "Weekly linting workflow":
+        return LintingMessageStrategy(data)
     else:
-        print("Default strat")
         return DefaultMessageStrategy(data)
 
 def get_release_type(release_name):
@@ -108,6 +110,28 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
             )
         )
         return extra_blocks
+
+class CodeCoverageMessageStrategy(BaseMessageStrategy):
+    def build_extra_blocks(self):
+        extra_blocks = []
+        extra_blocks.append(self.build_release_section())
+        extra_blocks.append(
+            SectionBlock(
+                f"You can download the full coverage report from the \"Artifacts\" section <{self.summary['html_url']}|here>."
+            )
+        )
+        return extra_blocks
+
+class LintingMessageStrategy(BaseMessageStrategy):
+        extra_blocks = []
+        extra_blocks.append(self.build_release_section())
+        extra_blocks.append(
+            SectionBlock(
+                f"You can download the full linting report from the \"Artifacts\" section <{self.summary['html_url']}|here>."
+            )
+        )
+        return extra_blocks
+    pass
 
 
 class Block(ABC):
