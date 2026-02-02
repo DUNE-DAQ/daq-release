@@ -26,7 +26,7 @@ def choose_strategy(data: dict) -> MessageStrategy:
     else:
         return DefaultMessageStrategy(data)
 
-def get_release_type(release_name):
+def get_release_type(release_name: str) -> str:
     if not release_name:
         return "Unknown"
     if "NFD_" in release_name:
@@ -36,7 +36,7 @@ def get_release_type(release_name):
     else:
         return "stable"
 
-def get_workflow_event(event, actor):
+def get_workflow_event(event: str, actor:str) -> str:
     if event == "schedule":
         return "This was a scheduled workflow."
     elif event == "workflow_dispatch":
@@ -62,7 +62,7 @@ class BaseMessageStrategy(MessageStrategy):
         builder.add_block(self.build_report_section())
 
         if self.summary['failed_jobs']:
-            builder.add_block(self.build_failed_jobs_block())
+            builder.add_block(self.build_failed_jobs_section())
 
         # Classes which inherit from BaseMessageStrategy can override this for additional information
         extra_blocks = self.build_extra_blocks()
@@ -85,7 +85,13 @@ class BaseMessageStrategy(MessageStrategy):
         return SectionBlock(f"Full report: <{self.summary['html_url']}|link>.")
 
     def build_failed_jobs_section(self):
-        pass
+        failed_jobs_text = "*Failed jobs and steps:*\n"
+        for failed_job in self.summary['failed_jobs']:
+            failed_jobs_text += f"- {failed_job['job']}\n"
+            for step in failed_job['steps']:
+                failed_jobs_text += f"\t:x: *{step['name']}*\n"
+
+        return SectionBlock(failed_jobs_text)
 
     def build_footer(self):
         return FooterBlock(get_workflow_event(self.summary['event'], self.summary['actor']))
@@ -123,6 +129,7 @@ class CodeCoverageMessageStrategy(BaseMessageStrategy):
         return extra_blocks
 
 class LintingMessageStrategy(BaseMessageStrategy):
+    def build_extra_blocks(self):
         extra_blocks = []
         extra_blocks.append(self.build_release_section())
         extra_blocks.append(
@@ -131,7 +138,6 @@ class LintingMessageStrategy(BaseMessageStrategy):
             )
         )
         return extra_blocks
-    pass
 
 
 class Block(ABC):
