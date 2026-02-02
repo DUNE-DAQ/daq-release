@@ -102,6 +102,7 @@ jobs:
     - name: checkout daqsystemtest branch
       uses: actions/checkout@v6
       with:
+        repository: DUNE-DAQ/daqsystemtest
         ref: amogan/sabotage_msqt
         path: daqsystemtest_sabotaged
       
