@@ -57,7 +57,7 @@ jobs:
           dbt-build  # --unittest done elsewhere; --lint unavailable due to llvm being too large for images
 
     - name: upload build log file
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: build_log_${{ matrix.os_name }}
         path: ${{ github.workspace }}/dev-${{ matrix.os_name }}/log/build*.log

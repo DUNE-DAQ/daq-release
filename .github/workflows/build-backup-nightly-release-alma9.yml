@@ -1,8 +1,8 @@
-name: Alma9 build v5 nightly release with externals v2.3
+name: Alma9 build backup v5 nightly release with externals v2.2
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "30 10 * * *"
 
   workflow_dispatch:
     inputs:
@@ -37,7 +37,7 @@ jobs:
         # Use GitHub input if provided, else default to N
         prefix="${{ github.event.inputs.tag-prefix }}"
         if [[ -z "$prefix" ]]; then
-          prefix="N"
+          prefix="BKPN"
         fi
 
         base_tag="${prefix}B_DEV_${date_tag}_A9"
@@ -63,7 +63,7 @@ jobs:
     runs-on: daq
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3Y
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
     defaults:
       run:
         shell: bash
@@ -82,12 +82,12 @@ jobs:
 
     - name: setup directories and install spack for the coredaq release
       run: |
-        source daq-release/.github/workflows/wf-setup-tools.sh
+        source daq-release/.github/workflows/wf-setup-tools-externals-v2.2.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/coredaq-externals-v2.2/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch
+        daq-release/scripts/spack/build-release-externals-v2.2.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR core $OS ${{ github.event.inputs.feature-branch }}
 
         cd $BASE_RELEASE_DIR/../
         tar_and_stage_release ${BASE_RELEASE_TAG}
@@ -100,12 +100,12 @@ jobs:
 
     - name: setup directories and install spack for the fddaq release
       run: |
-        source daq-release/.github/workflows/wf-setup-tools.sh
+        source daq-release/.github/workflows/wf-setup-tools-externals-v2.2.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-externals-v2.2/release.yaml -a -o $DET_RELEASE_DIR/sourcecode -b $branch --pymodules
+        daq-release/scripts/spack/build-release-externals-v2.2.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR fd $OS ${{ github.event.inputs.feature-branch }}
 
         cd $DET_RELEASE_DIR/../
         tar_and_stage_release ${DET_RELEASE_TAG}
@@ -122,9 +122,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3Y"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "development_v5${{ github.event.inputs.tag-prefix }}"
+            tag: "development_v5BKP${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
     environment: dockerhub
     permissions:
@@ -190,7 +190,7 @@ jobs:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}
+            type=raw,value=development_v5BKP${{ github.event.inputs.tag-prefix }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -206,7 +206,7 @@ jobs:
     runs-on: daq
     needs: [make_tags, update_image]
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5BKP${{ github.event.inputs.tag-prefix }}
     defaults:
       run:
         shell: bash
@@ -274,7 +274,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5BKP${{ github.event.inputs.tag-prefix }}"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE

@@ -1,29 +1,47 @@
-<!-- templates/integration_test_template.html -->
 {% extends "base_template.html" %}
 
 {% block title %}Integration Test Summary{% endblock %}
 
 {% block content %}
 <h1>Integration Test Report</h1>
-{% for package, tests in repo_results.items() %}
-  <h2>{{ package }}</h2>
+
+<p>
+  <strong>{{ totals.total_run }}</strong> total tests —
+  {{ totals.passed }} passed,
+  {{ totals.failed }} failed,
+  {{ totals.skipped }} skipped,
+  {{ totals.errors }} errors.
+</p>
+
+{% for repo, pytest_list in pytest_results.items() %}
+  <h2>{{ repo }} Results</h2>
+
+  {% for pytest_result in pytest_list %}
+    <h3>{{ pytest_result.test_name }} Results</h3>
     <table>
-      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Test Case</th>
+          <th>Status</th>
+        </tr>
+      </thead>
       <tbody>
-        {% for test in tests %}
+        {% for case in pytest_result.testcase_results %}
           <tr>
-            <td>{{ test.name }}</td>
+            <td>{{ case.case_name }}</td>
             <td>
-              {% if test.status == 'passed' %}	&#x2705
-              {% elif test.status == 'failed' %}&#x274C
-              {% elif test.status == 'skipped' %}⏩
-              {% elif test.status == 'errors' %}	&#x2757
+              {% if case.status == 'passed' %}&#x2705
+              {% elif case.status == 'failed' %}&#x274C
+              {% elif case.status == 'skipped' %}⏩
+              {% elif case.status == 'error' %}&#x2757
               {% else %}&#x2753 Unknown
-              {% endif %} {{ test.status }}
+              {% endif %}
+              {{ case.status }}
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+  {% endfor %}
 {% endfor %}
 {% endblock %}

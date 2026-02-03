@@ -17,6 +17,7 @@ jobs:
       lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
       code_check_summary_path: ${{ steps.set_paths.outputs.code_check_summary_path }}
       integration_test_summary_path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
+      extended_integration_test_summary_path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
     defaults:
       run: 
         shell: bash
@@ -29,6 +30,7 @@ jobs:
         echo "lcov_html_report_path=lcov_report" >> "$GITHUB_OUTPUT"
         echo "code_check_summary_path=code_check_summary" >> "$GITHUB_OUTPUT"
         echo "integration_test_summary_path=integration_test_summary" >> "$GITHUB_OUTPUT"
+        echo "extended_integration_test_summary_path=extended_integration_test_summary" >> "$GITHUB_OUTPUT"
     - name: Get workflow run IDs
       id: run_ids
       run: |
@@ -42,15 +44,20 @@ jobs:
                                    --json databaseId --jq '.[0].databaseId')
         integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
                                           --workflow integration_tests.yml \
-                                          --limit 1 --status success \
+                                          --limit 1 \
+                                          --json databaseId --jq '.[0].databaseId')
+        extended_integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
+                                          --workflow extended_integration_tests.yml \
+                                          --limit 1 \
                                           --json databaseId --jq '.[0].databaseId')
         echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
+        echo "extended_integration_test_id=$extended_integration_test_id" | tee -a "$GITHUB_OUTPUT"
 
     - name: Download lcov html report
       id: download_lcov
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: code_coverage
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -59,20 +66,47 @@ jobs:
         
     - name: Download code check summaries
       id: download_code_checks
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.code_check_summary_path }}
         run-id: ${{ steps.run_ids.outputs.code_check_id }}
 
-    - name: Download integration test summary
+    - name: Download integration test markdown
       id: download_integration_test
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: nightly_integtest_summary
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
         run-id: ${{ steps.run_ids.outputs.integration_test_id }}
+
+    - name: Download integration test json
+      id: download_integration_test_json
+      uses: actions/download-artifact@v7
+      with:
+        name: nightly_integtest_json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.integration_test_id }}
+
+    - name: Download extended integration test markdown
+      id: download_extended_integration_test
+      uses: actions/download-artifact@v7
+      with:
+        name: nightly_extended_integtest_summary
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
+
+    - name: Download extended integration test json
+      id: download_extended_integration_test_json
+      uses: actions/download-artifact@v7
+      with:
+        name: nightly_extended_integtest_json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
   
   build_ci_dashboard:
     runs-on: daq
@@ -81,7 +115,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - name: Checkout daq-release feature branch
+    - name: Checkout daq-release
       uses: actions/checkout@v4
       with:
         path: daq-release-ci-dashboard
@@ -89,25 +123,18 @@ jobs:
       env:
         CI_DASHBOARD_DIR: daq-release-ci-dashboard/scripts/github-ci/ci-dashboard
       run: |
-        echo "Debug: pwd - $(pwd)"
-        echo "Debug: ls - $(ls)"
-        echo "Debug: ls CI_DASHBOARD_DIR - $(ls ${{ env.CI_DASHBOARD_DIR }})"
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
         cp -r code_check_summary/ ${{ env.CI_DASHBOARD_DIR }}/code_check_summary
         cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
+        cp -r extended_integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/extended_integration_test_summary
         cd ${{ env.CI_DASHBOARD_DIR }}
-        echo "Debug: pwd - $(pwd)"
-        echo "Debug: ls - $(ls)"
         ./collect-ci-metrics.sh
         echo "Collected the following metrics:"
         cat ci_summary.json
-        ./combine_markdown_summaries.sh integration_test_summary/pytest_summary_table.md \
-                                        code_check_summary/pytest_summary/pytest_summary_table.md \
-                                        > combined_pytest_summary.md
-        cat combined_pytest_summary.md
         python generate_ci_site.py --json_input ci_summary.json \
                                    --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
-                                   --pytest_summary combined_pytest_summary.md
+                                   --core_pytest_summary integration_test_summary/pytest_summary.json \
+                                   --extended_pytest_summary extended_integration_test_summary/pytest_summary.json \
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages

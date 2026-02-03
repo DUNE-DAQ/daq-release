@@ -1,5 +1,5 @@
 ---
-    release: coredaq-v5.5.0
+    release: coredaq-develop
 
     type: coredaq
 
@@ -116,129 +116,129 @@
           version: v3.2.1
           commit: null
         - name: ers
-          version: v1.5.4
+          version: "develop"
           commit: null
         - name: logging
-          version: v2.0.1
+          version: "develop"
           commit: null
         - name: cmdlib
-          version: v1.3.0
+          version: "develop"
           commit: null
         - name: restcmd
-          version: v1.4.1
+          version: "develop"
           commit: null
         - name: opmonlib
-          version: v2.1.4
+          version: "develop"
           commit: null
         - name: rcif
-          version: v1.4.0
+          version: "develop"
           commit: null
         - name: appfwk
-          version: v6.0.1
+          version: "develop"
           commit: null
         - name: listrev
-          version: v6.1.0
+          version: "develop"
           commit: null
         - name: utilities
-          version: v5.0.0
+          version: "develop"
           commit: null
         - name: erskafka
-          version: v2.1.1
+          version: "develop"
           commit: null
         - name: kafkaopmon
-          version: v3.1.2
+          version: "develop"
           commit: null
         - name: ipm
-          version: v3.1.0
+          version: "develop"
           commit: null
         - name: serialization
-          version: v2.1.0
+          version: "develop"
           commit: null
         - name: iomanager
-          version: v3.1.0
+          version: "develop"
           commit: null
         - name: dfmessages
-          version: v3.0.0
+          version: "develop"
           commit: null
         - name: detdataformats
-          version: v4.3.0
+          version: "develop"
           commit: null
         - name: trgdataformats
-          version: v2.0.2
+          version: "develop"
           commit: null
         - name: detchannelmaps
-          version: v1.10.0
+          version: "develop"
           commit: null
         - name: daqdataformats
-          version: v3.12.0
+          version: "develop"
           commit: null
         - name: datahandlinglibs
-          version: v3.2.1
+          version: "develop"
           commit: null
         - name: dfmodules
-          version: v5.2.1
+          version: "develop"
           commit: null
         - name: hsilibs
-          version: v4.10.0
+          version: "develop"
           commit: null
         - name: timing
-          version: v7.12.1
+          version: "develop"
           commit: null
         - name: timinglibs
-          version: v4.6.0
+          version: "develop"
           commit: null
         - name: trigger
-          version: v2.5.2
+          version: "develop"
           commit: null
         - name: triggeralgs
-          version: v1.5.1
+          version: "develop"
           commit: null
         - name: trgtools
-          version: v2.2.2
+          version: "develop"
           commit: null
         - name: hdf5libs
-          version: v3.4.0
+          version: "develop"
           commit: null
         - name: oks
-          version: v1.3.3
+          version: "develop"
           commit: null
         - name: okssystem
-          version: v1.0.0
+          version: "develop"
           commit: null
         - name: oksutils
-          version: v1.0.0
+          version: "develop"
           commit: null
         - name: oksconflibs
-          version: v1.2.0
+          version: "develop"
           commit: null
         - name: conffwk
-          version: v2.1.1
+          version: "develop"
           commit: null
         - name: oksdalgen
-          version: v1.3.1
+          version: "develop"
           commit: null
         - name: confmodel
-          version: v2.6.0
+          version: "develop"
           commit: null
         - name: appmodel
-          version: v4.0.1
+          version: "develop"
           commit: null
         - name: dbe
-          version: v1.7.1
+          version: "develop"
           commit: null
         - name: daqconf
-          version: v8.7.1
+          version: "develop"
           commit: null
 
     others:
         - name: daq-release
-          version: v3.1.5
+          version: "develop"
           commit: null
         - name: daq-buildtools
-          version: v8.9.11
+          version: "develop"
           commit: null
         - name: daqsystemtest
-          version: v4.7.0
+          version: "develop"
           commit: null
         - name: pocket
           version: "develop"

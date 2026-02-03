@@ -1,8 +1,8 @@
-name: Integration test workflow
+name: Extended integration test workflow
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
 
   workflow_dispatch:
     inputs:
@@ -32,6 +32,7 @@ jobs:
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
+      daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
     defaults:
       run:
         shell: bash
@@ -61,8 +62,9 @@ jobs:
           fi
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
-          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-extended-${timestamp}
           integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+          daq_release_path="daq-release-extended-tests"
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
@@ -70,80 +72,79 @@ jobs:
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
+          echo "daq_release_path=${daq_release_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
-  integration_tests:
-    name: integration_tests
+  extended_integration_tests:
+    name: extended_integration_tests
     runs-on: daq
-    timeout-minutes: 30
+    timeout-minutes: 60
     needs: make_variables
-    strategy:
-        fail-fast: false
-        matrix:
-
-            test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
-                        "minimal_system_quick_test",
-                        "readout_type_scan_test",
-                        "small_footprint_quick_test",
-                        "tpreplay_test",
-                        "tpstream_writing_test"
-                       ]
+    outputs:
+      integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+    env:
+      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
+      RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+      PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
+      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
+      IS_CANDIDATE_RELEASE: ${{ needs.make_variables.outputs.is_candidate_release }}
+      IS_STABLE_RELEASE: ${{ needs.make_variables.outputs.is_stable_release }}
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: setup release and run tests
-      env:
-        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
-        IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
-        IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
-        INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
-      id: setup_and_run_test
+    - name: checkout daq-release
+      uses: actions/checkout@v6
+      with:
+        path: ${{ needs.make_variables.outputs.daq_release_path }}
+
+    - name: Create build area
       run: |
-        DET=fd
-        mkdir -p $INTEGTEST_OUTPUT_PATH
-        cd $INTEGTEST_OUTPUT_PATH
-        echo "Am in $(pwd)"
-        echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release -b candidate $RELEASE_TAG"
+          echo "create -b candidate $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release -b candidate $RELEASE_TAG
+          dbt-create -b candidate $RELEASE_TAG $RELEASE_TAG
         elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release $RELEASE_TAG"
+          echo "create $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release $RELEASE_TAG
+          dbt-create $RELEASE_TAG $RELEASE_TAG
         else
-          echo "dbt-setup-release -n $RELEASE_TAG"
+          echo "create -n $RELEASE_TAG"
           [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release -n $RELEASE_TAG
+          dbt-create -n $RELEASE_TAG $RELEASE_TAG
         fi
-        TEST_PATH=""
-        TEST_SOURCE=""
-        if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
-          TEST_PATH=$LISTREV_SHARE/integtest
-          TEST_SOURCE=listrev
-        else
-          TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
-          TEST_SOURCE=daqsystemtest
-        fi
+        cd ${{ env.DBT_AREA_ROOT }}
+        source env.sh
+        cd ../$DAQ_RELEASE_PATH/scripts
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
-        pytest_retval=0
-        pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
-                $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
+    - name: Run integration tests
+      id: integtests
+      run: |
+        cd $DBT_AREA_ROOT
+        # daqsystemtest and listrev tests are already run as part of the nightly integration tests
+        rm -rf sourcecode/daqsystemtest
+        rm -rf sourcecode/listrev
+        source env.sh
+        dbt-workarea-env
+        dbt-build --integtest | tee integtest_full_output.log
+        # Log directory is the last non-empty line of output
+        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
+        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
+        echo "integtest_log_dir: $integtest_log_dir"
 
+    - name:
+      id: move_logs
+      run: |
         mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-*/) $PERSISTENT_LOG_DIR/
 
         chmod -R 755 $PERSISTENT_LOG_DIR
         if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
@@ -152,43 +153,36 @@ jobs:
           exit 2
         fi
 
-        test $pytest_retval == 0 || false
-
   parse_and_upload_results:
     runs-on: daq
     if: always()
-    needs: [make_variables, integration_tests]
+    needs: [make_variables, extended_integration_tests]
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v4
-      with:
-        repository: DUNE-DAQ/daq-release
-        path: daq-release-integtest
     - name: Generate summary tables
       env:
-        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+        RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+        DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
       run: |
-        cd daq-release-integtest/scripts/github-ci/
-        python integtest_xml_parser.py \
-               --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
+        cd $DAQ_RELEASE_PATH/scripts/github-ci/
+        python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
-        name: nightly_integtest_summary
-        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+        name: nightly_extended_integtest_summary
+        path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary_table.md
     - name: Upload json summary as artifact
       uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
-        name: nightly_integtest_json
-        path: daq-release-integtest/scripts/github-ci/pytest_summary.json
+        name: nightly_extended_integtest_json
+        path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary.json
 
   store_and_upload_logs:
     runs-on: daq
     timeout-minutes: 5
-    needs: [make_variables, integration_tests]
+    needs: [make_variables, extended_integration_tests]
     if: success() || failure()
     steps:
     - name: Upload logs as artifact
@@ -197,7 +191,7 @@ jobs:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v6
       with:
-        name: pytest-logs-${{ env.TIMESTAMP }}
+        name: pytest-logs-extended-${{ env.TIMESTAMP }}
         path: ${{ env.PERSISTENT_LOG_DIR }}
     - name: Delete old log directories
       run: |
@@ -207,11 +201,11 @@ jobs:
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
-    needs: [make_variables, store_and_upload_logs]
+    needs: [make_variables, extended_integration_tests, store_and_upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
-      integtest_xml_dir: ${{ needs.make_variables.outputs.integtest_output_path }}
+      integtest_xml_dir: ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -220,22 +214,29 @@ jobs:
     runs-on: daq
     if: always()
     needs: [make_variables, parse_and_upload_results, send_slack_message]
+    env:
+      RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
     steps:
       - name: Remove xml files
-        env:
-          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         run: |
           rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
       - name: Remove daq-release
         run: |
-          rm -rf ${{ github.workspace }}/daq-release-integtest/
+          if [[ -d "$DAQ_RELEASE_PATH" ]]; then
+            echo "Removing $DAQ_RELEASE_PATH"
+            rm -rf $DAQ_RELEASE_PATH
+          fi
+          if [[ -d "$RELEASE_TAG" ]]; then
+            echo "Removing $RELEASE_TAG"
+            rm -rf $RELEASE_TAG
+          fi
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
     runs-on: daq
     if: always()
-    needs: integration_tests
+    needs: extended_integration_tests
     steps:
       - name: Run cleanup script
         run: |
