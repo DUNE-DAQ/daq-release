@@ -30,7 +30,6 @@ jobs:
         # Outputs workflow_summary.json
         ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
     - name: Add metadata to workflow summary
-      if: ${{ inputs.integtest_log_dir }}
       run: |
         jq --null-input \
            --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
