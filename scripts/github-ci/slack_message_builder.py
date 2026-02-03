@@ -9,10 +9,10 @@ from typing import List, Optional
 from abc import ABC, abstractmethod
 
 STATUS_EMOJIS = {
-    "success": ":white_check_mark:",
-    "failure": ":rotating_light:",
+    "success"  : ":white_check_mark:",
+    "failure"  : ":rotating_light:",
     "cancelled": ":no_entry:",
-    "unknown": ":question:",
+    "unknown"  : ":question:",
 }
 
 def choose_strategy(data: dict) -> MessageStrategy:
@@ -49,10 +49,12 @@ def get_workflow_event(event: str, actor:str) -> str:
 # Using the GitHub Actions "conclusion" from gh api doesn't work because
 # this script runs *during* a larger workflow. gh api therefore returns 
 # "null" as the conclusion
-
-# On second thought, maybe this should be added as metadata during the workflow?
 def get_workflow_status(summary: dict) -> str:
-    pass
+    if summary.get('cancelled_jobs'):
+        return "cancelled"
+    if summary.get('failed_jobs'):
+        return "failure"
+    return "success"
 
 
 class MessageStrategy(ABC):
@@ -65,11 +67,11 @@ class MessageStrategy(ABC):
 
 class BaseMessageStrategy(MessageStrategy):
     def build(self, output_path: str = "slack_payload.json"):
-        emoji = STATUS_EMOJIS.get(self.summary['conclusion'], ":question:")
+        status = get_workflow_status(self.summary)
 
         builder = SlackMessageBuilder()
 
-        builder.add_block(self.build_header(emoji))
+        builder.add_block(self.build_header(status))
         builder.add_block(self.build_report_section())
 
         if self.summary['failed_jobs']:
@@ -84,10 +86,11 @@ class BaseMessageStrategy(MessageStrategy):
 
         builder.write(output_path)
 
-    def build_header(self, emoji):
-        conclusion = self.summary.get("conclusion", "Unknown status")
+    def build_header(self, status: str):
+        emoji = STATUS_EMOJIS.get(status, ":question:")
+        status = get_workflow_status(self.summary).capitalize()
         workflow = self.summary.get("workflow", "Unknown workflow name")
-        return HeaderBlock(f"{emoji} {conclusion}: {workflow} {emoji}")
+        return HeaderBlock(f"{emoji} {status}: {workflow} {emoji}")
 
     def build_release_section(self):
         release = self.summary.get("release", None)
