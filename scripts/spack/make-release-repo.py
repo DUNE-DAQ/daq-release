@@ -9,11 +9,14 @@ import tempfile
 import re
 import copy
 import tempfile
+import pathlib
 
 from time import sleep
 
 from dr_tools import parse_yaml_file
 from mappings import cmake_to_spack, pyvenv_url_names
+
+contains_oks_file = {}
 
 class MyDumper(yaml.Dumper):
 
@@ -48,6 +51,17 @@ def check_output(cmd, max_tries = 1):
                 sleep(sleep_time)
     return out
 
+def get_contains_oks_file(repo_path_name):
+
+    assert os.path.exists(repo_path_name), f"The {get_contains_oks_file.__name__} function is unable to find expected path {repo_path_name}"
+
+    repo_path = pathlib.PosixPath(repo_path_name)
+
+    for glob_extension in ["*.schema.xml", "*.data.xml"]:
+        if len(list(repo_path.rglob(glob_extension))) > 0:
+            return True
+
+    return False
 
 def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
@@ -91,6 +105,7 @@ def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
         return (used_ref, commit_hash)
 
     finally:
+        contains_oks_file[repo] = get_contains_oks_file(f"{tmp_dir}/{repo}")
         shutil.rmtree(tmp_dir)
 
 def check_branch_exists(repo, branch):
@@ -192,18 +207,6 @@ class DAQRelease:
         cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
         return cmake_dependencies_list
 
-    def get_is_db_path_needed(self, package_name, branch_name):
-        file_name = "CMakeLists.txt"
-        self.get_file_from_package(package_name, branch_name, file_name)
-
-        pattern = re.compile(r"\bdaq_add_dal_library\s*\(")
-        with open(file_name, 'r') as infile:
-            for line in [l.lstrip() for l in infile]:
-                if pattern.search(line) and not line.startswith("#"):
-                    return True
-
-        return False
-
     def generate_depends_on_list(self, cmake_package_list):
         depends_on_list = ""
         for idep in cmake_package_list:
@@ -245,7 +248,7 @@ class DAQRelease:
                 depends_on_list = self.generate_depends_on_list(cmake_package_list)
                 lines = lines.replace("XDEPENDSX", depends_on_list)
 
-                if self.get_is_db_path_needed(ipkg["name"], ipkg["commit"]):
+                if contains_oks_file[ ipkg["name"] ]:
                     lines = lines.replace("XDBPATHX", "env.prepend_path(\"DUNEDAQ_DB_PATH\", self.prefix + \"/share\")")
                 else:
                     lines = lines.replace("XDBPATHX", "")
