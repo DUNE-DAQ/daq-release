@@ -24,8 +24,7 @@ jobs:
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-slack-message
-        ref: amogan/refactor_slack_message_builder
-    - name: Get workflow failures from GitHub API
+    - name: Get workflow summary from GitHub API
       run: |
         # Outputs workflow_summary.json
         ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}

@@ -79,8 +79,7 @@ jobs:
     needs: [make_variables, run_checks]
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
 

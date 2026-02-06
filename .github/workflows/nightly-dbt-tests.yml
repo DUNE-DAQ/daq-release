@@ -32,8 +32,7 @@ jobs:
     needs: run_dbt_commands
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_test_area:
     runs-on: daq
