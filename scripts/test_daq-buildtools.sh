@@ -1,11 +1,32 @@
 #!/bin/bash
 
+usage() {
+    local prog=$(basename "$0")
+    cat << EOF
+Usage: $prog [OPTIONS]
+
+Test functionality of daq-buildtools commands.
+
+Optional arguments:
+    --release <release_name>    Release in which to test daq-buildtools commands. [default: last_fddaq]
+    --dbt-branch <branch_name>  Branch of daq-buildtools to run tests from. [default: develop]
+    --repo <repo_name>          Name of a single repo to checkout for tests. [default: ipm]
+
+Example:
+    ./${prog} --release fddaq-v5.5.0-a9 --dbt-branch user/new_feature --repo hdf5libs
+EOF
+}
+
 release="last_fddaq"
 repo="ipm"
 dbt_branch="develop"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
+    -h|--help|-?)
+        usage
+        exit 1
+        ;;
     --release)
         release="$2"
         shift 2
@@ -24,6 +45,11 @@ while [[ $# -gt 0 ]]; do
         ;;
     esac
 done
+
+echo -e "Running daq-buildtools commands using:\n"
+echo -e "\tRelease name: $release"
+echo -e "\tdbt branch:   $dbt_branch"
+echo -e "\trepo:         $repo\n"
 
 . /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh || exit 1
 setup_dbt latest_v5 || exit 2
