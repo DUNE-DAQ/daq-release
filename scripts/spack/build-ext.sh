@@ -3,8 +3,8 @@
 # Example usage:
 
 # docker run -it --name <some useful name> \
-    # -e "EXT_VERSION=2.2" -e "DAQ_RELEASE=EXT2.2ADD" \
-    # -e "SPACK_VERSION=0.22.0" -e "GCC_VERSION=13.2.0" -e "ARCH=linux-almalinux9-x86_64" \
+    # -e "EXT_VERSION=2.3" -e "DAQ_RELEASE=EXT2.3ADD" \
+    # -e "SPACK_VERSION=0.22.0" -e "GCC_VERSION=14.3.0" -e "ARCH=linux-almalinux9-x86_64" \
     # -v <location of freshly-checked-out daq-release repo>:/daq-release \
     # -v <location of local directory for log output>:/log \
     # -v <location of local area for installation>:/cvmfs/dunedaq.opensciencegrid.org \
@@ -164,7 +164,7 @@ dbe_spec="dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=${ARCH} ^qt@5.15
 
 boost_spec="boost@1.85.0%gcc@${GCC_VERSION}+atomic+chrono~clanglibcpp+container+context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel~icu+iostreams~json+locale+log+math~mpi+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared+signals~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~versionedlayout+wave"
 
-llvm_spec="llvm@18.1.3%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
+llvm_spec="llvm@19.1.7%gcc@${GCC_VERSION}~gold~libomptarget~lld~lldb~lua~polly build_type=MinSizeRel compiler-rt=none libcxx=none libunwind=none targets=none arch=${ARCH}"
 
 dpdk_spec="dpdk max_lcores=512"
 
@@ -172,6 +172,11 @@ dpdk_spec="dpdk max_lcores=512"
 gcc_spec="/${gcc_hash}"
 
 umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$llvm_spec ^$boost_spec ^$dpdk_spec"
+#echo "JCF, Dec-12-2025: FOR DEVELOPMENT PURPOSES, SKIPPING llvm BUILD FOR NOW" >&2
+#echo "JCF, Dec-17-2025: also force version of py-openpyxl" >&2
+
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec ^py-openpyxl@3.1.2"
+#umbrella_spec="umbrella ^$gcc_spec ^$coredaq_spec ^$dbe_spec ^$boost_spec ^$dpdk_spec"
 
 echo $umbrella_spec
 
@@ -194,7 +199,7 @@ spack install --reuse graphviz@8.0.5%gcc@${GCC_VERSION}~doc+expat~ghostscript~gt
 
 for pkg in daq-cmake externals devtools systems; do
     echo "Uninstalling $pkg"
-    spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero"
+    spack uninstall -y --all --dependents $pkg || echo "Spack uninstall of $pkg returned nonzero" >> /log/uninstallations.txt
 done
 
 # Step 8 -- remove any unneeded externals (build-only packages, and those which are dependencies of build-only packages only)
@@ -203,18 +208,22 @@ done
 
 build_only_packages=$( cat /log/spack_spec_umbrella.txt | sed -r -n 's/.*\[b   \] +\^([^@]+).*/\1/p' )
 
+#echo "FOR DEVELOPMENT PURPOSES, SKIPPING UNINSTALLATION OF BUILD-ONLY DEPENDENCIES"
 for pkg in $build_only_packages; do
     echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero" >> /log/uninstallations.txt
 done
 
 # Now packages which are dependencies of build-only packages
-for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
+for pkg in py-hatch-vcs py-setuptools-scm py-typing-extensions go-bootstrap git openssh krb5 libidn2 docbook-xsl docbook-xml go libunistring gmake diffutils sed libtool bison flex autoconf automake openssl; do
     echo "Uninstalling $pkg"
-    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled"
+    spack uninstall -y $pkg || echo "Spack uninstall of $pkg returned nonzero; this likely means it had already been uninstalled" >> /log/uninstallations.txt
 done
 
 spack find -l | sort |& tee /log/externals_list.txt
+
+echo "Calling spack clean -a ..."
+spack clean -a
 
 endtime=$( date )
 

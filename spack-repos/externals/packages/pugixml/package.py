@@ -24,6 +24,7 @@ class Pugixml(CMakePackage):
     version('1.9',    sha256='d156d35b83f680e40fd6412c4455fdd03544339779134617b9b28d19e11fdba6')
     version('1.8.1',  sha256='00d974a1308e85ca0677a981adc1b2855cb060923181053fb0abf4e2f37b8f39')
 
+    patch("update_cmake_minimum_required.patch", when="@1.12.1", sha256="6f44d859b0475fd0ecff8fb5b678589c0f6f3fdb68ef89e885e41b325803460b")
 
     variant('pic', default=True, description='Build position-independent code')
     variant('shared', default=True, description='Build shared libraries')
