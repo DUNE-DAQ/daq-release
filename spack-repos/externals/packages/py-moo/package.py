@@ -27,10 +27,13 @@ class PyMoo(PythonPackage):
     depends_on('py-jsonschema', type=('build', 'run'))
     depends_on('py-fastjsonschema', type=('build', 'run'))
     depends_on('py-jsonpointer', type=('build', 'run'))
-    depends_on('py-numpy@1.23.0 ~blas ~lapack', type=('build', 'run'), when="@:0.6.4")
-    depends_on('py-numpy@1.24.0 ~blas ~lapack', type=('build', 'run'), when="@0.6.7:")
+    depends_on('py-numpy@1.23.0', type=('build', 'run'), when="@:0.6.4")
+    depends_on('py-numpy@2.1.2', type=('build', 'run'), when="@0.6.7:")
+    #depends_on('py-numpy@1.26.0', type=('build', 'run'), when="@0.6.7: ^python@:3.11")
+    #depends_on('py-numpy@2.1.2', type=('build', 'run'), when="@0.6.7: ^python@3.12:")
     depends_on('py-openpyxl', type=('build', 'run'))
     depends_on('py-gojsonnet', type=('build', 'run'), when='@0.6.7:')
+    depends_on('py-setuptools', type=('build'), when='@0.6.7: ^python@3.11:')
 
     # DUNE-specific
     depends_on('py-jsonnet', type=('build', 'run'))

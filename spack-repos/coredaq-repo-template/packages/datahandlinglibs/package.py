@@ -35,7 +35,8 @@ class Datahandlinglibs(CMakePackage):
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
         env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
         env.prune_duplicate_paths('LIBRARY_PATH')
-
+        XDBPATHX
+        
     def setup_build_environment(self, env):
         env.prepend_path('LIBRARY_PATH', self.spec['numactl'].prefix.lib)
         env.prune_duplicate_paths('LIBRARY_PATH')

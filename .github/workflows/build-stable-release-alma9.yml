@@ -21,7 +21,7 @@ jobs:
     name: build_stable_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
     defaults:
       run:
         shell: bash
@@ -60,6 +60,7 @@ jobs:
           export OS=almalinux9
           source daq-release/.github/workflows/wf-setup-tools.sh
 
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
           daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode --pymodules --continue-on-error || true
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS
 
@@ -79,7 +80,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3"
             output_image: "ghcr.io/dune-daq/stable-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
     needs: build_the_stable_release_spack

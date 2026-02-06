@@ -26,6 +26,21 @@ class Cmake(Package):
     executables = ["^cmake[0-9]*$"]
 
     version("master", branch="master")
+
+    version("4.2.0", sha256="4104e94657d247c811cb29985405a360b78130b5d51e7f6daceb2447830bd579")
+    version("4.1.2", sha256="643f04182b7ba323ab31f526f785134fb79cba3188a852206ef0473fee282a15")
+    version("4.1.1", sha256="b29f6f19733aa224b7763507a108a427ed48c688e1faf22b29c44e1c30549282")
+    version("4.0.4", sha256="629be82af0b76e029b675a4a37569e2ddc1769d42a768957c00ec0e98407737e")
+    version(
+        "3.31.9",
+        sha256="5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83",
+        preferred=True,
+    )
+    version("3.30.9", sha256="65f765bb87c8019316cabe67cbe5e8f45ede334eeb5afd161ca6874d17994e0d")
+    version("3.29.6", sha256="1391313003b83d48e2ab115a8b525a557f78d8c1544618b48d1d90184a10f0af")
+    version("3.28.6", sha256="c39c733900affc4eb0e9688b4d1a45435a732105d9bf9cc1e75dd2b9b81a36bb")
+    version("3.27.9", sha256="609a9b98572a6a5ea477f912cffb973109ed4d0a6a6b3f9e2353d2cdc048708e")
+    version("3.26.6", sha256="070b9a2422e666d2c1437e2dab239a236e8a63622d0a8d0ffe9e389613d2b76a")
     version("3.26.3", sha256="bbd8d39217509d163cb544a40d6428ac666ddc83e22905d3e52c925781f0f659")
     version("3.26.2", sha256="d54f25707300064308ef01d4d21b0f98f508f52dda5d527d882b9d88379f89a8")
     version("3.26.1", sha256="f29964290ad3ced782a1e58ca9fda394a82406a647e24d6afd4e6c32e42c412f")
@@ -162,6 +177,11 @@ class Cmake(Package):
         values=("Debug", "Release", "RelWithDebInfo", "MinSizeRel"),
     )
 
+    patch("suppress_excessive_warning.patch",
+          sha256="8676b35476eef5d4b92fc31dfba2c1d229968629e8fee0372f8dba91a7f8a115",
+          when="@4.1.2"
+          )
+
     patch(
         "cmake-findprotobuf.patch",
         sha256="4759c83e94606f7e69668b1f457fe7c5ff5d98826b5c23a837e4718cd4bcab90",
@@ -227,11 +247,13 @@ class Cmake(Package):
         depends_on("libuv@1.10.0:1.10", when="@3.11.0:3.11")
         depends_on("libuv@1.10.0:", when="@3.12.0:")
         depends_on("rhash", when="@3.8.0:")
+        depends_on("jsoncpp build_system=meson", when="@3.2:")
 
     for plat in ["darwin", "linux", "cray"]:
         with when("+ownlibs platform=%s" % plat):
-            depends_on("openssl")
-            depends_on("openssl@:1.0", when="@:3.6.9")
+            pass  # JCF, Jan-5-2026: use system openssl, not Spack openssl
+            #depends_on("openssl")
+            #depends_on("openssl@:1.0", when="@:3.6.9")
 
     depends_on("qt", when="+qt")
     depends_on("ncurses", when="+ncurses")
@@ -320,7 +342,8 @@ class Cmake(Package):
     def setup_build_environment(self, env):
         spec = self.spec
         if "+ownlibs" in spec and "platform=windows" not in spec:
-            env.set("OPENSSL_ROOT_DIR", spec["openssl"].prefix)
+            env.set("OPENSSL_ROOT_DIR", "/usr")
+            #env.set("OPENSSL_ROOT_DIR", spec["openssl"].prefix)
 
     def bootstrap_args(self):
         spec = self.spec

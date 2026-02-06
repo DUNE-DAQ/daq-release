@@ -117,7 +117,7 @@ class SlackPayload:
             return "\n\t\t  *Unknown failure:* No matching results.xml file found.\n"
 
         failure_summary = ''
-        results = self.xml_parser.parse_junit_xml(xml_file)
+        results = self.xml_parser.parse_xml_file(xml_file)
         failed_line_pattern = r"\n>\s+(.*?)\n"
 
         for result in results:
@@ -167,7 +167,7 @@ class SlackPayload:
         self.add_header()
         self.add_release_section()
         self.add_report_section()
-        self.add_failed_jobs_section()
+        #self.add_failed_jobs_section()
         if shorten_failed_jobs_section:
             self.blocks[2]['text']['text'] = f""":warning: The failed jobs text exceeded Slack's limit of 3,000 characters. This indicates a large number of failures across multiple tests. :warning:"""
         self.add_pytest_log_section()
