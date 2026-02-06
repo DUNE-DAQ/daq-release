@@ -20,6 +20,7 @@ class Folly(CMakePackage):
     homepage = "https://github.com/facebook/folly"
     url = "https://github.com/facebook/folly/releases/download/v2021.05.24.00/folly-v2021.05.24.00.tar.gz"
 
+    version("2025.11.24.00", sha256="46fec61b588637f90a1e4f1da07473ec25f6a9d38f11a92bbc4ae25dcade7cf7")
     version("2024.12.02.00", sha256="c6656ebdcade0f98925754d02a270b5c3b1d5a3a7cf16b468455fe2fc907569c")
     version('2021.12.13.00', sha256='87f87f5c6bf101ef15322c7351039747fb73640504d3d6de1fb719428fb0a5bc')
     version('2021.05.24.00', sha256='9d308adefe4670637f5c7d96309b3b394ac3fa129bc954f5dfbdd8b741c02aad')

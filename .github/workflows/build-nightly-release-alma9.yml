@@ -1,4 +1,4 @@
-name: Alma9 build v5 nightly release with externals v2.2
+name: Alma9 build v5 nightly release with externals v2.3
 
 on:
   schedule:
@@ -63,7 +63,7 @@ jobs:
     runs-on: daq
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
     defaults:
       run:
         shell: bash
@@ -123,7 +123,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "development_v5${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 

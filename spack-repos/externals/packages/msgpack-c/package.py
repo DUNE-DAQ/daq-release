@@ -11,6 +11,7 @@ class MsgpackC(CMakePackage):
     homepage = "http://www.msgpack.org"
     url      = "https://github.com/msgpack/msgpack-c/archive/cpp-3.0.1.tar.gz"
 
+    version("7.0.0", sha256="070881ebea9208cf7e731fd5a46a11404025b2f260ab9527e32dfcb7c689fbfc")
     version('3.3.0', sha256='754c3ace499a63e45b77ef4bcab4ee602c2c414f58403bce826b76ffc2f77d0b')
     version('3.1.1', sha256='bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e')
     version('3.0.1', sha256='1b834ab0b5b41da1dbfb96dd4a673f6de7e79dbd7f212f45a553ff9cc54abf3b')
@@ -18,7 +19,10 @@ class MsgpackC(CMakePackage):
 
     depends_on('cmake@2.8.12:', type='build')
     depends_on('googletest', type='test')
+    depends_on('boost', when='@7.0.0:')
 
+    patch("update_cmake_minimum_required.patch", when="@3.3.0", sha256="35c18b96d7c96eac7007cdb2df9a9078c4eb4eaf448b2c5765e54edca88b25f0")
+    
     def cmake_args(self):
         args = [
             "-DCMAKE_CXX_FLAGS=-Wno-implicit-fallthrough",

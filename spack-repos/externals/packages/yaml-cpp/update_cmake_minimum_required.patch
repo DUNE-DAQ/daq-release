@@ -1,0 +1,51 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b230b9e..f9a4026 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-# 3.5 is actually available almost everywhere, but this a good minimum
+-cmake_minimum_required(VERSION 3.4)
++
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ # enable MSVC_RUNTIME_LIBRARY target property
+ # see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+diff --git a/test/gtest-1.10.0/CMakeLists.txt b/test/gtest-1.10.0/CMakeLists.txt
+index f11bbb5..38e7503 100644
+--- a/test/gtest-1.10.0/CMakeLists.txt
++++ b/test/gtest-1.10.0/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Note: CMake support is community-based. The maintainers do not use CMake
+ # internally.
+ 
+-cmake_minimum_required(VERSION 2.8.8)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ if (POLICY CMP0048)
+   cmake_policy(SET CMP0048 NEW)
+diff --git a/test/gtest-1.10.0/googlemock/CMakeLists.txt b/test/gtest-1.10.0/googlemock/CMakeLists.txt
+index d32b70b..11ea1c5 100644
+--- a/test/gtest-1.10.0/googlemock/CMakeLists.txt
++++ b/test/gtest-1.10.0/googlemock/CMakeLists.txt
+@@ -42,7 +42,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gmock VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff --git a/test/gtest-1.10.0/googletest/CMakeLists.txt b/test/gtest-1.10.0/googletest/CMakeLists.txt
+index db29294..8bfb13e 100644
+--- a/test/gtest-1.10.0/googletest/CMakeLists.txt
++++ b/test/gtest-1.10.0/googletest/CMakeLists.txt
+@@ -53,7 +53,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gtest VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ if (POLICY CMP0063) # Visibility
+   cmake_policy(SET CMP0063 NEW)
