@@ -38,15 +38,9 @@ newdir=$( mktemp -d )
 mkdir -p $newdir
 cd $newdir
 
-#RELEASE=NFD_DEV_260120_A9
-echo "RELEASE: $release"
-echo "BRANCH: $dbt_branch"
-
 echo "*********************************TEST dbt-setup-release *******************************"
 # Check that dbt-setup-release works without altering the environment, thus the (...)
-#(dbt-setup-release -n last_fddaq; echo $? > $newdir/dbt-setup-release_result.txt)
 (dbt-setup-release -n "$release"; echo $? > $newdir/dbt-setup-release_result.txt)
-#source ~/daq-buildtools/env.sh
 
 test -e $newdir/dbt-setup-release_result.txt || exit 3
 test $( cat $newdir/dbt-setup-release_result.txt ) == 0 || exit 4
@@ -54,7 +48,6 @@ rm -f dbt-setup-release_result.txt
 
 echo "*********************************TEST dbt-create ***************************************"
 dbt-create -s -n "$release" || exit 5
-#cd "$release"  # Only thing in the directory will be the work area
 cd $(ls)  # Only thing in the directory will be the work area
 cd sourcecode
 git clone https://github.com/DUNE-DAQ/$repo || exit 6
