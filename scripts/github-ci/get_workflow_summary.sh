@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Success example
-#RUN_ID=20741010101
-
-# Failed example
-#RUN_ID=20720529187
-
 RUN_ID=$1
 REPO="DUNE-DAQ/daq-release"
 
