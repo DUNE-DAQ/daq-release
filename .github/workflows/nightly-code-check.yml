@@ -32,12 +32,10 @@ jobs:
       upload_logs: 'yes'
 
   run_checks:
-    name: Run linting and integration tests
+    name: Run integration tests and clang formatting
     runs-on: daq
     needs: [make_variables, run_unittests]
     timeout-minutes: 60
-    outputs:
-      integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
     defaults:
@@ -70,55 +68,25 @@ jobs:
         dbt-clang-format.sh . --view-differences-only --markdown-summary
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
         name: clang_formatting_summary
         path: ${{ env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
 
-    - name: Run integration tests
-      id: integtests
-      run: |
-        cd $DBT_AREA_ROOT
-        # daqsystemtest and listrev tests are already run as part of the nightly integration tests
-        rm -rf sourcecode/daqsystemtest
-        rm -rf sourcecode/listrev
-        source env.sh
-        dbt-workarea-env
-        dbt-build --integtest | tee integtest_full_output.log
-        # Log directory is the last non-empty line of output
-        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
-        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
-        echo "integtest_log_dir: $integtest_log_dir"
-
-  parse_integtest_results:
-    runs-on: daq
-    needs: [make_variables, run_unittests, run_checks]
-    steps:
-    - name: Generate summary tables
-      run: |
-        cd daq-release-code-checks/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.run_checks.outputs.integtest_log_dir }}
-        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
-
-    - name: Upload pytest summary
-      uses: actions/upload-artifact@v5
-      with:
-        if-no-files-found: error
-        name: pytest_summary
-        path: daq-release-code-checks/scripts/github-ci/pytest_summary_table.md
-
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: parse_integtest_results
+    needs: [make_variables, run_checks]
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
 
   cleanup_test_area:
     runs-on: daq
     if: always()
-    needs: [make_variables, parse_integtest_results]
+    needs: [make_variables, send_slack_message]
     steps:
       - name: Remove test directory and daq-release
         run: |

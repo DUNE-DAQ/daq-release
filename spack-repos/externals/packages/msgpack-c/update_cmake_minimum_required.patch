@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f9762d1d..6eebb52f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED (VERSION 2.8.12)
++CMAKE_MINIMUM_REQUIRED (VERSION 3.26)
+ 
+ IF ((CMAKE_VERSION VERSION_GREATER 3.1) OR
+     (CMAKE_VERSION VERSION_EQUAL 3.1))
+diff --git a/example/cmake/CMakeLists.txt b/example/cmake/CMakeLists.txt
+index 8c885ea5..910aa8e6 100644
+--- a/example/cmake/CMakeLists.txt
++++ b/example/cmake/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.26)
+ project (example)
+ 
+ if(EXAMPLE_MSGPACK_EMBEDDED)

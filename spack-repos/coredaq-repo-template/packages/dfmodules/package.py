@@ -35,4 +35,4 @@ class Dfmodules(CMakePackage):
         env.prepend_path("DUNEDAQ_SHARE_PATH", self.prefix + "/share")
         env.prepend_path('CET_PLUGIN_PATH', self.prefix.lib + "64")
         env.prepend_path("PYTHONPATH", self.prefix.lib + "64/python")
-
+        XDBPATHX

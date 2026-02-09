@@ -1,0 +1,73 @@
+name: Poll CVMFS for release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag-pattern:
+        type: string
+        description: 'Nightly tag pattern to check for on CVMFS'
+        default: 'NFD_*'
+      max-tries:
+        type: string
+        description: 'Maximum number of polling attempts before timing out'
+        default: '60'
+      interval:
+        type: string
+        description: 'Interval in seconds between polling attempts'
+        default: '60'
+  workflow_call:
+    inputs:
+      tag-pattern:
+        type: string
+        description: 'Nightly tag pattern to check for on CVMFS'
+        default: 'NFD_*'
+      max-tries:
+        type: string
+        description: 'Maximum number of polling attempts before timing out'
+        default: '60'
+      interval:
+        type: string
+        description: 'Interval in seconds between polling attempts'
+        default: '60'
+
+jobs:
+  poll_cvmfs:
+    runs-on: daq
+    timeout-minutes: 90
+    outputs:
+      new_release: ${{ steps.poll_release.outputs.release_tag }}
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release-cvmfs-poll
+        ref: amogan/slack_strategy_pattern
+    - id: poll_release
+      run: |
+        TAG=$(python daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.py \
+              --tag-pattern ${{ inputs.tag-pattern }} \
+              --max-tries ${{ inputs.max-tries }})    \
+              --interval ${{ inputs.interval }})
+        echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+
+  send_slack_message:
+    if: |
+      (success() || failure()) &&
+      ((github.event_name != 'workflow_dispatch') ||
+      (github.event_name == 'workflow_dispatch' && 
+      (github.event.inputs.send-slack-message == 'yes' || inputs.send-slack-message == 'yes')))
+    needs: [poll_cvmfs]
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      workflow_name: 'Nightly release watcher'
+      new_release_tag: ${{ needs.poll_cvmfs.outputs.new_release }}
+    secrets: 
+      slack_webhook_url: ${{ secrets.slack_webhook_url }}
+
+  cleanup:
+    runs-on: daq
+    steps:
+    - name: Remove directories
+      run: |
+        rm -rf daq-release-cvmfs-poll
+

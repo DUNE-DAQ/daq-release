@@ -111,6 +111,9 @@ fi
 # where speed as opposed to record-keeping is a priority, so we're
 # skipping the logging of a spec in that case
 
+# Dec-6-2025: DO NOT change the name out the output log file; its format is
+# used by daq-buildtools to determine the umbrella package (spec_<pkg>_log.txt)
+
 if [[ -z $BUILDCACHE_DIR ]]; then
 
     if [[ "$NAME" == "coredaq" ]]; then

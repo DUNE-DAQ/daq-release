@@ -2,7 +2,7 @@ name: Integration test workflow
 
 on:
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 6 * * *"
 
   workflow_dispatch:
     inputs:
@@ -169,14 +169,21 @@ jobs:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
       run: |
         cd daq-release-integtest/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
+        python integtest_xml_parser.py \
+               --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
         name: nightly_integtest_summary
         path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
+    - name: Upload json summary as artifact
+      uses: actions/upload-artifact@v6
+      with:
+        if-no-files-found: error
+        name: nightly_integtest_json
+        path: daq-release-integtest/scripts/github-ci/pytest_summary.json
 
   store_and_upload_logs:
     runs-on: daq
@@ -188,7 +195,7 @@ jobs:
       env:
         TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: pytest-logs-${{ env.TIMESTAMP }}
         path: ${{ env.PERSISTENT_LOG_DIR }}

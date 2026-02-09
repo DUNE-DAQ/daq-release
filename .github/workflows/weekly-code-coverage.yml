@@ -64,7 +64,7 @@ jobs:
         dbt-lcov.sh
         echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results/html" >> "$GITHUB_OUTPUT"
     - name: Upload html output as artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         if-no-files-found: error
         name: code_coverage

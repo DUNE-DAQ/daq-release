@@ -19,7 +19,7 @@ class FelixSoftware(Package):
 
     depends_on('boost', type='build')
     depends_on('python', type='build')
-    depends_on('cmake', type='build')
+    depends_on('cmake@3.26.3', type='build')
     depends_on('yaml-cpp', type=('build', 'link'))
     depends_on('czmq', type='build')
     depends_on('cppzmq', type='build')

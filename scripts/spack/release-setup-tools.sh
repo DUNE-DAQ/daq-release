@@ -62,8 +62,8 @@ echo "Deduced release type \"${RELEASE_TYPE}\" from the name of the coredaq dire
 export CORE_RELEASE_TAG=$( basename $CORE_RELEASE_DIR )
 export TARGET_RELEASE_TAG=$( basename $TARGET_RELEASE_DIR )
 
-export EXT_VERSION=v2.2
-export GCC_VERSION=13.2.0
+export EXT_VERSION=v2.3
+export GCC_VERSION=14.3.0
 export SPACK_VERSION=0.22.0
 
 export SPACK_EXTERNALS=${SPACK_EXTERNALS:-/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-${EXT_VERSION}}

@@ -21,7 +21,7 @@ jobs:
     name: build_stable_release_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
     defaults:
       run:
         shell: bash
@@ -47,7 +47,7 @@ jobs:
           tar_and_stage_release $BASE_RELEASE_TAG
 
     - name: upload spack stable release tarball for base release
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: stables_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -58,9 +58,10 @@ jobs:
           export BASE_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/coredaq-${{ github.event.inputs.base-release }}-a9-${{ github.event.inputs.build-number }}
           export DET_RELEASE_DIR=/cvmfs/dunedaq.opensciencegrid.org/spack/releases/${DET}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}
           export OS=almalinux9
-          source daq-release/.github/workflows/wf-setup-tools.sh
+          source daq-release/scripts/spack/release-setup-tools.sh
 
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode --pymodules
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.det-release }}/release.yaml -a -c -o $DET_RELEASE_DIR/sourcecode --pymodules --continue-on-error || true
           daq-release/scripts/spack/build-release.sh $BASE_RELEASE_DIR $DET_RELEASE_DIR $DET $OS
 
           cd $DET_RELEASE_DIR/..
@@ -68,7 +69,7 @@ jobs:
 
 
     - name: upload spack stable release tarball for detector release
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: stables_${{ github.event.inputs.det }}daq
         path: ${{ github.workspace }}/tarballs_for_upload/${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -79,7 +80,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3"
             output_image: "ghcr.io/dune-daq/stable-release-alma9"
             tag: ${{ github.event.inputs.det }}daq-${{ github.event.inputs.det-release }}-a9
     needs: build_the_stable_release_spack
@@ -95,13 +96,13 @@ jobs:
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
       - name: Download spack stable release tarball artifact for base release
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: stables_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack stable release tarball artifact for detector release
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: stables_${{ github.event.inputs.det }}daq
           path: ${{ github.workspace }}/docker-build
@@ -180,13 +181,13 @@ jobs:
 
 
     - name: upload ${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: ${{ github.event.inputs.det }}daq-dbt_setup_release_env
         path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq-dbt-setup-release-env.sh
 
     - name: upload ${{ github.event.inputs.det }}daq_app_rte.sh
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: ${{ github.event.inputs.det }}daq_app_rte
         path: ${{ github.workspace }}/${{ github.event.inputs.det }}daq_app_rte.sh
