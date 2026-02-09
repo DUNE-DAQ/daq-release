@@ -218,9 +218,8 @@ jobs:
       env:
           TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
       run: |
-          echo "SKIPPING STANDARD daq-buildtools SETUP TO USE johnfreeman/daq-release_issue500 FEAUTURE BRANCH"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt daq-release-issue500
+          setup_dbt latest
 
           dbt-setup-release -n ${TARGET_TAG}
           declare -x > ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh
