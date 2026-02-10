@@ -82,9 +82,6 @@ fi
 release_tmpdir=$(mktemp -d)
 mkdir -p "$release_tmpdir" && cd "$release_tmpdir"
 
-echo "dbt_tmpdir: $dbt_tmpdir"
-echo "release_tmpdir: $release_tmpdir"
-
 echo "*********************************TEST dbt-setup-release *******************************"
 # Check that dbt-setup-release works without altering the environment, thus the (...)
 (dbt-setup-release "${extra_args[@]}" "$release"; echo $? > $release_tmpdir/dbt-setup-release_result.txt)
