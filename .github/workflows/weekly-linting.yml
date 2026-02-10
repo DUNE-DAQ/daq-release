@@ -44,6 +44,8 @@ jobs:
         cd ./daq-release-linting/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o $tmpdirname
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o $tmpdirname
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -p hdf5libs -o $tmpdirname
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -p fdreadoutlibs -o $tmpdirname
         cd ../..
 
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
@@ -88,8 +90,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: run_linting
+    needs: [make_nightly_tag, run_linting]
     uses: ./.github/workflows/slack-notification.yml
+    with:
+      release_tag: ${{ needs.make_nightly_tag.outputs.tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
