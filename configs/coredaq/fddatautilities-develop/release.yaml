@@ -34,13 +34,16 @@
         - name: libevent
           version: 2.1.12
           variant: "~openssl"
+        - name: nlohmann-json
+          version: 3.12.0
+          variant: ~
 
     devtools:
         - name: cmake
-          version: 3.26.3
-          variant: "~ownlibs"
+          version: 4.1.2
+          variant: "+ownlibs"
         - name: gdb
-          version: 14.1 
+          version: 16.2
           variant: "~python"
         - name: ninja
           version: 1.10.0
@@ -48,13 +51,16 @@
 
     systems:
         - name: python
-          version: 3.10.10
+          version: 3.12.12
           variant: "~ssl"
         - name: gcc
-          version: 13.2.0
+          version: 14.3.0
           variant: "+binutils"
 
     coredaq:
+        - name: appmodel
+          version: "develop"
+          commit: null
         - name: daq-cmake
           version: v3.2.1
           commit: null
@@ -71,5 +77,11 @@
           version: "develop"
           commit: null
         - name: daqdataformats
+          version: "develop"
+          commit: null
+        - name: hdf5libs
+          version: "develop"
+          commit: null
+        - name: trgdataformats
           version: "develop"
           commit: null
