@@ -46,6 +46,13 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+extra_args=""
+if [[ "$release" == *"FD_"* ]]; then
+    extra_args=(-n)
+elif [[ "$release" == *"rc"* ]]; then
+    extra_args=(-b candidate)
+fi
+
 echo -e "Running daq-buildtools commands using:\n"
 echo -e "\tRelease name: $release"
 echo -e "\tdbt branch:   $dbt_branch"
@@ -66,14 +73,14 @@ cd $newdir
 
 echo "*********************************TEST dbt-setup-release *******************************"
 # Check that dbt-setup-release works without altering the environment, thus the (...)
-(dbt-setup-release -n "$release"; echo $? > $newdir/dbt-setup-release_result.txt)
+(dbt-setup-release "${extra_args[@]}" "$release"; echo $? > $newdir/dbt-setup-release_result.txt)
 
 test -e $newdir/dbt-setup-release_result.txt || exit 3
 test $( cat $newdir/dbt-setup-release_result.txt ) == 0 || exit 4
 rm -f dbt-setup-release_result.txt
 
 echo "*********************************TEST dbt-create ***************************************"
-dbt-create -s -n "$release" || exit 5
+dbt-create -s "${extra_args[@]}" "$release" || exit 5
 cd $(ls)  # Only thing in the directory will be the work area
 cd sourcecode
 git clone https://github.com/DUNE-DAQ/$repo || exit 6
