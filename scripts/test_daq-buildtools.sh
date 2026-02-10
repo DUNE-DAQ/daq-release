@@ -17,6 +17,17 @@ Example:
 EOF
 }
 
+start_dir="$PWD"
+
+cleanup() {
+    echo "Triggering cleanup"
+    cd "$start_dir"
+    rm -rf "$dbt_tmpdir"
+    rm -rf "$release_tmpdir"
+    echo "Done"
+}
+trap cleanup EXIT SIGINT SIGTERM
+
 release="last_fddaq"
 repo="ipm"
 dbt_branch="develop"
@@ -46,8 +57,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-extra_args=""
-if [[ "$release" == *"FD_"* ]]; then
+extra_args=()
+if [[ "$release" == *"FD_"* || "$release" == "last_fddaq" ]]; then
     extra_args=(-n)
 elif [[ "$release" == *"rc"* ]]; then
     extra_args=(-b candidate)
@@ -62,31 +73,33 @@ echo -e "\trepo:         $repo\n"
 setup_dbt latest_v5 || exit 2
 
 if [[ -n "dbt_branch" ]]; then
+    dbt_tmpdir=$(mktemp -d)
+    mkdir -p "$dbt_tmpdir" && cd "$dbt_tmpdir"
     git clone https://github.com/DUNE-DAQ/daq-buildtools.git -b "$dbt_branch"
     source daq-buildtools/env.sh
 fi
 
-newdir=$( mktemp -d )
+release_tmpdir=$(mktemp -d)
+mkdir -p "$release_tmpdir" && cd "$release_tmpdir"
 
-mkdir -p $newdir
-cd $newdir
+echo "dbt_tmpdir: $dbt_tmpdir"
+echo "release_tmpdir: $release_tmpdir"
 
 echo "*********************************TEST dbt-setup-release *******************************"
 # Check that dbt-setup-release works without altering the environment, thus the (...)
-(dbt-setup-release "${extra_args[@]}" "$release"; echo $? > $newdir/dbt-setup-release_result.txt)
+(dbt-setup-release "${extra_args[@]}" "$release"; echo $? > $release_tmpdir/dbt-setup-release_result.txt)
 
-test -e $newdir/dbt-setup-release_result.txt || exit 3
-test $( cat $newdir/dbt-setup-release_result.txt ) == 0 || exit 4
+test -e $release_tmpdir/dbt-setup-release_result.txt || exit 3
+test $( cat $release_tmpdir/dbt-setup-release_result.txt ) == 0 || exit 4
 rm -f dbt-setup-release_result.txt
 
 echo "*********************************TEST dbt-create ***************************************"
-dbt-create -s "${extra_args[@]}" "$release" || exit 5
+dbt-create -s ${extra_args[@]} $release || exit 5
 cd $(ls)  # Only thing in the directory will be the work area
 cd sourcecode
 git clone https://github.com/DUNE-DAQ/$repo || exit 6
 cd ..
 . env.sh || exit 7
-source ~/daq-buildtools/env.sh
 
 echo "**********************************TEST dbt-build ****************************************"
 dbt-build || exit 8
@@ -104,8 +117,8 @@ dbt-clang-format.sh $repo --view-differences-only || exit 11
 # Test building against a sourcecode directory outside of the work area
 echo "***********************TEST dbt-build with external sourcecode **************************"
 cd ..
-mv sourcecode $newdir
-ln -s $newdir/sourcecode
+mv sourcecode $release_tmpdir
+ln -s $release_tmpdir/sourcecode
 dbt-build --clean || exit 12
 
 echo "*****************************TEST dbt-build --codegen **********************************"
@@ -116,7 +129,5 @@ spack install py-wesanderson || exit 14
 
 echo "*********************************TEST dbt-lcov.sh****************************************"
 dbt-lcov.sh || exit 15
-
-rm -rf $newdir
 
 exit 0
