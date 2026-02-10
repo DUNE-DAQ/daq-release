@@ -29,6 +29,7 @@ jobs:
     name: Run linting
     runs-on: daq
     needs: make_nightly_tag
+    timeout-minutes: 480
     defaults:
       run:
         shell: bash
