@@ -72,8 +72,10 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: generate_code_coverage_report
+    needs: [make_nightly_tag, generate_code_coverage_report]
     uses: ./.github/workflows/slack-notification.yml
+    with:
+      release_tag: ${{ needs.make_nightly_tag.outputs.tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
