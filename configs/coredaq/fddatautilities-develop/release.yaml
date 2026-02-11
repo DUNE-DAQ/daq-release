@@ -64,6 +64,9 @@
         - name: conffwk
           version: "develop"
           commit: null
+        - name: confmodel
+          version: "develop"
+          commit: null
         - name: daq-cmake
           version: v3.2.1
           commit: null
@@ -83,6 +86,15 @@
           version: "develop"
           commit: null
         - name: hdf5libs
+          version: "develop"
+          commit: null
+        - name: oks
+          version: "develop"
+          commit: null
+        - name: oksdalgen
+          version: "develop"
+          commit: null
+        - name: okssystem
           version: "develop"
           commit: null
         - name: trgdataformats
