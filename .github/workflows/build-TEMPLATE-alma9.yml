@@ -1,4 +1,4 @@
-name: Alma9 build v5 nightly release with externals v2.3
+name: Alma9 build XTARGETNAMEX with externals v2.3
 
 on:
   schedule:
@@ -24,8 +24,8 @@ jobs:
     name: create core tag and target tag
     runs-on: ubuntu-latest
     outputs:
-      core_tag: ${{ steps.create_tags.outputs.core_tag }}
-      target_tag: ${{ steps.create_tags.outputs.target_tag }}
+      core_tag: ${{ steps.create_tags.outputs.core_tag }} 
+      target_tag: ${{ steps.create_tags.outputs.target_tag }} 
     defaults:
       run:
         shell: bash
@@ -40,8 +40,8 @@ jobs:
           prefix="N"
         fi
 
-        core_tag="${prefix}B_DEV_${date_tag}_A9"
-        target_tag="${prefix}FD_DEV_${date_tag}_A9"
+        core_tag="${prefix}XTARGETABBREVXB_DEV_${date_tag}_A9"
+        target_tag="${prefix}XTARGETABBREVX_DEV_${date_tag}_A9"
 
         echo "core_tag=$core_tag" >> "$GITHUB_OUTPUT"
         echo "target_tag=$target_tag" >> "$GITHUB_OUTPUT"
@@ -86,37 +86,35 @@ jobs:
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/XTARGETNAMEX-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
         daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
 
         cd $CORE_RELEASE_DIR/../
         tar_and_stage_release ${CORE_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for base release
+    - name: upload spack nightly tarball for core release
       uses: actions/upload-artifact@v6
       with:
         name: nightly_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.core_tag}}.tar.gz
 
-    - name: setup directories and install spack for the fddaq release
+    - name: setup directories and install spack for the XTARGETNAMEX release
       run: |
         source daq-release/scripts/spack/release-setup-tools.sh
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq $OS ${{ github.event.inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/XTARGETNAMEX/XTARGETNAMEX-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/XTARGETNAMEX/XTARGETNAMEX-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR XTARGETNAMEX $OS ${{ github.event.inputs.feature-branch }}
 
         cd $TARGET_RELEASE_DIR/../
         tar_and_stage_release ${TARGET_RELEASE_TAG}
 
-    - name: upload spack nightly tarball for far detector release
+    - name: upload spack nightly tarball for target release
       uses: actions/upload-artifact@v6
       with:
-        name: nightly_fddaq
+        name: nightly_XTARGETNAMEX
         path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.target_tag}}.tar.gz
 
   update_image:
@@ -127,7 +125,7 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
-            tag: "development_v5${{ github.event.inputs.tag-prefix }}"
+            tag: "XTARGETNAMEX${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
     environment: dockerhub
     permissions:
@@ -140,16 +138,16 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
-      - name: Download spack nightly release tarball artifact for base release
+      - name: Download spack nightly release tarball artifact for core release
         uses: actions/download-artifact@v7
         with:
           name: nightly_coredaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack nightly release tarball artifact for far detector release
+      - name: Download spack nightly release tarball artifact for target release
         uses: actions/download-artifact@v7
         with:
-          name: nightly_fddaq
+          name: nightly_XTARGETNAMEX
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-nightly
@@ -168,7 +166,7 @@ jobs:
             rm -rf ../${TARGET_TAG}.tar.gz
 
             if [[ "${TARGET_TAG}" == NFD_* ]]; then
-              ln -s ${TARGET_TAG} last_fddaq
+              ln -s ${TARGET_TAG} last_XTARGETNAMEX
             fi
 
             cd ..
@@ -193,7 +191,7 @@ jobs:
           images: |
             ghcr.io/dune-daq/nightly-release-alma9
           tags: |
-            type=raw,value=development_v5${{ github.event.inputs.tag-prefix }}
+            type=raw,value=XTARGETNAMEX${{ github.event.inputs.tag-prefix }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -209,37 +207,36 @@ jobs:
     runs-on: daq
     needs: [make_tags, update_image]
     container:
-      image: ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:XTARGETNAMEX${{ github.event.inputs.tag-prefix }}
     defaults:
       run:
         shell: bash
 
     steps:
     
-    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for XTARGETNAMEX
       env:
           TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
       run: |
-          export DET=fd
-
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt latest_v5
+          setup_dbt latest
+
           dbt-setup-release -n ${TARGET_TAG}
-          declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
-          declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
-          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
+          declare -x > ${GITHUB_WORKSPACE}/XTARGETNAMEX-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/XTARGETNAMEX-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/XTARGETNAMEX-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/XTARGETNAMEX_app_rte.sh
 
-    - name: upload fddaq-dbt-setup-release-env.sh
+    - name: upload XTARGETNAMEX-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v6
       with:
-        name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
+        name: XTARGETNAMEX-dbt_setup_release_env
+        path: ${{ github.workspace }}/XTARGETNAMEX-dbt-setup-release-env.sh
 
-    - name: upload fddaq_app_rte.sh
+    - name: upload XTARGETNAMEX_app_rte.sh
       uses: actions/upload-artifact@v6
       with:
-        name: fddaq_app_rte
-        path: ${{ github.workspace }}/fddaq_app_rte.sh
+        name: XTARGETNAMEX_app_rte
+        path: ${{ github.workspace }}/XTARGETNAMEX_app_rte.sh
 
   publish_to_cvmfs:
     name: publish to cvmfs
@@ -256,19 +253,19 @@ jobs:
         [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
       continue-on-error: true
 
-    - name: download fddaq-dbt-setup-release-env.sh
+    - name: download XTARGETNAMEX-dbt-setup-release-env.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v7
       with:
-        name: fddaq-dbt_setup_release_env
-        path: ${{ github.workspace }}/fddaq-release
+        name: XTARGETNAMEX-dbt_setup_release_env
+        path: ${{ github.workspace }}/XTARGETNAMEX-release
 
-    - name: download fddaq_app_rte.sh
+    - name: download XTARGETNAMEX_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
       uses: actions/download-artifact@v7
       with:
-        name: fddaq_app_rte
-        path: ${{ github.workspace }}/fddaq-rte
+        name: XTARGETNAMEX_app_rte
+        path: ${{ github.workspace }}/XTARGETNAMEX-rte
 
     - name: start docker container, and then rsync... 
       if: steps.do_deployment.outcome == 'success'
@@ -277,7 +274,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:development_v5${{ github.event.inputs.tag-prefix }}"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:XTARGETNAMEX${{ github.event.inputs.tag-prefix }}"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE
@@ -294,8 +291,8 @@ jobs:
 
         #dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
         dir_for_env_scripts="$unique_name/${{ needs.make_tags.outputs.target_tag }}"
-        cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
-        cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
+        cp ./XTARGETNAMEX-release/XTARGETNAMEX-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
+        cp ./XTARGETNAMEX-rte/XTARGETNAMEX_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
 
         kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
 
@@ -309,10 +306,8 @@ jobs:
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: [make_tags, publish_to_cvmfs]
+    needs: publish_to_cvmfs
     uses: ./.github/workflows/slack-notification.yml
-    with:
-      release_tag: ${{ needs.make_tags.outputs.detector_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
