@@ -61,6 +61,9 @@
         - name: appmodel
           version: "develop"
           commit: null
+        - name: conffwk
+          version: "develop"
+          commit: null
         - name: daq-cmake
           version: v3.2.1
           commit: null
