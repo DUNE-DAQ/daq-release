@@ -80,7 +80,7 @@ jobs:
         tar czf linting_results.tgz log/*_linting.log
 
     - name: Upload logs
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: Linting results
         path: ${{ needs.make_nightly_tag.outputs.tag }}/linting_results.tgz

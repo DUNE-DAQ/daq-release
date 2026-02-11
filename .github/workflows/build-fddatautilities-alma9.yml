@@ -1,4 +1,4 @@
-name: Alma9 build v5 nightly release with externals v2.2
+name: Alma9 build fddatautilities with externals v2.3
 
 on:
   schedule:
@@ -63,7 +63,7 @@ jobs:
     runs-on: daq
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.2T
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3T
     defaults:
       run:
         shell: bash
@@ -86,14 +86,14 @@ jobs:
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
         daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
 
         cd $CORE_RELEASE_DIR/../
         tar_and_stage_release ${CORE_RELEASE_TAG}
 
     - name: upload spack nightly tarball for core release
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: nightly_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.core_tag}}.tar.gz
@@ -104,14 +104,15 @@ jobs:
         input_feature_branch=${{ github.event.inputs.feature-branch }}
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddatautilities/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddatautilities/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddatautilities/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
         daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddatautilities $OS ${{ github.event.inputs.feature-branch }}
 
         cd $TARGET_RELEASE_DIR/../
         tar_and_stage_release ${TARGET_RELEASE_TAG}
 
     - name: upload spack nightly tarball for target release
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: nightly_fddatautilities
         path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.target_tag}}.tar.gz
@@ -122,7 +123,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.2T"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T"
             output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "fddatautilities${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
@@ -138,13 +139,13 @@ jobs:
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
       - name: Download spack nightly release tarball artifact for core release
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: nightly_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack nightly release tarball artifact for target release
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: nightly_fddatautilities
           path: ${{ github.workspace }}/docker-build
@@ -217,9 +218,8 @@ jobs:
       env:
           TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
       run: |
-          echo "SKIPPING STANDARD daq-buildtools SETUP TO USE johnfreeman/daq-release_issue500 FEAUTURE BRANCH"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-          setup_dbt daq-release-issue500
+          setup_dbt latest
 
           dbt-setup-release -n ${TARGET_TAG}
           declare -x > ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh
@@ -227,13 +227,13 @@ jobs:
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/fddatautilities_app_rte.sh
 
     - name: upload fddatautilities-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: fddatautilities-dbt_setup_release_env
         path: ${{ github.workspace }}/fddatautilities-dbt-setup-release-env.sh
 
     - name: upload fddatautilities_app_rte.sh
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: fddatautilities_app_rte
         path: ${{ github.workspace }}/fddatautilities_app_rte.sh
@@ -255,14 +255,14 @@ jobs:
 
     - name: download fddatautilities-dbt-setup-release-env.sh
       if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: fddatautilities-dbt_setup_release_env
         path: ${{ github.workspace }}/fddatautilities-release
 
     - name: download fddatautilities_app_rte.sh
       if: steps.do_deployment.outcome == 'success'
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: fddatautilities_app_rte
         path: ${{ github.workspace }}/fddatautilities-rte

@@ -39,16 +39,24 @@ class Pistache(CMakePackage):
     # fddaq-v5.3.0 and dunedaq-v2.8.0 are the same, except fddaq-v5.3.0 builds
     # against gcc 13.2.0 because of a patch and dunedaq-v2.8.0 doesn't
 
+    # JCF, Dec-30-2025
+
+    # fddaq-v5.6.0 is also the same, except there's an additional
+    # patch which will support newer versions of CMake (e.g., v4.1.2)
+
+    version('fddaq-v5.6.0', commit="a54a4fab00252a9")
     version('fddaq-v5.3.0', commit="a54a4fab00252a9")
     version('dunedaq-v2.8.0', commit="a54a4fab00252a9")
     version('master', branch='master')
-    #depends_on('openssl')
+
     depends_on('libpthread-stubs')
     depends_on('rapidjson')
 
-    #patch('pistache_gcc12.patch', when='@dunedaq-v2.8.0')
-    patch('build_under_gcc_13.2.0.patch', when='@fddaq-v5.3.0')
+    patch('build_under_gcc_13.2.0.patch', sha256='455c25d3b54c2ceabe24c5b564a3ab6b6b3b4585c725b77807e38dd16ffce90e', when='@fddaq-v5.3.0')
+    patch('build_under_gcc_13.2.0.patch', sha256='455c25d3b54c2ceabe24c5b564a3ab6b6b3b4585c725b77807e38dd16ffce90e', when='@fddaq-v5.6.0')
 
+    patch("update_cmake_minimum_required.patch", sha256="2dcde02fc983b470ab53d462bcda409eb66549f223c1bc46b5f6e50a4744f55f", when="@fddaq-v5.6.0")
+    
     def install(self, spec, prefix):
 
         super().install(spec, prefix)

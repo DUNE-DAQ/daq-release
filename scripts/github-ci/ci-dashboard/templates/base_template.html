@@ -1,0 +1,24 @@
+<!-- templates/base_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}DAQ Report{% endblock %}</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Navigation</h2>
+    <ul>
+      {% for label, url in links.items() %}
+        <li>
+          <a href="{{ url }}"{% if "http" in url %} target="_blank"{% endif %}>{{ label }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

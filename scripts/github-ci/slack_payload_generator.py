@@ -28,7 +28,7 @@ class SlackPayload:
         self.blocks = []
         self.junit_xml_dir = junit_xml_dir
         self.xml_parser = JUnitXMLParser(self.junit_xml_dir) if self.junit_xml_dir else None
-        self.xml_files = self.xml_parser.get_xml_files(self.junit_xml_dir, "*_results.xml") if self.xml_parser else []
+        self.xml_files = self.xml_parser.get_xml_files() if self.xml_parser else []
 
     def get_workflow_status(self):
         """Determine the overall workflow status based on job conclusions."""
@@ -117,7 +117,7 @@ class SlackPayload:
             return "\n\t\t  *Unknown failure:* No matching results.xml file found.\n"
 
         failure_summary = ''
-        results = self.xml_parser.parse_junit_xml(xml_file)
+        results = self.xml_parser.parse_xml_file(xml_file)
         failed_line_pattern = r"\n>\s+(.*?)\n"
 
         for result in results:
@@ -167,7 +167,7 @@ class SlackPayload:
         self.add_header()
         self.add_release_section()
         self.add_report_section()
-        self.add_failed_jobs_section()
+        #self.add_failed_jobs_section()
         if shorten_failed_jobs_section:
             self.blocks[2]['text']['text'] = f""":warning: The failed jobs text exceeded Slack's limit of 3,000 characters. This indicates a large number of failures across multiple tests. :warning:"""
         self.add_pytest_log_section()
@@ -222,7 +222,6 @@ def main():
     if args.junit_xml_dir and os.path.isdir(args.junit_xml_dir):
         xml_files = list(Path(args.junit_xml_dir).rglob("*_results.xml"))
 
-    print('args.pytest_log_dir:', args.pytest_log_dir)
     slack_payload = SlackPayload(workflow_summary, args.release_name, args.junit_xml_dir, args.pytest_log_dir)
     json_payload = slack_payload.to_json()
     write_payload_to_file(json_payload)

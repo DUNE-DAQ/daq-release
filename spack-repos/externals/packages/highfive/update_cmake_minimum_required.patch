@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6949600..672e077 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
+ if(${CMAKE_VERSION} VERSION_LESS 3.13)
+   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+ else()
+diff --git a/tests/test_dependent_library/CMakeLists.txt b/tests/test_dependent_library/CMakeLists.txt
+index 570dba2..45354a5 100644
+--- a/tests/test_dependent_library/CMakeLists.txt
++++ b/tests/test_dependent_library/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # This is a sample library to test integration via add_subdirectory and CMakeConfig
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ project(test_project VERSION 0.1)
+ 
+diff --git a/tests/test_project/CMakeLists.txt b/tests/test_project/CMakeLists.txt
+index 1a8ef09..a9e6733 100644
+--- a/tests/test_project/CMakeLists.txt
++++ b/tests/test_project/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # This is a sample project to test integration via add_subdirectory and CMakeConfig
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.26.3)
+ 
+ project(test_project VERSION 0.1)
+ 
