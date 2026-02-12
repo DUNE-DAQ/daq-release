@@ -44,8 +44,8 @@ jobs:
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
               ${{ inputs.tag-pattern }} \
-              ${{ inputs.interval }}) \
-              ${{ inputs.max-tries }})
+              ${{ inputs.interval }} \
+              ${{ inputs.max-tries }}
 
   send_slack_message:
     if: |
@@ -58,7 +58,8 @@ jobs:
     with:
       release_tag: ${{ inputs.tag-pattern }}
     secrets: 
-      slack_webhook_url: ${{ secrets.slack_webhook_url }}
+      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup:
     runs-on: daq
