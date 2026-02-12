@@ -45,7 +45,6 @@ jobs:
         path: daq-release-cvmfs-poll
         ref: amogan/poll_cvmfs_workflow
     - id: poll_release
-      continue-on-error: true
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
               ${{ inputs.tag-pattern }} \
