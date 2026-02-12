@@ -36,15 +36,13 @@ jobs:
   poll_cvmfs:
     runs-on: daq
     timeout-minutes: 90
-    outputs:
-      new_release: ${{ steps.poll_release.outputs.release_tag }}
     steps:
     - name: Checkout daq-release
       uses: actions/checkout@v6
       with:
         path: daq-release-cvmfs-poll
         ref: amogan/poll_cvmfs_workflow
-    - id: poll_release
+    - name: poll_release
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
               ${{ inputs.tag-pattern }} \
