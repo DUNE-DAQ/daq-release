@@ -14,6 +14,10 @@ on:
         type: string
         description: 'Interval in seconds between polling attempts'
         default: '60'
+      send-slack-message:
+        type: string
+        description: 'Whether to notify #daq-release-notifications of completion.'
+        default: 'yes'
   workflow_call:
     inputs:
       tag-pattern:
@@ -41,6 +45,7 @@ jobs:
         path: daq-release-cvmfs-poll
         ref: amogan/poll_cvmfs_workflow
     - id: poll_release
+      continue-on-error: true
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
               ${{ inputs.tag-pattern }} \
@@ -63,6 +68,7 @@ jobs:
 
   cleanup:
     runs-on: daq
+    needs: poll_cvmfs
     steps:
     - name: Remove directories
       run: |
