@@ -5,8 +5,7 @@ on:
     inputs:
       tag-pattern:
         type: string
-        description: 'Nightly tag pattern to check for on CVMFS'
-        default: 'NFD_*'
+        description: 'Release tag pattern to check for on CVMFS'
       max-tries:
         type: string
         description: 'Maximum number of polling attempts before timing out'
@@ -19,8 +18,7 @@ on:
     inputs:
       tag-pattern:
         type: string
-        description: 'Nightly tag pattern to check for on CVMFS'
-        default: 'NFD_*'
+        description: 'Release tag pattern to check for on CVMFS'
       max-tries:
         type: string
         description: 'Maximum number of polling attempts before timing out'
@@ -38,17 +36,16 @@ jobs:
       new_release: ${{ steps.poll_release.outputs.release_tag }}
     steps:
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         path: daq-release-cvmfs-poll
-        ref: amogan/slack_strategy_pattern
+        ref: amogan/poll_cvmfs_workflow
     - id: poll_release
       run: |
-        TAG=$(python daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.py \
-              --tag-pattern ${{ inputs.tag-pattern }} \
-              --max-tries ${{ inputs.max-tries }})    \
-              --interval ${{ inputs.interval }})
-        echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+        ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
+              ${{ inputs.tag-pattern }} \
+              ${{ inputs.interval }}) \
+              ${{ inputs.max-tries }})
 
   send_slack_message:
     if: |
@@ -59,8 +56,7 @@ jobs:
     needs: [poll_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      workflow_name: 'Nightly release watcher'
-      new_release_tag: ${{ needs.poll_cvmfs.outputs.new_release }}
+      release_tag: ${{ inputs.tag-pattern }}
     secrets: 
       slack_webhook_url: ${{ secrets.slack_webhook_url }}
 
