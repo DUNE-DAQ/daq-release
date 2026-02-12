@@ -22,8 +22,7 @@ on:
 jobs:
   make_tags:
     name: create base tag and detector tag
-    #runs-on: ubuntu-latest
-    runs-on: daq
+    runs-on: ubuntu-latest
     outputs:
       base_tag: ${{ steps.create_tags.outputs.base_tag }} 
       detector_tag: ${{ steps.create_tags.outputs.detector_tag }} 
@@ -49,15 +48,15 @@ jobs:
         echo "detector_tag=$detector_tag" >> "$GITHUB_ENV"
         echo "base_tag=$base_tag"
         echo "detector_tag=$detector_tag"
-    - uses: cvmfs-contrib/github-action-cvmfs@v5
-      with:
-        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
-    - name: Check tag on cvmfs
-      run: |
-        if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]]; then
-          echo "ERROR: Build area $detector_tag already exists on CVMFS."
-          exit 1
-        fi
+    #- uses: cvmfs-contrib/github-action-cvmfs@v5
+    #  with:
+    #    cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
+    #- name: Check tag on cvmfs
+    #  run: |
+    #    if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${detector_tag} ]]; then
+    #      echo "ERROR: Build area $detector_tag already exists on CVMFS."
+    #      exit 1
+    #    fi
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
