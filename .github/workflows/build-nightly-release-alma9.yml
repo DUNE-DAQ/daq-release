@@ -22,7 +22,8 @@ on:
 jobs:
   make_tags:
     name: create base tag and detector tag
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: daq
     outputs:
       base_tag: ${{ steps.create_tags.outputs.base_tag }} 
       detector_tag: ${{ steps.create_tags.outputs.detector_tag }} 
