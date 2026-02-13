@@ -66,6 +66,7 @@ jobs:
   cleanup:
     runs-on: daq
     needs: poll_cvmfs
+    if: always()
     steps:
     - name: Remove directories
       run: |
