@@ -61,7 +61,7 @@ packages are defined alongside the non-core packages.
 Additionally, the `package.py` files Spack uses to install the DUNE
 DAQ packages are provided in `daq-release`. Those for the core
 packages are available in
-`spack-repos/coredaq-repo-template/packages`, while specific to an
+`spack-repos/coredaq-repo-template/packages`, while those those specific to an
 environment are available in `spack-repos/<env
 name>-repo-template/packages`
 
