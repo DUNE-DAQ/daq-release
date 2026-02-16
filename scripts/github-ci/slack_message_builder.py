@@ -59,8 +59,11 @@ def get_workflow_status(summary: dict) -> str:
         return "failure"
     return "success"
 
-def instructions_link_is_valid(link: str) -> int:
-    return requests.get(link).status_code
+# In the event that the instructions link moves, requests.get will
+# always return 200 since GitHub wiki will redirect to "create a new page".
+# Using requests.history catches the redirect.
+def instructions_link_is_valid(link: str) -> bool:
+    return False if requests.get(link).history else True
 
 
 class MessageStrategy(ABC):
@@ -70,73 +73,6 @@ class MessageStrategy(ABC):
     @abstractmethod
     def build(self, output_path: str = "slack_payload.json"):
         pass
-
-class NewReleaseMessageStrategy(MessageStrategy):
-    def __init__(self, summary: dict):
-        super().__init__(summary)
-        self.instructions_link = (
-            "https://github.com/DUNE-DAQ/daqconf/wiki/"
-            "Setting-up-a-fddaq%E2%80%90v5.6.0-development-area"
-        )
-
-    def build(self, output_path: str = "slack_payload.json"):
-        status = get_workflow_status(self.summary)
-
-        builder = SlackMessageBuilder()
-
-        builder.add_block(self.build_header(status))
-
-        if self.summary['failed_jobs']:
-            builder.add_block(self.build_failed_jobs_section())
-        else:
-            builder.add_block(self.build_release_section())
-
-        if requests.get(self.instructions_link).history:
-            builder.add_block(self.build_stale_link_section())
-
-        builder.add_block(self.build_footer())
-
-        builder.write(output_path)
-
-    def build_header(self, status: str):
-        emoji = STATUS_EMOJIS.get(status, ":question:")
-        status = get_workflow_status(self.summary).capitalize()
-        workflow = self.summary.get("workflow", "Unknown workflow name")
-        if status == "Success":
-            return HeaderBlock(f":mega: New Release on CVMFS :mega:")
-        return HeaderBlock(f"{emoji} {status}: {workflow} {emoji}")
-
-    def build_release_section(self):
-        release = self.summary.get("release", None)
-        release_type = get_release_type(release)
-        if not release_type:
-            return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
-        return SectionBlock(
-            f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
-            f"To set up a working area based on this release, follow the instructions"
-            f" <{self.instructions_link}|here>."
-        )
-
-    def build_failed_jobs_section(self):
-        failed_jobs_text = "*Failed jobs and steps:*\n"
-        for failed_job in self.summary['failed_jobs']:
-            failed_jobs_text += f"- {failed_job['job']}\n"
-            for step in failed_job['steps']:
-                failed_jobs_text += f"\t:x: *{step['name']}*\n"
-
-        return SectionBlock(failed_jobs_text)
-
-    def build_stale_link_section(self, status_code):
-        return SectionBlock(
-            f":warning: The link to instructions for setting up the"
-            f"latest development area appears to have moved."
-            f"Someone should investigate!"
-        )
-
-    def build_footer(self):
-        event = self.summary.get("event", None)
-        actor = self.summary.get("actor", None)
-        return FooterBlock(get_workflow_event(event, actor))
 
 class BaseMessageStrategy(MessageStrategy):
     def build(self, output_path: str = "slack_payload.json"):
@@ -192,10 +128,61 @@ class BaseMessageStrategy(MessageStrategy):
     def build_extra_blocks(self):
         return []
 
-
 class DefaultMessageStrategy(BaseMessageStrategy):
     pass
 
+class NewReleaseMessageStrategy(BaseMessageStrategy):
+    def __init__(self, summary: dict):
+        super().__init__(summary)
+        self.instructions_link = (
+            "https://github.com/DUNE-DAQ/daqconf/wiki/"
+            "Setting-up-a-FarDet-DAQ-software-development-area"
+        )
+
+    def build(self, output_path: str = "slack_payload.json"):
+        status = get_workflow_status(self.summary)
+
+        builder = SlackMessageBuilder()
+
+        builder.add_block(self.build_header(status))
+
+        if self.summary['failed_jobs']:
+            builder.add_block(self.build_failed_jobs_section())
+        else:
+            builder.add_block(self.build_release_section())
+
+        if not instructions_link_is_valid(self.instructions_link):
+            builder.add_block(self.build_stale_link_section())
+
+        builder.add_block(self.build_footer())
+
+        builder.write(output_path)
+
+    def build_header(self, status: str):
+        emoji = STATUS_EMOJIS.get(status, ":question:")
+        status = get_workflow_status(self.summary).capitalize()
+        workflow = self.summary.get("workflow", "Unknown workflow name")
+        if status == "Success":
+            return HeaderBlock(f":mega: New Release on CVMFS :mega:")
+        return HeaderBlock(f"{emoji} {status}: {workflow} {emoji}")
+
+    def build_release_section(self):
+        release = self.summary.get("release", None)
+        release_type = get_release_type(release)
+        if not release_type:
+            return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
+        return SectionBlock(
+            f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
+            f"To set up a working area based on this release, follow the instructions"
+            f" <{self.instructions_link}|here>."
+        )
+
+    def build_stale_link_section(self):
+        return SectionBlock(
+            f":warning: There is an issue with the link to the "
+            f"instructions for setting up the latest development area. "
+            f"Someone should investigate!"
+        )
 
 class IntegrationTestMessageStrategy(BaseMessageStrategy):
     def build_extra_blocks(self):
