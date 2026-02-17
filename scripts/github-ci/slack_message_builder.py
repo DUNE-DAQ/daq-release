@@ -84,7 +84,7 @@ class BaseMessageStrategy(MessageStrategy):
         builder.add_block(self.build_header(status))
         builder.add_block(self.build_report_section())
 
-        if self.summary['failed_jobs']:
+        if self.summary.get('failed_jobs'):
             builder.add_block(self.build_failed_jobs_section())
 
         # Classes which inherit from BaseMessageStrategy can override this for additional information
@@ -147,7 +147,7 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
 
         builder.add_block(self.build_header(status))
 
-        if self.summary['failed_jobs']:
+        if self.summary.get('failed_jobs'):
             builder.add_block(self.build_failed_jobs_section())
         else:
             builder.add_block(self.build_release_section())
@@ -173,15 +173,10 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
         status = get_workflow_status(self.summary).capitalize()
         if not release_type:
             return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
-        if status == "Success":
-            return SectionBlock(
-                f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
-                f"To set up a working area based on this release, follow the instructions"
-                f" <{self.instructions_link}|here>."
-            )
         return SectionBlock(
-            f"The {release_type} release with tag `{release}` has not appeared on CVMFS."
-            f" Somone should investigate!"
+            f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
+            f"To set up a working area based on this release, follow the instructions"
+            f" <{self.instructions_link}|here>."
         )
 
     def build_stale_link_section(self):
