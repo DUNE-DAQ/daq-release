@@ -3,7 +3,7 @@ name: Poll CVMFS for release
 on:
   workflow_dispatch:
     inputs:
-      tag-pattern:
+      release-tag:
         type: string
         description: 'Release tag pattern to check for on CVMFS'
       max-tries:
@@ -20,7 +20,7 @@ on:
         default: 'yes'
   workflow_call:
     inputs:
-      tag-pattern:
+      release-tag:
         type: string
         description: 'Release tag pattern to check for on CVMFS'
       max-tries:
@@ -31,6 +31,10 @@ on:
         type: string
         description: 'Interval in seconds between polling attempts'
         default: '60'
+      send-slack-message:
+        type: string
+        description: 'Whether to notify #daq-release-notifications of completion.'
+        default: 'yes'
 
 jobs:
   poll_cvmfs:
@@ -45,7 +49,7 @@ jobs:
     - name: poll_release
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
-              ${{ inputs.tag-pattern }} \
+              ${{ inputs.release-tag }} \
               ${{ inputs.interval }} \
               ${{ inputs.max-tries }}
 
@@ -58,7 +62,7 @@ jobs:
     needs: [poll_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      release_tag: ${{ inputs.tag-pattern }}
+      release_tag: ${{ inputs.release-tag }}
     secrets: 
       #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
       slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}

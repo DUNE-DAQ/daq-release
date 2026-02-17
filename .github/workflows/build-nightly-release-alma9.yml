@@ -319,7 +319,7 @@ jobs:
     needs: [make_tags, publish_to_cvmfs]
     uses: ./.github/workflows/poll-cvmfs-for-release.yml
     with:
-      tag-pattern: ${{ needs.make_tags.outputs.detector_tag }}
+      release-tag: ${{ needs.make_tags.outputs.detector_tag }}
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
