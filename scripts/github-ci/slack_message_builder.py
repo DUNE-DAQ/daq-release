@@ -18,6 +18,7 @@ STATUS_EMOJIS = {
 
 def choose_strategy(data: dict) -> MessageStrategy:
     workflow_name = data.get("caller", data.get('workflow'))
+    print('Workflow name:', workflow_name)
     if "integration test workflow" in workflow_name.lower():
         return IntegrationTestMessageStrategy(data)
     elif workflow_name == "Weekly code coverage workflow":
@@ -164,17 +165,23 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
         workflow = self.summary.get("workflow", "Unknown workflow name")
         if status == "Success":
             return HeaderBlock(f":mega: New Release on CVMFS :mega:")
-        return HeaderBlock(f"{emoji} {status}: {workflow} {emoji}")
+        return HeaderBlock(f"{emoji} Nightly build not published to CVMFS {emoji}")
 
     def build_release_section(self):
         release = self.summary.get("release", None)
         release_type = get_release_type(release)
+        status = get_workflow_status(self.summary).capitalize()
         if not release_type:
             return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
+        if status == "Success":
+            return SectionBlock(
+                f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
+                f"To set up a working area based on this release, follow the instructions"
+                f" <{self.instructions_link}|here>."
+            )
         return SectionBlock(
-            f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
-            f"To set up a working area based on this release, follow the instructions"
-            f" <{self.instructions_link}|here>."
+            f"The {release_type} release with tag `{release}` has not appeared on CVMFS."
+            f" Somone should investigate!"
         )
 
     def build_stale_link_section(self):
@@ -306,6 +313,7 @@ def main():
         return
 
     message_strategy = choose_strategy(data)
+    print("Chose strategy", message_strategy)
     message_strategy.build(args.output_path)
 
     if Path(args.output_path).is_file():
