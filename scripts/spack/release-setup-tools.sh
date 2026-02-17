@@ -181,7 +181,7 @@ function get_release_yaml() {
 	
 	if [[ $name == "coredaq" ]]; then
 	    version=$( echo $CORE_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )  
-            echo -n "configs/coredaq/${TARGET}-${version}/release.yaml"
+            echo -n "configs/coredaq/${TARGET}-coredaq-${version}/release.yaml"
 	else
 	    version=$( echo $TARGET_RELEASE_TAG | sed -r 's/.*(v[0-9]+\.[0-9]+\.[0-9]+).*/\1/' )
 	    echo -n "configs/${TARGET}/${TARGET}-${version}/release.yaml"

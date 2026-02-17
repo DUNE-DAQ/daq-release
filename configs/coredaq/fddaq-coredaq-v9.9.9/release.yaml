@@ -14,10 +14,10 @@
           version: 3.17.14
           variant: ~
         - name: nlohmann-json
-          version: 3.11.2
+          version: 3.12.0
           variant: ~
         - name: pistache
-          version: fddaq-v5.3.0
+          version: fddaq-v5.6.0
           variant: ~
         - name: highfive
           version: 2.9.0
@@ -41,7 +41,7 @@
           version: 2.12.0
           variant: ~
         - name: uhal
-          version: 2.8.1
+          version: 2.8.18
           variant: ~
         - name: librdkafka
           version: 2.2.0
@@ -56,7 +56,7 @@
           version: fddaq-v5.3.0
           variant: ~
         - name: folly
-          version: 2024.12.02.00
+          version: 2025.11.24.00
           variant: "cxxstd=2a"
         - name: cli11
           version: 2.3.2
@@ -74,13 +74,13 @@
           version: 0.6.7
           variant: ~
         - name: py-anyconfig
-          version: 0.9.11
+          version: 0.14.0
           variant: ~
         - name: py-jsonnet
           version: 0.16.0
           variant: ~
         - name: rclone
-          version: 1.64.0
+          version: 1.69.1
           variant: ~
         - name: libtorrent
           version: 2.0.9
@@ -91,13 +91,19 @@
         - name: libevent
           version: 2.1.12
           variant: "~openssl"
+        - name: glib
+          version: 2.80.5
+          variant: ~
+        - name: openmpi
+          version: 5.0.9
+          variant: ~
 
     devtools:
         - name: cmake
-          version: 3.26.3
-          variant: "~ownlibs"
+          version: 4.1.2
+          variant: "+ownlibs"
         - name: gdb
-          version: 14.1 
+          version: 16.2 
           variant: "~python"
         - name: ninja
           version: 1.10.0
@@ -105,10 +111,10 @@
 
     systems:
         - name: python
-          version: 3.10.10
+          version: 3.12.12
           variant: "~ssl"
         - name: gcc
-          version: 13.2.0
+          version: 14.3.0
           variant: "+binutils"
 
     coredaq:
@@ -235,7 +241,7 @@
           version: v3.1.5
           commit: null
         - name: daq-buildtools
-          version: v8.9.11
+          version: v8.12.1
           commit: null
         - name: daqsystemtest
           version: v4.7.0

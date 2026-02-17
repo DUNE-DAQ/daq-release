@@ -32,12 +32,12 @@ jobs:
     - name: setup directories and install spack for the base release
       run: |
           export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.core-release }}-rc${{ github.event.inputs.build-number }}-a9
-          export FDDAQ_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
+          export TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
           export OS=almalinux9
           source daq-release/scripts/spack/release-setup-tools.sh
 
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-coredaq-${{ github.event.inputs.core-release }}/release.yaml -a -c -o $FDDAQ_RELEASE_DIR/sourcecode
-          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FDDAQ_RELEASE_DIR coredaq $OS
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-coredaq-${{ github.event.inputs.core-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode
+          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS
 
           cd $CORE_RELEASE_DIR/..
           tar_and_stage_release $CORE_RELEASE_TAG
@@ -51,15 +51,15 @@ jobs:
     - name: setup directories and install spack for the detector release
       run: |
           export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.core-release }}-rc${{ github.event.inputs.build-number }}-a9
-          export FDDAQ_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
+          export TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
           export OS=almalinux9
           source daq-release/scripts/spack/release-setup-tools.sh
 
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $FDDAQ_RELEASE_DIR/sourcecode
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $FDDAQ_RELEASE_DIR/sourcecode --pymodules --continue-on-error
-          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $FDDAQ_RELEASE_DIR fddaq $OS
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode --pymodules --continue-on-error
+          daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq $OS
 
-          cd $FDDAQ_RELEASE_DIR/..
+          cd $TARGET_RELEASE_DIR/..
           tar_and_stage_release $TARGET_RELEASE_TAG
 
     - name: upload spack candidate release tarball for detector release
