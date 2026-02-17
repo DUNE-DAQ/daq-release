@@ -48,6 +48,7 @@ jobs:
             }' > additional_metadata.json
 
         jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
+        cat workflow_summary_with_metadata.json
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_message_builder.py \

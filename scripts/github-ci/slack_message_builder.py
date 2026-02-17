@@ -17,7 +17,7 @@ STATUS_EMOJIS = {
 }
 
 def choose_strategy(data: dict) -> MessageStrategy:
-    workflow_name = data['caller']
+    workflow_name = data.get("caller", data.get('workflow'))
     if "integration test workflow" in workflow_name.lower():
         return IntegrationTestMessageStrategy(data)
     elif workflow_name == "Weekly code coverage workflow":
