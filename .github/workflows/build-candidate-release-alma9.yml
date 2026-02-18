@@ -29,7 +29,7 @@ jobs:
       with:
         path: daq-release
 
-    - name: setup directories and install spack for the base release
+    - name: setup directories and install spack for the core release
       run: |
           export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.core-release }}-rc${{ github.event.inputs.build-number }}-a9
           export TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
@@ -48,7 +48,7 @@ jobs:
         name: candidates_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.core-release }}-rc${{ github.event.inputs.build-number }}-a9.tar.gz
 
-    - name: setup directories and install spack for the detector release
+    - name: setup directories and install spack for the fddaq release
       run: |
           export CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/coredaq-${{ github.event.inputs.core-release }}-rc${{ github.event.inputs.build-number }}-a9
           export TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/candidates/fddaq-${{ github.event.inputs.fddaq-release }}-rc${{ github.event.inputs.build-number }}-a9
@@ -62,7 +62,7 @@ jobs:
           cd $TARGET_RELEASE_DIR/..
           tar_and_stage_release $TARGET_RELEASE_TAG
 
-    - name: upload spack candidate release tarball for detector release
+    - name: upload spack candidate release tarball for fddaq release
       uses: actions/upload-artifact@v6
       with:
         name: candidates_fddaq
@@ -89,13 +89,13 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
             
-      - name: Download spack candidate release tarball artifact for base release
+      - name: Download spack candidate release tarball artifact for core release
         uses: actions/download-artifact@v7
         with:
           name: candidates_coredaq
           path: ${{ github.workspace }}/docker-build
 
-      - name: Download spack candidate release tarball artifact for detector release
+      - name: Download spack candidate release tarball artifact for fddaq release
         uses: actions/download-artifact@v7
         with:
           name: candidates_fddaq
@@ -160,7 +160,7 @@ jobs:
 
     steps:
     
-    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for detector release
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddaq release
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
