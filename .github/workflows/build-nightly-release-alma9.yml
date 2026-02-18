@@ -321,6 +321,7 @@ jobs:
     with:
       release-tag: ${{ needs.make_tags.outputs.detector_tag }}
       send-slack-message: 'yes'
+    secrets: inherit
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
