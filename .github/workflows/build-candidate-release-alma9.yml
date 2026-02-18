@@ -56,7 +56,7 @@ jobs:
           source daq-release/scripts/spack/release-setup-tools.sh
 
           daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode
-          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode --pymodules --continue-on-error
+          daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-${{ github.event.inputs.fddaq-release }}/release.yaml -a -c -o $TARGET_RELEASE_DIR/sourcecode --pymodules --continue-on-error || true  # druncschema's CMakeLists.txt version will confuse checkout-daq-package.py, hence the "|| true"
           daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq $OS
 
           cd $TARGET_RELEASE_DIR/..
