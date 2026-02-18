@@ -10,11 +10,16 @@ Making a new stable DAQ release consists of:
 
 A patch release is built in the same way as a non-patch release, except it doesn't involve candidate releases.
 
+As of this writing (Feb-18-2026) the only software environment we
+release is the classic `fddaq` environment; for this reason it's the
+one that's referred to here, though the workflow will be essentially
+the same for any other environment (`nddaq`, etc.). Note these instructions will make more sense if you read up on our [software environment model](creating_a_new_environment.md).
+
 ## Prepare for the new release
 
 ### Create release configurations
 
-The release configuration package versions are defined by `configs/coredaq/coredaq-vX.Y.Z/release.yaml` (core release) and either `configs/fddaq/fddaq-vX.Y.Z/release.yaml` or `configs/nddaq/nddaq-vX.Y.Z/release.yaml` (detector release). To prepare the release configuration for a new release, it is best to start from (copy) the configuration of the develop release (`configs/coredaq/coredaq-develop/release.yaml` and `configs/fddaq/fddaq-develop/release.yaml` or `configs/nddaq/nddaq-develop/release.yaml`).
+The release configuration package versions are defined by `configs/coredaq/fddaq-coredaq-vX.Y.Z/release.yaml` (core release, `fddaq` variant) and `configs/fddaq/fddaq-vX.Y.Z/release.yaml` (`fddaq` specific packages). To prepare the release configuration for a new release, it is best to start from (copy) the configuration of the develop release (`configs/coredaq/fddaq-develop/release.yaml` and `configs/fddaq/fddaq-develop/release.yaml`.
 
 The release YAML file contains sections meant to define the versions of packages. In general, the `externals`, `devtools`, `systems` and `pymodules` sections will already have versions defined since you copied the YAML files from the develop release. While the develop release builds DUNE DAQ packages from the head of their `develop` branches, it uses versioned non-DUNE DAQ packages (e.g., Boost). However, you'll want to add the correct versions for the DUNE DAQ packages, e.g. edit
 ```
@@ -30,7 +35,7 @@ to
 ```
 ...where the `commit` field will be automatically calculated by the `make-release-repo.py` script run during the GitHub Actions which build releases. 
 
-In addition to the `release.yaml` file, there also needs to be a `dbt-build-order.cmake` file in the `configs/fddaq-vX.Y.Z/` or `configs/nddaq-vX.Y.Z/` directory you created. Copy it from the corresponding `fddaq-develop`/`nddaq-develop` subdirectory. Update this file when there's a package being added/removed, or if the dependency tree changed and a package needs to be built earlier.
+In addition to the `release.yaml` file, there also needs to be a `dbt-build-order.cmake` file in the `configs/fddaq/fddaq-vX.Y.Z/` directory you created. Copy it from the corresponding `fddaq-develop`/`nddaq-develop` subdirectory. Update this file when there's a package being added/removed, or if the dependency tree changed and a package needs to be built earlier (though generally, packages would be added removed outside the release period). 
 
 
 ### Checks before doing test builds
@@ -47,12 +52,12 @@ will checkout all the DAQ packages used in the release into a randomly-named dir
 
 ## Building candidate releases
 
-* Once the release configuration is ready, one can start the CI build for candidate releases. Go to the "Actions" tab of `daq-release` repo on GitHub. From the list of workflows on the left, select either "Alma9 build v5 candidate release" (for a develop release) or "Alma9 build v4 production candidate release" (for a production release), then click the "run workflow" button. A drop-down menu will show up. Put in the version of the base release in the `vX.Y.Z` format, the version of the detector release, the detector type for the release (`fd` or `nd`) and the candidate release number (start with 1, count up with later candidate releases). Click "Run workflow" to start the build. 
+* Once the release configuration is ready, one can start the CI build for candidate releases. Go to the "Actions" tab of `daq-release` repo on GitHub. From the list of workflows on the left, select "Alma9 build v5 candidate release", then click the "run workflow" button. A drop-down menu will show up. Put in the version of the core release in the `vX.Y.Z` format, the version of the `fddaq` release, and the candidate release number (start with 1, count up with later candidate releases). Click "Run workflow" to start the build. 
 * Once the build is completed successfully, verify if the same version tags shown in the GitHub Action log match those in the tag collector spreadsheet
 * To publish the candidate release to cvmfs:
     * Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaqdev`
     * Get the [`publish_release_to_cvmfs.sh` script](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/cvmfs/publish_release_to_cvmfs.sh) (`git clone` this repo or use `curl`, e.g.)
-    * Run the script without arguments for instructions; in a nutshell, it will publish the most recent release of a given specification (e.g., the most recent Alma9 near detector candidate build)
+    * Run the script without arguments for instructions; in a nutshell, it will publish the most recent release of a given specification (e.g., the most recent Alma9 stable build)
     * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate fddaq alma9`)
     * After running the script, the release will take ~20 minutes before it appears on cvmfs
 * After the candidate release is deployed and available on cvmfs, do the following simple tests:
