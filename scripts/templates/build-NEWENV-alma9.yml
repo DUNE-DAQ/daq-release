@@ -1,4 +1,4 @@
-name: LINUXVER build NEWENV with externals v2.3
+name: Alma9 build NEWENV with externals v2.3
 
 on:
 
@@ -61,7 +61,7 @@ jobs:
     runs-on: daq
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/LINUXVER-slim-externals:v2.3
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
     defaults:
       run:
         shell: bash
@@ -121,8 +121,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/LINUXVER-slim-externals:v2.3"
-            output_image: "ghcr.io/dune-daq/nightly-release-LINUXVER"
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3"
+            output_image: "ghcr.io/dune-daq/nightly-release-alma9"
             tag: "NEWENV${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
     environment: dockerhub
@@ -186,7 +186,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/dune-daq/nightly-release-LINUXVER
+            ghcr.io/dune-daq/nightly-release-alma9
           tags: |
             type=raw,value=NEWENV${{ github.event.inputs.tag-prefix }}
 
@@ -204,7 +204,7 @@ jobs:
     runs-on: daq
     needs: [make_tags, update_image]
     container:
-      image: ghcr.io/dune-daq/nightly-release-LINUXVER:NEWENV${{ github.event.inputs.tag-prefix }}
+      image: ghcr.io/dune-daq/nightly-release-alma9:NEWENV${{ github.event.inputs.tag-prefix }}
     defaults:
       run:
         shell: bash
@@ -271,7 +271,7 @@ jobs:
 
         cd $GITHUB_WORKSPACE
 
-        IMAGE="ghcr.io/dune-daq/nightly-release-LINUXVER:NEWENV${{ github.event.inputs.tag-prefix }}"
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:NEWENV${{ github.event.inputs.tag-prefix }}"
         unique_name=$( date | tr " :" _ )
 
         docker pull $IMAGE

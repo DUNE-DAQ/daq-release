@@ -85,8 +85,8 @@ fairly obvious:
    add a map between the target abbreviation and its full name (e.g.,
    `FD` <-> `fddaq`)
 1. In `scripts/checkout-daq-package.py`, edit the line which begins with `pkgs = yaml_dict.get("coredaq", []) ...` and add the name of the environment
-1. Copy `scripts/templates/build-NEWENV-LINUXVER.yml` over to `.github/workflows`, and change its name so that `NEWENV` has the environment name swapped in, and `LINUXVER` has the version of Linux swapped in - e.g., `scripts/templates/build-yourenv-alma9.yml`.
-1. Swap the `NEWENV` and `LINUXVER` tokens in the body of `scripts/templates/build-yourenv-alma9.yml` as well as `NEWABBREV`, which should be replaced by the target abbreviation you chose a few steps earlier. 
+1. Copy `scripts/templates/build-NEWENV-alma9.yml` over to `.github/workflows`, and change its name so that `NEWENV` has the environment name swapped in - e.g., `scripts/templates/build-yourenv-alma9.yml`.
+1. Swap the `NEWENV` token in the body of `scripts/templates/build-yourenv-alma9.yml` as well as `NEWABBREV`, which should be replaced by the target abbreviation you chose a few steps earlier. 
 
 At this point, you'll now have set things up to the point that you can run this workflow so as to install the environment in `/cvmfs`. 
 
