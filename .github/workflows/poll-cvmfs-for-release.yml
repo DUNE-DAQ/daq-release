@@ -45,7 +45,6 @@ jobs:
       uses: actions/checkout@v6
       with:
         path: daq-release-cvmfs-poll
-        ref: amogan/poll_cvmfs_workflow
     - name: poll_release
       run: |
         ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
@@ -65,8 +64,7 @@ jobs:
       release_tag: ${{ inputs.release-tag }}
       caller: 'Poll CVMFS for release'
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup:
     runs-on: daq

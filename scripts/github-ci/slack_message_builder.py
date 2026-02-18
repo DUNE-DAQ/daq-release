@@ -18,7 +18,6 @@ STATUS_EMOJIS = {
 
 def choose_strategy(data: dict) -> MessageStrategy:
     workflow_name = data.get("caller", data.get('workflow'))
-    print('Workflow name:', workflow_name)
     if "integration test workflow" in workflow_name.lower():
         return IntegrationTestMessageStrategy(data)
     elif workflow_name == "Weekly code coverage workflow":
@@ -308,7 +307,6 @@ def main():
         return
 
     message_strategy = choose_strategy(data)
-    print("Chose strategy", message_strategy)
     message_strategy.build(args.output_path)
 
     if Path(args.output_path).is_file():
