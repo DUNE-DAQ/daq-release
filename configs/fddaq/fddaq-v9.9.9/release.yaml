@@ -61,43 +61,54 @@
           version: v2.1.2
           commit: null
 
-
     pymodules:
         - name: pip
-          version: 24.3.1
+          version: 25.3
+          source:  pypi
+        - name: aiohappyeyeballs
+          version: 2.6.1
+          source:  pypi
+        - name: aiohttp
+          version: 3.13.3
+          source:  pypi
+        - name: aiohttp-jinja2
+          version: 1.6
+          source:  pypi
+        - name: aiosignal
+          version: 1.4.0
           source:  pypi
         - name: aniso8601
-          version: 9.0.1
-          source:  pypi
-        - name: anyconfig
-          version: 0.14.0
+          version: 10.0.1
           source:  pypi
         - name: anyio
-          version: 4.6.2.post1
+          version: 4.12.1
           source:  pypi
-        - name: argcomplete
-          version: 3.5.1
+        - name: asttokens
+          version: 3.0.1
           source:  pypi
         - name: attrs
-          version: 24.2.0
+          version: 25.4.0
+          source:  pypi
+        - name: bcrypt
+          version: 5.0.0
           source:  pypi
         - name: blinker
           version: 1.9.0
           source:  pypi
         - name: cachelib
-          version: 0.9.0
-          source:  pypi
-        - name: cachetools
-          version: 5.5.0
+          version: 0.13.0
           source:  pypi
         - name: certifi
-          version: 2024.8.30
+          version: 2026.1.4
+          source:  pypi
+        - name: cffi
+          version: 2.0.0
           source:  pypi
         - name: charset-normalizer
-          version: 3.4.0
+          version: 3.4.4
           source:  pypi
         - name: click
-          version: 8.1.7
+          version: 8.3.1
           source:  pypi
         - name: click-didyoumean
           version: 0.3.1
@@ -108,80 +119,80 @@
         - name: colorama
           version: 0.4.6
           source:  pypi
-        - name: configparser
-          version: 7.1.0
-          source:  pypi
         - name: connectivityserver
-          version: 1.3.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: contourpy
-          version: 1.3.1
+          version: 1.3.3
+          source:  pypi
+        - name: cryptography
+          version: 46.0.3
           source:  pypi
         - name: cycler
           version: 0.12.1
           source:  pypi
         - name: daq-assettools
-          version: 1.2.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: daqpytools
-          version: 0.1.0
+          version: develop
           source:  github_DUNE-DAQ
-        - name: docker
-          version: 7.1.0
+        - name: decorator
+          version: 5.2.1
+          source:  pypi
+        - name: docopt
+          version: 0.6.2
           source:  pypi
         - name: drunc
-          version: 1.0.1
+          version: develop
           source:  github_DUNE-DAQ
         - name: druncschema
-          version: 1.0.0
+          version: develop
           source:  github_DUNE-DAQ
-        - name: durationpy
-          version: 0.9
-          source:  pypi
-        - name: elisa_client_api
-          version: 2.0.0
+        - name: elisa-client-api
+          version: develop
           source:  github_DUNE-DAQ
-        - name: et_xmlfile
-          version: 2.0.0
+        - name: executing
+          version: 2.2.1
           source:  pypi
-        - name: exceptiongroup
-          version: 1.2.2
+        - name: flask
+          version: 3.1.2
           source:  pypi
-        - name: fastjsonschema
-          version: 2.21.0
+        - name: flask-caching
+          version: 2.3.1
           source:  pypi
-        - name: Flask
-          version: 3.1.0
-          source:  pypi
-        - name: Flask-Caching
-          version: 2.3.0
-          source:  pypi
-        - name: Flask-HTTPAuth
+        - name: flask-httpauth
           version: 4.8.0
           source:  pypi
-        - name: Flask-RESTful
+        - name: flask-restful
           version: 0.3.10
           source:  pypi
-        - name: Flask-SQLAlchemy
+        - name: flask-sqlalchemy
           version: 3.1.1
           source:  pypi
         - name: fonttools
-          version: 4.55.0
+          version: 4.61.1
+          source:  pypi
+        - name: frozenlist
+          version: 1.8.0
           source:  pypi
         - name: gevent
-          version: 24.11.1
+          version: 25.9.1
           source:  pypi
-        - name: gojsonnet
-          version: 0.20.0
+        - name: gitdb
+          version: 4.0.12
+          source:  pypi
+        - name: gitpython
+          version: 3.1.46
+          source:  pypi
+        - name: google-auth
+          version: 2.47.0
           source:  pypi
         - name: googleapis-common-protos
           version: 1.70.0
           source:  pypi
-        - name: google-auth
-          version: 2.36.0
-          source:  pypi
         - name: greenlet
-          version: 3.1.1
+          version: 3.3.0
           source:  pypi
         - name: grpcio
           version: 1.75.0
@@ -196,224 +207,257 @@
           version: 23.0.0
           source:  pypi
         - name: h11
-          version: 0.14.0
+          version: 0.16.0
           source:  pypi
         - name: h5py
-          version: 3.12.1
+          version: 3.15.1
           source:  pypi
         - name: httpcore
-          version: 1.0.7
+          version: 1.0.9
           source:  pypi
         - name: httpx
-          version: 0.27.2
+          version: 0.28.1
           source:  pypi
         - name: idna
-          version: 3.10
+          version: 3.11
           source:  pypi
         - name: iniconfig
-          version: 2.0.0
+          version: 2.3.0
           source:  pypi
         - name: integrationtest
-          version: 3.6.0
+          version: develop
           source:  github_DUNE-DAQ
+        - name: invoke
+          version: 2.2.1
+          source:  pypi
+        - name: ipython
+          version: 9.9.0
+          source:  pypi
+        - name: ipython-pygments-lexers
+          version: 1.1.1
+          source:  pypi
         - name: itsdangerous
           version: 2.2.0
           source:  pypi
-        - name: Jinja2
-          version: 3.1.4
+        - name: jedi
+          version: 0.19.2
           source:  pypi
-        - name: jsonpointer
-          version: 3.0.0
-          source:  pypi
-        - name: jsonschema
-          version: 4.23.0
-          source:  pypi
-        - name: jsonschema-specifications
-          version: 2024.10.1
+        - name: jinja2
+          version: 3.1.6
           source:  pypi
         - name: kafka-python
-          version: 2.0.2
+          version: 2.3.0
           source:  pypi
         - name: kiwisolver
-          version: 1.4.7
+          version: 1.4.9
           source:  pypi
         - name: kubernetes
-          version: 31.0.0
+          version: 34.1.0
           source:  pypi
         - name: linkify-it-py
           version: 2.0.3
           source:  pypi
         - name: lxml
-          version: 5.1.0
+          version: 6.0.2
           source:  pypi
         - name: markdown-it-py
-          version: 3.0.0
+          version: 4.0.0
           source:  pypi
-        - name: MarkupSafe
-          version: 3.0.2
+        - name: markupsafe
+          version: 3.0.3
           source:  pypi
         - name: matplotlib
-          version: 3.9.2
+          version: 3.10.8
+          source:  pypi
+        - name: matplotlib-inline
+          version: 0.2.1
           source:  pypi
         - name: mdit-py-plugins
-          version: 0.4.2
+          version: 0.5.0
           source:  pypi
         - name: mdurl
           version: 0.1.2
           source:  pypi
-        - name: moo
-          version: 0.6.7
-          source:  github_brettviren
+        - name: msgpack
+          version: 1.1.2
+          source:  pypi
+        - name: multidict
+          version: 6.7.0
+          source:  pypi
         - name: nest-asyncio
           version: 1.6.0
           source:  pypi
         - name: num2words
-          version: 0.5.13
+          version: 0.5.14
           source:  pypi
         - name: numpy
-          version: 2.1.3
+          version: 2.4.0
           source:  pypi
         - name: oauthlib
-          version: 3.2.2
-          source:  pypi
-        - name: openpyxl
-          version: 3.1.5
+          version: 3.3.1
           source:  pypi
         - name: packaging
-          version: 24.2
+          version: 25.0
           source:  pypi
         - name: pandas
-          version: 2.2.3
+          version: 2.3.3
           source:  pypi
         - name: paramiko
           version: 4.0.0
+          source:  pypi
+        - name: parso
+          version: 0.8.5
           source:  pypi
         - name: pexpect
           version: 4.9.0
           source:  pypi
         - name: pillow
-          version: 11.0.0
-          source:  pypi
-        - name: pipx
-          version: 1.7.1
+          version: 12.1.0
           source:  pypi
         - name: platformdirs
-          version: 4.3.6
+          version: 4.5.1
           source:  pypi
         - name: pluggy
-          version: 1.5.0
+          version: 1.6.0
+          source:  pypi
+        - name: prompt-toolkit
+          version: 3.0.52
+          source:  pypi
+        - name: propcache
+          version: 0.4.1
           source:  pypi
         - name: protobuf
-          version: 6.32.1
+          version: 6.33.2
           source:  pypi
         - name: psutil
-          version: 6.1.0
+          version: 7.2.1
           source:  pypi
         - name: ptyprocess
           version: 0.7.0
           source:  pypi
-        - name: py
-          version: 1.11.0
+        - name: pure-eval
+          version: 0.2.3
           source:  pypi
         - name: pyasn1
           version: 0.6.1
           source:  pypi
-        - name: pyasn1_modules
-          version: 0.4.1
+        - name: pyasn1-modules
+          version: 0.4.2
           source:  pypi
-        - name: Pygments
-          version: 2.18.0
+        - name: pycparser
+          version: 2.23
+          source:  pypi
+        - name: pygments
+          version: 2.19.2
+          source:  pypi
+        - name: pynacl
+          version: 1.6.2
           source:  pypi
         - name: pyparsing
-          version: 3.2.0
+          version: 3.3.1
           source:  pypi
-        - name: PySocks
+        - name: pysocks
           version: 1.7.1
           source:  pypi
         - name: pytest
-          version: 8.3.3
+          version: 9.0.2
           source:  pypi
         - name: python-dateutil
           version: 2.9.0.post0
           source:  pypi
         - name: python-ipmi
-          version: 0.5.7
+          version: 0.5.8
           source:  pypi
         - name: pytz
-          version: 2024.2
+          version: 2025.2
           source:  pypi
-        - name: PyYAML
-          version: 6.0.2
-          source:  pypi
-        - name: referencing
-          version: 0.35.1
+        - name: pyyaml
+          version: 6.0.3
           source:  pypi
         - name: requests
-          version: 2.32.3
+          version: 2.32.5
           source:  pypi
         - name: requests-oauthlib
           version: 2.0.0
           source:  pypi
         - name: rich
-          version: 13.9.4
-          source:  pypi
-        - name: rpds-py
-          version: 0.21.0
+          version: 14.2.0
           source:  pypi
         - name: rsa
-          version: 4.9
+          version: 4.9.1
           source:  pypi
         - name: runconftools
-          version: 1.2.0
+          version: develop
           source:  github_DUNE-DAQ
         - name: runconf-ui
-          version: 5.3.0
+          version: develop
           source:  github_DUNE-DAQ
+        - name: setuptools
+          version: 80.9.0
+          source:  pypi
         - name: sh
-          version: 2.1.0
+          version: 2.2.2
           source:  pypi
         - name: six
-          version: 1.16.0
+          version: 1.17.0
           source:  pypi
-        - name: sniffio
-          version: 1.3.1
+        - name: smmap
+          version: 5.0.2
           source:  pypi
-        - name: SQLAlchemy
-          version: 2.0.36
+        - name: sqlalchemy
+          version: 2.0.45
+          source:  pypi
+        - name: stack-data
+          version: 0.6.3
           source:  pypi
         - name: textual
-          version: 0.87.1
+          version: 7.0.2
           source:  pypi
-        - name: tomli
-          version: 2.1.0
+        - name: textual-dev
+          version: 1.8.0
           source:  pypi
-        - name: transitions
-          version: 0.9.2
+        - name: textual-serve
+          version: 1.1.3
           source:  pypi
-        - name: typing_extensions
+        - name: tqdm
+          version: 4.67.1
+          source:  pypi
+        - name: traitlets
+          version: 5.14.3
+          source:  pypi
+        - name: types-grpcio
+          version: 1.0.0.20251009
+          source:  pypi
+        - name: types-protobuf
+          version: 6.32.1.20251210
+          source:  pypi
+        - name: typing-extensions
           version: 4.15.0
           source:  pypi
         - name: tzdata
-          version: 2024.2
+          version: 2025.3
           source:  pypi
         - name: uc-micro-py
           version: 1.0.3
           source:  pypi
         - name: urllib3
-          version: 2.2.3
+          version: 2.3.0
           source:  pypi
-        - name: userpath
-          version: 1.9.2
+        - name: wcwidth
+          version: 0.2.14
           source:  pypi
         - name: websocket-client
-          version: 1.8.0
+          version: 1.9.0
           source:  pypi
-        - name: Werkzeug
-          version: 3.1.3
+        - name: werkzeug
+          version: 3.1.5
           source:  pypi
-        - name: zope.event
-          version: 5.0
+        - name: yarl
+          version: 1.22.0
           source:  pypi
-        - name: zope.interface
-          version: 7.1.1
+        - name: zope-event
+          version: 6.1
+          source:  pypi
+        - name: zope-interface
+          version: 8.2
           source:  pypi
