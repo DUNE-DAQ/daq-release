@@ -53,13 +53,12 @@ will checkout all the DAQ packages used in the release into a randomly-named dir
     * Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaqdev`
     * Get the [`publish_release_to_cvmfs.sh` script](https://github.com/DUNE-DAQ/daq-release/blob/develop/scripts/cvmfs/publish_release_to_cvmfs.sh) (`git clone` this repo or use `curl`, e.g.)
     * Run the script without arguments for instructions; in a nutshell, it will publish the most recent release of a given specification (e.g., the most recent Alma9 near detector candidate build)
-    * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate nd alma9 develop`)
+    * Run it with the desired specifications (e.g. `publish_release_to_cvmfs.sh candidate fddaq alma9`)
     * After running the script, the release will take ~20 minutes before it appears on cvmfs
 * After the candidate release is deployed and available on cvmfs, do the following simple tests:
     * Set up a work area based on the candidate release
     * If it's a far detector release, take the "Nightly v5 integration tests" Workflow and run it with the optional candidate release tag field filled in with the name of the candidate release. Performance should be what's expected and at the very least the `minimal_system_quick_test` should pass. 
     * The above tests should be run on at least one NP04 DAQ server, and one Fermilab server
-* Repeat all the above steps with "SL7" replacing "Alma9". 
 
 ## Building the stable release
 
