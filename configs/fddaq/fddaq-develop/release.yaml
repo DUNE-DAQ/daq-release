@@ -6,6 +6,9 @@
     base_release: coredaq-develop
 
     fddaq:
+        - name: cibmodules
+          version: "develop"
+          commit: null
         - name: ctbmodules
           version: "develop"
           commit: null
