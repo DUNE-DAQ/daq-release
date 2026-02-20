@@ -38,9 +38,13 @@ on:
 
 jobs:
   poll_cvmfs:
-    runs-on: daq
+    runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+      with:
+        cvmfs_repositories: 'dunedaq.opensciencegrid.org, 
+                             dunedaq-development.opensciencegrid.org'
     - name: Checkout daq-release
       uses: actions/checkout@v6
       with:
@@ -66,12 +70,4 @@ jobs:
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  cleanup:
-    runs-on: daq
-    needs: poll_cvmfs
-    if: always()
-    steps:
-    - name: Remove directories
-      run: |
-        rm -rf daq-release-cvmfs-poll
 
