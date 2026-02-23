@@ -3,10 +3,9 @@ name: Poll CVMFS for release
 on:
   workflow_dispatch:
     inputs:
-      tag-pattern:
+      release-tag:
         type: string
-        description: 'Nightly tag pattern to check for on CVMFS'
-        default: 'NFD_*'
+        description: 'Release tag pattern to check for on CVMFS'
       max-tries:
         type: string
         description: 'Maximum number of polling attempts before timing out'
@@ -15,12 +14,15 @@ on:
         type: string
         description: 'Interval in seconds between polling attempts'
         default: '60'
+      send-slack-message:
+        type: string
+        description: 'Whether to notify #daq-release-notifications of completion.'
+        default: 'yes'
   workflow_call:
     inputs:
-      tag-pattern:
+      release-tag:
         type: string
-        description: 'Nightly tag pattern to check for on CVMFS'
-        default: 'NFD_*'
+        description: 'Release tag pattern to check for on CVMFS.'
       max-tries:
         type: string
         description: 'Maximum number of polling attempts before timing out'
@@ -29,26 +31,30 @@ on:
         type: string
         description: 'Interval in seconds between polling attempts'
         default: '60'
+      send-slack-message:
+        type: string
+        description: 'Whether to notify #daq-release-notifications of completion.'
+        default: 'yes'
 
 jobs:
   poll_cvmfs:
-    runs-on: daq
+    runs-on: ubuntu-latest
     timeout-minutes: 90
-    outputs:
-      new_release: ${{ steps.poll_release.outputs.release_tag }}
     steps:
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+      with:
+        cvmfs_repositories: 'dunedaq.opensciencegrid.org, 
+                             dunedaq-development.opensciencegrid.org'
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         path: daq-release-cvmfs-poll
-        ref: amogan/slack_strategy_pattern
-    - id: poll_release
+    - name: poll_release
       run: |
-        TAG=$(python daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.py \
-              --tag-pattern ${{ inputs.tag-pattern }} \
-              --max-tries ${{ inputs.max-tries }})    \
-              --interval ${{ inputs.interval }})
-        echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+        ./daq-release-cvmfs-poll/scripts/github-ci/poll_cvmfs_for_release.sh \
+              ${{ inputs.release-tag }} \
+              ${{ inputs.interval }} \
+              ${{ inputs.max-tries }}
 
   send_slack_message:
     if: |
@@ -59,15 +65,9 @@ jobs:
     needs: [poll_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      workflow_name: 'Nightly release watcher'
-      new_release_tag: ${{ needs.poll_cvmfs.outputs.new_release }}
+      release_tag: ${{ inputs.release-tag }}
+      caller: 'Poll CVMFS for release'
     secrets: 
-      slack_webhook_url: ${{ secrets.slack_webhook_url }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  cleanup:
-    runs-on: daq
-    steps:
-    - name: Remove directories
-      run: |
-        rm -rf daq-release-cvmfs-poll
 

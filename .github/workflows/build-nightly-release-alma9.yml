@@ -312,9 +312,17 @@ jobs:
     needs: [make_tags, publish_to_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      release_tag: ${{ needs.make_tags.outputs.detector_tag }}
+      release_tag: ${{ needs.make_tags.outputs.target_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  poll_cvmfs_for_release:
+    needs: [make_tags, publish_to_cvmfs]
+    uses: ./.github/workflows/poll-cvmfs-for-release.yml
+    with:
+      release-tag: ${{ needs.make_tags.outputs.target_tag }}
+      send-slack-message: 'yes'
+    secrets: inherit
 
   cleanup_tarballs:
     name: cleanup tarballs from runner

@@ -7,6 +7,13 @@ on:
         type: string
         default: ''
         description: Name of the release used in the caller workflow.
+      # Used to disambiguate which workflow called this one when
+      # multiple workflows are nested. The default is the 
+      # top-level workflow.
+      caller:
+        type: string
+        description: 'Identifier of the caller workflow.'
+        default: ${{ github.workflow }}
       integtest_log_dir:
         type: string
         default: ''
@@ -31,11 +38,17 @@ jobs:
     - name: Add metadata to workflow summary
       run: |
         jq --null-input \
-           --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
            --arg release "${{ inputs.release_tag }}" \
-           '{"pytest_log_dir": $pytest_log_dir,
-             "release"       : $release}' > additional_metadata.json
+           --arg caller  "${{ inputs.caller }}" \
+           --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
+           '{
+              "release"        : $release,
+              "caller"         : $caller,
+              "pytest_log_dir" : $pytest_log_dir
+            }' > additional_metadata.json
+
         jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
+        cat workflow_summary_with_metadata.json
     - name: Parse GitHub API output
       run: |
         python daq-release-slack-message/scripts/github-ci/slack_message_builder.py \

@@ -2,6 +2,7 @@ from __future__ import annotations
 import sys
 import json
 import argparse
+import requests
 import re
 from pathlib import Path
 from dataclasses import dataclass
@@ -16,13 +17,15 @@ STATUS_EMOJIS = {
 }
 
 def choose_strategy(data: dict) -> MessageStrategy:
-    workflow_name = data['workflow']
+    workflow_name = data.get("caller", data.get('workflow'))
     if "integration test workflow" in workflow_name.lower():
         return IntegrationTestMessageStrategy(data)
     elif workflow_name == "Weekly code coverage workflow":
         return CodeCoverageMessageStrategy(data)
     elif workflow_name == "Weekly linting workflow":
         return LintingMessageStrategy(data)
+    elif workflow_name == "Poll CVMFS for release":
+        return NewReleaseMessageStrategy(data)
     else:
         return DefaultMessageStrategy(data)
 
@@ -56,6 +59,12 @@ def get_workflow_status(summary: dict) -> str:
         return "failure"
     return "success"
 
+# In the event that the instructions link moves, requests.get will
+# always return 200 since GitHub wiki will redirect to "create a new page".
+# Using requests.history catches the redirect.
+def instructions_link_is_valid(link: str) -> bool:
+    return False if requests.get(link).history else True
+
 
 class MessageStrategy(ABC):
     def __init__(self, summary: dict):
@@ -74,7 +83,7 @@ class BaseMessageStrategy(MessageStrategy):
         builder.add_block(self.build_header(status))
         builder.add_block(self.build_report_section())
 
-        if self.summary['failed_jobs']:
+        if self.summary.get('failed_jobs'):
             builder.add_block(self.build_failed_jobs_section())
 
         # Classes which inherit from BaseMessageStrategy can override this for additional information
@@ -119,9 +128,62 @@ class BaseMessageStrategy(MessageStrategy):
     def build_extra_blocks(self):
         return []
 
-
 class DefaultMessageStrategy(BaseMessageStrategy):
     pass
+
+class NewReleaseMessageStrategy(BaseMessageStrategy):
+    def __init__(self, summary: dict):
+        super().__init__(summary)
+        self.instructions_link = (
+            "https://github.com/DUNE-DAQ/daqconf/wiki/"
+            "Setting-up-a-FarDet-DAQ-software-development-area"
+        )
+
+    def build(self, output_path: str = "slack_payload.json"):
+        status = get_workflow_status(self.summary)
+
+        builder = SlackMessageBuilder()
+
+        builder.add_block(self.build_header(status))
+
+        if self.summary.get('failed_jobs'):
+            builder.add_block(self.build_failed_jobs_section())
+        else:
+            builder.add_block(self.build_release_section())
+
+        if not instructions_link_is_valid(self.instructions_link):
+            builder.add_block(self.build_stale_link_section())
+
+        builder.add_block(self.build_footer())
+
+        builder.write(output_path)
+
+    def build_header(self, status: str):
+        emoji = STATUS_EMOJIS.get(status, ":question:")
+        status = get_workflow_status(self.summary).capitalize()
+        workflow = self.summary.get("workflow", "Unknown workflow name")
+        if status == "Success":
+            return HeaderBlock(f":mega: New Release on CVMFS :mega:")
+        return HeaderBlock(f"{emoji} Nightly build not published to CVMFS {emoji}")
+
+    def build_release_section(self):
+        release = self.summary.get("release", None)
+        release_type = get_release_type(release)
+        status = get_workflow_status(self.summary).capitalize()
+        if not release_type:
+            return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
+        return SectionBlock(
+            f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
+            f"To set up a working area based on this release, follow the instructions"
+            f" <{self.instructions_link}|here>."
+        )
+
+    def build_stale_link_section(self):
+        return SectionBlock(
+            f":warning: There is an issue with the link to the "
+            f"instructions for setting up the latest development area. "
+            f"Someone should investigate!"
+        )
 
 class IntegrationTestMessageStrategy(BaseMessageStrategy):
     def build_extra_blocks(self):
