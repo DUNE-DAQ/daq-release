@@ -71,7 +71,7 @@ We can break this down into a series of steps. In the steps below, for
 convenience we'll pretend the new environment is called `yourenv`. The
 first steps, based on the description in the previous section, are
 fairly obvious:
-1. Create a `configs/coredaq/yourenv-develop/` configuration directory, copy `release.yaml` from `configs/coredaq/fddaq-develop` and define what Spack-installed core DUNE DAQ packages and externals your environment needs by deleting any unnecessary packages. 
+1. Create a `configs/coredaq/yourenv-develop/` configuration directory, copy `release.yaml` from `configs/coredaq/coredaq-develop` and define what Spack-installed core DUNE DAQ packages and externals your environment needs by deleting any unnecessary packages. 
 1. Similarly create a `configs/yourenv/yourenv-develop/` configuration directory, copy `release.yaml` and `dbt-build-order.cmake` over from `configs/fddaq/fddaq-develop`, and edit `release.yaml` to define which environment-specific Spack-installed DUNE DAQ packages and pip-installed DUNE DAQ Python packages go into the environment. Don't forget to change the references to `fddaq` in the copied file to the name of your new environment. 
 1. Create `spack-repos/yourenv-repo-template`
 1. Copy `spack-repos/fddaq-repo-template/repo.yaml` into it and again, replace the name `fddaq` in the file
