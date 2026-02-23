@@ -71,7 +71,7 @@ We can break this down into a series of steps. In the steps below, for
 convenience we'll pretend the new environment is called `yourenv`. The
 first steps, based on the description in the previous section, are
 fairly obvious:
-1. Create a `configs/coredaq/yourenv-develop/` configuration directory, copy `release.yaml` from `configs/coredaq/fddaq-develop` and define what Spack-installed core DUNE DAQ packages and externals your environment needs
+1. Create a `configs/coredaq/yourenv-develop/` configuration directory, copy `release.yaml` from `configs/coredaq/fddaq-develop` and define what Spack-installed core DUNE DAQ packages and externals your environment needs by deleting any unnecessary packages. 
 1. Similarly create a `configs/yourenv/yourenv-develop/` configuration directory, copy `release.yaml` and `dbt-build-order.cmake` over from `configs/fddaq/fddaq-develop`, and edit `release.yaml` to define which environment-specific Spack-installed DUNE DAQ packages and pip-installed DUNE DAQ Python packages go into the environment. Don't forget to change the references to `fddaq` in the copied file to the name of your new environment. 
 1. Create `spack-repos/yourenv-repo-template`
 1. Copy `spack-repos/fddaq-repo-template/repo.yaml` into it and again, replace the name `fddaq` in the file
@@ -85,8 +85,8 @@ fairly obvious:
    add a map between the target abbreviation and its full name (e.g.,
    `FD` <-> `fddaq`)
 1. In `scripts/checkout-daq-package.py`, edit the line which begins with `pkgs = yaml_dict.get("coredaq", []) ...` and add the name of the environment
-1. Copy `scripts/templates/build-NEWENV-alma9.yml` over to `.github/workflows`, and change its name so that `NEWENV` has the environment name swapped in - e.g., `scripts/templates/build-yourenv-alma9.yml`.
-1. Swap the `NEWENV` token in the body of `scripts/templates/build-yourenv-alma9.yml` as well as `NEWABBREV`, which should be replaced by the target abbreviation you chose a few steps earlier. 
+1. Copy `scripts/templates/build-NEWENV-alma9.yml` over to `.github/workflows`, and change its name so that `NEWENV` has the environment name swapped in - e.g., `.github/workflows/build-yourenv-alma9.yml`.
+1. Swap the `NEWENV` token in the body of `.github/workflows/build-yourenv-alma9.yml` as well as `NEWABBREV`, which should be replaced by the target abbreviation you chose a few steps earlier. 
 
 At this point, you'll now have set things up to the point that you can run this workflow so as to install the environment in `/cvmfs`. 
 
