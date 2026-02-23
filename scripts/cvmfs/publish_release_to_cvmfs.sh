@@ -1,47 +1,29 @@
 #!/bin/bash
 
-if (( $# != 4 )); then
-    echo "Usage: "$( basename $0 )" [build type (candidate or stable)] [detector type (nd or fd)] \
-[OS for build (sl7 or alma9)] [Build line (develop or production)]" >&2
+if (( $# != 3 )); then
+    echo "Usage: "$( basename $0 )" [build type (candidate or stable)] [target name (fddaq, etc.)] [OS for build (alma9, alma10, etc. )]" >&2
     exit 1
 fi
 
 build=$1
-det=$2
+target=$2
 os=$3
-dev_or_prod=$4
 
 if [[ $build != "candidate" && $build != "stable" ]]; then
     echo "Build type needs to be \"candidate\" or \"stable\"; exiting..." >&2
     exit 1
 fi
 
-if [[ $det != "nd" && $det != "fd" ]]; then
-    echo "Detector type needs to be \"nd\" or \"fd\"; exiting..." >&2
-    exit 2
-fi
-
-if [[ $os == "sl7" ]]; then
-    oslabel=SL7
-elif [[ $os == "alma9" ]]; then
+if [[ $os == "alma9" ]]; then
     oslabel=Alma9
+elif [[ $os == "alma10" ]]; then
+    oslabel=Alma10
 else
-    echo "OS of build needs to be \"sl7\" or \"alma9\"; exiting..." >&2
+    echo "OS of build needs to be \"alma9\" or \"alma10\"; exiting..." >&2
     exit 3
 fi
 
-if [[ $oslabel == "SL7" ]]; then
-    workflow_name="${oslabel} build v4 or v5 ${build} release"
-elif [[ $dev_or_prod == "production" && $oslabel == "Alma9" ]]; then
-    workflow_name="${oslabel} build v4 production ${build} release"
-elif [[ $dev_or_prod == "develop" && $oslabel == "Alma9" ]]; then
-    workflow_name="${oslabel} build v5 ${build} release"
-else
-    echo "Build line needs to be \"production\" (for v4) or \"develop\" (for v5); exiting..." >&2
-    exit 31
-fi
-
-
+workflow_name="${oslabel} build v5 ${build} release"
 
 REPO=
 SOURCE_DIR=
@@ -60,7 +42,7 @@ elif [[ $build == "stable" ]]; then
 fi
 
 BASE_WILDCARD='coredaq-v*'
-DET_WILDCARD=$det'daq-v*'
+TARGET_WILDCARD=$target'-v*'
 
 tmp_dir=$(mktemp --tmpdir=/dev/shm -d -t release_XXXXXXXXXX)
 
@@ -86,7 +68,7 @@ read -p "Will publish the results of the GitHub Action https://github.com/DUNE-D
 
 test "$answer" != "y" && exit 0
 
-artifacts="${build}s_coredaq ${build}s_${det}daq ${det}daq-dbt_setup_release_env ${det}daq_app_rte"
+artifacts="${build}s_coredaq ${build}s_${target} ${target}-dbt_setup_release_env ${target}_app_rte"
 
 for artifact in $artifacts; do
     echo "Downloading $artifact..."
@@ -101,13 +83,13 @@ for tarfile in ../*.tar.gz ; do
     rm -f $tarfile
 done
 
-full_det_release_name=$( ls | grep "${det}.*-v.*" )
-shorthand_det_release_name=$( echo $full_det_release_name | sed -r 's/(.*)-[0-9]+$/\1/' )
-ln -s $full_det_release_name $shorthand_det_release_name
+full_target_release_name=$( ls | grep "${target}-v.*" )
+shorthand_target_release_name=$( echo $full_target_release_name | sed -r 's/(.*)-[0-9]+$/\1/' )
+ln -s $full_target_release_name $shorthand_target_release_name
 
-cd $full_det_release_name || exit 45
-cp -p $tmp_dir/${det}daq-dbt-setup-release-env.sh dbt-setup-release-env.sh
-cp -p $tmp_dir/${det}daq_app_rte.sh daq_app_rte.sh
+cd $full_target_release_name || exit 45
+cp -p $tmp_dir/${target}-dbt-setup-release-env.sh dbt-setup-release-env.sh
+cp -p $tmp_dir/${target}_app_rte.sh daq_app_rte.sh
 
 cd $tmp_dir
 
@@ -120,7 +102,7 @@ echo >> $LOG
 echo -n Transaction $TAG: >>$LOG
 find $SOURCE_DIR/coredaq-* -name .cvmfscatalog -delete
 rsync -rlpvt --delete-after --stats $SOURCE_DIR/$BASE_WILDCARD $DEST_DIR
-rsync -rlpvt --delete-after --stats $SOURCE_DIR/$DET_WILDCARD $DEST_DIR
+rsync -rlpvt --delete-after --stats $SOURCE_DIR/$TARGET_WILDCARD $DEST_DIR
 
 RET=$?
 

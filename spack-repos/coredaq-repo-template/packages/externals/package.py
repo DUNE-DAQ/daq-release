@@ -8,7 +8,7 @@ from spack import *
 
 
 class Externals(BundlePackage):
-    """A dummy package meant to pull in packages needed by DUNE DAQ developers"""
+    """A dummy package meant to pull in packages needed by DUNE DAQ developers but not developed by them"""
 
     homepage = "https://dune-daq-sw.readthedocs.io/en/latest/"
 
@@ -16,6 +16,8 @@ class Externals(BundlePackage):
 
     version("XRELEASEX")
 
+    variant('subset', values=('fddaq', 'nddaq', 'fddatautilities'), default='fddaq', description='Select subset of total available external packages')
+    
     # Generate from release YAML file
     depends_on("devtools@XRELEASEX", when="+dev")
     # Additional dependencies defined in YAML file to be filled below
