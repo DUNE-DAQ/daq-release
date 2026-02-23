@@ -50,7 +50,7 @@ class DAQCheckoutArea:
     
     def load_packages(self):
         yaml_dict = parse_yaml_file(self.release_manifest)
-        pkgs = yaml_dict.get("coredaq", []) + yaml_dict.get("fddaq", []) + yaml_dict.get("nddaq", [])
+        pkgs = yaml_dict.get("coredaq", []) + yaml_dict.get("fddaq", []) + yaml_dict.get("nddaq", []) + yaml_dict.get("fddatautilities", [])
         if self.load_pymodules:
             pymodules = yaml_dict.get("pymodules", [])
             if not pymodules:

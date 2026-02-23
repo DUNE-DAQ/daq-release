@@ -1,69 +1,17 @@
 ---
-    release: fddaq-develop
+    release: fddatautilities-develop
 
-    type: fddaq
+    type: fddatautilities
 
     base_release: coredaq-develop
 
-    fddaq:
-        - name: cibmodules
-          version: "develop"
-          commit: null
-        - name: ctbmodules
-          version: "develop"
-          commit: null
-        - name: daqsystemtest
-          version: "develop"
-          commit: null
-        - name: dpdklibs
-          version: "develop"
-          commit: null
-        - name: asiolibs
-          version: "develop"
-          commit: null
+    fddatautilities:
         - name: fddetdataformats
-          version: "develop"
-          commit: null
-        - name: fdreadoutlibs
-          version: "develop"
-          commit: null
-        - name: fdreadoutmodules
-          version: "develop"
-          commit: null
-        - name: flxlibs
-          version: "develop"
-          commit: null
-        - name: hermesmodules
           version: "develop"
           commit: null
         - name: rawdatautils
           version: "develop"
           commit: null
-        - name: snbmodules
-          version: "develop"
-          commit: null
-        - name: sspmodules
-          version: "develop"
-          commit: null
-        - name: daphnemodules
-          version: "develop"
-          commit: null
-        - name: tdemodules
-          version: "develop"
-          commit: null
-        - name: tpglibs
-          version: "develop"
-          commit: null
-        - name: uhallibs
-          version: "develop"
-          commit: null
-        - name: wibmod
-          version: "develop"
-          commit: null
-        - name: crtmodules
-          version: "develop"
-          commit: null
-
 
     pymodules:
         - name: pip
@@ -246,9 +194,6 @@
         - name: jedi
           version: 0.19.2
           source:  pypi
-        - name: jinja2
-          version: 3.1.6
-          source:  pypi
         - name: kafka-python
           version: 2.3.0
           source:  pypi
@@ -293,9 +238,6 @@
           source:  pypi
         - name: num2words
           version: 0.5.14
-          source:  pypi
-        - name: numpy
-          version: 2.4.0
           source:  pypi
         - name: oauthlib
           version: 3.3.1

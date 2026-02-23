@@ -1,10 +1,13 @@
-name: Alma9 fddatautilities build
+name: Alma9 build fddatautilities with externals v2.3
 
 on:
+  schedule:
+    - cron: "0 3 * * *"
+
   workflow_dispatch:
     inputs:
       tag-prefix:
-        description: 'fddatautilities tag prefix'
+        description: 'nightly tag prefix (also used for output container tag)'
         default: ''
       feature-branch:
         description: 'feature branch to be used across all DAQ repos wherever possible.'
@@ -12,19 +15,315 @@ on:
       cvmfs-deployment:
         description: 'whether to deploy the release to cvmfs'
         default: 'no'
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
 
 jobs:
-  make_nightly_tag:
-    name: create nightly tag
+  make_tags:
+    name: create core tag and target tag
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.create_nightly_tag.outputs.nightly_tag }} 
+      core_tag: ${{ steps.create_tags.outputs.core_tag }} 
+      target_tag: ${{ steps.create_tags.outputs.target_tag }} 
     defaults:
       run:
         shell: bash
     steps:
-      - id: create_nightly_tag
+    - id: create_tags
+      run: |
+        date_tag=$(date +%y%m%d)
+
+        # Use GitHub input if provided, else default to N
+        prefix="${{ github.event.inputs.tag-prefix }}"
+        if [[ -z "$prefix" ]]; then
+          prefix="N"
+        fi
+
+        core_tag="${prefix}FDDUB_DEV_${date_tag}_A9"
+        target_tag="${prefix}FDDU_DEV_${date_tag}_A9"
+
+        echo "core_tag=$core_tag" >> "$GITHUB_OUTPUT"
+        echo "target_tag=$target_tag" >> "$GITHUB_OUTPUT"
+        echo "target_tag=$target_tag" >> "$GITHUB_ENV"
+        echo "core_tag=$core_tag"
+        echo "target_tag=$target_tag"
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+      with:
+        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
+    - name: Check tag on cvmfs
+      run: |
+        if [[ -d /cvmfs/dunedaq-development.opensciencegrid.org/nightly/${target_tag} ]]; then
+          echo "ERROR: Build area $target_tag already exists on CVMFS."
+          exit 1
+        fi
+
+  build_the_develop_release_spack:
+    name: build_dev_release_spack
+    runs-on: daq
+    needs: make_tags
+    container:
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v4
+      with:
+        path: daq-release
+    
+    - name: Set environment variables
+      run: |
+        echo "CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.core_tag }}" >> $GITHUB_ENV
+        echo "TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.target_tag }}" >> $GITHUB_ENV
+        echo "OS=almalinux9" >> $GITHUB_ENV
+
+    - name: setup directories and install spack for the coredaq release
+      run: |
+        source daq-release/scripts/spack/release-setup-tools.sh
+        input_feature_branch=${{ github.event.inputs.feature-branch }}
+        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
+        branch=${input_feature_branch:-"develop"}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
+
+        cd $CORE_RELEASE_DIR/../
+        tar_and_stage_release ${CORE_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for core release
+      uses: actions/upload-artifact@v6
+      with:
+        name: nightly_coredaq
+        path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.core_tag}}.tar.gz
+
+    - name: setup directories and install spack for the fddatautilities release
+      run: |
+        source daq-release/scripts/spack/release-setup-tools.sh
+        input_feature_branch=${{ github.event.inputs.feature-branch }}
+        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
+        branch=${input_feature_branch:-"develop"}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddatautilities/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddatautilities/fddatautilities-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddatautilities $OS ${{ github.event.inputs.feature-branch }}
+
+        cd $TARGET_RELEASE_DIR/../
+        tar_and_stage_release ${TARGET_RELEASE_TAG}
+
+    - name: upload spack nightly tarball for target release
+      uses: actions/upload-artifact@v6
+      with:
+        name: nightly_fddatautilities
+        path: ${{ github.workspace }}/tarballs_for_upload/${{needs.make_tags.outputs.target_tag}}.tar.gz
+
+  update_image:
+    name: update_spack_image_nightly
+    runs-on: daq
+    strategy:
+      matrix:
+        include:
+          - input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3"
+            output_image: "ghcr.io/dune-daq/nightly-release-alma9"
+            tag: "fddatautilities${{ github.event.inputs.tag-prefix }}"
+    needs: [build_the_develop_release_spack, make_tags] 
+    environment: dockerhub
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: clean docker-build
         run: |
-          date_tag=$(date +%y%m%d)
-          echo "nightly_tag=${{ github.event.inputs.tag-prefix }}_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
-          cat "$GITHUB_OUTPUT"
+            mkdir -p ${GITHUB_WORKSPACE}/docker-build 
+            rm -rf ${GITHUB_WORKSPACE}/docker-build/*
+
+      - name: Download spack nightly release tarball artifact for core release
+        uses: actions/download-artifact@v7
+        with:
+          name: nightly_coredaq
+          path: ${{ github.workspace }}/docker-build
+
+      - name: Download spack nightly release tarball artifact for target release
+        uses: actions/download-artifact@v7
+        with:
+          name: nightly_fddatautilities
+          path: ${{ github.workspace }}/docker-build
+
+      - name: prepare cvmfs mirror spack-nightly
+        env:
+          CORE_TAG: ${{needs.make_tags.outputs.core_tag}}
+          TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
+        run: |
+            cd ${{ github.workspace }}/docker-build
+            mkdir -p nightly
+
+            cd nightly
+            tar xf ../${CORE_TAG}.tar.gz
+            rm -rf ../${CORE_TAG}.tar.gz
+
+            tar xf ../${TARGET_TAG}.tar.gz
+            rm -rf ../${TARGET_TAG}.tar.gz
+
+            if [[ "${TARGET_TAG}" == NFD_* ]]; then
+              ln -s ${TARGET_TAG} last_fddatautilities
+            fi
+
+            cd ..
+            echo "FROM "${{ matrix.input_image }} > Dockerfile
+            echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
+            echo "ENV REFRESHED_AT ${CORE_TAG}" >> Dockerfile
+            echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
+            echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
+            echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/dune-daq/nightly-release-alma9
+          tags: |
+            type=raw,value=fddatautilities${{ github.event.inputs.tag-prefix }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ github.workspace }}/docker-build
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+  generate_dbt_setup_release_env:
+    name: generate_dbt_setup_release_env
+    runs-on: daq
+    needs: [make_tags, update_image]
+    container:
+      image: ghcr.io/dune-daq/nightly-release-alma9:fddatautilities${{ github.event.inputs.tag-prefix }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    
+    - name: create dbt-setup-release-env.sh and daq_app_rte.sh for fddatautilities
+      env:
+          TARGET_TAG: ${{needs.make_tags.outputs.target_tag}}
+      run: |
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+
+          dbt-setup-release -n ${TARGET_TAG}
+          declare -x > ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh
+          declare -f >> ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh
+          egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/fddatautilities-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/fddatautilities_app_rte.sh
+
+    - name: upload fddatautilities-dbt-setup-release-env.sh
+      uses: actions/upload-artifact@v6
+      with:
+        name: fddatautilities-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddatautilities-dbt-setup-release-env.sh
+
+    - name: upload fddatautilities_app_rte.sh
+      uses: actions/upload-artifact@v6
+      with:
+        name: fddatautilities_app_rte
+        path: ${{ github.workspace }}/fddatautilities_app_rte.sh
+
+  publish_to_cvmfs:
+    name: publish to cvmfs
+    needs: [generate_dbt_setup_release_env, make_tags]
+    runs-on: daq
+
+    steps:
+    - name: check_cvmfs_deployment
+      id: do_deployment
+      run: |
+        cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
+        cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
+        [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
+      continue-on-error: true
+
+    - name: download fddatautilities-dbt-setup-release-env.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v7
+      with:
+        name: fddatautilities-dbt_setup_release_env
+        path: ${{ github.workspace }}/fddatautilities-release
+
+    - name: download fddatautilities_app_rte.sh
+      if: steps.do_deployment.outcome == 'success'
+      uses: actions/download-artifact@v7
+      with:
+        name: fddatautilities_app_rte
+        path: ${{ github.workspace }}/fddatautilities-rte
+
+    - name: start docker container, and then rsync... 
+      if: steps.do_deployment.outcome == 'success'
+      run: |
+        [[ ${DO_DEPLOYMENT} == 'no' ]] && exit 0
+
+        cd $GITHUB_WORKSPACE
+
+        IMAGE="ghcr.io/dune-daq/nightly-release-alma9:fddatautilities${{ github.event.inputs.tag-prefix }}"
+        unique_name=$( date | tr " :" _ )
+
+        docker pull $IMAGE
+        files_to_copy=$( docker run --rm --entrypoint ls $IMAGE /cvmfs/dunedaq-development.opensciencegrid.org/nightly )
+
+        docker run --name $unique_name $IMAGE
+        mkdir $unique_name
+
+        for file in $files_to_copy; do
+             docker cp $unique_name:/cvmfs/dunedaq-development.opensciencegrid.org/nightly/$file $unique_name
+        done
+        docker rm $unique_name
+        docker system prune -f
+
+        #dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
+        dir_for_env_scripts="$unique_name/${{ needs.make_tags.outputs.target_tag }}"
+        cp ./fddatautilities-release/fddatautilities-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
+        cp ./fddatautilities-rte/fddatautilities_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
+
+        kinit  -k -t $HOME/daq-nightly.keytab nightly-build/dune/daq.dunescience.org@FNAL.GOV
+
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server transaction dunedaq-development.opensciencegrid.org"
+
+        rsync -e "ssh -o StrictHostKeyChecking=no" -rlpt --stats $unique_name/* cvmfsdunedaqdev@oasiscfs05.fnal.gov:/cvmfs/dunedaq-development.opensciencegrid.org/nightly
+
+        ssh -o StrictHostKeyChecking=no -l cvmfsdunedaqdev oasiscfs05.fnal.gov "cvmfs_server publish dunedaq-development.opensciencegrid.org"
+
+        rm -rf $unique_name
+
+  send_slack_message:
+    if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
+    needs: publish_to_cvmfs
+    uses: ./.github/workflows/slack-notification.yml
+    secrets: 
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup_tarballs:
+    name: cleanup tarballs from runner
+    runs-on: daq
+    if: always()
+    needs: publish_to_cvmfs
+    steps:
+    - name: cleanup tarballs from daq.fnal.gov
+      run: |
+        files_older_than_30_days=$(find "${{ github.workspace }}/tarballs_for_upload" -name "*.tar.gz" -mtime +30 -print)
+        echo "Found the following files older than 30 days:"
+        echo "$files_older_than_30_days"
+        if [[ -n "$files_older_than_30_days" ]]; then
+          echo "Removing $(files_older_than_30_days)"
+          rm -f "$files_older_than_30_days"
+        fi
+
