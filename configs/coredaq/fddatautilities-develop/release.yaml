@@ -1,0 +1,102 @@
+---
+    release: coredaq-develop
+
+    type: coredaq
+
+    externals:
+        - name: boost
+          version: 1.85.0
+          variant: "cxxstd=2a"
+        - name: cetlib
+          version: 3.18.01
+          variant: "+lite"
+        - name: trace
+          version: 3.17.14
+          variant: ~
+        - name: highfive
+          version: 2.9.0
+          variant: "+mpi"
+        - name: hdf5
+          version: 1.14.3
+          variant: "+mpi+threadsafe"
+        - name: libarchive
+          version: 3.7.1
+          variant: "crypto=systemssl"
+        - name: py-pybind11
+          version: 2.12.0
+          variant: ~
+        - name: protobuf
+          version: 4.24.4
+          variant: ~
+        - name: fmt
+          version: 8.1.1
+          variant: "cxxstd=17 shared=True"
+        - name: libevent
+          version: 2.1.12
+          variant: "~openssl"
+        - name: nlohmann-json
+          version: 3.12.0
+          variant: ~
+
+    devtools:
+        - name: cmake
+          version: 4.1.2
+          variant: "+ownlibs"
+        - name: gdb
+          version: 16.2
+          variant: "~python"
+        - name: ninja
+          version: 1.10.0
+          variant: ~
+
+    systems:
+        - name: python
+          version: 3.12.12
+          variant: "~ssl"
+        - name: gcc
+          version: 14.3.0
+          variant: "+binutils"
+
+    coredaq:
+        - name: appmodel
+          version: "develop"
+          commit: null
+        - name: conffwk
+          version: "develop"
+          commit: null
+        - name: confmodel
+          version: "develop"
+          commit: null
+        - name: daq-cmake
+          version: v3.2.1
+          commit: null
+        - name: ers
+          version: "develop"
+          commit: null
+        - name: logging
+          version: "develop"
+          commit: null
+        - name: detdataformats
+          version: "develop"
+          commit: null
+        - name: detchannelmaps
+          version: "develop"
+          commit: null
+        - name: daqdataformats
+          version: "develop"
+          commit: null
+        - name: hdf5libs
+          version: "develop"
+          commit: null
+        - name: oks
+          version: "develop"
+          commit: null
+        - name: oksdalgen
+          version: "develop"
+          commit: null
+        - name: okssystem
+          version: "develop"
+          commit: null
+        - name: trgdataformats
+          version: "develop"
+          commit: null
