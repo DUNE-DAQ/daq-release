@@ -21,7 +21,7 @@ class Coredaq(BundlePackage):
 
     variant("dev", default=True, description="Include build dependencies for a development environment")
 
-    variant('subset', values=('fddaq', 'nddaq', 'fddatautilities'), default='fddaq', description='Select subset of total available coredaq packages')
+    variant('subset', values=('fddaq', 'nddaq'), default='fddaq', description='Select subset of total available coredaq packages')
     
     depends_on("externals@XRELEASEX +dev subset=XTARGETX", when="@XRELEASEX +dev subset=XTARGETX")
     depends_on("externals@XRELEASEX ~dev subset=XTARGETX", when="@XRELEASEX ~dev subset=XTARGETX")

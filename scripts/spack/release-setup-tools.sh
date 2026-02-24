@@ -34,7 +34,7 @@ fi
 export TARGET=
 
 if [[ $RELEASE_TYPE == "nightly" ]]; then
-    export TARGET_ABBREV=$( echo $TARGET_RELEASE_DIR | sed -r 's!.*/.*(FD|ND|FDDU)_.*!\1!' )
+    export TARGET_ABBREV=$( echo $TARGET_RELEASE_DIR | sed -r 's!.*/.*(FD|ND)_.*!\1!' )
 
     if [[ -z $TARGET_ABBREV ]]; then
 	echo "Unable to intepret abbreviation of full umbrella package from repo path name ${FULL_RELEASE_DIR}; exiting...
@@ -46,8 +46,6 @@ if [[ $RELEASE_TYPE == "nightly" ]]; then
 	export TARGET="fddaq"
     elif [[ "$TARGET_ABBREV" == "ND" ]]; then
 	export TARGET="nddaq"
-    elif [[ "$TARGET_ABBREV" == "FDDU" ]]; then
-	export TARGET="fddatautilities"
     else
 	echo "Unknown full umbrella package abbreviation \"$TARGET_ABBREV\"; exiting..." >&2
 	exit 5
