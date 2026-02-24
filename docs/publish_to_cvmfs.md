@@ -30,8 +30,8 @@ section. Log in to `oasiscfs05.fnal.gov` as `cvmfsdunedaq` and execute the follo
 1. `git clone https://github.com/DUNE-DAQ/daq-buildtools.git -b <version>`
 1. `rm -rf daq-buildtools/.git   # No need for git info on cvmfs`
 1. `mv daq-buildtools <version>`
-1. `rm latest`
-1. `ln -s <version> latest`
+1. `rm latest_v5`
+1. `ln -s <version> latest_v5`
 1. `cd ~   # you can't run the next command from within /cvmfs`
 1. `cvmfs_server publish dunedaq.opensciencegrid.org`
 
