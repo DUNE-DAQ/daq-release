@@ -122,11 +122,11 @@ class DAQCheckoutPackage:
 
     def checkout(self):
         if self.overwrite and self.checkout_path.is_dir():
-            run_command(["rm", "-rf", f"{self.checkout_path}"], cwd=self.checkout_area)
+            run_command(f"rm -rf {self.checkout_path}", cwd=self.checkout_area)
 
-        run_command(["git", "clone", f"https://github.com/DUNE-DAQ/{self.name}.git"], cwd=self.checkout_area)
+        run_command(f"git clone https://github.com/DUNE-DAQ/{self.name}.git", cwd=self.checkout_area)
         print(f"\nINFO: Attempting checkout of {self.name:<20} {self.checkout_token:<20} under {self.checkout_path}")
-        checkout_results = run_command(["git", "checkout", f"{self.checkout_token}"], cwd=self.checkout_path, continue_on_error=self.continue_on_error)
+        checkout_results = run_command(f"git checkout {self.checkout_token}", cwd=self.checkout_path, continue_on_error=self.continue_on_error)
         if checkout_results["exit_code"] != 0:
             self.success = False
 

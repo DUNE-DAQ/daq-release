@@ -31,7 +31,7 @@ def run_command(
         "stdout": "",
         "stderr": "",
         "exit_code": None,
-        "command": " ".join(cmd),
+        "command": cmd,
         "context": context,
     }
 
@@ -40,6 +40,7 @@ def run_command(
             cmd,
             capture_output=True,
             text=True,
+            shell=True,
             check=check,
             cwd=cwd
         )
