@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
-import os
+import os, sys
 import yaml
 import argparse
 import shutil
@@ -19,6 +19,8 @@ from dataclasses import dataclass, field
 
 #from dr_tools import parse_yaml_file
 from mappings import cmake_to_spack, pyvenv_url_names
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from run_command import run_command
 
 contains_oks_file = {}
 
@@ -175,17 +177,17 @@ class DAQPackage:
     def update_commit_hash(self, fall_back_tag="develop"):
         # Necessary bespoke logic for the singular case of elisa-client-api >:[
         url_name = self.name if self.name != "elisa-client-api" else "elisa_client_api"
-        url = f"https://api.github.com/repos/DUNE-DAQ/{url_name}/git/trees/{self.version}"
-        response = requests.get(url)
-        if response.status_code != 200:
-            url = f"https://api.github.com/repos/DUNE-DAQ/{url_name}/git/trees/{fall_back_tag}"
-            response = requests.get(url)
-            response.raise_for_status()
+        url = f"https://github.com/DUNE-DAQ/{url_name}"
+        version = self.version
+        # Pymodules don't have a "v" in the manifest versions since 
+        # they need to be pip-installed, but we tag them with the 
+        # "v" on GitHub
+        if self.is_pymodule:
+            version = f"v{version}"
         
-        data = response.json()
-        if "sha" not in data:
-            raise ValueError(f"Cannot get commit SHA for {self.name} @ {self.version}")
-        self.commit = data['sha']
+        result = run_command(f"git ls-remote {url} {version} | cut -f 1 | cut -c1-7")
+        print(f'Got hash {result["stdout"]} for {self.name} @ {version}')
+        self.commit = result['stdout']
 
     def get_file(self):
         # Download file from package
@@ -251,13 +253,14 @@ class DAQRelease:
             self.rdict["core_release"] = core_release
         self.rdict["release"] = release_name
 
-    def write_release_yaml(self, repo_path, update_hash=False):
-        repo_dir = Path(repo_path/"spack-repo")
-        repo_dir.mkdir()
+    def write_release_yaml(self, repo_path):
+        repo_dir = Path(f"{repo_path}/spack-repo")
+        repo_dir.mkdir(parents=True)
 
-        with open(self.yaml, 'w') as outfile:
+        output_file = Path(f"{repo_dir}/{self.release_dict['release']}.yaml")
+        with output_file.open("w") as outfile:
             outfile.write('---\n')
-            yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
+            yaml.dump(self.release_dict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
     def copy_release_yaml_backup(self, repo_path, update_hash=False):
@@ -563,6 +566,7 @@ if __name__ == "__main__":
     daq_release = DAQRelease.from_yaml(release_dict, args.overwrite_branch, args.overwrite_daq_cmake)
     if args.update_hash:
         daq_release.update_hashes()
+
     if args.pypi_manifest:
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
