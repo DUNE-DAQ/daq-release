@@ -14,6 +14,3 @@ cmake_to_spack = {
     'tbb': 'intel-tbb',
 }
 
-pyvenv_url_names = {
-    "elisa-client-api": {"repo_name": "elisa_client_api"},
-}

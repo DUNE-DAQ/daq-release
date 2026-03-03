@@ -156,8 +156,6 @@ if __name__ == "__main__":
             ref = i["version"]
             if not ref.startswith('v'):
                 ref = "v" + ref
-            if "elisa" in iname:
-                iname = iname.replace('-', '_')
             if args.delete:
                 checkout_and_delete_tag(iname, new_tag)
             else:
@@ -187,8 +185,6 @@ if __name__ == "__main__":
             iname = args.package
         if not ref.startswith('v'):
             ref = "v" + ref
-        if "elisa" in iname:
-            iname = iname.replace('-', '_')
         if args.delete:
             checkout_and_delete_tag(iname, new_tag)
         else:

@@ -14,7 +14,7 @@ import pathlib
 from time import sleep
 
 from dr_tools import parse_yaml_file
-from mappings import cmake_to_spack, pyvenv_url_names
+from mappings import cmake_to_spack
 
 contains_oks_file = {}
 
@@ -65,10 +65,6 @@ def get_contains_oks_file(repo_path_name):
 
 def get_commit_hash(repo, tag_or_branch, fall_back_tag="develop"):
     tmp_dir = tempfile.mkdtemp()
-
-    # Account for packages whose names in release manifest don't match the GitHub URL
-    if repo in pyvenv_url_names:
-        repo = pyvenv_url_names[repo].get('repo_name', repo)
 
     try:
         cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
@@ -381,17 +377,14 @@ class DAQRelease:
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    # Special cases are handled using a dictionary in mappings.py
-                    repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
-                    egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
 
                     if iversion == "develop" and not iname == "moo":
                         (itag, ihash) = get_commit_hash(iname, iversion, iversion)
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@{ihash}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@{ihash}#egg={iname}"
                     elif iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
                     else:
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
                 f.write(iline + '\n')
         return
 

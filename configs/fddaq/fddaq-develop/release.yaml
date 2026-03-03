@@ -153,7 +153,7 @@
         - name: druncschema
           version: develop
           source:  github_DUNE-DAQ
-        - name: elisa-client-api
+        - name: elisa_client_api
           version: develop
           source:  github_DUNE-DAQ
         - name: executing
