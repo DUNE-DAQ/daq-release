@@ -417,17 +417,14 @@ class DAQRelease:
                     iline = f'{iname}=={iversion}'
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
-                    # Special cases are handled using a dictionary in mappings.py
-                    repo_name = pyvenv_url_names.get(iname, {}).get("repo_name", iname)
-                    egg_name = pyvenv_url_names.get(iname, {}).get("egg_name", repo_name)
 
                     if iversion == "develop" and not iname == "moo":
                         (itag, ihash) = get_commit_hash(iname, iversion, iversion)
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@{ihash}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@{ihash}#egg={iname}"
                     elif iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@{iversion}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
                     else:
-                        iline = f"git+https://github.com/{iuser}/{repo_name}@v{iversion}#egg={egg_name}"
+                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
                 f.write(iline + '\n')
         return
 
