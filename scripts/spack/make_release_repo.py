@@ -16,8 +16,9 @@ import requests
 from time import sleep
 from pathlib import Path
 from dataclasses import dataclass, field
+from git import Repo
+from tempfile import TemporaryDirectory
 
-#from dr_tools import parse_yaml_file
 from mappings import cmake_to_spack, pyvenv_url_names
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from run_command import run_command
@@ -29,43 +30,16 @@ class MyDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, False)
 
-def load_release_data(file):
+def load_release_data(file: str) -> dict:
     release_yaml = Path(file)
     umbrella = release_yaml.parent.stem.split('-')[0]
 
     with release_yaml.open() as f:
         release_data = yaml.safe_load(f)
-        release_data['umbrella'] = umbrella
+
+    release_data['umbrella'] = umbrella
 
     return release_data
-
-def check_output(cmd, max_tries = 1):
-
-    ntries = 0
-
-    while True:
-        ntries += 1
-
-        irun = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        out = irun.communicate()
-        rc = irun.returncode
-
-        if rc == 0:
-            break
-        elif rc != 0:
-            print('\nERROR: command "{}" has exit non-zero exit status,\
-    please check!\n'.format(cmd))
-            print('Command output:\n {}\n'.format(out[0].decode('utf-8')))
-            print('Command error:\n{}\n'.format(out[1].decode('utf-8')))
-
-            if ntries >= max_tries:
-                exit(10)
-            else:
-                sleep_time = 5
-                print(f"On try {ntries}; will sleep {sleep_time} seconds before trying again")
-                sleep(sleep_time)
-    return out
 
 def get_contains_oks_file_backup(repo_path_name):
 
@@ -78,52 +52,6 @@ def get_contains_oks_file_backup(repo_path_name):
             return True
 
     return False
-
-
-def get_commit_hash_backup(repo, tag_or_branch, fall_back_tag="develop"):
-    tmp_dir = tempfile.mkdtemp()
-
-    # Account for packages whose names in release manifest don't match the GitHub URL
-    if repo in pyvenv_url_names:
-        repo = pyvenv_url_names[repo].get('repo_name', repo)
-
-    try:
-        cmd = f"""cd {tmp_dir}; git clone --quiet https://github.com/DUNE-DAQ/{repo}.git"""
-        output = check_output(cmd)
-
-        used_ref = tag_or_branch
-        repo_dir = os.path.join(tmp_dir, repo)
-
-        is_tag = re.search('\d+.\d+.\d+', tag_or_branch)
-        if not is_tag:
-            cmd = f"""cd {repo_dir}; \
-                if git ls-remote --exit-code --heads origin {tag_or_branch} 2>&1 > /dev/null; then \
-                    echo {tag_or_branch}; \
-                else \
-                    echo {fall_back_tag} ;\
-                fi"""
-            output = check_output(cmd)
-            used_ref = output[0].decode('utf-8').strip()
-        else:
-            # Python package versions don't start with 'v' in the manifest, but it's needed for checking tags here
-            if not is_tag.string.startswith("v"):
-                used_ref = f"v{tag_or_branch}"
-            cmd = f"""cd {tmp_dir}/{repo}; \
-                if ! git show-ref --tags --verify --quiet "refs/tags/{used_ref}"; then \
-                    echo "{used_ref} does not exist for package {repo}. Exiting..."; \
-                    exit 1; \
-                fi;"""
-            output = check_output(cmd)
-        cmd = f"""cd {repo_dir}; \
-            git checkout --quiet {used_ref}; \
-            git rev-parse --short HEAD"""
-        output = check_output(cmd)
-        commit_hash = output[0].decode('utf-8').strip()
-        return (used_ref, commit_hash)
-
-    finally:
-        contains_oks_file[repo] = get_contains_oks_file(f"{tmp_dir}/{repo}")
-        shutil.rmtree(tmp_dir)
 
 # TODO: This should be handled automatically
 #def check_branch_exists(repo, branch):
@@ -153,36 +81,55 @@ class DAQPackage:
             variant = d.get("variant"),
         )
 
-    # Only pymodules have a "source" field
     @property
     def is_pymodule(self) -> bool:
         return bool(self.source)
 
-    def resolve_version(self):
-        pass
+    @property
+    def is_dunedaq_pymodule(self) -> bool:
+        return bool(self.source == "github_DUNE-DAQ")
 
-    def contains_oks_files(self, ref="HEAD"):
-        url = f"https://api.github.com/repos/DUNE-DAQ/{self.name}/git/trees/{ref}"
-        r = requests.get(url, params={"recursive": "1"})
-        r.raise_for_status()
+    @property
+    def version_is_tag(self) -> bool:
+        return bool(re.search('\d+.\d+.\d+', self.version))
 
-        for entry in r.json()["tree"]:
-            if entry["type"] == "blob" and (
-                entry["path"].endswith(".schema.xml") or
-                entry["path"].endswith(".data.xml")
-            ):
-                return True
+    @property
+    def repo_url(self) -> str:
+        print(f'{self.name} is pymodule?', self.is_pymodule)
+        print(f'{self.name} is dunedaq pymodule?', self.is_dunedaq_pymodule)
+        print(f'{self.name} source:', self.source)
+        print(f'{self.name} source type:', type(self.source))
+        if self.is_pymodule and not self.is_dunedaq_pymodule:
+            return None
+        return f"https://github.com/DUNE-DAQ/{self.name}"
+
+    def contains_oks_file(self, ref="HEAD") -> bool:
+        print('REPO URL:', self.repo_url)
+        if not self.repo_url:
+            return False
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo = Repo.init(tmpdir, bare=True)
+            repo.git.fetch(self.repo_url, ref, depth=1)
+            commit = repo.commit("FETCH_HEAD")
+
+            for blob in commit.tree.traverse():
+                if blob.type == "blob" and blob.path.endswith((".schema.xml", ".data.xml")):
+                    return True
+
         return False
 
     def update_commit_hash(self, fall_back_tag="develop"):
+        if self.source == "pypi":
+            return
         # Necessary bespoke logic for the singular case of elisa-client-api >:[
         url_name = self.name if self.name != "elisa-client-api" else "elisa_client_api"
         url = f"https://github.com/DUNE-DAQ/{url_name}"
-        version = self.version
+
         # Pymodules don't have a "v" in the manifest versions since 
         # they need to be pip-installed, but we tag them with the 
         # "v" on GitHub
-        if self.is_pymodule:
+        version = self.version
+        if self.is_dunedaq_pymodule and self.version_is_tag:
             version = f"v{version}"
         
         result = run_command(f"git ls-remote {url} {version} | cut -f 1 | cut -c1-7")
@@ -238,7 +185,7 @@ class DAQRelease:
             pymodules = [
                 DAQPackage.from_dict(entry)
                 for entry in self.release_dict.get("pymodules")
-                if entry.get("source") == "github_DUNE-DAQ"
+                #if entry.get("source") == "github_DUNE-DAQ"
             ]
             package_list.extend(pymodules)
 
@@ -263,57 +210,14 @@ class DAQRelease:
             yaml.dump(self.release_dict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
 
-    def copy_release_yaml_backup(self, repo_path, update_hash=False):
-        repo_dir = os.path.join(repo_path, "spack-repo")
-        print('[COPY]: repo_dir:', repo_dir)
-        os.makedirs(repo_dir, exist_ok=True)
-        self.yaml = shutil.copy2(self.yaml, os.path.join(repo_dir, self.rdict["release"] + ".yaml"))
-        print('[COPY]: self.yaml:', self.yaml)
-
-        if not update_hash:
-            return
-
-        # Use deepcopy to avoid modifying self.rdict during processing
-        pkgs = copy.deepcopy(self.rdict[self.rtype])
-        pymodules = [
-            copy.deepcopy(pkg)
-            for pkg in self.rdict.get("pymodules", [])
-            if pkg.get("source") == "github_DUNE-DAQ"
-        ]
-        all_pkgs = pkgs + pymodules
-
-        for i, pkg in enumerate(all_pkgs):
-            iname = pkg.get("name")
-            iver  = pkg.get("version")
-            ihash = pkg.get("commit")
-            itag = iver
-            if self.overwrite_branch != "" and (iname != "daq-cmake" or self.overwrite_daq_cmake):
-                iver = self.overwrite_branch
-            if not iname.startswith('py-'):
-                (itag, ihash) = get_commit_hash(iname, iver, pkg.get("version"))
-
-            # Only python modules contain a 'source' field
-            if pkg.get("source"):
-                for ipy, pymod in enumerate(self.rdict['pymodules']):
-                    if pymod.get("name") == iname:
-                        self.rdict['pymodules'][ipy]["commit"] = ihash
-            else:
-                self.rdict[self.rtype][i]["commit"] = ihash
-            print(f"Info: {iname:<20} | {itag:<20} | {ihash}")
-
-        # rewrite YAML
-        with open(self.yaml, 'w') as outfile:
-            outfile.write('---\n')
-            yaml.dump(self.rdict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
-        return
-
     def get_file_from_package(self, package_name, branch_name, file_name):
         if self.overwrite_branch != '':
             if check_branch_exists(package_name, self.overwrite_branch):
                 branch_name = self.overwrite_branch
         file_url = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
         command = f'curl -o {file_name} --fail {file_url}'
-        check_output(command, 5)
+        run_command(command)
+        #check_output(command, 5)
 
     def get_cmake_dependencies(self, package_name, branch_name):
 
@@ -575,10 +479,10 @@ if __name__ == "__main__":
         os.makedirs(args.output_path, exist_ok=True)
         outfile = os.path.join(args.output_path, 'pyvenv_requirements.txt')
         daq_release.generate_pyvenv_requirements(outfile)
-    elif args.check_branch:
-        tmp_dir = tempfile.mkdtemp()
-        daq_release.copy_release_yaml(tmp_dir, True)
-        shutil.rmtree(tmp_dir)
+    #elif args.check_branch:
+    #    tmp_dir = tempfile.mkdtemp()
+    #    daq_release.copy_release_yaml(tmp_dir, True)
+    #    shutil.rmtree(tmp_dir)
     else:
         daq_release.generate_repo(args.output_path, args.template_path,
                                   args.update_hash, args.release_name,
