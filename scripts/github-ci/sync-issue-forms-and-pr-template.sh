@@ -54,9 +54,6 @@ git clone https://github.com/DUNE-DAQ/.github.git dunedaq_github || exit 2
 
 ORG="DUNE-DAQ"
 for REPO in "${repo_list[@]}"; do
-    if [[ "$REPO" == "elisa-client-api" ]]; then
-      REPO="elisa_client_api"
-    fi
     echo "--------------------------------------------------------------"
     echo "********************* $REPO *****************************"
     git clone --quiet https://github.com/${ORG}/${REPO}.git || exit 3

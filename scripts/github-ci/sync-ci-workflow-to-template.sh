@@ -18,9 +18,6 @@ function git_checkout_and_update_ci {
   for repo in "${repo_list[@]}"; do
     irepo_arr=(${repo})
     repo_name=${irepo_arr[0]//_/-}
-    if [[ "$repo_name" == "elisa-client-api" ]]; then
-      repo_name="elisa_client_api"
-    fi
     echo "--------------------------------------------------------------"
     echo "********************* $repo_name *****************************"
     git clone --quiet https://github.com/DUNE-DAQ/${repo_name}.git -b "$branch" || exit 3
