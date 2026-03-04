@@ -91,13 +91,13 @@ jobs:
             rm -rf ${GITHUB_WORKSPACE}/docker-build/*
 
       - name: Download spack stable release tarball artifact for core release
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: stables_coredaq
           path: ${{ github.workspace }}/docker-build
 
       - name: Download spack stable release tarball artifact for fddaq release
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: stables_fddaq
           path: ${{ github.workspace }}/docker-build
