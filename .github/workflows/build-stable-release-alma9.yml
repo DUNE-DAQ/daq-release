@@ -43,7 +43,7 @@ jobs:
           tar_and_stage_release $CORE_RELEASE_TAG
 
     - name: upload spack stable release tarball for the core release
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: stables_coredaq
         path: ${{ github.workspace }}/tarballs_for_upload/coredaq-${{ github.event.inputs.core-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -64,7 +64,7 @@ jobs:
 
 
     - name: upload spack stable release tarball for the fddaq release
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: stables_fddaq
         path: ${{ github.workspace }}/tarballs_for_upload/fddaq-${{ github.event.inputs.fddaq-release }}-a9-${{ github.event.inputs.build-number }}.tar.gz
@@ -173,13 +173,13 @@ jobs:
 
 
     - name: upload fddaq-dbt-setup-release-env.sh
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: fddaq-dbt_setup_release_env
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: upload fddaq_app_rte.sh
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: fddaq_app_rte
         path: ${{ github.workspace }}/fddaq_app_rte.sh
