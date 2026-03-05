@@ -19,11 +19,9 @@ from dataclasses import dataclass, field
 from git import Repo
 from tempfile import TemporaryDirectory
 
-from mappings import cmake_to_spack, pyvenv_url_names
+from mappings import cmake_to_spack
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from run_command import run_command
-
-contains_oks_file = {}
 
 class MyDumper(yaml.Dumper):
 
@@ -71,6 +69,16 @@ class DAQPackage:
     source: str = None
     variant: str = None
 
+    contains_oks_file: bool = False
+    cmake_dependencies: list[str] = field(default_factory=list)
+
+    # Keep a reference to the original data in case mutations are necessary
+    _raw: dict | None = field(default=None, repr=False)
+
+    def __post_init__(self):
+        if not isinstance(self.version, str):
+            self.version = str(self.version)
+
     @classmethod
     def from_dict(cls, d: dict) -> DAQPackage:
         return cls(
@@ -79,6 +87,7 @@ class DAQPackage:
             commit  = d.get("commit"),
             source  = d.get("source"),
             variant = d.get("variant"),
+            _raw    = d,
         )
 
     @property
@@ -95,64 +104,78 @@ class DAQPackage:
 
     @property
     def repo_url(self) -> str:
-        print(f'{self.name} is pymodule?', self.is_pymodule)
-        print(f'{self.name} is dunedaq pymodule?', self.is_dunedaq_pymodule)
-        print(f'{self.name} source:', self.source)
-        print(f'{self.name} source type:', type(self.source))
         if self.is_pymodule and not self.is_dunedaq_pymodule:
             return None
         return f"https://github.com/DUNE-DAQ/{self.name}"
 
-    def contains_oks_file(self, ref="HEAD") -> bool:
-        print('REPO URL:', self.repo_url)
-        if not self.repo_url:
-            return False
-        with tempfile.TemporaryDirectory() as tmpdir:
-            repo = Repo.init(tmpdir, bare=True)
-            repo.git.fetch(self.repo_url, ref, depth=1)
-            commit = repo.commit("FETCH_HEAD")
+    # Update commit in both the DAQPackage object and the upstream release dict
+    def set_commit(self, commit: str):
+        self.commit = commit
+        self._raw["commit"] = commit
 
-            for blob in commit.tree.traverse():
-                if blob.type == "blob" and blob.path.endswith((".schema.xml", ".data.xml")):
-                    return True
-
-        return False
-
-    def update_commit_hash(self, fall_back_tag="develop"):
-        if self.source == "pypi":
+    def update_commit_hash(self, repo_path, fall_back_tag="develop"):
+        if self.is_pymodule and not self.is_dunedaq_pymodule:
             return
-        # Necessary bespoke logic for the singular case of elisa-client-api >:[
-        url_name = self.name if self.name != "elisa-client-api" else "elisa_client_api"
-        url = f"https://github.com/DUNE-DAQ/{url_name}"
+        
+        result = run_command(f"git rev-parse --short HEAD", cwd=repo_path)
+        self.set_commit(result['stdout'])
 
+    def get_contains_oks_file(self, repo_path_name):
+        assert os.path.exists(repo_path_name), f"The {get_contains_oks_file.__name__} function is unable to find expected path {repo_path_name}"
+
+        repo_path = pathlib.PosixPath(repo_path_name)
+
+        for glob_extension in ["*.schema.xml", "*.data.xml"]:
+            if len(list(repo_path.rglob(glob_extension))) > 0:
+                self.contains_oks_file = True
+
+    def get_cmake_dependencies(self, repo_path_name: str):
+        
+        with open(file_name, 'r') as infile:
+            lines = infile.read()
+            # Parse package names from find_package calls. Everything up to the first
+            # white space character will be taken as the package name (i.e., no "REQUIRED"
+            # or "COMPONENTS"
+            find_package_pattern  = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
+            cmake_dependencies_list = find_package_pattern.findall(lines)
+            # Special cases where the dependency has no explicit find_package call
+            find_daq_codegen = re.search(r'\s*[^# ]\s*daq_codegen\(', lines)
+            if find_daq_codegen:
+                cmake_dependencies_list.append('py-moo')
+            find_pybind = re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', lines)
+            if find_pybind: 
+                cmake_dependencies_list.append('pybind11')
+            find_numa = re.search(r'\s*[^# ]\s*pkg_check_modules\(numa', lines)
+            if find_numa:
+                cmake_dependencies_list.append('numactl')
+        cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
+        return cmake_dependencies_list
+
+    def get_git_info(self):
         # Pymodules don't have a "v" in the manifest versions since 
         # they need to be pip-installed, but we tag them with the 
         # "v" on GitHub
         version = self.version
         if self.is_dunedaq_pymodule and self.version_is_tag:
             version = f"v{version}"
-        
-        result = run_command(f"git ls-remote {url} {version} | cut -f 1 | cut -c1-7")
-        print(f'Got hash {result["stdout"]} for {self.name} @ {version}')
-        self.commit = result['stdout']
 
-    def get_file(self):
-        # Download file from package
-        pass
-
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_command(f"git clone --depth 1 --branch {version} {self.repo_url} {tmpdir}")
+            self.update_commit_hash(tmpdir)
+            self.get_contains_oks_file(tmpdir)
+            self.get_cmake_dependencies(tmpdir)
 
 class DAQRelease:
     def __init__(
         self,
         release_dict: dict,
-        overwrite_branch: str = "",
+        overwrite_branch: str = None,
         overwrite_daq_cmake: bool = False,
     ):
         self.release_dict = release_dict
         self.overwrite_branch = overwrite_branch
         self.overwrite_daq_cmake = overwrite_daq_cmake
 
-        self.rtype = self.get_release_type()
         self.packages = self.load_packages()
 
         # TODO: Edit elsewhere to simply use self.release_dict['umbrella]
@@ -172,20 +195,21 @@ class DAQRelease:
             overwrite_daq_cmake=overwrite_daq_cmake,
         )
     
-    def get_release_type(self):
+    @property
+    def release_type(self):
         return self.release_dict['type']
 
     def load_packages(self):
         package_list = [
             DAQPackage.from_dict(entry)
-            for entry in self.release_dict.get(self.rtype)
+            for entry in self.release_dict.get(self.release_type)
         ]
 
         if "pymodules" in self.release_dict:
             pymodules = [
                 DAQPackage.from_dict(entry)
                 for entry in self.release_dict.get("pymodules")
-                #if entry.get("source") == "github_DUNE-DAQ"
+                if entry.get("source") == "github_DUNE-DAQ"
             ]
             package_list.extend(pymodules)
 
@@ -193,7 +217,10 @@ class DAQRelease:
 
     def update_hashes(self):
         for package in self.packages:
-            package.update_commit_hash()
+            #package.update_commit_hash()
+            package.get_git_info()
+            #self.release_dict[self.release_type][package.name].commit = package.commit
+            print('Updated package?', package)
 
     def set_release(self, release_name, core_release=""):
         if core_release != "":
@@ -266,7 +293,7 @@ class DAQRelease:
     def generate_daq_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
-        for ipkg in self.rdict[self.rtype]:
+        for ipkg in self.rdict[self.release_type]:
             itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
             if not os.path.exists(itemp):
                 print(f"Error: template file {itemp} is not found!")
@@ -340,7 +367,7 @@ class DAQRelease:
     def generate_daq_umbrella_package(self, repo_path, template_dir):
         repo_dir = os.path.join(repo_path, "spack-repo", "packages")
         template_dir = os.path.join(template_dir, "packages")
-        ipkg = self.rtype
+        ipkg = self.release_type
         itemp = os.path.join(template_dir, ipkg, 'package.py')
         if not os.path.exists(itemp):
             print(f"Error: template file {itemp} is not found!")
@@ -352,7 +379,7 @@ class DAQRelease:
 
         # now add additional deps:
         lines += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
-        if self.rtype != "coredaq":
+        if self.release_type != "coredaq":
             lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} subset={self.full_umbrella} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
             lines += f'\n        depends_on(f"coredaq@{self.rdict["core_release"]} subset={self.full_umbrella} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
         for idep in self.rdict[ipkg]:
@@ -379,7 +406,7 @@ class DAQRelease:
         return
 
     def generate_umbrella_package(self, repo_path, template_dir):
-        if self.rtype == "coredaq":
+        if self.release_type == "coredaq":
             self.generate_external_umbrella_package(repo_path, template_dir)
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return
@@ -408,14 +435,21 @@ class DAQRelease:
             f.write(")\n")
         return
 
-    def generate_pyvenv_requirements(self, output_file):
-        with open(output_file, 'w') as f:
-            for i in self.rdict['pymodules']:
+    def generate_pyvenv_requirements(self, output_path):
+        output_file = Path(f"{output_path}/pyvenv_requirements.txt")
+        pymodules = self.release_dict.get('pymodules')
+        if not pymodules:
+            raise ValueError("No pymodules found in release manifest.")
+
+        with output_file.open('w') as f:
+            for i in pymodules:
+                package = DAQPackage(i)
+                print('Package?', package)
                 iname = i["name"]
                 iversion = i["version"]
                 if i["source"] == "pypi":
                     iline = f'{iname}=={iversion}'
-                if i["source"].startswith("github"):
+                else:
                     iuser = i["source"].replace("github_", "")
 
                     if iversion == "develop" and not iname == "moo":
