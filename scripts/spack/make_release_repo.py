@@ -39,27 +39,6 @@ def load_release_data(file: str) -> dict:
 
     return release_data
 
-def get_contains_oks_file_backup(repo_path_name):
-
-    assert os.path.exists(repo_path_name), f"The {get_contains_oks_file.__name__} function is unable to find expected path {repo_path_name}"
-
-    repo_path = pathlib.PosixPath(repo_path_name)
-
-    for glob_extension in ["*.schema.xml", "*.data.xml"]:
-        if len(list(repo_path.rglob(glob_extension))) > 0:
-            return True
-
-    return False
-
-# TODO: This should be handled automatically
-#def check_branch_exists(repo, branch):
-#    command = f'git ls-remote --exit-code https://github.com/DUNE-DAQ/{repo}.git --heads origin {branch}'
-#    args = command.split()
-#    subproc = subprocess.run(args)
-#    if subproc.returncode == 0:
-#        return True
-#    print(f'WARNING: No branch {branch} exists for package {repo}; defaulting to develop')
-#    return False
 
 @dataclass
 class DAQPackage:
@@ -113,11 +92,11 @@ class DAQPackage:
         self.commit = commit
         self._raw["commit"] = commit
 
-    def update_commit_hash(self, repo_path, fall_back_tag="develop"):
+    def update_commit_hash(self, repo_path_name, fall_back_tag="develop"):
         if self.is_pymodule and not self.is_dunedaq_pymodule:
             return
         
-        result = run_command(f"git rev-parse --short HEAD", cwd=repo_path)
+        result = run_command(f"git rev-parse --short HEAD", cwd=repo_path_name)
         self.set_commit(result['stdout'])
 
     def get_contains_oks_file(self, repo_path_name):
@@ -130,26 +109,32 @@ class DAQPackage:
                 self.contains_oks_file = True
 
     def get_cmake_dependencies(self, repo_path_name: str):
-        
-        with open(file_name, 'r') as infile:
-            lines = infile.read()
-            # Parse package names from find_package calls. Everything up to the first
-            # white space character will be taken as the package name (i.e., no "REQUIRED"
-            # or "COMPONENTS"
-            find_package_pattern  = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
-            cmake_dependencies_list = find_package_pattern.findall(lines)
-            # Special cases where the dependency has no explicit find_package call
-            find_daq_codegen = re.search(r'\s*[^# ]\s*daq_codegen\(', lines)
-            if find_daq_codegen:
-                cmake_dependencies_list.append('py-moo')
-            find_pybind = re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', lines)
-            if find_pybind: 
-                cmake_dependencies_list.append('pybind11')
-            find_numa = re.search(r'\s*[^# ]\s*pkg_check_modules\(numa', lines)
-            if find_numa:
-                cmake_dependencies_list.append('numactl')
-        cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
-        return cmake_dependencies_list
+        cmakelists = Path(f"{repo_path_name}/CMakeLists.txt")
+        if not cmakelists.is_file():
+            return
+
+        content = cmakelists.read_text()
+
+        # Parse package names from find_package calls. Everything up to the first
+        # white space character will be taken as the package name (i.e., no "REQUIRED"
+        # or "COMPONENTS"
+        find_package_pattern = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
+        cmake_package_list = find_package_pattern.findall(content)
+
+        # Special cases where the dependency has no explicit find_package call
+        if re.search(r'\s*[^# ]\s*daq_codegen\(', content):
+            cmake_package_list.append('py-moo')
+        if re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', content):
+            cmake_package_list.append('pybind11')
+        if re.search(r'\s*[^# ]\s*pkg_check_modules\(numa', content):
+            cmake_package_list.append('numactl')
+
+        # Handle cases where the dependency name in CMakeLists.txt
+        # doesn't match what Spack needs in its depends_on call
+        self.cmake_dependencies = [
+            cmake_to_spack.get(dep, dep)
+            for dep in cmake_package_list
+        ]
 
     def get_git_info(self):
         # Pymodules don't have a "v" in the manifest versions since 
@@ -169,35 +154,30 @@ class DAQRelease:
     def __init__(
         self,
         release_dict: dict,
+        output_path: str,
+        template_path: str,
         overwrite_branch: str = None,
         overwrite_daq_cmake: bool = False,
     ):
         self.release_dict = release_dict
+        self.output_path = output_path
+        self.template_path = template_path
         self.overwrite_branch = overwrite_branch
         self.overwrite_daq_cmake = overwrite_daq_cmake
 
         self.packages = self.load_packages()
 
-        # TODO: Edit elsewhere to simply use self.release_dict['umbrella]
-        self.full_umbrella = self.release_dict['umbrella']
-
-    @classmethod
-    def from_yaml(
-        cls,
-        release_dict: dict,
-        overwrite_branch: str = "",
-        overwrite_daq_cmake: bool = False,
-    ) -> DAQRelease:
-
-        return cls(
-            release_dict=release_dict,
-            overwrite_branch=overwrite_branch,
-            overwrite_daq_cmake=overwrite_daq_cmake,
-        )
-    
     @property
     def release_type(self):
         return self.release_dict['type']
+
+    @property
+    def full_umbrella(self):
+        return self.release_dict['umbrella']
+
+    @property 
+    def repo_dir(self):
+        return Path(f"{self.output_path}/spack-repo")
 
     def load_packages(self):
         package_list = [
@@ -217,60 +197,21 @@ class DAQRelease:
 
     def update_hashes(self):
         for package in self.packages:
-            #package.update_commit_hash()
             package.get_git_info()
-            #self.release_dict[self.release_type][package.name].commit = package.commit
-            print('Updated package?', package)
+        return
 
     def set_release(self, release_name, core_release=""):
         if core_release != "":
-            self.rdict["core_release"] = core_release
-        self.rdict["release"] = release_name
+            self.release_dict["core_release"] = core_release
+        self.release_dict["release"] = release_name
+        return
 
-    def write_release_yaml(self, repo_path):
-        repo_dir = Path(f"{repo_path}/spack-repo")
-        repo_dir.mkdir(parents=True)
-
-        output_file = Path(f"{repo_dir}/{self.release_dict['release']}.yaml")
+    def write_release_yaml(self):
+        output_file = Path(f"{self.repo_dir}/{self.release_dict['release']}.yaml")
         with output_file.open("w") as outfile:
             outfile.write('---\n')
             yaml.dump(self.release_dict, outfile, Dumper=MyDumper, default_flow_style=False, sort_keys=False)
         return
-
-    def get_file_from_package(self, package_name, branch_name, file_name):
-        if self.overwrite_branch != '':
-            if check_branch_exists(package_name, self.overwrite_branch):
-                branch_name = self.overwrite_branch
-        file_url = f'https://raw.githubusercontent.com/DUNE-DAQ/{package_name}/{branch_name}/{file_name}'
-        command = f'curl -o {file_name} --fail {file_url}'
-        run_command(command)
-        #check_output(command, 5)
-
-    def get_cmake_dependencies(self, package_name, branch_name):
-
-        file_name = "CMakeLists.txt"
-        self.get_file_from_package(package_name, branch_name, file_name)
-
-        cmake_dependencies_list = []
-        with open(file_name, 'r') as infile:
-            lines = infile.read()
-            # Parse package names from find_package calls. Everything up to the first
-            # white space character will be taken as the package name (i.e., no "REQUIRED"
-            # or "COMPONENTS"
-            find_package_pattern  = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
-            cmake_dependencies_list = find_package_pattern.findall(lines)
-            # Special cases where the dependency has no explicit find_package call
-            find_daq_codegen = re.search(r'\s*[^# ]\s*daq_codegen\(', lines)
-            if find_daq_codegen:
-                cmake_dependencies_list.append('py-moo')
-            find_pybind = re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', lines)
-            if find_pybind: 
-                cmake_dependencies_list.append('pybind11')
-            find_numa = re.search(r'\s*[^# ]\s*pkg_check_modules\(numa', lines)
-            if find_numa:
-                cmake_dependencies_list.append('numactl')
-        cmake_dependencies_list = [dep.lower() for dep in cmake_dependencies_list]
-        return cmake_dependencies_list
 
     def generate_depends_on_list(self, cmake_package_list):
         depends_on_list = ""
@@ -281,13 +222,9 @@ class DAQRelease:
             depends_on_list += f'\n    depends_on("{idep}")'
         return depends_on_list
 
-    def generate_repo_file(self, repo_path):
-        repo_dir = os.path.join(repo_path, "spack-repo")
-        os.makedirs(repo_dir, exist_ok=True)
-        with open(os.path.join(repo_dir, "repo.yaml"), 'w') as f:
-            repo_string = "repo:\n  namespace: '{}'\n".format(
-                self.rdict["release"])
-            f.write(repo_string)
+    def generate_repo_file(self):
+        with Path(f'{self.repo_dir}/repo.yaml').open('w') as f:
+            f.write(f"repo:\n  namespace: '{self.release_type}'\n")
         return
 
     def generate_daq_package(self, repo_path, template_dir):
@@ -411,16 +348,18 @@ class DAQRelease:
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return
 
-    def generate_repo(self, outdir, tempdir, update_hash, release_name, core_release):
+    def generate_repo(self, update_hash, release_name, core_release):
         if release_name is not None:
             self.set_release(release_name, core_release)
-        #self.copy_release_yaml(outdir, update_hash)
+
+        self.repo_dir.mkdir(parents=True)
         if update_hash:
             self.update_hashes()
-        self.write_release_yaml(outdir)
-        self.generate_repo_file(outdir)
-        self.generate_daq_package(outdir, tempdir)
-        self.generate_umbrella_package(outdir, tempdir)
+
+        self.write_release_yaml()
+        self.generate_repo_file()
+        #self.generate_daq_package()
+        #self.generate_umbrella_package()
         return
 
     def generate_pypi_manifest(self, output_file):
@@ -498,7 +437,8 @@ if __name__ == "__main__":
 
     #daq_release = DAQRelease(args.input_manifest, args.overwrite_branch, args.overwrite_daq_cmake)
     release_dict = load_release_data(args.input_manifest)
-    daq_release = DAQRelease.from_yaml(release_dict, args.overwrite_branch, args.overwrite_daq_cmake)
+    #daq_release = DAQRelease.from_yaml(release_dict, args.overwrite_branch, args.overwrite_daq_cmake)
+    daq_release = DAQRelease(release_dict, args.output_path, args.overwrite_branch, args.overwrite_daq_cmake)
     if args.update_hash:
         daq_release.update_hashes()
 
@@ -515,6 +455,7 @@ if __name__ == "__main__":
     #    daq_release.copy_release_yaml(tmp_dir, True)
     #    shutil.rmtree(tmp_dir)
     else:
-        daq_release.generate_repo(args.output_path, args.template_path,
-                                  args.update_hash, args.release_name,
-                                  args.core_release)
+        daq_release.generate_repo(args.update_hash, args.release_name, args.core_release)
+        #daq_release.generate_repo(args.output_path, args.template_path,
+        #                          args.update_hash, args.release_name,
+        #                          args.core_release)
