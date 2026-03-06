@@ -136,7 +136,7 @@ class DAQPackage:
             for dep in cmake_package_list
         ]
 
-    def get_git_info(self):
+    def get_git_info(self, update_package_hash):
         # Pymodules don't have a "v" in the manifest versions since 
         # they need to be pip-installed, but we tag them with the 
         # "v" on GitHub
@@ -146,7 +146,9 @@ class DAQPackage:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             run_command(f"git clone --depth 1 --branch {version} {self.repo_url} {tmpdir}")
-            self.update_commit_hash(tmpdir)
+            print('Update hash?', update_package_hash)
+            if update_package_hash:
+                self.update_commit_hash(tmpdir)
             self.get_contains_oks_file(tmpdir)
             self.get_cmake_dependencies(tmpdir)
 
@@ -155,15 +157,27 @@ class DAQRelease:
         self,
         release_dict: dict,
         output_path: str,
-        template_path: str,
+        template_path: str = None,
+        release_name: str = None,
+        update_hashes: bool = False,
         overwrite_branch: str = None,
         overwrite_daq_cmake: bool = False,
+        core_release: str = "",
     ):
         self.release_dict = release_dict
         self.output_path = output_path
         self.template_path = template_path
+        self.release_name = release_name
+        self.update_hashes = update_hashes
         self.overwrite_branch = overwrite_branch
         self.overwrite_daq_cmake = overwrite_daq_cmake
+        self.core_release = core_release
+
+        if self.release_name is not None:
+            self.release_dict["release"] = self.release_name
+
+        if self.core_release:
+            self.release_dict["core_release"] = self.core_release
 
         self.packages = self.load_packages()
 
@@ -175,9 +189,17 @@ class DAQRelease:
     def full_umbrella(self):
         return self.release_dict['umbrella']
 
-    @property 
+    @property
     def repo_dir(self):
-        return Path(f"{self.output_path}/spack-repo")
+        return Path(self.output_path) / "spack-repo"
+
+    @property
+    def template_dir(self):
+        return Path(self.template_path) / "packages"
+
+    @property
+    def is_nightly_release(self):
+        return "daq" not in self.release_dict["release"]
 
     def load_packages(self):
         package_list = [
@@ -195,15 +217,9 @@ class DAQRelease:
 
         return package_list
 
-    def update_hashes(self):
+    def update_package_metadata(self):
         for package in self.packages:
-            package.get_git_info()
-        return
-
-    def set_release(self, release_name, core_release=""):
-        if core_release != "":
-            self.release_dict["core_release"] = core_release
-        self.release_dict["release"] = release_name
+            package.get_git_info(self.update_hashes)
         return
 
     def write_release_yaml(self):
@@ -227,40 +243,48 @@ class DAQRelease:
             f.write(f"repo:\n  namespace: '{self.release_type}'\n")
         return
 
-    def generate_daq_package(self, repo_path, template_dir):
-        repo_dir = os.path.join(repo_path, "spack-repo", "packages")
-        template_dir = os.path.join(template_dir, "packages")
-        for ipkg in self.rdict[self.release_type]:
-            itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
-            if not os.path.exists(itemp):
-                print(f"Error: template file {itemp} is not found!")
+    def generate_daq_packages(self):
+        #for ipkg in self.release_dict[self.release_type]:
+        for package in self.packages:
+            if package.is_pymodule: continue
+        
+            #itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
+            package_template = Path(self.template_dir) / package.name / 'package.py'
+            if not package_template.is_file():
+                print(f"WARNING: template file {package_template} is not found! No package.py will be generated.")
                 continue
-            with open(itemp, 'r') as f:
-                lines = f.read()
-                # Nightlies
-                if "daq" not in self.rdict["release"]:
-                    lines = lines.replace("XVERSIONX", self.rdict["release"])
-                # Stable release
-                else:
-                    lines = lines.replace("XVERSIONX", ipkg["version"])
-                if ipkg["commit"] is not None:
-                    lines = lines.replace("XHASHX", ipkg["commit"])
-                # Infer dependencies from CMakeLists.txt
-                cmake_package_list = self.get_cmake_dependencies(ipkg["name"], ipkg["commit"])
-                depends_on_list = self.generate_depends_on_list(cmake_package_list)
-                lines = lines.replace("XDEPENDSX", depends_on_list)
+            print(f'Template file {package_template} found.')
 
-                if contains_oks_file[ ipkg["name"] ]:
-                    lines = lines.replace("XDBPATHX", "env.prepend_path(\"DUNEDAQ_DB_PATH\", self.prefix + \"/share\")")
-                else:
-                    lines = lines.replace("XDBPATHX", "")
+            content = package_template.read_text()
 
-            ipkg_dir = os.path.join(repo_dir, ipkg["name"])
-            os.makedirs(ipkg_dir)
-            ipkgpy = os.path.join(ipkg_dir, "package.py")
-            with open(ipkgpy, 'w') as o:
-                o.write(lines)
-                print(f"Info: package.py has been written at {ipkgpy}.")
+            if self.is_nightly_release:
+                content = content.replace("XVERSIONX", self.release_dict["release"])
+            else:
+                content = content.replace("XVERSIONX", package.version)
+
+            content = content.replace("XHASHX", package.commit)
+
+            depends_on_list = [f'depends_on("{dep}")' for dep in package.cmake_dependencies]
+            content = content.replace("XDEPENDSX", "\n    ".join(depends_on_list))
+
+            dbpath = (
+                'env.prepend_path("DUNEDAQ_DB_PATH", self.prefix + "/share")'
+                if package.contains_oks_file
+                else ""
+            )
+            content = content.replace("XDBPATHX", dbpath)
+            print('Final content:', content)
+            generated_package_file = Path(self.repo_dir) / package.name / "package.py"
+            generated_package_file.parent.mkdir(parents=True)
+            generated_package_file.write_text(content)
+
+    def temp(self):
+        ipkg_dir = os.path.join(repo_dir, ipkg["name"])
+        os.makedirs(ipkg_dir)
+        ipkgpy = os.path.join(ipkg_dir, "package.py")
+        with open(ipkgpy, 'w') as o:
+            o.write(lines)
+            print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
     def generate_external_umbrella_package(self, repo_path, template_dir):
@@ -348,17 +372,12 @@ class DAQRelease:
         self.generate_daq_umbrella_package(repo_path, template_dir)
         return
 
-    def generate_repo(self, update_hash, release_name, core_release):
-        if release_name is not None:
-            self.set_release(release_name, core_release)
-
+    def generate_repo(self):
         self.repo_dir.mkdir(parents=True)
-        if update_hash:
-            self.update_hashes()
-
+        self.update_package_metadata()
         self.write_release_yaml()
         self.generate_repo_file()
-        #self.generate_daq_package()
+        self.generate_daq_packages()
         #self.generate_umbrella_package()
         return
 
@@ -409,7 +428,6 @@ if __name__ == "__main__":
         epilog="Questions and comments to jcfree@fnal.gov",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-t', '--template-path',
-                        default="../../spack-repos/packages",
                         help='''path to the template directory;''')
     parser.add_argument('-b', '--overwrite-branch',
                         default="",
@@ -424,7 +442,7 @@ if __name__ == "__main__":
                         help="whether to update commit hash in the YAML file;")
     parser.add_argument('-c', '--check-branch', action='store_true',
                         help="check if branch exists in repo;")
-    parser.add_argument('-o', '--output-path',
+    parser.add_argument('-o', '--output-path', required=True,
                         help="path to the generated spack repo;")
     parser.add_argument('--pypi-manifest', action='store_true',
                         help="whether to generate file containing bash array for python modules;")
@@ -435,27 +453,39 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    #daq_release = DAQRelease(args.input_manifest, args.overwrite_branch, args.overwrite_daq_cmake)
     release_dict = load_release_data(args.input_manifest)
-    #daq_release = DAQRelease.from_yaml(release_dict, args.overwrite_branch, args.overwrite_daq_cmake)
-    daq_release = DAQRelease(release_dict, args.output_path, args.overwrite_branch, args.overwrite_daq_cmake)
-    if args.update_hash:
-        daq_release.update_hashes()
+    daq_release = DAQRelease(
+        release_dict, 
+        args.output_path, 
+        args.template_path,
+        args.release_name,
+        args.update_hash,
+        args.overwrite_branch, 
+        args.overwrite_daq_cmake
+    )
+
+    #if args.update_hash:
+    #    daq_release.update_hashes()
 
     if args.pypi_manifest:
-        os.makedirs(args.output_path, exist_ok=True)
-        outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
-        daq_release.generate_pypi_manifest(outfile)
+        #os.makedirs(args.output_path, exist_ok=True)
+        #outfile = os.path.join(args.output_path, 'pypi_manifest.sh')
+        daq_release.generate_pypi_manifest()
     elif args.pyvenv_requirements:
-        os.makedirs(args.output_path, exist_ok=True)
-        outfile = os.path.join(args.output_path, 'pyvenv_requirements.txt')
-        daq_release.generate_pyvenv_requirements(outfile)
+        #os.makedirs(args.output_path, exist_ok=True)
+        #outfile = os.path.join(args.output_path, 'pyvenv_requirements.txt')
+        daq_release.generate_pyvenv_requirements()
     #elif args.check_branch:
     #    tmp_dir = tempfile.mkdtemp()
     #    daq_release.copy_release_yaml(tmp_dir, True)
     #    shutil.rmtree(tmp_dir)
     else:
-        daq_release.generate_repo(args.update_hash, args.release_name, args.core_release)
+        if not args.release_name:
+            raise ValueError("--release-name is required for generating a release repo.")
+        if not args.template_path:
+            raise ValueError("--template-path is required for generating a release repo.")
+        daq_release.generate_repo()
+        #daq_release.generate_repo(args.update_hash, args.core_release)
         #daq_release.generate_repo(args.output_path, args.template_path,
         #                          args.update_hash, args.release_name,
         #                          args.core_release)
