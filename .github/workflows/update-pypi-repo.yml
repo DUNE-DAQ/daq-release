@@ -49,7 +49,7 @@ jobs:
           du -sh pypi-repo.tar.gz
           
     - name: upload pypi-repo
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: pypi-repo
         path: ${{ github.workspace }}/pypi-repo.tar.gz         
@@ -74,13 +74,13 @@ jobs:
           pip freeze > $GITHUB_WORKSPACE/pip-freeze.txt
 
     - name: upload pyvenv_requirements.txt
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: pyvenv_requirements
         path: ${{ github.workspace }}/pyvenv_requirements.txt
 
     - name: upload pip-freeze.txt
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: pip_freeze
         path: ${{ github.workspace }}/pip-freeze.txt
@@ -112,7 +112,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Download pypi repo tarball artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: pypi-repo
           path: ${{ github.workspace }}/docker-build
