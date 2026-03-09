@@ -39,11 +39,13 @@ def load_release_data(file: str) -> dict:
 
     return release_data
 
-
 @dataclass
 class DAQPackage:
     name: str
     version: str
+    subset: str
+    release_name: str
+    full_umbrella: str
     commit: str = None
     source: str = None
     variant: str = None
@@ -54,21 +56,6 @@ class DAQPackage:
     # Keep a reference to the original data in case mutations are necessary
     _raw: dict | None = field(default=None, repr=False)
 
-    def __post_init__(self):
-        if not isinstance(self.version, str):
-            self.version = str(self.version)
-
-    @classmethod
-    def from_dict(cls, d: dict) -> DAQPackage:
-        return cls(
-            name    = d.get("name"),
-            version = d.get("version"),
-            commit  = d.get("commit"),
-            source  = d.get("source"),
-            variant = d.get("variant"),
-            _raw    = d,
-        )
-
     @property
     def is_pymodule(self) -> bool:
         return bool(self.source)
@@ -76,6 +63,10 @@ class DAQPackage:
     @property
     def is_dunedaq_pymodule(self) -> bool:
         return bool(self.source == "github_DUNE-DAQ")
+
+    @property
+    def is_external(self) -> bool:
+        return self.kind in ["externals", "devtools", "systems"]
 
     @property
     def version_is_tag(self) -> bool:
@@ -87,15 +78,33 @@ class DAQPackage:
             return None
         return f"https://github.com/DUNE-DAQ/{self.name}"
 
-    # Update commit in both the DAQPackage object and the upstream release dict
+    @property
+    def possible_subset_qualifier(self) -> str:
+        if self.subset == "externals":
+            return f', when="subset={self.full_umbrella}"'
+        return ""
+
+    @property
+    def spec(self) -> str:
+        spec_version = self.version if self.version_is_tag else self.release_name
+        spec = f"{self.name}@{spec_version}"
+
+        # External packages
+        if self.variant:
+            spec += f" {self.variant}"
+            spec += f"{self.possible_subset_qualifier}"
+            return spec
+
+        # DUNE-DAQ packages
+        spec += ' build_type={{build_type}}", when=f"build_type={{build_type}}'
+        return spec
+
+    # Update commit in both the DAQPackage object and the upstream DAQRelease.release_dict
     def set_commit(self, commit: str):
         self.commit = commit
         self._raw["commit"] = commit
 
     def update_commit_hash(self, repo_path_name, fall_back_tag="develop"):
-        if self.is_pymodule and not self.is_dunedaq_pymodule:
-            return
-        
         result = run_command(f"git rev-parse --short HEAD", cwd=repo_path_name)
         self.set_commit(result['stdout'])
 
@@ -109,9 +118,11 @@ class DAQPackage:
                 self.contains_oks_file = True
 
     def get_cmake_dependencies(self, repo_path_name: str):
+        if self.is_pymodule:
+            return
         cmakelists = Path(f"{repo_path_name}/CMakeLists.txt")
         if not cmakelists.is_file():
-            return
+            raise FileNotFoundError(cmakelists)
 
         content = cmakelists.read_text()
 
@@ -146,11 +157,70 @@ class DAQPackage:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             run_command(f"git clone --depth 1 --branch {version} {self.repo_url} {tmpdir}")
-            print('Update hash?', update_package_hash)
             if update_package_hash:
                 self.update_commit_hash(tmpdir)
             self.get_contains_oks_file(tmpdir)
             self.get_cmake_dependencies(tmpdir)
+
+@dataclass
+class UmbrellaPackage:
+    name: str
+    full_umbrella: str
+    core_release: str
+    template_path: str
+    packages: list[DAQPackage]
+
+    @property
+    def template_file(self):
+        return Path(self.template_path / "packages" / self.name / "package.py")
+
+    def render(self):
+        content = self.template_file.read_text()
+        
+        content = content.replace("XRELEASEX", self.release_dict["release"])
+        content = content.replace("XTARGETX", self.full_umbrella)
+
+        for package in self.packages:
+            content += package.spec
+
+        print('UMBRELLA CONTENT:', content)
+        return content
+
+    def _dunedaq_dependencies(self, content):
+        content += '\n    for build_type in ["Debug", "RelWithDebInfo", "Release"]:'
+        if self.name != "coredaq":
+            content += f'\n        depends_on(f"coredaq@{self.core_release} subset={self.full_umbrella} build_type={{build_type}} +dev", when=f"build_type={{build_type}} +dev")'
+            content += f'\n        depends_on(f"coredaq@{self.core_release} subset={self.full_umbrella} build_type={{build_type}} ~dev", when=f"build_type={{build_type}} ~dev")'
+        for package in self.packages:
+            if package.name == "dbe":
+                continue
+            if package.name.startswith("py-"):
+                iver = idep["version"]
+                lines += f'\n        depends_on(f"{iname}@{iver}")'
+            else:
+                # Nightlies
+                if "daq" not in self.rdict["release"]:
+                    iver = self.rdict["release"]
+                lines += f'\n        depends_on(f"{iname}@{iver} build_type={{build_type}}", when=f"build_type={{build_type}}")'
+        lines += '\n'
+        return content
+
+    def _external_dependencies(self, content):
+        possible_subset_qualifier=""
+        if self.name == 'externals':
+            possible_subset_qualifier=f', when="subset={self.full_umbrella}"'
+
+        # now add additional deps:
+        print('Generating externals:', self.name)
+        print(f"{ipkg} packages: {self.packages}")
+        for package in self.packages:
+            if package.variant:
+                content += f'\n    depends_on("{package.name}@{package.version} {package.variant}"{possible_subset_qualifier})'
+            else:
+                content += f'\n    depends_on("{package.name}@{package.version}"{possible_subset_qualifier})'
+
+        return content
+
 
 class DAQRelease:
     def __init__(
@@ -173,13 +243,13 @@ class DAQRelease:
         self.overwrite_daq_cmake = overwrite_daq_cmake
         self.core_release = core_release
 
+        self.dunedaq_packages = self._load_dunedaq_packages()
+
         if self.release_name is not None:
             self.release_dict["release"] = self.release_name
 
         if self.core_release:
             self.release_dict["core_release"] = self.core_release
-
-        self.packages = self.load_packages()
 
     @property
     def release_type(self):
@@ -194,6 +264,10 @@ class DAQRelease:
         return Path(self.output_path) / "spack-repo"
 
     @property
+    def package_dir(self):
+        return Path(self.repo_dir) / "packages"
+
+    @property
     def template_dir(self):
         return Path(self.template_path) / "packages"
 
@@ -201,24 +275,31 @@ class DAQRelease:
     def is_nightly_release(self):
         return "daq" not in self.release_dict["release"]
 
-    def load_packages(self):
-        package_list = [
-            DAQPackage.from_dict(entry)
-            for entry in self.release_dict.get(self.release_type)
+    def _load_packages(self, subset, source=None):
+        print("Attempting to load", subset, "with source", source)
+        print(f"{subset} exists?", self.release_dict.get(subset))
+        return [
+            DAQPackage(
+                _raw = entry,
+                name=entry.get("name"),
+                version=str(entry.get("version")),
+                commit=entry.get("commit"),
+                source=entry.get("source"),
+                variant=entry.get("variant"),
+                subset=subset,
+                release_name=self.release_name,
+                full_umbrella=self.full_umbrella,
+            )
+            for entry in self.release_dict.get(subset, [])
+            if source is None or entry.get("source") == source
         ]
 
-        if "pymodules" in self.release_dict:
-            pymodules = [
-                DAQPackage.from_dict(entry)
-                for entry in self.release_dict.get("pymodules")
-                if entry.get("source") == "github_DUNE-DAQ"
-            ]
-            package_list.extend(pymodules)
-
-        return package_list
+    def _load_dunedaq_packages(self):
+        return self._load_packages(self.release_type) + self._load_packages("pymodules", source="github_DUNE-DAQ")
 
     def update_package_metadata(self):
-        for package in self.packages:
+        #daq_packages = self._load_packages(self.release_type)
+        for package in self.dunedaq_packages:
             package.get_git_info(self.update_hashes)
         return
 
@@ -243,86 +324,69 @@ class DAQRelease:
             f.write(f"repo:\n  namespace: '{self.release_type}'\n")
         return
 
+    def _load_template(self, package_name):
+        template_path = Path(self.template_dir) / package_name / 'package.py'
+        if not template_path.is_file():
+            raise FileNotFoundError(f"Template file {template_path} is not found!")
+        template_content = template_path.read_text()
+        return template_content
+
+    def _write_package_file(self, package_name, content):
+        package_file = Path(self.package_dir) / package_name / "package.py"
+        package_file.parent.mkdir(parents=True)
+        package_file.write_text(content)
+        print(f"Info: package.py has been written at {package_file}.")
+
     def generate_daq_packages(self):
-        #for ipkg in self.release_dict[self.release_type]:
-        for package in self.packages:
+        for package in self.dunedaq_packages:
+            print(f'Package {package.name} spec: {package.spec}')
             if package.is_pymodule: continue
-        
-            #itemp = os.path.join(template_dir, ipkg["name"], 'package.py')
-            package_template = Path(self.template_dir) / package.name / 'package.py'
-            if not package_template.is_file():
-                print(f"WARNING: template file {package_template} is not found! No package.py will be generated.")
-                continue
-            print(f'Template file {package_template} found.')
-
-            content = package_template.read_text()
-
-            if self.is_nightly_release:
-                content = content.replace("XVERSIONX", self.release_dict["release"])
-            else:
-                content = content.replace("XVERSIONX", package.version)
+            content = self._load_template(package.name)
 
             content = content.replace("XHASHX", package.commit)
+
+            version_replace = (
+                self.release_dict["release"]
+                if self.is_nightly_release
+                else package.version
+            )
+            content = content.replace("XVERSIONX", version_replace)
 
             depends_on_list = [f'depends_on("{dep}")' for dep in package.cmake_dependencies]
             content = content.replace("XDEPENDSX", "\n    ".join(depends_on_list))
 
-            dbpath = (
+            dbpath_replace = (
                 'env.prepend_path("DUNEDAQ_DB_PATH", self.prefix + "/share")'
                 if package.contains_oks_file
                 else ""
             )
-            content = content.replace("XDBPATHX", dbpath)
-            print('Final content:', content)
-            generated_package_file = Path(self.repo_dir) / package.name / "package.py"
-            generated_package_file.parent.mkdir(parents=True)
-            generated_package_file.write_text(content)
+            content = content.replace("XDBPATHX", dbpath_replace)
 
-    def temp(self):
-        ipkg_dir = os.path.join(repo_dir, ipkg["name"])
-        os.makedirs(ipkg_dir)
-        ipkgpy = os.path.join(ipkg_dir, "package.py")
-        with open(ipkgpy, 'w') as o:
-            o.write(lines)
-            print(f"Info: package.py has been written at {ipkgpy}.")
-        return
+            self._write_package_file(package.name, content)
 
-    def generate_external_umbrella_package(self, repo_path, template_dir):
-        repo_dir = os.path.join(repo_path, "spack-repo", "packages")
-        template_dir = os.path.join(template_dir, "packages")
-
-        for ipkg in ['devtools', 'externals', 'systems']:
-            itemp = os.path.join(template_dir, ipkg, 'package.py')
-            if not os.path.exists(itemp):
-                print(f"Error: template file {itemp} is not found!")
-                continue
-            with open(itemp, 'r') as f:
-                lines = f.read()
-                lines = lines.replace("XRELEASEX", self.rdict["release"])
-                lines = lines.replace("XTARGETX", self.full_umbrella)
+    def generate_external_umbrella_package(self):
+        for ipkg in ["devtools", "externals", "systems"]:
+            content = self._load_template(ipkg)
+            
+            content = content.replace("XRELEASEX", self.release_dict["release"])
+            content = content.replace("XTARGETX", self.full_umbrella)
 
             possible_subset_qualifier=""
             if ipkg == 'externals':
                 possible_subset_qualifier=f', when="subset={self.full_umbrella}"'
 
             # now add additional deps:
-            for idep in self.rdict[ipkg]:
-                iname = idep["name"]
-                iver = idep["version"]
-                # Externals, system/devtools etc, variant is used instead of
-                # version
-                ivar = idep["variant"]
-                if ivar == None:
-                    lines += f'\n    depends_on("{iname}@{iver}"{possible_subset_qualifier})'
+            print('Generating externals:', ipkg)
+            packages = self._load_packages(ipkg)
+            print(f"{ipkg} packages: {packages}")
+            for package in packages:
+                if package.variant:
+                    content += f'\n    depends_on("{package.name}@{package.version} {package.variant}"{possible_subset_qualifier})'
                 else:
-                    lines += f'\n    depends_on("{iname}@{iver} {ivar}"{possible_subset_qualifier})'
-            lines += '\n'
-            ipkg_dir = os.path.join(repo_dir, ipkg)
-            os.makedirs(ipkg_dir)
-            ipkgpy = os.path.join(ipkg_dir, "package.py")
-            with open(ipkgpy, 'w') as o:
-                o.write(lines)
-                print(f"Info: package.py has been written at {ipkgpy}.")
+                    content += f'\n    depends_on("{package.name}@{package.version}"{possible_subset_qualifier})'
+
+            self._write_package_file(ipkg, content)
+
         return
 
     def generate_daq_umbrella_package(self, repo_path, template_dir):
@@ -366,19 +430,16 @@ class DAQRelease:
             print(f"Info: package.py has been written at {ipkgpy}.")
         return
 
-    def generate_umbrella_package(self, repo_path, template_dir):
-        if self.release_type == "coredaq":
-            self.generate_external_umbrella_package(repo_path, template_dir)
-        self.generate_daq_umbrella_package(repo_path, template_dir)
-        return
-
     def generate_repo(self):
         self.repo_dir.mkdir(parents=True)
         self.update_package_metadata()
         self.write_release_yaml()
         self.generate_repo_file()
         self.generate_daq_packages()
-        #self.generate_umbrella_package()
+        if self.release_type == "coredaq":
+            self.generate_external_umbrella_package()
+        #else:
+        #    self.generate_daq_umbrella_package()
         return
 
     def generate_pypi_manifest(self, output_file):
