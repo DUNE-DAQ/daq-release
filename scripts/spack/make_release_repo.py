@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
-import os, sys
+import sys
 import yaml
 import argparse
-import shutil
-import subprocess
 import tempfile
 import re
-import copy
 import tempfile
 import pathlib
-import requests
 
-from time import sleep
 from pathlib import Path
 from dataclasses import dataclass, field
-from git import Repo
 from tempfile import TemporaryDirectory
 
 from mappings import cmake_to_spack
@@ -44,7 +38,9 @@ class ReleaseContext:
     release_name: str
     core_release: str
     full_umbrella: str
-    is_nightly_release: bool = False
+    update_hashes: bool
+    overwrite_branch: str
+    overwrite_daq_cmake: str
 
 
 @dataclass
@@ -59,7 +55,7 @@ class DAQPackage:
     contains_oks_file: bool = False
     cmake_dependencies: list[str] = field(default_factory=list)
 
-    # Keep a reference to the original data in case mutations are necessary
+    # Keep a reference to the original data for when mutations are necessary
     _raw: dict | None = field(default=None, repr=False)
 
     @property
@@ -76,7 +72,7 @@ class DAQPackage:
 
     @property
     def version_is_tag(self) -> bool:
-        return bool(re.search('\d+.', self.version))
+        return bool(re.search('\d+.\d+', self.version))
 
     @property
     def repo_url(self) -> str:
@@ -114,12 +110,38 @@ class DAQPackage:
         self.commit = commit
         self._raw["commit"] = commit
 
-    def update_commit_hash(self, repo_path_name, fall_back_tag="develop"):
+    def resolve_ref(self, fall_back_ref: str = "develop") -> str:
+        if self.version_is_tag:
+            # Python packages don't have a "v" in the release manifest
+            # since they need to be pip-installed, but we tag them
+            # with a "v" on GitHub
+            if self.is_dunedaq_pymodule:
+                return f"v{self.version}"
+            if self.name == "daq-cmake" and self.context.overwrite_daq_cmake:
+                return self.context.overwrite_daq_cmake
+            return self.version
+
+        overwrite = self.context.overwrite_branch
+        if not overwrite:
+            return fall_back_ref
+        
+        branch_exists = run_command(
+            f"git ls-remote --exit-code --heads {self.repo_url} {overwrite}",
+            continue_on_error=True
+        )
+
+        return overwrite if branch_exists["exit_code"] == 0 else fall_back_ref
+
+    def set_ref(self, ref: str):
+        self.version = ref
+        self._raw["version"] = ref
+
+    def update_commit_hash(self, repo_path_name):
         result = run_command(f"git rev-parse --short HEAD", cwd=repo_path_name)
         self.set_commit(result['stdout'])
 
     def get_contains_oks_file(self, repo_path_name):
-        assert os.path.exists(repo_path_name), f"The {get_contains_oks_file.__name__} function is unable to find expected path {repo_path_name}"
+        assert Path(repo_path_name).is_dir(), f"The {get_contains_oks_file.__name__} function is unable to find expected path {repo_path_name}"
 
         repo_path = pathlib.PosixPath(repo_path_name)
 
@@ -157,17 +179,14 @@ class DAQPackage:
             for dep in cmake_package_list
         ]
 
-    def get_git_info(self, update_package_hash):
-        # Pymodules don't have a "v" in the manifest versions since 
-        # they need to be pip-installed, but we tag them with the 
-        # "v" on GitHub
-        version = self.version
-        if self.is_dunedaq_pymodule and self.version_is_tag:
-            version = f"v{version}"
+    def get_git_info(self, fall_back_tag="develop"):
+        ref = self.resolve_ref()
+        self.set_ref(ref)
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            run_command(f"git clone --depth 1 --branch {version} {self.repo_url} {tmpdir}")
-            if update_package_hash:
+            run_command(f"git clone --depth 1 --branch {ref} {self.repo_url} {tmpdir}")
+
+            if self.context.update_hashes:
                 self.update_commit_hash(tmpdir)
             self.get_contains_oks_file(tmpdir)
             self.get_cmake_dependencies(tmpdir)
@@ -180,12 +199,9 @@ class UmbrellaPackage:
     packages: list[DAQPackage]
     context: ReleaseContext
 
-    @property
-    def template_file(self):
-        return Path(self.template_path) / "packages" / self.name / "package.py"
-
     def render(self):
-        content = self.template_file.read_text()
+        template_file = Path(self.template_path) / "packages" / self.name / "package.py"
+        content = template_file.read_text()
         
         content = content.replace("XRELEASEX", self.context.release_name)
         content = content.replace("XTARGETX", self.context.full_umbrella)
@@ -196,16 +212,12 @@ class UmbrellaPackage:
             deps.append(f'{indent}for build_type in ["Debug", "RelWithDebInfo", "Release"]:')
             indent += "    "
             if self.name != "coredaq":
-                deps.append(
-                    f'{indent}depends_on(f"coredaq@{self.context.core_release} '
-                    f'subset={self.context.full_umbrella} build_type={{build_type}} +dev", '
-                    f'when=f"build_type={{build_type}} +dev")'
-                )
-                deps.append(
-                    f'{indent}depends_on(f"coredaq@{self.context.core_release} '
-                    f'subset={self.context.full_umbrella} build_type={{build_type}} ~dev", '
-                    f'when=f"build_type={{build_type}} ~dev")'
-                )
+                for var in ["+dev", "~dev"]:
+                    deps.append(
+                        f'{indent}depends_on(f"coredaq@{self.context.core_release} '
+                        f'subset={self.context.full_umbrella} build_type={{build_type}} {var}", '
+                        f'when=f"build_type={{build_type}} +dev")'
+                    )
 
         for package in self.packages:
             if package.name == "dbe": continue
@@ -273,7 +285,9 @@ class DAQRelease:
             release_name=self.release_name,
             core_release=self.core_release,
             full_umbrella=self.full_umbrella,
-            is_nightly_release=self.is_nightly_release,
+            update_hashes=self.update_hashes,
+            overwrite_branch=self.overwrite_branch,
+            overwrite_daq_cmake=self.overwrite_daq_cmake,
         )
 
     def _load_packages(self, subset, source=None):
@@ -297,7 +311,7 @@ class DAQRelease:
 
     def update_package_metadata(self):
         for package in self.dunedaq_packages:
-            package.get_git_info(self.update_hashes)
+            package.get_git_info()
 
     def write_release_yaml(self):
         output_file = Path(f"{self.repo_dir}/{self.release_dict['release']}.yaml")
@@ -470,8 +484,4 @@ if __name__ == "__main__":
     elif args.pyvenv_requirements:
         daq_release.generate_pyvenv_requirements()
     else:
-        if not args.release_name:
-            raise ValueError("--release-name is required for generating a release repo.")
-        if not args.template_path:
-            raise ValueError("--template-path is required for generating a release repo.")
         daq_release.generate_repo()
