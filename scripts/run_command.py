@@ -10,7 +10,8 @@ def run_command(
     cwd=None,
     check=True,
     context=None,
-    continue_on_error=False
+    continue_on_error=False,
+    verbose=False,
 ):
     """
     Run a shell command and return a dictionary with its results.
@@ -21,6 +22,7 @@ def run_command(
         check: bool - raise RuntimeError if the command fails
         context: str - optional extra message for errors
         continue_on_error: bool - if True, don't raise, just return dict
+        verbose: bool - if True, print stdout/stderr when relevant
 
     Returns:
         dict with keys: success, stdout, stderr, exit_code, command, context
@@ -50,7 +52,7 @@ def run_command(
             "stderr": result.stderr.strip(),
             "exit_code": result.returncode
         })
-        if result_dict["stdout"]:
+        if result_dict["stdout"] and verbose:
             print(result_dict["stdout"])
     except subprocess.CalledProcessError as e:
         result_dict.update({
@@ -69,8 +71,9 @@ def run_command(
             message = f"{context}\n\n{message}"
 
         if continue_on_error:
-            print(message)
-            print("Continuing despite error...")
+            if verbose:
+                print(message)
+                print("Continuing despite error...")
         else:
             raise RuntimeError(message) from e
 
