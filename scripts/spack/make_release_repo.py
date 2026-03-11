@@ -52,8 +52,13 @@ class DAQPackage:
     source: str = None
     variant: str = None
     context: ReleaseContext = None
-    contains_oks_file: bool = False
+    contains_oks_file: bool = field(default=False)
     cmake_dependencies: list[str] = field(default_factory=list)
+    ref: str = field(init=False)
+
+    def __post_init__(self):
+        self.ref = self._resolve_ref()
+        self._set_ref()
 
     # Keep a reference to the original data for when mutations are necessary
     _raw: dict | None = field(default=None, repr=False)
@@ -105,17 +110,29 @@ class DAQPackage:
             f'when=f"build_type={{build_type}}"'
         )
 
+    @property
+    def pyvenv_requirements_line(self) -> str:
+        if not self.is_pymodule:
+            return None
+
+        if not self.is_dunedaq_pymodule:
+            return f"{package.name}=={package.version}"
+
+        user = self.source.replace("github_", "")
+        ref = self.get_commit_hash() if self.ref == "develop" else self.ref
+        return f"git+https://github.com/{user}/{self.name}@{ref}#egg={self.name}"
+
     # Update commit in both the DAQPackage object and the upstream DAQRelease.release_dict
     def set_commit(self, commit: str):
         self.commit = commit
         self._raw["commit"] = commit
 
-    def resolve_ref(self, fall_back_ref: str = "develop") -> str:
+    def _resolve_ref(self, fall_back_ref: str = "develop") -> str:
         if self.version_is_tag:
             # Python packages don't have a "v" in the release manifest
             # since they need to be pip-installed, but we tag them
             # with a "v" on GitHub
-            if self.is_dunedaq_pymodule:
+            if self.is_dunedaq_pymodule and self.name != "py-moo":
                 return f"v{self.version}"
             if self.name == "daq-cmake" and self.context.overwrite_daq_cmake:
                 return self.context.overwrite_daq_cmake
@@ -132,9 +149,9 @@ class DAQPackage:
 
         return overwrite if branch_exists["exit_code"] == 0 else fall_back_ref
 
-    def set_ref(self, ref: str):
-        self.version = ref
-        self._raw["version"] = ref
+    def _set_ref(self):
+        self.version = self.ref
+        self._raw["version"] = self.ref
 
     def update_commit_hash(self, repo_path_name):
         result = run_command(f"git rev-parse --short HEAD", cwd=repo_path_name)
@@ -180,11 +197,8 @@ class DAQPackage:
         ]
 
     def get_git_info(self, fall_back_tag="develop"):
-        ref = self.resolve_ref()
-        self.set_ref(ref)
-
         with tempfile.TemporaryDirectory() as tmpdir:
-            run_command(f"git clone --depth 1 --branch {ref} {self.repo_url} {tmpdir}")
+            run_command(f"git clone --depth 1 --branch {self.ref} {self.repo_url} {tmpdir}")
 
             if self.context.update_hashes:
                 self.update_commit_hash(tmpdir)
@@ -322,7 +336,6 @@ class DAQRelease:
     def generate_repo_file(self):
         with Path(f'{self.repo_dir}/repo.yaml').open('w') as f:
             f.write(f"repo:\n  namespace: '{self.release_type}'\n")
-        return
 
     def _load_template(self, package_name):
         template_path = Path(self.template_dir) / package_name / 'package.py'
@@ -410,29 +423,13 @@ class DAQRelease:
 
     def generate_pyvenv_requirements(self, output_path):
         output_file = Path(f"{output_path}/pyvenv_requirements.txt")
-        pymodules = self.release_dict.get('pymodules')
+        pymodules = self._load_packages("pymodules")
         if not pymodules:
             raise ValueError("No pymodules found in release manifest.")
 
         with output_file.open('w') as f:
-            for i in pymodules:
-                package = DAQPackage(i)
-                print('Package?', package)
-                iname = i["name"]
-                iversion = i["version"]
-                if i["source"] == "pypi":
-                    iline = f'{iname}=={iversion}'
-                else:
-                    iuser = i["source"].replace("github_", "")
-
-                    if iversion == "develop" and not iname == "moo":
-                        (itag, ihash) = get_commit_hash(iname, iversion, iversion)
-                        iline = f"git+https://github.com/{iuser}/{iname}@{ihash}#egg={iname}"
-                    elif iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
-                    else:
-                        iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
-                f.write(iline + '\n')
+            for mod in pymodules:
+                f.write(mod.pyvenv_requirements_line + '\n')
         return
 
 
