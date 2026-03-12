@@ -18,6 +18,10 @@ on:
         type: string
         default: ''
         description: Optional path to directory containing the full pytest output.
+      artifact_name:
+        type: string
+        default: ''
+        description: Optional artifact name to download for additional metadata.
     secrets:
       slack_webhook_url:
         required: true
@@ -35,16 +39,33 @@ jobs:
       run: |
         # Outputs workflow_summary.json
         ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
+    - name: Download artifact if specified
+      if: ${{ inputs.artifact_name }}
+      uses: actions/download-artifact@v8
+      with:
+        name: ${{ inputs.artifact_name }}
     - name: Add metadata to workflow summary
       run: |
+        ARTIFACT_JSON="{}"
+        if [[ -f "${{ inputs.artifact_name}}" ]]; then
+          ARTIFACT_JSON="$(cat "${{ inputs.artifact_name }}")"
+          echo "Found additional artifact data:"
+          echo "$ARTIFACT_JSON"
+        else
+          echo "ERROR: Artifact ${{ inputs.artifact_name }} not found. Exiting..."
+          exit 123
+        fi
+
         jq --null-input \
            --arg release "${{ inputs.release_tag }}" \
            --arg caller  "${{ inputs.caller }}" \
            --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
+           --argjson artifact_data "$ARTIFACT_JSON" \
            '{
               "release"        : $release,
               "caller"         : $caller,
-              "pytest_log_dir" : $pytest_log_dir
+              "pytest_log_dir" : $pytest_log_dir,
+              "artifact_data"  : $artifact_data
             }' > additional_metadata.json
 
         jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
