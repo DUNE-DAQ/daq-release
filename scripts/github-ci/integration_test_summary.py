@@ -98,9 +98,9 @@ class IntegrationTestSummary:
             return f"All tests passed {self.which_emoji('all_passed')}"
 
         return dedent(f"""\
-            {self.totals['total_run']} total tests run. 
-            {self.totals['passed']} passed {self.which_emoji('passed')}, 
-            {self.totals['failed']} failed {self.which_emoji('failed')}, 
+            {self.totals['total_run']} total tests run.
+            {self.totals['passed']} passed {self.which_emoji('passed')},
+            {self.totals['failed']} failed {self.which_emoji('failed')},
             {self.totals['skipped']} were skipped {self.which_emoji('skipped')}, and
             {self.totals['errors']} had errors {self.which_emoji('error')} which prevented the test from completing.\n"""
         )
