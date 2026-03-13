@@ -67,8 +67,8 @@ class IntegrationTestSummary:
         'passed': ':white_check_mark:',
         'failed': ':x:',
         'skipped': ':fast_forward:',
-        'error': ':warning:'
-        'all_passed': ':tada:'
+        'error': ':warning:',
+        'all_passed': ':tada:',
     }
 
     def which_emoji(self, test_status: str) -> str:
