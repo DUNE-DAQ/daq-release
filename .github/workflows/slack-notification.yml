@@ -50,7 +50,7 @@ jobs:
         ARTIFACT_JSON="{}"
         if [[ -d artifacts ]]; then
           if compgen -G "artifacts/*.json" > /dev/null; then
-            jq -s '.' artifacts/*.json > artifacts.json
+            jq -s '.[0]' artifacts/*.json > artifacts.json
           else
             echo "ERROR: ${{ inputs.artifact_name }} does not contains any JSON files."
             echo "ERROR: Continuing with empty artifact data..."
