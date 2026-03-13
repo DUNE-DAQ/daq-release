@@ -46,25 +46,22 @@ jobs:
         name: ${{ inputs.artifact_name }}
         path: artifacts
     - name: Add metadata to workflow summary
+      if: ${{ inputs.artifact_name }}
       run: |
         ARTIFACT_JSON="{}"
-        if [[ -d artifacts ]]; then
-          if compgen -G "artifacts/*.json" > /dev/null; then
-            jq -s '.[0]' artifacts/*.json > artifacts.json
-          else
-            echo "ERROR: ${{ inputs.artifact_name }} does not contains any JSON files."
-            echo "ERROR: Continuing with empty artifact data..."
-            echo "[]" > artifacts.json
-          fi
-        
+        [[ -d artifacts ]] || echo "ERROR: There was an issue downloading ${{ inputs.artifact_name }}; exit 1"
+
+        if compgen -G "artifacts/*.json" > /dev/null; then
+          jq -s '.[0]' artifacts/*.json > artifacts.json
+        else
+          echo "WARNING: ${{ inputs.artifact_name }} does not contains any JSON files."
+          echo "WARNING: Continuing with empty artifact data..."
+          echo "[]" > artifacts.json
+        fi
+
         ARTIFACT_JSON="$(<artifacts.json)"
-      
         echo "Found additional artifact data:"
         echo "$ARTIFACT_JSON"
-        else
-          echo "ERROR: No artifacts directory found. Exiting..."
-          exit 123
-        fi
 
         jq --null-input \
            --arg release "${{ inputs.release_tag }}" \
