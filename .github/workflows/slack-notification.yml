@@ -44,15 +44,25 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: ${{ inputs.artifact_name }}
+        path: artifacts
     - name: Add metadata to workflow summary
       run: |
         ARTIFACT_JSON="{}"
-        if [[ -f "${{ inputs.artifact_name}}" ]]; then
-          ARTIFACT_JSON="$(cat "${{ inputs.artifact_name }}")"
-          echo "Found additional artifact data:"
-          echo "$ARTIFACT_JSON"
+        if [[ -d artifacts ]]; then
+          if compgen -G "artifacts/*.json" > /dev/null; then
+            jq -s '.' artifacts/*.json > artifacts.json
+          else
+            echo "ERROR: ${{ inputs.artifact_name }} does not contains any JSON files."
+            echo "ERROR: Continuing with empty artifact data..."
+            echo "[]" > artifacts.json
+          fi
+        
+        ARTIFACT_JSON="$(<artifacts.json)"
+      
+        echo "Found additional artifact data:"
+        echo "$ARTIFACT_JSON"
         else
-          echo "ERROR: Artifact ${{ inputs.artifact_name }} not found. Exiting..."
+          echo "ERROR: No artifacts directory found. Exiting..."
           exit 123
         fi
 
