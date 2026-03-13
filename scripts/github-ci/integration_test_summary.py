@@ -95,7 +95,7 @@ class IntegrationTestSummary:
             self.totals['skipped'] == 0 and
             self.totals['errors'] == 0
         ):
-            return f"All tests passed {self.which_emoji('all_passed')}"
+            return f"All tests passed {self.which_emoji('all_passed')}\n"
 
         return dedent(f"""\
             {self.totals['total_run']} total tests run.
