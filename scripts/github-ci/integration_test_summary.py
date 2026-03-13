@@ -68,6 +68,7 @@ class IntegrationTestSummary:
         'failed': ':x:',
         'skipped': ':fast_forward:',
         'error': ':warning:'
+        'all_passed': ':tada:'
     }
 
     def which_emoji(self, test_status: str) -> str:
@@ -89,6 +90,13 @@ class IntegrationTestSummary:
 
     @property
     def summary_text(self) -> str:
+        if (self.totals['passed'] > 0 and
+            self.totals['failed'] == 0 and
+            self.totals['skipped'] == 0 and
+            self.totals['errors'] == 0
+        ):
+            return f"All tests passed {self.which_emoji('all_passed')}"
+
         return dedent(f"""\
             {self.totals['total_run']} total tests run. 
             {self.totals['passed']} passed {self.which_emoji('passed')}, 
