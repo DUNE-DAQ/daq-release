@@ -18,6 +18,10 @@ on:
         type: string
         default: ''
         description: Optional path to directory containing the full pytest output.
+      artifact_name:
+        type: string
+        default: ''
+        description: Optional artifact name to download for additional metadata.
     secrets:
       slack_webhook_url:
         required: true
@@ -35,16 +39,42 @@ jobs:
       run: |
         # Outputs workflow_summary.json
         ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
+    - name: Download artifact if specified
+      if: ${{ inputs.artifact_name }}
+      uses: actions/download-artifact@v8
+      with:
+        name: ${{ inputs.artifact_name }}
+        path: artifacts
+    - name: Determine artifact data
+      if: ${{ inputs.artifact_name }}
+      run: |
+        ARTIFACT_JSON="{}"
+        [[ -d artifacts ]] || echo "ERROR: There was an issue downloading ${{ inputs.artifact_name }}; exit 1"
+
+        if compgen -G "artifacts/*.json" > /dev/null; then
+          jq -s '.[0]' artifacts/*.json > artifacts.json
+        else
+          echo "WARNING: ${{ inputs.artifact_name }} does not contains any JSON files."
+          echo "WARNING: Continuing with empty artifact data..."
+          echo "[]" > artifacts.json
+        fi
+
+        echo "Found additional artifact data:"
+        cat artifacts.json
+
     - name: Add metadata to workflow summary
       run: |
+        ARTIFACT_JSON="$(<artifacts.json)"
         jq --null-input \
            --arg release "${{ inputs.release_tag }}" \
            --arg caller  "${{ inputs.caller }}" \
            --arg pytest_log_dir "${{ inputs.integtest_log_dir }}" \
+           --argjson artifact_data "$ARTIFACT_JSON" \
            '{
               "release"        : $release,
               "caller"         : $caller,
-              "pytest_log_dir" : $pytest_log_dir
+              "pytest_log_dir" : $pytest_log_dir,
+              "artifact_data"  : $artifact_data
             }' > additional_metadata.json
 
         jq -s '.[0] + .[1]' workflow_summary.json additional_metadata.json > workflow_summary_with_metadata.json
@@ -65,4 +95,6 @@ jobs:
     - name: Cleanup files
       run: |
         rm workflow_summary.json additional_metadata.json workflow_summary_with_metadata.json slack_payload.json || true
+        rm pytest_summary.json artifacts.json || true
+        rm -rf artifacts || true
         rm -rf daq-release-slack-message

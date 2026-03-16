@@ -63,6 +63,17 @@ class PytestResult:
 class IntegrationTestSummary:
     pytest_results: list[PytestResult] = field(default_factory=list)
 
+    EMOJI_MAP = {
+        'passed': ':white_check_mark:',
+        'failed': ':x:',
+        'skipped': ':fast_forward:',
+        'error': ':warning:',
+        'all_passed': ':tada:',
+    }
+
+    def which_emoji(self, test_status: str) -> str:
+        return self.EMOJI_MAP.get(test_status, ':question:')
+
     @property
     def totals(self) -> dict[str, int]:
         passed = sum(pr.passed for pr in self.pytest_results)
@@ -76,6 +87,23 @@ class IntegrationTestSummary:
             "errors": errors,
             "total_run": passed + failed
         }
+
+    @property
+    def summary_text(self) -> str:
+        if (self.totals['passed'] > 0 and
+            self.totals['failed'] == 0 and
+            self.totals['skipped'] == 0 and
+            self.totals['errors'] == 0
+        ):
+            return f"All tests passed {self.which_emoji('all_passed')}\n"
+
+        return dedent(f"""\
+            {self.totals['total_run']} total tests run.
+            {self.totals['passed']} passed {self.which_emoji('passed')},
+            {self.totals['failed']} failed {self.which_emoji('failed')},
+            {self.totals['skipped']} skipped {self.which_emoji('skipped')}, and
+            {self.totals['errors']} had errors {self.which_emoji('error')} which prevented the test from completing.\n"""
+        )
 
     @classmethod
     def from_dict(cls, data: dict) -> IntegrationTestSummary:
@@ -107,6 +135,7 @@ class IntegrationTestSummary:
                 "errors": self.totals['errors'],
                 "total_run": self.totals['total_run'],
             },
+            "summary_text": self.summary_text,
             "pytest_results": grouped
         }
 
@@ -130,13 +159,7 @@ class IntegrationTestSummary:
             return f"| {testname} | {emoji} {result} |\n"
 
         with open(output_filename, 'w') as f:
-            summary_string = dedent(f"""\
-                {self.totals['total_run']} total tests run. 
-                {self.totals['passed']} passed {which_emoji('passed')}, 
-                {self.totals['failed']} failed {which_emoji('failed')}, 
-                {self.totals['skipped']} were skipped {which_emoji('skipped')}, and
-                {self.totals['errors']} had errors {which_emoji('error')} which prevented the test from completing.\n""")
-            f.write(summary_string)
+            f.write(self.summary_text)
 
             for idx, pytest_result in enumerate(self.pytest_results):
                 f.write(f"# {pytest_result.repo_name} {pytest_result.test_name} Results\n")

@@ -206,6 +206,7 @@ jobs:
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
+      artifact_name: nightly_extended_integtest_json
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
