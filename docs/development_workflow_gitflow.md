@@ -16,11 +16,11 @@ A team is defined at the level of [the GitHub DUNE-DAQ organization](https://git
 We have four types of branch in our workflow:
 
 * **Common branches** 
-    * The default branch of each repository. As of Sep-23-2024, the default branch for all repositories is `develop`. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs). While we do not require reviews before pushing to `develop`, developers are strongly encouraged to seek a review for any non-trivial change. An example of a trivial change would be fixing a typo in the README or bumping a version number. At a minimum it should be established that no changes to the `develop` branch should cause unit test failures (`dbt-build --unittest <repo name>`) or fail the simplest integration test (`pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py`).
+    * The default branch of each repository. As of Mar-16-2026, the default branch for all repositories is `develop`. This branch exists permanently and, shared among all developers, is not generally meant to be worked on (i.e., committed to) directly; it can only be updated via Pull Requests (PRs). While we do not require reviews before pushing to `develop`, developers are strongly encouraged to seek a review for any non-trivial change. An example of a trivial change would be fixing a typo in the README or bumping a version number. At a minimum it should be established that no changes to the `develop` branch should cause unit test failures (`dbt-build --unittest <repo name>`) or fail the simplest integration test (`pytest -v -s $DAQSYSTEMTEST_SHARE/integtest/minimal_system_quick_test.py`).
 * **Feature branches**
     * Forked off of the `develop` branch, and where developers are meant to do their work for a specific task. When work on this branch is complete, it is merged into the `develop` branch via a PR.  
 * **Release preparation branches** 
-    * These are only intended for use if changes need to be made after the initial tags are made for a particular stable release's release cycle. Note that as of May-2-2025, "stable" is the term which replaces "frozen".
+    * These are only intended for use if changes need to be made after the initial tags are made for a particular stable release's release cycle.
     * Intended to be forked off the tag, _not_ `develop`
     * Can only be updated via PRs _with at least one approval review_ before release cut-off time; again, unit tests and `minimal_system_quick_test.py` should continue to pass. 
     * After the final tag for the stable release is made, notify the Software Coordination team to merge it into `develop`, along with any special instructions (like if there shouldn't, in fact, be a merge, or if only a subset of the commits on the branch should be merged)
@@ -60,25 +60,25 @@ In this period, developers make frequent updates to the `develop` branch via pul
 4. Create a pull request to the `develop` branch and link the issue to the pull request if applicable.  How to fill the form associated with the pull request is described [here](change_tracking_process.md).
 5. Technically, the pull request can be merged without reviews. But it's highly recommended the author request reviews from other developers if the code change is significant.
 
-The active development period comes to an end when the `develop` branch is ready to be tagged. The procedure for this is described in the next section. It is _highly_ recommended that before this is done the package's codebase is checked for:
+The active development period comes to an end when the `develop` branch is ready to be tagged. The procedure for this is described in the next section. For C++ packages, it is _highly_ recommended that before this is done the package's codebase is checked for:
 
-1. [compliance with our coding guidelines](https://dune-daq-sw.readthedocs.io/en/latest/packages/styleguide/) -- in particular that `dbt-build` is run with the `--lint` option and no major issues revealed
+1. [compliance with our C++ coding guidelines](https://dune-daq-sw.readthedocs.io/en/latest/packages/styleguide/) -- in particular that `dbt-build` is run with the `--lint` option and no major issues revealed
 2. `dbt-clang-format.sh` is run on the codebase so that whitespace formatting is correct
 3. If your package is a dependency of another package, a correct set `find_dependency` calls in `cmake/<packagename>Config.cmake.in`. It's often the case that developers update dependencies in `CMakeLists.txt` without making the corresponding update(s) in `cmake/<packagename>Config.cmake.in`.
 
 Details on the first two steps above can be found in the [daq-buildtools documentation](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-buildtools/#useful-build-options). Details on the third step can be found in the [daq-cmake documentation](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/#installing-your-project-as-a-local-package).
-
 
 ### Phase 2 - Testing Period
 
 #### Before the testing period starts
 
 Developers need to bump the version of the package on the `develop` branch. Either on or before the tag collection date, the person in charge of tagging the package (typically the package maintainer, or whoever is marked as such on the tag collector spreadsheet) should do the following:
-1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet is by convention linked to [from the top of the "Instructions for setting up a development area" page of the daqconf Wiki](https://github.com/DUNE-DAQ/daqconf/wiki/Instructions-for-setting-up-a-development-software-area)
-2. Update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`.
-3. With the `CMakeLists.txt` modification committed on `develop` branch, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
-4. Push your `develop` branch and your tag to the central repo: `git push origin develop; git push --tags`
-5. Mark your package as "Tag Ready" on the tag collector spreadsheet
+1. Consult the tag collector spreadsheet to confirm they're assigned as the package tagger, and to confirm the new version number `<X.Y.Z>`. Any disagreement or confusion about either of these should be resolved before the next step. The spreadsheet can be found [here](https://docs.google.com/spreadsheets/d/1yPNWi11mpVNB_TaaNvQZuzVSt3k9S34a1sUFM_WBHfk).
+1. For C++ packages, update the `project(<package name> VERSION <X.Y.Z>)` line at the top of `CMakeLists.txt`.
+1. For Python packages, update the `version = "X.Y.Z"` line in `pyproject.toml`.
+1. With the `CMakeLists.txt`/`pyproject.toml` modification committed on `develop` branch, perform an annotated tag on `develop`: `git tag -a v<X.Y.Z> -m "<your initials>: version v<X.Y.Z>"`
+1. Push your `develop` branch and your tag to the central repo: `git push origin develop; git push --tags`
+1. Mark your package as "Tag Ready" on the tag collector spreadsheet
 
 #### During the testing period
 
