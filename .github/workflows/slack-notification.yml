@@ -95,4 +95,6 @@ jobs:
     - name: Cleanup files
       run: |
         rm workflow_summary.json additional_metadata.json workflow_summary_with_metadata.json slack_payload.json || true
+        rm pytest_summary.json artifacts.json || true
+        rm -rf artifacts || true
         rm -rf daq-release-slack-message
