@@ -193,7 +193,7 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
         pytest_log_dir = self.summary.get("pytest_log_dir", None)
         return (
             f"The pytest logs for these tests will be stored for 7 days at:\n"
-            f"`daq.fnal.gov:{pytest_log_dir}`\n"
+            f"```daq.fnal.gov:{pytest_log_dir}```\n"
             f"You can also download logs from the *Full report* link above."
         )
 
