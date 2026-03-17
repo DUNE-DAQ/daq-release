@@ -45,7 +45,7 @@ jobs:
       with:
         name: ${{ inputs.artifact_name }}
         path: artifacts
-    - name: Determine artifact data
+    - name: Extract artifact data
       if: ${{ inputs.artifact_name }}
       run: |
         ARTIFACT_JSON="{}"
@@ -64,6 +64,10 @@ jobs:
 
     - name: Add metadata to workflow summary
       run: |
+        if [[ ! -f artifacts.json ]]; then
+          echo "{}" > artifacts.json
+        fi
+
         ARTIFACT_JSON="$(<artifacts.json)"
         jq --null-input \
            --arg release "${{ inputs.release_tag }}" \
