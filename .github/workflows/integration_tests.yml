@@ -82,17 +82,17 @@ jobs:
         matrix:
 
             test_name: [
-                        #"listrev_test",
-                        #"3ru_1df_multirun_test",
-                        #"3ru_3df_multirun_test",
-                        #"example_system_test",
-                        #"fake_data_producer_test",
-                        #"long_window_readout_test",
+                        "listrev_test",
+                        "3ru_1df_multirun_test",
+                        "3ru_3df_multirun_test",
+                        "example_system_test",
+                        "fake_data_producer_test",
+                        "long_window_readout_test",
                         "minimal_system_quick_test",
-                        #"readout_type_scan_test",
-                        #"small_footprint_quick_test",
-                        #"tpreplay_test",
-                        #"tpstream_writing_test"
+                        "readout_type_scan_test",
+                        "small_footprint_quick_test",
+                        "tpreplay_test",
+                        "tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -214,8 +214,7 @@ jobs:
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
       artifact_name: nightly_integtest_json
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     runs-on: daq
