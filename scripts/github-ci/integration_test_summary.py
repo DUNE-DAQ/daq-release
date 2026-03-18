@@ -34,6 +34,9 @@ class PytestResult:
     test_name: str
     testcase_results: list[TestCaseResult] = field(default_factory=list)
 
+    def __len__(self):
+        return len(self.testcase_results)
+
     @property
     def passed(self) -> int:
         return sum(tc.status == "passed" for tc in self.testcase_results)
@@ -71,16 +74,22 @@ class IntegrationTestSummary:
         'all_passed': ':tada:',
     }
 
+    def __len__(self):
+        return len(self.pytest_results)
+
     def which_emoji(self, test_status: str) -> str:
         return self.EMOJI_MAP.get(test_status, ':question:')
 
     @property
     def totals(self) -> dict[str, int]:
+        num_tests = sum(len(test) for test in self.pytest_results)
         passed = sum(pr.passed for pr in self.pytest_results)
         failed = sum(pr.failed for pr in self.pytest_results)
         skipped = sum(pr.skipped for pr in self.pytest_results)
         errors = sum(pr.errors for pr in self.pytest_results)
         return {
+            "num_modules": len(self),
+            "num_tests": num_tests,
             "passed": passed,
             "failed": failed,
             "skipped": skipped,
@@ -95,10 +104,13 @@ class IntegrationTestSummary:
             self.totals['skipped'] == 0 and
             self.totals['errors'] == 0
         ):
-            return f"All tests passed {self.which_emoji('all_passed')}\n"
+            return (
+            f"All {self.totals['num_tests']} tests from {self.totals['num_modules']} "
+            f"modules passed {self.which_emoji('all_passed')}\n"
+            )
 
         return dedent(f"""\
-            {self.totals['total_run']} total tests run.
+            {self.totals['total_run']} total tests run across {self.totals['num_modules']} modules.
             {self.totals['passed']} passed {self.which_emoji('passed')},
             {self.totals['failed']} failed {self.which_emoji('failed')},
             {self.totals['skipped']} skipped {self.which_emoji('skipped')}, and
