@@ -46,7 +46,7 @@
           version: v1.6.1
           commit: null
         - name: daphnemodules
-          version: v3.0.1
+          version: v3.0.3
           commit: null
         - name: tdemodules
           version: v1.1.2
@@ -394,7 +394,7 @@
           version: 1.2.2
           source:  github_DUNE-DAQ
         - name: runconf-ui
-          version: 5.3.0
+          version: 5.4.0
           source:  github_DUNE-DAQ
         - name: setuptools
           version: 80.9.0
