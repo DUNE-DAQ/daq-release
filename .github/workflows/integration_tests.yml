@@ -160,7 +160,7 @@ jobs:
     needs: [make_variables, integration_tests]
     steps:
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: DUNE-DAQ/daq-release
         path: daq-release-integtest

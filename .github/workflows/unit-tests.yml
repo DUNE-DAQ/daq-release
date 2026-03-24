@@ -41,7 +41,7 @@ jobs:
         shell: bash
     steps:
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         path: daq-release-unittests
     - name: Determine release type
