@@ -36,11 +36,11 @@ jobs:
         shell: bash
     steps:
     - name: Checkout daq-release
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         path: daq-release-pytests
     - name: Checkout daq-buildtools
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: DUNE-DAQ/daq-buildtools
         path: daq-buildtools-pytests

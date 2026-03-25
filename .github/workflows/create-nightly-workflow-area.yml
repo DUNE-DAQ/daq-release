@@ -1,0 +1,46 @@
+name: Create nightly workflow areas
+
+on:
+  workflow_dispatch:
+
+jobs:
+  make_tag:
+    name: Get nightly tags
+    runs-on: ubuntu-latest
+    outputs:
+      nightly_tag: ${{ steps.get_tag.outputs.nightly_tag }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: get_tag
+        run: |
+          date_tag=$(date +%y%m%d)
+          nightly_tag="$NFD_DEV_${date_tag}_A9"
+  
+          echo "nightly_tag=$nightly_tag" >> "$GITHUB_OUTPUT"
+    
+  create_build_area:
+    name: Create build area
+    needs: make_tag
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Make build area
+      run: |
+        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+        setup_dbt latest
+        dbt-create -n ${{ needs.make_tag.outputs.nightly_tag }}
+        ln -sf ${{ needs.make_tag.outputs.nightly_tag }} latest-nightly
+        
+    - name: Checkout daq-release
+      uses: actions/checkout@v6
+      with:
+        path: nightly-daq-release
+
+    - name: Create symlink to daq-release
+      run: |
+        ln -sf nightly-daq-release latest-daq-release

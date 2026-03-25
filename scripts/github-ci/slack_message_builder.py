@@ -75,15 +75,18 @@ class MessageStrategy(ABC):
         pass
 
 class BaseMessageStrategy(MessageStrategy):
-    def build(self, output_path: str = "slack_payload.json"):
-        status = get_workflow_status(self.summary)
+    @property
+    def status(self):
+        return get_workflow_status(self.summary)
 
+    def build(self, output_path: str = "slack_payload.json"):
         builder = SlackMessageBuilder()
 
-        builder.add_block(self.build_header(status))
+        builder.add_block(self.build_header(self.status))
         builder.add_block(self.build_report_section())
+        builder.add_block(self.build_release_section())
 
-        if self.summary.get('failed_jobs'):
+        if self.status == "failure":
             builder.add_block(self.build_failed_jobs_section())
 
         # Classes which inherit from BaseMessageStrategy can override this for additional information
@@ -140,16 +143,13 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
         )
 
     def build(self, output_path: str = "slack_payload.json"):
-        status = get_workflow_status(self.summary)
-
         builder = SlackMessageBuilder()
 
-        builder.add_block(self.build_header(status))
+        builder.add_block(self.build_header(self.status))
+        builder.add_block(self.build_release_section())
 
-        if self.summary.get('failed_jobs'):
+        if self.status == "failure":
             builder.add_block(self.build_failed_jobs_section())
-        else:
-            builder.add_block(self.build_release_section())
 
         if not instructions_link_is_valid(self.instructions_link):
             builder.add_block(self.build_stale_link_section())
@@ -172,6 +172,11 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
         status = get_workflow_status(self.summary).capitalize()
         if not release_type:
             return SectionBlock(f":warning: Unable to get release name for this workflow. Someone should investigate!")
+        if self.status != "success":
+            return SectionBlock(
+                f":warning: Failed to find a {release_type} release with tag `{release}` on CVMFS.\n"
+                f"Someone should investigate!"
+            )
         return SectionBlock(
             f"A DUNE-DAQ {release_type} release with tag `{release}` has appeared on CVMFS.\n"
             f"To set up a working area based on this release, follow the instructions"
@@ -186,23 +191,30 @@ class NewReleaseMessageStrategy(BaseMessageStrategy):
         )
 
 class IntegrationTestMessageStrategy(BaseMessageStrategy):
-    def build_extra_blocks(self):
+    def _get_summary_text(self):
+        return self.summary.get("artifact_data", {}).get("summary_text", "FAILED TO GET SUMMARY")
+
+    def _get_pytest_log_text(self):
         pytest_log_dir = self.summary.get("pytest_log_dir", None)
-        extra_blocks = []
-        extra_blocks.append(self.build_release_section())
-        extra_blocks.append(
-            SectionBlock(
-                f"The pytest logs for these tests will be stored for 7 days at:\n"
-                f"`daq.fnal.gov:{pytest_log_dir}`\n"
-                f"You can also download logs from the *Full report* link above."
-            )
+        return (
+            f"The pytest logs for these tests will be stored for 7 days at:\n"
+            f"```daq.fnal.gov:{pytest_log_dir}```\n"
+            f"You can also download logs from the *Full report* link above."
         )
+
+    def build_extra_blocks(self):
+        extra_blocks = []
+        summary_text = self._get_summary_text()
+        extra_blocks.append(SectionBlock(summary_text))
+
+        pytest_log_text = self._get_pytest_log_text()
+        extra_blocks.append(SectionBlock(pytest_log_text))
+
         return extra_blocks
 
 class CodeCoverageMessageStrategy(BaseMessageStrategy):
     def build_extra_blocks(self):
         extra_blocks = []
-        extra_blocks.append(self.build_release_section())
         extra_blocks.append(
             SectionBlock(
                 f"You can download the full coverage report from the \"Artifacts\" section <{self.summary['html_url']}|here>."
@@ -213,7 +225,6 @@ class CodeCoverageMessageStrategy(BaseMessageStrategy):
 class LintingMessageStrategy(BaseMessageStrategy):
     def build_extra_blocks(self):
         extra_blocks = []
-        extra_blocks.append(self.build_release_section())
         extra_blocks.append(
             SectionBlock(
                 f"You can download the full linting report from the \"Artifacts\" section <{self.summary['html_url']}|here>."
