@@ -77,7 +77,7 @@ cd $DAQ_RELEASE_REPO
 
 spack_template_dir=spack-repos/${NAME}-repo-template
 
-cmd="python3 scripts/spack/make-release-repo.py -u \
+cmd="python3 scripts/spack/make_release_repo.py -u \
   -i ${release_yaml} \
   -t $spack_template_dir \
   -r ${RELEASE_TAG} \
@@ -223,7 +223,7 @@ if [[ "$NAME" != "coredaq" ]]; then
     spack load ${NAME}@${RELEASE_TAG} +dev || exit 9
 
     cd $DAQ_RELEASE_REPO
-    cmd="/usr/bin/python3 scripts/spack/make-release-repo.py \
+    cmd="/usr/bin/python3 scripts/spack/make_release_repo.py \
         -o ${SPACK_AREA} \
         --pyvenv-requirements \
         -i ${release_yaml}"
