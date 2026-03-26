@@ -151,7 +151,9 @@ class DAQPackage:
 
     def _set_ref(self):
         self.version = self.ref
-        self._raw["version"] = self.ref
+        # Python versions should not have a "v" in the final release manifest
+        if not self.is_dunedaq_pymodule:
+            self._raw["version"] = self.ref
 
     def update_commit_hash(self, repo_path_name):
         result = run_command(f"git rev-parse --short HEAD", cwd=repo_path_name)
@@ -335,7 +337,7 @@ class DAQRelease:
 
     def generate_repo_file(self):
         with Path(f'{self.repo_dir}/repo.yaml').open('w') as f:
-            f.write(f"repo:\n  namespace: '{self.release_type}'\n")
+            f.write(f"repo:\n  namespace: '{self.release_dict['release']}'\n")
 
     def _load_template(self, package_name):
         template_path = Path(self.template_dir) / package_name / 'package.py'
@@ -409,18 +411,6 @@ class DAQRelease:
         self.generate_umbrella_packages()
         return
 
-    def generate_pypi_manifest(self, output_file):
-        with open(output_file, 'w') as f:
-            f.write("dune_pythonmodules=(\n")
-            for i in self.rdict['pymodules']:
-                iname = i["name"]
-                iversion = i["version"]
-                isource = i["source"]
-                iline = f' "{iname}   {iversion}   {isource}"'
-                f.write(iline + '\n')
-            f.write(")\n")
-        return
-
     def generate_pyvenv_requirements(self, output_path):
         output_file = Path(f"{output_path}/pyvenv_requirements.txt")
         pymodules = self._load_packages("pymodules")
@@ -456,8 +446,6 @@ if __name__ == "__main__":
                         help="check if branch exists in repo;")
     parser.add_argument('-o', '--output-path', required=True,
                         help="path to the generated spack repo;")
-    parser.add_argument('--pypi-manifest', action='store_true',
-                        help="whether to generate file containing bash array for python modules;")
     parser.add_argument('--pyvenv-requirements', action='store_true',
                         help="whether to generate requirements file for pyvenv;")
     parser.add_argument('--core-release',
@@ -473,12 +461,11 @@ if __name__ == "__main__":
         args.release_name,
         args.update_hash,
         args.overwrite_branch, 
-        args.overwrite_daq_cmake
+        args.overwrite_daq_cmake,
+        args.core_release,
     )
 
-    if args.pypi_manifest:
-        daq_release.generate_pypi_manifest()
-    elif args.pyvenv_requirements:
+    if args.pyvenv_requirements:
         daq_release.generate_pyvenv_requirements()
     else:
         daq_release.generate_repo()
