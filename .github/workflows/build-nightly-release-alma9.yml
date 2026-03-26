@@ -73,6 +73,7 @@ jobs:
       uses: actions/checkout@v6
       with:
         path: daq-release
+        ref: amogan/issue534_modernize_make_release_repo
     
     - name: Set environment variables
       run: |
