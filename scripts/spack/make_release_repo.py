@@ -194,7 +194,7 @@ class DAQPackage:
         # Handle cases where the dependency name in CMakeLists.txt
         # doesn't match what Spack needs in its depends_on call
         self.cmake_dependencies = [
-            cmake_to_spack.get(dep, dep).lower()
+            cmake_to_spack.get(dep.lower(), dep.lower())
             for dep in cmake_package_list
         ]
 
