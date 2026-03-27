@@ -236,7 +236,7 @@ class UmbrellaPackage:
                     deps.append(
                         f'{indent}depends_on(f"coredaq@{self.context.core_release} '
                         f'subset={self.context.full_umbrella} build_type={{build_type}} {var}", '
-                        f'when=f"build_type={{build_type}} +dev")'
+                        f'when=f"build_type={{build_type}} {var}")'
                     )
 
         for package in self.packages:
