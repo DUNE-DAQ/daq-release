@@ -93,7 +93,11 @@ class DAQPackage:
 
     @property
     def spec(self) -> str:
-        spec_version = self.version if self.version_is_tag else self.context.release_name
+        spec_version = (
+            self.version 
+            if (self.version_is_tag and self.name != "daq-cmake")
+            else self.context.release_name
+        )
 
         parts = [f"{self.name}@{spec_version}"]
 
