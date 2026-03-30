@@ -120,10 +120,16 @@ class DAQPackage:
             return None
 
         if not self.is_dunedaq_pymodule:
-            return f"{package.name}=={package.version}"
+            return f"{self.name}=={self.version}"
 
         user = self.source.replace("github_", "")
-        ref = self.get_commit_hash() if self.ref == "develop" else self.ref
+        ref = self.version
+        if ref == "develop":
+            with tempfile.TemporaryDirectory() as tmpdir:
+                run_command(f"git clone --depth 1 --branch {self.ref} {self.repo_url} {tmpdir}")
+                self.update_commit_hash(tmpdir)
+                ref = self.commit
+
         return f"git+https://github.com/{user}/{self.name}@{ref}#egg={self.name}"
 
     # Update commit in both the DAQPackage object and the upstream DAQRelease.release_dict
@@ -289,6 +295,10 @@ class DAQRelease:
         return Path(self.output_path) / "spack-repo"
 
     @property
+    def pyvenv_requirements_path(self):
+        return Path(self.output_path) / "pyvenv_requirements.txt"
+
+    @property
     def package_dir(self):
         return Path(self.repo_dir) / "packages"
 
@@ -415,13 +425,14 @@ class DAQRelease:
         self.generate_umbrella_packages()
         return
 
-    def generate_pyvenv_requirements(self, output_path):
-        output_file = Path(f"{output_path}/pyvenv_requirements.txt")
+    def generate_pyvenv_requirements(self):
         pymodules = self._load_packages("pymodules")
         if not pymodules:
             raise ValueError("No pymodules found in release manifest.")
 
-        with output_file.open('w') as f:
+        self.pyvenv_requirements_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with self.pyvenv_requirements_path.open('w') as f:
             for mod in pymodules:
                 f.write(mod.pyvenv_requirements_line + '\n')
         return
