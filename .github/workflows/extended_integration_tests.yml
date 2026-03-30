@@ -221,16 +221,23 @@ jobs:
     env:
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
       DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
+      INTEGTEST_XML_PATH: ${{ needs.make_variables.outputs.integtest_output_path }}
     steps:
       - name: Remove xml files
         run: |
           rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
       - name: Remove daq-release
         run: |
+          if [[ -d "$INTEGTEST_XML_PATH" ]]; then
+            echo "Removing $INTEGTEST_XML_PATH"
+            rm -rf $INTEGTEST_XML_PATH
+          fi
+
           if [[ -d "$DAQ_RELEASE_PATH" ]]; then
             echo "Removing $DAQ_RELEASE_PATH"
             rm -rf $DAQ_RELEASE_PATH
           fi
+
           if [[ -d "$RELEASE_TAG" ]]; then
             echo "Removing $RELEASE_TAG"
             rm -rf $RELEASE_TAG
@@ -238,8 +245,10 @@ jobs:
       - name: Delete old log directories
         run: |
           old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-          echo "Removing the following directories that are more than 7 days old: $old_dirs"
-          rm -rf $old_dirs
+          if [[ -n "$old_dirs" ]]; then
+            echo "Removing the following directories that are more than 7 days old: $old_dirs"
+            rm -rf $old_dirs
+          fi
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
