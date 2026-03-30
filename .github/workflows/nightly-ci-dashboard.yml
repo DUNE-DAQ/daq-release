@@ -156,7 +156,7 @@ jobs:
         path: ${{ github.workspace }}/daq-release-ci-dashboard/scripts/github-ci/ci-dashboard/site
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5
 
   cleanup_test_area:
     runs-on: daq
