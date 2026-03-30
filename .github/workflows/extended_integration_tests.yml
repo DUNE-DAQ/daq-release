@@ -140,18 +140,38 @@ jobs:
         echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
         echo "integtest_log_dir: $integtest_log_dir"
 
-    - name:
+    - name: Move log files
       id: move_logs
       run: |
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-*/) $PERSISTENT_LOG_DIR/
+        mkdir -p "$PERSISTENT_LOG_DIR"
 
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
-          exit 2
-        fi
+        max_kb=10000000
+        total_log_dir_size=0
+
+        for dir in /tmp/pytest-of-dunedaq/pytest-*; do
+          [[ -d "$dir" ]] || continue
+          dir_size_kb=$(du -sk $dir | awk '{print $1}')
+          echo "Size of $dir: $(du -sh $dir | awk '{print $1}')"
+
+          total_log_dir_size=$(( total_log_dir_size + dir_size_kb))
+          if (( total_log_dir_size > max_kb )); then
+            echo "ERROR: $dir of size $dir_size_kb would make $PERSISTENT_LOG_DIR exceed $max_kb. Exiting..." >&2
+            exit 2
+          fi
+
+          rsync -a --no-links --prune-empty-dirs \
+            --chmod=D755,F644 \
+            "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
+        done
+
+        #cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-*/) $PERSISTENT_LOG_DIR/
+
+        #chmod -R 755 $PERSISTENT_LOG_DIR
+        #if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
+        #  echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
+        #  rm -rf $PERSISTENT_LOG_DIR
+        #  exit 2
+        #fi
 
   parse_and_upload_results:
     runs-on: daq
