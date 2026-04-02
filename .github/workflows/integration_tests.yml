@@ -142,6 +142,27 @@ jobs:
         pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
 
+    - name: Copy log to persistent area
+      env:
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+      run: |
+        max_kb=10000000
+        total_log_dir_size=0
+        pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
+
+        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}; exit 1" }
+        dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
+        echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
+
+        if (( dir_size_kb > max_kb )); then
+          echo "ERROR: ${{ matrix.test_name }} log directory $pytest_current_dir of size $dir_size_kb would make $PERSISTENT_LOG_DIR exceed $max_kb. Exiting..." >&2
+          exit 2
+        fi
+
+        rsync -a --no-links --prune-empty-dirs \
+          --chmod=D755,F644 \
+          "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
+
         mkdir -p $PERSISTENT_LOG_DIR
         cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
 
