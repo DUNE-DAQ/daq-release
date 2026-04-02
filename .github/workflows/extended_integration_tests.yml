@@ -148,8 +148,9 @@ jobs:
         max_kb=10000000
         total_log_dir_size=0
 
-        for dir in /tmp/pytest-of-dunedaq/pytest-*; do
-          [[ -d "$dir" ]] || continue
+        recent_pytest_dirs=$(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120)
+        for dir in "$recent_pytest_dirs"; do
+          [[ -d "$dir" && "$dir" != "pytest-current" ]] || continue
           dir_size_kb=$(du -sk $dir | awk '{print $1}')
           echo "Size of $dir: $(du -sh $dir | awk '{print $1}')"
 
