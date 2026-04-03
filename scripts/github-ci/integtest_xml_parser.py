@@ -5,24 +5,40 @@ import argparse
 import html
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import Optional
 from integration_test_summary import IntegrationTestSummary, PytestResult, TestCaseResult
 
 class JUnitXMLParser:
-    def __init__(self, input_directory: str='', input_file: str=''):
-        self.input_directory = Path(input_directory) if Path(input_directory).is_dir() else None
-        self.input_file = Path(input_file) if Path(input_file).is_file() else None
+    def __init__(self, input_directory: Optional[str]=None, input_file: Optional[str]=None):
+        self.input_directory: Optional[Path] = None
+        self.input_file: Optional[Path] = None
         self.summary = IntegrationTestSummary()
 
-        if not self.input_directory and not self.input_file:
-            raise FileNotFoundError("No valid input file or directory specified.")
+        if input_directory:
+            self.input_directory = Path(input_directory)
+            if not self.input_directory.is_dir():
+                raise FileNotFoundError(f"Input directory {input_directory} doesn't exist or isn't a directory.")
+
+        if input_file:
+            self.input_file = Path(input_file)
+            if not self.input_file.is_file():
+                raise FileNotFoundError(f"Input file {input_file} doesn't exist or isn't a file.")
+
+        if self.input_file and self.input_directory:
+            raise ValueError("Specify one of --input-directory or --input-file, not both.")
+
+        if not input_file and not input_directory:
+            # Before throwing, write empty test results so that downstream workflows don't fail
+            self.summary.to_json()
+            raise ValueError("No valid input file or directory specified.")
 
     def get_xml_files(self, pattern="*.xml"):
-        xml_files = self.input_directory.rglob(pattern)
+        xml_files = list(self.input_directory.rglob(pattern))
         if not xml_files:
             raise FileNotFoundError(f"Error: No xml files found in {self.input_directory}.")
         return xml_files
 
-    # Junit xml file names should be structured as <package_name>_<pytest_name>_results.xml
+    # JUnit xml file names should be structured as <package_name>_<pytest_name>_results.xml
     def get_package_name(self, file) -> str:
         return file.stem.split('_')[0]
 
@@ -65,7 +81,7 @@ class JUnitXMLParser:
         self.summary.pytest_results.append(pytest_result)
 
 def main():
-    parser = argparse.ArgumentParser(description="Parse a JUnit XML file and extract test case results.")
+    parser = argparse.ArgumentParser(description="Parse JUnit XML file(s) and extract test case results.")
     parser.add_argument("--input-directory", "-d", type=str, default='',
                         help="Path to the directory containing junit xml files.")
     parser.add_argument("--input-file", "-i", type=str, default='',
@@ -73,17 +89,18 @@ def main():
 
     args = parser.parse_args()
 
-    if len(sys.argv) == 1:
-        parser.print_usage()
-        exit(1)
-
     integtest_parser = JUnitXMLParser(
         input_directory=args.input_directory,
         input_file=args.input_file,
     )
 
     if integtest_parser.input_directory:
-        xml_files = integtest_parser.get_xml_files()
+        try:
+            xml_files = integtest_parser.get_xml_files()
+        except FileNotFoundError:
+            print(f'WARNING: No JUnit XML files found in {integtest_parser.input_directory}; '
+                  f'test results will be empty.')
+            xml_files = []
         for file in xml_files:
             integtest_parser.parse_xml_file(file)
 
