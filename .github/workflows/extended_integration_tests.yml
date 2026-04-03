@@ -152,10 +152,10 @@ jobs:
         echo "Traversing pytest directories newer than 2 hours old: ${recent_pytest_dirs[@]}"
         for dir in "$recent_pytest_dirs"; do
           if [[ ! -d "$dir" ]]; then
-            echo "$dir" is not a directory. Continuing..."
+            echo "$dir is not a directory. Continuing..."
             continue
           fi
-          if [[ "$(basename $dir)" != "pytest-current" ]]; then
+          if [[ "$(basename $dir)" == "pytest-current" ]]; then
             echo "Skipping pytest-current..."
             continue
           fi
@@ -170,7 +170,6 @@ jobs:
 
           rsync -a --no-links --prune-empty-dirs \
             --chmod=D755,F644 \
-            --exclude='pytest-current/' \
             "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
         done
 
