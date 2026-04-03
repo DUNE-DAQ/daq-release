@@ -172,11 +172,8 @@ jobs:
     needs: [make_variables, extended_integration_tests]
     steps:
     - name: Generate summary tables
-      env:
-        RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-        DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
       run: |
-        cd $DAQ_RELEASE_PATH/scripts/github-ci/
+        cd ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
