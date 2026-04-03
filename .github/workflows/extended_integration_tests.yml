@@ -119,10 +119,10 @@ jobs:
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
@@ -151,8 +151,6 @@ jobs:
         mapfile -t recent_pytest_dirs < <(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120 -type d)
         echo "Traversing pytest directories newer than 2 hours old: ${recent_pytest_dirs[@]}"
         for dir in "${recent_pytest_dirs[@]}"; do
-          echo "Contents of $dir:"
-          ls "$dir"
           if [[ ! -d "$dir" ]]; then
             echo "$dir is not a directory. Continuing..."
             continue
@@ -170,7 +168,7 @@ jobs:
             exit 2
           fi
 
-          rsync -av --no-links --prune-empty-dirs \
+          rsync -a --no-links --prune-empty-dirs \
             --chmod=D755,F644 \
             "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
         done
