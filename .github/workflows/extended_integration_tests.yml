@@ -82,6 +82,7 @@ jobs:
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+      logs_exist: ${{ steps.integtests.outputs.logs_exist }}
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
@@ -135,12 +136,32 @@ jobs:
         source env.sh
         dbt-workarea-env
         dbt-build --integtest | tee integtest_full_output.log
-        # Log directory is the last non-empty line of output
-        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
-        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
-        echo "integtest_log_dir: $integtest_log_dir"
 
+    - name: Check and set integration test log directory
+      if: always()
+      id: integtest_logs
+      run: |
+        # Log directory is the last non-empty line of output
+        logs_exist="false"
+        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
+
+        if [[ ! -d $integtest_log_dir ]]; then 
+          echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
+          exit 2
+        fi
+        if [[ -z $(ls -A $integtest_log_dir) ]]; then
+          echo "ERROR: The log directory $integtest_log_dir is empty."
+          exit 3
+        fi
+
+        echo "integtest_log_dir: $integtest_log_dir"
+        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
+
+        logs_exist="true"
+        echo "logs_exist=${logs_exist}"
+        echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
     - name:
+      if: ${{ steps.integtest_logs.conclusion == 'success' }}
       id: move_logs
       run: |
         mkdir -p $PERSISTENT_LOG_DIR
@@ -158,13 +179,18 @@ jobs:
     if: always()
     needs: [make_variables, extended_integration_tests]
     steps:
-    - name: Generate summary tables
+    - name: Generate summary files
       env:
         RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
         DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
       run: |
+        args=()
+        if [[ -n "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}" ]]; then
+          args+=(--input-directory "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}")
+        fi
+
         cd $DAQ_RELEASE_PATH/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
+        python integtest_xml_parser.py "${args[@]}"
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v7
@@ -186,13 +212,10 @@ jobs:
     if: success() || failure()
     steps:
     - name: Upload logs as artifact
-      env:
-        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v7
       with:
-        name: pytest-logs-extended-${{ env.TIMESTAMP }}
-        path: ${{ env.PERSISTENT_LOG_DIR }}
+        name: pytest-logs-extended-${{ needs.make_variables.outputs.timestamp }}
+        path: ${{ needs.make_variables.outputs.persistent_log_dir }}
     - name: Delete old log directories
       run: |
         old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
