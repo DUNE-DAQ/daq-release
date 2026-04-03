@@ -137,7 +137,6 @@ jobs:
         dbt-workarea-env
         dbt-build --integtest | tee integtest_full_output.log
 
-<<<<<<< HEAD
     - name: Check and set integration test log directory
       if: always()
       id: integtest_logs
@@ -161,11 +160,8 @@ jobs:
         logs_exist="true"
         echo "logs_exist=${logs_exist}"
         echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
-    - name:
-      if: ${{ steps.integtest_logs.conclusion == 'success' }}
-=======
     - name: Store log files
->>>>>>> 41fb5feb6035c11ae633e3f132f941ae0ae0cc97
+      if: ${{ steps.integtest_logs.conclusion == 'success' }}
       id: move_logs
       run: |
         mkdir -p "$PERSISTENT_LOG_DIR"
@@ -231,16 +227,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: pytest-logs-extended-${{ needs.make_variables.outputs.timestamp }}
-<<<<<<< HEAD
-        path: ${{ needs.make_variables.outputs.persistent_log_dir }}
-    - name: Delete old log directories
-      run: |
-        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-        echo "Removing the following directories that are more than 7 days old: $old_dirs"
-        rm -rf $old_dirs
-=======
         path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
->>>>>>> 41fb5feb6035c11ae633e3f132f941ae0ae0cc97
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
