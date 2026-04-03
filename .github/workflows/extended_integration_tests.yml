@@ -151,6 +151,8 @@ jobs:
         recent_pytest_dirs=$(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120)
         echo "Traversing pytest directories newer than 2 hours old: ${recent_pytest_dirs[@]}"
         for dir in "$recent_pytest_dirs"; do
+          echo "Contents of $dir:"
+          ls "$dir"
           if [[ ! -d "$dir" ]]; then
             echo "$dir is not a directory. Continuing..."
             continue
@@ -168,7 +170,7 @@ jobs:
             exit 2
           fi
 
-          rsync -a --no-links --prune-empty-dirs \
+          rsync -av --no-links --prune-empty-dirs \
             --chmod=D755,F644 \
             "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
         done
