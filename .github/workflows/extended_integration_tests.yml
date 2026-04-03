@@ -149,8 +149,16 @@ jobs:
         total_log_dir_size=0
 
         recent_pytest_dirs=$(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120)
+        echo "Traversing pytest directories newer than 2 hours old: ${recent_pytest_dirs[@]}"
         for dir in "$recent_pytest_dirs"; do
-          [[ -d "$dir" && "$dir" != "pytest-current" ]] || continue
+          if [[ ! -d "$dir" ]]; then
+            echo "$dir" is not a directory. Continuing..."
+            continue
+          fi
+          if [[ "$(basename $dir)" != "pytest-current" ]]; then
+            echo "Skipping pytest-current..."
+            continue
+          fi
           dir_size_kb=$(du -sk $dir | awk '{print $1}')
           echo "Size of $dir: $(du -sh $dir | awk '{print $1}')"
 
