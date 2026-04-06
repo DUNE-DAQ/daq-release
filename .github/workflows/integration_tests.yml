@@ -213,18 +213,10 @@ jobs:
     if: success() || failure()
     steps:
     - name: Upload logs as artifact
-      env:
-        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v7
       with:
-        name: pytest-logs-${{ env.TIMESTAMP }}
-        path: ${{ env.PERSISTENT_LOG_DIR }}
-    - name: Delete old log directories
-      run: |
-        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-        echo "Removing the following directories that are more than 7 days old: $old_dirs"
-        rm -rf $old_dirs
+        name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
+        path: ${{ needs.make_variables.outputs.persistent_log_dir }}
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
@@ -242,15 +234,14 @@ jobs:
     if: always()
     needs: [make_variables, parse_and_upload_results, send_slack_message]
     steps:
-      - name: Remove xml files
-        env:
-          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+      - name: Remove xml files and daq-release
         run: |
-          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
-      - name: Remove daq-release
+          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }} ${{ github.workspace }}/daq-release-integtest/
+      - name: Delete old log directories
         run: |
-          rm -rf ${{ github.workspace }}/daq-release-integtest/
+          old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+          echo "Removing the following directories that are more than 7 days old: $old_dirs"
+          rm -rf $old_dirs
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
