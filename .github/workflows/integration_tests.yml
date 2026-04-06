@@ -141,6 +141,7 @@ jobs:
         pytest_retval=0
         pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
+        test $pytest_retval == 0 || false
 
     - name: Copy log to persistent area
       env:
@@ -163,8 +164,6 @@ jobs:
         rsync -a --no-links --prune-empty-dirs \
           --chmod=D755,F644 \
           "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
-
-        test $pytest_retval == 0 || false
 
   parse_and_upload_results:
     runs-on: daq
