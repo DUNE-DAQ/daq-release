@@ -150,7 +150,7 @@ jobs:
         total_log_dir_size=0
         pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
 
-        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1 }
+        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1; }
         dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
         echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
 
