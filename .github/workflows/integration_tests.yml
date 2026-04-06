@@ -150,7 +150,7 @@ jobs:
         total_log_dir_size=0
         pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
 
-        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}; exit 1" }
+        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1 }
         dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
         echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
 
@@ -162,16 +162,6 @@ jobs:
         rsync -a --no-links --prune-empty-dirs \
           --chmod=D755,F644 \
           "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
-
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
-
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
-          exit 2
-        fi
 
         test $pytest_retval == 0 || false
 
