@@ -159,6 +159,7 @@ jobs:
           exit 2
         fi
 
+        mkdir -p $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
         rsync -a --no-links --prune-empty-dirs \
           --chmod=D755,F644 \
           "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
