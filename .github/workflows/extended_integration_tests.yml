@@ -140,18 +140,38 @@ jobs:
         echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
         echo "integtest_log_dir: $integtest_log_dir"
 
-    - name:
+    - name: Store log files
       id: move_logs
       run: |
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-*/) $PERSISTENT_LOG_DIR/
+        mkdir -p "$PERSISTENT_LOG_DIR"
 
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
-          exit 2
-        fi
+        max_kb=10000000
+        total_log_dir_size=0
+
+        mapfile -t recent_pytest_dirs < <(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120 -type d)
+        echo "Traversing pytest directories less than 2 hours old: ${recent_pytest_dirs[@]}"
+        for dir in "${recent_pytest_dirs[@]}"; do
+          if [[ ! -d "$dir" ]]; then
+            echo "$dir is not a directory. Continuing..."
+            continue
+          fi
+          if [[ "$(basename $dir)" == "pytest-current" ]]; then
+            echo "Skipping pytest-current..."
+            continue
+          fi
+          dir_size_kb=$(du -sk $dir | awk '{print $1}')
+          echo "Size of $dir: $(du -sh $dir | awk '{print $1}')"
+
+          total_log_dir_size=$(( total_log_dir_size + dir_size_kb))
+          if (( total_log_dir_size > max_kb )); then
+            echo "ERROR: $dir of size $dir_size_kb would make $PERSISTENT_LOG_DIR exceed $max_kb. Exiting..." >&2
+            exit 2
+          fi
+
+          rsync -a --no-links --prune-empty-dirs \
+            --chmod=D755,F644 \
+            "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
+        done
 
   parse_and_upload_results:
     runs-on: daq
@@ -159,11 +179,8 @@ jobs:
     needs: [make_variables, extended_integration_tests]
     steps:
     - name: Generate summary tables
-      env:
-        RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-        DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
       run: |
-        cd $DAQ_RELEASE_PATH/scripts/github-ci/
+        cd ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/
         python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
@@ -179,29 +196,21 @@ jobs:
         name: nightly_extended_integtest_json
         path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary.json
 
-  store_and_upload_logs:
+  upload_logs:
     runs-on: daq
     timeout-minutes: 5
     needs: [make_variables, extended_integration_tests]
     if: success() || failure()
     steps:
     - name: Upload logs as artifact
-      env:
-        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v7
       with:
-        name: pytest-logs-extended-${{ env.TIMESTAMP }}
-        path: ${{ env.PERSISTENT_LOG_DIR }}
-    - name: Delete old log directories
-      run: |
-        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-        echo "Removing the following directories that are more than 7 days old: $old_dirs"
-        rm -rf $old_dirs
+        name: pytest-logs-extended-${{ needs.make_variables.outputs.timestamp }}
+        path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
-    needs: [make_variables, extended_integration_tests, store_and_upload_logs]
+    needs: [make_variables, extended_integration_tests, upload_logs]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
@@ -217,19 +226,33 @@ jobs:
     env:
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
       DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
+      INTEGTEST_XML_PATH: ${{ needs.make_variables.outputs.integtest_output_path }}
     steps:
       - name: Remove xml files
         run: |
           rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
       - name: Remove daq-release
         run: |
+          if [[ -d "$INTEGTEST_XML_PATH" ]]; then
+            echo "Removing $INTEGTEST_XML_PATH"
+            rm -rf $INTEGTEST_XML_PATH
+          fi
+
           if [[ -d "$DAQ_RELEASE_PATH" ]]; then
             echo "Removing $DAQ_RELEASE_PATH"
             rm -rf $DAQ_RELEASE_PATH
           fi
+
           if [[ -d "$RELEASE_TAG" ]]; then
             echo "Removing $RELEASE_TAG"
             rm -rf $RELEASE_TAG
+          fi
+      - name: Delete old log directories
+        run: |
+          old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+          if [[ -n "$old_dirs" ]]; then
+            echo "Removing the following directories that are more than 7 days old: $old_dirs"
+            rm -rf $old_dirs
           fi
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
