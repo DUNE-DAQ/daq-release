@@ -149,7 +149,7 @@ jobs:
         total_log_dir_size=0
 
         mapfile -t recent_pytest_dirs < <(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120 -type d)
-        echo "Traversing pytest directories newer than 2 hours old: ${recent_pytest_dirs[@]}"
+        echo "Traversing pytest directories less than 2 hours old: ${recent_pytest_dirs[@]}"
         for dir in "${recent_pytest_dirs[@]}"; do
           if [[ ! -d "$dir" ]]; then
             echo "$dir is not a directory. Continuing..."
