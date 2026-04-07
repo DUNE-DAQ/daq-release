@@ -141,18 +141,29 @@ jobs:
         pytest_retval=0
         pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
                 $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
+        test $pytest_retval == 0 || false
 
-        mkdir -p $PERSISTENT_LOG_DIR
-        cp -rL $(readlink -f /tmp/pytest-of-dunedaq/pytest-current/) $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+    - name: Copy log to persistent area
+      env:
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+      run: |
+        max_kb=10000000
+        total_log_dir_size=0
+        pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
 
-        chmod -R 755 $PERSISTENT_LOG_DIR
-        if [[ $(du -sk $PERSISTENT_LOG_DIR | awk '{print $1}') -gt 10000000 ]]; then
-          echo "The log directory $PERSISTENT_LOG_DIR has exceeded 10 GB. Deleting and exiting..."
-          rm -rf $PERSISTENT_LOG_DIR
+        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1; }
+        dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
+        echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
+
+        if (( dir_size_kb > max_kb )); then
+          echo "ERROR: ${{ matrix.test_name }} log directory $pytest_current_dir of size $dir_size_kb would make $PERSISTENT_LOG_DIR exceed $max_kb. Exiting..." >&2
           exit 2
         fi
 
-        test $pytest_retval == 0 || false
+        mkdir -p $PERSISTENT_LOG_DIR/${{ matrix.test_name }}
+        rsync -a --no-links --prune-empty-dirs \
+          --chmod=D755,F644 \
+          "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
 
   parse_and_upload_results:
     runs-on: daq
@@ -192,18 +203,10 @@ jobs:
     if: success() || failure()
     steps:
     - name: Upload logs as artifact
-      env:
-        TIMESTAMP: ${{needs.make_variables.outputs.timestamp}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       uses: actions/upload-artifact@v7
       with:
-        name: pytest-logs-${{ env.TIMESTAMP }}
-        path: ${{ env.PERSISTENT_LOG_DIR }}
-    - name: Delete old log directories
-      run: |
-        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-        echo "Removing the following directories that are more than 7 days old: $old_dirs"
-        rm -rf $old_dirs
+        name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
+        path: ${{ needs.make_variables.outputs.persistent_log_dir }}
 
   send_slack_message:
     if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
@@ -221,15 +224,14 @@ jobs:
     if: always()
     needs: [make_variables, parse_and_upload_results, send_slack_message]
     steps:
-      - name: Remove xml files
-        env:
-          RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
+      - name: Remove xml files and daq-release
         run: |
-          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-          #echo "NOT removing ${{ needs.make_variables.outputs.integtest_output_path }} for now"
-      - name: Remove daq-release
+          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }} ${{ github.workspace }}/daq-release-integtest/
+      - name: Delete old log directories
         run: |
-          rm -rf ${{ github.workspace }}/daq-release-integtest/
+          old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+          echo "Removing the following directories that are more than 7 days old: $old_dirs"
+          rm -rf $old_dirs
 
   # Integration tests can sometimes collide with stale processes, leading to timeout
   cleanup_stale_gunicorn_processes:
