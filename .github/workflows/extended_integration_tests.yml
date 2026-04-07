@@ -78,7 +78,7 @@ jobs:
   extended_integration_tests:
     name: extended_integration_tests
     runs-on: daq
-    timeout-minutes: 1
+    timeout-minutes: 90
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
@@ -244,8 +244,7 @@ jobs:
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
       artifact_name: nightly_extended_integtest_json
     secrets: 
-      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:
     runs-on: daq
