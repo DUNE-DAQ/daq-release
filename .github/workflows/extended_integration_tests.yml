@@ -145,7 +145,7 @@ jobs:
         logs_exist="false"
         integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
 
-        if [[ ! -d $integtest_log_dir ]]; then 
+        if [[ ! -d $integtest_log_dir ]]; then
           echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
           exit 2
         fi
