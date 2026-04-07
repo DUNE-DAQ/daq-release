@@ -235,7 +235,7 @@ jobs:
         path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
 
   send_slack_message:
-    if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
+    if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
     needs: [make_variables, extended_integration_tests]
     uses: ./.github/workflows/slack-notification.yml
     with:
