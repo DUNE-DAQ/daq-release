@@ -81,7 +81,7 @@ jobs:
     timeout-minutes: 90
     needs: make_variables
     outputs:
-      integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+      integtest_log_dir: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
       logs_exist: ${{ steps.integtests.outputs.logs_exist }}
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
