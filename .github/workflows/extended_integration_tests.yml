@@ -243,7 +243,8 @@ jobs:
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
       artifact_name: nightly_extended_integtest_json
     secrets: 
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_TEST_WEBHOOK }}
 
   cleanup_files:
     runs-on: daq
