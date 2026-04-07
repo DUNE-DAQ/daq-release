@@ -196,7 +196,7 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
 
     def _get_pytest_log_text(self):
         pytest_log_dir = self.summary.get("pytest_log_dir", None)
-        if pytest_log_dir:
+        if self.status != "cancelled":
             return (
                 f"The pytest logs for these tests will be stored for 7 days at:\n"
                 f"```daq.fnal.gov:{pytest_log_dir}```\n"
