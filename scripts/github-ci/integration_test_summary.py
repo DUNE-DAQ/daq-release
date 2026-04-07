@@ -116,8 +116,7 @@ class IntegrationTestSummary:
             self.totals['errors'] == 0
         ):
             return (
-            f"{self.which_emoji('no_tests')} No test results were collected "
-            f"from {self.totals['num_modules']} modules. "
+            f"{self.which_emoji('no_tests')} No test results were collected. "
             f"This may indicate that the tests were cancelled or timed out.\n"
             )
 
