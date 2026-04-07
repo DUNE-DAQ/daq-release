@@ -145,6 +145,9 @@ jobs:
         logs_exist="false"
         integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
 
+        echo "integtest_log_dir: $integtest_log_dir"
+        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
+
         if [[ ! -d $integtest_log_dir ]]; then
           echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
           exit 2
@@ -154,14 +157,11 @@ jobs:
           exit 3
         fi
 
-        echo "integtest_log_dir: $integtest_log_dir"
-        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
-
         logs_exist="true"
         echo "logs_exist=${logs_exist}"
         echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
     - name: Store log files
-      if: ${{ steps.integtest_logs.conclusion == 'success' }}
+      if: ${{ steps.integtest_logs.outputs.logs_exist == 'true' }}
       id: move_logs
       run: |
         mkdir -p "$PERSISTENT_LOG_DIR"
