@@ -200,6 +200,7 @@ jobs:
     needs: [make_variables, extended_integration_tests]
     steps:
     - name: Generate summary tables
+      continue-on-error: true
       run: |
         args=()
         if [[ -n "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}" ]]; then
@@ -236,7 +237,7 @@ jobs:
 
   send_slack_message:
     if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
-    needs: [make_variables, extended_integration_tests]
+    needs: [make_variables, extended_integration_tests, parse_and_upload_results]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}

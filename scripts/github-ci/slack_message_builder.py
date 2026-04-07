@@ -196,11 +196,12 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
 
     def _get_pytest_log_text(self):
         pytest_log_dir = self.summary.get("pytest_log_dir", None)
-        return (
-            f"The pytest logs for these tests will be stored for 7 days at:\n"
-            f"```daq.fnal.gov:{pytest_log_dir}```\n"
-            f"You can also download logs from the *Full report* link above."
-        )
+        if pytest_log_dir:
+            return (
+                f"The pytest logs for these tests will be stored for 7 days at:\n"
+                f"```daq.fnal.gov:{pytest_log_dir}```\n"
+                f"You can also download logs from the *Full report* link above."
+            )
 
     def build_extra_blocks(self):
         extra_blocks = []
