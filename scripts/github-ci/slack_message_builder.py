@@ -196,20 +196,20 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
 
     def _get_pytest_log_text(self):
         pytest_log_dir = self.summary.get("pytest_log_dir", None)
-        if self.status != "cancelled":
-            return (
-                f"The pytest logs for these tests will be stored for 7 days at:\n"
-                f"```daq.fnal.gov:{pytest_log_dir}```\n"
-                f"You can also download logs from the *Full report* link above."
-            )
+        return (
+            f"The pytest logs for these tests will be stored for 7 days at:\n"
+            f"```daq.fnal.gov:{pytest_log_dir}```\n"
+            f"You can also download logs from the *Full report* link above."
+        )
 
     def build_extra_blocks(self):
         extra_blocks = []
         summary_text = self._get_summary_text()
         extra_blocks.append(SectionBlock(summary_text))
 
-        pytest_log_text = self._get_pytest_log_text()
-        extra_blocks.append(SectionBlock(pytest_log_text))
+        if self.status != "cancelled":
+            pytest_log_text = self._get_pytest_log_text()
+            extra_blocks.append(SectionBlock(pytest_log_text))
 
         return extra_blocks
 
