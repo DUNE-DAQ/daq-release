@@ -81,7 +81,8 @@ jobs:
     timeout-minutes: 90
     needs: make_variables
     outputs:
-      integtest_log_dir: ${{ steps.integtests.outputs.integtest_log_dir }}
+      integtest_log_dir: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
+      logs_exist: ${{ steps.integtests.outputs.logs_exist }}
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
@@ -135,12 +136,32 @@ jobs:
         source env.sh
         dbt-workarea-env
         dbt-build --integtest | tee integtest_full_output.log
-        # Log directory is the last non-empty line of output
-        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
-        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
-        echo "integtest_log_dir: $integtest_log_dir"
 
+    - name: Check and set integration test log directory
+      if: always()
+      id: integtest_logs
+      run: |
+        # Log directory is the last non-empty line of output
+        logs_exist="false"
+        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
+
+        echo "integtest_log_dir: $integtest_log_dir"
+        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
+
+        if [[ ! -d $integtest_log_dir ]]; then
+          echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
+          exit 2
+        fi
+        if [[ -z $(ls -A $integtest_log_dir) ]]; then
+          echo "ERROR: The log directory $integtest_log_dir is empty."
+          exit 3
+        fi
+
+        logs_exist="true"
+        echo "logs_exist=${logs_exist}"
+        echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
     - name: Store log files
+      if: ${{ steps.integtest_logs.outputs.logs_exist == 'true' }}
       id: move_logs
       run: |
         mkdir -p "$PERSISTENT_LOG_DIR"
@@ -179,14 +200,20 @@ jobs:
     needs: [make_variables, extended_integration_tests]
     steps:
     - name: Generate summary tables
+      continue-on-error: true
       run: |
+        args=()
+        if [[ -n "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}" ]]; then
+          args+=(--input-directory "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}")
+        fi
+
         cd ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/
-        python integtest_xml_parser.py --input-directory ${{ needs.extended_integration_tests.outputs.integtest_log_dir }}
+        python integtest_xml_parser.py "${args[@]}"
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v7
       with:
-        if-no-files-found: error
+        if-no-files-found: warn
         name: nightly_extended_integtest_summary
         path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary_table.md
     - name: Upload json summary as artifact
@@ -209,14 +236,14 @@ jobs:
         path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
 
   send_slack_message:
-    if: (success() || failure()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
-    needs: [make_variables, extended_integration_tests, upload_logs]
+    if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
+    needs: [make_variables, extended_integration_tests, parse_and_upload_results]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
       integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
       artifact_name: nightly_extended_integtest_json
-    secrets: 
+    secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   cleanup_files:

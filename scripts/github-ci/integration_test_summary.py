@@ -72,6 +72,7 @@ class IntegrationTestSummary:
         'skipped': ':fast_forward:',
         'error': ':warning:',
         'all_passed': ':tada:',
+        'no_tests': ':no_entry_sign:',
     }
 
     def __len__(self):
@@ -107,6 +108,16 @@ class IntegrationTestSummary:
             return (
             f"All {self.totals['num_tests']} tests from {self.totals['num_modules']} "
             f"modules passed {self.which_emoji('all_passed')}\n"
+            )
+
+        if (self.totals['passed'] == 0 and
+            self.totals['failed'] == 0 and
+            self.totals['skipped'] == 0 and
+            self.totals['errors'] == 0
+        ):
+            return (
+            f"{self.which_emoji('no_tests')} No test results were collected. "
+            f"This may indicate that the tests were cancelled or timed out.\n"
             )
 
         return dedent(f"""\

@@ -207,8 +207,9 @@ class IntegrationTestMessageStrategy(BaseMessageStrategy):
         summary_text = self._get_summary_text()
         extra_blocks.append(SectionBlock(summary_text))
 
-        pytest_log_text = self._get_pytest_log_text()
-        extra_blocks.append(SectionBlock(pytest_log_text))
+        if self.status != "cancelled":
+            pytest_log_text = self._get_pytest_log_text()
+            extra_blocks.append(SectionBlock(pytest_log_text))
 
         return extra_blocks
 
