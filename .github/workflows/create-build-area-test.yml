@@ -19,17 +19,19 @@ on:
 jobs:
   build_release_area:
     runs-on: daq
+    env:
+      DAQ_RELEASE_PATH: daq-release-test
     steps:
-    #- id: checkout
-    #  uses: actions/checkout@v6
-    #  with:
-    #    path: daq-release-test
+    - id: checkout
+      uses: actions/checkout@v6
+      with:
+        path: ${{ env.DAQ_RELEASE_PATH }}
     - id: create_nightly_build_area
-      uses: ./.github/actions/create-build-area
+      uses: ${{ env.DAQ_RELEASE_PATH }}/.github/actions/create-build-area
       with:
         tag: ${{ inputs.tag }}
         feature-branch: ${{ inputs.feature_branch || 'develop' }}
     - id: create_symlink
       run: ln -s ${{ steps.create_nightly_build_area.outputs.NIGHTLY_PATH }} latest_nightly
-    #- id: cleanup
-    #  run: rm -rf daq-release-test
+    - id: cleanup
+      run: rm -rf ${{ env.DAQ_RELEASE_PATH }}
