@@ -35,7 +35,7 @@ runs:
       TYPE=""
       if [[ "$TAG" == NFD_* ]]; then
         echo "Inferred nightly release from tag $TAG"
-        ARGS="-n nightly"
+        ARGS="-n"
         TYPE="nightly"
       elif [[ "$TAG" == *rc* ]]; then
         echo "Inferred candidate release from tag $TAG"
