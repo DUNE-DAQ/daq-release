@@ -1,0 +1,29 @@
+name: Create build area (test)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+        description: 'Base tag for build area'
+      path:
+        type: string
+        default: ''
+        description: 'Build area path'
+      feature_branch:
+        type: string
+        default: 'develop'
+        description: 'Feature branch to be used across all DAQ repos wherever possible.'
+
+jobs:
+  build_release_area:
+    runs-on: daq
+    steps:
+    - id: create_nightly_build_area
+      uses: ./.github/actions/create_build_area.yml
+      with:
+        tag: ${{ inputs.tag }}
+        feature-branch: ${{ inputs.feature_branch || 'develop' }}
+    - id: create_symlink
+      run: ln -s ${{ steps.create_nightly_build_area.outputs.NIGHTLY_PATH }} latest_nightly
