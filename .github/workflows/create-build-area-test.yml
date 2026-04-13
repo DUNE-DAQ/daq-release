@@ -33,5 +33,5 @@ jobs:
         feature_branch: ${{ inputs.feature_branch || 'develop' }}
     - id: create_symlink
       run: ln -s ${{ steps.create_nightly_build_area.outputs.NIGHTLY_PATH }} latest_nightly
-    - id: cleanup
-      run: rm -rf ${{ env.DAQ_RELEASE_PATH }}
+    #- id: cleanup
+    #  run: rm -rf ${{ env.DAQ_RELEASE_PATH }}
