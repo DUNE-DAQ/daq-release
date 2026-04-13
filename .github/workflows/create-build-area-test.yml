@@ -25,7 +25,7 @@ jobs:
       with:
         path: daq-release-test
     - id: create_nightly_build_area
-      uses: ./.github/actions/create_build_area.yml
+      uses: ./.github/actions/create-build-area
       with:
         tag: ${{ inputs.tag }}
         feature-branch: ${{ inputs.feature_branch || 'develop' }}
