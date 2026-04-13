@@ -27,7 +27,7 @@ jobs:
       with:
         path: ${{ env.DAQ_RELEASE_PATH }}
     - id: create_nightly_build_area
-      uses: ${{ env.DAQ_RELEASE_PATH }}/.github/actions/create-build-area
+      uses: ./daq-release-test/.github/actions/create-build-area # Can't use env here
       with:
         tag: ${{ inputs.tag }}
         feature-branch: ${{ inputs.feature_branch || 'develop' }}
