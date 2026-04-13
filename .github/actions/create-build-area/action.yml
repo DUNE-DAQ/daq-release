@@ -28,6 +28,8 @@ runs:
   - name: Get release type
     id: release_type
     shell: bash
+    env:
+      TAG: ${{ inputs.tag }}
     run: |
       ARGS=""
       TYPE=""
