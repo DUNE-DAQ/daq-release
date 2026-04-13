@@ -59,10 +59,7 @@ runs:
       source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
       setup_dbt latest
 
-      BUILD_ARGS=${{ steps.release_type.outputs.ARGS }}
-      echo "BUILD_ARGS=${{ steps.release_type.outputs.ARGS }}"
-
-      #echo "Will run: dbt-create $BUILD_ARGS $TAG $BUILD_PATH"
+      echo "Will run: dbt-create $BUILD_ARGS $TAG $BUILD_PATH"
       dbt-create $BUILD_ARGS $TAG $BUILD_PATH
 
       [[ -d "$BUILD_PATH" ]] || exit 2
