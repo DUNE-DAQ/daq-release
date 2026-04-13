@@ -20,6 +20,8 @@ jobs:
   build_release_area:
     runs-on: daq
     steps:
+    - id: checkout
+      uses: actions/checkout@v6
     - id: create_nightly_build_area
       uses: ./.github/actions/create_build_area.yml
       with:
