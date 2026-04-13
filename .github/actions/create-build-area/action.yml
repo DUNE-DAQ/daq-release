@@ -84,6 +84,8 @@ runs:
 
   - id: checkout_packages
     shell: bash
+    env:
+      BRANCH: ${{ inputs.feature_branch }}
     run: |
       $GITHUB_WORKSPACE/daq-release-buildarea/scripts/checkout-daq-package.py \
         -i ${{ steps.get_release_manifest.outputs.CORE_RELEASE_MANIFEST}} \

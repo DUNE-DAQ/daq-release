@@ -30,7 +30,7 @@ jobs:
       uses: ./daq-release-test/.github/actions/create-build-area # Can't use env here
       with:
         tag: ${{ inputs.tag }}
-        feature-branch: ${{ inputs.feature_branch || 'develop' }}
+        feature_branch: ${{ inputs.feature_branch || 'develop' }}
     - id: create_symlink
       run: ln -s ${{ steps.create_nightly_build_area.outputs.NIGHTLY_PATH }} latest_nightly
     - id: cleanup
