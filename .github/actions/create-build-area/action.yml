@@ -49,6 +49,9 @@ runs:
 
   - id: create_build_area
     shell: bash
+    env:
+      TAG: ${{ inputs.tag }}
+      BUILD_PATH: ${{ inputs.path || inputs.tag }}
     run: |
       source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
       setup_dbt latest
@@ -86,6 +89,7 @@ runs:
     shell: bash
     env:
       BRANCH: ${{ inputs.feature_branch }}
+      BUILD_PATH: ${{ inputs.path || inputs.tag }}
     run: |
       $GITHUB_WORKSPACE/daq-release-buildarea/scripts/checkout-daq-package.py \
         -i ${{ steps.get_release_manifest.outputs.CORE_RELEASE_MANIFEST}} \
