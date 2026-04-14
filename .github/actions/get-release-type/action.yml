@@ -1,0 +1,42 @@
+name: Create build area
+description: 'Create nightly build area'
+
+inputs:
+  tag:
+    type: string
+    required: true
+    description: 'Release tag.'
+outputs:
+  type:
+    description: 'Type of the build. One of nightly, candidate, or stable.'
+    value: ${{ steps.release_type.outputs.BUILD_PATH }}
+  dbt_args:
+    description: 'Arguments for dbt-create or dbt-setup-release for this release type.'
+    value: ${{ steps.release_type.outputs.ARGS }}
+
+runs:
+  using: "composite"
+  steps:
+  - name: Get release type
+    id: release_type
+    shell: bash
+    env:
+      TAG: ${{ inputs.tag }}
+    run: |
+      ARGS=""
+      TYPE=""
+      if [[ "$TAG" == NFD_* ]]; then
+        echo "Inferred nightly release from tag $TAG"
+        ARGS="-n"
+        TYPE="nightly"
+      elif [[ "$TAG" == *rc* ]]; then
+        echo "Inferred candidate release from tag $TAG"
+        ARGS="-b candidate"
+        TYPE="candidate"
+      else
+        echo "Inferred stable release from $TAG"
+        TYPE="stable"
+      fi
+
+      echo "ARGS=$ARGS" >> "$GITHUB_OUTPUT"
+      echo "TYPE=$TYPE" >> "$GITHUB_OUTPUT"
