@@ -39,7 +39,7 @@ runs:
     env:
       TAG: ${{ inputs.tag }}
       BUILD_PATH: ${{ inputs.path || inputs.tag }}
-      BUILD_ARGS: ${{ steps.release_type.outputs.ARGS }}
+      BUILD_ARGS: ${{ steps.release_type.outputs.dbt_args }}
     run: |
       source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
       setup_dbt latest
@@ -54,7 +54,7 @@ runs:
   - id: get_release_manifest
     shell: bash
     env:
-      RELEASE_TYPE: ${{ steps.release_type.outputs.TYPE }}
+      RELEASE_TYPE: ${{ steps.release_type.outputs.type }}
       TAG: ${{ inputs.tag }}
       DAQ_RELEASE: 'daq-release-buildarea'
     run: |
