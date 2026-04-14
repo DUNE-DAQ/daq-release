@@ -9,7 +9,7 @@ inputs:
 outputs:
   type:
     description: 'Type of the build. One of nightly, candidate, or stable.'
-    value: ${{ steps.release_type.outputs.BUILD_PATH }}
+    value: ${{ steps.release_type.outputs.TYPE }}
   dbt_args:
     description: 'Arguments for dbt-create or dbt-setup-release for this release type.'
     value: ${{ steps.release_type.outputs.ARGS }}
