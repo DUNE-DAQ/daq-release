@@ -73,6 +73,7 @@ jobs:
       uses: actions/checkout@v6
       with:
         path: daq-release
+        ref: amogan/build_composite_action
     
     - name: Set environment variables
       run: |
@@ -330,7 +331,7 @@ jobs:
     runs-on: daq
     steps:
     - id: create_nightly_build_area
-      uses: ./.github/actions/create_build_area.yml
+      uses: ./daq-release/.github/actions/create_build_area.yml
       with:
         tag: ${{ needs.make_tags.outputs.target_tag }}
         feature-branch: ${{ inputs.feature-branch || 'develop' }}
