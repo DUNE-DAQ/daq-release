@@ -331,7 +331,7 @@ jobs:
     runs-on: daq
     steps:
     - id: create_nightly_build_area
-      uses: ./daq-release/.github/actions/create_build_area.yml
+      uses: ./daq-release/.github/actions/create_build_area
       with:
         tag: ${{ needs.make_tags.outputs.target_tag }}
         feature-branch: ${{ inputs.feature-branch || 'develop' }}
