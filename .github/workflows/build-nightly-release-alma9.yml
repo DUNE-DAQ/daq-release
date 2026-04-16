@@ -336,7 +336,7 @@ jobs:
         tag: ${{ needs.make_tags.outputs.target_tag }}
         feature-branch: ${{ inputs.feature-branch || 'develop' }}
     - id: create_symlink
-      run: ln -s ${{ steps.create_nightly_build_area.outputs.nightly_path }} latest_nightly
+      run: ln -sfn ${{ steps.create_nightly_build_area.outputs.nightly_path }} latest_nightly
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
