@@ -25,7 +25,7 @@ runs:
     run: |
       ARGS=""
       TYPE=""
-      if [[ "$TAG" == NFD_* ]]; then
+      if [[ "$TAG" == *FD_* ]]; then
         echo "Inferred nightly release from tag $TAG"
         ARGS="-n"
         TYPE="nightly"
