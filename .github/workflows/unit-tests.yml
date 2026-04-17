@@ -45,6 +45,8 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v6
+      with:
+        path: nightly-daq-release
     - name: Create release area
       if: ${{ env.INPUT_TAG != 'latest_nightly' }}
       id: release_area
