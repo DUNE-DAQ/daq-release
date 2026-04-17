@@ -75,6 +75,8 @@ jobs:
         dbt-build --unittest
 
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
+        echo "Log summary file: $log_summary_file"
+        echo "Contents of DBT_AREA_ROOT/log: $(ls $DBT_AREA_ROOT/log)"
         ../${{ env.DAQ_RELEASE_PATH }}/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
