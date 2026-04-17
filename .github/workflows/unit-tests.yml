@@ -5,8 +5,8 @@ on:
     inputs:
       release_tag:
         type: string
-        required: true
-        description: Name of the release used in the caller workflow.
+        default: ''
+        description: Name of the release to unit test. If not provided, use the latest nightly area on daq.fnal.gov.
       upload_logs:
         type: string
         required: false
@@ -20,8 +20,8 @@ on:
     inputs:
       release_tag:
         type: string
-        required: true
-        description: Name of the release to unit test
+        default: ''
+        description: Name of the release to unit test. If not provided, use the latest nightly area on daq.fnal.gov.
       upload_logs:
         required: false
         default: 'yes'
@@ -36,24 +36,41 @@ jobs:
     name: Run unit tests
     runs-on: daq
     timeout-minutes: 30
+    outputs:
+      used_tag: ${{ steps.unit_tests.outputs.used_tag }}
+    env:
+      INPUT_TAG: ${{ inputs.release_tag || 'latest_nightly' }}
     defaults:
       run:
         shell: bash
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
+    - uses: actions/checkout@v6
+    - name: Create release area
+      if: ${{ env.INPUT_TAG != 'latest_nightly' }}
+      id: release_area
+      uses: ./daq-release/.github/actions/create-build-area
       with:
-        path: daq-release-unittests
+        tag: ${{ env.INPUT_TAG }}
     - name: Run unit tests
       id: unit_tests
       run: |
-        cd latest-nightly
+        if [[ ! -d "$INPUT_TAG" ]]; then
+          echo "ERROR: No release area named $INPUT_TAG found on daq.fnal.gov"
+          exit 1
+        fi
+        cd $INPUT_TAG
         source env.sh
+
+        used_tag=$(dbt-info release | grep "Release name" | awk '{print $3}')
+        echo "used_tag=$used_tag" >> "$GITHUB_OUTPUT"
+        echo "Unit testing release $used_tag"
+
         spack load dbe
         dbt-workarea-env
         dbt-build --unittest
+
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        ../daq-release-unittests/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        ./daq-release/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
       # Handle both workflow_call and workflow_dispatch cases
@@ -69,7 +86,7 @@ jobs:
     needs: [run_unittests]
     uses: ./.github/workflows/slack-notification.yml
     with:
-      release_tag: ${{ inputs.release_tag }}
+      release_tag: ${{ needs.run_unittests.outputs.used_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
@@ -78,9 +95,11 @@ jobs:
     needs: run_unittests
     runs-on: daq
     env:
-      RELEASE_TAG: ${{ inputs.release_tag }}
+      INPUT_TAG: ${{ inputs.release_tag }}
     steps:
     - name: Remove files
       run: |
-        rm -rf $RELEASE_TAG
-        rm -rf ${{ github.workspace }}/daq-release-unittests
+        if [[ -n "$INPUT_TAG" && -d "$INPUT_TAG" ]]; then
+          echo "Removing $INPUT_TAG directory now that testing is complete."
+          rm -rf -- "$INPUT_TAG"
+        fi
