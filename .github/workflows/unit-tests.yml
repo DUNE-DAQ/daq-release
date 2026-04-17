@@ -74,7 +74,10 @@ jobs:
         dbt-workarea-env
         dbt-build --unittest
 
-        log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
+        log_summary_file=$(realpath $(find log/ -name unit_test_summary.log | tail -n 1))
+        if [[ ! -f "$log_summary_file" ]]; then
+          echo "ERROR: No file named unit_test_summary.log found in $(readlink -f log/)"
+        fi
         echo "Log summary file: $log_summary_file"
         echo "Contents of DBT_AREA_ROOT/log: $(ls $DBT_AREA_ROOT/log)"
         ../${{ env.DAQ_RELEASE_PATH }}/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
