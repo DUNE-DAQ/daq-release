@@ -113,7 +113,7 @@ jobs:
           echo "Removing $INPUT_TAG directory now that testing is complete."
           rm -rf -- "$INPUT_TAG"
         fi
-        if [[ -n "$INPUT_TAG" && -d "$INPUT_TAG" ]]; then
-          echo "Removing $INPUT_TAG directory now that testing is complete."
-          rm -rf -- "$INPUT_TAG"
+        if [[ -n "$DAQ_RELEASE_PATH" && -d "$DAQ_RELEASE_PATH" ]]; then
+          echo "Removing $DAQ_RELEASE_PATH directory now that testing is complete."
+          rm -rf -- "$DAQ_RELEASE_PATH"
         fi
