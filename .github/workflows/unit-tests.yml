@@ -31,6 +31,9 @@ on:
           type: string
           default: 'no'
 
+env:
+  DAQ_RELEASE_PATH: nightly-daq-release
+
 jobs:
   run_unittests:
     name: Run unit tests
@@ -46,11 +49,11 @@ jobs:
     steps:
     - uses: actions/checkout@v6
       with:
-        path: nightly-daq-release
+        path: ${{ env.DAQ_RELEASE_PATH }}
     - name: Create release area
       if: ${{ env.INPUT_TAG != 'latest_nightly' }}
       id: release_area
-      uses: ./daq-release/.github/actions/create-build-area
+      uses: ./nightly-daq-release/.github/actions/create-build-area
       with:
         tag: ${{ env.INPUT_TAG }}
     - name: Run unit tests
@@ -72,7 +75,7 @@ jobs:
         dbt-build --unittest
 
         log_summary_file=$(ls $DBT_AREA_ROOT/log/unit_tests_*/*_summary.log)
-        ./daq-release/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
+        ./${{ env.DAQ_RELEASE_PATH }}/scripts/github-ci/parse_unit_test_summary.sh $log_summary_file | tee $GITHUB_STEP_SUMMARY
         echo "unit_test_summary=$log_summary_file" >> "$GITHUB_OUTPUT"
     - name: Upload summary log
       # Handle both workflow_call and workflow_dispatch cases
@@ -101,6 +104,10 @@ jobs:
     steps:
     - name: Remove files
       run: |
+        if [[ -n "$INPUT_TAG" && -d "$INPUT_TAG" ]]; then
+          echo "Removing $INPUT_TAG directory now that testing is complete."
+          rm -rf -- "$INPUT_TAG"
+        fi
         if [[ -n "$INPUT_TAG" && -d "$INPUT_TAG" ]]; then
           echo "Removing $INPUT_TAG directory now that testing is complete."
           rm -rf -- "$INPUT_TAG"
