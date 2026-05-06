@@ -25,6 +25,7 @@ jobs:
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
   
   start_snapshot:
+    needs: make_variables
     name: starting snapshot
     runs-on: daq
     defaults:
@@ -36,7 +37,7 @@ jobs:
           ./take_snapshot.sh | tee starting_snapshot_code_check.txt
 
   run_unittests:
-    needs: make_variables
+    needs: [start_snapshot, make_variables]
     uses: ./.github/workflows/unit-tests.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
@@ -95,6 +96,7 @@ jobs:
       release_tag: ${{ needs.make_variables.outputs.tag }}
 
   end_snapshot:
+    needs: run_checks
     name: ending snapshot
     runs-on: daq
     defaults:
