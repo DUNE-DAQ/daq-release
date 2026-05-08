@@ -147,6 +147,9 @@ jobs:
       contents: read
 
     steps:
+      - id: extra_snapshot
+        run: |
+          ./take_snapshot.sh | tee mid_snapshot_nightly_build.txt
       - name: clean docker-build
         run: |
             mkdir -p ${GITHUB_WORKSPACE}/docker-build 
