@@ -58,6 +58,18 @@ jobs:
           exit 1
         fi
 
+  start_snapshot:
+    needs: make_tags
+    name: starting snapshot
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: starting_snapshot
+        run: |
+          ./take_snapshot.sh | tee starting_snapshot_nightly_build.txt
+
   build_the_develop_release_spack:
     name: build_dev_release_spack
     runs-on: daq
@@ -323,6 +335,18 @@ jobs:
       release-tag: ${{ needs.make_tags.outputs.target_tag }}
       send-slack-message: 'yes'
     secrets: inherit
+
+  end_snapshot:
+    needs: poll_cvmfs_for_release
+    name: ending snapshot
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: ending_snapshot
+        run: |
+          ./take_snapshot.sh | tee ending_snapshot_nightly_build.txt
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
