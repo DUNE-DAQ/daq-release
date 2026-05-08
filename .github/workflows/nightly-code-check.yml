@@ -36,6 +36,39 @@ jobs:
         run: |
           ./take_snapshot.sh | tee starting_snapshot_code_check.txt
 
+  start_resource_monitor:
+    name: resource monitor
+    needs: start_snapshot
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      RESOURCE_MONITOR_PID: ${{ steps.start_monitor.outputs.MONITOR_PID }}
+    steps:
+    - id: start_monitor
+      run: |
+        set -euo pipefail
+        mkdir -p "$GITHUB_WORKSPACE/metrics"
+        (
+          while true; do
+            ts=$(date -Is)
+            {
+              echo "---- $ts ----"
+              echo "[load] $(cut -d' ' -f1-3 /proc/loadavg 2>/dev/null || true)"
+              echo "[mem]"
+              free -h || true
+              echo "[disk]"
+              df -h "$GITHUB_WORKSPACE" || true
+              echo "[top]"
+              ps -eo pid,ppid,cmd,%cpu,%mem,rss --sort=-%cpu | head -n 15 || true
+              echo
+            } >> "$GITHUB_WORKSPACE/metrics/nightly_code_check_resource.log"
+            sleep 10
+          done
+        ) &
+        echo "MONITOR_PID=$!" >> "$GITHUB_OUTPUT"
+        
   run_unittests:
     needs: [start_snapshot, make_variables]
     uses: ./.github/workflows/unit-tests.yml
@@ -107,6 +140,22 @@ jobs:
         run: |
           ./take_snapshot.sh | tee ending_snapshot_code_check.txt
 
+  stop_resource_monitor:
+    name: stop resource monitor
+    needs: [start_resource_monitor, end_snapshot]
+    if: always()
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    env:
+      RESOURCE_MONITOR_PID: ${{ needs.start_resource_monitor.outputs.RESOURCE_MONITOR_PID }}
+    steps:
+    - id: start_monitor
+      run: |
+        if [[ -n "$RESOURCE_MONITOR_PID:-" ]]; then
+          kill "$RESOURCE_MONITOR_PID" || true
+        fi
 
   cleanup_test_area:
     runs-on: daq
