@@ -72,6 +72,18 @@ jobs:
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
+  start_snapshot:
+    needs: make_variables
+    name: starting snapshot
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: starting_snapshot
+        run: |
+          ./take_snapshot.sh | tee starting_snapshot_integtest.txt
+
   integration_tests:
     name: integration_tests
     runs-on: daq
@@ -218,6 +230,18 @@ jobs:
       artifact_name: nightly_integtest_json
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  end_snapshot:
+    needs: store_and_upload_logs
+    name: endting snapshot
+    runs-on: daq
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - id: ending_snapshot
+        run: |
+          ./take_snapshot.sh | tee ending_snapshot_integtest.txt
 
   cleanup_files:
     runs-on: daq
