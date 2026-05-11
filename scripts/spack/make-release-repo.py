@@ -196,9 +196,6 @@ class DAQRelease:
             find_package_pattern  = re.compile(r'\s*[^# ]\s*find_package\(\s*([^)\s]+)')
             cmake_dependencies_list = find_package_pattern.findall(lines)
             # Special cases where the dependency has no explicit find_package call
-            find_daq_codegen = re.search(r'\s*[^# ]\s*daq_codegen\(', lines)
-            if find_daq_codegen:
-                cmake_dependencies_list.append('py-moo')
             find_pybind = re.search(r'\s*[^# ]\s*daq_add_python_bindings\(', lines)
             if find_pybind: 
                 cmake_dependencies_list.append('pybind11')
@@ -378,11 +375,9 @@ class DAQRelease:
                 if i["source"].startswith("github"):
                     iuser = i["source"].replace("github_", "")
 
-                    if iversion == "develop" and not iname == "moo":
+                    if iversion == "develop":
                         (itag, ihash) = get_commit_hash(iname, iversion, iversion)
                         iline = f"git+https://github.com/{iuser}/{iname}@{ihash}#egg={iname}"
-                    elif iname == "moo":
-                        iline = f"git+https://github.com/{iuser}/{iname}@{iversion}#egg={iname}"
                     else:
                         iline = f"git+https://github.com/{iuser}/{iname}@v{iversion}#egg={iname}"
                 f.write(iline + '\n')
