@@ -43,5 +43,6 @@ pip freeze > ./pyvenv_requirements.txt
 test "$?" == "0" || return 12
 
 echo "Versions stable into ./pyvenv_requirements.txt"
+echo "Note you need to handle moo and its dependencies separately"
 echo $success_message
 
