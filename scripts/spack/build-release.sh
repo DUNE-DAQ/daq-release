@@ -83,7 +83,6 @@ cmd="python3 scripts/spack/make-release-repo.py -u \
   -r ${RELEASE_TAG} \
   -o ${SPACK_AREA}/spack-${SPACK_VERSION} \
   ${possible_core_release_arg} \
-  --overwrite-daq-cmake \
   ${possible_branch_arg}"
 
 echo $cmd
