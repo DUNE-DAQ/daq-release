@@ -41,6 +41,8 @@ jobs:
         pwd
         ls -lrt
     - name: Get workflow summary from GitHub API
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         # Outputs workflow_summary.json
         scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
