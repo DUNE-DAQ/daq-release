@@ -1,5 +1,7 @@
 name: Nightly CI Dashboard Publication
 
+permissions: read-all
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,20 +12,16 @@ on:
     - cron: "0 10 * * *"
 
 jobs:
-  download_artifacts:
-    name: Download artifacts
-    runs-on: daq
-    outputs:
-      lcov_html_report_path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
-      code_check_summary_path: ${{ steps.set_paths.outputs.code_check_summary_path }}
-      integration_test_summary_path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
-      extended_integration_test_summary_path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+  build_site:
+    name: Build CI site and upload
+    runs-on: ubuntu-latest
     defaults:
       run: 
         shell: bash
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+    - uses: actions/checkout@v6
     - name: Set paths to artifacts
       id: set_paths
       run : |
@@ -108,20 +106,9 @@ jobs:
         path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
         run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
   
-  build_ci_dashboard:
-    runs-on: daq
-    needs: download_artifacts
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
-      with:
-        path: daq-release-ci-dashboard
     - name: Copy artifacts and generate dashboard
       env:
-        CI_DASHBOARD_DIR: daq-release-ci-dashboard/scripts/github-ci/ci-dashboard
+        CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
       run: |
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
         cp -r code_check_summary/ ${{ env.CI_DASHBOARD_DIR }}/code_check_summary
@@ -136,10 +123,17 @@ jobs:
                                    --core_pytest_summary integration_test_summary/pytest_summary.json \
                                    --extended_pytest_summary extended_integration_test_summary/pytest_summary.json \
 
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v5
+      env:
+        CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
+      with:
+        path: ${{ env.CI_DASHBOARD_DIR }}/site
+
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
-    runs-on: daq
-    needs: build_ci_dashboard
+    runs-on: ubuntu-latest
+    needs: build_site
     permissions:
         contents: read
         pages: write
@@ -150,20 +144,8 @@ jobs:
     steps:
     - name: Configure GitHub Pages
       uses: actions/configure-pages@v6
-    - name: Upload pages artifact
-      uses: actions/upload-pages-artifact@v5
-      with:
-        path: ${{ github.workspace }}/daq-release-ci-dashboard/scripts/github-ci/ci-dashboard/site
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v5
 
-  cleanup_test_area:
-    runs-on: daq
-    if: always()
-    needs: [deploy_to_github_pages]
-    steps:
-    - name: Remove test directory
-      run: |
-        rm -rf daq-release-ci-dashboard/
 
