@@ -85,6 +85,7 @@ jobs:
                         "listrev_test",
                         "3ru_1df_multirun_test",
                         "3ru_3df_multirun_test",
+                        "disabled_tpg_test",
                         "example_system_test",
                         "fake_data_producer_test",
                         "long_window_readout_test",
