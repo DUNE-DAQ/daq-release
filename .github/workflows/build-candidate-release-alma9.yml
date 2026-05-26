@@ -1,5 +1,8 @@
 name: Alma9 build v5 candidate release
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:

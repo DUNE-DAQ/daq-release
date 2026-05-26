@@ -1,6 +1,7 @@
 name: Nightly CI Dashboard Publication
 
-permissions: read-all
+permissions:
+  contents: read
 
 on:
   workflow_dispatch:

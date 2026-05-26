@@ -1,5 +1,8 @@
 name: Alma9 build v5 nightly release with externals v2.3
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: "0 3 * * *"

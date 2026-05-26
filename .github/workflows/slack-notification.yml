@@ -1,6 +1,8 @@
 name: Slack Notification
 
-permissions: read-all
+permissions: 
+  contents: read
+
 
 on:
   workflow_call:
