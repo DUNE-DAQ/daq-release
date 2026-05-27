@@ -261,7 +261,7 @@ jobs:
     - name: Generate summary tables
       continue-on-error: true
       run: |
-        python scripts/github-ci/integtest_xml_parser.py --input-directory extended_integtest_log/
+        python scripts/github-ci/integtest_xml_parser.py --input-directory extended_integtest_logs/
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
         echo "ls -lrt: $(ls -lrt)"
         echo "Find?"
