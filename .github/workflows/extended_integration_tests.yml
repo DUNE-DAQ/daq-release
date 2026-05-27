@@ -252,8 +252,8 @@ jobs:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
       with:
-        name: extended_integtest_log
-        path: extended_integtest_log
+        name: extended_integtest_logs
+        path: extended_integtest_logs
     - name: Sanity checks
       run: |
         echo "pwd: $(pwd)"
