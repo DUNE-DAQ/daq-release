@@ -183,6 +183,7 @@ jobs:
       with:
         name: junit-xml
         path: ${{ needs.make_variables.outputs.integtest_output_path }}
+        if-no-files-found: error
     - name: Cleanup files
       run: |
         rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
@@ -228,7 +229,6 @@ jobs:
         if-no-files-found: error
         name: nightly_integtest_json
         path: scripts/github-ci/pytest_summary.json
-
 
   send_slack_message:
     if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
