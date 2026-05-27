@@ -107,7 +107,6 @@ jobs:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
         IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
         INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
@@ -147,6 +146,8 @@ jobs:
         test $pytest_retval == 0 || false
 
     - name: Copy log to persistent area
+      env:
+        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
         max_kb=10000000
         total_log_dir_size=0
