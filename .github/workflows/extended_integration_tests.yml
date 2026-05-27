@@ -1,5 +1,8 @@
 name: Extended integration test workflow
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: "0 6 * * *"
@@ -24,7 +27,7 @@ on:
 jobs:
   make_variables:
     name: create nightly tag, timestamp, etc.
-    runs-on: daq
+    runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
       is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
@@ -63,7 +66,7 @@ jobs:
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-extended-${timestamp}
-          integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+          integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
           daq_release_path="daq-release-extended-tests"
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
@@ -86,10 +89,7 @@ jobs:
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-      PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
       DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
-      IS_CANDIDATE_RELEASE: ${{ needs.make_variables.outputs.is_candidate_release }}
-      IS_STABLE_RELEASE: ${{ needs.make_variables.outputs.is_stable_release }}
     defaults:
       run:
         shell: bash
@@ -101,6 +101,9 @@ jobs:
         path: ${{ needs.make_variables.outputs.daq_release_path }}
 
     - name: Create build area
+      env:
+        IS_CANDIDATE_RELEASE: ${{ needs.make_variables.outputs.is_candidate_release }}
+        IS_STABLE_RELEASE: ${{ needs.make_variables.outputs.is_stable_release }}
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
@@ -120,10 +123,10 @@ jobs:
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
@@ -138,7 +141,7 @@ jobs:
         dbt-build --integtest | tee integtest_full_output.log
 
     - name: Check and set integration test log directory
-      if: always()
+      if: success() || failure()
       id: integtest_logs
       run: |
         # Log directory is the last non-empty line of output
@@ -160,8 +163,15 @@ jobs:
         logs_exist="true"
         echo "logs_exist=${logs_exist}"
         echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
-    - name: Store log files
-      if: ${{ steps.integtest_logs.outputs.logs_exist == 'true' }}
+    - name: Upload integtest logs
+      uses: actions/upload-artifact@v7
+      with:
+        name: extended_integtest_logs
+        path: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
+        if-no-files-found: error
+    - name: Store pytest logs
+      env:
+        PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
       id: move_logs
       run: |
         mkdir -p "$PERSISTENT_LOG_DIR"
@@ -193,47 +203,78 @@ jobs:
             --chmod=D755,F644 \
             "$dir"/ "$PERSISTENT_LOG_DIR/$(basename "$dir")"/
         done
+    - name: Upload logs as artifact
+      if: success() || failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: pytest-logs-extended-${{ needs.make_variables.outputs.timestamp }}
+        path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
+    - name: Clean up files from daq.fnal.gov
+      if: always()
+      env:
+        RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+        INTEGTEST_XML_PATH: ${{ needs.make_variables.outputs.integtest_output_path }}
+      run: |
+        rm -rf ${{ needs.make_variables.outputs.integtest_output_path }} || true
+
+        if [[ -d "$INTEGTEST_XML_PATH" ]]; then
+          echo "Removing $INTEGTEST_XML_PATH"
+          rm -rf $INTEGTEST_XML_PATH
+        fi
+
+        if [[ -d "$DAQ_RELEASE_PATH" ]]; then
+          echo "Removing $DAQ_RELEASE_PATH"
+          rm -rf $DAQ_RELEASE_PATH
+        fi
+
+        if [[ -d "$RELEASE_TAG" ]]; then
+          echo "Removing $RELEASE_TAG"
+          rm -rf $RELEASE_TAG
+        fi
+    - name: Delete old log directories
+      if: always()
+      run: |
+        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+        if [[ -n "$old_dirs" ]]; then
+          echo "Removing the following directories that are more than 7 days old: $old_dirs"
+          rm -rf $old_dirs
+        fi
+    - name: Clean up stale gunicorn processes
+      if: always()
+      run: |
+        /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   parse_and_upload_results:
-    runs-on: daq
+    runs-on: ubuntu-latest
     if: always()
     needs: [make_variables, extended_integration_tests]
     steps:
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
+      with:
+        name: extended_integtest_log
+        path: extended_integtest_log
+    - name: Sanity checks
+      run: |
+        echo "pwd: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
     - name: Generate summary tables
       continue-on-error: true
       run: |
-        args=()
-        if [[ -n "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}" ]]; then
-          args+=(--input-directory "${{ needs.extended_integration_tests.outputs.integtest_log_dir }}")
-        fi
-
-        cd ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/
-        python integtest_xml_parser.py "${args[@]}"
+        cd scripts/github-ci/
+        python scripts/github-ci/integtest_xml_parser.py --input-directory extended_integtest_log/
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v7
       with:
-        if-no-files-found: warn
         name: nightly_extended_integtest_summary
-        path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary_table.md
+        path: pytest_summary_table.md
     - name: Upload json summary as artifact
       uses: actions/upload-artifact@v7
       with:
         if-no-files-found: error
         name: nightly_extended_integtest_json
-        path: ${{ needs.make_variables.outputs.daq_release_path }}/scripts/github-ci/pytest_summary.json
-
-  upload_logs:
-    runs-on: daq
-    timeout-minutes: 5
-    needs: [make_variables, extended_integration_tests]
-    if: success() || failure()
-    steps:
-    - name: Upload logs as artifact
-      uses: actions/upload-artifact@v7
-      with:
-        name: pytest-logs-extended-${{ needs.make_variables.outputs.timestamp }}
-        path: ${{ needs.make_variables.outputs.persistent_log_dir  }}
+        path: pytest_summary.json
 
   send_slack_message:
     if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
@@ -245,51 +286,5 @@ jobs:
       artifact_name: nightly_extended_integtest_json
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  cleanup_files:
-    runs-on: daq
-    if: always()
-    needs: [make_variables, parse_and_upload_results, send_slack_message]
-    env:
-      RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
-      INTEGTEST_XML_PATH: ${{ needs.make_variables.outputs.integtest_output_path }}
-    steps:
-      - name: Remove xml files
-        run: |
-          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
-      - name: Remove daq-release
-        run: |
-          if [[ -d "$INTEGTEST_XML_PATH" ]]; then
-            echo "Removing $INTEGTEST_XML_PATH"
-            rm -rf $INTEGTEST_XML_PATH
-          fi
-
-          if [[ -d "$DAQ_RELEASE_PATH" ]]; then
-            echo "Removing $DAQ_RELEASE_PATH"
-            rm -rf $DAQ_RELEASE_PATH
-          fi
-
-          if [[ -d "$RELEASE_TAG" ]]; then
-            echo "Removing $RELEASE_TAG"
-            rm -rf $RELEASE_TAG
-          fi
-      - name: Delete old log directories
-        run: |
-          old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-          if [[ -n "$old_dirs" ]]; then
-            echo "Removing the following directories that are more than 7 days old: $old_dirs"
-            rm -rf $old_dirs
-          fi
-
-  # Integration tests can sometimes collide with stale processes, leading to timeout
-  cleanup_stale_gunicorn_processes:
-    runs-on: daq
-    if: always()
-    needs: extended_integration_tests
-    steps:
-      - name: Run cleanup script
-        run: |
-          /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
 
