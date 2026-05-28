@@ -1,5 +1,8 @@
 name: Run Unit Tests on a Given Release
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
@@ -111,6 +114,11 @@ jobs:
         if-no-files-found: error
         name: unit_test_summary
         path: ${{ steps.unit_tests.outputs.unit_test_summary }}
+    - name: Remove files
+      if: always()
+      run: |
+        rm -rf $RELEASE_TAG || true
+        rm -rf ${{ github.workspace }}/daq-release-unittests || true
 
   send_slack_message:
     if: (success() || failure()) && (inputs.send-slack-message == 'yes' && github.event_name == 'workflow_dispatch')
@@ -120,15 +128,3 @@ jobs:
       release_tag: ${{ inputs.release_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  cleanup_files:
-    if: always()
-    needs: run_unittests
-    runs-on: daq
-    env:
-      RELEASE_TAG: ${{ inputs.release_tag }}
-    steps:
-    - name: Remove files
-      run: |
-        rm -rf $RELEASE_TAG
-        rm -rf ${{ github.workspace }}/daq-release-unittests
