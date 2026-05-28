@@ -61,7 +61,8 @@ jobs:
       id: build_script
       run: |
         cat << EOF > run_clang_formatting.sh
-          echo "pwd: $(pwd)"
+          echo "======Start container======="
+          echo "Starting in: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
@@ -70,14 +71,16 @@ jobs:
           source env.sh
           #cd ../daq-release-code-checks/scripts
           cd ../scripts
+          echo "cd to scripts? $(pwd)"
+          echo "ls -lrt: $(ls -lrt)"
           #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
           #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
           ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
           ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
 
           cd $DBT_AREA_ROOT
+          echo "DBT_AREA_ROOT is $(pwd)"
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
-          echo "======In container======="
           echo "pwd: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
           find . -name "clang_format_summary_table.md"
@@ -98,7 +101,7 @@ jobs:
         echo "pwd: $(pwd)"
         echo "ls -lrt: $(ls -lrt)"
         find . -name "clang_format_summary_table.md"
-        cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        cat ./scripts/NFD_DEV_260528_A9/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     #- name: Create build area
     #  run: |
     #    source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
@@ -124,7 +127,8 @@ jobs:
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        path: ${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md
+        #path: ${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md
+        path: ./scripts/NFD_DEV_260528_A9/clang_format_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
