@@ -77,6 +77,11 @@ jobs:
 
           cd $DBT_AREA_ROOT
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
+          echo "======In container======="
+          echo "pwd: $(pwd)"
+          echo "ls -lrt: $(ls -lrt)"
+          find . -name "clang_format_summary_table.md"
+          echo "======Exit container======="
         EOF
 
         chmod +x run_clang_formatting.sh
