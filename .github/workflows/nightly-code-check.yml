@@ -111,7 +111,7 @@ jobs:
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        path: ./${{ env.IMAGE }}/clang_format_summary_table.md
+        path: ./${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
