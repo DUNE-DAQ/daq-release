@@ -67,10 +67,10 @@ jobs:
           echo "ls -lrt: $(ls -lrt)"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-create -n $DBT_AREA_ROOT
+          dbt-create -n $DBT_AREA_ROOT /ghw/$DBT_AREA_ROOT
           echo "After dbt-create: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
-          cd $DBT_AREA_ROOT
+          cd /ghw/$DBT_AREA_ROOT
           source env.sh
           #cd ../daq-release-code-checks/scripts
           cd ../scripts
@@ -78,20 +78,20 @@ jobs:
           echo "ls -lrt: $(ls -lrt)"
           #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
           #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
 
-          cd $DBT_AREA_ROOT
+          cd /ghw/$DBT_AREA_ROOT
           echo "DBT_AREA_ROOT is $(pwd)"
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
           echo "pwd: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
-          find . -name "clang_format_summary_table.md"
+          find /ghw -name "clang_format_summary_table.md"
           echo "======Exit container======="
         EOF
 
-        chmod +x run_clang_formatting.sh
-        cat run_clang_formatting.sh
+        chmod +x /ghw/run_clang_formatting.sh
+        cat /ghw/run_clang_formatting.sh
     - name: Run clang formatting script in Docker container
       run: |
         echo "Outside container, DBT_AREA_ROOT=$DBT_AREA_ROOT"
