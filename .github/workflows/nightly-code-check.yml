@@ -70,10 +70,10 @@ jobs:
           source env.sh
           #cd ../daq-release-code-checks/scripts
           cd ../scripts
-          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-          #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
 
           cd $DBT_AREA_ROOT
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
@@ -92,6 +92,7 @@ jobs:
           /ghw/run_clang_formatting.sh
         echo "pwd: $(pwd)"
         echo "ls -lrt: $(ls -lrt)"
+        find . -name "clang_format_summary_table.md"
         cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     #- name: Create build area
     #  run: |
