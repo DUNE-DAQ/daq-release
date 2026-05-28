@@ -1,5 +1,8 @@
 name: Nightly dbt regression tests
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,20 +15,19 @@ on:
 jobs:
   run_dbt_commands:
     name: Run dbt test script
-    runs-on: daq
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
       run:
         shell: bash
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
+    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
-        path: daq-release-dbt-tests
+        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
+    - uses: actions/checkout@v6
     - name: Run dbt test script
       run: | 
-        cd daq-release-dbt-tests/scripts
-        ./test_daq-buildtools.sh
+        ./scripts/test_daq-buildtools.sh
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
@@ -33,12 +35,3 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  cleanup_test_area:
-    runs-on: daq
-    if: always()
-    needs: run_dbt_commands
-    steps:
-      - name: Remove test directory
-        run: |
-          rm -rf daq-release-dbt-tests
