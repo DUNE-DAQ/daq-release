@@ -53,10 +53,6 @@ jobs:
     -  uses: actions/checkout@v6
     - name: Pull build image
       run: docker pull ${{ env.IMAGE }}
-    #- name: Checkout daq-release
-    #  uses: actions/checkout@v6
-    #  with:
-    #    path: daq-release-code-checks
     - name: Generate clang formatting script
       id: build_script
       run: |
@@ -109,34 +105,13 @@ jobs:
         echo "pwd: $(pwd)"
         echo "ls -lrt: $(ls -lrt)"
         find . -name "clang_format_summary_table.md"
-        cat ./scripts/NFD_DEV_260528_A9/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
-    #- name: Create build area
-    #  run: |
-    #    source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-    #    setup_dbt latest_v5
-    #    dbt-create -n ${{ env.DBT_AREA_ROOT }}
-    #    cd ${{ env.DBT_AREA_ROOT }}
-    #    source env.sh
-    #    #cd ../daq-release-code-checks/scripts
-    #    cd ../scripts
-    #    ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-    #    ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-    #    #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-    #    #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-    #    echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-    #- name: Run clang formatting
-    #  run: |
-    #    cd ${{ env.DBT_AREA_ROOT }}
-    #    source env.sh
-    #    dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
-    #    cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        cat ./NFD_DEV_260528_A9/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
       uses: actions/upload-artifact@v7
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        #path: ${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md
-        path: ./scripts/NFD_DEV_260528_A9/clang_format_summary_table.md
+        path: ./${{ env.IMAGE }}/clang_format_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
