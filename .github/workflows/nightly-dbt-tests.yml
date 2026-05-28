@@ -21,9 +21,6 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
-      with:
-        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - uses: actions/checkout@v6
       with:
         path: daq-release-dbt-tests
