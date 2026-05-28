@@ -27,17 +27,17 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
   
-  #run_unittests:
-  #  needs: make_variables
-  #  uses: ./.github/workflows/unit-tests.yml
-  #  with:
-  #    release_tag: ${{ needs.make_variables.outputs.tag }}
-  #    upload_logs: 'yes'
+  run_unittests:
+    needs: make_variables
+    uses: ./.github/workflows/unit-tests.yml
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
+      upload_logs: 'yes'
 
   run_clang_formatting:
     name: Run clang formatting
     runs-on: ubuntu-latest
-    needs: [make_variables]
+    needs: make_variables
     timeout-minutes: 60
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
