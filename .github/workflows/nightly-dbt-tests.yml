@@ -16,6 +16,8 @@ jobs:
   run_dbt_commands:
     name: Run dbt test script
     runs-on: ubuntu-latest
+    container:
+      image: almalinux:9
     timeout-minutes: 20
     defaults:
       run:
