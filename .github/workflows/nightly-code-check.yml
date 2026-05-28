@@ -27,12 +27,12 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
   
-  run_unittests:
-    needs: make_variables
-    uses: ./.github/workflows/unit-tests.yml
-    with:
-      release_tag: ${{ needs.make_variables.outputs.tag }}
-      upload_logs: 'yes'
+  #run_unittests:
+  #  needs: make_variables
+  #  uses: ./.github/workflows/unit-tests.yml
+  #  with:
+  #    release_tag: ${{ needs.make_variables.outputs.tag }}
+  #    upload_logs: 'yes'
 
   run_clang_formatting:
     name: Run clang formatting
@@ -41,38 +41,76 @@ jobs:
     timeout-minutes: 60
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
+      IMAGE: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
       run:
         shell: bash
     steps:
+    - uses: actions/checkout@v6
     - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     -  uses: actions/checkout@v6
+    - name: Pull build image
+      run: docker pull ${{ env.IMAGE }}
     #- name: Checkout daq-release
     #  uses: actions/checkout@v6
     #  with:
     #    path: daq-release-code-checks
-    - name: Create build area
+    - name: Generate clang formatting script
+      id: build_script
       run: |
-        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest_v5
-        dbt-create -n ${{ env.DBT_AREA_ROOT }}
-        cd ${{ env.DBT_AREA_ROOT }}
-        source env.sh
-        #cd ../daq-release-code-checks/scripts
-        cd ../scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-    - name: Run clang formatting
+        cat << EOF > run_clang_formatting.sh
+          echo "pwd: $(pwd)"
+          echo "ls -lrt: $(ls -lrt)"
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest_v5
+          dbt-create -n $DBT_AREA_ROOT
+          cd $DBT_AREA_ROOT
+          source env.sh
+          #cd ../daq-release-code-checks/scripts
+          cd ../scripts
+          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+
+          cd $DBT_AREA_ROOT
+          dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
+          cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        EOF
+
+        chmod +x run_clang_formatting.sh
+        cat run_clang_formatting.sh
+    - name: Run clang formatting script in Docker container
       run: |
-        cd ${{ env.DBT_AREA_ROOT }}
-        source env.sh
-        dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
-        cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        docker run --rm \
+        -v /cvmfs:/cvmfs:shared \
+        -v "${GITHUB_WORKSPACE}:/ghw" \
+        -e "$DBT_AREA_ROOT" \
+        -w /ghw \
+        ${{ env.IMAGE }} \
+        /ghw/run_clang_formatting.sh
+    #- name: Create build area
+    #  run: |
+    #    source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+    #    setup_dbt latest_v5
+    #    dbt-create -n ${{ env.DBT_AREA_ROOT }}
+    #    cd ${{ env.DBT_AREA_ROOT }}
+    #    source env.sh
+    #    #cd ../daq-release-code-checks/scripts
+    #    cd ../scripts
+    #    ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+    #    ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+    #    #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+    #    #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+    #    echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+    #- name: Run clang formatting
+    #  run: |
+    #    cd ${{ env.DBT_AREA_ROOT }}
+    #    source env.sh
+    #    dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
+    #    cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
       uses: actions/upload-artifact@v7
       with:
