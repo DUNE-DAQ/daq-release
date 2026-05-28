@@ -61,18 +61,21 @@ jobs:
       id: build_script
       run: |
         cat << EOF > run_clang_formatting.sh
+          #!/bin/bash
           echo "======Start container======="
           echo "Inside container, DBT_AREA_ROOT=$DBT_AREA_ROOT"
           echo "Starting in: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
+
           dbt-create -n $DBT_AREA_ROOT /ghw/$DBT_AREA_ROOT
           echo "After dbt-create: $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
           cd /ghw/$DBT_AREA_ROOT
           source env.sh
           #cd ../daq-release-code-checks/scripts
+
           cd ../scripts
           echo "cd to scripts? $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
@@ -90,8 +93,8 @@ jobs:
           echo "======Exit container======="
         EOF
 
-        chmod +x /ghw/run_clang_formatting.sh
-        cat /ghw/run_clang_formatting.sh
+        chmod +x run_clang_formatting.sh
+        cat run_clang_formatting.sh
     - name: Run clang formatting script in Docker container
       run: |
         echo "Outside container, DBT_AREA_ROOT=$DBT_AREA_ROOT"
@@ -102,6 +105,7 @@ jobs:
           -w /ghw \
           ${{ env.IMAGE }} \
           /ghw/run_clang_formatting.sh
+
         echo "pwd: $(pwd)"
         echo "ls -lrt: $(ls -lrt)"
         find . -name "clang_format_summary_table.md"
