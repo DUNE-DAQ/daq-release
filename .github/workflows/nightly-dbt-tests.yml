@@ -18,7 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: almalinux:9
-      volumes: /cvmfs:/cvmfs:shared
+      volumes: 
+        - /cvmfs:/cvmfs:shared
     timeout-minutes: 20
     defaults:
       run:
