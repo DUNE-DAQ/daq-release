@@ -77,7 +77,6 @@ jobs:
 
           cd $DBT_AREA_ROOT
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
-          cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
         EOF
 
         chmod +x run_clang_formatting.sh
@@ -85,12 +84,15 @@ jobs:
     - name: Run clang formatting script in Docker container
       run: |
         docker run --rm \
-        -v /cvmfs:/cvmfs:shared \
-        -v "${GITHUB_WORKSPACE}:/ghw" \
-        -e "$DBT_AREA_ROOT" \
-        -w /ghw \
-        ${{ env.IMAGE }} \
-        /ghw/run_clang_formatting.sh
+          -v /cvmfs:/cvmfs:shared \
+          -v "${GITHUB_WORKSPACE}:/ghw" \
+          -e "$DBT_AREA_ROOT" \
+          -w /ghw \
+          ${{ env.IMAGE }} \
+          /ghw/run_clang_formatting.sh
+        echo "pwd: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
+        cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     #- name: Create build area
     #  run: |
     #    source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
