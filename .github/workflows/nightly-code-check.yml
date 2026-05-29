@@ -89,7 +89,7 @@ jobs:
           ${{ env.IMAGE }} \
           /ghw/run_clang_formatting.sh
 
-        cat ./NFD_DEV_260528_A9/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        cat ./${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
       uses: actions/upload-artifact@v7
       with:
