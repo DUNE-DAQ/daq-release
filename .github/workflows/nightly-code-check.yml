@@ -27,12 +27,12 @@ jobs:
           date_tag=$(date +%y%m%d)
           echo "nightly_tag=NFD_DEV_${date_tag}_A9"  >>  "$GITHUB_OUTPUT"
   
-  #run_unittests:
-  #  needs: make_variables
-  #  uses: ./.github/workflows/unit-tests.yml
-  #  with:
-  #    release_tag: ${{ needs.make_variables.outputs.tag }}
-  #    upload_logs: 'yes'
+  run_unittests:
+    needs: make_variables
+    uses: ./.github/workflows/unit-tests.yml
+    with:
+      release_tag: ${{ needs.make_variables.outputs.tag }}
+      upload_logs: 'yes'
 
   run_clang_formatting:
     name: Run clang formatting
@@ -58,42 +58,29 @@ jobs:
       run: |
         cat << EOF > run_clang_formatting.sh
           #!/bin/bash
-          echo "======Start container======="
-          echo "Inside container, DBT_AREA_ROOT=$DBT_AREA_ROOT"
-          echo "Starting in: $(pwd)"
-          echo "ls -lrt: $(ls -lrt)"
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
 
           dbt-create -n $DBT_AREA_ROOT /ghw/$DBT_AREA_ROOT
-          echo "After dbt-create: $(pwd)"
-          echo "ls -lrt: $(ls -lrt)"
           cd /ghw/$DBT_AREA_ROOT
           source env.sh
-          #cd ../daq-release-code-checks/scripts
 
-          cd ../scripts
+          cd /ghw/scripts
           echo "cd to scripts? $(pwd)"
           echo "ls -lrt: $(ls -lrt)"
-          #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
 
           cd /ghw/$DBT_AREA_ROOT
-          echo "DBT_AREA_ROOT is $(pwd)"
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
-          echo "pwd: $(pwd)"
-          echo "ls -lrt: $(ls -lrt)"
-          find /ghw -name "clang_format_summary_table.md"
-          echo "======Exit container======="
         EOF
 
         chmod +x run_clang_formatting.sh
         cat run_clang_formatting.sh
     - name: Run clang formatting script in Docker container
       run: |
-        echo "Outside container, DBT_AREA_ROOT=$DBT_AREA_ROOT"
         docker run --rm \
           -v /cvmfs:/cvmfs:shared \
           -v "${GITHUB_WORKSPACE}:/ghw" \
@@ -102,9 +89,6 @@ jobs:
           ${{ env.IMAGE }} \
           /ghw/run_clang_formatting.sh
 
-        echo "pwd: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
-        find . -name "clang_format_summary_table.md"
         cat ./NFD_DEV_260528_A9/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
       uses: actions/upload-artifact@v7
