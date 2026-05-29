@@ -50,7 +50,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
-    -  uses: actions/checkout@v6
+    - uses: actions/checkout@v6
     - name: Pull build image
       run: docker pull ${{ env.IMAGE }}
     - name: Generate clang formatting script
@@ -66,12 +66,8 @@ jobs:
           source env.sh
 
           cd /ghw/scripts
-          echo "cd to scripts? $(pwd)"
-          echo "ls -lrt: $(ls -lrt)"
-          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-          #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
-          #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
 
           cd /ghw/$DBT_AREA_ROOT
           dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary

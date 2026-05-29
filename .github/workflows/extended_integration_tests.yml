@@ -123,10 +123,10 @@ jobs:
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
@@ -254,18 +254,11 @@ jobs:
       with:
         name: extended_integtest_logs
         path: extended_integtest_logs
-    - name: Sanity checks
-      run: |
-        echo "pwd: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
     - name: Generate summary tables
       continue-on-error: true
       run: |
         python scripts/github-ci/integtest_xml_parser.py --input-directory extended_integtest_logs/
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
-        echo "ls -lrt: $(ls -lrt)"
-        echo "Find?"
-        find . -name pytest_summary.json
     - name: Upload markdown summary as artifact
       uses: actions/upload-artifact@v7
       with:
