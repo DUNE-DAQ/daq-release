@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
         cvmfs_repositories: 'dunedaq.opensciencegrid.org, 
                              dunedaq-development.opensciencegrid.org'

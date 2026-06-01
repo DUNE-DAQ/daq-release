@@ -1,5 +1,8 @@
 name: Nightly code check workflow
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -31,64 +34,70 @@ jobs:
       release_tag: ${{ needs.make_variables.outputs.tag }}
       upload_logs: 'yes'
 
-  run_checks:
-    name: Run integration tests and clang formatting
-    runs-on: daq
-    needs: [make_variables, run_unittests]
+  run_clang_formatting:
+    name: Run clang formatting
+    runs-on: ubuntu-latest
+    needs: make_variables
     timeout-minutes: 60
     env:
       DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
+      IMAGE: ghcr.io/dune-daq/nightly-release-alma9:development_v5
     defaults:
       run:
         shell: bash
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
+    - uses: actions/checkout@v6
+    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
-        path: daq-release-code-checks
-    - name: Create build area
+        cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
+    - uses: actions/checkout@v6
+    - name: Pull build image
+      run: docker pull ${{ env.IMAGE }}
+    - name: Generate clang formatting script
+      id: build_script
       run: |
-        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest_v5
-        dbt-create -n ${{ env.DBT_AREA_ROOT }}
-        cd ${{ env.DBT_AREA_ROOT }}
-        source env.sh
-        cd ../daq-release-code-checks/scripts
-        #cd ${{ github.workspace }}/daq-release-code-checks/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-    - name: Run clang formatting
+        cat << EOF > run_clang_formatting.sh
+          #!/bin/bash
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest_v5
+
+          dbt-create -n $DBT_AREA_ROOT /ghw/$DBT_AREA_ROOT
+          cd /ghw/$DBT_AREA_ROOT
+          source env.sh
+
+          cd /ghw/scripts
+          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
+
+          cd /ghw/$DBT_AREA_ROOT
+          dbt-clang-format.sh sourcecode --view-differences-only --markdown-summary
+        EOF
+
+        chmod +x run_clang_formatting.sh
+        cat run_clang_formatting.sh
+    - name: Run clang formatting script in Docker container
       run: |
-        cd ${{ env.DBT_AREA_ROOT }}
-        source env.sh
-        cd sourcecode
-        dbt-clang-format.sh . --view-differences-only --markdown-summary
-        cat clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
+        docker run --rm \
+          -v /cvmfs:/cvmfs:shared \
+          -v "${GITHUB_WORKSPACE}:/ghw" \
+          -e "$DBT_AREA_ROOT" \
+          -w /ghw \
+          ${{ env.IMAGE }} \
+          /ghw/run_clang_formatting.sh
+
+        cat ./${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md >> $GITHUB_STEP_SUMMARY
     - name: Upload clang formatting summary
       uses: actions/upload-artifact@v7
       with:
         if-no-files-found: error
         name: clang_formatting_summary
-        path: ${{ env.DBT_AREA_ROOT }}/sourcecode/clang_format_summary_table.md
+        path: ./${{ env.DBT_AREA_ROOT }}/clang_format_summary_table.md
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
-    needs: [make_variables, run_checks]
+    needs: [make_variables, run_clang_formatting]
     uses: ./.github/workflows/slack-notification.yml
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
-
-  cleanup_test_area:
-    runs-on: daq
-    if: always()
-    needs: [make_variables, send_slack_message]
-    steps:
-      - name: Remove test directory and daq-release
-        run: |
-          rm -rf daq-release-code-checks
-          rm -rf ${{ needs.make_variables.outputs.tag }}

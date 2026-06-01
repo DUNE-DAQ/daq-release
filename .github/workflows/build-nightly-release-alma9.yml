@@ -1,5 +1,8 @@
 name: Alma9 build v5 nightly release with externals v2.3
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -48,7 +51,7 @@ jobs:
         echo "target_tag=$target_tag" >> "$GITHUB_ENV"
         echo "core_tag=$core_tag"
         echo "target_tag=$target_tag"
-    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - name: Check tag on cvmfs

@@ -1,5 +1,8 @@
 name: Slack Notification
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
@@ -28,17 +31,18 @@ on:
 
 jobs:
   generate_and_send_slack_message:
-    runs-on: daq
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
-      with:
-        repository: DUNE-DAQ/daq-release
-        path: daq-release-slack-message
+    - uses: actions/checkout@v6
     - name: Get workflow summary from GitHub API
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         # Outputs workflow_summary.json
-        ./daq-release-slack-message/scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
+        scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
     - name: Download artifact if specified
       if: ${{ inputs.artifact_name }}
       uses: actions/download-artifact@v8
@@ -85,7 +89,7 @@ jobs:
         cat workflow_summary_with_metadata.json
     - name: Parse GitHub API output
       run: |
-        python daq-release-slack-message/scripts/github-ci/slack_message_builder.py \
+        python scripts/github-ci/slack_message_builder.py \
                --workflow-summary workflow_summary_with_metadata.json
         cat slack_payload.json
     - name: Send Slack Message
@@ -96,9 +100,3 @@ jobs:
         payload-file-path: "./slack_payload.json"
         payload-templated: true
         errors: true
-    - name: Cleanup files
-      run: |
-        rm workflow_summary.json additional_metadata.json workflow_summary_with_metadata.json slack_payload.json || true
-        rm pytest_summary.json artifacts.json || true
-        rm -rf artifacts || true
-        rm -rf daq-release-slack-message

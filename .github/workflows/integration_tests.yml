@@ -1,5 +1,8 @@
 name: Integration test workflow
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: "0 5 * * *"
@@ -24,7 +27,7 @@ on:
 jobs:
   make_variables:
     name: create nightly tag, timestamp, etc.
-    runs-on: daq
+    runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
       is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
@@ -62,7 +65,7 @@ jobs:
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
-          integtest_output_path=${{ github.workspace }}/integration_tests_${release_tag}
+          integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
@@ -105,7 +108,6 @@ jobs:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
         IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
         INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
@@ -166,52 +168,67 @@ jobs:
           --chmod=D755,F644 \
           "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
 
-  parse_and_upload_results:
-    runs-on: daq
-    if: always()
-    needs: [make_variables, integration_tests]
-    steps:
-    - name: Checkout daq-release
-      uses: actions/checkout@v6
-      with:
-        repository: DUNE-DAQ/daq-release
-        path: daq-release-integtest
-    - name: Generate summary tables
-      env:
-        RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
-      run: |
-        cd daq-release-integtest/scripts/github-ci/
-        python integtest_xml_parser.py \
-               --input-directory ${{ needs.make_variables.outputs.integtest_output_path }}
-        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
-    - name: Upload markdown summary as artifact
-      uses: actions/upload-artifact@v7
-      with:
-        if-no-files-found: error
-        name: nightly_integtest_summary
-        path: daq-release-integtest/scripts/github-ci/pytest_summary_table.md
-    - name: Upload json summary as artifact
-      uses: actions/upload-artifact@v7
-      with:
-        if-no-files-found: error
-        name: nightly_integtest_json
-        path: daq-release-integtest/scripts/github-ci/pytest_summary.json
-
   store_and_upload_logs:
     runs-on: daq
     timeout-minutes: 5
     needs: [make_variables, integration_tests]
     if: success() || failure()
     steps:
-    - name: Upload logs as artifact
+    - name: Upload pytest logs
       uses: actions/upload-artifact@v7
       with:
         name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
         path: ${{ needs.make_variables.outputs.persistent_log_dir }}
+    - name: Upload junit xml files
+      uses: actions/upload-artifact@v7
+      with:
+        name: junit-xml
+        path: ${{ needs.make_variables.outputs.integtest_output_path }}
+        if-no-files-found: error
+    - name: Cleanup files
+      run: |
+        rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+    - name: Delete old log directories
+      run: |
+        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+        echo "Removing the following directories that are more than 7 days old: $old_dirs"
+        rm -rf $old_dirs
+    # Integration tests can sometimes collide with stale processes, leading to timeout
+    - name: Kill stale gunicorn processes
+      run: |
+        /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+
+  parse_and_upload_results:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [make_variables, store_and_upload_logs]
+    steps:
+    - name: Checkout daq-release
+      uses: actions/checkout@v6
+    - name: Download pytest logs
+      uses: actions/download-artifact@v8
+    - name: Generate summary tables
+      run: |
+        cd scripts/github-ci/
+        python integtest_xml_parser.py \
+               --input-directory ${{ github.workspace }}/junit-xml
+        cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
+    - name: Upload markdown summary as artifact
+      uses: actions/upload-artifact@v7
+      with:
+        if-no-files-found: error
+        name: nightly_integtest_summary
+        path: scripts/github-ci/pytest_summary_table.md
+    - name: Upload json summary as artifact
+      uses: actions/upload-artifact@v7
+      with:
+        if-no-files-found: error
+        name: nightly_integtest_json
+        path: scripts/github-ci/pytest_summary.json
 
   send_slack_message:
     if: (always()) && ((github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes'))
-    needs: [make_variables, store_and_upload_logs]
+    needs: [make_variables, parse_and_upload_results]
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
@@ -219,29 +236,5 @@ jobs:
       artifact_name: nightly_integtest_json
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  cleanup_files:
-    runs-on: daq
-    if: always()
-    needs: [make_variables, parse_and_upload_results, send_slack_message]
-    steps:
-      - name: Remove xml files and daq-release
-        run: |
-          rm -rf ${{ needs.make_variables.outputs.integtest_output_path }} ${{ github.workspace }}/daq-release-integtest/
-      - name: Delete old log directories
-        run: |
-          old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
-          echo "Removing the following directories that are more than 7 days old: $old_dirs"
-          rm -rf $old_dirs
-
-  # Integration tests can sometimes collide with stale processes, leading to timeout
-  cleanup_stale_gunicorn_processes:
-    runs-on: daq
-    if: always()
-    needs: integration_tests
-    steps:
-      - name: Run cleanup script
-        run: |
-          /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
 
