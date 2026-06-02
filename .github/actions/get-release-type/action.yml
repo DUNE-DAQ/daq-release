@@ -24,6 +24,8 @@ runs:
     shell: bash
     run: |
       TAG="${{ inputs.tag }}"
+      TYPE=""
+      DBT_ARGS=""
       if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ ]]; then
         echo "TYPE=nightly"       >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=-n ${TAG}" >> "$GITHUB_OUTPUT"
