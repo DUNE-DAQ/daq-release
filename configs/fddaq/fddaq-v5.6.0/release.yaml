@@ -16,7 +16,7 @@
           version: v4.8.1
           commit: null
         - name: dpdklibs
-          version: v2.3.6
+          version: v2.3.7
           commit: null
         - name: asiolibs
           version: v1.2.3
@@ -148,7 +148,7 @@
           version: 0.6.2
           source:  pypi
         - name: drunc
-          version: 1.1.2
+          version: 1.1.4
           source:  github_DUNE-DAQ
         - name: druncschema
           version: 1.1.0
