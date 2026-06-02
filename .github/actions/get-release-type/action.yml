@@ -36,3 +36,5 @@ runs:
       else
         echo "::error::Unrecognized tag format: ${TAG}"; exit 1
       fi
+      echo "TYPE=$TYPE"
+      echo "DBT_ARGS=$DBT_ARGS"

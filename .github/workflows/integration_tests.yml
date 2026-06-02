@@ -116,7 +116,9 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         
-        dbt-setup-release "$DBT_ARGS" "$RELEASE_TAG"
+        cmd="dbt-setup-release $DBT_ARGS $RELEASE_TAG"
+        echo "Running $cmd"
+        $cmd
 
         TEST_PATH=""
         TEST_SOURCE=""
