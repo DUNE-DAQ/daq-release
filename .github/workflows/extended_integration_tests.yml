@@ -106,9 +106,9 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
 
-        dbt-create $DBT_ARGS "$RELEASE_TAG"
+        dbt-create $DBT_ARGS "$RELEASE_TAG" "$DBT_AREA_ROOT"
 
-        cd ${{ env.DBT_AREA_ROOT }}
+        cd $DBT_AREA_ROOT
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
