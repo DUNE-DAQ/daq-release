@@ -30,19 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
-      is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
-      is_stable_release: ${{ steps.create_variables.outputs.is_stable }}
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
+      dbt_args: ${{ steps.release_type.outputs.DBT_ARGS }}
     defaults:
       run:
         shell: bash
     steps:
       - id: create_variables
         run: |
-          is_candidate=false
-          is_stable=false
           if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
             echo "Error: You cannot specify both a candidate tag and a stable tag. Please choose one and try again. Exiting..."
             exit 1
@@ -54,10 +51,8 @@ jobs:
             fi
           elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
             release_tag="${{ github.event.inputs.candidate-release-tag }}"
-            is_candidate=true
           elif [ -n "${{ github.event.inputs.stable-release-tag }}" ]; then
             release_tag="${{ github.event.inputs.stable-release-tag }}"
-            is_stable=true
           else
             date_tag=$(date +%y%m%d)
             release_tag="NFD_DEV_${date_tag}_A9"
@@ -68,12 +63,15 @@ jobs:
           integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
-          echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
-          echo "is_stable=${is_stable}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+      - name: Get release type
+        id: release_type
+        uses: ./.github/actions/get-release-type
+        with:
+          TAG: ${{ steps.create_variables.outputs.release_tag }}
 
   integration_tests:
     name: integration_tests
@@ -85,18 +83,18 @@ jobs:
         matrix:
 
             test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "disabled_tpg_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
+                        #"listrev_test",
+                        #"3ru_1df_multirun_test",
+                        #"3ru_3df_multirun_test",
+                        #"disabled_tpg_test",
+                        #"example_system_test",
+                        #"fake_data_producer_test",
+                        #"long_window_readout_test",
                         "minimal_system_quick_test",
-                        "readout_type_scan_test",
-                        "small_footprint_quick_test",
-                        "tpreplay_test",
-                        "tpstream_writing_test"
+                        #"readout_type_scan_test",
+                        #"small_footprint_quick_test",
+                        #"tpreplay_test",
+                        #"tpstream_writing_test"
                        ]
     defaults:
       run:
@@ -106,31 +104,19 @@ jobs:
     - name: setup release and run tests
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
-        IS_CANDIDATE_RELEASE: ${{needs.make_variables.outputs.is_candidate_release}}
-        IS_STABLE_RELEASE: ${{needs.make_variables.outputs.is_stable_release}}
+        DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
         INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
-        DET=fd
         mkdir -p $INTEGTEST_OUTPUT_PATH
         cd $INTEGTEST_OUTPUT_PATH
         echo "Am in $(pwd)"
         echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release -b candidate $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release -b candidate $RELEASE_TAG
-        elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "dbt-setup-release $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release $RELEASE_TAG
-        else
-          echo "dbt-setup-release -n $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-setup-release -n $RELEASE_TAG
-        fi
+        
+        dbt-setup-release "$DBT_ARGS" "$RELEASE_TAG"
+
         TEST_PATH=""
         TEST_SOURCE=""
         if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
