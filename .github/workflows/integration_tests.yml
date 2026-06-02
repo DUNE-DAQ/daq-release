@@ -38,6 +38,7 @@ jobs:
       run:
         shell: bash
     steps:
+      - uses: actions/checkout@v6
       - id: create_variables
         run: |
           if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
