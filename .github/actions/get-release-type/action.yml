@@ -24,8 +24,6 @@ runs:
     shell: bash
     run: |
       TAG="${{ inputs.tag }}"
-      TYPE=""
-      DBT_ARGS=""
       if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ ]]; then
         echo "TYPE=nightly"       >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=-n ${TAG}" >> "$GITHUB_OUTPUT"
@@ -36,7 +34,6 @@ runs:
         echo "TYPE=stable"        >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=$DBT_ARGS" >> "$GITHUB_OUTPUT"
       else
-        echo "::error::Unrecognized tag format: ${TAG}"; exit 1
+        echo "ERROR: Unrecognized tag format: ${TAG}"; exit 1
       fi
-      echo "TYPE=$TYPE"
-      echo "DBT_ARGS=$DBT_ARGS"
+      cat "$GITHUB_OUTPUT"
