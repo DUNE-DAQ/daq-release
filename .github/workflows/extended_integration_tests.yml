@@ -30,20 +30,17 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
-      is_candidate_release: ${{ steps.create_variables.outputs.is_candidate }}
-      is_stable_release: ${{ steps.create_variables.outputs.is_stable }}
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
       daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
+      dbt_args: ${{ steps.release_type.outputs.DBT_ARGS }}
     defaults:
       run:
         shell: bash
     steps:
       - id: create_variables
         run: |
-          is_candidate=false
-          is_stable=false
           if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
             echo "Error: You cannot specify both a candidate tag and a stable tag. Please choose one and try again. Exiting..."
             exit 1
@@ -55,10 +52,8 @@ jobs:
             fi
           elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
             release_tag="${{ github.event.inputs.candidate-release-tag }}"
-            is_candidate=true
           elif [ -n "${{ github.event.inputs.stable-release-tag }}" ]; then
             release_tag="${{ github.event.inputs.stable-release-tag }}"
-            is_stable=true
           else
             date_tag=$(date +%y%m%d)
             release_tag="NFD_DEV_${date_tag}_A9"
@@ -70,13 +65,16 @@ jobs:
           daq_release_path="daq-release-extended-tests"
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
-          echo "is_candidate=${is_candidate}"  >>  "$GITHUB_OUTPUT"
-          echo "is_stable=${is_stable}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
           echo "daq_release_path=${daq_release_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+      - name: Get release type
+        id: release_type
+        uses: ./.github/actions/get-release-type
+        with:
+          TAG: ${{ steps.create_variables.outputs.release_tag }}
 
   extended_integration_tests:
     name: extended_integration_tests
@@ -102,31 +100,20 @@ jobs:
 
     - name: Create build area
       env:
-        IS_CANDIDATE_RELEASE: ${{ needs.make_variables.outputs.is_candidate_release }}
-        IS_STABLE_RELEASE: ${{ needs.make_variables.outputs.is_stable_release }}
+        DBT_ARGS: ${{ needs.make_variables.outputs.DBT_ARGS }}
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        if [[ "$IS_CANDIDATE_RELEASE" == "true" ]]; then
-          echo "create -b candidate $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/candidates/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create -b candidate $RELEASE_TAG $RELEASE_TAG
-        elif [[ "$IS_STABLE_RELEASE" == "true" ]]; then
-          echo "create $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq.opensciencegrid.org/spack/releases/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create $RELEASE_TAG $RELEASE_TAG
-        else
-          echo "create -n $RELEASE_TAG"
-          [[ -e /cvmfs/dunedaq-development.opensciencegrid.org/nightly/$RELEASE_TAG/daq_app_rte.sh ]]
-          dbt-create -n $RELEASE_TAG $RELEASE_TAG
-        fi
+
+        dbt-create "$DBT_ARGS" "$RELEASE_TAG"
+
         cd ${{ env.DBT_AREA_ROOT }}
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
