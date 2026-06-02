@@ -34,7 +34,7 @@ runs:
         echo "DBT_ARGS=-b candidate" >> "$GITHUB_OUTPUT"
       elif [[ "$TAG" =~ ^[a-z]+-v[0-9]+\.[0-9]+\.[0-9]+-?[a-z]+[0-9]+$ ]]; then
         echo "TYPE=stable"        >> "$GITHUB_OUTPUT"
-        echo "DBT_ARGS=''"        >> "$GITHUB_OUTPUT"
+        echo "DBT_ARGS=$DBT_ARGS" >> "$GITHUB_OUTPUT"
       else
         echo "::error::Unrecognized tag format: ${TAG}"; exit 1
       fi
