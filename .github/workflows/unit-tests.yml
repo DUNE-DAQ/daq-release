@@ -51,7 +51,7 @@ jobs:
         path: daq-release-unittests
     - name: Determine release type
       id: release_type
-      uses: ./.github/actions/get-release-type
+      uses: ./daq-release-unittests/.github/actions/get-release-type
       with:
         TAG: ${{ inputs.release_tag }}
     - name: Create build area
