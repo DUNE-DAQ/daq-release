@@ -34,7 +34,9 @@ jobs:
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
       daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
-      dbt_args: ${{ steps.release_type.outputs.DBT_ARGS }}
+      dbt_args: ${{ steps.release_type.outputs.dbt_args }}
+      coredaq_manifest: ${{ steps.release_type.outputs.coredaq_manifest }}
+      fddaq_manifest: ${{ steps.release_type.outputs.fddaq_manifest }}
     defaults:
       run:
         shell: bash
@@ -101,7 +103,9 @@ jobs:
 
     - name: Create build area
       env:
-        DBT_ARGS: ${{ needs.make_variables.outputs.DBT_ARGS }}
+        DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
+        COREDAQ_MANIFEST: ${{ needs.make_variables.outputs.coredaq_manifest }}
+        FDDAQ_MANIFEST: ${{ needs.make_variables.outputs.fddaq_manifest }}
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
@@ -111,10 +115,14 @@ jobs:
         cd $DBT_AREA_ROOT
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
+        echo "DEBUG LS:"
+        echo "$COREDAQ_MANIFEST"
+        ls -lrt ../
+        ls -lrt ../$COREDAQ_MANIFEST
         #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p trigger -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -p trigger -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
     - name: Run integration tests
