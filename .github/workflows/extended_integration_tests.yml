@@ -12,17 +12,12 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-      override-nightly-tag:
-        description: 'manually specify the nightly tag (optional)'
+      release-tag:
+        description: >-
+          Release to test, e.g., NFD_DEV_YYMMDD_A9, fddaq-vX.Y.Z-a9, etc. 
+          Default: last_fddaq (latest nightly)
         required: false
-      candidate-release-tag:
-        description: 'manually specify a candidate release tag (optional)'
-        required: false
-        default: ""
-      stable-release-tag:
-        description: 'manually specify a stable release tag (optional)'
-        required: false
-        default: ""
+        default: 'last_fddaq'
 
 jobs:
   make_variables:
@@ -44,23 +39,8 @@ jobs:
       - uses: actions/checkout@v6
       - id: create_variables
         run: |
-          if [[ -n "${{ github.event.inputs.candidate-release-tag }}" && -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
-            echo "Error: You cannot specify both a candidate tag and a stable tag. Please choose one and try again. Exiting..."
-            exit 1
-          fi
-          if [ -n "${{ github.event.inputs.override-nightly-tag }}" ]; then
-            release_tag="${{ github.event.inputs.override-nightly-tag }}"
-            if [[ -n "${{ github.event.inputs.candidate-release-tag }}" || -n "${{ github.event.inputs.stable-release-tag }}" ]]; then
-              echo "WARNING: The provided nightly tag will supercede the provided candidate or stable release tag."
-            fi
-          elif [ -n "${{ github.event.inputs.candidate-release-tag }}" ]; then
-            release_tag="${{ github.event.inputs.candidate-release-tag }}"
-          elif [ -n "${{ github.event.inputs.stable-release-tag }}" ]; then
-            release_tag="${{ github.event.inputs.stable-release-tag }}"
-          else
-            date_tag=$(date +%y%m%d)
-            release_tag="NFD_DEV_${date_tag}_A9"
-          fi
+          tag="${{ inputs.release-tag }}"
+          release_tag="${tag:-last_fddaq}"
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-extended-${timestamp}
@@ -115,13 +95,9 @@ jobs:
         cd $DBT_AREA_ROOT
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
-        echo "DEBUG LS:"
-        echo "$COREDAQ_MANIFEST"
-        ls -lrt ../
-        ls -lrt ../$COREDAQ_MANIFEST
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p dfmodules -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p dfmodules -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -p trigger -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
 
