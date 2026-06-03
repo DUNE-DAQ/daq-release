@@ -4,7 +4,7 @@ description: 'Get release type'
 
 inputs:
   TAG:
-    description: 'Relese tag'
+    description: 'Release tag'
     type: string
     required: true
 
