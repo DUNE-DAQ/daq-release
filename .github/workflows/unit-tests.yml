@@ -64,7 +64,7 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest
 
-        dbt-create "$DBT_ARGS" "$RELEASE_TAG"
+        dbt-create $DBT_ARGS "$RELEASE_TAG"
 
         cd "$RELEASE_TAG"
         source env.sh
