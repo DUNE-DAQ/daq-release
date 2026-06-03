@@ -35,8 +35,8 @@ runs:
         echo "TYPE=nightly" >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=-n"  >> "$GITHUB_OUTPUT"
 
-        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-develop/release.yml" >> "$GITHUB_OUTPUT"
-        echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-develop/release.yml" >> "$GITHUB_OUTPUT"
+        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-develop/release.yaml" >> "$GITHUB_OUTPUT"
+        echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-develop/release.yaml" >> "$GITHUB_OUTPUT"
 
       # Tags containing vX.Y.Z are either candidate or stable
       elif [[ "$TAG" =~ -v([0-9]+)\.([0-9]+)\.[0-9]+- ]]; then
@@ -53,12 +53,12 @@ runs:
         # Backwards compatibility with previous manifest file name format
         VERSION_STRING=$(echo "$TAG" | cut -d "-" -f 2)
         if (( MAJOR_VERSION < 5 || (MAJOR_VERSION == 5 && MINOR_VERSION < 6) )); then
-          echo "COREDAQ_MANIFEST=configs/coredaq/coredaq-${VERSION_STRING}/release.yml" >> "$GITHUB_OUTPUT"
+          echo "COREDAQ_MANIFEST=configs/coredaq/coredaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
         else
-          echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-coredaq-${VERSION_STRING}/release.yml" >> "$GITHUB_OUTPUT"
+          echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-coredaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
         fi
 
-        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-${VERSION_STRING}/release.yml" >> "$GITHUB_OUTPUT"
+        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
 
       else
         echo "::error::Unrecognized tag format: ${TAG}"; exit 1
