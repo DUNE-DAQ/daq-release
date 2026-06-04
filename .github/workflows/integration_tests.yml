@@ -14,7 +14,7 @@ on:
         default: 'no'
       release-tag:
         description: >-
-          Release to test, e.g., NFD_DEV_YYMMDD_A9, fddaq-vX.Y.Z-a9, etc. 
+          Release to test, e.g., NFD_DEV_YYMMDD_A9, fddaq-vX.Y.Z-a9, etc.
           Default: last_fddaq (latest nightly)
         required: false
         default: 'last_fddaq'
@@ -95,9 +95,7 @@ jobs:
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         
-        cmd="dbt-setup-release $DBT_ARGS $RELEASE_TAG"
-        echo "Running $cmd"
-        $cmd
+        dbt-setup-release $DBT_ARGS $RELEASE_TAG
 
         TEST_PATH=""
         TEST_SOURCE=""
