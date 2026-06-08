@@ -39,6 +39,8 @@ jobs:
     name: Run unit tests
     runs-on: daq
     timeout-minutes: 30
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag }}
     defaults:
       run:
         shell: bash
@@ -48,52 +50,30 @@ jobs:
       with:
         path: daq-release-unittests
     - name: Determine release type
-      env:
-        RELEASE_TAG: ${{ inputs.release_tag }}
-      run: |
-        RELEASE_TYPE=""
-        echo "RELEASE_TAG: $RELEASE_TAG"
-        if [[ "$RELEASE_TAG" == NFD* ]]; then
-          RELEASE_TYPE="nightly"
-        elif [[ "$RELEASE_TAG" == *rc* ]]; then
-          RELEASE_TYPE="candidate"
-        elif [[ "$RELEASE_TAG" =~ ^fddaq-v[0-9]+\.[0-9]+\.[0-9]+-a9 ]]; then
-          RELEASE_TYPE="stable"
-        else
-          echo "Could not determine release type. Exiting..."
-          exit 1
-        fi
-
-        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
-        echo "RELEASE_TYPE=$RELEASE_TYPE" >> $GITHUB_ENV
-
+      id: release_type
+      uses: ./daq-release-unittests/.github/actions/get-release-type
+      with:
+        TAG: ${{ inputs.release_tag }}
     - name: Create build area
+      env:
+        RELEASE_TYPE: ${{ steps.release_type.outputs.type }}
+        DBT_ARGS: ${{ steps.release_type.outputs.dbt_args }}
+        COREDAQ_MANIFEST: ${{ steps.release_type.outputs.coredaq_manifest }}
+        FDDAQ_MANIFEST: ${{ steps.release_type.outputs.fddaq_manifest }}
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest
-        if [[ "$RELEASE_TYPE" == "nightly" ]]; then
-          dbt-create -n "$RELEASE_TAG"
-        elif [[ "$RELEASE_TYPE" == "candidate" ]]; then
-          dbt-create -b candidate "$RELEASE_TAG"
-        else
-          dbt-create "$RELEASE_TAG" "$RELEASE_TAG"
-        fi
+
+        dbt-create $DBT_ARGS "$RELEASE_TAG"
+
         cd "$RELEASE_TAG"
         source env.sh
 
-        if [[ "$RELEASE_TYPE" == "nightly" ]]; then
-          VERSION_TAG="develop"
-        else
-          # To find the correct release manifest, extract vX.Y.Z from the release name
-          VERSION_TAG=$(echo "$RELEASE_TAG" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+')
-        fi
-        echo "VERSION_TAG: $VERSION_TAG"
-
         cd ../daq-release-unittests/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-${VERSION_TAG}/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -i ../$FDDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run unit tests
       id: unit_tests

@@ -4,7 +4,7 @@ description: 'Get release type'
 
 inputs:
   TAG:
-    description: 'Relese tag'
+    description: 'Release tag'
     type: string
     required: true
 
@@ -15,6 +15,12 @@ outputs:
   dbt_args:
     description: 'Additional args for dbt-build, dbt-setup-release, etc.'
     value: ${{ steps.get_release_type.outputs.DBT_ARGS }}
+  fddaq_manifest:
+    description: 'Path to far detector release manifest, relative to daq-release root'
+    value: ${{ steps.get_release_type.outputs.FDDAQ_MANIFEST }}
+  coredaq_manifest:
+    description: 'Path to core release manifest, relative to daq-release root'
+    value: ${{ steps.get_release_type.outputs.COREDAQ_MANIFEST }}
 
 runs:
   using: "composite"
@@ -24,15 +30,38 @@ runs:
     shell: bash
     run: |
       TAG="${{ inputs.tag }}"
-      if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ ]]; then
-        echo "TYPE=nightly"       >> "$GITHUB_OUTPUT"
-        echo "DBT_ARGS=-n ${TAG}" >> "$GITHUB_OUTPUT"
-      elif [[ "$TAG" =~ ^[a-z]+-v[0-9]+\.[0-9]+\.[0-9]+-?rc[0-9]+.*$ ]]; then
-        echo "TYPE=candidate"        >> "$GITHUB_OUTPUT"
-        echo "DBT_ARGS=-b candidate" >> "$GITHUB_OUTPUT"
-      elif [[ "$TAG" =~ ^[a-z]+-v[0-9]+\.[0-9]+\.[0-9]+-?[a-z]+[0-9]+$ ]]; then
-        echo "TYPE=stable"        >> "$GITHUB_OUTPUT"
-        echo "DBT_ARGS=''"        >> "$GITHUB_OUTPUT"
+
+      if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ || "$TAG" == "last_fddaq" ]]; then
+        echo "TYPE=nightly" >> "$GITHUB_OUTPUT"
+        echo "DBT_ARGS=-n"  >> "$GITHUB_OUTPUT"
+
+        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-develop/release.yaml" >> "$GITHUB_OUTPUT"
+        echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-develop/release.yaml" >> "$GITHUB_OUTPUT"
+
+      # Tags containing vX.Y.Z are either candidate or stable
+      elif [[ "$TAG" =~ -v([0-9]+)\.([0-9]+)\.[0-9]+- ]]; then
+        MAJOR_VERSION="${BASH_REMATCH[1]}"
+        MINOR_VERSION="${BASH_REMATCH[2]}"
+        if [[ "$TAG" =~ -rc[0-9]+- ]]; then
+          echo "TYPE=candidate"        >> "$GITHUB_OUTPUT"
+          echo "DBT_ARGS=-b candidate" >> "$GITHUB_OUTPUT"
+        else
+          echo "TYPE=stable" >> "$GITHUB_OUTPUT"
+          echo "DBT_ARGS="   >> "$GITHUB_OUTPUT"
+        fi
+
+        # Backwards compatibility with previous manifest file name format
+        VERSION_STRING=$(echo "$TAG" | cut -d "-" -f 2)
+        if (( MAJOR_VERSION < 5 || (MAJOR_VERSION == 5 && MINOR_VERSION < 6) )); then
+          echo "COREDAQ_MANIFEST=configs/coredaq/coredaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
+        else
+          echo "COREDAQ_MANIFEST=configs/coredaq/fddaq-coredaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
+        fi
+
+        echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-${VERSION_STRING}/release.yaml" >> "$GITHUB_OUTPUT"
+
       else
         echo "::error::Unrecognized tag format: ${TAG}"; exit 1
       fi
+
+      cat "$GITHUB_OUTPUT"
