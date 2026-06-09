@@ -80,38 +80,21 @@ jobs:
       uses: actions/checkout@v6
       with:
         path: ${{ needs.make_variables.outputs.daq_release_path }}
-
-    - name: Create build area
-      env:
-        DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
-        COREDAQ_MANIFEST: ${{ needs.make_variables.outputs.coredaq_manifest }}
-        FDDAQ_MANIFEST: ${{ needs.make_variables.outputs.fddaq_manifest }}
-      run: |
-        source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-        setup_dbt latest_v5
-
-        dbt-create $DBT_ARGS "$RELEASE_TAG" "$DBT_AREA_ROOT"
-
-        cd $DBT_AREA_ROOT
-        source env.sh
-        cd ../$DAQ_RELEASE_PATH/scripts
-        ./checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p dfmodules -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
-        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-
+    - name: Setup build area
+      id: build_area
+      uses: ./.github/actions/create-build-area
+      with:
+        TAG: ${{ needs.make_variables.outputs.tag }}
     - name: Run integration tests
       id: integtests
       run: |
-        cd $DBT_AREA_ROOT
+        cd ${{ steps.build_area.outputs.symlink }}
         # daqsystemtest and listrev tests are already run as part of the nightly integration tests
         rm -rf sourcecode/daqsystemtest
         rm -rf sourcecode/listrev
         source env.sh
         dbt-workarea-env
         dbt-build --integtest | tee integtest_full_output.log
-
     - name: Check and set integration test log directory
       if: success() || failure()
       id: integtest_logs

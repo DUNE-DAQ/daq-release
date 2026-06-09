@@ -1,0 +1,81 @@
+name: Setup build area
+
+description: >-
+  Create or setup a DUNE DAQ build area given an input tag.
+  If a build area does not exist, create the area and a symlink pointing to it.
+  If one already exists, source its env.sh.
+
+inputs:
+  TAG:
+    description: 'Release tag'
+    type: string
+    required: true
+  SYMLINK:
+    description: >-
+      Name of the symlink that will be used to find this build area.
+      If a symlink with this name already exists, it will be forcibly overwritten.
+      Default: latest_nightly
+    required: false
+    default: 'latest_nightly'
+
+outputs:
+  symlink:
+    description: 'Symbolic link to created or setup build area'
+    value: ${{ steps.symlink.outputs.LINK }}
+
+runs:
+  using: "composite"
+  steps:
+  - name: Verify host
+    shell: bash
+    run: |
+      if ! hostname=="daq.fnal.gov"; then
+        echo "::error:: This action is intended to run on daq.fnal.gov"
+        echo "::error:: This host is $(hostname)"
+        exit 1
+      fi
+  - uses: actions/checkout@v6
+  - name: Check if build area already exists
+    shell: bash
+    run: |
+      if [[ -d "$TAG" || -L "$SYMLINK" ]]; then
+        if basename "$(readlink -f $SYMLINK)" == "$TAG"; then
+          echo "Found existing build area for $TAG"
+        fi
+      fi
+  - name: Get release type
+    id: release_type
+    uses: ./.github/actions/get-release-type
+    with:
+      TAG: ${{ inputs.TAG }}
+  - name: Create build area
+    id: build_area
+    shell: bash
+    env:
+      DBT_ARGS: ${{ steps.release_type.outputs.dbt_args }}
+      COREDAQ_MANIFEST: ${{ steps.release_type.outputs.coredaq_manifest }}
+      FDDAQ_MANIFEST: ${{ steps.release_type.outputs.fddaq_manifest }}
+      TAG: ${{ inputs.TAG }}
+    run: |
+      source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+      setup_dbt latest_v5
+
+      dbt-create $DBT_ARGS "$TAG" "$TAG"
+
+      cd $DBT_AREA_ROOT
+      source env.sh
+      ./scripts/checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+      ./scripts/checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
+      echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+  - name: Update symlink
+    id: symlink
+    shell: bash
+    env:
+      LINK: ${{ inputs.SYMLINK }}
+      TAG: ${{ inputs.TAG }}
+    run: |
+      if [[ -L "$LINK" ]]; then
+        rm -rf "$(readlink -f $LINK)"
+      fi
+      ln -sfn "$TAG" "$LINK"
+
