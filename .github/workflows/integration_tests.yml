@@ -38,6 +38,9 @@ jobs:
         run: |
           tag="${{ inputs.release-tag }}"
           release_tag="${tag:-last_fddaq}"
+          if [[ "$release_tag" == "last_fddaq" ]]; then
+            release_tag="NFD_DEV_$(date +%y%m%d)_A9"
+          fi
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
           integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}

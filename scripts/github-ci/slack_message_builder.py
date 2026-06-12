@@ -32,7 +32,7 @@ def choose_strategy(data: dict) -> MessageStrategy:
 def get_release_type(release_name: str) -> str:
     if not release_name:
         return None
-    if release_name.startswith("NFD_"):
+    if release_name.startswith("NFD_") or release_name=="last_fddaq":
         return "nightly"
     elif "FD_" in release_name and not release_name.startswith("N"):
         return "test"
