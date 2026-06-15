@@ -29,6 +29,7 @@ jobs:
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
       daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
+      release_type: ${{ steps.release_type.outputs.type }}
       dbt_args: ${{ steps.release_type.outputs.dbt_args }}
       coredaq_manifest: ${{ steps.release_type.outputs.coredaq_manifest }}
       fddaq_manifest: ${{ steps.release_type.outputs.fddaq_manifest }}
@@ -43,6 +44,7 @@ jobs:
           release_tag="${tag:-last_fddaq}"
           if [[ "$release_tag" == "last_fddaq" ]]; then
             release_tag="NFD_DEV_$(date +%y%m%d)_A9"
+            use_latest_nightly=true
           fi
 
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
@@ -83,7 +85,24 @@ jobs:
       uses: actions/checkout@v6
       with:
         path: ${{ needs.make_variables.outputs.daq_release_path }}
-    - name: Setup build area
+    - name: Check latest_nightly symlink
+      if: ${{ needs.make_variables.outputs.release_type == 'nightly' }}
+      run: |
+        if [[ ! -L latest_nightly || ! -e latest_nightly]]; then
+          echo "::error:: Detected nightly build type, but the symbolic link"
+          echo "::error:: latest_nightly does not exist."
+          exit 11
+        fi
+        
+        link_endpoint="$(basename $(readlink -f latest_nightly))"
+        if [[ "$link_endpoint" != "$RELEASE_TAG" ]]; then
+          echo "::error:: The symbolic link latest_nightly does not point"
+          echo "::error:: to the provided release $RELEASE_TAG."
+          echo "::error:: This may indicate an issue with the nightly build."
+          exit 12
+        fi
+    - name: Create build area
+      if: ${{ needs.make_variables.outputs.release_type != 'nightly' }}
       id: build_area
       uses: ./.github/actions/create-build-area
       with:
@@ -111,11 +130,11 @@ jobs:
 
         if [[ ! -d $integtest_log_dir ]]; then
           echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
-          exit 2
+          exit 13
         fi
         if [[ -z $(ls -A $integtest_log_dir) ]]; then
           echo "ERROR: The log directory $integtest_log_dir is empty."
-          exit 3
+          exit 14
         fi
 
         logs_exist="true"
@@ -154,7 +173,7 @@ jobs:
           total_log_dir_size=$(( total_log_dir_size + dir_size_kb))
           if (( total_log_dir_size > max_kb )); then
             echo "ERROR: $dir of size $dir_size_kb would make $PERSISTENT_LOG_DIR exceed $max_kb. Exiting..." >&2
-            exit 2
+            exit 15
           fi
 
           rsync -a --no-links --prune-empty-dirs \
