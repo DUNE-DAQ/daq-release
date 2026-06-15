@@ -1,9 +1,14 @@
 name: Setup build area
 
 description: >-
-  Create or setup a DUNE DAQ build area given an input tag.
-  If a build area does not exist, create the area and a symlink pointing to it.
-  If one already exists, source its env.sh.
+  Create or source a DUNE DAQ build area given an input tag.
+
+  For scheduled nightly workflows, create a new build area to be used
+  by downstream workflows, e.g., integration/unit tests.
+
+  For manually triggered workflows, create a new build area. Note that
+  the calling workflow is responsible for removing this new area from
+  daq.fnal.gov.
 
 inputs:
   TAG:
@@ -13,7 +18,6 @@ inputs:
   SYMLINK:
     description: >-
       Name of the symlink that will be used to find this build area.
-      If a symlink with this name already exists, it will be forcibly overwritten.
       Default: latest_nightly
     required: false
     default: 'latest_nightly'
@@ -35,20 +39,55 @@ runs:
         exit 1
       fi
   - uses: actions/checkout@v6
-  - name: Check if build area already exists
-    shell: bash
-    run: |
-      if [[ -d "$TAG" || -L "$SYMLINK" ]]; then
-        if basename "$(readlink -f $SYMLINK)" == "$TAG"; then
-          echo "Found existing build area for $TAG"
-        fi
-      fi
   - name: Get release type
     id: release_type
     uses: ./.github/actions/get-release-type
     with:
       TAG: ${{ inputs.TAG }}
+  - name: Resolve tag and symlink
+    id: resolve_link
+    shell: bash
+    env:
+      TAG: ${{ inputs.TAG }}
+      LINK: ${{ inputs.SYMLINK }}
+    run: |
+      ACTION=none
+      if [[ ! -L "$LINK" || ! -e "$LINK" ]]; then
+        echo "Provided symlink $LINK does not exist or is broken."
+        echo "A new area based on $TAG will be created and pointed to by $LINK".
+        echo "ls -lrt:"
+        ls -lrt
+        ACTION=build
+
+      else
+        link_endpoint="$(basename $(readlink -f $LINK))"
+        if [[ "$link_endpoint" == "$TAG" ]]; then
+          echo "Link $LINK already exists and points to $TAG."
+          echo "This workflow will source the existing area."
+          ACTION=source
+        else
+          echo "Link $LINK exists but points to $link_endpoint, which is different"
+          echo "from the provided $TAG. The old area will be deleted and"
+          echo "replaced with one based off $TAG."
+          ACTION=build
+        fi
+      fi
+
+      echo "ACTION=$ACTION" >> "$GITHUB_OUTPUT"
+
+  # If: symlink exists and points to tag
+  - name: Source build area
+    id: source_area
+    if: ${{ steps.resolve_link.outputs.ACTION == 'source' }}
+    shell: bash
+    env:
+      LINK: ${{ inputs.SYMLINK }}
+    run: |
+      cd "$(readlink -f $LINK)"
+      source env.sh
+  # If: symlink does not exist OR symlink exists but points to different tag
   - name: Create build area
+    if: ${{ steps.resolve_link.outputs.ACTION == 'build' }}
     id: build_area
     shell: bash
     env:
@@ -67,6 +106,7 @@ runs:
       ./scripts/checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
       ./scripts/checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
       echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
+  # If symlink points to older/wrong tag, move it here
   - name: Update symlink
     id: symlink
     shell: bash
