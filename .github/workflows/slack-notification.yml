@@ -44,13 +44,15 @@ jobs:
         # Outputs workflow_summary.json
         scripts/github-ci/get_workflow_summary.sh ${{ github.run_id }}
     - name: Download artifact if specified
+      id: download
       if: ${{ inputs.artifact_name }}
+      continue-on-error: true
       uses: actions/download-artifact@v8
       with:
         name: ${{ inputs.artifact_name }}
         path: artifacts
     - name: Extract artifact data
-      if: ${{ inputs.artifact_name }}
+      if: ${{ inputs.artifact_name && steps.download.conclusion == 'success' }}
       run: |
         ARTIFACT_JSON="{}"
         [[ -d artifacts ]] || echo "ERROR: There was an issue downloading ${{ inputs.artifact_name }}; exit 1"

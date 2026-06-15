@@ -116,6 +116,7 @@ jobs:
         test $pytest_retval == 0 || false
 
     - name: Copy log to persistent area
+      if: always()
       env:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
@@ -141,13 +142,14 @@ jobs:
     runs-on: daq
     timeout-minutes: 5
     needs: [make_variables, integration_tests]
-    if: success() || failure()
+    if: always()
     steps:
     - name: Upload pytest logs
       uses: actions/upload-artifact@v7
       with:
         name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
         path: ${{ needs.make_variables.outputs.persistent_log_dir }}
+        if-no-files-found: error
     - name: Upload junit xml files
       uses: actions/upload-artifact@v7
       with:
@@ -169,7 +171,7 @@ jobs:
 
   parse_and_upload_results:
     runs-on: ubuntu-latest
-    if: always()
+    if: ${{ needs.store_and_upload_logs.result == 'success' }}
     needs: [make_variables, store_and_upload_logs]
     steps:
     - name: Checkout daq-release
