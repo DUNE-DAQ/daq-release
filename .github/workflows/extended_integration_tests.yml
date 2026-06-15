@@ -116,7 +116,7 @@ jobs:
         dbt-build --integtest | tee integtest_full_output.log
 
     - name: Check and set integration test log directory
-      if: success() || failure()
+      if: always()
       id: integtest_logs
       run: |
         # Log directory is the last non-empty line of output
@@ -221,8 +221,8 @@ jobs:
 
   parse_and_upload_results:
     runs-on: ubuntu-latest
-    if: always()
     needs: [make_variables, extended_integration_tests]
+    if: ${{ needs.extended_integration_tests.result == 'success' }}
     steps:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
