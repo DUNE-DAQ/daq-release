@@ -10,7 +10,7 @@ inputs:
 
 outputs:
   type:
-    description: 'One of nightly, stable, or candidate'
+    description: 'One of nightly, stable, candidate, or test'
     value: ${{ steps.get_release_type.outputs.TYPE }}
   dbt_args:
     description: 'Additional args for dbt-build, dbt-setup-release, etc.'
@@ -30,9 +30,13 @@ runs:
     shell: bash
     run: |
       TAG="${{ inputs.tag }}"
+      if [[ "$TAG" =~ ^[A-Z]+FD_DEV_[0-9]{6}_[A-Za-z0-9]+$ || "$TAG" == "last_fddaq" ]]; then
+        TYPE=nightly
+        if [[ "$TAG" != NFD_* ]]; then
+          TYPE=test
+        fi
 
-      if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ || "$TAG" == "last_fddaq" ]]; then
-        echo "TYPE=nightly" >> "$GITHUB_OUTPUT"
+        echo "TYPE=$TYPE" >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=-n"  >> "$GITHUB_OUTPUT"
 
         echo "FDDAQ_MANIFEST=configs/fddaq/fddaq-develop/release.yaml" >> "$GITHUB_OUTPUT"
