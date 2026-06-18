@@ -222,7 +222,7 @@ jobs:
   parse_and_upload_results:
     runs-on: ubuntu-latest
     needs: [make_variables, extended_integration_tests]
-    if: ${{ needs.extended_integration_tests.result == 'success' }}
+    if: always() && needs.extended_integration_tests.result == 'success'
     steps:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
