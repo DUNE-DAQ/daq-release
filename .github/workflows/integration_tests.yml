@@ -171,8 +171,8 @@ jobs:
 
   parse_and_upload_results:
     runs-on: ubuntu-latest
-    if: ${{ needs.store_and_upload_logs.result == 'success' }}
     needs: [make_variables, store_and_upload_logs]
+    if: always() && needs.store_and_upload_logs.result == 'success'
     steps:
     - name: Checkout daq-release
       uses: actions/checkout@v6
