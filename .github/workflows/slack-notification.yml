@@ -62,7 +62,7 @@ jobs:
         else
           echo "WARNING: ${{ inputs.artifact_name }} does not contains any JSON files."
           echo "WARNING: Continuing with empty artifact data..."
-          echo "[]" > artifacts.json
+          echo "{}" > artifacts.json
         fi
 
         echo "Found additional artifact data:"
