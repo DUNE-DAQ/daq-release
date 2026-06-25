@@ -33,22 +33,32 @@ jobs:
     - name: Get workflow run IDs
       id: run_ids
       run: |
-        lcov_id=$(gh run list --repo DUNE-DAQ/daq-release \
-                              --workflow "Weekly code coverage workflow" \
-                              --limit 1 --status success \
-                              --json databaseId --jq '.[0].databaseId')
-        code_check_id=$(gh run list --repo DUNE-DAQ/daq-release \
-                                   --workflow nightly-code-check.yml \
-                                   --limit 1 --status success \
-                                   --json databaseId --jq '.[0].databaseId')
-        integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
-                                          --workflow integration_tests.yml \
-                                          --limit 1 \
-                                          --json databaseId --jq '.[0].databaseId')
-        extended_integration_test_id=$(gh run list --repo DUNE-DAQ/daq-release \
-                                          --workflow extended_integration_tests.yml \
-                                          --limit 1 \
-                                          --json databaseId --jq '.[0].databaseId')
+        get_run_id() {
+          local workflow=$1
+
+          run_id=$(
+            gh run list \
+              --repo DUNE-DAQ/daq-release \
+              --workflow "$workflow" \
+              --status completed \
+              --limit 1 \
+              --json databaseId --jq '.[0].databaseId'
+            ) \
+            || { echo "::error::get_run_id: Failed to get workflow ID for '${workflow}'" >&2; return 1; }
+
+            if [[ -z "$run_id" || "$run_id" == "null" ]]; then
+              echo "::error::get_run_id: Got null or empty workflow ID for '${workflow}'"
+              return 1
+            fi
+
+            echo "$run_id"
+        }
+
+        code_check_id=$(get_run_id "nightly-code-check.yml")
+        lcov_id=$(get_run_id "Weekly code coverage workflow")
+        integration_test_id=$(get_run_id "integration_tests.yml")
+        extended_integration_test_id=$(get_run_id "extended_integration_tests.yml")
+
         echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
