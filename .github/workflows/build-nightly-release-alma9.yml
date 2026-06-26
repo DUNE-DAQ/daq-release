@@ -206,6 +206,103 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  update_prebuilt_image:
+    runs-on: daq
+    strategy:
+      matrix:
+        include:
+          - input_image: "ghcr.io/dune-daq/nightly-release-alma9"
+            output_image: "ghcr.io/dune-daq/nightly-prebuilt-alma9"
+            tag: "prebuilt${{ inputs.tag-prefix }}"
+    needs: [make_tags, update_image]
+    environment: dockerhub
+    env:
+      IMAGE_PATH: ${{ github.workspace }}/docker-prebuilt
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: clean docker-prebuilt
+        run: |
+          mkdir -p $IMAGE_PATH
+          rm -rf $IMAGE_PATH/*
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate entrypoint script
+        run: |
+          cat > ${IMAGE_PATH}/entrypoint.sh << 'EOF'
+          #!/bin/bash
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
+          setup_dbt latest
+          source env.sh
+          exec "$@"
+          EOF
+
+      - name: Generate Dockerfile for prebuilt image
+        run: |
+          cat > ${IMAGE_PATH}/Dockerfile << 'EOF'
+          ARG BASE_IMAGE
+          FROM ${BASE_IMAGE}
+
+          ARG TARGET_TAG
+          ENV TARGET_TAG=${TARGET_TAG}
+          SHELL ["/bin/bash", "-c"]
+
+          RUN mkdir -p /work/dev_area && \
+          cd /work/dev_area || exit 1 && \
+          git clone https://github.com/DUNE-DAQ/daq-release.git && \
+          source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh && \
+          setup_dbt latest && \
+          dbt-create -n last_fddaq ${TARGET_TAG} && \
+          echo "====pwd $(pwd)====" && \
+          ls -lrt && \
+          cd /work/dev_area/${TARGET_TAG}/ || exit 2 && \
+          echo "====pwd $(pwd)====" && \
+          ls -lrt && \
+          pwd && \
+          source /work/dev_area/$TARGET_TAG/env.sh || exit 3 && \
+          env | grep DBT || exit 6 && \
+          ls -lrt ${DBT_AREA_ROOT} || exit 13 && \
+          ls -lrt ${DBT_AREA_ROOT}/sourcecode || exit 12 && \
+          /work/dev_area/daq-release/scripts/checkout-daq-package.py \
+              -i /work/dev_area/daq-release/configs/coredaq/fddaq-develop/release.yaml \
+              -a -o ${DBT_AREA_ROOT}/sourcecode || exit 4 && \
+          spack load dbe && \
+          dbt-build || exit 5
+
+          WORKDIR /work/dev_area/${TARGET_TAG}
+          COPY entrypoint.sh /entrypoint.sh
+          RUN chmod +x /entrypoint.sh
+          ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+          CMD ["/bin/bash"]
+          EOF
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta_prebuilt
+        uses: docker/metadata-action@v6
+        with:
+          images: |
+            ${{ matrix.output_image }}
+          tags: |
+            type=raw,value=prebuilt${{ github.event.inputs.tag-prefix }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ github.workspace }}/docker-prebuilt
+          push: true
+          tags: ${{ steps.meta_prebuilt.outputs.tags }}
+          labels: ${{ steps.meta_prebuilt.outputs.labels }}
+          build-args: |
+            TARGET_TAG=${{ needs.make_tags.outputs.target_tag }}
+            BASE_IMAGE=${{ matrix.input_image }}:${{ matrix.tag }}
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
