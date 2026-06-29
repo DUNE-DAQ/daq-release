@@ -248,7 +248,7 @@ jobs:
       - name: Generate Dockerfile for prebuilt image
         run: |
           cat > ${IMAGE_PATH}/Dockerfile << 'EOF'
-          ARG BASE_IMAGE
+          ARG BASE_IMAGE=ghcr.io/dune-daq/nightly-release-alma9:development_v5
           FROM ${BASE_IMAGE}
 
           ARG TARGET_TAG
@@ -274,6 +274,9 @@ jobs:
           /work/dev_area/daq-release/scripts/checkout-daq-package.py \
               -i /work/dev_area/daq-release/configs/coredaq/fddaq-develop/release.yaml \
               -a -o ${DBT_AREA_ROOT}/sourcecode || exit 4 && \
+          /work/dev_area/daq-release/scripts/checkout-daq-package.py \
+              -i /work/dev_area/daq-release/configs/fddaq/fddaq-develop/release.yaml \
+              -a -o ${DBT_AREA_ROOT}/sourcecode || exit 8 && \
           spack load dbe && \
           dbt-build || exit 5
 
