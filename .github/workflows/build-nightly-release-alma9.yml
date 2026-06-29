@@ -260,7 +260,7 @@ jobs:
           git clone https://github.com/DUNE-DAQ/daq-release.git && \
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh && \
           setup_dbt latest && \
-          dbt-create -n last_fddaq ${TARGET_TAG} && \
+          dbt-create -n ${TARGET_TAG} ${TARGET_TAG} && \
           echo "====pwd $(pwd)====" && \
           ls -lrt && \
           cd /work/dev_area/${TARGET_TAG}/ || exit 2 && \
@@ -288,7 +288,7 @@ jobs:
         run: |
           cat ${IMAGE_PATH}/Dockerfile
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for prebuilt image
         id: meta_prebuilt
         uses: docker/metadata-action@v6
         with:
@@ -297,7 +297,7 @@ jobs:
           tags: |
             type=raw,value=prebuilt${{ github.event.inputs.tag-prefix }}
 
-      - name: Build and push Docker images
+      - name: Build and push prebuilt image
         uses: docker/build-push-action@v7
         with:
           context: ${{ github.workspace }}/docker-prebuilt
