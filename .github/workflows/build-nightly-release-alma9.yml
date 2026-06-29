@@ -213,7 +213,7 @@ jobs:
         include:
           - input_image: "ghcr.io/dune-daq/nightly-release-alma9"
             output_image: "ghcr.io/dune-daq/nightly-prebuilt-alma9"
-            tag: "prebuilt${{ inputs.tag-prefix }}"
+            tag: "development_v5${{ inputs.tag-prefix }}"
     needs: [make_tags, update_image]
     environment: dockerhub
     env:
@@ -284,6 +284,10 @@ jobs:
           CMD ["/bin/bash"]
           EOF
 
+      - name: Print Dockerfile for debug
+        run: |
+          cat ${IMAGE_PATH}/Dockerfile
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta_prebuilt
         uses: docker/metadata-action@v6
@@ -345,6 +349,8 @@ jobs:
     name: publish to cvmfs
     needs: [generate_dbt_setup_release_env, make_tags]
     runs-on: daq
+    outputs:
+      cvmfs_deployment_flag: ${{ steps.do_deployment.outputs.cvmfs_deployment_flag }}
 
     steps:
     - name: check_cvmfs_deployment
@@ -352,6 +358,7 @@ jobs:
       run: |
         cvmfs_deployment_input=${{ github.event.inputs.cvmfs-deployment }}
         cvmfs_deployment_flag=${cvmfs_deployment_input:-"yes"}
+        echo "cvmfs_deployment_flag=$cvmfs_deployment_flag" >> "$GITHUB_OUTPUT"
         echo "Do cvmfs deployment: ${cvmfs_deployment_flag}"
         [[ ${cvmfs_deployment_flag} == 'yes' ]] && exit 0 || exit 1
       continue-on-error: true
@@ -418,6 +425,7 @@ jobs:
 
   poll_cvmfs_for_release:
     needs: [make_tags, publish_to_cvmfs]
+    if: ${{ needs.publish_to_cvmfs.outputs.cvmfs_deployment_flag }}
     uses: ./.github/workflows/poll-cvmfs-for-release.yml
     with:
       release-tag: ${{ needs.make_tags.outputs.target_tag }}
