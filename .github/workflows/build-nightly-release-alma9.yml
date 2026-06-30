@@ -256,6 +256,7 @@ jobs:
           SHELL ["/bin/bash", "-c"]
 
           RUN mkdir -p /work/dev_area && \
+          chown -R dunedaq:dunedaq /work && \
           cd /work/dev_area || exit 1 && \
           git clone https://github.com/DUNE-DAQ/daq-release.git && \
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh && \
@@ -280,6 +281,7 @@ jobs:
           spack load dbe && \
           dbt-build || exit 5
 
+          USER dunedaq
           WORKDIR /work/dev_area/${TARGET_TAG}
           COPY entrypoint.sh /entrypoint.sh
           RUN chmod +x /entrypoint.sh
