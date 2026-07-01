@@ -245,6 +245,12 @@ jobs:
           exec "$@"
           EOF
 
+      - name: Generate dockerignore file
+        run: |
+          cat > ${IMAGE_PATH}/entrypoint.sh << 'EOF'
+          .git
+          EOF
+
       - name: Generate Dockerfile for prebuilt image
         run: |
           cat > ${IMAGE_PATH}/Dockerfile << 'EOF'
@@ -253,6 +259,9 @@ jobs:
 
           ARG TARGET_TAG
           ENV TARGET_TAG=${TARGET_TAG}
+          ENV REFRESHED_AT ${CORE_TAG}
+          USER dunedaq
+          MAINTAINER Andrew Mogan "amogan@fnal.gov"
           SHELL ["/bin/bash", "-c"]
 
           RUN mkdir -p /work/dev_area && \
@@ -281,7 +290,6 @@ jobs:
           spack load dbe && \
           dbt-build || exit 5
 
-          USER dunedaq
           WORKDIR /work/dev_area/${TARGET_TAG}
           COPY entrypoint.sh /entrypoint.sh
           RUN chmod +x /entrypoint.sh
@@ -305,7 +313,7 @@ jobs:
       - name: Build and push prebuilt image
         uses: docker/build-push-action@v7
         with:
-          context: ${{ github.workspace }}/docker-prebuilt
+          context: ${{ env.IMAGE_PATH }}
           push: true
           tags: ${{ steps.meta_prebuilt.outputs.tags }}
           labels: ${{ steps.meta_prebuilt.outputs.labels }}
