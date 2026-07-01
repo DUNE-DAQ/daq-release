@@ -23,7 +23,9 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
   # Get most recent single-repo CI build status
-  BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 --json status,conclusion,name,url --workflow dunedaq-develop-cpp-ci.yml -q '.[0]')
+  BUILD_DEVELOP_STATUS=$(gh run list -R "$FULL_NAME" --limit 1 \
+                         --json event,status,conclusion,name,url,createdAt,updatedAt \
+                         --workflow dunedaq-develop-cpp-ci.yml -q '.[0]')
 
   now=$(date +%s)
   last_commit_time=$(date -d "$(gh api repos/$ORG/$REPO/commits --jq '.[0].commit.author.date')" +%s)
@@ -62,6 +64,9 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   fi
 
   echo "$JSON_ENTRY" >> "$OUTFILE"
+
+  # Reset workflow inactivity timer
+  gh api -X PUT "repos/$FULL_NAME/actions/workflows/dunedaq-develop-cpp-ci.yml/enable"
 done
 
 echo "]" >> "$OUTFILE"
