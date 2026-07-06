@@ -139,12 +139,14 @@ jobs:
         echo "logs_exist=${logs_exist}"
         echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
     - name: Upload integtest logs
+      if: always()
       uses: actions/upload-artifact@v7
       with:
         name: extended_integtest_logs
         path: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
         if-no-files-found: error
     - name: Store pytest logs
+      if: always()
       env:
         PERSISTENT_LOG_DIR: ${{ needs.make_variables.outputs.persistent_log_dir }}
       id: move_logs
