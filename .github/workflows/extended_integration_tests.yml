@@ -65,7 +65,7 @@ jobs:
   extended_integration_tests:
     name: extended_integration_tests
     runs-on: daq
-    timeout-minutes: 90
+    timeout-minutes: 1
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
