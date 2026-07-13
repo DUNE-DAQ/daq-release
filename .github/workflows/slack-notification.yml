@@ -95,7 +95,7 @@ jobs:
                --workflow-summary workflow_summary_with_metadata.json
         cat slack_payload.json
     - name: Send Slack Message
-      uses: slackapi/slack-github-action@v3.0.3
+      uses: slackapi/slack-github-action@v3.0.5
       with:
         webhook: ${{ secrets.slack_webhook_url }}
         webhook-type: incoming-webhook
