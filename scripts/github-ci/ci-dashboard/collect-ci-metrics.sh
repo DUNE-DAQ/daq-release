@@ -6,6 +6,29 @@ export DEVLINE="develop"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/../repo.sh || exit $?
 
+get_run_id() {
+  local repo=$1
+  local workflow=$2
+
+  run_id=$(
+    gh run list \
+      --repo "DUNE-DAQ/$repo" \
+      --workflow "$workflow" \
+      --status completed \
+      --limit 10 \
+      --json databaseId,conclusion \
+      --jq '[.[] | select(.conclusion=="success" or .conclusion=="failure")] | first | .databaseId'
+    ) \
+    || { echo "::error::get_run_id: Failed to get workflow ID for '${workflow}'" >&2; return 1; }
+
+    if [[ -z "$run_id" || "$run_id" == "null" ]]; then
+      echo "::error::get_run_id: Got null or empty workflow ID for '${workflow}'"
+      return 1
+    fi
+
+    echo "$run_id"
+}
+
 ORG="DUNE-DAQ"
 REPOS=$(gh repo list "$ORG" --limit 100 --json name -q '.[].name')
 OUTFILE="ci_summary.json"
