@@ -91,6 +91,7 @@ if $fresh_build; then
 -t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
 -o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION} \
+--overwrite-daq-cmake \
 -b develop
 "
 
