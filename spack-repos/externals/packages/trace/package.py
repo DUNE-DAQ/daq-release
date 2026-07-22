@@ -14,15 +14,24 @@ class Trace(CMakePackage):
     homepage = "https://github.com/art-daq/trace"
     git      = "https://github.com/art-daq/trace.git"
 
-    version('3.16.02', commit='570d91139f7277966ae5259b0a11d85f8574e5dc')   # JCF, Sep-9-2021: v3_16_02 is used in the dunedaq-v2.8.0 suite
-    version('3.17.03', commit='a1c3d7db117e8d965a181a73cedf4d4e45144025')   # DPF, May-10-2022: v3_17_03
-    version('3.17.04', commit='526de4f948c7dbd32622b924c11d93836484e5d5')   # DPF, May-12-2022: v3_17_04
-    version('3.17.06', commit='6245d834f68e57338cedd8af66dfb1b53582b7ad')   # DPF, Dec-16-2022: v3_17_06
-    version('3.17.09', commit='d93a64f45e57bec87c0b890b9bbaaf94eb0b2e69')   # DPF, Mar-14-2023: v3_17_00
-    version('3.17.11', commit='23f21ee9c53af5bd0e1b695038cda457517028fe')   # JCF, Mar-4-2024: v3_17_11
-    version('3.17.12', commit='58433e1c560c4c6538c6f6fc79b04a106691749f')   # AJM, Apr-2-2024: v3_17_12
-    version('3.17.13', commit='01865d3fc90e82f20b50da10b6a7993ab428bcf5')   # AJM, Apr-18-2024: v3_17_13
+    version('3.24.00', commit='6add133be9b6b1dbdbca92c4d1f8eda7066e6ca8')   # JCF, Jul-21-2026: v3_24_00
     version('3.17.14', commit='4f0a54a354b7f19a7cc3874d2d7b48a24990a102')   # JCF, Oct-31-2024: v3_17_14
+    version('3.17.13', commit='01865d3fc90e82f20b50da10b6a7993ab428bcf5')   # AJM, Apr-18-2024: v3_17_13
+    version('3.17.12', commit='58433e1c560c4c6538c6f6fc79b04a106691749f')   # AJM, Apr-2-2024: v3_17_12
+    version('3.17.11', commit='23f21ee9c53af5bd0e1b695038cda457517028fe')   # JCF, Mar-4-2024: v3_17_11
+    version('3.17.03', commit='a1c3d7db117e8d965a181a73cedf4d4e45144025')   # DPF, May-10-2022: v3_17_03
+    version('3.17.09', commit='d93a64f45e57bec87c0b890b9bbaaf94eb0b2e69')   # DPF, Mar-14-2023: v3_17_00
+    version('3.17.06', commit='6245d834f68e57338cedd8af66dfb1b53582b7ad')   # DPF, Dec-16-2022: v3_17_06
+    version('3.17.04', commit='526de4f948c7dbd32622b924c11d93836484e5d5')   # DPF, May-12-2022: v3_17_04
+    version('3.16.02', commit='570d91139f7277966ae5259b0a11d85f8574e5dc')   # JCF, Sep-9-2021: v3_16_02 is used in the dunedaq-v2.8.0 suite
+
+
+
+
+
+
+
+
 
     patch('disable_cetmodules.diff', sha256='640816dfe077382bdb5345c8b5568c92e1ccb36274887e57241d826522ba5686', when='@3.16.02')
     patch('install-exec.diff', sha256='882deacf74407e1c83fb88ae8b2d16286751a49096682e441dc53175268ddcd9', when='@3.16.02')

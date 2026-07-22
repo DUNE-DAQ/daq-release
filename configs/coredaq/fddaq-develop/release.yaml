@@ -11,7 +11,7 @@
           version: 3.18.01
           variant: "+lite"
         - name: trace
-          version: 3.17.14
+          version: 3.24.00
           variant: ~
         - name: nlohmann-json
           version: 3.12.0
@@ -39,6 +39,9 @@
           variant: ~
         - name: py-pybind11
           version: 2.12.0
+          variant: ~
+        - name: py-pybind11-stubgen
+          version: 2.5.5
           variant: ~
         - name: uhal
           version: 2.8.18
