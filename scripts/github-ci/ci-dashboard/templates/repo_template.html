@@ -1,0 +1,45 @@
+{% extends "base_template.html" %}
+
+{% block title %}{{ repo }}{% endblock %}
+{% block content %}
+<h1>{{ repo }}</h1>
+
+{% if unit_test_summary %}
+  <h2>Unit Tests</h2>
+  {% if unit_test_summary[0][0] is none %}
+    <p>No unit tests written.</p>
+  {% else %}
+    <table>
+      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for test, status in unit_test_summary %}
+          <tr>
+            <td>{{ test }}</td>
+            <td>{% if status == 'Passed' %}&#x2705{% elif status == 'Failed' %}&#x274C{% else %}⚠️{% endif %} {{ status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% else %}
+  <p>No unit test results found for this repo.</p>
+{% endif %}
+
+{% if clang_format_summary %}
+  <h2>Clang Formatting</h2>
+  <table>
+    <thead><tr><th>File</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for file, status in clang_format_summary %}
+        <tr>
+          <td>{{ file }}</td>
+          <td>{% if status == 'Already formatted' %}&#x2705{% elif status == 'Needs formatting' %}&#x274C{% else %}⚠️{% endif %} {{ status }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No clang formatting results found for this repo.</p>
+{% endif %}
+
+{% endblock %}
