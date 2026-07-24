@@ -36,13 +36,24 @@ OUTFILE="ci_summary.json"
 echo "[" > "$OUTFILE"
 FIRST=true
 
-for REPO in "${dune_packages_with_ci[@]}"; do
+#for REPO in "${dune_packages_with_ci[@]}"; do
+for REPO in "hdf5libs" "timing" "dfmodules"; do
   FULL_NAME="$ORG/$REPO"
   echo "Collecting metrics for $FULL_NAME..."
 
-  OPEN_ISSUES=$(gh issue list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
+  OPEN_ISSUES=$(gh issue list \
+                --repo "$FULL_NAME" \
+                --state open \
+                --limit 1000 \
+                --json number \
+                --jq 'length' || echo 0)
+  OPEN_PRS=$(gh pr list \
+             --repo "$FULL_NAME" \
+             --state open \
+             --limit 1000 \
+             --json number \
+             --jq 'length' || echo 0)
   ISSUES_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/issues")
-  OPEN_PRS=$(gh pr list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
   PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
   # Get most recent single-repo CI build status
@@ -87,6 +98,11 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   fi
 
   echo "$JSON_ENTRY" >> "$OUTFILE"
+
+  gh run download --repo "$FULL_NAME" --name unit_test_summary       --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name link_checker_log        --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name nightly_linting_results --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name clang_format_summary    --dir "artifacts/$REPO/" 2>/dev/null
 
   # Reset workflow inactivity timer
   gh api -X PUT "repos/$FULL_NAME/actions/workflows/dunedaq-develop-cpp-ci.yml/enable"
