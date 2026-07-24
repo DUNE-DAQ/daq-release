@@ -4,8 +4,8 @@
 {% block content %}
 <h1>{{ repo }}</h1>
 
+<h2>Unit Tests</h2>
 {% if unit_test_summary %}
-  <h2>Unit Tests</h2>
   {% if unit_test_summary[0][0] is none %}
     <p>No unit tests written.</p>
   {% else %}
@@ -25,8 +25,8 @@
   <p>No unit test results found for this repo.</p>
 {% endif %}
 
+<h2>Clang Formatting</h2>
 {% if clang_format_summary %}
-  <h2>Clang Formatting</h2>
   <table>
     <thead><tr><th>File</th><th>Status</th></tr></thead>
     <tbody>
