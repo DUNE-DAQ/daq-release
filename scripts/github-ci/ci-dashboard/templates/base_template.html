@@ -1,10 +1,9 @@
-<!-- templates/base_template.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}DAQ Report{% endblock %}</title>
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="sidebar">
@@ -16,6 +15,15 @@
         </li>
       {% endfor %}
     </ul>
+
+    {% if repo_links %}
+      <h3>Repo Summaries</h3>
+      <ul>
+        {% for repo, url in repo_links.items() %}
+          <li><a href="{{ url }}">{{ repo }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
   <div class="content">
     {% block content %}{% endblock %}
