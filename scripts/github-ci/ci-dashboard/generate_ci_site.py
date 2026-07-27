@@ -8,6 +8,7 @@ from data.integration_tests import load_integration_test_data
 from data.unit_tests import UnitTestReport
 from data.clang_format_report import ClangFormatReport
 from data.link_checker_report import LinkCheckerReport
+from data.linting_report import LintingReport
 from renderer.renderer import Renderer
 from pages.page import IndexPage, RepoPage, UnitTestPage, IntegrationTestPage
 
@@ -64,6 +65,7 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
     }
 
     repo_pages = []
+    linting_report = LintingReport()
     for repo_dir in sorted(Path(artifacts_dir).iterdir()):
         if not repo_dir.is_dir():
             continue
@@ -73,9 +75,18 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
             if path.is_file():
                 report.parse(path)
 
+        # Linting logs are treated separately since you need the repo
+        # name to find the linting file
+        linting_log = Path(repo_dir / f"{repo_dir.name}_linting.log")
+        if linting_log.is_file():
+            linting_report.parse(linting_log)
+        
+
     unit_test_data    = ARTIFACT_PARSERS["unit_test_summary.log"        ].to_dict()
     clang_format_data = ARTIFACT_PARSERS["clang_format_summary_table.md"].to_dict()
     link_checker_data = ARTIFACT_PARSERS["out.md"                       ].repo_results
+
+    linting_data      = linting_report.to_dict()
     integration_test_data = load_integration_test_data(core_summary, extended_summary)
 
     index_context = {
@@ -88,6 +99,7 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
         "unit_test_summary"       : unit_test_data,
         "clang_format_summary"    : clang_format_data,
         "link_checker_results"    : link_checker_data,
+        "linting_results"         : linting_data,
         "integration_test_summary": integration_test_data['totals'],
     }
 
@@ -99,9 +111,10 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
     for repo_name in repo_pages:
         pages.append(RepoPage(repo_name, {
             "repo": repo_name,
-            "unit_test_summary"   : unit_test_data   ["repo_results"].get(repo_name),
-            "clang_format_summary": clang_format_data["repo_results"].get(repo_name),
-            "link_checker_summary": link_checker_data.get(repo_name),
+            "unit_test_summary"    : unit_test_data   ["repo_results"].get(repo_name),
+            "clang_format_summary" : clang_format_data["repo_results"].get(repo_name),
+            "linting_summary"      : linting_data     ["repo_results"].get(repo_name),
+            "link_checker_summary" : link_checker_data.get(repo_name),
         }))
 
     renderer = Renderer(repo_pages)
