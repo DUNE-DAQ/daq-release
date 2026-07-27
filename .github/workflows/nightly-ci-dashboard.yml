@@ -21,8 +21,6 @@ jobs:
         shell: bash
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    permissions:
-      actions: read
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
@@ -112,6 +110,7 @@ jobs:
     - name: Copy artifacts and generate dashboard
       env:
         CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
         cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
