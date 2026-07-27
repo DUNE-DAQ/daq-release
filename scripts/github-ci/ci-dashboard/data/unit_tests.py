@@ -1,11 +1,12 @@
 import re
 from pathlib import Path
+from typing import Optional
 from dataclasses import dataclass, field
 
 @dataclass
 class UnitTestReport:
     # Map repo_name to a list of tuples, where each tuple is ('test_name', 'status')
-    repo_results: dict[str, list[tuple[str, str]]] = field(default_factory=dict)
+    repo_results: dict[str, list[tuple[Optional[str], str]]] = field(default_factory=dict)
 
     def _count_status(self, status: str) -> int:
         return sum(1 for tests in self.repo_results.values() for _, s in tests if s == status)
@@ -36,9 +37,6 @@ class UnitTestReport:
 
     def parse(self, log_path):
         """Parse unit test summary and store as a dictionary."""
-        if not Path(log_path).is_file():
-            raise FileNotFoundError
-
         with open(log_path, "r") as f:
             for line in f:
                 clean_line = strip_ansi(line.strip())
@@ -54,12 +52,12 @@ class UnitTestReport:
                 if this_package not in self.repo_results:
                     self.repo_results[this_package] = []
 
-                if "SUCCESS" in clean_line:
+                if "SUCCESS" in clean_line and test_name:
                     self.repo_results[this_package].append((test_name, "Passed"))
-                elif "FAILURE" in clean_line:
+                elif "FAILURE" in clean_line and test_name:
                     self.repo_results[this_package].append((test_name, "Failed"))
                 elif test_name is None:
-                    self.repo_results[this_package].append((test_name, "NoTests"))
+                    self.repo_results[this_package].append((None, "NoTests"))
         
     def to_dict(self):
         return {
@@ -74,22 +72,6 @@ class UnitTestReport:
 def strip_ansi(line):
     """Strip color coding from unit test summary log."""
     return re.sub(r"\x1B\[[0-9;]*[a-zA-Z]", "", line)
-
-def parse_unit_tests(artifacts_dir: str) -> dict[str, dict]:
-    """Returns {repo_name: {artifact_name: parsed_object}}"""
-    if not Path(artifacts_dir).is_dir():
-        raise FileNotFoundError
-
-    report = UnitTestReport()
-    for repo_dir in sorted(Path(artifacts_dir).iterdir()):
-        if not repo_dir.is_dir():
-            continue
-        if not Path(repo_dir / "unit_test_summary.log").is_file():
-            continue
-        report.parse(repo_dir / "unit_test_summary.log")
-
-    return report.to_dict()
-
 
 if __name__ == "__main__":
     pass
