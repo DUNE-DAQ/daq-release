@@ -21,6 +21,7 @@ jobs:
         shell: bash
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
@@ -108,9 +109,6 @@ jobs:
         run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
   
     - name: Copy artifacts and generate dashboard
-      env:
-        CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
         cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
@@ -137,7 +135,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: Site
-        path: ./site
+        path: ${{ env.CI_DASHBOARD_DIR }}/site
 
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
