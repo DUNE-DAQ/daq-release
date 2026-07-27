@@ -54,4 +54,17 @@
   <p>No clang formatting results found for this repo.</p>
 {% endif %}
 
+{% if linting_summary %}
+<h2>Linting Errors</h2>
+  {% for file, errors in linting_summary.items() %}
+    <h3>{{ file }}</h3>
+    <ul>
+      {% for line_number, message in errors %}
+        <li>Line {{ line_number }}: {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endif %}
+
+
 {% endblock %}
