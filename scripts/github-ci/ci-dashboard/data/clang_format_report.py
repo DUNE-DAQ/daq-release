@@ -7,18 +7,18 @@ class ClangFormatReport:
     repo_results: dict[str, list[tuple[str, str]]] = field(default_factory=dict)
 
     def parse(self, log_path):
-        """Parse clang formatting summary and store as a dictionary."""
-        if not Path(log_path).is_file():
-            raise FileNotFoundError
+        """Parse clang formatting summary and store as a dictionary.
+        Before parsing, the clang format markdown report looks something like
 
-        # Before parsing, the clang format markdown report looks something like
         # Clang-Format Report
         # ## hdf5libs 
         # | Test | Status| 
         # | --- | --- |
         # | sourcecode/hdf5libs/include/hdf5libs/HDF5FileLayout.hpp | :white_check_mark: Already formatted |
         # | sourcecode/hdf5libs/include/hdf5libs/HDF5FileLayoutParameters.hpp | :x: Needs formatting |
-        # We want to parse this down to tuples of (<file_name>, <status>)
+
+        We want to parse this down to tuples of (<file_name>, <status>), similar to unit tests
+        """
         with open(log_path, "r") as f:
             for line in f:
                 line = line.strip()
