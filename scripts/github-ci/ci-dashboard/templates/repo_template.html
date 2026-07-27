@@ -6,7 +6,7 @@
 
 <h2>Unit Tests</h2>
 {% if unit_test_summary %}
-  {% if unit_test_summary[0][0] is none %}
+  {% if unit_test_summary[0] is none %}
     <p>No unit tests written.</p>
   {% else %}
     <table>
@@ -23,6 +23,18 @@
   {% endif %}
 {% else %}
   <p>No unit test results found for this repo.</p>
+{% endif %}
+
+{% if link_checker_summary %}
+<h2>Errors in Documentation Links</h2>
+  {% for file, links in link_checker_summary.items() %}
+    <h3>{{ file }}</h3>
+    <ul>
+      {% for url, error in links %}
+        <li>[{{ error }}] {{ url }}</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
 {% endif %}
 
 <h2>Clang Formatting</h2>

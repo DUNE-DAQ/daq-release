@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from data.integration_tests import load_integration_test_data
 from data.unit_tests import UnitTestReport
 from data.clang_format_report import ClangFormatReport
+from data.link_checker_report import LinkCheckerReport
 from renderer.renderer import Renderer
 from pages.page import IndexPage, RepoPage, UnitTestPage, IntegrationTestPage
 
@@ -56,33 +57,37 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
     ]
 
 
-    unit_test_report = UnitTestReport()
-    clang_format_report = ClangFormatReport()
+    ARTIFACT_PARSERS = {
+        "unit_test_summary.log":         UnitTestReport(),
+        "clang_format_summary_table.md": ClangFormatReport(),
+        "out.md":                        LinkCheckerReport(),
+    }
+
     repo_pages = []
     for repo_dir in sorted(Path(artifacts_dir).iterdir()):
         if not repo_dir.is_dir():
             continue
         repo_pages.append(repo_dir.name)
-        unit_test_log_path = Path(repo_dir / "unit_test_summary.log")
-        if unit_test_log_path.is_file():
-            unit_test_report.parse(unit_test_log_path)
-        clang_format_table_path = Path(repo_dir / "clang_format_summary_table.md")
-        if clang_format_table_path.is_file():
-            clang_format_report.parse(clang_format_table_path)
+        for filename, report in ARTIFACT_PARSERS.items():
+            path = repo_dir / filename
+            if path.is_file():
+                report.parse(path)
 
-    unit_test_data = unit_test_report.to_dict()
-    clang_format_data = clang_format_report.to_dict()
+    unit_test_data    = ARTIFACT_PARSERS["unit_test_summary.log"        ].to_dict()
+    clang_format_data = ARTIFACT_PARSERS["clang_format_summary_table.md"].to_dict()
+    link_checker_data = ARTIFACT_PARSERS["out.md"                       ].repo_results
     integration_test_data = load_integration_test_data(core_summary, extended_summary)
 
     index_context = {
-        "repos": repos,
-        "last_updated": last_updated,
-        "total_issues": total_issues,
-        "total_prs": total_prs,
-        "passing_percentage": passing_percentage,
-        "workflow_badges": workflow_badges,
-        "unit_test_summary": unit_test_data,
-        "clang_format_summary": clang_format_data,
+        "repos"                   : repos,
+        "last_updated"            : last_updated,
+        "total_issues"            : total_issues,
+        "total_prs"               : total_prs,
+        "passing_percentage"      : passing_percentage,
+        "workflow_badges"         : workflow_badges,
+        "unit_test_summary"       : unit_test_data,
+        "clang_format_summary"    : clang_format_data,
+        "link_checker_results"    : link_checker_data,
         "integration_test_summary": integration_test_data['totals'],
     }
 
@@ -94,8 +99,9 @@ def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summ
     for repo_name in repo_pages:
         pages.append(RepoPage(repo_name, {
             "repo": repo_name,
-            "unit_test_summary": unit_test_data["repo_results"].get(repo_name),
+            "unit_test_summary"   : unit_test_data   ["repo_results"].get(repo_name),
             "clang_format_summary": clang_format_data["repo_results"].get(repo_name),
+            "link_checker_summary": link_checker_data.get(repo_name),
         }))
 
     renderer = Renderer(repo_pages)
