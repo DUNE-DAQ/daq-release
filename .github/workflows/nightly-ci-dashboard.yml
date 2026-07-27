@@ -21,6 +21,8 @@ jobs:
         shell: bash
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      actions: read
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
