@@ -117,6 +117,8 @@ jobs:
         cp -r extended_integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/extended_integration_test_summary
         cd ${{ env.CI_DASHBOARD_DIR }}
         ./collect-ci-metrics.sh
+        echo "ls -lrt:"
+        ls -lrt
         echo "Collected the following metrics:"
         cat ci_summary.json
         python generate_ci_site.py --json_input ci_summary.json \
