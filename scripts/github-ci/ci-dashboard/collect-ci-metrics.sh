@@ -36,8 +36,7 @@ OUTFILE="ci_summary.json"
 echo "[" > "$OUTFILE"
 FIRST=true
 
-#for REPO in "${dune_packages_with_ci[@]}"; do
-for REPO in "hdf5libs" "timing" "dfmodules" "triggeralgs"; do
+for REPO in "${dune_packages_with_ci[@]}"; do
   FULL_NAME="$ORG/$REPO"
   echo "Collecting metrics for $FULL_NAME..."
 
