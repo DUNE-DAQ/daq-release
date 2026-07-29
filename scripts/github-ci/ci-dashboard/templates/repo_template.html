@@ -55,15 +55,25 @@
 {% endif %}
 
 {% if linting_summary %}
-<h2>Linting Errors</h2>
-  {% for file, errors in linting_summary.items() %}
-    <h3>{{ file }}</h3>
+{% for file, results in linting_summary.items() %}
+  <h3>{{ file }}</h3>
+  {% if results.errors %}
+    <h4>Errors</h4>
     <ul>
-      {% for line_number, message in errors %}
+      {% for line_number, message in results.errors %}
         <li>Line {{ line_number }}: {{ message }}</li>
       {% endfor %}
     </ul>
-  {% endfor %}
+  {% endif %}
+  {% if results.warnings %}
+    <h4>Warnings</h4>
+    <ul>
+      {% for line_number, message in results.warnings %}
+        <li>Line {{ line_number }}: {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
 {% endif %}
 
 
