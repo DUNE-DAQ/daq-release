@@ -30,8 +30,8 @@
   {% for file, links in link_checker_summary.items() %}
     <h3>{{ file }}</h3>
     <ul>
-      {% for url, error in links %}
-        <li>[{{ error }}] {{ url }}</li>
+      {% for url, error, message in links %}
+        <li>[{{ error }}] {{ url }} {{ message }}</li>
       {% endfor %}
     </ul>
   {% endfor %}

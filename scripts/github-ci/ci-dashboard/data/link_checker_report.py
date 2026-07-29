@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 @dataclass
 class LinkCheckerReport:
     # Map repo_name to a list of files with links containing errors
-    repo_results: dict[str, dict[str, list[tuple[str, str]]]] = field(default_factory=dict)
+    repo_results: dict[str, dict[str, list[tuple[str, str, str]]]] = field(default_factory=dict)
 
     def parse(self, log_path):
         """Parse link checker output and store as a dictionary.
@@ -18,15 +18,16 @@ class LinkCheckerReport:
         Also, each file should map to the link and http error code
 
         repo_results = {
-            "hdf5libs": {
+            "repo_name": {
                 "file_1": [(link1, error1), (link2, error2)],
                 "file_2": [(link1, error1), (link2, error2)],
+                "full_report": link,
             }
         }
 
         Note that LinkCheckerReport does not use a to_dict() method like the UnitTestReport
-        and ClangFormatReport classes. The extra layer of wrapping the results in another
-        dictionary turns out to be cumbersome and confusing.
+        and ClangFormatReport classes. The extra layer of wrapping turns out to be 
+        cumbersome and confusing in this case.
         """
 
         with open(log_path, "r") as f:
@@ -37,7 +38,8 @@ class LinkCheckerReport:
         repo_name = lines[-1].split('/')[4]
 
         current_file = None
-        pattern = re.compile(r"\[(\d+)]\s+<(\S+)>")
+        pattern = re.compile(r"\[(\S+)]\s+<(\S+)>[^|]*\|\s*(.+)")
+
         for line in lines:
             if line.startswith("### Errors"):
                 if repo_name not in self.repo_results:
@@ -51,7 +53,13 @@ class LinkCheckerReport:
             if match and current_file is not None:
                 error_code = match.group(1)
                 url        = match.group(2)
-                self.repo_results[repo_name][current_file].append((url, error_code))
+                message    = match.group(3)
+                self.repo_results[repo_name][current_file].append((url, error_code, message))
+
+            if line.startswith("[Full Github Actions output]"):
+                link = line.split('(')[-1].rstrip(')')
+                print('link:', link)
+                self.repo_results[repo_name]['full_report'] = link
 
 
 if __name__ == "__main__":
