@@ -21,7 +21,6 @@ class LinkCheckerReport:
             "repo_name": {
                 "file_1": [(link1, error1), (link2, error2)],
                 "file_2": [(link1, error1), (link2, error2)],
-                "full_report": link,
             }
         }
 
@@ -36,14 +35,13 @@ class LinkCheckerReport:
         # repo_name comes from the last line, which looks like:
         # 'Full Github Actions output](https://github.com/DUNE-DAQ/<repo_name>/actions/runs/<run_number>?check_suite_focus=true)'
         repo_name = lines[-1].split('/')[4]
+        self.repo_results[repo_name] = {}
 
         current_file = None
         pattern = re.compile(r"\[(\S+)]\s+<(\S+)>[^|]*\|\s*(.+)")
 
         for line in lines:
             if line.startswith("### Errors"):
-                if repo_name not in self.repo_results:
-                    self.repo_results[repo_name] = {}
                 current_file = line.replace("### Errors in ", "").strip()
                 if current_file not in self.repo_results[repo_name]:
                     self.repo_results[repo_name][current_file] = []
@@ -55,11 +53,6 @@ class LinkCheckerReport:
                 url        = match.group(2)
                 message    = match.group(3)
                 self.repo_results[repo_name][current_file].append((url, error_code, message))
-
-            if line.startswith("[Full Github Actions output]"):
-                link = line.split('(')[-1].rstrip(')')
-                print('link:', link)
-                self.repo_results[repo_name]['full_report'] = link
 
 
 if __name__ == "__main__":
