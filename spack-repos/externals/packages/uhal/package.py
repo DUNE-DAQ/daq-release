@@ -11,17 +11,14 @@ class Uhal(Package):
     version('2.8.18', sha256='72fb2b34ccaadc9db4032616e3ee25e7974ebb93aaf7aab45b432219307d2060', extension='tar.gz')
     version('2.8.1', sha256='73f26639a16ea65cecd367045ad0767a7eb4f5f8f488df1bbf121fc47aec3142', extension='tar.gz')
 
-    #depends_on('boost@1.75.0+debug', type='build')
-    depends_on('boost', type='build')
+    depends_on('boost', type=('build', 'link', 'run'))
     depends_on('pugixml', type=('build', 'link', 'run'))
     depends_on('gettext', type=('build', 'link', 'run'))
     depends_on('py-pybind11', type=('build', 'link', 'run'))
     depends_on('py-setuptools', type=('build', 'run'))
 
-    #patch('ipbus_2.patch', when='@2.8.0')
     patch('ipbus_2.patch', when='@2.8.1')
 
-    #patch("support_python3.12.patch", sha256="839dfda2b717d5917f1b126e8c4f5f0fb2dac5debd50018e19778803653c671f", when="@2.8.18: ^python@3.12:")
     patch("support_python3.12.patch", sha256="839dfda2b717d5917f1b126e8c4f5f0fb2dac5debd50018e19778803653c671f", when="@2.8.18:")
 
     def setup_build_environment(self,env):
