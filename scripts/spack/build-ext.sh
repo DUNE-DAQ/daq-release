@@ -87,7 +87,7 @@ if $fresh_build; then
 
     cmd="python3 scripts/spack/make-release-repo.py -u \
 -b develop \
--i configs/coredaq/coredaq-develop/release.yaml \
+-i configs/coredaq/fddaq-develop/release.yaml \
 -t spack-repos/coredaq-repo-template \
 -r ${DAQ_RELEASE} \
 -o ${SPACK_EXTERNALS}/spack-${SPACK_VERSION} \

@@ -19,7 +19,7 @@ class DaqCmake(CMakePackage):
 
     XDEPENDSX
     depends_on("py-pybind11")
-
+    depends_on("py-pybind11-stubgen")
 
     # DBT_DEBUG is used by daq-cmake to set compiler options
     def cmake_args(self):
