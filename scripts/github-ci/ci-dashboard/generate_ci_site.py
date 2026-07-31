@@ -1,16 +1,18 @@
-import re
+#import re
 import argparse
 import json
-from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 from data.integration_tests import load_integration_test_data
-from data.unit_tests import parse_unit_test_summary
+from data.unit_tests import UnitTestReport
+from data.clang_format_report import ClangFormatReport
+from data.link_checker_report import LinkCheckerReport
+from data.linting_report import LintingReport
 from renderer.renderer import Renderer
-from pages.page import Page, IndexPage, UnitTestPage, IntegrationTestPage
+from pages.page import IndexPage, RepoPage, UnitTestPage, IntegrationTestPage
 
-def generate_site(json_input_path, unit_test_summary='', core_summary='', extended_summary=''):
+def generate_site(json_input_path, artifacts_dir, core_summary='', extended_summary=''):
     """Render html files from templates to generate the site."""
     with open(json_input_path, 'r') as f:
         repos = json.load(f)
@@ -26,7 +28,8 @@ def generate_site(json_input_path, unit_test_summary='', core_summary='', extend
 
     passing_percentage = round((passing_repos / total_repos) * 100, 1) if total_repos else 0
 
-    last_updated=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+    last_updated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
     workflow_badges = [
     {
         "image": "https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml/badge.svg",
@@ -54,27 +57,67 @@ def generate_site(json_input_path, unit_test_summary='', core_summary='', extend
         "alt": "Weekly linting"},
     ]
 
-    unit_test_data = parse_unit_test_summary(unit_test_summary)
+
+    ARTIFACT_PARSERS = {
+        "unit_test_summary.log":         UnitTestReport(),
+        "clang_format_summary_table.md": ClangFormatReport(),
+        "out.md":                        LinkCheckerReport(),
+    }
+
+    repo_pages = []
+    linting_report = LintingReport()
+    for repo_dir in sorted(Path(artifacts_dir).iterdir()):
+        if not repo_dir.is_dir():
+            continue
+        repo_pages.append(repo_dir.name)
+        for filename, report in ARTIFACT_PARSERS.items():
+            path = repo_dir / filename
+            if path.is_file():
+                report.parse(path)
+
+        # Linting logs are treated separately since you need the repo
+        # name to find the linting file
+        linting_log = Path(repo_dir / f"{repo_dir.name}_linting.log")
+        if linting_log.is_file():
+            linting_report.parse(linting_log)
+        
+
+    unit_test_data    = ARTIFACT_PARSERS["unit_test_summary.log"        ].to_dict()
+    clang_format_data = ARTIFACT_PARSERS["clang_format_summary_table.md"].to_dict()
+    link_checker_data = ARTIFACT_PARSERS["out.md"                       ].repo_results
+
+    linting_data      = linting_report.to_dict()
     integration_test_data = load_integration_test_data(core_summary, extended_summary)
-    
+
     index_context = {
-        "repos": repos,
-        "last_updated": last_updated,
-        "total_issues": total_issues,
-        "total_prs": total_prs,
-        "passing_percentage": passing_percentage,
-        "workflow_badges": workflow_badges,
-        "unit_test_summary": unit_test_data,
+        "repos"                   : repos,
+        "last_updated"            : last_updated,
+        "total_issues"            : total_issues,
+        "total_prs"               : total_prs,
+        "passing_percentage"      : passing_percentage,
+        "workflow_badges"         : workflow_badges,
+        "unit_test_summary"       : unit_test_data,
+        "clang_format_summary"    : clang_format_data,
+        "link_checker_results"    : link_checker_data,
+        "linting_results"         : linting_data,
         "integration_test_summary": integration_test_data['totals'],
     }
 
     pages = [
         IndexPage(index_context),
-        UnitTestPage(unit_test_data.to_dict()),
+        UnitTestPage(unit_test_data),
         IntegrationTestPage(integration_test_data),
     ]
+    for repo_name in repo_pages:
+        pages.append(RepoPage(repo_name, {
+            "repo": repo_name,
+            "unit_test_summary"    : unit_test_data   ["repo_results"].get(repo_name),
+            "clang_format_summary" : clang_format_data["repo_results"].get(repo_name),
+            "linting_summary"      : linting_data     ["repo_results"].get(repo_name),
+            "link_checker_summary" : link_checker_data.get(repo_name),
+        }))
 
-    renderer = Renderer()
+    renderer = Renderer(repo_pages)
     for page in pages:
         page.render(renderer)
 
@@ -83,9 +126,13 @@ def generate_site(json_input_path, unit_test_summary='', core_summary='', extend
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate CI HTML site from a JSON summary file.")
     parser.add_argument("--json_input", required=True, help="Path to the JSON file containing CI summary data. See collect-ci-metrics.sh.")
-    parser.add_argument("--unit_test_summary", required=False, help="Path to the unit test summary output by dbt-build --unittest.")
+    parser.add_argument("--artifacts_dir", required=True, help="Path to single-repo artifacts directory output by collect-ci-metrics.sh.")
     parser.add_argument("--core_pytest_summary", required=False, help="Path to the json summary output by core integration test workflow.")
     parser.add_argument("--extended_pytest_summary", required=False, help="Path to the json summary output by extended integration test workflow.")
     args = parser.parse_args()
 
-    generate_site(args.json_input, args.unit_test_summary, args.core_pytest_summary, args.extended_pytest_summary)
+    if not Path(args.artifacts_dir).is_dir():
+        raise FileNotFoundError
+
+    generate_site(args.json_input, args.artifacts_dir, args.core_pytest_summary, args.extended_pytest_summary)
+

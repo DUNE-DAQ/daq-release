@@ -26,13 +26,13 @@
       <p>
         {{ integration_test_summary.total_run }} total tests run.<br>
         <span class="status-success">
-          Passed: {{ integration_test_summary.passed }} 
-          ({{ (100 * integration_test_summary.passed / integration_test_summary.total_run) | round(1) }}%)
+          Passed: {{ integration_test_summary.passed }}
+          ({{ (100 * integration_test_summary.passed / (integration_test_summary.total_run or 1)) | round(1) }}%)
           <br>
         </span>
         <span class="status-failure">
           Failed: {{ integration_test_summary.failed }} 
-          ({{ (100 * integration_test_summary.failed / integration_test_summary.total_run) | round(1) }}%)
+          ({{ (100 * integration_test_summary.failed / (integration_test_summary.total_run or 1)) | round(1) }}%)
           <br>
         </span>
         <span class="status-skipped">
@@ -52,12 +52,12 @@
         {{ unit_test_summary.total }} tests run. <br>
           <span class="status-success">
             Passed: {{ unit_test_summary.passed }} 
-            ({{ (100 * unit_test_summary.passed // (unit_test_summary.passed + unit_test_summary.failed)) }}%)
+            ({{ (100 * unit_test_summary.passed // ((unit_test_summary.passed + unit_test_summary.failed or 1))) }}%)
             <br>
           </span>
           <span class="status-failure">
             Failed: {{ unit_test_summary.failed }} 
-            ({{ (100 * unit_test_summary.failed // (unit_test_summary.passed + unit_test_summary.failed)) }}%)
+            ({{ (100 * unit_test_summary.failed // ((unit_test_summary.passed + unit_test_summary.failed or 1))) }}%)
             <br>
           </span>
         {% if unit_test_summary.no_tests|length > 1 %}
@@ -93,6 +93,7 @@
             <th>Open Issues</th>
             <th>Open PRs</th>
             <th>Develop Build Status</th>
+            <th>Broken Links</th>
         </tr>
     </thead>
     <tbody>
@@ -111,6 +112,14 @@
                         {{ repo.build_develop.conclusion | capitalize }}
                     </span>
                 </a>
+            </td>
+            <td>
+                {% if link_checker_results and repo.repo in link_checker_results %}
+                    {% set count = link_checker_results[repo.repo].values() | map('length') | sum %}
+                    <a href="/repos/{{ repo.repo }}.html">{{ count }}</a>
+                {% else %}
+                    —
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

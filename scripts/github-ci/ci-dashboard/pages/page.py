@@ -18,6 +18,14 @@ class IndexPage(Page):
             output_file="index.html"
         )
 
+class RepoPage(Page):
+    def __init__(self, repo_name, context):
+        super().__init__(
+            template_name="repo_template.html",
+            context=context,
+            output_file=f"repos/{repo_name}.html"
+        )
+
 class UnitTestPage(Page):
     def __init__(self, unit_test_summary):
         super().__init__(

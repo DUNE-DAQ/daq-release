@@ -1,0 +1,80 @@
+{% extends "base_template.html" %}
+
+{% block title %}{{ repo }}{% endblock %}
+{% block content %}
+<h1>{{ repo }}</h1>
+
+<h2>Unit Tests</h2>
+{% if unit_test_summary %}
+  {% if unit_test_summary[0][0] is none %}
+    <p>No unit tests written.</p>
+  {% else %}
+    <table>
+      <thead><tr><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for test, status in unit_test_summary %}
+          <tr>
+            <td>{{ test }}</td>
+            <td>{% if status == 'Passed' %}&#x2705{% elif status == 'Failed' %}&#x274C{% else %}⚠️{% endif %} {{ status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% else %}
+  <p>No unit test results found for this repo.</p>
+{% endif %}
+
+{% if link_checker_summary %}
+<h2>Errors in Documentation Links</h2>
+  {% for file, links in link_checker_summary.items() %}
+    <h3>{{ file }}</h3>
+    <ul>
+      {% for url, error, message in links %}
+        <li>[{{ error }}] {{ url }} {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endif %}
+
+<h2>Clang Formatting</h2>
+{% if clang_format_summary %}
+  <table>
+    <thead><tr><th>File</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for file, status in clang_format_summary %}
+        <tr>
+          <td>{{ file }}</td>
+          <td>{% if status == 'Already formatted' %}&#x2705{% elif status == 'Needs formatting' %}&#x274C{% else %}⚠️{% endif %} {{ status }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No clang formatting results found for this repo.</p>
+{% endif %}
+
+{% if linting_summary %}
+{% for file, results in linting_summary.items() %}
+  <h3>{{ file }}</h3>
+  {% if results.errors %}
+    <h4>Errors</h4>
+    <ul>
+      {% for line_number, message in results.errors %}
+        <li>Line {{ line_number }}: {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if results.warnings %}
+    <h4>Warnings</h4>
+    <ul>
+      {% for line_number, message in results.warnings %}
+        <li>Line {{ line_number }}: {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}
