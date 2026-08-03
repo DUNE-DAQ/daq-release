@@ -19,17 +19,17 @@ class Renderer:
         self.templates_path = Path(__file__).parent.parent / "templates"
         self.output_path = Path("site")
         self.links = {
-            "Home": "/index.html",
+            "Home": "index.html",
             "Doxygen": "https://dune-daq.github.io/docs/",
-            "Unit Test Summary": "/unit_test_summary.html",
-            "Integration Test Summary": "/integtest_summary.html",
-            "Code Coverage Report": "/code_coverage/index.html",
+            "Unit Test Summary": "unit_test_summary.html",
+            "Integration Test Summary": "integtest_summary.html",
+            "Code Coverage Report": "code_coverage/index.html",
         }
         self.env = Environment(loader=FileSystemLoader(self.templates_path))
         self.env.filters["commit_age"] = commit_age
         self.env.globals["links"] = self.links
         self.env.globals["repo_links"] = {
-            repo: f"/repos/{repo}.html"
+            repo: f"repos/{repo}.html"
             for repo in (repo_names or [])
         }
 
