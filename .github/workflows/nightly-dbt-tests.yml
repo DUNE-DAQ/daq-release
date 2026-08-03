@@ -24,7 +24,7 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v6
-    - uses: cvmfs-contrib/github-action-cvmfs@d93d881391926e8146776c13345c3e23d6393acd
+    - uses: cvmfs-contrib/github-action-cvmfs@d79d292a9fc4a1d34fe5caa390308d0ec4ffe993
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - name: Pull build image
