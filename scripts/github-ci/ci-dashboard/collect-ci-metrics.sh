@@ -6,6 +6,29 @@ export DEVLINE="develop"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPT_DIR/../repo.sh || exit $?
 
+get_run_id() {
+  local repo=$1
+  local workflow=$2
+
+  run_id=$(
+    gh run list \
+      --repo "DUNE-DAQ/$repo" \
+      --workflow "$workflow" \
+      --status completed \
+      --limit 10 \
+      --json databaseId,conclusion \
+      --jq '[.[] | select(.conclusion=="success" or .conclusion=="failure")] | first | .databaseId'
+    ) \
+    || { echo "::error::get_run_id: Failed to get workflow ID for '${workflow}'" >&2; return 1; }
+
+    if [[ -z "$run_id" || "$run_id" == "null" ]]; then
+      echo "::error::get_run_id: Got null or empty workflow ID for '${workflow}'"
+      return 1
+    fi
+
+    echo "$run_id"
+}
+
 ORG="DUNE-DAQ"
 REPOS=$(gh repo list "$ORG" --limit 100 --json name -q '.[].name')
 OUTFILE="ci_summary.json"
@@ -17,9 +40,19 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   FULL_NAME="$ORG/$REPO"
   echo "Collecting metrics for $FULL_NAME..."
 
-  OPEN_ISSUES=$(gh issue list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
+  OPEN_ISSUES=$(gh issue list \
+                --repo "$FULL_NAME" \
+                --state open \
+                --limit 1000 \
+                --json number \
+                --jq 'length' || echo 0)
+  OPEN_PRS=$(gh pr list \
+             --repo "$FULL_NAME" \
+             --state open \
+             --limit 1000 \
+             --json number \
+             --jq 'length' || echo 0)
   ISSUES_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/issues")
-  OPEN_PRS=$(gh pr list -R "$FULL_NAME" --state open --limit 1000 --json number --jq 'length' || echo 0)
   PRS_URL=$(echo "https://github.com/DUNE-DAQ/$REPO/pulls")
 
   # Get most recent single-repo CI build status
@@ -64,6 +97,11 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   fi
 
   echo "$JSON_ENTRY" >> "$OUTFILE"
+
+  gh run download --repo "$FULL_NAME" --name unit_test_summary       --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name link_checker_log        --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name nightly_linting_results --dir "artifacts/$REPO/" 2>/dev/null
+  gh run download --repo "$FULL_NAME" --name clang_format_summary    --dir "artifacts/$REPO/" 2>/dev/null
 
   # Reset workflow inactivity timer
   gh api -X PUT "repos/$FULL_NAME/actions/workflows/dunedaq-develop-cpp-ci.yml/enable"

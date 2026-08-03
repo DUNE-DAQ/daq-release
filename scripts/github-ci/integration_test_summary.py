@@ -13,6 +13,8 @@ class TestCaseResult:
 
     @classmethod
     def from_dict(cls, d: dict) -> TestCaseResult:
+        if not d:
+            return cls(case_name='', status='')
         return cls(**d)
 
     def summarize_failure(self) -> str:
@@ -55,7 +57,9 @@ class PytestResult:
 
     @classmethod
     def from_dict(cls, d: dict) -> PytestResult:
-        cases = [TestCaseResult.from_dict(case) for case in d["testcase_results"]]
+        if not d:
+            return cls(repo_name='', test_name='')
+        cases = [TestCaseResult.from_dict(case) for case in d.get("testcase_results", [])]
         return cls(
             repo_name=d["repo_name"],
             test_name=d["test_name"],
@@ -132,15 +136,16 @@ class IntegrationTestSummary:
     def from_dict(cls, data: dict) -> IntegrationTestSummary:
         pytest_results = [
             PytestResult.from_dict(test)
-            for repo_tests in data["pytest_results"].values()
+            for repo_tests in data.get("pytest_results", {}).values()
             for test in repo_tests
         ]
         return cls(pytest_results=pytest_results)
 
     @classmethod
     def from_json_file(cls, path: str | Path) -> IntegrationTestSummary:
+        if not path: return cls.from_dict({})
         path = Path(path)
-        data = json.loads(path.read_text())
+        data = json.loads(path.read_text()) if path.is_file() else {}
         return cls.from_dict(data)
 
     def to_dict(self) -> dict:

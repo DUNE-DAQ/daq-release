@@ -21,13 +21,13 @@ jobs:
         shell: bash
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
       id: set_paths
       run : |
         echo "lcov_html_report_path=lcov_report" >> "$GITHUB_OUTPUT"
-        echo "code_check_summary_path=code_check_summary" >> "$GITHUB_OUTPUT"
         echo "integration_test_summary_path=integration_test_summary" >> "$GITHUB_OUTPUT"
         echo "extended_integration_test_summary_path=extended_integration_test_summary" >> "$GITHUB_OUTPUT"
     - name: Get workflow run IDs
@@ -55,12 +55,10 @@ jobs:
             echo "$run_id"
         }
 
-        code_check_id=$(get_run_id "nightly-code-check.yml")
         lcov_id=$(get_run_id "Weekly code coverage workflow")
         integration_test_id=$(get_run_id "integration_tests.yml")
         extended_integration_test_id=$(get_run_id "extended_integration_tests.yml")
 
-        echo "code_check_id=$code_check_id" | tee -a "$GITHUB_OUTPUT"
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
         echo "extended_integration_test_id=$extended_integration_test_id" | tee -a "$GITHUB_OUTPUT"
@@ -74,14 +72,6 @@ jobs:
         path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
         run-id: ${{ steps.run_ids.outputs.lcov_id }}
         
-    - name: Download code check summaries
-      id: download_code_checks
-      uses: actions/download-artifact@v8
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path: ${{ steps.set_paths.outputs.code_check_summary_path }}
-        run-id: ${{ steps.run_ids.outputs.code_check_id }}
-
     - name: Download integration test markdown
       id: download_integration_test
       uses: actions/download-artifact@v8
@@ -119,19 +109,18 @@ jobs:
         run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
   
     - name: Copy artifacts and generate dashboard
-      env:
-        CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
       run: |
         cp -r lcov_report ${{ env.CI_DASHBOARD_DIR }}/site/code_coverage
-        cp -r code_check_summary/ ${{ env.CI_DASHBOARD_DIR }}/code_check_summary
         cp -r integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/integration_test_summary
         cp -r extended_integration_test_summary/ ${{ env.CI_DASHBOARD_DIR }}/extended_integration_test_summary
         cd ${{ env.CI_DASHBOARD_DIR }}
         ./collect-ci-metrics.sh
+        echo "ls -lrt:"
+        ls -lrt
         echo "Collected the following metrics:"
         cat ci_summary.json
         python generate_ci_site.py --json_input ci_summary.json \
-                                   --unit_test_summary code_check_summary/unit_test_summary/unit_test_summary.log \
+                                   --artifacts_dir artifacts \
                                    --core_pytest_summary integration_test_summary/pytest_summary.json \
                                    --extended_pytest_summary extended_integration_test_summary/pytest_summary.json \
 
@@ -140,6 +129,12 @@ jobs:
       env:
         CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
       with:
+        path: ${{ env.CI_DASHBOARD_DIR }}/site
+
+    - name: Upload site artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: site
         path: ${{ env.CI_DASHBOARD_DIR }}/site
 
   deploy_to_github_pages:
