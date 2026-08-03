@@ -291,6 +291,9 @@
         - name: multidict
           version: 6.7.0
           source:  pypi
+        - name: mypy-protobuf
+          version: 5.1.0
+          source:  pypi
         - name: nest-asyncio
           version: 1.6.0
           source:  pypi
