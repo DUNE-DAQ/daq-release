@@ -131,12 +131,6 @@ jobs:
       with:
         path: ${{ env.CI_DASHBOARD_DIR }}/site
 
-    - name: Upload site artifact
-      uses: actions/upload-artifact@v7
-      with:
-        name: site
-        path: ${{ env.CI_DASHBOARD_DIR }}/site
-
   deploy_to_github_pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
