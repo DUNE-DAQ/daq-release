@@ -51,3 +51,6 @@ dune_packages=(
   "tpgtools"
   "trgtools"
 )
+
+# AJM 8/5/26: Remove daq-cmake
+dune_packages_with_ci=($(printf '%s\n' "${dune_packages_with_ci[@]}" | grep -v "^daq-cmake$"))
