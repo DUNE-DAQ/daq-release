@@ -31,7 +31,7 @@ runs:
     run: |
       TAG="${{ inputs.tag }}"
 
-      if [[ "$TAG" =~ ^[A-Z]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ || "$TAG" == "last_fddaq" ]]; then
+      if [[ "$TAG" =~ ^[A-Z0-9]+_DEV_[0-9]{6}_[A-Za-z0-9]+$ || "$TAG" == "last_fddaq" ]]; then
         echo "TYPE=nightly" >> "$GITHUB_OUTPUT"
         echo "DBT_ARGS=-n"  >> "$GITHUB_OUTPUT"
 
