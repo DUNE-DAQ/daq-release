@@ -229,7 +229,7 @@
           version: 2.3.0
           source:  pypi
         - name: integrationtest
-          version: develop
+          version: tmp_john
           source:  github_DUNE-DAQ
         - name: invoke
           version: 2.2.1
