@@ -148,7 +148,7 @@
           version: 0.6.2
           source:  pypi
         - name: drunc
-          version: develop
+          version: vtmp_john
           source:  github_DUNE-DAQ
         - name: druncschema
           version: develop
@@ -403,7 +403,7 @@
           version: develop
           source:  github_DUNE-DAQ
         - name: runconf-ui
-          version: develop
+          version: vtmp_john
           source:  github_DUNE-DAQ
         - name: setuptools
           version: 80.9.0
