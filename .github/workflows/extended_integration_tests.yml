@@ -99,7 +99,7 @@ jobs:
         source env.sh
         cd ../$DAQ_RELEASE_PATH/scripts
         ./checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode --branch johnfreeman/daq-deliverables_issue216_resource_renaming --continue-on-error || true
-        ./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode --branch johnfreeman/daq-deliverables_issue216_resource_renaming --continue-on-error
+        ./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode --branch johnfreeman/daq-deliverables_issue216_resource_renaming --continue-on-error || true
         #./checkout-daq-package.py -p dfmodules -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p trigger -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
