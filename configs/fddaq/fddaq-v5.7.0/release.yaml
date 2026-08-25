@@ -249,6 +249,9 @@
         - name: jinja2
           version: 3.1.6
           source:  pypi
+        - name: jsonschema
+          version: 4.17.3
+          source:  pypi
         - name: kafka-python
           version: 2.3.0
           source:  pypi
@@ -287,6 +290,9 @@
           source:  pypi
         - name: multidict
           version: 6.7.0
+          source:  pypi
+        - name: mypy-protobuf
+          version: 5.1.0
           source:  pypi
         - name: nest-asyncio
           version: 1.6.0
