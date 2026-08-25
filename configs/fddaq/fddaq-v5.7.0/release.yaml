@@ -366,6 +366,9 @@
         - name: pyparsing
           version: 3.3.1
           source:  pypi
+        - name: pyrsistent
+          version: 0.19.3
+          source:  pypi
         - name: pysocks
           version: 1.7.1
           source:  pypi
