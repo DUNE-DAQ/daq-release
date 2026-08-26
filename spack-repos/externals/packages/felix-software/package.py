@@ -149,8 +149,8 @@ class FelixSoftware(Package):
             return_zero_or_exit('pushd external/catch && git checkout %s && popd' % (hashes["external-catch"]))
 
             os.environ['PATH'] = prefix+"/software/cmake_tdaq/bin" + ":" + os.environ['PATH']
-            return_zero_or_exit('cmake_config x86_64-centos7-gcc8-opt')
-            os.chdir("x86_64-centos7-gcc8-opt")
+            return_zero_or_exit('cmake_config x86_64-el10-gcc14-opt')
+            os.chdir("x86_64-el10-gcc14-opt")
             make()
 
         # JCF, Oct-21-2021
@@ -169,14 +169,14 @@ class FelixSoftware(Package):
             copytree("software/packetformat/packetformat", "include/packetformat")
 
             return_zero_or_exit("cp software/drivers_rcc/lib64/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/flxcard/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/flxcard_py/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/packetformat/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/regmap/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/drivers_rcc/lib* lib")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/libFlxTools* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard/lib* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard_py/lib* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/packetformat/lib* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/regmap/lib* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/drivers_rcc/lib* lib")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/ftools/libFlxTools* lib")
 
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/flxcard/flx-* bin")
-            return_zero_or_exit("cp software/x86_64-centos7-gcc8-opt/ftools/f* bin")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard/flx-* bin")
+            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/ftools/f* bin")
 
             return_zero_or_exit("rm -rf software")
