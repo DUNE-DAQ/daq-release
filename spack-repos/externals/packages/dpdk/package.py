@@ -42,5 +42,5 @@ class Dpdk(MesonPackage):
 
     def meson_args(self):
         max_lcores = self.spec.variants['max_lcores'].value
-        return ['-Dplatform=generic',  f'-Dmax_lcores={max_lcores}']
+        return ['-Dplatform=generic',  f'-Dmax_lcores={max_lcores}', f'-Ddisable_drivers=net/gve,net/ionic,net/cxgbe']
 
