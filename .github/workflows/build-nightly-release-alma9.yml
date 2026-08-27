@@ -27,8 +27,7 @@ jobs:
     name: create core tag and target tag
     runs-on: ubuntu-latest
     outputs:
-      core_tag: ${{ steps.create_tags.outputs.core_tag }}
-      target_tag: ${{ steps.create_tags.outputs.target_tag }}
+      platforms: ${{ steps.create_tags.outputs.platforms }}
     defaults:
       run:
         shell: bash
@@ -38,19 +37,27 @@ jobs:
         date_tag=$(date +%y%m%d)
 
         # Use GitHub input if provided, else default to N
-        prefix="${{ github.event.inputs.tag-prefix }}"
-        if [[ -z "$prefix" ]]; then
-          prefix="N"
-        fi
+        prefix="${{ github.event.inputs.tag-prefix || 'N' }}"
 
-        core_tag="${prefix}B_DEV_${date_tag}_A9"
-        target_tag="${prefix}FD_DEV_${date_tag}_A9"
+        # Construct a JSON blob containing all necessary information
+        # for building on separate operating systems
+        ### TODO: Update al10 image when available ###
+        jq -c -n --arg prefix "$prefix" --arg date "$date_tag" '
+          [
+            { label: "al9",  suffix: "A9",  os: "almalinux9",
+              image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3" },
+            { label: "al10", suffix: "A10", os: "almalinux10",
+              image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T" }
+          ]
+          | map(. + {
+              core_tag:   ($prefix + "B_DEV_"  + $date + "_" + .suffix),
+              target_tag: ($prefix + "FD_DEV_" + $date + "_" + .suffix)
+            })
+        ' | tee platforms.json >> /dev/null
 
-        echo "core_tag=$core_tag" >> "$GITHUB_OUTPUT"
-        echo "target_tag=$target_tag" >> "$GITHUB_OUTPUT"
-        echo "target_tag=$target_tag" >> "$GITHUB_ENV"
-        echo "core_tag=$core_tag"
-        echo "target_tag=$target_tag"
+        echo "platforms=$(cat platforms.json)" >> "$GITHUB_OUTPUT"
+        jq . platforms.json   # pretty-print into the log for debugging
+    
     - uses: cvmfs-contrib/github-action-cvmfs@d79d292a9fc4a1d34fe5caa390308d0ec4ffe993
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
@@ -62,11 +69,21 @@ jobs:
         fi
 
   build_the_develop_release_spack:
-    name: build_dev_release_spack
+    name: build_dev_release_spack (${{ matrix.label }})
     runs-on: daq
     needs: make_tags
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: alma9
+            image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
+            os: almalinux9
+          - label: alma10
+            image: ghcr.io/dune-daq/alma9-slim-externals:v2.3T
+            os: almalinux10
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
+      image: ${{ matrix.image }}
     defaults:
       run:
         shell: bash
@@ -81,7 +98,7 @@ jobs:
       run: |
         echo "CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.core_tag }}" >> $GITHUB_ENV
         echo "TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.target_tag }}" >> $GITHUB_ENV
-        echo "OS=almalinux9" >> $GITHUB_ENV
+        echo "OS=${{ matrix.os }}" >> $GITHUB_ENV
 
     - name: setup directories and install spack for the coredaq release
       run: |
