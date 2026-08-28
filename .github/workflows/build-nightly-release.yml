@@ -108,7 +108,7 @@ jobs:
         branch=${input_feature_branch:-"develop"}
 
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ inputs.feature-branch }}
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq ${{ matrix.os }} ${{ inputs.feature-branch }}
 
         cd $CORE_RELEASE_DIR/../
         tar_and_stage_release ${CORE_RELEASE_TAG}
@@ -117,7 +117,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: nightly_coredaq_${{ matrix.os }}
-        path: ${{ github.workspace }}/tarballs_for_upload/${{matrix.core_tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.core_tag }}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       run: |
@@ -128,7 +128,7 @@ jobs:
 
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
         daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq $OS ${{ inputs.feature-branch }}
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq ${{ matrix.os }} ${{ inputs.feature-branch }}
 
         cd $TARGET_RELEASE_DIR/../
         tar_and_stage_release ${TARGET_RELEASE_TAG}
@@ -137,7 +137,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: nightly_fddaq_${{ matrix.os }}
-        path: ${{ github.workspace }}/tarballs_for_upload/${{matrix.target_tag}}.tar.gz
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.target_tag }}.tar.gz
 
   update_image:
     name: update_spack_image_nightly
