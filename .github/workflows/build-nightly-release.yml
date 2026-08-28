@@ -267,6 +267,9 @@ jobs:
     if: ${{ inputs.cvmfs-deployment == 'yes' }}
     strategy:
       fail-fast: false
+      # max-parallel is currently a no-op, but could be relevant if we parallelize builds 
+      # in the future
+      max-parallel: 1
       matrix:
         include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     needs: [make_tags, generate_dbt_setup_release_env]
