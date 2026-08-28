@@ -50,7 +50,7 @@ jobs:
             },
             { label: "al10", suffix: "A10", os: "almalinux9",
               input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T",
-              output_image: "ghcr.io/dune-daq/nightly-release-alma9T",
+              output_image: "ghcr.io/dune-daq/nightly-release-alma10t",
             }
           ]
           | map(. + {
