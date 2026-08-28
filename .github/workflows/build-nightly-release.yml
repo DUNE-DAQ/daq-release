@@ -48,7 +48,7 @@ jobs:
               input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3",
               output_image: "ghcr.io/dune-daq/nightly-release-alma9",
             },
-            { label: "al10", suffix: "A10", os: "almalinux10",
+            { label: "al10", suffix: "A10", os: "almalinux9",
               input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T",
               output_image: "ghcr.io/dune-daq/nightly-release-alma9T",
             }
@@ -116,7 +116,7 @@ jobs:
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v7
       with:
-        name: nightly_coredaq_${{ matrix.os }}
+        name: nightly_coredaq_${{ matrix.label }}
         path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.core_tag }}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
@@ -136,7 +136,7 @@ jobs:
     - name: upload spack nightly tarball for far detector release
       uses: actions/upload-artifact@v7
       with:
-        name: nightly_fddaq_${{ matrix.os }}
+        name: nightly_fddaq_${{ matrix.label }}
         path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.target_tag }}.tar.gz
 
   update_image:
@@ -163,13 +163,13 @@ jobs:
       - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v8
         with:
-          name: nightly_coredaq_${{ matrix.os }}
+          name: nightly_coredaq_${{ matrix.label }}
           path: ${{ github.workspace }}/docker-build
 
       - name: Download nightly release tarball artifact for far detector release
         uses: actions/download-artifact@v8
         with:
-          name: nightly_fddaq_${{ matrix.os }}
+          name: nightly_fddaq_${{ matrix.label }}
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-nightly
@@ -253,13 +253,13 @@ jobs:
     - name: upload fddaq-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v7
       with:
-        name: fddaq-dbt_setup_release_env_${{ matrix.os }}
+        name: fddaq-dbt_setup_release_env_${{ matrix.label }}
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: upload fddaq_app_rte.sh
       uses: actions/upload-artifact@v7
       with:
-        name: fddaq_app_rte_${{ matrix.os }}
+        name: fddaq_app_rte_${{ matrix.label }}
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
   publish_to_cvmfs:
@@ -279,13 +279,13 @@ jobs:
     - name: download fddaq-dbt-setup-release-env.sh
       uses: actions/download-artifact@v8
       with:
-        name: fddaq-dbt_setup_release_env_${{ matrix.os }}
+        name: fddaq-dbt_setup_release_env_${{ matrix.label }}
         path: ${{ github.workspace }}/fddaq-release
 
     - name: download fddaq_app_rte.sh
       uses: actions/download-artifact@v8
       with:
-        name: fddaq_app_rte_${{ matrix.os }}
+        name: fddaq_app_rte_${{ matrix.label }}
         path: ${{ github.workspace }}/fddaq-rte
 
     - name: start docker container, and then rsync... 
