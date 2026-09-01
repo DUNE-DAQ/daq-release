@@ -2,6 +2,11 @@
 
 _Note that names are given in order of whom to contact first_
 
+A manager for a repo serves to:
+* Be in charge of tagging a repo
+* Be a point of contact for questions about the repo
+* Be a fallback option as a PR reviewer for a repo if there's not a more obvious person
+
 **appfwk**: Marco Roda, Alex Tapper, Eric Flumerfelt
 
 **appmodel**: Eric Flumerfelt
@@ -38,7 +43,7 @@ _Note that names are given in order of whom to contact first_
 
 **daq-docker**: John Freeman, Andrew Mogan
 
-**daqpytools**: Emir Muhammad, Pawel Plesniak
+**daqpytools**: Pawel Plesniak, Emir Muhammad
 
 **daqpyutils**: John Freeman, Pawel Plesniak
 
@@ -102,11 +107,11 @@ _Note that names are given in order of whom to contact first_
 
 **microservices**: Marco Roda
 
+**oks**: John Freeman, Marco Roda
+
 **oksconflibs**: John Freeman, Marco Roda
 
 **oksdalgen**: John Freeman
-
-**oks**: John Freeman, Marco Roda
 
 **okssystem**: John Freeman
 
@@ -140,9 +145,9 @@ _Note that names are given in order of whom to contact first_
 
 **template-repo**: John Freeman, Andrew Mogan
 
-**timinglibs**: Stoyan Trilov
-
 **timing**: Stoyan Trilov
+
+**timinglibs**: Stoyan Trilov
 
 **tpglibs**: Shyam Bhuller, Alessandro Thea
 
