@@ -16,7 +16,7 @@ _Note that names are given in order of whom to contact first_
 
 **confmodel**: Marco Roda, Alex Tapper
 
-**connectivityserver**: Emir Muhammad
+**connectivityserver**: Pawel Plesniak, Emir Muhammad
 
 **crtmodules**: Deniz Tuana Ergonul Uzun, Wes Ketchum
 
