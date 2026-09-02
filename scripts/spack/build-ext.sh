@@ -229,6 +229,11 @@ spack find -l | sort |& tee /log/externals_list.txt
 echo "Calling spack clean -a ..."
 spack clean -a
 
+# JCF, Sep-2-2026: by default this file doesn't have global read
+# permissions which can cause problems when trying to use the
+# installation
+chmod a+r $SPACK_EXTERNALS/spack-${SPACK_VERSION}/spack-repo-${DAQ_RELEASE}/${DAQ_RELEASE}.yaml
+
 endtime=$( date )
 
 echo "Externals build complete"
