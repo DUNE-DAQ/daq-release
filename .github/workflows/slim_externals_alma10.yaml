@@ -1,0 +1,27 @@
+name: Build docker image with Alma 10 slim externals
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag-suffix:
+        description: 'optional suffix for test-only externals image (e.g., T would mean alma10-slim-externals:v2.3T)'
+        default: ''
+      account-to-copy:
+        description: 'the user account whose docker-scratch/cvmfs_dunedaq area you want to copy (default dunedaq)'
+        default: 'dunedaq'
+      spack-version:
+        description: 'the version of Spack the v2.3 externals were built with (default 0.22.0)'
+        default: '0.22.0'
+
+jobs:
+
+  build_alma10_externals:
+    name: build_al10_initial
+    runs-on: daq
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Intro
+        run: |
+          echo "This is a stub so the Alma 10 Externals Image creation workflow on johnfreeman/issue569_alma10_externals can be developed"
