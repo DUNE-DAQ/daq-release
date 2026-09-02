@@ -220,7 +220,6 @@ fi
 
 if [[ "$NAME" != "coredaq" ]]; then
     # Generate pyvenv_requirements.txt
-    spack load ${NAME}@${RELEASE_TAG} +dev || exit 9
 
     cd $DAQ_RELEASE_REPO
     cmd="/usr/bin/python3 scripts/spack/make-release-repo.py \
@@ -230,6 +229,8 @@ if [[ "$NAME" != "coredaq" ]]; then
 
     echo $cmd
     $cmd || exit 8
+
+    spack load ${NAME}@${RELEASE_TAG} +dev || exit 9
 
     python -m venv --prompt dbt ${SPACK_AREA}/.venv
     source ${SPACK_AREA}/.venv/bin/activate

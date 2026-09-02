@@ -11,8 +11,20 @@ class Librdkafka(AutotoolsPackage):
     """librdkafka is a C library implementation of the Apache Kafka
     protocol."""
 
-    homepage = "https://github.com/edenhill/librdkafka"
-    url      = "https://codeload.github.com/edenhill/librdkafka/tar.gz/refs/tags/v1.7.0"
+    homepage = "https://github.com/confluentinc/librdkafka"
+    git = "https://github.com/confluentinc/librdkafka.git"
+    
+    # JCF, Aug-25-2026
+    # Mothballing the edenhill-account librdkafka; it's been moved to
+    # https://github.com/confluentinc/librdkafka.git
+    
+    # homepage = "https://github.com/edenhill/librdkafka"
+    # url      = "https://codeload.github.com/edenhill/librdkafka/tar.gz/refs/tags/v1.7.0"
+
+    
+    # JCF, Aug-25-2026
+    # librdkafka 2.15.0 made available to handle Alma 10 installation of openssl
+    version("2.15.0", tag="v2.15.0", commit="9a94e11452cdeb0a844db44ee5dd01ccbe17d3ab")
 
     # JCF, Jan-7-2025
     # librdkafka 2.2.0 under consideration for externals v2.2
@@ -52,9 +64,16 @@ class Librdkafka(AutotoolsPackage):
                            "RdKafkaTargets.cmake.v2.2.0"), self.prefix + "/RdKafkaTargets.cmake")
             copy(join_path(os.path.dirname(__file__),
                            "RdKafkaTargets-noconfig.cmake.v2.2.0"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
-
-
-
-
-
-
+        elif self.spec.satisfies('@2.15.0'):
+            print(f"Spec satisfies @2.15.0; will look in {os.path.dirname(__file__)}")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfig.cmake.v2.15.0"), self.prefix + "/RdKafkaConfig.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaConfigVersion.cmake.v2.15.0"), self.prefix + "/RdKafkaConfigVersion.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets.cmake.v2.15.0"), self.prefix + "/RdKafkaTargets.cmake")
+            copy(join_path(os.path.dirname(__file__),
+                           "RdKafkaTargets-noconfig.cmake.v2.15.0"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
+        else:
+            print("Spec doesn't satisfy @2.15.0")
+            print(self.spec)
