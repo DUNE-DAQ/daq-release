@@ -139,7 +139,11 @@ spack find gcc@${GCC_VERSION} +binutils arch=${ARCH}
 retval=$?
 
 if $fresh_build || [[ "$retval" != "0" ]]; then
-    nice -n $niceness spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} ^libiconv |& tee /log/spack_install_gcc.txt || exit 8
+    if [[ "$ARCH" != "linux-almalinux9-x86_64" ]]; then
+	nice -n $niceness spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} ^libiconv |& tee /log/spack_install_gcc.txt || exit 8
+    else
+	nice -n $niceness spack install gcc@${GCC_VERSION} +binutils arch=${ARCH} |& tee /log/spack_install_gcc.txt || exit 8
+    fi
 fi
 
 spack load gcc@${GCC_VERSION} || exit 12

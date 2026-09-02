@@ -105,6 +105,15 @@ class FelixSoftware(Package):
                 sys.stderr.write(f"Error: return value of {retval} for the command \"{cmd}\"")
                 sys.exit(retval)
 
+        if self.spec.satisfies("arch=linux-almalinux9-x86_64"):
+            arch_subdir="x86_64-centos7-gcc8-opt"
+        elif self.spec.satisfies("arch=linux-almalinux10-x86_64"):
+            arch_subdir="x86_64-el10-gcc14-opt"
+        else:
+            raise RuntimeError(
+                "This \"arch\" spec is not currently supported for felix-software Spack installations"
+            )
+
         with working_dir(prefix.software):
 
             install(f"{os.path.dirname(__file__)}/CMakeLists_base_of_software_repo.txt", "CMakeLists.txt")
@@ -149,8 +158,8 @@ class FelixSoftware(Package):
             return_zero_or_exit('pushd external/catch && git checkout %s && popd' % (hashes["external-catch"]))
 
             os.environ['PATH'] = prefix+"/software/cmake_tdaq/bin" + ":" + os.environ['PATH']
-            return_zero_or_exit('cmake_config x86_64-el10-gcc14-opt')
-            os.chdir("x86_64-el10-gcc14-opt")
+            return_zero_or_exit(f'cmake_config {arch_subdir}')
+            os.chdir(arch_subdir)
             make()
 
         # JCF, Oct-21-2021
@@ -169,14 +178,14 @@ class FelixSoftware(Package):
             copytree("software/packetformat/packetformat", "include/packetformat")
 
             return_zero_or_exit("cp software/drivers_rcc/lib64/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard_py/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/packetformat/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/regmap/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/drivers_rcc/lib* lib")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/ftools/libFlxTools* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/flxcard/lib* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/flxcard_py/lib* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/packetformat/lib* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/regmap/lib* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/drivers_rcc/lib* lib")
+            return_zero_or_exit(f"cp software/{arch_subdir}/ftools/libFlxTools* lib")
 
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/flxcard/flx-* bin")
-            return_zero_or_exit("cp software/x86_64-el10-gcc14-opt/ftools/f* bin")
+            return_zero_or_exit(f"cp software/{arch_subdir}/flxcard/flx-* bin")
+            return_zero_or_exit(f"cp software/{arch_subdir}/ftools/f* bin")
 
             return_zero_or_exit("rm -rf software")
