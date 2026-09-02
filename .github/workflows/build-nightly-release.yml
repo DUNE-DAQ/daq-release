@@ -41,15 +41,14 @@ jobs:
 
         # Construct a JSON blob containing all necessary information
         # for building on separate operating systems
-        ### TODO: Update al10 image when available ###
         jq -c -n --arg prefix "$prefix" --arg date "$date_tag" '
           [
             { label: "al9",  suffix: "A9",  os: "almalinux9",
               input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3",
               output_image: "ghcr.io/dune-daq/nightly-release-alma9",
             },
-            { label: "al10", suffix: "A10", os: "almalinux9",
-              input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3T",
+            { label: "al10", suffix: "A10", os: "almalinux10",
+              input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3t",
               output_image: "ghcr.io/dune-daq/nightly-release-alma10t",
             }
           ]
