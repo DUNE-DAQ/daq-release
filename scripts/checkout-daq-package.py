@@ -87,8 +87,8 @@ class DAQCheckoutPackage:
     def __init__(self, package_dict, checkout_area):
         self.name = package_dict.get("name")
         # AJM Mar. 4, 2026: the next two lines are kept for backwards compatibility
-        #if self.name == "elisa-client-api":
-        #    self.name = "elisa_client_api"
+        if self.name == "elisa-client-api":
+            self.name = "elisa_client_api"
         self.commit = package_dict.get("commit")
         self.version = package_dict.get("version")
         self.source = package_dict.get("source")
