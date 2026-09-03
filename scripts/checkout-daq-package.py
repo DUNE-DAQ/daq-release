@@ -87,8 +87,8 @@ class DAQCheckoutPackage:
     def __init__(self, package_dict, checkout_area):
         self.name = package_dict.get("name")
         # AJM Mar. 4, 2026: the next two lines are kept for backwards compatibility
-        if self.name == "elisa-client-api":
-            self.name = "elisa_client_api"
+        #if self.name == "elisa-client-api":
+        #    self.name = "elisa_client_api"
         self.commit = package_dict.get("commit")
         self.version = package_dict.get("version")
         self.source = package_dict.get("source")
@@ -145,14 +145,20 @@ class DAQCheckoutPackage:
 
         # Verify tag in CMakeLists and/or pyproject.toml
         if cmakelists_tag is not None and f"v{cmakelists_tag}" != self.version:
+            cmakelists_tag_mismatch = f"Tag mismatch in {self.name}: you requested {self.version}, but the CMakeLists has {cmakelists_tag}"
+            if self.name == "druncschema":
+                print(f"WARNING: {cmakelists_tag_mismatch}")
             self.success = False
             if not self.continue_on_error:
-                raise RuntimeError(f"Tag mismatch in {self.name}: you requested {self.version}, but the CMakeLists has {cmakelists_tag}")
+                raise RuntimeError(cmakelists_tag_mismatch)
 
         if pyproj_tag is not None and f"v{pyproj_tag}" != self.version:
             self.success = False
-            if not self.continue_on_error:
-                raise RuntimeError(f"Tag mismatch in {self.name}: you requested {self.version}, but the pyproject.toml has {pyproj_tag}")
+            pyproj_version_mismatch = f"Tag mismatch in {self.name}: you requested {self.version}, but the pyproject.toml has {pyproj_tag}"
+            if self.continue_on_error:
+                print(f"WARNING: {pyproj_version_mismatch}")
+            else:
+                raise RuntimeError(pyproj_version_mismatch)
 
     def get_cmakelists_version(self):
         cmakelists_file = Path(self.checkout_path) / "CMakeLists.txt"
@@ -193,6 +199,7 @@ class DAQCheckoutPackage:
         else:
             print(f"{self.checkout_path}: No [project] section found in pyproject.toml")
             return None
+
 def main():
     parser = argparse.ArgumentParser(
         prog='checkout-daq-package.py',
