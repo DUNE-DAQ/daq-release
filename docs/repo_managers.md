@@ -159,7 +159,7 @@ A manager for a repo serves to:
 
 **triggeralgs**: Alessandro Thea
 
-**uhallibs**: Stoyan Trilov, John Freeman
+**uhallibs**: John Freeman
 
 **utilities**: Eric Flumerfelt, Kurt Biery
 
