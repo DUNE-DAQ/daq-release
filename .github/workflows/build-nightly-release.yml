@@ -4,14 +4,15 @@ permissions:
   contents: read
 
 on:
-  #schedule:
-  #  - cron: "0 3 * * *"
-
   workflow_dispatch:
     inputs:
       tag-prefix:
         description: 'nightly tag prefix (also used for output container tag)'
         default: ''
+      platform:
+        type: string
+        description: 'operating system abbreviation (i.e., "al9" or "al10")'
+        default: 'al9'
       feature-branch:
         description: 'feature branch to be used across all DAQ repos wherever possible.'
         default: develop
@@ -22,45 +23,73 @@ on:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
 
+  workflow_call:
+    inputs:
+      tag-prefix:
+        type: string
+        description: 'nightly tag prefix (also used for output container tag)'
+        default: ''
+      platform:
+        type: string
+        description: 'platform abbreviation (i.e., "al9" or "al10")'
+        default: 'al9'
+      feature-branch:
+        type: string
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        type: string
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+      send-slack-message:
+        type: string
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+
 jobs:
   make_tags:
     name: create core tag and target tag
     runs-on: ubuntu-latest
     outputs:
-      platforms: ${{ steps.create_tags.outputs.platforms }}
+      label:        ${{ steps.create_tags.outputs.label }}
+      suffix:       ${{ steps.create_tags.outputs.suffix }}
+      os:           ${{ steps.create_tags.outputs.os }}
+      input_image:  ${{ steps.create_tags.outputs.input_image }}
+      output_image: ${{ steps.create_tags.outputs.output_image }}
+      core_tag:     ${{ steps.create_tags.outputs.core_tag }}
+      target_tag:   ${{ steps.create_tags.outputs.target_tag }}
     defaults:
       run:
         shell: bash
+    env:
+      PLATFORM: ${{ inputs.platform || 'al9' }}
+      PREFIX: ${{ inputs.tag-prefix || 'N' }}
     steps:
     - id: create_tags
       run: |
         date_tag=$(date +%y%m%d)
 
-        # Use GitHub input if provided, else default to N
-        prefix="${{ inputs.tag-prefix || 'N' }}"
-
         # Construct a JSON blob containing all necessary information
-        # for building on separate operating systems
-        jq -c -n --arg prefix "$prefix" --arg date "$date_tag" '
-          [
-            { label: "al9",  suffix: "A9",  os: "almalinux9",
-              input_image: "ghcr.io/dune-daq/alma9-slim-externals:v2.3",
-              output_image: "ghcr.io/dune-daq/nightly-release-alma9",
-            },
-            { label: "al10", suffix: "A10", os: "almalinux10",
-              input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3t",
-              output_image: "ghcr.io/dune-daq/nightly-release-alma10t",
-            }
-          ]
-          | map(. + {
+        # for building on separate platforms
+        jq -c -n --arg platform "$PLATFORM" --arg prefix "$PREFIX" --arg date "$date_tag" '
+          {
+            al9:  { label: "al9",  suffix: "A9",  os: "almalinux9",
+                    input_image:  "ghcr.io/dune-daq/alma9-slim-externals:v2.3T",
+                    output_image: "ghcr.io/dune-daq/nightly-release-alma9" },
+            al10: { label: "al10", suffix: "A10", os: "almalinux10",
+                    input_image:  "ghcr.io/dune-daq/alma10-slim-externals:v2.3T",
+                    output_image: "ghcr.io/dune-daq/nightly-release-alma10t" }
+          }
+          | (.[$platform] // ("unknown platform: \($platform)" | halt_error(1)))
+          | . + {
               core_tag:   ($prefix + "B_DEV_"  + $date + "_" + .suffix),
               target_tag: ($prefix + "FD_DEV_" + $date + "_" + .suffix)
-            })
-        ' | tee platforms.json >> /dev/null
+            }
+        ' > platform.json
 
-        echo "platforms=$(cat platforms.json)" >> "$GITHUB_OUTPUT"
-        jq . platforms.json   # pretty-print into the log for debugging
-    
+        jq -r 'to_entries[] | "\(.key)=\(.value)"' platform.json >> "$GITHUB_OUTPUT"
+        jq . platform.json   # print for debugging
+
     - uses: cvmfs-contrib/github-action-cvmfs@d79d292a9fc4a1d34fe5caa390308d0ec4ffe993
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
@@ -72,20 +101,17 @@ jobs:
           fi
         done
 
-
   build_release:
-    name: build_release (${{ matrix.label }})
+    name: build_release (${{ needs.make_tags.outputs.label }})
     runs-on: daq
     needs: make_tags
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     container:
-      image: ${{ matrix.input_image }}
+      image: ${{ needs.make_tags.outputs.input_image }}
     defaults:
       run:
         shell: bash
+    env:
+      BRANCH: ${{ inputs['feature-branch'] || 'develop' }}
 
     steps:
     - name: Checkout daq-release
@@ -95,19 +121,15 @@ jobs:
     
     - name: Set environment variables
       run: |
-        echo "CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ matrix.core_tag }}" >> $GITHUB_ENV
-        echo "TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ matrix.target_tag }}" >> $GITHUB_ENV
-        echo "OS=${{ matrix.os }}" >> $GITHUB_ENV
+        echo "CORE_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.core_tag }}" >> $GITHUB_ENV
+        echo "TARGET_RELEASE_DIR=/cvmfs/dunedaq-development.opensciencegrid.org/nightly/${{ needs.make_tags.outputs.target_tag }}" >> $GITHUB_ENV
+        echo "OS=${{ needs.make_tags.outputs.os }}" >> $GITHUB_ENV
 
     - name: setup directories and install spack for the coredaq release
       run: |
         source daq-release/scripts/spack/release-setup-tools.sh
-        input_feature_branch=${{ inputs.feature-branch }}
-        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
-        branch=${input_feature_branch:-"develop"}
-
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq ${{ matrix.os }} ${{ inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $BRANCH --continue-on-error || [[ "$BRANCH" != "develop" ]] 
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq ${{ needs.make_tags.outputs.os }} $BRANCH
 
         cd $CORE_RELEASE_DIR/../
         tar_and_stage_release ${CORE_RELEASE_TAG}
@@ -115,19 +137,15 @@ jobs:
     - name: upload spack nightly tarball for base release
       uses: actions/upload-artifact@v7
       with:
-        name: nightly_coredaq_${{ matrix.label }}
-        path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.core_tag }}.tar.gz
+        name: nightly_coredaq_${{ needs.make_tags.outputs.label }}
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ needs.make_tags.outputs.core_tag }}.tar.gz
 
     - name: setup directories and install spack for the fddaq release
       run: |
         source daq-release/scripts/spack/release-setup-tools.sh
-        input_feature_branch=${{ inputs.feature-branch }}
-        # For automatically triggered workflows where feature-branch is not set, fall back to default branch
-        branch=${input_feature_branch:-"develop"}
-
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --pymodules --continue-on-error || [[ "$branch" != "develop" ]]
-        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq ${{ matrix.os }} ${{ inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $BRANCH --continue-on-error || [[ "$BRANCH" != "develop" ]]
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/fddaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $BRANCH --pymodules --continue-on-error || [[ "$BRANCH" != "develop" ]]
+        daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR fddaq ${{ needs.make_tags.outputs.os }} $BRANCH
 
         cd $TARGET_RELEASE_DIR/../
         tar_and_stage_release ${TARGET_RELEASE_TAG}
@@ -135,16 +153,12 @@ jobs:
     - name: upload spack nightly tarball for far detector release
       uses: actions/upload-artifact@v7
       with:
-        name: nightly_fddaq_${{ matrix.label }}
-        path: ${{ github.workspace }}/tarballs_for_upload/${{ matrix.target_tag }}.tar.gz
+        name: nightly_fddaq_${{ needs.make_tags.outputs.label }}
+        path: ${{ github.workspace }}/tarballs_for_upload/${{ needs.make_tags.outputs.target_tag }}.tar.gz
 
   update_image:
     name: update_spack_image_nightly
     runs-on: daq
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     needs: [make_tags, build_release] 
     env:
       TAG: ${{ inputs.tag-prefix }}
@@ -162,13 +176,13 @@ jobs:
       - name: Download spack nightly release tarball artifact for base release
         uses: actions/download-artifact@v8
         with:
-          name: nightly_coredaq_${{ matrix.label }}
+          name: nightly_coredaq_${{ needs.make_tags.outputs.label }}
           path: ${{ github.workspace }}/docker-build
 
       - name: Download nightly release tarball artifact for far detector release
         uses: actions/download-artifact@v8
         with:
-          name: nightly_fddaq_${{ matrix.label }}
+          name: nightly_fddaq_${{ needs.make_tags.outputs.label }}
           path: ${{ github.workspace }}/docker-build
 
       - name: prepare cvmfs mirror spack-nightly
@@ -177,22 +191,22 @@ jobs:
             mkdir -p nightly
 
             cd nightly
-            tar xf ../${{ matrix.core_tag }}.tar.gz
-            rm -rf ../${{ matrix.core_tag}}.tar.gz
+            tar xf ../${{ needs.make_tags.outputs.core_tag }}.tar.gz
+            rm -rf ../${{ needs.make_tags.outputs.core_tag}}.tar.gz
 
-            tar xf ../${{ matrix.target_tag}}.tar.gz
-            rm -rf ../${{ matrix.target_tag}}.tar.gz
+            tar xf ../${{ needs.make_tags.outputs.target_tag}}.tar.gz
+            rm -rf ../${{ needs.make_tags.outputs.target_tag}}.tar.gz
 
-            if [[ "${{ matrix.target_tag }}" == NFD_*_A9 ]]; then
-              ln -s ${{ matrix.target_tag }} last_fddaq
-            elif [[ "${{ matrix.target_tag }}" == NFD_*_A10 ]]; then
-              ln -s ${{ matrix.target_tag }} last_fddaq_a10
+            if [[ "${{ needs.make_tags.outputs.target_tag }}" == NFD_*_A9 ]]; then
+              ln -s ${{ needs.make_tags.outputs.target_tag }} last_fddaq
+            elif [[ "${{ needs.make_tags.outputs.target_tag }}" == NFD_*_A10 ]]; then
+              ln -s ${{ needs.make_tags.outputs.target_tag }} last_fddaq_a10
             fi
 
             cd ..
-            echo "FROM "${{ matrix.input_image }} > Dockerfile
+            echo "FROM "${{ needs.make_tags.outputs.input_image }} > Dockerfile
             echo 'MAINTAINER John Freeman "jcfree@fnal.gov"' >> Dockerfile
-            echo "ENV REFRESHED_AT ${{ matrix.core_tag }}" >> Dockerfile
+            echo "ENV REFRESHED_AT ${{ needs.make_tags.outputs.core_tag }}" >> Dockerfile
             echo "COPY --from=ghcr.io/dune-daq/pypi-repo:latest /cvmfs/dunedaq.opensciencegrid.org/pypi-repo /cvmfs/dunedaq.opensciencegrid.org/pypi-repo" >> Dockerfile
             echo "ADD nightly /cvmfs/dunedaq-development.opensciencegrid.org/nightly" >> Dockerfile
             echo 'ENTRYPOINT ["/bin/bash"]' >> Dockerfile
@@ -209,7 +223,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            ${{ matrix.output_image }}
+            ${{ needs.make_tags.outputs.output_image }}
           tags: |
             type=raw,value=development_v5${{ inputs.tag-prefix }}
 
@@ -226,12 +240,8 @@ jobs:
     name: generate_dbt_setup_release_env
     runs-on: daq
     needs: [make_tags, update_image]
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     container:
-      image: ${{ matrix.output_image }}:development_v5${{ inputs.tag-prefix }}
+      image: ${{ needs.make_tags.outputs.output_image }}:development_v5${{ inputs.tag-prefix }}
     env:
       DET: 'fd'
     defaults:
@@ -244,7 +254,7 @@ jobs:
       run: |
           source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
           setup_dbt latest_v5
-          dbt-setup-release -n ${{ matrix.target_tag }}
+          dbt-setup-release -n ${{ needs.make_tags.outputs.target_tag }}
           declare -x > ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           declare -f >> ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh
           egrep "declare -x (PATH|.*_SHARE|CET_PLUGIN_PATH|DUNEDAQ_SHARE_PATH|LD_LIBRARY_PATH|LIBRARY_PATH|PYTHONPATH)=" ${GITHUB_WORKSPACE}/${DET}daq-dbt-setup-release-env.sh > ${GITHUB_WORKSPACE}/${DET}daq_app_rte.sh
@@ -252,25 +262,18 @@ jobs:
     - name: upload fddaq-dbt-setup-release-env.sh
       uses: actions/upload-artifact@v7
       with:
-        name: fddaq-dbt_setup_release_env_${{ matrix.label }}
+        name: fddaq-dbt_setup_release_env_${{ needs.make_tags.outputs.label }}
         path: ${{ github.workspace }}/fddaq-dbt-setup-release-env.sh
 
     - name: upload fddaq_app_rte.sh
       uses: actions/upload-artifact@v7
       with:
-        name: fddaq_app_rte_${{ matrix.label }}
+        name: fddaq_app_rte_${{ needs.make_tags.outputs.label }}
         path: ${{ github.workspace }}/fddaq_app_rte.sh
 
   publish_to_cvmfs:
     name: publish to cvmfs
     if: ${{ inputs.cvmfs-deployment == 'yes' }}
-    strategy:
-      fail-fast: false
-      # max-parallel is currently a no-op, but could be relevant if we parallelize builds 
-      # in the future
-      max-parallel: 1
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     needs: [make_tags, generate_dbt_setup_release_env]
     runs-on: daq
 
@@ -278,18 +281,18 @@ jobs:
     - name: download fddaq-dbt-setup-release-env.sh
       uses: actions/download-artifact@v8
       with:
-        name: fddaq-dbt_setup_release_env_${{ matrix.label }}
+        name: fddaq-dbt_setup_release_env_${{ needs.make_tags.outputs.label }}
         path: ${{ github.workspace }}/fddaq-release
 
     - name: download fddaq_app_rte.sh
       uses: actions/download-artifact@v8
       with:
-        name: fddaq_app_rte_${{ matrix.label }}
+        name: fddaq_app_rte_${{ needs.make_tags.outputs.label }}
         path: ${{ github.workspace }}/fddaq-rte
 
     - name: start docker container, and then rsync... 
       env:
-        IMAGE: "${{ matrix.output_image }}:development_v5${{ inputs.tag-prefix }}"
+        IMAGE: "${{ needs.make_tags.outputs.output_image }}:development_v5${{ inputs.tag-prefix }}"
       run: |
         cd $GITHUB_WORKSPACE
 
@@ -308,7 +311,7 @@ jobs:
         docker system prune -f
 
         #dir_for_env_scripts=$( find $unique_name -mindepth 1 -maxdepth 1 -type d -name "NFD*" )
-        dir_for_env_scripts="$unique_name/${{ matrix.target_tag }}"
+        dir_for_env_scripts="$unique_name/${{ needs.make_tags.outputs.target_tag }}"
         cp ./fddaq-release/fddaq-dbt-setup-release-env.sh     $dir_for_env_scripts/dbt-setup-release-env.sh
         cp ./fddaq-rte/fddaq_app_rte.sh                       $dir_for_env_scripts/daq_app_rte.sh
 
@@ -326,24 +329,16 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' && failure()) || (github.event_name == 'workflow_dispatch' && inputs.send-slack-message == 'yes')
     needs: [make_tags, publish_to_cvmfs]
     uses: ./.github/workflows/slack-notification.yml
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     with:
-      release_tag: ${{ matrix.target_tag }}
+      release_tag: ${{ needs.make_tags.outputs.target_tag }}
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   poll_cvmfs_for_release:
     needs: [make_tags, publish_to_cvmfs]
     uses: ./.github/workflows/poll-cvmfs-for-release.yml
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.make_tags.outputs.platforms) }}
     with:
-      release-tag: ${{ matrix.target_tag }}
+      release-tag: ${{ needs.make_tags.outputs.target_tag }}
       send-slack-message: 'yes'
     secrets: inherit
 
