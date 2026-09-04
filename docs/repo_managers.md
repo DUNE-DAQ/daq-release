@@ -39,7 +39,7 @@ A manager for a repo serves to:
 
 **daqdataformats**: Eric Flumerfelt, John Freeman
 
-**daq-deliverables**: John Freeman, Andrew Mogan
+**daq-deliverables**: Wes Ketchum
 
 **daq-docker**: John Freeman, Andrew Mogan
 
@@ -159,7 +159,7 @@ A manager for a repo serves to:
 
 **triggeralgs**: Alessandro Thea
 
-**uhallibs**: Stoyan Trilov, John Freeman
+**uhallibs**: John Freeman
 
 **utilities**: Eric Flumerfelt, Kurt Biery
 
