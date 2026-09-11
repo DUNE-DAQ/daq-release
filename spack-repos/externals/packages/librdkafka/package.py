@@ -76,5 +76,5 @@ class Librdkafka(AutotoolsPackage):
             copy(join_path(os.path.dirname(__file__),
                            "RdKafkaTargets-noconfig.cmake.v2.15.0"), self.prefix + "/RdKafkaTargets-noconfig.cmake")
         else:
-            print("Spec doesn't satisfy @2.15.0")
+            print("Unknown spec")
             print(self.spec)
