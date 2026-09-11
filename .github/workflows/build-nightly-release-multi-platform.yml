@@ -1,0 +1,52 @@
+name: Build nightly release multi-platform
+
+permissions:
+  contents: read
+
+on:
+  #schedule:
+  #  - cron: "0 3 * * *"
+  workflow_dispatch:
+    inputs:
+      tag-prefix:
+        description: 'nightly tag prefix (also used for output container tag)'
+        default: ''
+      feature-branch:
+        description: 'feature branch to be used across all DAQ repos wherever possible.'
+        default: develop
+      cvmfs-deployment:
+        description: 'whether to deploy the release to cvmfs'
+        default: 'no'
+      send-slack-message:
+        description: 'whether to send a message to #daq-release-notifications on completion'
+        default: 'no'
+
+jobs:
+  al9:
+    uses: ./.github/workflows/build-nightly-release.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      platform: al9
+      tag-prefix:         ${{ inputs['tag-prefix']         || '' }}
+      feature-branch:     ${{ inputs['feature-branch']     || 'develop' }}
+      cvmfs-deployment:   ${{ inputs['cvmfs-deployment']   || 'no' }}
+      send-slack-message: ${{ inputs['send-slack-message'] || 'no' }}
+    secrets: inherit
+
+  al10:
+    needs: al9
+    if: success() || failure()
+    uses: ./.github/workflows/build-nightly-release.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      platform: al10
+      tag-prefix:         ${{ inputs['tag-prefix']         || '' }}
+      feature-branch:     ${{ inputs['feature-branch']     || 'develop' }}
+      cvmfs-deployment:   ${{ inputs['cvmfs-deployment']   || 'no' }}
+      send-slack-message: ${{ inputs['send-slack-message'] || 'no' }}
+    secrets: inherit
+
