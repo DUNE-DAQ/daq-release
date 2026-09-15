@@ -227,7 +227,7 @@
           version: v3.0.0
           commit: null
         - name: appmodel
-          version: v6.1.0
+          version: v6.1.1
           commit: null
         - name: dbe
           version: v1.9.0
