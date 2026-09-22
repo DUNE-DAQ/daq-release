@@ -36,8 +36,8 @@ jobs:
     secrets: inherit
 
   al10:
-    needs: al9
-    if: success() || failure()
+    #needs: al9
+    #if: success() || failure()
     uses: ./.github/workflows/build-nightly-release.yml
     permissions:
       contents: read

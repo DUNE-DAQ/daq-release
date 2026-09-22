@@ -334,14 +334,6 @@ jobs:
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  poll_cvmfs_for_release:
-    needs: [make_tags, publish_to_cvmfs]
-    uses: ./.github/workflows/poll-cvmfs-for-release.yml
-    with:
-      release-tag: ${{ needs.make_tags.outputs.target_tag }}
-      send-slack-message: 'yes'
-    secrets: inherit
-
   cleanup_tarballs:
     name: cleanup tarballs from runner
     runs-on: daq
@@ -357,4 +349,13 @@ jobs:
           echo "Removing $files_older_than_30_days"
           rm -f "$files_older_than_30_days"
         fi
+
+  poll_cvmfs_for_release:
+    needs: [make_tags, publish_to_cvmfs]
+    uses: ./.github/workflows/poll-cvmfs-for-release.yml
+    with:
+      release-tag: ${{ needs.make_tags.outputs.target_tag }}
+      send-slack-message: 'yes'
+    secrets: inherit
+
 
