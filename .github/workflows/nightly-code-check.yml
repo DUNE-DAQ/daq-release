@@ -47,7 +47,7 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v6
-    - uses: cvmfs-contrib/github-action-cvmfs@d79d292a9fc4a1d34fe5caa390308d0ec4ffe993
+    - uses: cvmfs-contrib/github-action-cvmfs@72f2a8d366043978d6aebee154bc9ed321c2f2a8
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - uses: actions/checkout@v6
