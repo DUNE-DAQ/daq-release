@@ -27,6 +27,10 @@ A manager for a repo serves to:
 
 **ctbmodules**: James Shen, Marco Roda
 
+**daphne-firmware**: Manuel Arroyave
+
+**daphne-os**: Manuel Arroyave
+
 **daphnemodules**: Manuel Arroyave, Marco Roda
 
 **daq-assettools**: John Freeman, Andrew Mogan
@@ -51,6 +55,8 @@ A manager for a repo serves to:
 
 **daqsystemtest**: Kurt Biery, John Freeman, Eric Flumerfelt
 
+**datafilter**: Eric Flumerfelt
+
 **datahandlinglibs**: Deniz Tuana Ergonul Uzun, Shyam Bhuller, Roland Sipos
 
 **dbe**: John Freeman, Marco Roda
@@ -67,9 +73,19 @@ A manager for a repo serves to:
 
 **dpdklibs**: Roland Sipos, Shyam Bhuller
 
+**dqmdisplay**: Michal Rigan, Artur Sztuc
+
+**dqmtools**: Artur Sztuc, Michal Rigan
+
 **drunc**: Pawel Plesniak, Marco Roda, Alex Tapper
 
 **druncschema**: Pawel Plesniak, Marco Roda, Alex Tapper
+
+**drunc_ui**: Pawel Plesniak, James Paul Turner
+
+**dunedaq_conf_reader**: Marco Roda
+
+**dune-wib-firmware**: Roger Huang
 
 **elisa_client_api**: Marco Roda, Alex Tapper
 
@@ -87,6 +103,8 @@ A manager for a repo serves to:
 
 **.github**: John Freeman, Andrew Mogan
 
+**grafana-dashboards**: Marco Roda
+
 **hdf5libs**: Kurt Biery, Andrew Mogan
 
 **hermesmodules**: Alessandro Thea
@@ -99,13 +117,25 @@ A manager for a repo serves to:
 
 **ipm**: Kurt Biery, Eric Flumerfelt, Marco Roda
 
+**justintime**: Artur Sztuc, Michal Rigan
+
 **kafkaopmon**: Pawel Plesniak, Marco Roda
+
+**lbrulibs**: Asher Kaboth
 
 **listrev**: Kurt Biery, Eric Flumerfelt
 
 **logging**: Ron Rechenmacher, John Freeman
 
 **microservices**: Marco Roda
+
+**nddaqconf**: Asher Kaboth
+
+**nddetdataformats**: Asher Kaboth
+
+**ndreadoutlibs**: Asher Kaboth
+
+**ndreadoutmodules**: Asher Kaboth
 
 **oks**: John Freeman, Marco Roda
 
@@ -121,11 +151,17 @@ A manager for a repo serves to:
 
 **org-admin**: John Freeman, Andrew Mogan
 
+**performancetest**: Shyam Bhuller
+
+**protodqmproc**: Artur Sztuc
+
 **pocket**: Pat Riehecky
 
 **rawdatautils**: Wes Ketchum
 
 **rcif**: John Freeman
+
+**resource-manager**: Marco Roda
 
 **restcmd**: Eric Flumerfelt
 
