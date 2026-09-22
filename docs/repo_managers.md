@@ -47,6 +47,8 @@ A manager for a repo serves to:
 
 **daq-docker**: John Freeman, Andrew Mogan
 
+**daq-kube**: Pat Riehecky
+
 **daqpytools**: Pawel Plesniak, Emir Muhammad
 
 **daqpyutils**: John Freeman, Pawel Plesniak
