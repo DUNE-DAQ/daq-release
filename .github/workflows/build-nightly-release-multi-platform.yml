@@ -35,9 +35,18 @@ jobs:
       send-slack-message: ${{ inputs['send-slack-message'] || 'no' }}
     secrets: inherit
 
+  poll_al9:
+    needs: al9
+    if: ${{ !cancelled() && inputs['cvmfs-deployment'] == 'yes' }}
+    uses: ./.github/workflows/poll-cvmfs-for-release.yml
+    with:
+      release-tag: ${{ needs.al9.outputs.release-tag }}
+      send-slack-message: 'yes'
+    secrets: inherit
+
   al10:
-    #needs: al9
-    #if: success() || failure()
+    needs: al9
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/build-nightly-release.yml
     permissions:
       contents: read
@@ -48,5 +57,14 @@ jobs:
       feature-branch:     ${{ inputs['feature-branch']     || 'develop' }}
       cvmfs-deployment:   ${{ inputs['cvmfs-deployment']   || 'no' }}
       send-slack-message: ${{ inputs['send-slack-message'] || 'no' }}
+    secrets: inherit
+
+  poll_al10:
+    needs: al10
+    if: ${{ !cancelled() && inputs['cvmfs-deployment'] == 'yes' }}
+    uses: ./.github/workflows/poll-cvmfs-for-release.yml
+    with:
+      release-tag: ${{ needs.al10.outputs.release-tag }}
+      send-slack-message: 'yes'
     secrets: inherit
 

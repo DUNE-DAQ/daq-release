@@ -45,6 +45,10 @@ on:
         type: string
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
+    outputs:
+      release-tag:
+        description: 'release tag output by nightly build workflow'
+        value: ${{ jobs.make_tags.outputs.target_tag }}
 
 jobs:
   make_tags:
@@ -85,10 +89,10 @@ jobs:
               core_tag:   ($prefix + "B_DEV_"  + $date + "_" + .suffix),
               target_tag: ($prefix + "FD_DEV_" + $date + "_" + .suffix)
             }
-        ' > platform.json
+        ' > platforms.json
 
-        jq -r 'to_entries[] | "\(.key)=\(.value)"' platform.json >> "$GITHUB_OUTPUT"
-        jq . platform.json   # print for debugging
+        jq -r 'to_entries[] | "\(.key)=\(.value)"' platforms.json >> "$GITHUB_OUTPUT"
+        jq . platforms.json   # print for debugging
 
     - uses: cvmfs-contrib/github-action-cvmfs@72f2a8d366043978d6aebee154bc9ed321c2f2a8
       with:
@@ -349,13 +353,4 @@ jobs:
           echo "Removing $files_older_than_30_days"
           rm -f "$files_older_than_30_days"
         fi
-
-  poll_cvmfs_for_release:
-    needs: [make_tags, publish_to_cvmfs]
-    uses: ./.github/workflows/poll-cvmfs-for-release.yml
-    with:
-      release-tag: ${{ needs.make_tags.outputs.target_tag }}
-      send-slack-message: 'yes'
-    secrets: inherit
-
 
