@@ -64,9 +64,9 @@ jobs:
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
-      logs_exist: ${{ steps.integtest_logs.outputs.logs_exist }}
     env:
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
+      LOG_DIR: 'scratch'
     defaults:
       run:
         shell: bash
@@ -80,38 +80,26 @@ jobs:
         setup_dbt latest_v5
 
         dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
+        mkdir $LOG_DIR && cd $LOG_DIR
         
-        dunedaq_integtest_bundle.sh -s extended --log-retention-count 100
+        dunedaq_integtest_bundle.sh
+          -k min \
+          --log-retention-count 100 \
+          --junit-xml
 
     - name: Check and set integration test log directory
       if: always()
       id: integtest_logs
       run: |
-        # Log directory is the last non-empty line of output
-        logs_exist="false"
-        integtest_log_dir=$(readlink -f $DBT_AREA_ROOT/log/integtest_tests_* | tail -n 1)
-
-        echo "integtest_log_dir: $integtest_log_dir"
-        echo "integtest_log_dir=${integtest_log_dir}" >> "$GITHUB_OUTPUT"
-
-        if [[ ! -d $integtest_log_dir ]]; then
-          echo "ERROR: No integtest log directory found under $DBT_AREA_ROOT/log."
-          exit 2
+        if [[ $(ls -A "$LOG_DIR" | wc -l) -eq 0 ]]; then
+          echo "ERROR: Log dir $(readlink -f $LOG_DIR) is empty."
+          exit 15
         fi
-        if [[ -z $(ls -A $integtest_log_dir) ]]; then
-          echo "ERROR: The log directory $integtest_log_dir is empty."
-          exit 3
-        fi
-
-        logs_exist="true"
-        echo "logs_exist=${logs_exist}"
-        echo "logs_exist=${logs_exist}" >> "$GITHUB_OUTPUT"
     - name: Upload integtest logs
-      if: always()
       uses: actions/upload-artifact@v7
       with:
         name: extended_integtest_logs
-        path: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
+        path: ${{ env.LOG_DIR }}
         if-no-files-found: error
     - name: Store pytest logs
       if: always()
