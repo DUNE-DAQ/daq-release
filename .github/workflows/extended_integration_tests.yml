@@ -28,10 +28,7 @@ jobs:
       timestamp: ${{ steps.create_variables.outputs.timestamp }}
       persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
       integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
-      daq_release_path: ${{ steps.create_variables.outputs.daq_release_path }}
       dbt_args: ${{ steps.release_type.outputs.dbt_args }}
-      coredaq_manifest: ${{ steps.release_type.outputs.coredaq_manifest }}
-      fddaq_manifest: ${{ steps.release_type.outputs.fddaq_manifest }}
     defaults:
       run:
         shell: bash
@@ -48,13 +45,11 @@ jobs:
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-extended-${timestamp}
           integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
-          daq_release_path="daq-release-extended-tests"
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
           echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
           echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
-          echo "daq_release_path=${daq_release_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
       - name: Get release type
         id: release_type
@@ -69,51 +64,24 @@ jobs:
     needs: make_variables
     outputs:
       integtest_log_dir: ${{ steps.integtest_logs.outputs.integtest_log_dir }}
-      logs_exist: ${{ steps.integtests.outputs.logs_exist }}
+      logs_exist: ${{ steps.integtest_logs.outputs.logs_exist }}
     env:
-      DBT_AREA_ROOT: ${{ needs.make_variables.outputs.tag }}
       RELEASE_TAG: ${{ needs.make_variables.outputs.tag }}
-      DAQ_RELEASE_PATH: ${{ needs.make_variables.outputs.daq_release_path }}
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: checkout daq-release
-      uses: actions/checkout@v6
-      with:
-        path: ${{ needs.make_variables.outputs.daq_release_path }}
-
-    - name: Create build area
+    - name: Setup release and run tests
       env:
         DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
-        COREDAQ_MANIFEST: ${{ needs.make_variables.outputs.coredaq_manifest }}
-        FDDAQ_MANIFEST: ${{ needs.make_variables.outputs.fddaq_manifest }}
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
 
-        dbt-create $DBT_ARGS "$RELEASE_TAG" "$DBT_AREA_ROOT"
-
-        cd $DBT_AREA_ROOT
-        source env.sh
-        cd ../$DAQ_RELEASE_PATH/scripts
-        ./checkout-daq-package.py -i ../$COREDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -i ../$FDDAQ_MANIFEST -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p dfmodules -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -p trigger -i ../$COREDAQ_MANIFEST -o ${DBT_AREA_ROOT}/sourcecode
-        echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
-
-    - name: Run integration tests
-      id: integtests
-      run: |
-        cd $DBT_AREA_ROOT
-        # daqsystemtest and listrev tests are already run as part of the nightly integration tests
-        rm -rf sourcecode/daqsystemtest
-        rm -rf sourcecode/listrev
-        source env.sh
-        dbt-workarea-env
-        dbt-build --integtest | tee integtest_full_output.log
+        dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
+        
+        dunedaq_integtest_bundle.sh -s extended --log-retention-count 100
 
     - name: Check and set integration test log directory
       if: always()
@@ -199,15 +167,6 @@ jobs:
           rm -rf $INTEGTEST_XML_PATH
         fi
 
-        if [[ -d "$DAQ_RELEASE_PATH" ]]; then
-          echo "Removing $DAQ_RELEASE_PATH"
-          rm -rf $DAQ_RELEASE_PATH
-        fi
-
-        if [[ -d "$RELEASE_TAG" ]]; then
-          echo "Removing $RELEASE_TAG"
-          rm -rf $RELEASE_TAG
-        fi
     - name: Delete old log directories
       if: always()
       run: |
