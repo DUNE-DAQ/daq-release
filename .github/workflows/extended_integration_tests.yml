@@ -91,6 +91,10 @@ jobs:
       if: always()
       id: integtest_logs
       run: |
+        echo "PWD: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
+        echo "LOG_DIR: $LOG_DIR"
+        echo "ls -lrt LOG_DIR: $(ls -lrt $LOG_DIR)"
         if [[ $(ls -A "$LOG_DIR" | wc -l) -eq 0 ]]; then
           echo "ERROR: Log dir $(readlink -f $LOG_DIR) is empty."
           exit 15
