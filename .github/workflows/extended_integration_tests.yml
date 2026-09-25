@@ -86,7 +86,7 @@ jobs:
         echo "PWD #1: $(pwd)"
         
         dunedaq_integtest_bundle.sh \
-          -k min \
+          -s extended \
           --log-retention-count 100 \
           --junit-xml
 
