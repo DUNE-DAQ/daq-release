@@ -80,12 +80,18 @@ jobs:
         setup_dbt latest_v5
 
         dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
-        mkdir $LOG_DIR && cd $LOG_DIR
+        mkdir -p $LOG_DIR
+        cd $LOG_DIR
+
+        echo "PWD #1: $(pwd)"
         
         dunedaq_integtest_bundle.sh \
           -k min \
           --log-retention-count 100 \
           --junit-xml
+
+        echo "PWD #2: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
 
     - name: Check and set integration test log directory
       if: always()
