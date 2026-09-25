@@ -82,7 +82,7 @@ jobs:
         dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
         mkdir $LOG_DIR && cd $LOG_DIR
         
-        dunedaq_integtest_bundle.sh
+        dunedaq_integtest_bundle.sh \
           -k min \
           --log-retention-count 100 \
           --junit-xml
