@@ -87,7 +87,9 @@ jobs:
         
         dunedaq_integtest_bundle.sh \
           -s extended \
+          -x iceberg \
           --log-retention-count 100 \
+          --log-retention-policy failed \
           --junit-xml
 
         echo "PWD #2: $(pwd)"
