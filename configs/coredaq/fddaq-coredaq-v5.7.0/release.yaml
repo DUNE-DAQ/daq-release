@@ -224,7 +224,7 @@
           version: v1.3.2
           commit: null
         - name: confmodel
-          version: v3.0.1
+          version: v3.0.0
           commit: null
         - name: appmodel
           version: v6.1.2
