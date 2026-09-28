@@ -9,7 +9,7 @@ on:
       feature-branch:
         description: >-
           Optional branch from which to pull nightly artifacts.
-          If no workflow runs from that branch are available, falls back to develop.
+          Falls back to develop if no workflow runs from that branch are available.
         type: string
         default: 'develop'
       send-slack-message:
@@ -42,7 +42,7 @@ jobs:
       run: |
         get_run_id() {
           local workflow="$1"
-          local branch="$2"
+          local branch="${2:-develop}"
 
           run_id=$(
             gh run list \
@@ -53,26 +53,28 @@ jobs:
               --limit 10                   \
               --json databaseId,conclusion \
               --jq '[.[] | select(.conclusion=="success" or .conclusion=="failure")] | first | .databaseId'
-            ) \
-            || { echo "::error::get_run_id: Failed to get workflow ID for '${workflow}'" >&2; return 1; }
+            )
 
             if [[ -z "$run_id" || "$run_id" == "null" ]]; then
-              if [[ "$branch" != "develop" ]]; then
-                echo "::warning::get_run_id: Got null or empty workflow ID for '${workflow}' using branch $branch."
-                echo "Retrying with 'develop' as the target branch..."
-                get_run_id "$workflow" "develop"
-              else
-                echo "::error::get_run_id: Got null or empty workflow ID for '${workflow}'"
-                return 1
-              fi
+              echo "ERROR: Got null or empty workflow ID for '${workflow}' using branch '$branch'" >&2
+              return 1
             fi
 
             echo "$run_id"
         }
 
-        lcov_id=$(get_run_id "Weekly code coverage workflow" "$BRANCH")
-        integration_test_id=$(get_run_id "integration_tests.yml" "$BRANCH")
-        extended_integration_test_id=$(get_run_id "extended_integration_tests.yml" "$BRANCH")
+        lcov_id=$(
+          get_run_id "Weekly code coverage workflow" "$BRANCH" || \
+          get_run_id "Weekly code coverage workflow" "develop"
+        )
+        integration_test_id=$(
+          get_run_id "integration_tests.yml" "$BRANCH" || \
+          get_run_id "integration_tests.yml" "develop"
+        )
+        extended_integration_test_id=$(
+          get_run_id "extended_integration_tests.yml" "$BRANCH" || \
+          get_run_id "extended_integration_tests.yml" "develop"
+        )
 
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
