@@ -119,7 +119,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: v3.3.2
+          version: v3.3.3
           commit: null
         - name: ers
           version: v1.5.5
@@ -128,43 +128,43 @@
           version: v2.1.0
           commit: null
         - name: cmdlib
-          version: v1.3.1
+          version: v1.3.2
           commit: null
         - name: restcmd
-          version: v1.4.2
+          version: v1.4.3
           commit: null
         - name: opmonlib
-          version: v2.1.6
+          version: v2.1.7
           commit: null
         - name: rcif
-          version: v1.5.0
+          version: v1.5.1
           commit: null
         - name: appfwk
-          version: v6.2.0
+          version: v6.2.1
           commit: null
         - name: listrev
-          version: v6.3.1
+          version: v6.3.2
           commit: null
         - name: utilities
-          version: v5.0.0
+          version: v5.0.1
           commit: null
         - name: erskafka
-          version: v2.1.2
+          version: v2.1.3
           commit: null
         - name: kafkaopmon
           version: v3.1.3
           commit: null
         - name: ipm
-          version: v4.1.0
+          version: v4.1.1
           commit: null
         - name: serialization
           version: v2.1.0
           commit: null
         - name: iomanager
-          version: v3.3.0
+          version: v3.3.1
           commit: null
         - name: dfmessages
-          version: v3.2.0
+          version: v3.2.1
           commit: null
         - name: detdataformats
           version: v5.0.0
@@ -173,25 +173,25 @@
           version: v2.1.0
           commit: null
         - name: detchannelmaps
-          version: v1.10.0
+          version: v1.10.1
           commit: null
         - name: daqdataformats
           version: v5.0.0
           commit: null
         - name: datahandlinglibs
-          version: v3.2.6
+          version: v3.2.7
           commit: null
         - name: dfmodules
-          version: v6.0.1
+          version: v6.0.2
           commit: null
         - name: hsilibs
-          version: v4.11.0
+          version: v4.11.1
           commit: null
         - name: timing
           version: v7.14.0
           commit: null
         - name: timinglibs
-          version: v4.8.0
+          version: v4.8.1
           commit: null
         - name: trigger
           version: v2.5.6
@@ -200,40 +200,40 @@
           version: v1.7.0
           commit: null
         - name: trgtools
-          version: v2.2.3
+          version: v2.2.4
           commit: null
         - name: hdf5libs
-          version: v3.6.1
+          version: v3.6.2
           commit: null
         - name: oks
-          version: v1.4.1
+          version: v1.4.2
           commit: null
         - name: okssystem
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: oksutils
-          version: v1.0.0
+          version: v1.0.1
           commit: null
         - name: oksconflibs
-          version: v1.2.0
+          version: v1.2.1
           commit: null
         - name: conffwk
-          version: v2.1.2
+          version: v2.1.3
           commit: null
         - name: oksdalgen
-          version: v1.3.1
+          version: v1.3.2
           commit: null
         - name: confmodel
-          version: v3.0.0
+          version: v3.0.1
           commit: null
         - name: appmodel
-          version: v6.1.1
+          version: v6.1.2
           commit: null
         - name: dbe
-          version: v1.9.0
+          version: v1.9.1
           commit: null
         - name: daqconf
-          version: v9.0.0
+          version: v9.0.1
           commit: null
 
     others:
@@ -241,7 +241,7 @@
           version: v3.1.8
           commit: null
         - name: daq-buildtools
-          version: v8.13.1
+          version: v8.13.2
           commit: null
         - name: daqsystemtest
           version: v4.8.1
