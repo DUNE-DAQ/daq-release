@@ -83,17 +83,12 @@ jobs:
         mkdir -p $LOG_DIR
         cd $LOG_DIR
 
-        echo "PWD #1: $(pwd)"
-        
         dunedaq_integtest_bundle.sh \
           -s extended \
           -x iceberg \
           --log-retention-count 100 \
           --log-retention-policy failed \
           --junit-xml
-
-        echo "PWD #2: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
 
     - name: Check and set integration test log directory
       if: always()
