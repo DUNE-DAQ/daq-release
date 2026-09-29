@@ -105,11 +105,11 @@ jobs:
         if [[ -d "$pytest_current_dir" ]]; then
           echo "INFO: Failure found in ${{ matrix.test_name }}"
           COPY_LOGS="true"
-          echo "COPY_LOGS=$COPY_LOGS" >> "$GITHUB_OUTPUT"
         fi 
+        echo "COPY_LOGS=$COPY_LOGS" >> "$GITHUB_OUTPUT"
 
     - name: Copy log to persistent area
-      if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS }} == 'true'
+      if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS == 'true' }}
       env:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
