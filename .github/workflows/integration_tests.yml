@@ -90,6 +90,7 @@ jobs:
         INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
+        COPY_LOGS="false"
         mkdir -p $INTEGTEST_OUTPUT_PATH
         cd $INTEGTEST_OUTPUT_PATH
         echo "INFO: Junit XML files will be stored in in $(pwd)"
@@ -100,8 +101,15 @@ jobs:
 
         dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml --log-retention-policy failed
 
+        pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
+        if [[ -d "$pytest_current_dir" ]]; then
+          echo "INFO: Failure found in ${{ matrix.test_name }}"
+          COPY_LOGS="true"
+          echo "COPY_LOGS=$COPY_LOGS" >> "$GITHUB_OUTPUT"
+        fi 
+
     - name: Copy log to persistent area
-      if: always()
+      if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS }} == 'true'
       env:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
@@ -109,7 +117,6 @@ jobs:
         total_log_dir_size=0
         pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
 
-        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1; }
         dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
         echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
 
@@ -134,7 +141,7 @@ jobs:
       with:
         name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
         path: ${{ needs.make_variables.outputs.persistent_log_dir }}
-        if-no-files-found: error
+        if-no-files-found: ignore
     - name: Upload junit xml files
       uses: actions/upload-artifact@v7
       with:
