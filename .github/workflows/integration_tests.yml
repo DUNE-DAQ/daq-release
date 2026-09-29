@@ -66,17 +66,17 @@ jobs:
         matrix:
           test_name: [
             "listrev_test",
-            #"3ru_1df_multirun_test",
-            #"3ru_3df_multirun_test",
-            #"disabled_tpg_test",
-            #"example_system_test",
-            #"fake_data_producer_test",
-            #"long_window_readout_test",
+            "3ru_1df_multirun_test",
+            "3ru_3df_multirun_test",
+            "disabled_tpg_test",
+            "example_system_test",
+            "fake_data_producer_test",
+            "long_window_readout_test",
             "minimal_system_quick_test",
-            #"readout_type_scan_test",
-            #"small_footprint_quick_test",
-            #"tpreplay_test",
-            #"tpstream_writing_test"
+            "readout_type_scan_test",
+            "small_footprint_quick_test",
+            "tpreplay_test",
+            "tpstream_writing_test"
           ]
     defaults:
       run:
@@ -174,14 +174,7 @@ jobs:
         path: junit-xml
     - name: Generate summary tables
       run: |
-        echo "PWD: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
         cd scripts/github-ci/
-        echo "PWD: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
-        echo "Find??" 
-        find ${{ github.workspace }} -name "junit-xml" -type d
-        find ${{ github.workspace }} -name "junit-xml" -type f
         python integtest_xml_parser.py \
                --input-directory ${{ github.workspace }}/junit-xml
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
