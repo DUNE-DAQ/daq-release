@@ -172,7 +172,14 @@ jobs:
       uses: actions/download-artifact@v8
     - name: Generate summary tables
       run: |
+        echo "PWD: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
         cd scripts/github-ci/
+        echo "PWD: $(pwd)"
+        echo "ls -lrt: $(ls -lrt)"
+        echo "Find??" 
+        find ${{ github.workspace }} -name "junit-xml" -type d
+        find ${{ github.workspace }} -name "junit-xml" -type f
         python integtest_xml_parser.py \
                --input-directory ${{ github.workspace }}/junit-xml
         cat pytest_summary_table.md >> $GITHUB_STEP_SUMMARY
