@@ -119,7 +119,7 @@
 
     coredaq:
         - name: daq-cmake
-          version: v3.3.2
+          version: v3.3.3
           commit: null
         - name: ers
           version: "develop"
