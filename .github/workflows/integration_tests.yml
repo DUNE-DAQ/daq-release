@@ -1,4 +1,4 @@
-name: Integration test workflow
+name: Core integration test workflow
 
 permissions:
   contents: read
@@ -62,61 +62,54 @@ jobs:
     timeout-minutes: 30
     needs: make_variables
     strategy:
-        fail-fast: false
-        matrix:
-
-            test_name: [
-                        "listrev_test",
-                        "3ru_1df_multirun_test",
-                        "3ru_3df_multirun_test",
-                        "disabled_tpg_test",
-                        "example_system_test",
-                        "fake_data_producer_test",
-                        "long_window_readout_test",
-                        "minimal_system_quick_test",
-                        "readout_type_scan_test",
-                        "small_footprint_quick_test",
-                        "tpreplay_test",
-                        "tpstream_writing_test"
-                       ]
+      fail-fast: false
+      matrix:
+        test_name: [
+          "listrev_test",
+          "3ru_1df_multirun_test",
+          "3ru_3df_multirun_test",
+          "disabled_tpg_test",
+          "example_system_test",
+          "fake_data_producer_test",
+          "long_window_readout_test",
+          "minimal_system_quick_test",
+          "readout_type_scan_test",
+          "small_footprint_quick_test",
+          "tpreplay_test",
+          "tpstream_writing_test"
+        ]
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: setup release and run tests
+    - name: setup release and run test
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
         INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
       id: setup_and_run_test
       run: |
+        COPY_LOGS="false"
         mkdir -p $INTEGTEST_OUTPUT_PATH
         cd $INTEGTEST_OUTPUT_PATH
-        echo "Am in $(pwd)"
-        echo "INTEGTEST_OUTPUT_PATH: $INTEGTEST_OUTPUT_PATH"
+        echo "INFO: Junit XML files will be stored in in $(pwd)"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         
         dbt-setup-release $DBT_ARGS $RELEASE_TAG
 
-        TEST_PATH=""
-        TEST_SOURCE=""
-        if [[ "${{ matrix.test_name }}" == "listrev_test" ]]; then
-          TEST_PATH=$LISTREV_SHARE/integtest
-          TEST_SOURCE=listrev
-        else
-          TEST_PATH=$DAQSYSTEMTEST_SHARE/integtest
-          TEST_SOURCE=daqsystemtest
-        fi
+        dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml --log-retention-policy failed
 
-        pytest_retval=0
-        pytest --tb=short --junit-xml=${TEST_SOURCE}_${{ matrix.test_name }}_results.xml \
-                $TEST_PATH/${{ matrix.test_name }}.py || { pytest_retval=$?; true; }
-        test $pytest_retval == 0 || false
+        pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
+        if [[ -d "$pytest_current_dir" ]]; then
+          echo "INFO: Failure found in ${{ matrix.test_name }}"
+          COPY_LOGS="true"
+        fi 
+        echo "COPY_LOGS=$COPY_LOGS" >> "$GITHUB_OUTPUT"
 
     - name: Copy log to persistent area
-      if: always()
+      if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS == 'true' }}
       env:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
@@ -124,7 +117,6 @@ jobs:
         total_log_dir_size=0
         pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
 
-        [[ -d "$pytest_current_dir" ]] || { echo "No pytest directory found for ${{ matrix.test_name }}"; exit 1; }
         dir_size_kb=$(du -sk $pytest_current_dir | awk '{print $1}')
         echo "Size of $pytest_current_dir: $(du -sh $pytest_current_dir | awk '{print $1}')"
 
@@ -149,7 +141,7 @@ jobs:
       with:
         name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
         path: ${{ needs.make_variables.outputs.persistent_log_dir }}
-        if-no-files-found: error
+        if-no-files-found: ignore
     - name: Upload junit xml files
       uses: actions/upload-artifact@v7
       with:
@@ -178,6 +170,8 @@ jobs:
       uses: actions/checkout@v6
     - name: Download pytest logs
       uses: actions/download-artifact@v8
+      with:
+        path: junit-xml
     - name: Generate summary tables
       run: |
         cd scripts/github-ci/
