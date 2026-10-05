@@ -87,7 +87,6 @@ jobs:
           -s extended \
           -x iceberg \
           --log-retention-count 100 \
-          --log-retention-policy failed \
           --junit-xml
 
     - name: Check and set integration test log directory
