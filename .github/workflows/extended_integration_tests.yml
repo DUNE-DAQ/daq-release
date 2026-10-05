@@ -81,6 +81,7 @@ jobs:
 
         dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
         mkdir -p $LOG_DIR
+        find "$LOG_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
         cd $LOG_DIR
 
         dunedaq_integtest_bundle.sh \
