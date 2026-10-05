@@ -85,8 +85,7 @@ jobs:
         cd $LOG_DIR
 
         dunedaq_integtest_bundle.sh \
-          -r dfmodules \
-          -k disabled_output \
+          -s extended \
           -x iceberg \
           --log-retention-count 100 \
           --junit-xml
