@@ -99,7 +99,7 @@ jobs:
         
         dbt-setup-release $DBT_ARGS $RELEASE_TAG
 
-        dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml --log-retention-policy failed
+        dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml
 
         pytest_current_dir=/tmp/pytest-of-dunedaq/pytest-current/
         if [[ -d "$pytest_current_dir" ]]; then
