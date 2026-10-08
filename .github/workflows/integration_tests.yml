@@ -94,6 +94,13 @@ jobs:
         echo "User: $(whoami)"
         pwd
         ls -lrt
+        echo "=========="
+        id
+        echo "=========="
+        printf 'USER=%s\nHOME=%s\n' "$USER" "$HOME"
+        echo "=========="
+        getent passwd "$(id -un)"
+
 
     - name: setup release and run tests
       env:
