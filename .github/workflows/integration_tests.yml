@@ -58,7 +58,9 @@ jobs:
 
   integration_tests:
     name: integration_tests
-    runs-on: [dunedaq-integtest, alma9]
+    runs-on:
+      group: dunedaq-integtest
+      labels: alma9
     timeout-minutes: 30
     needs: make_variables
     strategy:
