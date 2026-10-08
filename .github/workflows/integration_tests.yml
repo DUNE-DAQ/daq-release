@@ -84,8 +84,8 @@ jobs:
       run: |
         echo "GITHUB_WORKSPACE: ${{ github.workspace }}"
         timestamp=$(date +"%Y-%m-%d-%H%M%Z")
-        persistent_log_dir="$HOME/github-actions/pytest-logs-${timestamp}""
-        integtest_output_path=${{ github.workspace }}/integration_tests_${{ needs.make_variables.outputs.tag }}
+        persistent_log_dir="$HOME/github-actions/pytest-logs-${timestamp}"
+        integtest_output_path="${{ github.workspace }}/integration_tests_${{ needs.make_variables.outputs.tag }}"
 
         echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
         echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
