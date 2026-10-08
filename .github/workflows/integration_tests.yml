@@ -42,8 +42,10 @@ jobs:
             release_tag="NFD_DEV_$(date +%y%m%d)_A9"
           fi
           timestamp=$(date +"%Y-%m-%d-%H%M%Z")
-          persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
-          integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
+          #persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
+          #integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
+          persistent_log_dir=~/github-actions/pytest-logs-${timestamp}
+          integtest_output_path=~/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
           echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
@@ -170,13 +172,14 @@ jobs:
         rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
     - name: Delete old log directories
       run: |
-        old_dirs=$(find /home/nfs/dunedaq/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
+        old_dirs=$(find ~/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
         echo "Removing the following directories that are more than 7 days old: $old_dirs"
         rm -rf $old_dirs
     # Integration tests can sometimes collide with stale processes, leading to timeout
     - name: Kill stale gunicorn processes
       run: |
-        /home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
+        echo "Pass (script does not yet exist here)"
+        #/home/nfs/dunedaq/kill_stale_gunicorn_processes.sh
 
   parse_and_upload_results:
     runs-on: ubuntu-latest
