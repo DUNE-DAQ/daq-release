@@ -81,23 +81,19 @@ jobs:
 
         dbt-setup-release $DBT_ARGS "$RELEASE_TAG"
         mkdir -p $LOG_DIR
+        find "$LOG_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
         cd $LOG_DIR
 
         dunedaq_integtest_bundle.sh \
           -s extended \
           -x iceberg \
           --log-retention-count 100 \
-          --log-retention-policy failed \
           --junit-xml
 
     - name: Check and set integration test log directory
       if: always()
       id: integtest_logs
       run: |
-        echo "PWD: $(pwd)"
-        echo "ls -lrt: $(ls -lrt)"
-        echo "LOG_DIR: $LOG_DIR"
-        echo "ls -lrt LOG_DIR: $(ls -lrt $LOG_DIR)"
         if [[ $(ls -A "$LOG_DIR" | wc -l) -eq 0 ]]; then
           echo "ERROR: Log dir $(readlink -f $LOG_DIR) is empty."
           exit 15
@@ -119,9 +115,9 @@ jobs:
         max_kb=10000000
         total_log_dir_size=0
 
-        mapfile -t recent_pytest_dirs < <(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120 -type d)
-        echo "Traversing pytest directories less than 2 hours old: ${recent_pytest_dirs[@]}"
-        for dir in "${recent_pytest_dirs[@]}"; do
+        mapfile -t failed_pytest_dirs < <(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -mmin -120 -type d -name "failed-pytest*")
+        echo "Traversing pytest directories less than 2 hours old: ${failed_pytest_dirs[@]}"
+        for dir in "${failed_pytest_dirs[@]}"; do
           if [[ ! -d "$dir" ]]; then
             echo "$dir is not a directory. Continuing..."
             continue
