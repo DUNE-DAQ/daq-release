@@ -86,9 +86,12 @@ jobs:
         shell: bash
 
     steps:
-    - name: Show runner
+    - name: Troubleshoot
       run: |
         echo "Runner: ${{ runner.name }}"
+        echo "User: $(whoami)"
+        pwd
+        ls -lrt
 
     - name: setup release and run tests
       env:
