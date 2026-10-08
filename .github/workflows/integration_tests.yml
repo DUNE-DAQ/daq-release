@@ -21,13 +21,10 @@ on:
 
 jobs:
   make_variables:
-    name: create nightly tag, timestamp, etc.
+    name: set nightly tag and extra dbt arguments
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.create_variables.outputs.release_tag }}
-      timestamp: ${{ steps.create_variables.outputs.timestamp }}
-      persistent_log_dir: ${{ steps.create_variables.outputs.persistent_log_dir }}
-      integtest_output_path: ${{ steps.create_variables.outputs.integtest_output_path }}
       dbt_args: ${{ steps.release_type.outputs.dbt_args }}
     defaults:
       run:
@@ -41,16 +38,10 @@ jobs:
           if [[ "$release_tag" == "last_fddaq" ]]; then
             release_tag="NFD_DEV_$(date +%y%m%d)_A9"
           fi
-          timestamp=$(date +"%Y-%m-%d-%H%M%Z")
           #persistent_log_dir=/home/nfs/dunedaq/github-actions/pytest-logs-${timestamp}
           #integtest_output_path=/home/nfs/dunedaq/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
-          persistent_log_dir=$HOME/github-actions/pytest-logs-${timestamp}
-          integtest_output_path=$HOME/actions-runner/_work/daq-release/daq-release/integration_tests_${release_tag}
 
           echo "release_tag=${release_tag}"  >>  "$GITHUB_OUTPUT"
-          echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
-          echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
-          echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
       - name: Get release type
         id: release_type
@@ -88,25 +79,24 @@ jobs:
         shell: bash
 
     steps:
-    - name: Troubleshoot
+    - name: Set log directories
+      id: set_log_directories
       run: |
-        echo "Runner: ${{ runner.name }}"
-        echo "User: $(whoami)"
-        pwd
-        ls -lrt
-        echo "=========="
-        id
-        echo "=========="
-        printf 'USER=%s\nHOME=%s\n' "$USER" "$HOME"
-        echo "=========="
-        getent passwd "$(id -un)"
+        echo "GITHUB_WORKSPACE: ${{ github.workspace }}"
+        timestamp=$(date +"%Y-%m-%d-%H%M%Z")
+        persistent_log_dir="$HOME/github-actions/pytest-logs-${timestamp}""
+        integtest_output_path=${{ github.workspace }}/integration_tests_${{ needs.make_variables.outputs.tag }}
 
+        echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
+        echo "persistent_log_dir=${persistent_log_dir}" >> "$GITHUB_OUTPUT"
+        echo "integtest_output_path=${integtest_output_path}" >> "$GITHUB_OUTPUT"
+        cat "$GITHUB_OUTPUT"
 
     - name: setup release and run tests
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
         DBT_ARGS: ${{ needs.make_variables.outputs.dbt_args }}
-        INTEGTEST_OUTPUT_PATH: ${{needs.make_variables.outputs.integtest_output_path}}
+        INTEGTEST_OUTPUT_PATH: ${{ steps.set_log_directories.outputs.integtest_output_path }}
       id: setup_and_run_test
       run: |
         mkdir -p $INTEGTEST_OUTPUT_PATH
@@ -136,7 +126,7 @@ jobs:
     - name: Copy log to persistent area
       if: always()
       env:
-        PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
+        PERSISTENT_LOG_DIR: ${{ steps.set_log_directories.outputs.persistent_log_dir }}
       run: |
         max_kb=10000000
         total_log_dir_size=0
@@ -156,32 +146,30 @@ jobs:
           --chmod=D755,F644 \
           "$pytest_current_dir"/ "$PERSISTENT_LOG_DIR/${{ matrix.test_name }}"/
 
-  store_and_upload_logs:
-    runs-on: daq
-    timeout-minutes: 5
-    needs: [make_variables, integration_tests]
-    if: always()
-    steps:
     - name: Upload pytest logs
       uses: actions/upload-artifact@v7
       with:
-        name: pytest-logs-${{ needs.make_variables.outputs.timestamp }}
-        path: ${{ needs.make_variables.outputs.persistent_log_dir }}
+        name: pytest-logs-${{ steps.set_log_directories.outputs.timestamp }}
+        path: ${{ steps.set_log_directories.outputs.persistent_log_dir }}
         if-no-files-found: error
+
     - name: Upload junit xml files
       uses: actions/upload-artifact@v7
       with:
         name: junit-xml
-        path: ${{ needs.make_variables.outputs.integtest_output_path }}
+        path: ${{ steps.set_log_directories.outputs.integtest_output_path }}
         if-no-files-found: error
+
     - name: Cleanup files
       run: |
-        rm -rf ${{ needs.make_variables.outputs.integtest_output_path }}
+        rm -rf ${{ steps.set_log_directories.outputs.integtest_output_path }}
+
     - name: Delete old log directories
       run: |
         old_dirs=$(find $HOME/github-actions -mindepth 1 -maxdepth 1 -type d -mtime +7)
         echo "Removing the following directories that are more than 7 days old: $old_dirs"
         rm -rf $old_dirs
+
     # Integration tests can sometimes collide with stale processes, leading to timeout
     - name: Kill stale gunicorn processes
       run: |
@@ -190,8 +178,8 @@ jobs:
 
   parse_and_upload_results:
     runs-on: ubuntu-latest
-    needs: [make_variables, store_and_upload_logs]
-    if: always() && needs.store_and_upload_logs.result == 'success'
+    needs: [make_variables, integration_tests]
+    if: success() || failure()
     steps:
     - name: Checkout daq-release
       uses: actions/checkout@v6
@@ -222,7 +210,7 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       release_tag: ${{ needs.make_variables.outputs.tag }}
-      integtest_log_dir: ${{ needs.make_variables.outputs.persistent_log_dir }}
+      integtest_log_dir: 'figure/this/out'
       artifact_name: nightly_integtest_json
     secrets: 
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
