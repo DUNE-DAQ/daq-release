@@ -86,6 +86,10 @@ jobs:
         shell: bash
 
     steps:
+    - name: Show runner
+      run: |
+        echo "Runner: ${{ runner.name }}"
+
     - name: setup release and run tests
       env:
         RELEASE_TAG: ${{needs.make_variables.outputs.tag}}
