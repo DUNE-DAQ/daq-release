@@ -105,8 +105,8 @@ jobs:
         if [[ -d "$failed_pytest_dir" ]]; then
           echo "INFO: Failure found in ${{ matrix.test_name }}"
           COPY_LOGS="true"
+          exit 1
         fi 
-        echo "COPY_LOGS=$COPY_LOGS" >> "$GITHUB_OUTPUT"
 
     - name: Copy log to persistent area
       if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS == 'true' }}
@@ -175,12 +175,6 @@ jobs:
         path: junit-xml
     - name: Generate summary tables
       run: |
-        ls -lrt
-        echo "GITHUB_WORKSPACE: ${{ github.workspace }}"
-        echo "PWD: $(pwd)"
-        ls -lrt junit-xml
-        ls -lrt ${{ github.workspace }}/junit-xml
-        cat junit-xml/*
         cd scripts/github-ci/
         python integtest_xml_parser.py \
                --input-directory ${{ github.workspace }}/junit-xml
