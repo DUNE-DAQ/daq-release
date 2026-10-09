@@ -171,6 +171,7 @@ jobs:
     - name: Download pytest logs
       uses: actions/download-artifact@v8
       with:
+        name: junit-xml
         path: junit-xml
     - name: Generate summary tables
       run: |
