@@ -47,17 +47,16 @@ jobs:
       id: create_build_area
       run: |
         echo "results_dir=$RESULTS_DIR" >> "$GITHUB_OUTPUT"
-        exit 123
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
         dbt-create -n $TAG
         cd $TAG
         source env.sh
         cd ../daq-release-lcov/scripts
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
-        ./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=${DBT_AREA_ROOT}" >> "$GITHUB_ENV"
     - name: Run dbt-lcov.sh
       id: run_lcov

@@ -77,7 +77,7 @@ jobs:
           get_run_id "extended_integration_tests.yml" "develop"
         )
 
-        echo "lcov_id=38279140933" | tee -a "$GITHUB_OUTPUT"
+        echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
         echo "extended_integration_test_id=$extended_integration_test_id" | tee -a "$GITHUB_OUTPUT"
 
