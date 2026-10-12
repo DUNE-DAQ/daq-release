@@ -2,6 +2,8 @@ name: Nightly CI Dashboard Publication
 
 permissions:
   contents: read
+  issues: read
+  pull-requests: read
 
 on:
   workflow_dispatch:
