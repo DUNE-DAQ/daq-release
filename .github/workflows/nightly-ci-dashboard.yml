@@ -29,10 +29,6 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
       BRANCH: ${{ inputs.feature_branch || 'develop' }}
-    permissions:
-      issues: read
-      pull-requests: read
-      actions: write
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
