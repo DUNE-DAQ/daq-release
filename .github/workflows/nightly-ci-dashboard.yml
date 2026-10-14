@@ -37,13 +37,76 @@ jobs:
         echo "lcov_html_report_path=lcov_report" >> "$GITHUB_OUTPUT"
         echo "integration_test_summary_path=integration_test_summary" >> "$GITHUB_OUTPUT"
         echo "extended_integration_test_summary_path=extended_integration_test_summary" >> "$GITHUB_OUTPUT"
-
-    - name: Download artifacts
-      id: download
+    - name: Get workflow run IDs
+      id: run_ids
       run: |
-        gh run download -n code_coverage -D ${{ steps.set_paths.outputs.lcov_html_report_path }}
-        gh run download -n nightly_integtest_json -D ${{ steps.set_paths.outputs.integration_test_summary_path }}
-        gh run download -n nightly_extended_integtest_json -D ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+        get_run_id() {
+          local workflow="$1"
+          local branch="${2:-develop}"
+          echo "Local branch is $branch" &>2
+
+          run_id=$(
+            gh run list \
+              --repo DUNE-DAQ/daq-release  \
+              --workflow "$workflow"       \
+              --branch "$branch"           \
+              --status completed           \
+              --limit 10                   \
+              --json databaseId,conclusion \
+              --jq '[.[] | select(.conclusion=="success" or .conclusion=="failure")] | first | .databaseId'
+            )
+
+            if [[ -z "$run_id" || "$run_id" == "null" ]]; then
+              echo "WARNING: Got null or empty workflow ID for '${workflow}' using branch '${branch}'" >&2
+              return 1
+            fi
+
+            echo "$run_id"
+        }
+
+        lcov_id=$(
+          get_run_id "Weekly code coverage workflow" "$BRANCH" || \
+          get_run_id "Weekly code coverage workflow" "develop"
+        )
+        integration_test_id=$(
+          get_run_id "integration_tests.yml" "$BRANCH" || \
+          get_run_id "integration_tests.yml" "develop"
+        )
+        extended_integration_test_id=$(
+          get_run_id "extended_integration_tests.yml" "$BRANCH" || \
+          get_run_id "extended_integration_tests.yml" "develop"
+        )
+
+        echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
+        echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"
+        echo "extended_integration_test_id=$extended_integration_test_id" | tee -a "$GITHUB_OUTPUT"
+
+    - name: Download lcov html report
+      id: download_lcov
+      uses: actions/download-artifact@v8
+      with:
+        name: code_coverage
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.lcov_html_report_path }}
+        run-id: ${{ steps.run_ids.outputs.lcov_id }}
+        
+    - name: Download integration test json
+      id: download_integration_test_json
+      uses: actions/download-artifact@v8
+      with:
+        name: nightly_integtest_json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.integration_test_id }}
+
+    - name: Download extended integration test json
+      id: download_extended_integration_test_json
+      uses: actions/download-artifact@v8
+      with:
+        name: nightly_extended_integtest_json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ steps.set_paths.outputs.extended_integration_test_summary_path }}
+        run-id: ${{ steps.run_ids.outputs.extended_integration_test_id }}
   
     - name: Copy artifacts and generate dashboard
       run: |
