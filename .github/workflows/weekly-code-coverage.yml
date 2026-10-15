@@ -46,7 +46,6 @@ jobs:
     - name: Create build area
       id: create_build_area
       run: |
-        exit 1
         echo "results_dir=$RESULTS_DIR" >> "$GITHUB_OUTPUT"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
