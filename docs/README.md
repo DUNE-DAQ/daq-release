@@ -2,11 +2,11 @@
 
 [![AL9 Spack Nightly Workflow (dev, v5) ](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/build-nightly-release-alma9.yml)
 
-[![Nightly v5 Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml)
+[![Core Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/integration_tests.yml)
+
+[![Extended Integration Test Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/extended_integration_tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/extended_integration_tests.yml)
 
 [![Nightly daq-buildtools Workflow](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-dbt-tests.yml)
-
-[![Nightly unit tests and clang format check](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/nightly-code-check.yml)
 
 [![Weekly linting](https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml/badge.svg)](https://github.com/DUNE-DAQ/daq-release/actions/workflows/weekly-linting.yml)
 
