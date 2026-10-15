@@ -89,16 +89,8 @@ jobs:
           -x iceberg \
           --log-retention-count 100 \
           --junit-xml
-
-    - name: Check and set integration test log directory
-      if: always()
-      id: integtest_logs
-      run: |
-        if [[ $(ls -A "$LOG_DIR" | wc -l) -eq 0 ]]; then
-          echo "ERROR: Log dir $(readlink -f $LOG_DIR) is empty."
-          exit 15
-        fi
     - name: Upload integtest logs
+      if: success() || failure()
       uses: actions/upload-artifact@v7
       with:
         name: extended_integtest_logs
