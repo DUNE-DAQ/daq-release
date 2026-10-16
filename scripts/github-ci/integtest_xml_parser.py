@@ -32,7 +32,7 @@ class JUnitXMLParser:
             self.summary.to_json()
             raise ValueError("No valid input file or directory specified.")
 
-    def get_xml_files(self, pattern="*.xml"):
+    def get_xml_files(self, pattern="*_results.xml"):
         xml_files = list(self.input_directory.rglob(pattern))
         if not xml_files:
             raise FileNotFoundError(f"Error: No xml files found in {self.input_directory}.")

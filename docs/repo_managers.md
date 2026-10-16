@@ -13,7 +13,7 @@ A manager for a repo serves to:
 
 **asiolibs**: Deniz Tuana Ergonul Uzun, Roland Sipos
 
-**cibmodules**: Nuno Barros, Marco Roda
+**cibmodules**: Marco Roda, David Rivera
 
 **cmdlib**: Marco Roda, Alex Tapper
 
@@ -109,7 +109,7 @@ A manager for a repo serves to:
 
 **hdf5libs**: Kurt Biery, Andrew Mogan
 
-**hermesmodules**: Alessandro Thea
+**hermesmodules**: Alessandro Thea, Shyam Bhuller, Roland Sipos
 
 **hsilibs**: Stoyan Trilov
 
@@ -129,7 +129,7 @@ A manager for a repo serves to:
 
 **logging**: Ron Rechenmacher, John Freeman
 
-**microservices**: Marco Roda
+**microservices**: Marco Roda, John Freeman
 
 **nddaqconf**: Asher Kaboth
 
@@ -143,11 +143,11 @@ A manager for a repo serves to:
 
 **oksconflibs**: John Freeman, Marco Roda
 
-**oksdalgen**: John Freeman
+**oksdalgen**: John Freeman, Andrew Mogan
 
-**okssystem**: John Freeman
+**okssystem**: John Freeman, Andrew Mogan
 
-**oksutils**: John Freeman
+**oksutils**: John Freeman, Andrew Mogan
 
 **opmonlib**: Marco Roda, Alex Tapper
 
@@ -161,17 +161,17 @@ A manager for a repo serves to:
 
 **rawdatautils**: Wes Ketchum
 
-**rcif**: John Freeman
+**rcif**: John Freeman, Andrew Mogan
 
 **resource-manager**: Marco Roda
 
 **restcmd**: Eric Flumerfelt
 
-**runconftools**: Marco Roda
+**runconftools**: Marco Roda, Henry Wallace
 
 **runconf-ui**: Henry Wallace, Marco Roda
 
-**serialization**: Eric Flumerfelt
+**serialization**: Eric Flumerfelt, John Freeman
 
 **snbmodules**: Eric Flumerfelt, Deniz Tuana Ergonul Uzun
 
@@ -197,7 +197,7 @@ A manager for a repo serves to:
 
 **triggeralgs**: Alessandro Thea
 
-**uhallibs**: John Freeman
+**uhallibs**: John Freeman, Andrew Mogan
 
 **utilities**: Eric Flumerfelt, Kurt Biery
 
