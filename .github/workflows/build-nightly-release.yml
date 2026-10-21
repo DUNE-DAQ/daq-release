@@ -77,10 +77,10 @@ jobs:
         # for building on separate platforms
         jq -c -n --arg platform "$PLATFORM" --arg prefix "$PREFIX" --arg date "$date_tag" '
           {
-            al9:  { label: "al9",  suffix: "A9",  os: "almalinux9",
+            al9:  { label: "alma9",  suffix: "A9",  os: "almalinux9",
                     input_image:  "ghcr.io/dune-daq/alma9-slim-externals:v2.3T",
                     output_image: "ghcr.io/dune-daq/nightly-release-alma9" },
-            al10: { label: "al10", suffix: "A10", os: "almalinux10",
+            al10: { label: "alma10", suffix: "A10", os: "almalinux10",
                     input_image:  "ghcr.io/dune-daq/alma10-slim-externals:v2.3T",
                     output_image: "ghcr.io/dune-daq/nightly-release-alma10t" }
           }
@@ -107,7 +107,10 @@ jobs:
 
   build_release:
     name: build_release (${{ needs.make_tags.outputs.label }})
-    runs-on: daq
+    runs-on:
+      group: dunedaq-build
+      labels: ${{ needs.make_tags.outputs.label }}
+
     needs: make_tags
     container:
       image: ${{ needs.make_tags.outputs.input_image }}
