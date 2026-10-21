@@ -6,8 +6,8 @@ on:
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
-  schedule:
-    - cron: "0 12 * * 0"
+  #schedule:
+  #  - cron: "0 12 * * 0"
 
 jobs:
   make_nightly_tag:
@@ -42,9 +42,9 @@ jobs:
       run: |
         tmpdirname=$( mktemp -d )
         cd ./daq-release-linting/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o $tmpdirname
+        ./checkout-daq-package.py -i ../configs/coredaq/fddaq-develop/release.yaml -a -o $tmpdirname
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o $tmpdirname
-        #./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -p hdf5libs -o $tmpdirname
+        #./checkout-daq-package.py -i ../configs/coredaq/fddaq-develop/release.yaml -p hdf5libs -o $tmpdirname
         #./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -p fdreadoutlibs -o $tmpdirname
         cd ../..
 
