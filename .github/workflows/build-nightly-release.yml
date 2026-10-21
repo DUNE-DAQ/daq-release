@@ -165,7 +165,9 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on:
+      group: dunedaq-build
+      labels: ${{ needs.make_tags.outputs.label }}
     needs: [make_tags, build_release] 
     env:
       TAG: ${{ inputs.tag-prefix }}
@@ -245,7 +247,9 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on:
+      group: dunedaq-build
+      labels: ${{ needs.make_tags.outputs.label }}
     needs: [make_tags, update_image]
     container:
       image: ${{ needs.make_tags.outputs.output_image }}:development_v5${{ inputs.tag-prefix }}
@@ -282,7 +286,9 @@ jobs:
     name: publish to cvmfs
     if: ${{ inputs.cvmfs-deployment == 'yes' }}
     needs: [make_tags, generate_dbt_setup_release_env]
-    runs-on: daq
+    runs-on:
+      group: dunedaq-build
+      labels: ${{ needs.make_tags.outputs.label }}
 
     steps:
     - name: download fddaq-dbt-setup-release-env.sh
@@ -343,9 +349,11 @@ jobs:
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
-    runs-on: daq
+    runs-on:
+      group: dunedaq-build
+      labels: ${{ needs.make_tags.outputs.label }}
     if: always()
-    needs: publish_to_cvmfs
+    needs: [make_tags, publish_to_cvmfs]
     steps:
     - name: cleanup tarballs from daq.fnal.gov
       run: |
