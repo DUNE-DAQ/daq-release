@@ -150,6 +150,10 @@ jobs:
           rm -rf $INTEGTEST_XML_PATH
         fi
 
+        # Pause the workflow to ensure the workflow status has time to update.
+        # This affects GitHub API calls in downstream jobs.
+        sleep 120
+
     - name: Delete old log directories
       if: always()
       run: |
