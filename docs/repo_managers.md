@@ -111,7 +111,7 @@ A manager for a repo serves to:
 
 **hermesmodules**: Alessandro Thea, Shyam Bhuller, Roland Sipos
 
-**hsilibs**: Stoyan Trilov
+**hsilibs**: Stoyan Trilov, Dennis Lindebaum
 
 **integrationtest**: Kurt Biery, John Freeman
 
@@ -183,9 +183,9 @@ A manager for a repo serves to:
 
 **template-repo**: John Freeman, Andrew Mogan
 
-**timing**: Stoyan Trilov
+**timing**: Stoyan Trilov, Dennis Lindebaum
 
-**timinglibs**: Stoyan Trilov
+**timinglibs**: Stoyan Trilov, Dennis Lindebaum
 
 **tpglibs**: Shyam Bhuller, Alessandro Thea
 
