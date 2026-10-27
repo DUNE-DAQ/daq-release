@@ -106,6 +106,10 @@ if [[ -n $BUILDCACHE_DIR ]]; then
     fi
 fi
 
+which python3
+python3 --version
+
+python3 -c 'import clingo; print(clingo.__file__); print(getattr(clingo, "__version__", "unknown version")); import clingo.ast; print("clingo.ast imported successfully")'
 
 echo "JCF: ABOUT TO PERFORM A RANDOM SPEC CALL"
 time spack -dv --stacktrace spec graphviz
