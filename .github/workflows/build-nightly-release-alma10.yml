@@ -90,7 +90,8 @@ jobs:
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
 
-        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        #daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
+        echo "JCF: calling "daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
         daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
 
         cd $CORE_RELEASE_DIR/../

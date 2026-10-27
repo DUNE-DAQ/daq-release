@@ -130,10 +130,18 @@ if [[ -z $BUILDCACHE_DIR ]]; then
     fi
 fi
 
+echo "JCF: ABOUT TO PERFORM A RANDOM SPEC CALL"
+time spack -dv --stacktrace spec graphviz
+retval=$?
+echo "JCF: DONE, retval IS $retval"
+
+
+
 build_dbe=false
 if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
     if [[ -z $BUILDCACHE_DIR ]]; then
-	spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+	echo spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64
+	spack -dv --stacktrace spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
 	retval=$?    
 
 	cat $SPACK_AREA/spec_dbe_log.txt
@@ -149,6 +157,8 @@ if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
 	build_dbe=true  # Any buildcache provided will be assumed to contain dbe
     fi
 fi
+
+echo "JCF: SPACK SPEC CALL WENT FINE"
 
 attempt=1
 max_attempts=3
