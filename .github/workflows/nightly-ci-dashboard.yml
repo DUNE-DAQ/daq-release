@@ -6,6 +6,12 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
+      feature_branch:
+        description: >-
+          Optional branch from which to pull nightly artifacts.
+          Falls back to develop if no workflow runs from that branch are available.
+        type: string
+        default: 'develop'
       send-slack-message:
         description: 'whether to send a message to #daq-release-notifications on completion'
         default: 'no'
@@ -22,6 +28,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_DASHBOARD_DIR: scripts/github-ci/ci-dashboard
+      BRANCH: ${{ inputs.feature_branch || 'develop' }}
     steps:
     - uses: actions/checkout@v6
     - name: Set paths to artifacts
@@ -34,30 +41,41 @@ jobs:
       id: run_ids
       run: |
         get_run_id() {
-          local workflow=$1
+          local workflow="$1"
+          local branch="${2:-develop}"
+          echo "Local branch is $branch" &>2
 
           run_id=$(
             gh run list \
-              --repo DUNE-DAQ/daq-release \
-              --workflow "$workflow" \
-              --status completed \
-              --limit 10 \
+              --repo DUNE-DAQ/daq-release  \
+              --workflow "$workflow"       \
+              --branch "$branch"           \
+              --status completed           \
+              --limit 10                   \
               --json databaseId,conclusion \
               --jq '[.[] | select(.conclusion=="success" or .conclusion=="failure")] | first | .databaseId'
-            ) \
-            || { echo "::error::get_run_id: Failed to get workflow ID for '${workflow}'" >&2; return 1; }
+            )
 
             if [[ -z "$run_id" || "$run_id" == "null" ]]; then
-              echo "::error::get_run_id: Got null or empty workflow ID for '${workflow}'"
+              echo "WARNING: Got null or empty workflow ID for '${workflow}' using branch '${branch}'" >&2
               return 1
             fi
 
             echo "$run_id"
         }
 
-        lcov_id=$(get_run_id "Weekly code coverage workflow")
-        integration_test_id=$(get_run_id "integration_tests.yml")
-        extended_integration_test_id=$(get_run_id "extended_integration_tests.yml")
+        lcov_id=$(
+          get_run_id "Weekly code coverage workflow" "$BRANCH" || \
+          get_run_id "Weekly code coverage workflow" "develop"
+        )
+        integration_test_id=$(
+          get_run_id "integration_tests.yml" "$BRANCH" || \
+          get_run_id "integration_tests.yml" "develop"
+        )
+        extended_integration_test_id=$(
+          get_run_id "extended_integration_tests.yml" "$BRANCH" || \
+          get_run_id "extended_integration_tests.yml" "develop"
+        )
 
         echo "lcov_id=$lcov_id" | tee -a "$GITHUB_OUTPUT"
         echo "integration_test_id=$integration_test_id" | tee -a "$GITHUB_OUTPUT"

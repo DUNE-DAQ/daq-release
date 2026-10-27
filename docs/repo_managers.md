@@ -13,7 +13,7 @@ A manager for a repo serves to:
 
 **asiolibs**: Deniz Tuana Ergonul Uzun, Roland Sipos
 
-**cibmodules**: Nuno Barros, Marco Roda
+**cibmodules**: Marco Roda, David Rivera
 
 **cmdlib**: Marco Roda, Alex Tapper
 
@@ -26,6 +26,10 @@ A manager for a repo serves to:
 **crtmodules**: Deniz Tuana Ergonul Uzun, Wes Ketchum
 
 **ctbmodules**: James Shen, Marco Roda
+
+**daphne-firmware**: Manuel Arroyave
+
+**daphne-os**: Manuel Arroyave
 
 **daphnemodules**: Manuel Arroyave, Marco Roda
 
@@ -43,6 +47,8 @@ A manager for a repo serves to:
 
 **daq-docker**: John Freeman, Andrew Mogan
 
+**daq-kube**: Pat Riehecky
+
 **daqpytools**: Pawel Plesniak, Emir Muhammad
 
 **daqpyutils**: John Freeman, Pawel Plesniak
@@ -50,6 +56,8 @@ A manager for a repo serves to:
 **daq-release**: John Freeman, Andrew Mogan
 
 **daqsystemtest**: Kurt Biery, John Freeman, Eric Flumerfelt
+
+**datafilter**: Eric Flumerfelt
 
 **datahandlinglibs**: Deniz Tuana Ergonul Uzun, Shyam Bhuller, Roland Sipos
 
@@ -67,9 +75,19 @@ A manager for a repo serves to:
 
 **dpdklibs**: Roland Sipos, Shyam Bhuller
 
+**dqmdisplay**: Michal Rigan, Artur Sztuc
+
+**dqmtools**: Artur Sztuc, Michal Rigan
+
 **drunc**: Pawel Plesniak, Marco Roda, Alex Tapper
 
 **druncschema**: Pawel Plesniak, Marco Roda, Alex Tapper
+
+**drunc_ui**: Pawel Plesniak, James Paul Turner
+
+**dunedaq_conf_reader**: Marco Roda
+
+**dune-wib-firmware**: Roger Huang
 
 **elisa_client_api**: Marco Roda, Alex Tapper
 
@@ -87,11 +105,13 @@ A manager for a repo serves to:
 
 **.github**: John Freeman, Andrew Mogan
 
+**grafana-dashboards**: Marco Roda
+
 **hdf5libs**: Kurt Biery, Andrew Mogan
 
-**hermesmodules**: Alessandro Thea
+**hermesmodules**: Alessandro Thea, Shyam Bhuller, Roland Sipos
 
-**hsilibs**: Stoyan Trilov
+**hsilibs**: Stoyan Trilov, Dennis Lindebaum
 
 **integrationtest**: Kurt Biery, John Freeman
 
@@ -99,41 +119,59 @@ A manager for a repo serves to:
 
 **ipm**: Kurt Biery, Eric Flumerfelt, Marco Roda
 
+**justintime**: Artur Sztuc, Michal Rigan
+
 **kafkaopmon**: Pawel Plesniak, Marco Roda
+
+**lbrulibs**: Asher Kaboth
 
 **listrev**: Kurt Biery, Eric Flumerfelt
 
 **logging**: Ron Rechenmacher, John Freeman
 
-**microservices**: Marco Roda
+**microservices**: Marco Roda, John Freeman
+
+**nddaqconf**: Asher Kaboth
+
+**nddetdataformats**: Asher Kaboth
+
+**ndreadoutlibs**: Asher Kaboth
+
+**ndreadoutmodules**: Asher Kaboth
 
 **oks**: John Freeman, Marco Roda
 
 **oksconflibs**: John Freeman, Marco Roda
 
-**oksdalgen**: John Freeman
+**oksdalgen**: John Freeman, Andrew Mogan
 
-**okssystem**: John Freeman
+**okssystem**: John Freeman, Andrew Mogan
 
-**oksutils**: John Freeman
+**oksutils**: John Freeman, Andrew Mogan
 
 **opmonlib**: Marco Roda, Alex Tapper
 
 **org-admin**: John Freeman, Andrew Mogan
 
+**performancetest**: Shyam Bhuller
+
+**protodqmproc**: Artur Sztuc
+
 **pocket**: Pat Riehecky
 
 **rawdatautils**: Wes Ketchum
 
-**rcif**: John Freeman
+**rcif**: John Freeman, Andrew Mogan
+
+**resource-manager**: Marco Roda
 
 **restcmd**: Eric Flumerfelt
 
-**runconftools**: Marco Roda
+**runconftools**: Marco Roda, Henry Wallace
 
 **runconf-ui**: Henry Wallace, Marco Roda
 
-**serialization**: Eric Flumerfelt
+**serialization**: Eric Flumerfelt, John Freeman
 
 **snbmodules**: Eric Flumerfelt, Deniz Tuana Ergonul Uzun
 
@@ -145,9 +183,9 @@ A manager for a repo serves to:
 
 **template-repo**: John Freeman, Andrew Mogan
 
-**timing**: Stoyan Trilov
+**timing**: Stoyan Trilov, Dennis Lindebaum
 
-**timinglibs**: Stoyan Trilov
+**timinglibs**: Stoyan Trilov, Dennis Lindebaum
 
 **tpglibs**: Shyam Bhuller, Alessandro Thea
 
@@ -159,7 +197,7 @@ A manager for a repo serves to:
 
 **triggeralgs**: Alessandro Thea
 
-**uhallibs**: John Freeman
+**uhallibs**: John Freeman, Andrew Mogan
 
 **utilities**: Eric Flumerfelt, Kurt Biery
 
