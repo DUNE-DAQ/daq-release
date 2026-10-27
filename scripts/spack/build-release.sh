@@ -90,7 +90,9 @@ $cmd || exit 5
 
 cd $SPACK_AREA
 
-spack clean -m 
+echo "JCF: ABOUT TO CALL spack clean -m"
+spack clean -m
+echo "JCF: FINISHED CALL TO spack clean -m"
 
 if [[ -n $BUILDCACHE_DIR ]]; then
 
@@ -103,6 +105,13 @@ if [[ -n $BUILDCACHE_DIR ]]; then
 	echo "Already have $mirror_name available; won't add it"
     fi
 fi
+
+
+echo "JCF: ABOUT TO PERFORM A RANDOM SPEC CALL"
+time spack -dv --stacktrace spec graphviz
+retval=$?
+echo "JCF: DONE, retval IS $retval"
+
 
 # JCF, Mar-3-2025
 
@@ -117,7 +126,8 @@ fi
 if [[ -z $BUILDCACHE_DIR ]]; then
 
     if [[ "$NAME" == "coredaq" ]]; then
-	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
+	echo spack -dv --stacktrace spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 
+	spack -dv --stacktrace spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 #> $SPACK_AREA/spec_${NAME}_log.txt 2>&1
 	retval=$?
     else
 	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
@@ -130,18 +140,12 @@ if [[ -z $BUILDCACHE_DIR ]]; then
     fi
 fi
 
-echo "JCF: ABOUT TO PERFORM A RANDOM SPEC CALL"
-time spack -dv --stacktrace spec graphviz
-retval=$?
-echo "JCF: DONE, retval IS $retval"
-
 
 
 build_dbe=false
 if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
     if [[ -z $BUILDCACHE_DIR ]]; then
-	echo spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64
-	spack -dv --stacktrace spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
+	spack spec -l --reuse dbe%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_dbe_log.txt 2>&1
 	retval=$?    
 
 	cat $SPACK_AREA/spec_dbe_log.txt
