@@ -10,7 +10,6 @@ jobs:
   troubleshoot_spack:
     name: troubleshoot_spack
     runs-on: daq
-    needs: make_tags
     container:
       image: ghcr.io/dune-daq/alma10-slim-externals:v2.3
     defaults:
