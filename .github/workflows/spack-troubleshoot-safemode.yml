@@ -1,0 +1,30 @@
+name: Safe-Mode Alma10 Spack Troubleshooting
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+
+jobs:
+  troubleshoot_spack:
+    name: troubleshoot_spack
+    runs-on: daq
+    container:
+      image: ghcr.io/dune-daq/alma10-spack:latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: basic_check
+      run: |
+        export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v${EXT_VERSION}
+        mkdir -p $SPACK_EXTERNALS
+        cd $SPACK_EXTERNALS
+        wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
+        tar xf v${SPACK_VERSION}.tar.gz
+        ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        spack -dv --stacktrace spec graphviz
+        echo "JCF: done"
