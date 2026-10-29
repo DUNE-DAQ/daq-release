@@ -11,7 +11,7 @@ jobs:
     name: troubleshoot_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3
+      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
     defaults:
       run:
         shell: bash
