@@ -19,11 +19,11 @@ jobs:
     steps:
     - name: basic_check
       run: |
-        export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v${EXT_VERSION}
+        export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3
         mkdir -p $SPACK_EXTERNALS
         cd $SPACK_EXTERNALS
-        wget https://github.com/spack/spack/archive/refs/tags/v${SPACK_VERSION}.tar.gz
-        tar xf v${SPACK_VERSION}.tar.gz
+        wget https://github.com/spack/spack/archive/refs/tags/v0.22.0.tar.gz
+        tar xf v0.22.0.tar.gz
         ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
         source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
         spack -dv --stacktrace spec graphviz
