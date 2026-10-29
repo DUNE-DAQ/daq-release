@@ -11,7 +11,7 @@ jobs:
     name: troubleshoot_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-slim-externals:v2.3
+      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3
     defaults:
       run:
         shell: bash
@@ -20,5 +20,9 @@ jobs:
     - name: basic_check
       run: |
         source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        spack clean -a
+        echo "PYTHONPATH == $PYTHONPATH"
+        echo "PATH == $PATH"
+        ls -l /github/home/.spack/bootstrap
         spack -dv --stacktrace spec graphviz
         echo "JCF: done"
