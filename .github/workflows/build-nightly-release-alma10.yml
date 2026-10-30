@@ -63,10 +63,10 @@ jobs:
 
   build_the_develop_release_spack:
     name: build_dev_release_spack
-    runs-on: daq
+    runs-on: ubuntu-latest
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3
+      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3T
     defaults:
       run:
         shell: bash
@@ -129,7 +129,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3"
+          - input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3T"
             output_image: "ghcr.io/dune-daq/nightly-release-alma10"
             tag: "development_v5${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
@@ -210,7 +210,7 @@ jobs:
 
   generate_dbt_setup_release_env:
     name: generate_dbt_setup_release_env
-    runs-on: daq
+    runs-on: ubuntu-latest
     needs: [make_tags, update_image]
     container:
       image: ghcr.io/dune-daq/nightly-release-alma10:development_v5${{ github.event.inputs.tag-prefix }}
