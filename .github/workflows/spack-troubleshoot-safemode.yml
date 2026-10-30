@@ -20,8 +20,6 @@ jobs:
     - name: basic_check
       run: |
         dnf -y install wget git gzip bzip2 gcc gcc-c++ make patch python3-pip
-        python3 -m pip install clingo
-        python3 -c 'import clingo.ast; print(clingo.__file__)'
         export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3
         mkdir -p $SPACK_EXTERNALS
         cd $SPACK_EXTERNALS
@@ -29,5 +27,6 @@ jobs:
         tar xf v0.22.0.tar.gz
         ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
         source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        spack compilers
         spack -dv --stacktrace spec graphviz
         echo "JCF: done"
