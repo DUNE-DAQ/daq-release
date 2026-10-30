@@ -9,7 +9,7 @@ on:
 jobs:
   troubleshoot_spack:
     name: troubleshoot_spack
-    runs-on: ubuntu-latest
+    runs-on: daq
     container:
       image: almalinux:10
     defaults:
@@ -19,16 +19,16 @@ jobs:
     steps:
     - name: basic_check
       run: |
-        dnf -y install wget git gzip bzip2 gcc gcc-c++ make patch python3-pip
-        export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3
-        mkdir -p $SPACK_EXTERNALS
-        cd $SPACK_EXTERNALS
-        wget https://github.com/spack/spack/archive/refs/tags/v0.22.0.tar.gz
-        tar xf v0.22.0.tar.gz
-        ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        #dnf -y install wget git gzip bzip2 gcc gcc-c++ make patch python3-pip
+        #export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3
+        #mkdir -p $SPACK_EXTERNALS
+        #cd $SPACK_EXTERNALS
+        #wget https://github.com/spack/spack/archive/refs/tags/v0.22.0.tar.gz
+        #tar xf v0.22.0.tar.gz
+        #ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
         uname -a
         ls -ltr /tmp
-        source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
-        spack compilers
-        spack -dv --stacktrace spec graphviz
-        echo "JCF: done"
+        #source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        #spack compilers
+        #spack -dv --stacktrace spec graphviz
+        #echo "JCF: done"
