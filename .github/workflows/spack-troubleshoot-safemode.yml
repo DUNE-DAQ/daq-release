@@ -11,7 +11,7 @@ jobs:
     name: troubleshoot_spack
     runs-on: daq
     container:
-      image: almalinux:10
+      image: almalinux:9
     defaults:
       run:
         shell: bash
