@@ -11,7 +11,7 @@ jobs:
     name: troubleshoot_spack
     runs-on: daq
     container:
-      image: ghcr.io/dune-daq/alma9-spack:latest
+      image: almalinux:10
     defaults:
       run:
         shell: bash
@@ -19,6 +19,7 @@ jobs:
     steps:
     - name: basic_check
       run: |
+        dnf -y install wget git gzip bzip2 gcc gcc-c++ make patch
         export SPACK_EXTERNALS=/cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3
         mkdir -p $SPACK_EXTERNALS
         cd $SPACK_EXTERNALS
