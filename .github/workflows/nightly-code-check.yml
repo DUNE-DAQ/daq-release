@@ -66,7 +66,7 @@ jobs:
           source env.sh
 
           cd /ghw/scripts
-          ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
+          ./checkout-daq-package.py -i ../configs/coredaq/fddaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
           ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o /ghw/${DBT_AREA_ROOT}/sourcecode
 
           cd /ghw/$DBT_AREA_ROOT

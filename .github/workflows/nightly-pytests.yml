@@ -54,13 +54,13 @@ jobs:
         source env.sh
         source $GITHUB_WORKSPACE/daq-buildtools-pytests/env.sh
         cd ../daq-release-pytests/scripts
-        ./checkout-daq-package.py -i ../configs/coredaq/coredaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
+        ./checkout-daq-package.py -i ../configs/coredaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         ./checkout-daq-package.py -i ../configs/fddaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
         # daqsystemtest and listrev tests are already run in the nightly integration tests
         cd ${DBT_AREA_ROOT}/sourcecode
         rm -rf daqsystemtest
         rm -rf listrev
-        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/coredaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
+        #./checkout-daq-package.py -p hdf5libs -b develop -i ../configs/coredaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         #./checkout-daq-package.py -p flxlibs -b develop -i ../configs/fddaq/fddaq-develop/release.yaml -o ${DBT_AREA_ROOT}/sourcecode
         echo "DBT_AREA_ROOT=$DBT_AREA_ROOT" >> "$GITHUB_ENV"
     - name: Run pytests
