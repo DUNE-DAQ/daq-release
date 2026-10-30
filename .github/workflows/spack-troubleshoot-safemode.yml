@@ -26,6 +26,8 @@ jobs:
         wget https://github.com/spack/spack/archive/refs/tags/v0.22.0.tar.gz
         tar xf v0.22.0.tar.gz
         ls -l /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
+        uname -a
+        ls -ltr /tmp
         source /cvmfs/dunedaq.opensciencegrid.org/spack/externals/ext-v2.3/spack-0.22.0/share/spack/setup-env.sh
         spack compilers
         spack -dv --stacktrace spec graphviz
