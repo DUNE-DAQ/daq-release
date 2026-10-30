@@ -9,7 +9,7 @@ on:
 jobs:
   troubleshoot_spack:
     name: troubleshoot_spack
-    runs-on: daq
+    runs-on: ubuntu-latest
     container:
       image: almalinux:10
     defaults:
