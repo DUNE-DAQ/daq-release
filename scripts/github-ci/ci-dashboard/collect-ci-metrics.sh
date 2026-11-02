@@ -102,9 +102,6 @@ for REPO in "${dune_packages_with_ci[@]}"; do
   gh run download --repo "$FULL_NAME" --name link_checker_log        --dir "artifacts/$REPO/" 2>/dev/null
   gh run download --repo "$FULL_NAME" --name nightly_linting_results --dir "artifacts/$REPO/" 2>/dev/null
   gh run download --repo "$FULL_NAME" --name clang_format_summary    --dir "artifacts/$REPO/" 2>/dev/null
-
-  # Reset workflow inactivity timer
-  gh api -X PUT "repos/$FULL_NAME/actions/workflows/dunedaq-develop-cpp-ci.yml/enable"
 done
 
 echo "]" >> "$OUTFILE"

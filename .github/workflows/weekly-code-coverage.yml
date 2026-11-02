@@ -30,8 +30,11 @@ jobs:
     runs-on: daq
     needs: make_nightly_tag
     timeout-minutes: 120
+    env:
+      TAG: ${{ needs.make_nightly_tag.outputs.tag }}
+      RESULTS_DIR: ${{ needs.make_nightly_tag.outputs.tag }}/code_coverage_results/html
     outputs:
-      coverage_results_dir: ${{ steps.run_lcov.outputs.results_dir }}
+      coverage_results_dir: ${{ steps.create_build_area.outputs.results_dir }}
     defaults:
       run:
         shell: bash
@@ -43,10 +46,11 @@ jobs:
     - name: Create build area
       id: create_build_area
       run: |
+        echo "results_dir=$RESULTS_DIR" >> "$GITHUB_OUTPUT"
         source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
         setup_dbt latest_v5
-        dbt-create -n ${{ needs.make_nightly_tag.outputs.tag }}
-        cd ${{ needs.make_nightly_tag.outputs.tag }}
+        dbt-create -n $TAG
+        cd $TAG
         source env.sh
         cd ../daq-release-lcov/scripts
         ./checkout-daq-package.py -i ../configs/coredaq/fddaq-develop/release.yaml -a -o ${DBT_AREA_ROOT}/sourcecode
@@ -62,13 +66,23 @@ jobs:
         dbt-workarea-env
         # spack load dbe
         dbt-lcov.sh
-        echo "results_dir=${DBT_AREA_ROOT}/code_coverage_results/html" >> "$GITHUB_OUTPUT"
+    - name: Create fallback html
+      if: failure()
+      run: |
+        if [[ ! -f "$RESULTS_DIR/index.html" ]]; then
+          mkdir -p "$RESULTS_DIR"
+          {
+            echo "It appears there was a problem with the code coverage workflow."
+            echo "Contact Software Coordination."
+          } > "$RESULTS_DIR/index.html"
+        fi
     - name: Upload html output as artifact
+      if: always()
       uses: actions/upload-artifact@v7
       with:
         if-no-files-found: error
         name: code_coverage
-        path: ${{ steps.run_lcov.outputs.results_dir }}
+        path: ${{ env.RESULTS_DIR }}
 
   send_slack_message:
     if: (github.event_name != 'workflow_dispatch') || (github.event_name == 'workflow_dispatch' && github.event.inputs.send-slack-message == 'yes')
