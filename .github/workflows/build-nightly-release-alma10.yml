@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: make_tags
     container:
-      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3
+      image: ghcr.io/dune-daq/alma10-slim-externals:v2.3T
     defaults:
       run:
         shell: bash
@@ -90,8 +90,7 @@ jobs:
         # For automatically triggered workflows where feature-branch is not set, fall back to default branch
         branch=${input_feature_branch:-"develop"}
 
-        #daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
-        echo "JCF: calling "daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
+        daq-release/scripts/checkout-daq-package.py -i daq-release/configs/coredaq/fddaq-develop/release.yaml -a -o $TARGET_RELEASE_DIR/sourcecode -b $branch --continue-on-error || [[ "$branch" != "develop" ]]
         daq-release/scripts/spack/build-release.sh $CORE_RELEASE_DIR $TARGET_RELEASE_DIR coredaq $OS ${{ github.event.inputs.feature-branch }}
 
         cd $CORE_RELEASE_DIR/../
@@ -125,11 +124,11 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: daq
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3"
+          - input_image: "ghcr.io/dune-daq/alma10-slim-externals:v2.3T"
             output_image: "ghcr.io/dune-daq/nightly-release-alma10"
             tag: "development_v5${{ github.event.inputs.tag-prefix }}"
     needs: [build_the_develop_release_spack, make_tags] 
@@ -248,7 +247,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: [generate_dbt_setup_release_env, make_tags]
-    runs-on: daq
+    runs-on: ubuntu-latest
 
     steps:
     - name: check_cvmfs_deployment
@@ -330,7 +329,7 @@ jobs:
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
-    runs-on: daq
+    runs-on: ubuntu-latest
     if: always()
     needs: publish_to_cvmfs
     steps:

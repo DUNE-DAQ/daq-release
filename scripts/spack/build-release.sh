@@ -90,9 +90,7 @@ $cmd || exit 5
 
 cd $SPACK_AREA
 
-echo "JCF: ABOUT TO CALL spack clean -m"
-spack clean -m
-echo "JCF: FINISHED CALL TO spack clean -m"
+spack clean -m 
 
 if [[ -n $BUILDCACHE_DIR ]]; then
 
@@ -105,17 +103,6 @@ if [[ -n $BUILDCACHE_DIR ]]; then
 	echo "Already have $mirror_name available; won't add it"
     fi
 fi
-
-which python3
-python3 --version
-
-python3 -c 'import clingo; print(clingo.__file__); print(getattr(clingo, "__version__", "unknown version")); import clingo.ast; print("clingo.ast imported successfully")'
-
-echo "JCF: ABOUT TO PERFORM A RANDOM SPEC CALL"
-time spack -dv --stacktrace spec graphviz
-retval=$?
-echo "JCF: DONE, retval IS $retval"
-
 
 # JCF, Mar-3-2025
 
@@ -130,8 +117,7 @@ echo "JCF: DONE, retval IS $retval"
 if [[ -z $BUILDCACHE_DIR ]]; then
 
     if [[ "$NAME" == "coredaq" ]]; then
-	echo spack -dv --stacktrace spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 
-	spack -dv --stacktrace spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 #> $SPACK_AREA/spec_${NAME}_log.txt 2>&1
+	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} subset=$TARGET build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
 	retval=$?
     else
 	spack spec -l --reuse ${NAME}@${RELEASE_TAG}%gcc@${GCC_VERSION} build_type=RelWithDebInfo arch=linux-${OS}-x86_64 > $SPACK_AREA/spec_${NAME}_log.txt 2>&1
@@ -143,8 +129,6 @@ if [[ -z $BUILDCACHE_DIR ]]; then
 	exit 20
     fi
 fi
-
-
 
 build_dbe=false
 if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
@@ -165,8 +149,6 @@ if [[ $NAME == "coredaq" && $TARGET == "fddaq" ]]; then
 	build_dbe=true  # Any buildcache provided will be assumed to contain dbe
     fi
 fi
-
-echo "JCF: SPACK SPEC CALL WENT FINE"
 
 attempt=1
 max_attempts=3
