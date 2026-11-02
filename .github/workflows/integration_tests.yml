@@ -101,11 +101,18 @@ jobs:
 
         dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml
 
+        echo
+        echo ${{ matrix.test_name }}
+        ls -ltr /tmp/pytest-of-dunedaq/
         failed_pytest_dir=$(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -type d -name "failed-pytest*")
+        echo "Failed pytest dir output:"
+        echo $failed_pytest_dir
         if [[ -d "$failed_pytest_dir" ]]; then
           echo "INFO: Failure found in ${{ matrix.test_name }}"
           COPY_LOGS="true"
           exit 1
+        else
+          echo "JCF: NO APPARENT FAILURE FOUND"
         fi 
 
     - name: Copy log to persistent area
