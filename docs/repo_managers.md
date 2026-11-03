@@ -167,6 +167,8 @@ A manager for a repo serves to:
 
 **restcmd**: Eric Flumerfelt
 
+**runconfschema**: Marco Roda, Pawel Plesniak, Henry Wallace
+
 **runconftools**: Marco Roda, Henry Wallace
 
 **runconf-ui**: Henry Wallace, Marco Roda
