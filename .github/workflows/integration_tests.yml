@@ -101,15 +101,8 @@ jobs:
 
         dunedaq_integtest_bundle.sh -r all -k ${{ matrix.test_name }} --junit-xml
 
-        failed_pytest_dir=$(find /tmp/pytest-of-dunedaq/ -mindepth 1 -maxdepth 1 -type d -name "failed-pytest*")
-        if [[ -d "$failed_pytest_dir" ]]; then
-          echo "INFO: Failure found in ${{ matrix.test_name }}"
-          COPY_LOGS="true"
-          exit 1
-        fi 
-
     - name: Copy log to persistent area
-      if: ${{ steps.setup_and_run_test.outputs.COPY_LOGS == 'true' }}
+      if: ${{ steps.setup_and_run_test.conclusion == 'failure' }}
       env:
         PERSISTENT_LOG_DIR: ${{needs.make_variables.outputs.persistent_log_dir}}
       run: |
