@@ -124,7 +124,7 @@ jobs:
 
   update_image:
     name: update_spack_image_nightly
-    runs-on: ubuntu-latest
+    runs-on: daq
     strategy:
       matrix:
         include:
@@ -247,7 +247,7 @@ jobs:
   publish_to_cvmfs:
     name: publish to cvmfs
     needs: [generate_dbt_setup_release_env, make_tags]
-    runs-on: ubuntu-latest
+    runs-on: daq
 
     steps:
     - name: check_cvmfs_deployment
@@ -329,7 +329,7 @@ jobs:
 
   cleanup_tarballs:
     name: cleanup tarballs from runner
-    runs-on: ubuntu-latest
+    runs-on: daq
     if: always()
     needs: publish_to_cvmfs
     steps:
