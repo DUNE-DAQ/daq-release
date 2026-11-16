@@ -62,7 +62,7 @@ jobs:
         echo "platforms=$(cat platforms.json)" >> "$GITHUB_OUTPUT"
         jq . platforms.json   # pretty-print into the log for debugging
     
-    - uses: cvmfs-contrib/github-action-cvmfs@72f2a8d366043978d6aebee154bc9ed321c2f2a8
+    - uses: cvmfs-contrib/github-action-cvmfs@d705955b32075b4b0178f3a0160b6fe527483cf8
       with:
         cvmfs_repositories: 'dunedaq-development.opensciencegrid.org'
     - name: Check tag on cvmfs
