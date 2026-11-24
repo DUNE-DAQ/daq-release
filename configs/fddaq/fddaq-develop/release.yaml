@@ -375,6 +375,9 @@
         - name: pytest
           version: 9.0.2
           source:  pypi
+        - name: pytest-xdist
+          version: 3.8.0
+          source:  pypi
         - name: python-dateutil
           version: 2.9.0.post0
           source:  pypi
