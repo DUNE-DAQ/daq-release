@@ -156,6 +156,9 @@
         - name: elisa_client_api
           version: develop
           source:  github_DUNE-DAQ
+        - name: execnet
+          version: 2.1.2
+          source:  pypi
         - name: executing
           version: 2.2.1
           source:  pypi
@@ -374,6 +377,9 @@
           source:  pypi
         - name: pytest
           version: 9.0.2
+          source:  pypi
+        - name: pytest-xdist
+          version: 3.8.0
           source:  pypi
         - name: python-dateutil
           version: 2.9.0.post0
