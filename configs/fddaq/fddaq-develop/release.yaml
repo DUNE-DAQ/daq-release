@@ -156,6 +156,9 @@
         - name: elisa_client_api
           version: develop
           source:  github_DUNE-DAQ
+        - name: execnet
+          version: 2.1.2
+          source:  pypi
         - name: executing
           version: 2.2.1
           source:  pypi
